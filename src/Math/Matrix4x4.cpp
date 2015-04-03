@@ -153,13 +153,13 @@ Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& n)
 
 Vector3 Matrix4x4::operator*(const Vector3& v) const
 {
-	Vector3 r;
+	Vector3 result;
 
-	r.x = m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0];
-	r.y = m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1];
-	r.z = m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z + m[3][2];
+	result.x = m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0];
+	result.y = m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1];
+	result.z = m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z + m[3][2];
 
-	return r;
+	return result;
 }
 
 bool Matrix4x4::operator==(const Matrix4x4& n) const
@@ -202,4 +202,71 @@ Matrix4x4 Matrix4x4::transposed() const
 	r.m[0][3] = m[3][0]; r.m[1][3] = m[3][1]; r.m[2][3] = m[3][2]; r.m[3][3] = m[3][3];
 
 	return r;
+}
+
+Matrix4x4 Matrix4x4::scale(float sx, float sy, float sz)
+{
+	Matrix4x4 result = IDENTITY;
+
+	result.m[0][0] = sx;
+	result.m[1][1] = sy;
+	result.m[2][2] = sz;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::translate(float tx, float ty, float tz)
+{
+	Matrix4x4 result = IDENTITY;
+
+	result.m[3][0] = tx;
+	result.m[3][1] = ty;
+	result.m[3][2] = tz;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::rotateX(float angle)
+{
+	Matrix4x4 result = IDENTITY;
+
+	float sine = sin(angle);
+	float cosine = cos(angle);
+
+	result.m[1][1] = cosine;
+	result.m[2][1] = -sine;
+	result.m[1][2] = sine;
+	result.m[2][2] = cosine;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::rotateY(float angle)
+{
+	Matrix4x4 result = IDENTITY;
+
+	float sine = sin(angle);
+	float cosine = cos(angle);
+
+	result.m[0][0] = cosine;
+	result.m[2][0] = sine;
+	result.m[0][2] = -sine;
+	result.m[2][2] = cosine;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::rotateZ(float angle)
+{
+	Matrix4x4 result = IDENTITY;
+
+	float sine = sin(angle);
+	float cosine = cos(angle);
+
+	result.m[0][0] = cosine;
+	result.m[1][0] = -sine;
+	result.m[0][1] = sine;
+	result.m[1][1] = cosine;
+
+	return result;
 }

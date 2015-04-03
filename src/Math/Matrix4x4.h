@@ -63,6 +63,12 @@ namespace Raycer
 		static const Matrix4x4 IDENTITY;
 		static const Matrix4x4 ZERO;
 
+		static Matrix4x4 scale(float sx, float sy, float sz);
+		static Matrix4x4 translate(float tx, float ty, float tz);
+		static Matrix4x4 rotateX(float angle);
+		static Matrix4x4 rotateY(float angle);
+		static Matrix4x4 rotateZ(float angle);
+
 		float m[4][4];
 	};
 }
