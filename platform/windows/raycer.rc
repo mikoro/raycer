@@ -1,0 +1,29 @@
+RT_ICON ICON "raycer.ico"
+GLFW_ICON ICON "raycer.ico"
+
+1 24 "raycer.exe.manifest"
+
+1 VERSIONINFO
+FILEVERSION     1,0,0,0
+PRODUCTVERSION  1,0,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904E4"
+    BEGIN
+      VALUE "FileDescription", "Raycer"
+      VALUE "ProductName", "Raycer"
+      VALUE "InternalName", "Raycer"
+      VALUE "ProductVersion", "1.0.0"
+      VALUE "FileVersion", "1.0.0"
+      VALUE "CompanyName", "Mikko Ronkainen"
+      VALUE "LegalCopyright", "Copyright (C) 2015 Mikko Ronkainen"
+      VALUE "OriginalFilename", "raycer.exe"
+    END
+  END
+
+  BLOCK "VarFileInfo"
+  BEGIN
+    VALUE "Translation", 0x409, 1252
+  END
+END

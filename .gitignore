@@ -1,0 +1,10 @@
+/bin
+/build
+*.sdf
+*.opensdf
+*.suo
+*.user
+*.log
+Thumbs.db
+.directory
+.DS_Store
