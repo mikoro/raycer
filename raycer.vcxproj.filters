@@ -19,6 +19,9 @@
     <Filter Include="Math">
       <UniqueIdentifier>{947ff596-4f44-479c-83da-3d73818002a9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Raytracing">
+      <UniqueIdentifier>{99754385-78c4-4170-a243-c1513a21c797}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
@@ -57,6 +60,42 @@
     </ClCompile>
     <ClCompile Include="src\States\TestState.cpp">
       <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Material.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Mesh.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Plane.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Ray.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Raytracer.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Sphere.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Triangle.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Camera.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Light.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Scene.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Shape.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\EulerAngle.cpp">
+      <Filter>Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -98,6 +137,42 @@
     </ClInclude>
     <ClInclude Include="src\App\AppStateBase.h">
       <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Material.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Mesh.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Plane.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Ray.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Raytracer.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Sphere.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Triangle.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Camera.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Light.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Scene.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Shape.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\EulerAngle.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

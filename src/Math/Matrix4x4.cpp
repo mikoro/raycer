@@ -42,106 +42,121 @@ Matrix4x4& Matrix4x4::operator=(const Matrix4x4& n)
 	return *this;
 }
 
-Matrix4x4 Matrix4x4::operator+(const Matrix4x4& n) const
+Matrix4x4 Raycer::operator+(const Matrix4x4& m, const Matrix4x4& n)
 {
 	Matrix4x4 result;
 
 	for (int c = 0; c < 4; ++c)
 		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m[c][r] + n.m[c][r];
+			result.m[c][r] = m.m[c][r] + n.m[c][r];
 
 	return result;
 }
 
-Matrix4x4 Matrix4x4::operator-(const Matrix4x4& n) const
+Matrix4x4 Raycer::operator-(const Matrix4x4& m, const Matrix4x4& n)
 {
 	Matrix4x4 result;
 
 	for (int c = 0; c < 4; ++c)
 		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m[c][r] - n.m[c][r];
+			result.m[c][r] = m.m[c][r] - n.m[c][r];
 
 	return result;
 }
 
-Matrix4x4 Matrix4x4::operator*(float s) const
+Matrix4x4 Raycer::operator*(const Matrix4x4& m, float s)
 {
 	Matrix4x4 result;
 
 	for (int c = 0; c < 4; ++c)
 		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m[c][r] * s;
+			result.m[c][r] = m.m[c][r] * s;
 
 	return result;
 }
 
-Matrix4x4 Matrix4x4::operator/(float s) const
+Matrix4x4 Raycer::operator*(float s, const Matrix4x4& m)
 {
 	Matrix4x4 result;
 
 	for (int c = 0; c < 4; ++c)
 		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m[c][r] / s;
+			result.m[c][r] = m.m[c][r] * s;
 
 	return result;
 }
 
-Matrix4x4 Matrix4x4::operator-() const
+Matrix4x4 Raycer::operator*(const Matrix4x4& m, const Matrix4x4& n)
 {
 	Matrix4x4 result;
 
 	for (int c = 0; c < 4; ++c)
 		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = -m[c][r];
+			result.m[c][r] = m.m[0][r] * n.m[c][0] + m.m[1][r] * n.m[c][1] + m.m[2][r] * n.m[c][2] + m.m[3][r] * n.m[c][3];
 
 	return result;
+}
+
+Vector3 Raycer::operator*(const Matrix4x4& m, const Vector3& v)
+{
+	Vector3 result;
+
+	result.x = m.m[0][0] * v.x + m.m[1][0] * v.y + m.m[2][0] * v.z + m.m[3][0];
+	result.y = m.m[0][1] * v.x + m.m[1][1] * v.y + m.m[2][1] * v.z + m.m[3][1];
+	result.z = m.m[0][2] * v.x + m.m[1][2] * v.y + m.m[2][2] * v.z + m.m[3][2];
+
+	return result;
+}
+
+Matrix4x4 Raycer::operator/(const Matrix4x4& m, float s)
+{
+	Matrix4x4 result;
+
+	for (int c = 0; c < 4; ++c)
+		for (int r = 0; r < 4; ++r)
+			result.m[c][r] = m.m[c][r] / s;
+
+	return result;
+}
+
+Matrix4x4 Raycer::operator-(const Matrix4x4& m)
+{
+	Matrix4x4 result;
+
+	for (int c = 0; c < 4; ++c)
+		for (int r = 0; r < 4; ++r)
+			result.m[c][r] = -m.m[c][r];
+
+	return result;
+}
+
+bool Raycer::operator==(const Matrix4x4& m, const Matrix4x4& n)
+{
+	for (int c = 0; c < 4; ++c)
+		for (int r = 0; r < 4; ++r)
+			if (!MathUtils::almostSame(m.m[c][r], n.m[c][r]))
+				return false;
+
+	return true;
+}
+
+bool Raycer::operator!=(const Matrix4x4& m, const Matrix4x4& n)
+{
+	return !(m == n);
 }
 
 Matrix4x4& Matrix4x4::operator+=(const Matrix4x4& n)
 {
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			m[c][r] += n.m[c][r];
+	*this = *this + n;
 
 	return *this;
 }
 
 Matrix4x4& Matrix4x4::operator-=(const Matrix4x4& n)
 {
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			m[c][r] -= n.m[c][r];
+	*this = *this - n;
 
 	return *this;
-}
-
-Matrix4x4& Matrix4x4::operator*=(float s)
-{
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			m[c][r] *= s;
-
-	return *this;
-}
-
-Matrix4x4& Matrix4x4::operator/=(float s)
-{
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			m[c][r] /= s;
-
-	return *this;
-}
-
-Matrix4x4 Matrix4x4::operator*(const Matrix4x4& n) const
-{
-	Matrix4x4 result;
-
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m[0][r] * n.m[c][0] + m[1][r] * n.m[c][1] + m[2][r] * n.m[c][2] + m[3][r] * n.m[c][3];
-
-	return result;
 }
 
 Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& n)
@@ -151,30 +166,18 @@ Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& n)
 	return *this;
 }
 
-Vector3 Matrix4x4::operator*(const Vector3& v) const
+Matrix4x4& Matrix4x4::operator*=(float s)
 {
-	Vector3 result;
+	*this = *this * s;
 
-	result.x = m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z + m[3][0];
-	result.y = m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z + m[3][1];
-	result.z = m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z + m[3][2];
-
-	return result;
+	return *this;
 }
 
-bool Matrix4x4::operator==(const Matrix4x4& n) const
+Matrix4x4& Matrix4x4::operator/=(float s)
 {
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			if (!MathUtils::almostSame(m[c][r], n.m[c][r]))
-				return false;
+	*this = *this / s;
 
-	return true;
-}
-
-bool Matrix4x4::operator!=(const Matrix4x4& n) const
-{
-	return !(*this == n);
+	return *this;
 }
 
 Matrix4x4::operator float*()
@@ -226,12 +229,12 @@ Matrix4x4 Matrix4x4::translate(float tx, float ty, float tz)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateX(float angle)
+Matrix4x4 Matrix4x4::rotateX(float degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(angle);
-	float cosine = cos(angle);
+	float sine = sin(MathUtils::degToRad(degrees));
+	float cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[1][1] = cosine;
 	result.m[2][1] = -sine;
@@ -241,12 +244,12 @@ Matrix4x4 Matrix4x4::rotateX(float angle)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateY(float angle)
+Matrix4x4 Matrix4x4::rotateY(float degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(angle);
-	float cosine = cos(angle);
+	float sine = sin(MathUtils::degToRad(degrees));
+	float cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[0][0] = cosine;
 	result.m[2][0] = sine;
@@ -256,12 +259,12 @@ Matrix4x4 Matrix4x4::rotateY(float angle)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateZ(float angle)
+Matrix4x4 Matrix4x4::rotateZ(float degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(angle);
-	float cosine = cos(angle);
+	float sine = sin(MathUtils::degToRad(degrees));
+	float cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[0][0] = cosine;
 	result.m[1][0] = -sine;

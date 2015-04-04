@@ -34,3 +34,8 @@ bool MathUtils::almostSame(float first, float second, int epsilons)
 
 	return false;
 }
+
+float MathUtils::degToRad(float degrees)
+{
+	return (degrees * ((float)M_PI / 180.0f));
+}

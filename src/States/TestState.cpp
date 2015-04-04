@@ -7,6 +7,7 @@
 #include "Utils/Log.h"
 #include "App/App.h"
 #include "Framebuffer/Framebuffer.h"
+#include "Raytracing/Raytracer.h"
 
 using namespace Raycer;
 
@@ -44,4 +45,6 @@ void TestState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
 	(void)interpolation;
+
+	Raytracer::raytrace(framebuffer, scene);
 }

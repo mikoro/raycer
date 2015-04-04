@@ -13,33 +13,64 @@ const Vector3 Vector3::RIGHT = Vector3(1.0f, 0.0f, 0.0f);
 const Vector3 Vector3::UP = Vector3(0.0f, 1.0f, 0.0f);
 const Vector3 Vector3::FORWARD = Vector3(0.0f, 0.0f, 1.0f);
 
-Vector3::Vector3(float x, float y, float z) : x(x), y(y), z(z)
+Vector3::Vector3(float x_, float y_, float z_) : x(x_), y(y_), z(z_)
 {
 }
 
-Vector3 Vector3::operator+(const Vector3& v) const
+Vector3::Vector3(const Vector3& v)
 {
-	return Vector3(x + v.x, y + v.y, z + v.z);
+	x = v.x;
+	y = v.y;
+	z = v.z;
 }
 
-Vector3 Vector3::operator-(const Vector3& v) const
+Vector3& Vector3::operator=(const Vector3& v)
 {
-	return Vector3(x - v.x, y - v.y, z - v.z);
+	x = v.x;
+	y = v.y;
+	z = v.z;
+
+	return *this;
 }
 
-Vector3 Vector3::operator*(float s) const
+Vector3 Raycer::operator+(const Vector3& v, const Vector3& w)
 {
-	return Vector3(x * s, y * s, z * s);
+	return Vector3(v.x + w.x, v.y + w.y, v.z + w.z);
 }
 
-Vector3 Vector3::operator/(float s) const
+Vector3 Raycer::operator-(const Vector3& v, const Vector3& w)
 {
-	return Vector3(x / s, y / s, z / s);
+	return Vector3(v.x - w.x, v.y - w.y, v.z - w.z);
 }
 
-Vector3 Vector3::operator-() const
+Vector3 Raycer::operator*(const Vector3& v, float s)
 {
-	return Vector3(-x, -y, -z);
+	return Vector3(v.x * s, v.y * s, v.z * s);
+}
+
+Vector3 Raycer::operator*(float s, const Vector3& v)
+{
+	return Vector3(v.x * s, v.y * s, v.z * s);
+}
+
+Vector3 Raycer::operator/(const Vector3& v, float s)
+{
+	return Vector3(v.x / s, v.y / s, v.z / s);
+}
+
+Vector3 Raycer::operator-(const Vector3& v)
+{
+	return Vector3(-v.x, -v.y, -v.z);
+}
+
+bool Raycer::operator==(const Vector3& v, const Vector3& w)
+{
+	return MathUtils::almostSame(v.x, w.x) && MathUtils::almostSame(v.y, w.y) && MathUtils::almostSame(v.z, w.z);
+}
+
+bool Raycer::operator!=(const Vector3& v, const Vector3& w)
+{
+	return !(v == w);
 }
 
 Vector3& Vector3::operator+=(const Vector3& v)
@@ -68,16 +99,6 @@ Vector3& Vector3::operator/=(float s)
 	*this = *this / s;
 
 	return *this;
-}
-
-bool Vector3::operator==(const Vector3& v) const
-{
-	return MathUtils::almostSame(x, v.x) && MathUtils::almostSame(y, v.y) && MathUtils::almostSame(z, v.z);
-}
-
-bool Vector3::operator!=(const Vector3& v) const
-{
-	return !(*this == v);
 }
 
 float Vector3::length() const
@@ -124,6 +145,11 @@ Vector3 Vector3::cross(const Vector3& v) const
 	r.z = x * v.y - y * v.x;
 
 	return r;
+}
+
+Vector3 Vector3::reflect(const Vector3& normal) const
+{
+	return *this - ((2.0f * this->dot(normal)) * normal);
 }
 
 Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, float t)

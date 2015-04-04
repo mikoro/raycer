@@ -33,26 +33,25 @@ namespace Raycer
 		Matrix4x4();
 		Matrix4x4(const Matrix4x4& m);
 		Matrix4x4(float m00, float m10, float m20, float m30, float m01, float m11, float m21, float m31, float m02, float m12, float m22, float m32, float m03, float m13, float m23, float m33);
-
 		Matrix4x4& operator=(const Matrix4x4& m);
 
-		Matrix4x4 operator+(const Matrix4x4& m) const;
-		Matrix4x4 operator-(const Matrix4x4& m) const;
-		Matrix4x4 operator*(float s) const;
-		Matrix4x4 operator/(float s) const;
-		Matrix4x4 operator-() const;
+		friend Matrix4x4 operator+(const Matrix4x4& m, const Matrix4x4& n);
+		friend Matrix4x4 operator-(const Matrix4x4& m, const Matrix4x4& n);
+		friend Matrix4x4 operator*(const Matrix4x4& m, float s);
+		friend Matrix4x4 operator*(float s, const Matrix4x4& m);
+		friend Matrix4x4 operator*(const Matrix4x4& m, const Matrix4x4& n);
+		friend Vector3 operator*(const Matrix4x4& m, const Vector3& v);
+		friend Matrix4x4 operator/(const Matrix4x4& m, float s);
+		friend Matrix4x4 operator-(const Matrix4x4& m);
+
+		friend bool operator==(const Matrix4x4& m, const Matrix4x4& n);
+		friend bool operator!=(const Matrix4x4& m, const Matrix4x4& n);
 
 		Matrix4x4& operator+=(const Matrix4x4& m);
 		Matrix4x4& operator-=(const Matrix4x4& m);
+		Matrix4x4& operator*=(const Matrix4x4& m);
 		Matrix4x4& operator*=(float s);
 		Matrix4x4& operator/=(float s);
-
-		Matrix4x4 operator*(const Matrix4x4& m) const;
-		Matrix4x4& operator*=(const Matrix4x4& m);
-		Vector3 operator*(const Vector3& v) const;
-
-		bool operator==(const Matrix4x4& m) const;
-		bool operator!=(const Matrix4x4& m) const;
 
 		operator float*();
 		operator const float*() const;
@@ -65,9 +64,9 @@ namespace Raycer
 
 		static Matrix4x4 scale(float sx, float sy, float sz);
 		static Matrix4x4 translate(float tx, float ty, float tz);
-		static Matrix4x4 rotateX(float angle);
-		static Matrix4x4 rotateY(float angle);
-		static Matrix4x4 rotateZ(float angle);
+		static Matrix4x4 rotateX(float degrees);
+		static Matrix4x4 rotateY(float degrees);
+		static Matrix4x4 rotateZ(float degrees);
 
 		float m[4][4];
 	};

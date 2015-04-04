@@ -9242,7 +9242,8 @@ namespace Catch {
 
 // Standard C/C++ main entry point
 int main (int argc, char * const argv[]) {
-    return Catch::Session().run( argc, argv );
+	Catch::Session().run( argc, argv );
+    return 0;
 }
 
 #else // __OBJC__

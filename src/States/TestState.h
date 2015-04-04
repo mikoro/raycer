@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "App/AppStateBase.h"
+#include "Raytracing/Scene.h"
 
 namespace Raycer
 {
@@ -34,5 +35,6 @@ namespace Raycer
 
 		App& app;
 		Framebuffer& framebuffer;
+		Scene scene;
 	};
 }

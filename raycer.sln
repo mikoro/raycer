@@ -5,6 +5,11 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "raycer", "raycer.vcxproj", "{42FB9D22-D754-4BBA-8DF4-041B231BF702}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tests", "tests.vcxproj", "{E6A41D46-856B-4BA6-89D2-34BA40E53F5B}"
+	ProjectSection(ProjectDependencies) = postProject
+		{42FB9D22-D754-4BBA-8DF4-041B231BF702} = {42FB9D22-D754-4BBA-8DF4-041B231BF702}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -15,6 +20,10 @@ Global
 		{42FB9D22-D754-4BBA-8DF4-041B231BF702}.Debug|x64.Build.0 = Debug|x64
 		{42FB9D22-D754-4BBA-8DF4-041B231BF702}.Release|x64.ActiveCfg = Release|x64
 		{42FB9D22-D754-4BBA-8DF4-041B231BF702}.Release|x64.Build.0 = Release|x64
+		{E6A41D46-856B-4BA6-89D2-34BA40E53F5B}.Debug|x64.ActiveCfg = Debug|x64
+		{E6A41D46-856B-4BA6-89D2-34BA40E53F5B}.Debug|x64.Build.0 = Debug|x64
+		{E6A41D46-856B-4BA6-89D2-34BA40E53F5B}.Release|x64.ActiveCfg = Release|x64
+		{E6A41D46-856B-4BA6-89D2-34BA40E53F5B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
