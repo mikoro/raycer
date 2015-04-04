@@ -26,8 +26,8 @@ namespace Raycer
 		void resume();
 		void shutdown();
 
-		void update(double timeStep);
-		void render(double timeStep, double interpolation);
+		void update(float timeStep);
+		void render(float timeStep, float interpolation);
 
 		void windowResized(int width, int height);
 

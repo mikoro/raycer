@@ -44,7 +44,7 @@ bool Sphere::intersects(const Ray& ray, Intersection& intersection) const
 	//if (t > ray.intersectionDistance)
 		//return false;
 
-	intersection.position = t * ray.direction;
+	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = (intersection.position - position).normalized();
 
 	return true;

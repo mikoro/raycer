@@ -86,6 +86,11 @@ bool App::keyIsDown(int key)
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
 }
 
+bool App::mouseIsDown(int button)
+{
+	return (glfwGetMouseButton(glfwWindow, button) == GLFW_PRESS);
+}
+
 bool App::keyWasPressed(int key)
 {
 	if (keyIsDown(key))
@@ -205,6 +210,8 @@ void App::mainLoop()
 	double previousTime = glfwGetTime();
 	double timeAccumulator = 0;
 
+	update(0.0f);
+
 	while (shouldRun)
 	{
 		double currentTime = glfwGetTime();
@@ -290,7 +297,7 @@ void App::update(double timeStep)
 		framebuffer->SetEnableSmoothing(!framebuffer->GetEnableSmoothing());
 
 	if (currentState != AppStates::None)
-		appStates[currentState]->update(timeStep);
+		appStates[currentState]->update((float)timeStep);
 	else
 		throw std::runtime_error("App state has not been set");
 }
@@ -300,7 +307,7 @@ void App::render(double timeStep, double interpolation)
 	renderFpsCounter.countFrame();
 
 	if (currentState != AppStates::None)
-		appStates[currentState]->render(timeStep, interpolation);
+		appStates[currentState]->render((float)timeStep, (float)interpolation);
 	else
 		throw std::runtime_error("App state has not been set");
 

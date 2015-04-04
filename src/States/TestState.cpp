@@ -28,20 +28,21 @@ void TestState::initialize()
 	m1.shininess = 1.0f;
 
 	Sphere* s1 = new Sphere();
-	s1->position = Vector3(0.0f, 0.0f, -10.0f);
-	s1->radius = 1.0f;
+	s1->position = Vector3(0.0f, 0.0f, -5.0f);
+	s1->setRadius(2.0f);
 	s1->material = m1;
 
 	Light l1;
-	l1.position = Vector3(0.0f, 100.0f, 100.0f);
+	l1.position = Vector3(0.0f, 0.0f, 0.0f);
 	l1.diffuseColor = Color::WHITE;
 	l1.specularColor = Color::WHITE;
 
 	scene.ambientColor = Color(0.2f, 0.2f, 0.2f);
-	scene.camera.position = Vector3(0.0f, 0.0f, 5.0f);
+	scene.camera.position = Vector3(0.0f, 0.0f, 0.0f);
 	scene.camera.orientation = EulerAngle(0.0f, 0.0f, 0.0f);
 	scene.camera.setFov(90.0f);
-	scene.camera.setSize(framebuffer.getWidth(), framebuffer.getHeight());
+	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	scene.camera.setApp(&app);
 
 	scene.primitives.push_back(std::shared_ptr<Primitive>(s1));
 	scene.lights.push_back(l1);
@@ -62,12 +63,12 @@ void TestState::shutdown()
 
 }
 
-void TestState::update(double timeStep)
+void TestState::update(float timeStep)
 {
-	(void)timeStep;
+	scene.camera.update(timeStep);
 }
 
-void TestState::render(double timeStep, double interpolation)
+void TestState::render(float timeStep, float interpolation)
 {
 	(void)timeStep;
 	(void)interpolation;
@@ -77,5 +78,5 @@ void TestState::render(double timeStep, double interpolation)
 
 void TestState::windowResized(int width, int height)
 {
-	scene.camera.setSize(width, height);
+	scene.camera.setImagePlaneSize(width, height);
 }

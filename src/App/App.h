@@ -43,6 +43,7 @@ namespace Raycer
 		BaseLog& getBaseLog() const;
 		const MouseInfo& getMouseInfo() const;
 		bool keyIsDown(int key);
+		bool mouseIsDown(int button);
 		bool keyWasPressed(int key);
 		void changeState(AppStates newState);
 
