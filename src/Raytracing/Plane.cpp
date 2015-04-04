@@ -7,5 +7,4 @@ using namespace Raycer;
 
 Plane::Plane()
 {
-
 }

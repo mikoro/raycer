@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include "Raytracing/Shape.h"
+#include "Raytracing/Primitive.h"
 #include "Raytracing/Material.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
 {
-	class Plane : public Shape
+	class Plane : public Primitive
 	{
 	public:
 

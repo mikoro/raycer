@@ -8,14 +8,11 @@
 
 namespace Raycer
 {
-	class Light
+	struct Light
 	{
-	public:
-
-		Light();
-		
 		Vector3 position = Vector3(0, 0, 0);
-		Vector3 direction = Vector3(1, 0, 0);
-		Color color = Color::WHITE;
+
+		Color diffuseColor = Color::WHITE;
+		Color specularColor = Color::WHITE;
 	};
 }

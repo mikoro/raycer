@@ -189,6 +189,9 @@ void App::windowResized(int width, int height)
 		framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5f), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5f));
 	else if (framebuffer->getWidth() != settings->framebuffer.fixedWidth || framebuffer->getHeight() != settings->framebuffer.fixedHeight)
 		framebuffer->resize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
+
+	if (currentState != AppStates::None)
+		appStates[currentState]->windowResized(windowWidth, windowHeight);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

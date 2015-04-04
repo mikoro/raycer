@@ -14,7 +14,8 @@ namespace Raycer
 		Ray();
 		Ray(const Vector3& origin, const Vector3& direction);
 		
-		Vector3 origin = Vector3();
-		Vector3 direction = Vector3();
+		Vector3 origin = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 direction = Vector3(0.0f, 0.0f, 0.0f);
+		float intersectionDistance = 0.0f;
 	};
 }

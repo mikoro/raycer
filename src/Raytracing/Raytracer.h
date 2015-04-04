@@ -6,7 +6,7 @@
 namespace Raycer
 {
 	class Framebuffer;
-	class Scene;
+	struct Scene;
 
 	class Raytracer
 	{

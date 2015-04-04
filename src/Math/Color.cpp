@@ -16,7 +16,6 @@ const Color Color::BLACK = Color(0.0f, 0.0f, 0.0f);
 
 Color::Color(float r_, float g_, float b_, float a_) : r(r_), g(g_), b(b_), a(a_)
 {
-	assert(r >= 0.0f && r <= 1.0f && g >= 0.0f && g <= 1.0f && b >= 0.0f && b <= 1.0f && a >= 0.0f && a <= 1.0f);
 }
 
 Color::Color(int r_, int g_, int b_, int a_)
@@ -56,6 +55,31 @@ uint32_t Color::getAbgrValue() const
 	int ai = (int)(a * 255.0f + 0.5f);
 
 	return (ai << 24 | bi << 16 | gi << 8 | ri);
+}
+
+Color Raycer::operator+(const Color& c1, const Color& c2)
+{
+	return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a + c2.a);
+}
+
+Color Raycer::operator-(const Color& c1, const Color& c2)
+{
+	return Color(c1.r - c2.r, c1.g - c2.g, c1.b - c2.b, c1.a - c2.a);
+}
+
+Color Raycer::operator*(const Color& c1, const Color& c2)
+{
+	return Color(c1.r * c2.r, c1.g * c2.g, c1.b * c2.b, c1.a * c2.a);
+}
+
+Color Raycer::operator*(const Color& c, float s)
+{
+	return Color(c.r * s, c.g * s, c.b * s, c.a * s);
+}
+
+Color Raycer::operator*(float s, const Color& c)
+{
+	return Color(c.r * s, c.g * s, c.b * s, c.a * s);
 }
 
 bool Color::isTransparent() const

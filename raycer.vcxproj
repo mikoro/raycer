@@ -115,14 +115,10 @@
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
-    <ClCompile Include="src\Raytracing\Light.cpp" />
-    <ClCompile Include="src\Raytracing\Material.cpp" />
     <ClCompile Include="src\Raytracing\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Plane.cpp" />
     <ClCompile Include="src\Raytracing\Ray.cpp" />
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
-    <ClCompile Include="src\Raytracing\Scene.cpp" />
-    <ClCompile Include="src\Raytracing\Shape.cpp" />
     <ClCompile Include="src\Raytracing\Sphere.cpp" />
     <ClCompile Include="src\Raytracing\Triangle.cpp" />
     <ClCompile Include="src\States\TestState.cpp" />
@@ -142,6 +138,7 @@
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />
+    <ClInclude Include="src\Raytracing\Intersection.h" />
     <ClInclude Include="src\Raytracing\Light.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
     <ClInclude Include="src\Raytracing\Mesh.h" />
@@ -149,7 +146,7 @@
     <ClInclude Include="src\Raytracing\Ray.h" />
     <ClInclude Include="src\Raytracing\Raytracer.h" />
     <ClInclude Include="src\Raytracing\Scene.h" />
-    <ClInclude Include="src\Raytracing\Shape.h" />
+    <ClInclude Include="src\Raytracing\Primitive.h" />
     <ClInclude Include="src\Raytracing\Sphere.h" />
     <ClInclude Include="src\Raytracing\Triangle.h" />
     <ClInclude Include="src\States\TestState.h" />

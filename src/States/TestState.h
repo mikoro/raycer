@@ -29,6 +29,8 @@ namespace Raycer
 		void update(double timeStep);
 		void render(double timeStep, double interpolation);
 
+		void windowResized(int width, int height);
+
 	private:
 
 		std::unique_ptr<NamedLog> log;

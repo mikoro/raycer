@@ -18,5 +18,7 @@ namespace Raycer
 
 		virtual void update(double timeStep) = 0;
 		virtual void render(double timeStep, double interpolation) = 0;
+
+		virtual void windowResized(int width, int height) = 0;
 	};
 }

@@ -4,19 +4,21 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 #include "Raytracing/Light.h"
-#include "Raytracing/Shape.h"
+#include "Raytracing/Primitive.h"
 #include "Raytracing/Camera.h"
 
 namespace Raycer
 {
-	class Scene
+	struct Scene
 	{
-	public:
-
+		std::vector<std::shared_ptr<Primitive>> primitives;
 		std::vector<Light> lights;
-		std::vector<Shape> shapes;
+
+		Color ambientColor = Color::WHITE;
+
 		Camera camera;
 	};
 }

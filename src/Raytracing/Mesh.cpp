@@ -7,6 +7,4 @@ using namespace Raycer;
 
 Mesh::Mesh()
 {
-
 }
-

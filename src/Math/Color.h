@@ -15,6 +15,12 @@ namespace Raycer
 		explicit Color(int r, int g, int b, int a = 255);
 		Color(uint32_t abgr);
 
+		friend Color operator+(const Color& c1, const Color& c2);
+		friend Color operator-(const Color& c1, const Color& c2);
+		friend Color operator*(const Color& c1, const Color& c2);
+		friend Color operator*(const Color& c, float s);
+		friend Color operator*(float s, const Color& c);
+
 		uint32_t getAbgrValue() const;
 		bool isTransparent() const;
 		void clamp();

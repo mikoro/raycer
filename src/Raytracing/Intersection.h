@@ -3,18 +3,15 @@
 
 #pragma once
 
-#include "Raytracing/Primitive.h"
-#include "Raytracing/Material.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
 {
-	class Triangle : public Primitive
+	struct Intersection
 	{
-	public:
-
-		Triangle();
-		
-		Material material;
+		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 normal = Vector3(0.0f, 0.0f, 0.0f);
+		float tx = 0.0f;
+		float ty = 0.0f;
 	};
 }

@@ -7,5 +7,4 @@ using namespace Raycer;
 
 Triangle::Triangle()
 {
-
 }
