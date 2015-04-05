@@ -25,20 +25,26 @@ void Sphere::setRadius(float radius_)
 
 void Sphere::intersect(Ray& ray) const
 {
-	Vector3 L = position - ray.origin;
-	float ta = L.dot(ray.direction);
+	Vector3 originToCenter = position - ray.origin;
+	float originToSphereDistance2 = originToCenter.lengthSquared();
+
+	// ray origin inside the sphere
+	if (originToSphereDistance2 < radius2)
+		return;
+
+	float ta = originToCenter.dot(ray.direction);
 
 	// sphere is behind the ray
 	if (ta < 0.0f)
 		return;
 
-	float d2 = L.lengthSquared() - ta * ta;
+	float sphereToRayDistance2 = originToSphereDistance2 - (ta * ta);
 
 	// ray misses the sphere
-	if (d2 > radius2)
+	if (sphereToRayDistance2 > radius2)
 		return;
 
-	float tb = sqrt(radius2 - d2);
+	float tb = sqrt(radius2 - sphereToRayDistance2);
 	float t = ta - tb;
 
 	// there was another intersection closer to camera

@@ -43,13 +43,15 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 			for (int l = 0; l < lightCount; ++l)
 			{
 				const Light& light = scene.lights[l];
-				Vector3 directionToLight = (light.position - rayToScene.intersection.position).normalized();
+				Vector3 vectorToLight = light.position - rayToScene.intersection.position;
+				Vector3 directionToLight = vectorToLight.normalized();
+				float distanceToLight = vectorToLight.length();
 				Ray rayToLight = Ray(rayToScene.intersection.position, directionToLight);
 
 				for (int p = 0; p < primitiveCount; ++p)
 					scene.primitives[p]->intersect(rayToLight);
 
-				if (!rayToLight.intersection.wasFound)
+				if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
 				{
 					float diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
 

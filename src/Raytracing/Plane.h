@@ -14,8 +14,12 @@ namespace Raycer
 	public:
 
 		Plane();
+		Plane(const Vector3& position, const Vector3& normal, const Material& material);
 		
-		Vector3 position = Vector3(0, 0, 0);
+		void intersect(Ray& ray) const;
+
+		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 normal = Vector3(0.0f, 0.0f, 0.0f);
 		Material material;
 	};
 }
