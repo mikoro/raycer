@@ -5,6 +5,6 @@
 
 using namespace Raycer;
 
-Ray::Ray(const Vector3& origin_, const Vector3& direction_) : origin(origin_), direction(direction_)
+Ray::Ray(const Vector3& origin_, const Vector3& direction_, int reflectionCount_) : origin(origin_), direction(direction_), reflectionCount(reflectionCount_)
 {
 }

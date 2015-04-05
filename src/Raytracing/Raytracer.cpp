@@ -17,7 +17,7 @@ using namespace Raycer;
 
 namespace
 {
-	const double rayToLightOriginOffset = 0.000001;
+	const double rayStartOffset = 0.000001;
 }
 
 void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
@@ -26,8 +26,6 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 	int height = framebuffer.getHeight();
 	int pixelCount = width * height;
 	uint32_t* pixelData = framebuffer.getPixelData();
-	int primitiveCount = (int)scene.primitives.size();
-	int lightCount = (int)scene.lights.size();
 
 	#pragma omp parallel for schedule(dynamic, 4096)
 	for (int i = 0; i < pixelCount; ++i)
@@ -36,50 +34,61 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 		int y = i / width;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
+		shootRay(rayToScene, scene);
+		pixelData[y * width + x] = rayToScene.color.clamped().getAbgrValue();
+	}
+}
 
-		for (int p = 0; p < primitiveCount; ++p)
-			scene.primitives[p]->intersect(rayToScene);
+void Raytracer::shootRay(Ray& ray, const Scene& scene)
+{
+	for (int p = 0; p < scene.primitives.size(); ++p)
+		scene.primitives[p]->intersect(ray);
 
-		Color pixelColor;
+	if (ray.intersection.wasFound)
+	{
+		Color lightColor(0.0, 0.0, 0.0);
 
-		if (rayToScene.intersection.wasFound)
+		if (ray.intersection.material->rayReflectivity > 0.0 && ray.reflectionCount < MAX_REFLECTIONS)
 		{
-			Color lightColor(0.0, 0.0, 0.0);
+			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
+			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			for (int l = 0; l < lightCount; ++l)
+			shootRay(reflectedRay, scene);
+
+			lightColor += reflectedRay.color * ray.intersection.material->rayReflectivity;
+		}
+
+		for (int l = 0; l < scene.lights.size(); ++l)
+		{
+			const Light& light = scene.lights[l];
+			Vector3 vectorToLight = light.position - ray.intersection.position;
+			Vector3 directionToLight = vectorToLight.normalized();
+			double distanceToLight = vectorToLight.length();
+			Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
+
+			for (int p = 0; p < scene.primitives.size(); ++p)
+				scene.primitives[p]->intersect(rayToLight);
+
+			if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
 			{
-				const Light& light = scene.lights[l];
-				Vector3 vectorToLight = light.position - rayToScene.intersection.position;
-				Vector3 directionToLight = vectorToLight.normalized();
-				double distanceToLight = vectorToLight.length();
-				Ray rayToLight = Ray(rayToScene.intersection.position + directionToLight * rayToLightOriginOffset, directionToLight);
+				double diffuseAmount = directionToLight.dot(ray.intersection.normal);
 
-				for (int p = 0; p < primitiveCount; ++p)
-					scene.primitives[p]->intersect(rayToLight);
-
-				if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
+				if (diffuseAmount > 0.0)
 				{
-					double diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
+					lightColor += light.diffuseColor * diffuseAmount * ray.intersection.material->diffuseReflectivity;
 
-					if (diffuseAmount > 0.0)
+					Vector3 lightReflectionDirection = (2.0 * diffuseAmount * ray.intersection.normal) - directionToLight;
+					double specularAmount = lightReflectionDirection.dot(-ray.direction);
+
+					if (specularAmount > 0.0)
 					{
-						lightColor += light.diffuseColor * diffuseAmount * rayToScene.intersection.material->diffuseReflectivity;
-
-						Vector3 lightReflectionDirection = (2.0 * diffuseAmount * rayToScene.intersection.normal) - directionToLight;
-						double specularAmount = lightReflectionDirection.dot(-rayToScene.direction);
-
-						if (specularAmount > 0.0)
-						{
-							specularAmount = pow(specularAmount, rayToScene.intersection.material->shininess);
-							lightColor += light.specularColor * specularAmount * rayToScene.intersection.material->specularReflectivity;
-						}
+						specularAmount = pow(specularAmount, ray.intersection.material->shininess);
+						lightColor += light.specularColor * specularAmount * ray.intersection.material->specularReflectivity;
 					}
 				}
 			}
-
-			pixelColor = rayToScene.intersection.material->color * lightColor;
 		}
 
-		pixelData[y * width + x] = pixelColor.clamped().getAbgrValue();
+		ray.color = lightColor * ray.intersection.material->color;
 	}
 }
