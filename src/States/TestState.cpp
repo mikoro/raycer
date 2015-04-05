@@ -64,7 +64,7 @@ void TestState::initialize()
 	l2.specularColor = Color(0.5f, 0.5f, 0.5f);
 
 	Light l3;
-	l3.position = Vector3(0.0f, -4.0f, 10.0f);
+	l3.position = Vector3(0.0f, -10.0f, -5.0f);
 	l3.diffuseColor = Color(0.5f, 0.5f, 0.5f);
 	l3.specularColor = Color(0.5f, 0.5f, 0.5f);
 

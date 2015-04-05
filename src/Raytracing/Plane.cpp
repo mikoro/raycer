@@ -22,7 +22,7 @@ void Plane::intersect(Ray& ray) const
 
 	float denominator = ray.direction.dot(normal);
 
-	if (denominator > 0.0f || abs(denominator) < epsilon)
+	if (abs(denominator) < epsilon)
 		return;
 
 	float t = (position - ray.origin).dot(normal) / denominator;
@@ -36,6 +36,6 @@ void Plane::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = ray.origin + (t * ray.direction);
-	ray.intersection.normal = normal;
+	ray.intersection.normal = (denominator > 0.0f) ? -normal : normal;
 	ray.intersection.material = &material;
 }

@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <limits>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/Scene.h"
@@ -13,6 +14,11 @@
 #include "Math/Color.h"
 
 using namespace Raycer;
+
+namespace
+{
+	const float rayToLightOriginOffset = 0.0001f;
+}
 
 void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 {
@@ -46,7 +52,7 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 				Vector3 vectorToLight = light.position - rayToScene.intersection.position;
 				Vector3 directionToLight = vectorToLight.normalized();
 				float distanceToLight = vectorToLight.length();
-				Ray rayToLight = Ray(rayToScene.intersection.position, directionToLight);
+				Ray rayToLight = Ray(rayToScene.intersection.position + directionToLight * rayToLightOriginOffset, directionToLight);
 
 				for (int p = 0; p < primitiveCount; ++p)
 					scene.primitives[p]->intersect(rayToLight);
