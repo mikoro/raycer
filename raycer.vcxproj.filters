@@ -85,6 +85,9 @@
     <ClCompile Include="src\Math\EulerAngle.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\Vector2.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Framebuffer\Font.h">
@@ -164,6 +167,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Intersection.h">
       <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vector2.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

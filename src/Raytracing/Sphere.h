@@ -17,12 +17,14 @@ namespace Raycer
 		Sphere(const Vector3& position, float radius, const Material& material);
 
 		void setRadius(float radius);
-		bool intersects(const Ray& ray, Intersection& intersection) const;
-		const Material& getMaterial() const;
+		void intersect(Ray& ray) const;
 
-		Vector3 position = Vector3(0, 0, 0);
+		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+		Material material;
+
+	private:
+
 		float radius = 1.0f;
 		float radius2 = 1.0f;
-		Material material;
 	};
 }

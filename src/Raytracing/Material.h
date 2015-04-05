@@ -11,7 +11,6 @@ namespace Raycer
 	{
 		Color color = Color::WHITE;
 
-		float ambientReflectivity = 1.0f;
 		float diffuseReflectivity = 1.0f;
 		float specularReflectivity = 1.0f;
 		float rayReflectivity = 1.0f;

@@ -109,6 +109,7 @@
     <ClCompile Include="src\Math\EulerAngle.cpp" />
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
+    <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
     <ClCompile Include="src\Raytracing\Mesh.cpp" />
@@ -132,6 +133,7 @@
     <ClInclude Include="src\Math\EulerAngle.h" />
     <ClInclude Include="src\Math\Matrix4x4.h" />
     <ClInclude Include="src\Math\MathUtils.h" />
+    <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />
     <ClInclude Include="src\Raytracing\Intersection.h" />

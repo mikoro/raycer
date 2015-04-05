@@ -4,18 +4,16 @@
 #pragma once
 
 #include "Math/Vector3.h"
+#include "Raytracing/Intersection.h"
 
 namespace Raycer
 {
-	class Ray
+	struct Ray
 	{
-	public:
-
-		Ray();
 		Ray(const Vector3& origin, const Vector3& direction);
 		
-		Vector3 origin = Vector3(0.0f, 0.0f, 0.0f);
-		Vector3 direction = Vector3(0.0f, 0.0f, 0.0f);
-		float intersectionDistance = 0.0f;
+		Vector3 origin;
+		Vector3 direction;
+		Intersection intersection;
 	};
 }

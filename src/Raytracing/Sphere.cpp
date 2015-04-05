@@ -23,34 +23,31 @@ void Sphere::setRadius(float radius_)
 	radius2 = radius * radius;
 }
 
-bool Sphere::intersects(const Ray& ray, Intersection& intersection) const
+void Sphere::intersect(Ray& ray) const
 {
 	Vector3 L = position - ray.origin;
 	float ta = L.dot(ray.direction);
 
-	// sphere is behind
+	// sphere is behind the ray
 	if (ta < 0.0f)
-		return false;
+		return;
 
 	float d2 = L.lengthSquared() - ta * ta;
 
 	// ray misses the sphere
 	if (d2 > radius2)
-		return false;
+		return;
 
 	float tb = sqrt(radius2 - d2);
 	float t = ta - tb;
 
-	//if (t > ray.intersectionDistance)
-		//return false;
+	// there was another intersection closer to camera
+	if (t > ray.intersection.distance)
+		return;
 
-	intersection.position = ray.origin + (t * ray.direction);
-	intersection.normal = (intersection.position - position).normalized();
-
-	return true;
-}
-
-const Material& Sphere::getMaterial() const
-{
-	return material;
+	ray.intersection.wasFound = true;
+	ray.intersection.distance = t;
+	ray.intersection.position = ray.origin + (t * ray.direction);
+	ray.intersection.normal = (ray.intersection.position - position).normalized();
+	ray.intersection.material = &material;
 }

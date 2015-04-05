@@ -20,6 +20,15 @@ namespace Raycer
 		friend Color operator*(const Color& c1, const Color& c2);
 		friend Color operator*(const Color& c, float s);
 		friend Color operator*(float s, const Color& c);
+		friend Color operator/(const Color& c, float s);
+
+		friend bool operator==(const Color& c1, const Color& c2);
+		friend bool operator!=(const Color& c1, const Color& c2);
+
+		Color& operator+=(const Color& c);
+		Color& operator-=(const Color& c);
+		Color& operator*=(float s);
+		Color& operator/=(float s);
 
 		uint32_t getAbgrValue() const;
 		bool isTransparent() const;

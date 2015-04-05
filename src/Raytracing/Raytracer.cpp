@@ -20,49 +20,47 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 	int height = framebuffer.getHeight();
 	int pixelCount = width * height;
 	uint32_t* pixelData = framebuffer.getPixelData();
-	auto primitive = scene.primitives.at(0);
-	auto light = scene.lights.at(0);
+	int primitiveCount = (int)scene.primitives.size();
+	int lightCount = (int)scene.lights.size();
 
-#pragma omp parallel for schedule(dynamic, 4096)
+	#pragma omp parallel for schedule(dynamic, 4096)
 	for (int i = 0; i < pixelCount; ++i)
 	{
-		int y = i / width;
 		int x = i % width;
+		int y = i / width;
 
-		Intersection intersection;
-		Intersection intersection2;
+		Ray rayToScene = scene.camera.getRay(x, y);
 
-		Ray ray = scene.camera.getRay(x, y);
+		for (int p = 0; p < primitiveCount; ++p)
+			scene.primitives[p]->intersect(rayToScene);
 
-		if (primitive->intersects(ray, intersection))
+		Color pixelColor;
+
+		if (rayToScene.intersection.wasFound)
 		{
-			Vector3 intersectionToLight = (light.position - intersection.position).normalized();
-
-			Ray ray2 = Ray(intersection.position, intersectionToLight);
-			bool lightBlocked = false;
-
-			if (primitive->intersects(ray2, intersection2))
-			{
-				lightBlocked = true;
-			}
-
 			Color lightColor;
-			const Material& material = primitive->getMaterial();
-			float diffuseAmount = intersectionToLight.dot(intersection.normal);
 
-			if (lightBlocked || diffuseAmount < 0.0f)
+			for (int l = 0; l < lightCount; ++l)
 			{
-				lightColor = scene.ambientColor * material.ambientReflectivity;
-			}
-			else
-			{
-				lightColor =
-					scene.ambientColor * material.ambientReflectivity +
-					light.diffuseColor * diffuseAmount * material.diffuseReflectivity;
+				const Light& light = scene.lights[l];
+				Vector3 directionToLight = (light.position - rayToScene.intersection.position).normalized();
+				Ray rayToLight = Ray(rayToScene.intersection.position, directionToLight);
+
+				for (int p = 0; p < primitiveCount; ++p)
+					scene.primitives[p]->intersect(rayToLight);
+
+				if (!rayToLight.intersection.wasFound)
+				{
+					float diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
+
+					if (diffuseAmount > 0.0f)
+						lightColor += light.diffuseColor * diffuseAmount * rayToScene.intersection.material->diffuseReflectivity;
+				}
 			}
 
-			Color pixelColor = material.color * lightColor;
-			pixelData[y * width + x] = pixelColor.clamped().getAbgrValue();
+			pixelColor = rayToScene.intersection.material->color * lightColor;
 		}
+
+		pixelData[y * width + x] = pixelColor.clamped().getAbgrValue();
 	}
 }

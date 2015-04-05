@@ -17,8 +17,6 @@ namespace Raycer
 		std::vector<std::shared_ptr<Primitive>> primitives;
 		std::vector<Light> lights;
 
-		Color ambientColor = Color::WHITE;
-
 		Camera camera;
 	};
 }

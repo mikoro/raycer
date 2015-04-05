@@ -5,6 +5,7 @@
 *.suo
 *.user
 *.log
+My*
 Thumbs.db
 .directory
 .DS_Store

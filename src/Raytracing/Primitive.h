@@ -5,9 +5,7 @@
 
 namespace Raycer
 {
-	class Ray;
-	struct Intersection;
-	struct Material;
+	struct Ray;
 
 	class Primitive
 	{
@@ -15,7 +13,6 @@ namespace Raycer
 
 		virtual ~Primitive() {}
 
-		virtual bool intersects(const Ray& ray, Intersection& intersection) const = 0;
-		virtual const Material& getMaterial() const = 0;
+		virtual void intersect(Ray& ray) const = 0;
 	};
 }

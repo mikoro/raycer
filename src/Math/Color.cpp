@@ -5,6 +5,7 @@
 #include <cassert>
 
 #include "Math/Color.h"
+#include "Math/MathUtils.h"
 
 using namespace Raycer;
 
@@ -80,6 +81,49 @@ Color Raycer::operator*(const Color& c, float s)
 Color Raycer::operator*(float s, const Color& c)
 {
 	return Color(c.r * s, c.g * s, c.b * s, c.a * s);
+}
+
+Color Raycer::operator/(const Color& c, float s)
+{
+	return Color(c.r / s, c.g / s, c.b / s, c.a / s);
+}
+
+bool Raycer::operator==(const Color& c1, const Color& c2)
+{
+	return MathUtils::almostSame(c1.r, c2.r) && MathUtils::almostSame(c1.g, c2.g) && MathUtils::almostSame(c1.b, c2.b) && MathUtils::almostSame(c1.a, c2.a);
+}
+
+bool Raycer::operator!=(const Color& c1, const Color& c2)
+{
+	return !(c1 == c2);
+}
+
+Color& Color::operator+=(const Color& c)
+{
+	*this = *this + c;
+
+	return *this;
+}
+
+Color& Color::operator-=(const Color& c)
+{
+	*this = *this - c;
+
+	return *this;
+}
+
+Color& Color::operator*=(float s)
+{
+	*this = *this * s;
+
+	return *this;
+}
+
+Color& Color::operator/=(float s)
+{
+	*this = *this / s;
+
+	return *this;
 }
 
 bool Color::isTransparent() const

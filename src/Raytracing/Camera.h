@@ -10,7 +10,7 @@ namespace Raycer
 {
 	class App;
 	struct Settings;
-	class Ray;
+	struct Ray;
 
 	class Camera
 	{
