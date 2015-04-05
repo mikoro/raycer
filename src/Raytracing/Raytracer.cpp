@@ -44,7 +44,7 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 
 		if (rayToScene.intersection.wasFound)
 		{
-			Color lightColor;
+			Color lightColor(0.0, 0.0, 0.0);
 
 			for (int l = 0; l < lightCount; ++l)
 			{
@@ -62,7 +62,18 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 					double diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
 
 					if (diffuseAmount > 0.0)
+					{
 						lightColor += light.diffuseColor * diffuseAmount * rayToScene.intersection.material->diffuseReflectivity;
+
+						Vector3 lightReflectionDirection = (2.0 * diffuseAmount * rayToScene.intersection.normal) - directionToLight;
+						double specularAmount = lightReflectionDirection.dot(-rayToScene.direction);
+
+						if (specularAmount > 0.0)
+						{
+							specularAmount = pow(specularAmount, rayToScene.intersection.material->shininess);
+							lightColor += light.specularColor * specularAmount * rayToScene.intersection.material->specularReflectivity;
+						}
+					}
 				}
 			}
 
