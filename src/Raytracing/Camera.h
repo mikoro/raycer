@@ -17,14 +17,14 @@ namespace Raycer
 	public:
 
 		void initialize(App* app, Settings* settings);
-		void setFov(float fov);
+		void setFov(double fov);
 		void setImagePlaneSize(int width, int height);
-		void update(float timeStep);
+		void update(double timeStep);
 		
 		Ray getRay(int x, int y) const;
 
-		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		EulerAngle orientation = EulerAngle(0.0f, 0.0f, 0.0f);
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
 
 	private:
 
@@ -36,9 +36,9 @@ namespace Raycer
 		Vector3 up;
 		Vector3 imagePlaneCenter;
 
-		float aspectRatio = 1.0f;
-		float imagePlaneDistance = 1.0f;
-		float imagePlaneWidth = 0.0f;
-		float imagePlaneHeight = 0.0f;
+		double aspectRatio = 1.0;
+		double imagePlaneDistance = 1.0;
+		double imagePlaneWidth = 0.0;
+		double imagePlaneHeight = 0.0;
 	};
 }

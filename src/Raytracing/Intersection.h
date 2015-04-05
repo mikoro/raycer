@@ -14,10 +14,10 @@ namespace Raycer
 	struct Intersection
 	{
 		bool wasFound = false;
-		float distance = std::numeric_limits<float>::max();
-		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		Vector3 normal = Vector3(0.0f, 0.0f, 0.0f);
-		Vector2 textureCoordinate = Vector2(0.0f, 0.0f);
+		double distance = std::numeric_limits<double>::max();
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		Vector3 normal = Vector3(0.0, 0.0, 0.0);
+		Vector2 textureCoordinate = Vector2(0.0, 0.0);
 		const Material* material;
 	};
 }

@@ -9,8 +9,8 @@ namespace Raycer
 	{
 	public:
 
-		static bool almostZero(float value, int epsilons = 4);
-		static bool almostSame(float first, float second, int epsilons = 4);
-		static float degToRad(float degrees);
+		static bool almostZero(double value, int epsilons = 4);
+		static bool almostSame(double first, double second, int epsilons = 4);
+		static double degToRad(double degrees);
 	};
 }

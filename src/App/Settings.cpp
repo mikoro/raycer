@@ -13,23 +13,23 @@ Settings::Settings(IniReader& iniReader)
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
-	window.fov = iniReader.getValue<float>("window", "fov");
+	window.fov = iniReader.getValue<double>("window", "fov");
 
 	framebuffer.fixedWidth = iniReader.getValue<int>("framebuffer", "fixedWidth");
 	framebuffer.fixedHeight = iniReader.getValue<int>("framebuffer", "fixedHeight");
 	framebuffer.enableResizing = iniReader.getValue<bool>("framebuffer", "enableResizing");
-	framebuffer.resizeScale = iniReader.getValue<float>("framebuffer", "resizeScale");
+	framebuffer.resizeScale = iniReader.getValue<double>("framebuffer", "resizeScale");
 	framebuffer.enableSmoothing = iniReader.getValue<bool>("framebuffer", "enableSmoothing");
 
 	logger.minimumMessageLevel = iniReader.getValue<int>("logger", "minimumMessageLevel");
 	logger.outputToConsole = iniReader.getValue<bool>("logger", "outputToConsole");
 
-	app.updateFrequency = iniReader.getValue<float>("app", "updateFrequency");
+	app.updateFrequency = iniReader.getValue<double>("app", "updateFrequency");
 	app.showFps = iniReader.getValue<bool>("app", "showFps");
 	app.fpsFont = iniReader.getValue<std::string>("app", "fpsFont");
 	app.fpsFontSize = iniReader.getValue<int>("app", "fpsFontSize");
 
-	controls.moveSpeed = iniReader.getValue<float>("controls", "moveSpeed");
-	controls.mouseSpeed = iniReader.getValue<float>("controls", "mouseSpeed");
+	controls.moveSpeed = iniReader.getValue<double>("controls", "moveSpeed");
+	controls.mouseSpeed = iniReader.getValue<double>("controls", "mouseSpeed");
 	controls.mouseLookWithButton = iniReader.getValue<bool>("controls", "mouseLookWithButton");
 }

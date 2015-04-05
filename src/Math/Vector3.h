@@ -9,15 +9,15 @@ namespace Raycer
 	{
 	public:
 
-		Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+		Vector3(double x = 0.0, double y = 0.0, double z = 0.0);
 		Vector3(const Vector3& v);
 		Vector3& operator=(const Vector3& v);
 
 		friend Vector3 operator+(const Vector3& v, const Vector3& w);
 		friend Vector3 operator-(const Vector3& v, const Vector3& w);
-		friend Vector3 operator*(const Vector3& v, float s);
-		friend Vector3 operator*(float s, const Vector3& v);
-		friend Vector3 operator/(const Vector3& v, float s);
+		friend Vector3 operator*(const Vector3& v, double s);
+		friend Vector3 operator*(double s, const Vector3& v);
+		friend Vector3 operator/(const Vector3& v, double s);
 		friend Vector3 operator-(const Vector3& v);
 
 		friend bool operator==(const Vector3& v, const Vector3& w);
@@ -25,26 +25,26 @@ namespace Raycer
 
 		Vector3& operator+=(const Vector3& v);
 		Vector3& operator-=(const Vector3& v);
-		Vector3& operator*=(float s);
-		Vector3& operator/=(float s);
+		Vector3& operator*=(double s);
+		Vector3& operator/=(double s);
 
-		float length() const;
-		float lengthSquared() const;
+		double length() const;
+		double lengthSquared() const;
 		void normalize();
 		Vector3 normalized() const;
 		bool isZero() const;
 		bool isNormal() const;
-		float dot(const Vector3& v) const;
+		double dot(const Vector3& v) const;
 		Vector3 cross(const Vector3& v) const;
 		Vector3 reflect(const Vector3& normal) const;
-		static Vector3 lerp(const Vector3& v1, const Vector3& v2, float t);
+		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
 
 		static const Vector3 RIGHT;   // [1 0 0]
 		static const Vector3 UP;      // [0 1 0]
 		static const Vector3 FORWARD; // [0 0 1]
 
-		float x;
-		float y;
-		float z;
+		double x;
+		double y;
+		double z;
 	};
 }

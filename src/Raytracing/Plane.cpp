@@ -18,16 +18,16 @@ Plane::Plane(const Vector3& position_, const Vector3& normal_, const Material& m
 
 void Plane::intersect(Ray& ray) const
 {
-	const float epsilon = std::numeric_limits<float>::epsilon();
+	const double epsilon = std::numeric_limits<double>::epsilon();
 
-	float denominator = ray.direction.dot(normal);
+	double denominator = ray.direction.dot(normal);
 
 	if (abs(denominator) < epsilon)
 		return;
 
-	float t = (position - ray.origin).dot(normal) / denominator;
+	double t = (position - ray.origin).dot(normal) / denominator;
 
-	if (t < 0.0f)
+	if (t < 0.0)
 		return;
 
 	if (t > ray.intersection.distance)
@@ -36,6 +36,6 @@ void Plane::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = ray.origin + (t * ray.direction);
-	ray.intersection.normal = (denominator > 0.0f) ? -normal : normal;
+	ray.intersection.normal = (denominator > 0.0) ? -normal : normal;
 	ray.intersection.material = &material;
 }

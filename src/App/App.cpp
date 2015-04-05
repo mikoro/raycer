@@ -191,7 +191,7 @@ void App::windowResized(int width, int height)
 	glViewport(0, 0, windowWidth, windowHeight);
 
 	if (settings->framebuffer.enableResizing)
-		framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5f), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5f));
+		framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
 	else if (framebuffer->getWidth() != settings->framebuffer.fixedWidth || framebuffer->getHeight() != settings->framebuffer.fixedHeight)
 		framebuffer->resize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
 
@@ -213,7 +213,7 @@ void App::mainLoop()
 	double previousTime = glfwGetTime();
 	double timeAccumulator = 0;
 
-	update(0.0f);
+	update(0.0);
 
 	while (shouldRun)
 	{
@@ -257,8 +257,8 @@ void App::update(double timeStep)
 
 	mouseInfo.windowX = (int)newMouseX;
 	mouseInfo.windowY = windowHeight - (int)newMouseY - 1;
-	mouseInfo.framebufferX = (int)((float)mouseInfo.windowX / windowWidth * framebuffer->getWidth());
-	mouseInfo.framebufferY = (int)((float)mouseInfo.windowY / windowHeight * framebuffer->getHeight());
+	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / windowWidth * framebuffer->getWidth());
+	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / windowHeight * framebuffer->getHeight());
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
@@ -272,23 +272,23 @@ void App::update(double timeStep)
 
 	if (keyWasPressed(GLFW_KEY_F11) && settings->framebuffer.enableResizing)
 	{
-		if (settings->framebuffer.resizeScale < 1.0f)
+		if (settings->framebuffer.resizeScale < 1.0)
 		{
-			settings->framebuffer.resizeScale *= 2.0f;
+			settings->framebuffer.resizeScale *= 2.0;
 
-			if (settings->framebuffer.resizeScale > 1.0f)
-				settings->framebuffer.resizeScale = 1.0f;
+			if (settings->framebuffer.resizeScale > 1.0)
+				settings->framebuffer.resizeScale = 1.0;
 
-			framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5f), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5f));
+			framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
 			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
 	if (keyWasPressed(GLFW_KEY_F10) && settings->framebuffer.enableResizing)
 	{
-		float newScale = settings->framebuffer.resizeScale * 0.5f;
-		int newWidth = (int)(windowWidth * newScale + 0.5f);
-		int newHeight = (int)(windowHeight * newScale + 0.5f);
+		double newScale = settings->framebuffer.resizeScale * 0.5;
+		int newWidth = (int)(windowWidth * newScale + 0.5);
+		int newHeight = (int)(windowHeight * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
@@ -302,7 +302,7 @@ void App::update(double timeStep)
 		framebuffer->SetEnableSmoothing(!framebuffer->GetEnableSmoothing());
 
 	if (currentState != AppStates::None)
-		appStates[currentState]->update((float)timeStep);
+		appStates[currentState]->update(timeStep);
 	else
 		throw std::runtime_error("App state has not been set");
 }
@@ -312,7 +312,7 @@ void App::render(double timeStep, double interpolation)
 	renderFpsCounter.countFrame();
 
 	if (currentState != AppStates::None)
-		appStates[currentState]->render((float)timeStep, (float)interpolation);
+		appStates[currentState]->render(timeStep, interpolation);
 	else
 		throw std::runtime_error("App state has not been set");
 

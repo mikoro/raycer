@@ -20,7 +20,7 @@ namespace Raycer
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
-			float fov;
+			double fov;
 		} window;
 
 		struct Framebuffer
@@ -28,7 +28,7 @@ namespace Raycer
 			int fixedWidth;
 			int fixedHeight;
 			bool enableResizing;
-			float resizeScale;
+			double resizeScale;
 			bool enableSmoothing;
 		} framebuffer;
 
@@ -40,7 +40,7 @@ namespace Raycer
 
 		struct App
 		{
-			float updateFrequency;
+			double updateFrequency;
 			bool showFps;
 			std::string fpsFont;
 			int fpsFontSize;
@@ -48,8 +48,8 @@ namespace Raycer
 
 		struct Controls
 		{
-			float moveSpeed;
-			float mouseSpeed;
+			double moveSpeed;
+			double mouseSpeed;
 			bool mouseLookWithButton;
 		} controls;
 	};

@@ -18,8 +18,8 @@ namespace Raycer
 		
 		void intersect(Ray& ray) const;
 
-		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
-		Vector3 normal = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		Vector3 normal = Vector3(0.0, 0.0, 0.0);
 		Material material;
 	};
 }

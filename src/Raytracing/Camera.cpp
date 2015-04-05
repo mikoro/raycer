@@ -18,26 +18,26 @@ void Camera::initialize(App* app_, Settings* settings_)
 	settings = settings_;
 }
 
-void Camera::setFov(float fov)
+void Camera::setFov(double fov)
 {
-	imagePlaneDistance = 0.5f / tan(MathUtils::degToRad(fov / 2.0f));
+	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
 }
 
 void Camera::setImagePlaneSize(int width, int height)
 {
-	imagePlaneWidth = (float)(width - 1);
-	imagePlaneHeight = (float)(height - 1);
-	aspectRatio = (float)height / width;
+	imagePlaneWidth = (double)(width - 1);
+	imagePlaneHeight = (double)(height - 1);
+	aspectRatio = (double)height / width;
 }
 
-void Camera::update(float timeStep)
+void Camera::update(double timeStep)
 {
 	MouseInfo mouseInfo = app->getMouseInfo();
 
 	if (app->mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || !settings->controls.mouseLookWithButton)
 	{
-		orientation.yaw -= (float)mouseInfo.deltaX * timeStep * settings->controls.mouseSpeed;
-		orientation.pitch += (float)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
+		orientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings->controls.mouseSpeed;
+		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
 	}
 
 	forward = orientation.getDirectionVector().normalized();
@@ -67,8 +67,8 @@ void Camera::update(float timeStep)
 
 Ray Camera::getRay(int x, int y) const
 {
-	float dx = ((float)x / imagePlaneWidth) - 0.5f;
-	float dy = ((float)y / imagePlaneHeight) - 0.5f;
+	double dx = ((double)x / imagePlaneWidth) - 0.5;
+	double dy = ((double)y / imagePlaneHeight) - 0.5;
 
 	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 	Vector3 rayDirection = (imagePlanePixelPosition - position).normalized();

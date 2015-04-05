@@ -9,7 +9,7 @@
 
 using namespace Raycer;
 
-Vector2::Vector2(float x_, float y_) : x(x_), y(y_)
+Vector2::Vector2(double x_, double y_) : x(x_), y(y_)
 {
 }
 
@@ -37,17 +37,17 @@ Vector2 Raycer::operator-(const Vector2& v, const Vector2& w)
 	return Vector2(v.x - w.x, v.y - w.y);
 }
 
-Vector2 Raycer::operator*(const Vector2& v, float s)
+Vector2 Raycer::operator*(const Vector2& v, double s)
 {
 	return Vector2(v.x * s, v.y * s);
 }
 
-Vector2 Raycer::operator*(float s, const Vector2& v)
+Vector2 Raycer::operator*(double s, const Vector2& v)
 {
 	return Vector2(v.x * s, v.y * s);
 }
 
-Vector2 Raycer::operator/(const Vector2& v, float s)
+Vector2 Raycer::operator/(const Vector2& v, double s)
 {
 	return Vector2(v.x / s, v.y / s);
 }
@@ -81,26 +81,26 @@ Vector2& Vector2::operator-=(const Vector2& v)
 	return *this;
 }
 
-Vector2& Vector2::operator*=(float s)
+Vector2& Vector2::operator*=(double s)
 {
 	*this = *this * s;
 
 	return *this;
 }
 
-Vector2& Vector2::operator/=(float s)
+Vector2& Vector2::operator/=(double s)
 {
 	*this = *this / s;
 
 	return *this;
 }
 
-float Vector2::length() const
+double Vector2::length() const
 {
 	return std::sqrt(x*x + y*y);
 }
 
-float Vector2::lengthSquared() const
+double Vector2::lengthSquared() const
 {
 	return (x*x + y*y);
 }
@@ -122,22 +122,22 @@ bool Vector2::isZero() const
 
 bool Vector2::isNormal() const
 {
-	return MathUtils::almostSame(lengthSquared(), 1.0f);
+	return MathUtils::almostSame(lengthSquared(), 1.0);
 }
 
-float Vector2::dot(const Vector2& v) const
+double Vector2::dot(const Vector2& v) const
 {
 	return (x * v.x) + (y * v.y);
 }
 
 Vector2 Vector2::reflect(const Vector2& normal) const
 {
-	return *this - ((2.0f * this->dot(normal)) * normal);
+	return *this - ((2.0 * this->dot(normal)) * normal);
 }
 
-Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, float t)
+Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, double t)
 {
-	assert(t >= 0.0f && t <= 1.0f);
+	assert(t >= 0.0 && t <= 1.0);
 
-	return v1 * (1.0f - t) + v2 * t;
+	return v1 * (1.0 - t) + v2 * t;
 }

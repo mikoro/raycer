@@ -22,54 +22,54 @@ void TestState::initialize()
 {
 	Material m1;
 	m1.color = Color(119, 158, 203);
-	m1.diffuseReflectivity = 1.0f;
-	m1.specularReflectivity = 1.0f;
-	m1.rayReflectivity = 1.0f;
-	m1.shininess = 1.0f;
+	m1.diffuseReflectivity = 1.0;
+	m1.specularReflectivity = 1.0;
+	m1.rayReflectivity = 1.0;
+	m1.shininess = 1.0;
 
 	Sphere* s1 = new Sphere();
-	s1->position = Vector3(0.0f, 1.0f, -5.0f);
-	s1->setRadius(1.0f);
+	s1->position = Vector3(0.0, 1.0, -5.0);
+	s1->setRadius(1.0);
 	s1->material = m1;
 
 	m1.color = Color(255, 179, 71);
 
 	Sphere* s2 = new Sphere();
-	s2->position = Vector3(-1.0f, 2.0f, -5.0f);
-	s2->setRadius(1.0f);
+	s2->position = Vector3(-1.0, 2.0, -5.0);
+	s2->setRadius(1.0);
 	s2->material = m1;
 
 	m1.color = Color(119, 190, 119);
 
 	Sphere* s3 = new Sphere();
-	s3->position = Vector3(1.0f, 2.0f, -5.0f);
-	s3->setRadius(1.0f);
+	s3->position = Vector3(1.0, 2.0, -5.0);
+	s3->setRadius(1.0);
 	s3->material = m1;
 
 	m1.color = Color(112, 128, 144);
 
 	Plane* p1 = new Plane();
-	p1->position = Vector3(0.0f, 0.0f, 0.0f);
-	p1->normal = Vector3(0.0f, 1.0f, 0.0f);
+	p1->position = Vector3(0.0, 0.0, 0.0);
+	p1->normal = Vector3(0.0, 1.0, 0.0);
 	p1->material = m1;
 
 	Light l1;
-	l1.position = Vector3(0.0f, 10.0f, -5.0f);
-	l1.diffuseColor = Color(0.5f, 0.5f, 0.5f);
-	l1.specularColor = Color(0.5f, 0.5f, 0.5f);
+	l1.position = Vector3(0.0, 10.0, -5.0);
+	l1.diffuseColor = Color(0.5, 0.5, 0.5);
+	l1.specularColor = Color(0.5, 0.5, 0.5);
 
 	Light l2;
-	l2.position = Vector3(0.0f, 4.0f, 10.0f);
-	l2.diffuseColor = Color(0.5f, 0.5f, 0.5f);
-	l2.specularColor = Color(0.5f, 0.5f, 0.5f);
+	l2.position = Vector3(0.0, 4.0, 10.0);
+	l2.diffuseColor = Color(0.5, 0.5, 0.5);
+	l2.specularColor = Color(0.5, 0.5, 0.5);
 
 	Light l3;
-	l3.position = Vector3(0.0f, -10.0f, -5.0f);
-	l3.diffuseColor = Color(0.5f, 0.5f, 0.5f);
-	l3.specularColor = Color(0.5f, 0.5f, 0.5f);
+	l3.position = Vector3(0.0, -10.0, -5.0);
+	l3.diffuseColor = Color(0.5, 0.5, 0.5);
+	l3.specularColor = Color(0.5, 0.5, 0.5);
 
-	scene.camera.position = Vector3(0.0f, 1.0f, 0.0f);
-	scene.camera.orientation = EulerAngle(0.0f, 0.0f, 0.0f);
+	scene.camera.position = Vector3(0.0, 1.0, 0.0);
+	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 	scene.camera.initialize(&app, &settings);
 	scene.camera.setFov(settings.window.fov);
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
@@ -99,12 +99,12 @@ void TestState::shutdown()
 
 }
 
-void TestState::update(float timeStep)
+void TestState::update(double timeStep)
 {
 	scene.camera.update(timeStep);
 }
 
-void TestState::render(float timeStep, float interpolation)
+void TestState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
 	(void)interpolation;

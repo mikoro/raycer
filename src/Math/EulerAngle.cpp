@@ -10,7 +10,7 @@
 
 using namespace Raycer;
 
-EulerAngle::EulerAngle(float yaw_, float pitch_, float roll_) : yaw(yaw_), pitch(pitch_), roll(roll_)
+EulerAngle::EulerAngle(double yaw_, double pitch_, double roll_) : yaw(yaw_), pitch(pitch_), roll(roll_)
 {
 }
 

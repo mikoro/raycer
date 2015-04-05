@@ -15,7 +15,7 @@ namespace Raycer
 
 		Mesh();
 		
-		Vector3 position = Vector3(0, 0, 0);
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Material material;
 	};
 }

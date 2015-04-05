@@ -17,7 +17,7 @@ using namespace Raycer;
 
 namespace
 {
-	const float rayToLightOriginOffset = 0.0001f;
+	const double rayToLightOriginOffset = 0.000001;
 }
 
 void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
@@ -51,7 +51,7 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 				const Light& light = scene.lights[l];
 				Vector3 vectorToLight = light.position - rayToScene.intersection.position;
 				Vector3 directionToLight = vectorToLight.normalized();
-				float distanceToLight = vectorToLight.length();
+				double distanceToLight = vectorToLight.length();
 				Ray rayToLight = Ray(rayToScene.intersection.position + directionToLight * rayToLightOriginOffset, directionToLight);
 
 				for (int p = 0; p < primitiveCount; ++p)
@@ -59,9 +59,9 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 
 				if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
 				{
-					float diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
+					double diffuseAmount = directionToLight.dot(rayToScene.intersection.normal);
 
-					if (diffuseAmount > 0.0f)
+					if (diffuseAmount > 0.0)
 						lightColor += light.diffuseColor * diffuseAmount * rayToScene.intersection.material->diffuseReflectivity;
 				}
 			}

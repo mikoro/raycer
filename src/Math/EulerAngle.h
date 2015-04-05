@@ -23,14 +23,14 @@ namespace Raycer
 	{
 	public:
 
-		EulerAngle(float yaw = 0.0f, float pitch = 0.0f, float roll = 0.0f);
+		EulerAngle(double yaw = 0.0, double pitch = 0.0, double roll = 0.0);
 		EulerAngle(const EulerAngle& e);
 		EulerAngle& operator=(const EulerAngle& e);
 
 		Vector3 getDirectionVector() const;
 
-		float yaw;
-		float pitch;
-		float roll;
+		double yaw;
+		double pitch;
+		double roll;
 	};
 }

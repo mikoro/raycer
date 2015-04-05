@@ -11,23 +11,23 @@ using namespace Raycer;
 
 namespace
 {
-	const float epsilon = std::numeric_limits<float>::epsilon();
+	const double epsilon = std::numeric_limits<double>::epsilon();
 }
 
-bool MathUtils::almostZero(float value, int epsilons)
+bool MathUtils::almostZero(double value, int epsilons)
 {
 	return std::abs(value) < (epsilon * epsilons);
 }
 
 // https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
-bool MathUtils::almostSame(float first, float second, int epsilons)
+bool MathUtils::almostSame(double first, double second, int epsilons)
 {
-	float difference = std::abs(first - second);
+	double difference = std::abs(first - second);
 
 	if (difference < (epsilon * epsilons))
 		return true;
 
-	float larger = std::max(std::abs(first), std::abs(second));
+	double larger = std::max(std::abs(first), std::abs(second));
 	
 	if (difference < (larger * epsilon * epsilons))
 		return true;
@@ -35,7 +35,7 @@ bool MathUtils::almostSame(float first, float second, int epsilons)
 	return false;
 }
 
-float MathUtils::degToRad(float degrees)
+double MathUtils::degToRad(double degrees)
 {
-	return (degrees * ((float)M_PI / 180.0f));
+	return (degrees * (M_PI / 180.0));
 }

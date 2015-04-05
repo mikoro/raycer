@@ -14,17 +14,17 @@ namespace Raycer
 	public:
 
 		Sphere();
-		Sphere(const Vector3& position, float radius, const Material& material);
+		Sphere(const Vector3& position, double radius, const Material& material);
 
-		void setRadius(float radius);
+		void setRadius(double radius);
 		void intersect(Ray& ray) const;
 
-		Vector3 position = Vector3(0.0f, 0.0f, 0.0f);
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Material material;
 
 	private:
 
-		float radius = 1.0f;
-		float radius2 = 1.0f;
+		double radius = 1.0;
+		double radius2 = 1.0;
 	};
 }

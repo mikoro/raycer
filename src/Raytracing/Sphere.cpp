@@ -13,11 +13,11 @@ Sphere::Sphere()
 {
 }
 
-Sphere::Sphere(const Vector3& position_, float radius_, const Material& material_) : position(position_), radius(radius_), material(material_)
+Sphere::Sphere(const Vector3& position_, double radius_, const Material& material_) : position(position_), radius(radius_), material(material_)
 {
 }
 
-void Sphere::setRadius(float radius_)
+void Sphere::setRadius(double radius_)
 {
 	radius = radius_;
 	radius2 = radius * radius;
@@ -26,26 +26,26 @@ void Sphere::setRadius(float radius_)
 void Sphere::intersect(Ray& ray) const
 {
 	Vector3 originToCenter = position - ray.origin;
-	float originToSphereDistance2 = originToCenter.lengthSquared();
+	double originToSphereDistance2 = originToCenter.lengthSquared();
 
 	// ray origin inside the sphere
 	if (originToSphereDistance2 < radius2)
 		return;
 
-	float ta = originToCenter.dot(ray.direction);
+	double ta = originToCenter.dot(ray.direction);
 
 	// sphere is behind the ray
-	if (ta < 0.0f)
+	if (ta < 0.0)
 		return;
 
-	float sphereToRayDistance2 = originToSphereDistance2 - (ta * ta);
+	double sphereToRayDistance2 = originToSphereDistance2 - (ta * ta);
 
 	// ray misses the sphere
 	if (sphereToRayDistance2 > radius2)
 		return;
 
-	float tb = sqrt(radius2 - sphereToRayDistance2);
-	float t = ta - tb;
+	double tb = sqrt(radius2 - sphereToRayDistance2);
+	double t = ta - tb;
 
 	// there was another intersection closer to camera
 	if (t > ray.intersection.distance)

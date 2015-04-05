@@ -158,8 +158,8 @@ void Font::drawText(Framebuffer& framebuffer, int x0, int y0, const std::string&
 				if (glyphAlphaInt == 0)
 					continue;
 
-				float glyphAlpha = glyphAlphaInt * (1.0f / 255.0f);
-				float combinedAlpha = glyphAlpha * color.a;
+				double glyphAlpha = glyphAlphaInt * (1.0 / 255.0);
+				double combinedAlpha = glyphAlpha * color.a;
 
 				uint32_t oldColorValue = pixelData[y * framebufferWidth + x];
 				uint32_t newColorValue = Color(color.r, color.g, color.b, combinedAlpha).getAbgrValue();

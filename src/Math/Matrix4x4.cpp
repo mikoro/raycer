@@ -10,24 +10,24 @@
 using namespace Raycer;
 
 const Matrix4x4 Matrix4x4::IDENTITY = Matrix4x4(
-	1.0f, 0.0f, 0.0f, 0.0f,
-	0.0f, 1.0f, 0.0f, 0.0f,
-	0.0f, 0.0f, 1.0f, 0.0f,
-	0.0f, 0.0f, 0.0f, 1.0f);
+	1.0, 0.0, 0.0, 0.0,
+	0.0, 1.0, 0.0, 0.0,
+	0.0, 0.0, 1.0, 0.0,
+	0.0, 0.0, 0.0, 1.0);
 
 const Matrix4x4 Matrix4x4::ZERO = Matrix4x4();
 
 Matrix4x4::Matrix4x4()
 {
-	std::memset(m, 0, sizeof(float) * 16);
+	std::memset(m, 0, sizeof(double) * 16);
 }
 
 Matrix4x4::Matrix4x4(const Matrix4x4& n)
 {
-	std::memcpy(m, n.m, sizeof(float) * 16);
+	std::memcpy(m, n.m, sizeof(double) * 16);
 }
 
-Matrix4x4::Matrix4x4(float m00, float m10, float m20, float m30, float m01, float m11, float m21, float m31, float m02, float m12, float m22, float m32, float m03, float m13, float m23, float m33)
+Matrix4x4::Matrix4x4(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33)
 {
 	m[0][0] = m00; m[1][0] = m10; m[2][0] = m20; m[3][0] = m30;
 	m[0][1] = m01; m[1][1] = m11; m[2][1] = m21; m[3][1] = m31;
@@ -37,7 +37,7 @@ Matrix4x4::Matrix4x4(float m00, float m10, float m20, float m30, float m01, floa
 
 Matrix4x4& Matrix4x4::operator=(const Matrix4x4& n)
 {
-	std::memcpy(m, n.m, sizeof(float) * 16);
+	std::memcpy(m, n.m, sizeof(double) * 16);
 
 	return *this;
 }
@@ -64,7 +64,7 @@ Matrix4x4 Raycer::operator-(const Matrix4x4& m, const Matrix4x4& n)
 	return result;
 }
 
-Matrix4x4 Raycer::operator*(const Matrix4x4& m, float s)
+Matrix4x4 Raycer::operator*(const Matrix4x4& m, double s)
 {
 	Matrix4x4 result;
 
@@ -75,7 +75,7 @@ Matrix4x4 Raycer::operator*(const Matrix4x4& m, float s)
 	return result;
 }
 
-Matrix4x4 Raycer::operator*(float s, const Matrix4x4& m)
+Matrix4x4 Raycer::operator*(double s, const Matrix4x4& m)
 {
 	Matrix4x4 result;
 
@@ -108,7 +108,7 @@ Vector3 Raycer::operator*(const Matrix4x4& m, const Vector3& v)
 	return result;
 }
 
-Matrix4x4 Raycer::operator/(const Matrix4x4& m, float s)
+Matrix4x4 Raycer::operator/(const Matrix4x4& m, double s)
 {
 	Matrix4x4 result;
 
@@ -166,26 +166,26 @@ Matrix4x4& Matrix4x4::operator*=(const Matrix4x4& n)
 	return *this;
 }
 
-Matrix4x4& Matrix4x4::operator*=(float s)
+Matrix4x4& Matrix4x4::operator*=(double s)
 {
 	*this = *this * s;
 
 	return *this;
 }
 
-Matrix4x4& Matrix4x4::operator/=(float s)
+Matrix4x4& Matrix4x4::operator/=(double s)
 {
 	*this = *this / s;
 
 	return *this;
 }
 
-Matrix4x4::operator float*()
+Matrix4x4::operator double*()
 {
 	return &m[0][0];
 }
 
-Matrix4x4::operator const float*() const
+Matrix4x4::operator const double*() const
 {
 	return &m[0][0];
 }
@@ -207,7 +207,7 @@ Matrix4x4 Matrix4x4::transposed() const
 	return r;
 }
 
-Matrix4x4 Matrix4x4::scale(float sx, float sy, float sz)
+Matrix4x4 Matrix4x4::scale(double sx, double sy, double sz)
 {
 	Matrix4x4 result = IDENTITY;
 
@@ -218,7 +218,7 @@ Matrix4x4 Matrix4x4::scale(float sx, float sy, float sz)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::translate(float tx, float ty, float tz)
+Matrix4x4 Matrix4x4::translate(double tx, double ty, double tz)
 {
 	Matrix4x4 result = IDENTITY;
 
@@ -229,12 +229,12 @@ Matrix4x4 Matrix4x4::translate(float tx, float ty, float tz)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateX(float degrees)
+Matrix4x4 Matrix4x4::rotateX(double degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(MathUtils::degToRad(degrees));
-	float cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(degrees));
+	double cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[1][1] = cosine;
 	result.m[2][1] = -sine;
@@ -244,12 +244,12 @@ Matrix4x4 Matrix4x4::rotateX(float degrees)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateY(float degrees)
+Matrix4x4 Matrix4x4::rotateY(double degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(MathUtils::degToRad(degrees));
-	float cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(degrees));
+	double cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[0][0] = cosine;
 	result.m[2][0] = sine;
@@ -259,12 +259,12 @@ Matrix4x4 Matrix4x4::rotateY(float degrees)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateZ(float degrees)
+Matrix4x4 Matrix4x4::rotateZ(double degrees)
 {
 	Matrix4x4 result = IDENTITY;
 
-	float sine = sin(MathUtils::degToRad(degrees));
-	float cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(degrees));
+	double cosine = cos(MathUtils::degToRad(degrees));
 
 	result.m[0][0] = cosine;
 	result.m[1][0] = -sine;
