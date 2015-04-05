@@ -28,8 +28,8 @@ namespace Raycer
 
 	private:
 
-		App* app;
-		Settings* settings;
+		App* app = nullptr;
+		Settings* settings = nullptr;
 
 		Vector3 forward;
 		Vector3 right;

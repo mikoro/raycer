@@ -11,9 +11,9 @@ namespace Raycer
 	{
 		Color color = Color::WHITE;
 
-		double diffuseReflectivity = 1.0;
-		double specularReflectivity = 1.0;
-		double rayReflectivity = 1.0;
+		double diffuseConstant = 1.0;
+		double specularConstant = 1.0;
 		double shininess = 1.0;
+		double reflectivity = 0.0;
 	};
 }

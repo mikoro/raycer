@@ -18,6 +18,6 @@ namespace Raycer
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Vector3 normal = Vector3(0.0, 0.0, 0.0);
 		Vector2 textureCoordinate = Vector2(0.0, 0.0);
-		const Material* material;
+		const Material* material = nullptr;
 	};
 }

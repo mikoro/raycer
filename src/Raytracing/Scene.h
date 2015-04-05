@@ -9,6 +9,7 @@
 #include "Raytracing/Light.h"
 #include "Raytracing/Primitive.h"
 #include "Raytracing/Camera.h"
+#include "Math/Color.h"
 
 namespace Raycer
 {
@@ -18,5 +19,10 @@ namespace Raycer
 		std::vector<Light> lights;
 
 		Camera camera;
+
+		bool fogEnabled = false;
+		double fogDistance = 0.0;
+		double fogSteepness = 0.0;
+		Color fogColor = Color(0.0, 0.0, 0.0);
 	};
 }

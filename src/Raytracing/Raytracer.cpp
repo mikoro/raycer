@@ -35,7 +35,17 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 
 		Ray rayToScene = scene.camera.getRay(x, y);
 		shootRay(rayToScene, scene);
-		pixelData[y * width + x] = rayToScene.color.clamped().getAbgrValue();
+		Color finalColor = rayToScene.color;
+
+		if (scene.fogEnabled)
+		{
+			double t = rayToScene.intersection.distance / scene.fogDistance;
+			t = std::max(0.0, std::min(t, 1.0));
+			t = pow(t, scene.fogSteepness);
+			finalColor = Color::lerp(finalColor, scene.fogColor, t);
+		}
+
+		pixelData[y * width + x] = finalColor.clamped().getAbgrValue();
 	}
 }
 
@@ -48,14 +58,14 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene)
 	{
 		Color lightColor(0.0, 0.0, 0.0);
 
-		if (ray.intersection.material->rayReflectivity > 0.0 && ray.reflectionCount < MAX_REFLECTIONS)
+		if (ray.intersection.material->reflectivity > 0.0 && ray.reflectionCount < MAX_REFLECTIONS)
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
 			shootRay(reflectedRay, scene);
 
-			lightColor += reflectedRay.color * ray.intersection.material->rayReflectivity;
+			lightColor += reflectedRay.color * ray.intersection.material->reflectivity;
 		}
 
 		for (int l = 0; l < scene.lights.size(); ++l)
@@ -75,7 +85,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene)
 
 				if (diffuseAmount > 0.0)
 				{
-					lightColor += light.diffuseColor * diffuseAmount * ray.intersection.material->diffuseReflectivity;
+					lightColor += light.color * light.intensity * diffuseAmount * ray.intersection.material->diffuseConstant;
 
 					Vector3 lightReflectionDirection = (2.0 * diffuseAmount * ray.intersection.normal) - directionToLight;
 					double specularAmount = lightReflectionDirection.dot(-ray.direction);
@@ -83,7 +93,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene)
 					if (specularAmount > 0.0)
 					{
 						specularAmount = pow(specularAmount, ray.intersection.material->shininess);
-						lightColor += light.specularColor * specularAmount * ray.intersection.material->specularReflectivity;
+						lightColor += light.color * light.intensity * specularAmount * ray.intersection.material->specularConstant;
 					}
 				}
 			}

@@ -11,8 +11,7 @@ namespace Raycer
 	struct Light
 	{
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
-
-		Color diffuseColor = Color::WHITE;
-		Color specularColor = Color::WHITE;
+		Color color = Color::WHITE;
+		double intensity = 1.0;
 	};
 }

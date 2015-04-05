@@ -22,10 +22,10 @@ void TestState::initialize()
 {
 	Material m1;
 	m1.color = Color(119, 158, 203);
-	m1.diffuseReflectivity = 1.0;
-	m1.specularReflectivity = 1.0;
-	m1.rayReflectivity = 1.0;
-	m1.shininess = 8.0;
+	m1.diffuseConstant = 1.0;
+	m1.specularConstant = 1.0;
+	m1.reflectivity = 1.0;
+	m1.shininess = 16.0;
 
 	Sphere* s1 = new Sphere();
 	s1->position = Vector3(0.0, 1.0, -5.0);
@@ -47,7 +47,8 @@ void TestState::initialize()
 	s3->material = m1;
 
 	m1.color = Color(112, 128, 144);
-	m1.specularReflectivity = 0.0;
+	m1.specularConstant = 1.0;
+	m1.shininess = 8.0;
 
 	Plane* p1 = new Plane();
 	p1->position = Vector3(0.0, 0.0, 0.0);
@@ -56,18 +57,23 @@ void TestState::initialize()
 
 	Light l1;
 	l1.position = Vector3(0.0, 10.0, -5.0);
-	l1.diffuseColor = Color(0.5, 0.5, 0.5);
-	l1.specularColor = Color(0.8, 0.8, 0.8);
+	l1.color = Color(1.0, 1.0, 1.0);
+	l1.intensity = 0.5;
 
 	Light l2;
 	l2.position = Vector3(0.0, 4.0, 10.0);
-	l2.diffuseColor = Color(0.5, 0.5, 0.5);
-	l2.specularColor = Color(0.8, 0.8, 0.8);
+	l2.color = Color(1.0, 1.0, 1.0);
+	l2.intensity = 0.5;
 
 	Light l3;
 	l3.position = Vector3(0.0, -10.0, -5.0);
-	l3.diffuseColor = Color(0.5, 0.5, 0.5);
-	l3.specularColor = Color(0.5, 0.5, 0.5);
+	l3.color = Color(1.0, 1.0, 1.0);
+	l3.intensity = 0.5;
+
+	scene.fogEnabled = true;
+	scene.fogDistance = 40.0;
+	scene.fogSteepness = 4.0;
+	scene.fogColor = Color(128, 128, 128);
 
 	scene.camera.position = Vector3(0.0, 1.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
