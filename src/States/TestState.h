@@ -14,12 +14,13 @@ namespace Raycer
 	class BaseLog;
 	class NamedLog;
 	class Framebuffer;
+	struct Settings;
 
 	class TestState : public AppStateBase
 	{
 	public:
 
-		TestState(BaseLog& baseLog, App& app, Framebuffer& framebuffer);
+		TestState(BaseLog& baseLog, App& app, Framebuffer& framebuffer, Settings& settings);
 
 		void initialize();
 		void pause();
@@ -30,6 +31,7 @@ namespace Raycer
 		void render(float timeStep, float interpolation);
 
 		void windowResized(int width, int height);
+		void framebufferResized(int width, int height);
 
 	private:
 
@@ -37,6 +39,7 @@ namespace Raycer
 
 		App& app;
 		Framebuffer& framebuffer;
+		Settings& settings;
 		Scene scene;
 	};
 }

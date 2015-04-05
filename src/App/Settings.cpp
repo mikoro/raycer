@@ -13,6 +13,7 @@ Settings::Settings(IniReader& iniReader)
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
+	window.fov = iniReader.getValue<float>("window", "fov");
 
 	framebuffer.fixedWidth = iniReader.getValue<int>("framebuffer", "fixedWidth");
 	framebuffer.fixedHeight = iniReader.getValue<int>("framebuffer", "fixedHeight");
@@ -25,4 +26,10 @@ Settings::Settings(IniReader& iniReader)
 
 	app.updateFrequency = iniReader.getValue<float>("app", "updateFrequency");
 	app.showFps = iniReader.getValue<bool>("app", "showFps");
+	app.fpsFont = iniReader.getValue<std::string>("app", "fpsFont");
+	app.fpsFontSize = iniReader.getValue<int>("app", "fpsFontSize");
+
+	controls.moveSpeed = iniReader.getValue<float>("controls", "moveSpeed");
+	controls.mouseSpeed = iniReader.getValue<float>("controls", "mouseSpeed");
+	controls.mouseLookWithButton = iniReader.getValue<bool>("controls", "mouseLookWithButton");
 }

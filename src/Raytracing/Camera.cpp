@@ -12,9 +12,10 @@
 
 using namespace Raycer;
 
-void Camera::setApp(App* app_)
+void Camera::initialize(App* app_, Settings* settings_)
 {
 	app = app_;
+	settings = settings_;
 }
 
 void Camera::setFov(float fov)
@@ -33,33 +34,33 @@ void Camera::update(float timeStep)
 {
 	MouseInfo mouseInfo = app->getMouseInfo();
 
-	if (app->mouseIsDown(GLFW_MOUSE_BUTTON_LEFT))
+	if (app->mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || !settings->controls.mouseLookWithButton)
 	{
-		orientation.yaw -= (float)mouseInfo.deltaX * timeStep * 5.0f;
-		orientation.pitch += (float)mouseInfo.deltaY * timeStep * 5.0f;
+		orientation.yaw -= (float)mouseInfo.deltaX * timeStep * settings->controls.mouseSpeed;
+		orientation.pitch += (float)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
 	}
 
 	forward = orientation.getDirectionVector().normalized();
 	right = forward.cross(Vector3::UP).normalized();
 	up = right.cross(forward).normalized();
 
-	if (app->keyIsDown(GLFW_KEY_W))
-		position += forward * timeStep * 5.0f;
+	if (app->keyIsDown(GLFW_KEY_W) || app->keyIsDown(GLFW_KEY_UP))
+		position += forward * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_S))
-		position -= forward * timeStep * 5.0f;
+	if (app->keyIsDown(GLFW_KEY_S) || app->keyIsDown(GLFW_KEY_DOWN))
+		position -= forward * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_A))
-		position -= right * timeStep * 5.0f;
+	if (app->keyIsDown(GLFW_KEY_A) || app->keyIsDown(GLFW_KEY_LEFT))
+		position -= right * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_D))
-		position += right * timeStep * 5.0f;
+	if (app->keyIsDown(GLFW_KEY_D) || app->keyIsDown(GLFW_KEY_RIGHT))
+		position += right * timeStep * settings->controls.moveSpeed;
 
 	if (app->keyIsDown(GLFW_KEY_Q))
-		position -= up * timeStep * 5.0f;
+		position -= up * timeStep * settings->controls.moveSpeed;
 
 	if (app->keyIsDown(GLFW_KEY_E))
-		position += up * timeStep * 5.0f;
+		position += up * timeStep * settings->controls.moveSpeed;
 
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }

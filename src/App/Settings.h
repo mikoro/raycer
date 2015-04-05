@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <string>
+
 namespace Raycer
 {
 	class IniReader;
@@ -18,6 +20,7 @@ namespace Raycer
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
+			float fov;
 		} window;
 
 		struct Framebuffer
@@ -39,6 +42,15 @@ namespace Raycer
 		{
 			float updateFrequency;
 			bool showFps;
+			std::string fpsFont;
+			int fpsFontSize;
 		} app;
+
+		struct Controls
+		{
+			float moveSpeed;
+			float mouseSpeed;
+			bool mouseLookWithButton;
+		} controls;
 	};
 }

@@ -6,7 +6,7 @@
 #include <map>
 #include <memory>
 
-#include "Settings.h"
+#include "App/Settings.h"
 #include "App/AppStateBase.h"
 #include "Utils/Log.h"
 #include "Utils/IniReader.h"

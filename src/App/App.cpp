@@ -164,9 +164,9 @@ void App::initialize()
 	
 	windowResized(settings->window.width, settings->window.height);
 
-	fpsFont = std::unique_ptr<Font>(new Font(*baseLog, "data/fonts/dejavu-sans-regular.ttf", 14));
+	fpsFont = std::unique_ptr<Font>(new Font(*baseLog, settings->app.fpsFont, settings->app.fpsFontSize));
 
-	appStates[AppStates::Test] = std::unique_ptr<TestState>(new TestState(*baseLog, *this, *framebuffer));
+	appStates[AppStates::Test] = std::unique_ptr<TestState>(new TestState(*baseLog, *this, *framebuffer, *settings));
 
 	changeState(AppStates::Test);
 }
@@ -196,7 +196,10 @@ void App::windowResized(int width, int height)
 		framebuffer->resize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
 
 	if (currentState != AppStates::None)
+	{
 		appStates[currentState]->windowResized(windowWidth, windowHeight);
+		appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
+	}
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
@@ -267,7 +270,7 @@ void App::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_ESCAPE))
 		shouldRun = false;
 
-	if (keyWasPressed(GLFW_KEY_F11))
+	if (keyWasPressed(GLFW_KEY_F11) && settings->framebuffer.enableResizing)
 	{
 		if (settings->framebuffer.resizeScale < 1.0f)
 		{
@@ -277,10 +280,11 @@ void App::update(double timeStep)
 				settings->framebuffer.resizeScale = 1.0f;
 
 			framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5f), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5f));
+			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
-	if (keyWasPressed(GLFW_KEY_F10))
+	if (keyWasPressed(GLFW_KEY_F10) && settings->framebuffer.enableResizing)
 	{
 		float newScale = settings->framebuffer.resizeScale * 0.5f;
 		int newWidth = (int)(windowWidth * newScale + 0.5f);
@@ -290,6 +294,7 @@ void App::update(double timeStep)
 		{
 			settings->framebuffer.resizeScale = newScale;
 			framebuffer->resize(newWidth, newHeight);
+			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
@@ -312,7 +317,7 @@ void App::render(double timeStep, double interpolation)
 		throw std::runtime_error("App state has not been set");
 
 	if (settings->app.showFps)
-		fpsFont->drawText(*framebuffer, 5, windowHeight - 16, renderFpsCounter.getFpsString(), Color(255, 255, 255, 128));
+		fpsFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->app.fpsFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
 
 	framebuffer->render();
 	framebuffer->clear();
