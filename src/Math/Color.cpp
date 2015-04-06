@@ -147,38 +147,38 @@ Color Color::clamped() const
 
 Color Color::fromRgbaValue(uint32_t rgba)
 {
-	int r = (rgba >> 24);
-	int g = (rgba >> 16) & 0xff;
-	int b = (rgba >> 8) & 0xff;
-	int a = rgba & 0xff;
+	int r_ = (rgba >> 24);
+	int g_ = (rgba >> 16) & 0xff;
+	int b_ = (rgba >> 8) & 0xff;
+	int a_ = rgba & 0xff;
 	
 	const double inv255 = 1.0 / 255.0;
 
 	Color c;
 
-	c.r = r * inv255;
-	c.g = g * inv255;
-	c.b = b * inv255;
-	c.a = a * inv255;
+	c.r = r_ * inv255;
+	c.g = g_ * inv255;
+	c.b = b_ * inv255;
+	c.a = a_ * inv255;
 
 	return c;
 }
 
 Color Color::fromAbgrValue(uint32_t abgr)
 {
-	int r = abgr & 0xff;
-	int g = (abgr >> 8) & 0xff;
-	int b = (abgr >> 16) & 0xff;
-	int a = (abgr >> 24);
+	int r_ = abgr & 0xff;
+	int g_ = (abgr >> 8) & 0xff;
+	int b_ = (abgr >> 16) & 0xff;
+	int a_ = (abgr >> 24);
 
 	const double inv255 = 1.0 / 255.0;
 
 	Color c;
 
-	c.r = r * inv255;
-	c.g = g * inv255;
-	c.b = b * inv255;
-	c.a = a * inv255;
+	c.r = r_ * inv255;
+	c.g = g_ * inv255;
+	c.b = b_ * inv255;
+	c.a = a_ * inv255;
 
 	return c;
 }

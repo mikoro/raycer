@@ -21,5 +21,13 @@ namespace Raycer
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Vector3 normal = Vector3(0.0, 0.0, 0.0);
 		Material material;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(normal),
+				CEREAL_NVP(material));
+		}
 	};
 }

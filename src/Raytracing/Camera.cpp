@@ -18,11 +18,6 @@ void Camera::initialize(App* app_, Settings* settings_)
 	settings = settings_;
 }
 
-void Camera::setFov(double fov)
-{
-	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
-}
-
 void Camera::setImagePlaneSize(int width, int height)
 {
 	imagePlaneWidth = (double)(width - 1);
@@ -35,6 +30,8 @@ void Camera::calculateVariables()
 	forward = orientation.getDirectionVector().normalized();
 	right = forward.cross(Vector3::UP).normalized();
 	up = right.cross(forward).normalized();
+
+	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 

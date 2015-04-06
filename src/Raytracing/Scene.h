@@ -6,16 +6,33 @@
 #include <vector>
 #include <memory>
 
-#include "Raytracing/Light.h"
 #include "Raytracing/Primitive.h"
+#include "Raytracing/Sphere.h"
+#include "Raytracing/Plane.h"
+#include "Raytracing/Mesh.h"
+#include "Raytracing/Light.h"
 #include "Raytracing/Camera.h"
 #include "Math/Color.h"
 
 namespace Raycer
 {
-	struct Scene
+	class Scene
 	{
-		std::vector<std::shared_ptr<Primitive>> primitives;
+	public:
+
+		Scene();
+		Scene(const std::string fileName);
+
+		void load(const std::string fileName);
+		void saveAs(const std::string fileName) const;
+
+		void initialize();
+
+		std::vector<Primitive*> primitives;
+
+		std::vector<Sphere> spheres;
+		std::vector<Plane> planes;
+		std::vector<Mesh> meshes;
 		std::vector<Light> lights;
 
 		Camera camera;
@@ -26,5 +43,20 @@ namespace Raycer
 		double fogDistance = 0.0;
 		double fogSteepness = 0.0;
 		Color fogColor = Color(0.0, 0.0, 0.0);
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(spheres),
+				CEREAL_NVP(planes),
+				CEREAL_NVP(meshes),
+				CEREAL_NVP(lights),
+				CEREAL_NVP(camera),
+				CEREAL_NVP(maxReflections),
+				CEREAL_NVP(fogEnabled),
+				CEREAL_NVP(fogDistance),
+				CEREAL_NVP(fogSteepness),
+				CEREAL_NVP(fogColor));
+		}
 	};
 }

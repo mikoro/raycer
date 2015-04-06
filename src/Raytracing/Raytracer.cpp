@@ -68,7 +68,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interr
 
 	++rayCount;
 
-	for (int p = 0; p < scene.primitives.size(); ++p)
+	for (size_t p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
 
 	if (ray.intersection.wasFound)
@@ -85,7 +85,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interr
 			lightColor += reflectedRay.color * ray.intersection.material->reflectivity;
 		}
 
-		for (int l = 0; l < scene.lights.size(); ++l)
+		for (size_t l = 0; l < scene.lights.size(); ++l)
 		{
 			const Light& light = scene.lights[l];
 			Vector3 vectorToLight = light.position - ray.intersection.position;
@@ -93,7 +93,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interr
 			double distanceToLight = vectorToLight.length();
 			Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
 
-			for (int p = 0; p < scene.primitives.size(); ++p)
+			for (size_t p = 0; p < scene.primitives.size(); ++p)
 				scene.primitives[p]->intersect(rayToLight);
 
 			if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)

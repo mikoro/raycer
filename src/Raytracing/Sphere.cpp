@@ -13,7 +13,7 @@ Sphere::Sphere()
 {
 }
 
-Sphere::Sphere(const Vector3& position_, double radius_, const Material& material_) : position(position_), radius(radius_), material(material_)
+Sphere::Sphere(const Vector3& position_, double radius_, const Material& material_) : position(position_), material(material_), radius(radius_)
 {
 }
 

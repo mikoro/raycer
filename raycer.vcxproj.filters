@@ -94,6 +94,9 @@
     <ClCompile Include="src\Utils\ConsoleRunner.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Scene.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

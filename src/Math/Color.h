@@ -50,5 +50,14 @@ namespace Raycer
 		double g;
 		double b;
 		double a;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(r),
+				CEREAL_NVP(g),
+				CEREAL_NVP(b),
+				CEREAL_NVP(a));
+		}
 	};
 }

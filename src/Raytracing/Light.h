@@ -13,5 +13,13 @@ namespace Raycer
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Color color = Color::WHITE;
 		double intensity = 1.0;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(color),
+				CEREAL_NVP(intensity));
+		}
 	};
 }

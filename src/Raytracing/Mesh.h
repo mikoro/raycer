@@ -15,7 +15,16 @@ namespace Raycer
 
 		Mesh();
 		
+		void intersect(Ray& ray) const;
+
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Material material;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(material));
+		}
 	};
 }

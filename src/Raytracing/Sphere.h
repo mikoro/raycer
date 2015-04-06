@@ -22,6 +22,14 @@ namespace Raycer
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Material material;
 
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(material),
+				CEREAL_NVP(radius));
+		}
+
 	private:
 
 		double radius = 1.0;

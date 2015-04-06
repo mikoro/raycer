@@ -17,7 +17,6 @@ namespace Raycer
 	public:
 
 		void initialize(App* app, Settings* settings);
-		void setFov(double fov);
 		void setImagePlaneSize(int width, int height);
 		void calculateVariables();
 		void update(double timeStep);
@@ -26,6 +25,15 @@ namespace Raycer
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
+		double fov = 75.0;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(orientation),
+				CEREAL_NVP(fov));
+		}
 
 	private:
 

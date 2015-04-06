@@ -22,6 +22,7 @@ TraceFastState::TraceFastState(BaseLog& baseLog, App& app_, Framebuffer& framebu
 
 void TraceFastState::initialize()
 {
+	/*
 	Material m1;
 	m1.color = Color(119, 158, 203);
 	m1.diffuseConstant = 1.0;
@@ -29,33 +30,33 @@ void TraceFastState::initialize()
 	m1.reflectivity = 1.0;
 	m1.shininess = 16.0;
 
-	Sphere* s1 = new Sphere();
-	s1->position = Vector3(0.0, 1.0, -5.0);
-	s1->setRadius(1.0);
-	s1->material = m1;
+	Sphere s1;
+	s1.position = Vector3(0.0, 1.0, -5.0);
+	s1.setRadius(1.0);
+	s1.material = m1;
 
 	m1.color = Color(255, 179, 71);
 
-	Sphere* s2 = new Sphere();
-	s2->position = Vector3(-1.0, 2.0, -5.0);
-	s2->setRadius(1.0);
-	s2->material = m1;
+	Sphere s2;
+	s2.position = Vector3(-1.0, 2.0, -5.0);
+	s2.setRadius(1.0);
+	s2.material = m1;
 
 	m1.color = Color(119, 190, 119);
 
-	Sphere* s3 = new Sphere();
-	s3->position = Vector3(1.0, 2.0, -5.0);
-	s3->setRadius(1.0);
-	s3->material = m1;
+	Sphere s3;
+	s3.position = Vector3(1.0, 2.0, -5.0);
+	s3.setRadius(1.0);
+	s3.material = m1;
 
 	m1.color = Color(112, 128, 144);
 	m1.specularConstant = 1.0;
 	m1.shininess = 8.0;
 
-	Plane* p1 = new Plane();
-	p1->position = Vector3(0.0, 0.0, 0.0);
-	p1->normal = Vector3(0.0, 1.0, 0.0);
-	p1->material = m1;
+	Plane p1;
+	p1.position = Vector3(0.0, 0.0, 0.0);
+	p1.normal = Vector3(0.0, 1.0, 0.0);
+	p1.material = m1;
 
 	Light l1;
 	l1.position = Vector3(0.0, 10.0, -5.0);
@@ -82,17 +83,28 @@ void TraceFastState::initialize()
 	scene.camera.position = Vector3(0.0, 1.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 	scene.camera.initialize(&app, &settings);
-	scene.camera.setFov(75.0);
+	scene.camera.fov = 75.0;
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	scene.camera.calculateVariables();
 
-	scene.primitives.push_back(std::shared_ptr<Primitive>(s1));
-	scene.primitives.push_back(std::shared_ptr<Primitive>(s2));
-	scene.primitives.push_back(std::shared_ptr<Primitive>(s3));
-	scene.primitives.push_back(std::shared_ptr<Primitive>(p1));
+	scene.spheres.push_back(s1);
+	scene.spheres.push_back(s2);
+	scene.spheres.push_back(s3);
+
+	scene.planes.push_back(p1);
 
 	scene.lights.push_back(l1);
 	scene.lights.push_back(l2);
 	scene.lights.push_back(l3);
+
+	scene.initialize();
+	*/
+
+	scene.load("data/scenes/test_scene.json");
+	scene.initialize();
+	scene.camera.initialize(&app, &settings);
+	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	scene.camera.calculateVariables();
 }
 
 void TraceFastState::pause()

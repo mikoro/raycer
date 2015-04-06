@@ -8,7 +8,7 @@
 namespace Raycer
 {
 	class RenderTarget;
-	struct Scene;
+	class Scene;
 	struct Ray;
 
 	class Raytracer
