@@ -3,7 +3,14 @@
 
 #include <cassert>
 
+#define STB_IMAGE_IMPLEMENTATION
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+
+#include "stb/stb_image.h"
+#include "stb/stb_image_write.h"
+
 #include "Rendering/Image.h"
+#include "Rendering/Framebuffer.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -15,6 +22,11 @@ Image::Image()
 Image::Image(const std::string& fileName)
 {
 	load(fileName);
+}
+
+Image::Image(const Framebuffer& framebuffer)
+{
+	(void)framebuffer;
 }
 
 Image::~Image()

@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <tclap/CmdLine.h>
+#include "tclap/CmdLine.h"
 
 #include "App/App.h"
 

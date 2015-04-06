@@ -11,6 +11,7 @@
 namespace Raycer
 {
 	class Color;
+	class Framebuffer;
 
 	class Image : public RenderTarget
 	{
@@ -18,6 +19,7 @@ namespace Raycer
 
 		Image();
 		Image(const std::string& fileName);
+		Image(const Framebuffer& framebuffer);
 		~Image();
 
 		void load(const std::string& fileName);
