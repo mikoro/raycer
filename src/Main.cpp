@@ -16,6 +16,7 @@ int main(int argc, char** argv)
 	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image", false, 1280, "int", cmd);
 	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image", false, 800, "int", cmd);
 	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively", cmd, false);
+	TCLAP::SwitchArg viewSwitch("v", "view", "View the image after completion", cmd, false);
 
 	try
 	{
@@ -38,6 +39,7 @@ int main(int argc, char** argv)
 		settings.outputFileName = outputFileArg.getValue();
 		settings.width = widthArg.getValue();
 		settings.height = heightArg.getValue();
+		settings.viewImage = viewSwitch.getValue();
 
 		return ConsoleRunner::run(settings);
 	}

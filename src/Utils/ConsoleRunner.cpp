@@ -1,6 +1,10 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include "tinyformat/tinyformat.h"
 
 #include "Utils/ConsoleRunner.h"
@@ -104,6 +108,13 @@ int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
 	Raytracer::traceFast(image, scene);
 
 	image.saveAs(settings.outputFileName);
+
+	if (settings.viewImage)
+	{
+#ifdef WIN32
+		ShellExecuteA(NULL, "open", settings.outputFileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+#endif
+	}
 
 	return 0;
 }

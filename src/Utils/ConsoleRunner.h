@@ -13,6 +13,7 @@ namespace Raycer
 		std::string outputFileName;
 		int width;
 		int height;
+		bool viewImage;
 	};
 
 	class ConsoleRunner
