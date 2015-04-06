@@ -14,7 +14,7 @@ namespace Raycer
 {
 	class BaseLog;
 	class NamedLog;
-	class Framebuffer;
+	class RenderTarget;
 	class Color;
 
 	struct Glyph
@@ -39,7 +39,7 @@ namespace Raycer
 		static void initFreeType();
 		static void closeFreeType();
 
-		void drawText(Framebuffer& framebuffer, int x, int y, const std::string& text, const Color& color);
+		void drawText(RenderTarget& renderTarget, int x, int y, const std::string& text, const Color& color);
 
 	private:
 

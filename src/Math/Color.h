@@ -13,7 +13,6 @@ namespace Raycer
 
 		Color(double r = 0.0, double g = 0.0, double b = 0.0, double a = 1.0);
 		explicit Color(int r, int g, int b, int a = 255);
-		Color(uint32_t abgr);
 
 		friend Color operator+(const Color& c1, const Color& c2);
 		friend Color operator-(const Color& c1, const Color& c2);
@@ -30,14 +29,16 @@ namespace Raycer
 		Color& operator*=(double s);
 		Color& operator/=(double s);
 
+		uint32_t getRgbaValue() const;
 		uint32_t getAbgrValue() const;
 		bool isTransparent() const;
 		void clamp();
 		Color clamped() const;
 
+		static Color fromRgbaValue(uint32_t rgba);
+		static Color fromAbgrValue(uint32_t abgr);
 		static Color lerp(const Color& start, const Color& end, double alpha);
 		static Color alphaBlend(const Color& first, const Color& second);
-		static uint32_t alphaBlend(uint32_t first, uint32_t second);
 
 		static const Color RED;
 		static const Color GREEN;

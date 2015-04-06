@@ -10,8 +10,8 @@
 #include "App/AppStateBase.h"
 #include "Utils/Log.h"
 #include "Utils/IniReader.h"
-#include "Framebuffer/Framebuffer.h"
-#include "Framebuffer/Font.h"
+#include "Rendering/Framebuffer.h"
+#include "Rendering/Font.h"
 #include "Utils/FpsCounter.h"
 
 struct GLFWwindow;

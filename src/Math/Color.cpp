@@ -31,33 +31,6 @@ Color::Color(int r_, int g_, int b_, int a_)
 	a = a_ * inv255;
 }
 
-Color::Color(uint32_t abgr)
-{
-	int r_ = abgr & 0xff;
-	int g_ = (abgr >> 8) & 0xff;
-	int b_ = (abgr >> 16) & 0xff;
-	int a_ = (abgr >> 24);
-
-	double inv255 = 1.0 / 255.0;
-
-	r = r_ * inv255;
-	g = g_ * inv255;
-	b = b_ * inv255;
-	a = a_ * inv255;
-}
-
-uint32_t Color::getAbgrValue() const
-{
-	assert(r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
-
-	int ri = (int)(r * 255.0 + 0.5);
-	int gi = (int)(g * 255.0 + 0.5);
-	int bi = (int)(b * 255.0 + 0.5);
-	int ai = (int)(a * 255.0 + 0.5);
-
-	return (ai << 24 | bi << 16 | gi << 8 | ri);
-}
-
 Color Raycer::operator+(const Color& c1, const Color& c2)
 {
 	return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a + c2.a);
@@ -126,6 +99,30 @@ Color& Color::operator/=(double s)
 	return *this;
 }
 
+uint32_t Color::getRgbaValue() const
+{
+	assert(r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
+
+	int r_ = (int)(r * 255.0 + 0.5);
+	int g_ = (int)(g * 255.0 + 0.5);
+	int b_ = (int)(b * 255.0 + 0.5);
+	int a_ = (int)(a * 255.0 + 0.5);
+
+	return (r_ << 24 | g_ << 16 | b_ << 8 | a_);
+}
+
+uint32_t Color::getAbgrValue() const
+{
+	assert(r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
+
+	int r_ = (int)(r * 255.0 + 0.5);
+	int g_ = (int)(g * 255.0 + 0.5);
+	int b_ = (int)(b * 255.0 + 0.5);
+	int a_ = (int)(a * 255.0 + 0.5);
+
+	return (a_ << 24 | b_ << 16 | g_ << 8 | r_);
+}
+
 bool Color::isTransparent() const
 {
 	return (a < 1.0);
@@ -148,6 +145,44 @@ Color Color::clamped() const
 	return c;
 }
 
+Color Color::fromRgbaValue(uint32_t rgba)
+{
+	int r = (rgba >> 24);
+	int g = (rgba >> 16) & 0xff;
+	int b = (rgba >> 8) & 0xff;
+	int a = rgba & 0xff;
+	
+	const double inv255 = 1.0 / 255.0;
+
+	Color c;
+
+	c.r = r * inv255;
+	c.g = g * inv255;
+	c.b = b * inv255;
+	c.a = a * inv255;
+
+	return c;
+}
+
+Color Color::fromAbgrValue(uint32_t abgr)
+{
+	int r = abgr & 0xff;
+	int g = (abgr >> 8) & 0xff;
+	int b = (abgr >> 16) & 0xff;
+	int a = (abgr >> 24);
+
+	const double inv255 = 1.0 / 255.0;
+
+	Color c;
+
+	c.r = r * inv255;
+	c.g = g * inv255;
+	c.b = b * inv255;
+	c.a = a * inv255;
+
+	return c;
+}
+
 Color Color::lerp(const Color& start, const Color& end, double alpha)
 {
 	Color c;
@@ -162,8 +197,8 @@ Color Color::lerp(const Color& start, const Color& end, double alpha)
 
 Color Color::alphaBlend(const Color& first, const Color& second)
 {
-	double alpha = second.a;
-	double invAlpha = 1.0 - alpha;
+	const double alpha = second.a;
+	const double invAlpha = 1.0 - alpha;
 
 	Color c;
 
@@ -173,23 +208,4 @@ Color Color::alphaBlend(const Color& first, const Color& second)
 	c.a = 1.0;
 
 	return c;
-}
-
-uint32_t Color::alphaBlend(uint32_t first, uint32_t second)
-{
-	int r1 = first & 0xff;
-	int g1 = (first >> 8) & 0xff;
-	int b1 = (first >> 16) & 0xff;
-
-	int r2 = second & 0xff;
-	int g2 = (second >> 8) & 0xff;
-	int b2 = (second >> 16) & 0xff;
-	int alpha = (second >> 24) + 1;
-	int invAlpha = 257 - alpha;
-
-	int r3 = (alpha * r2 + invAlpha * r1) >> 8;
-	int g3 = (alpha * g2 + invAlpha * g1) >> 8;
-	int b3 = (alpha * b2 + invAlpha * b1) >> 8;
-
-	return (0xff << 24 | b3 << 16 | g3 << 8 | r3);
 }

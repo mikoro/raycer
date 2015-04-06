@@ -5,7 +5,7 @@
 
 namespace Raycer
 {
-	class Framebuffer;
+	class RenderTarget;
 	struct Scene;
 	struct Ray;
 
@@ -13,7 +13,7 @@ namespace Raycer
 	{
 	public:
 
-		static void raytrace(const Framebuffer& framebuffer, const Scene& scene);
+		static void traceFast(RenderTarget& renderTarget, const Scene& scene);
 		static void shootRay(Ray& ray, const Scene& scene);
 
 		static const int MAX_REFLECTIONS = 1;

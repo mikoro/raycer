@@ -4,14 +4,9 @@
 #include "glfw/glfw3.h"
 #include "gl/glext.h"
 
-#include "Framebuffer/Framebuffer.h"
+#include "Rendering/Framebuffer.h"
 #include "Utils/Log.h"
 #include "Math/Color.h"
-
-namespace
-{
-	const int DATA_ALIGNMENT = 64;
-}
 
 using namespace Raycer;
 
@@ -29,7 +24,7 @@ Framebuffer::Framebuffer(BaseLog& baseLog)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-	SetEnableSmoothing(false);
+	enableSmoothing(true);
 }
 
 Framebuffer::~Framebuffer()
@@ -41,8 +36,10 @@ Framebuffer::~Framebuffer()
 	}
 }
 
-void Framebuffer::resize(int width_, int height_)
+void Framebuffer::setSize(int width_, int height_)
 {
+	assert(width_ > 0 && height_ > 0);
+
 	width = width_;
 	height = height_;
 
@@ -51,12 +48,29 @@ void Framebuffer::resize(int width_, int height_)
 	if (pixelData != nullptr)
 		_mm_free(pixelData);
 
-	pixelData = (uint32_t*)_mm_malloc(width * height * sizeof(uint32_t), DATA_ALIGNMENT);
+	pixelData = (uint32_t*)_mm_malloc(width * height * sizeof(uint32_t), 64);
+
+	if (pixelData == nullptr)
+		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 
 	clear();
+}
+
+void Framebuffer::setPixel(int x, int y, const Color& color)
+{
+	assert(x < width && y < height);
+
+	pixelData[y * width + x] = color.getAbgrValue();
+}
+
+Color Framebuffer::getPixel(int x, int y) const
+{
+	assert(x < width && y < height);
+
+	return Color::fromAbgrValue(pixelData[y * width + x]);
 }
 
 void Framebuffer::clear()
@@ -86,11 +100,6 @@ void Framebuffer::render() const
 	glEnd();
 }
 
-void Framebuffer::saveAsTga(const std::string& fileName) const
-{
-	log->logInfo("Saving as TGA to %s", fileName);
-}
-
 int Framebuffer::getWidth() const
 {
 	return width;
@@ -101,33 +110,10 @@ int Framebuffer::getHeight() const
 	return height;
 }
 
-uint32_t* Framebuffer::getPixelData() const
+void Framebuffer::enableSmoothing(bool value)
 {
-	return pixelData;
-}
-
-void Framebuffer::SetEnableSmoothing(bool value)
-{
-	enableSmoothing = value;
-
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	if (enableSmoothing)
-	{
-		// smooth texture scaling
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	}
-	else
-	{
-		// blocky texture scaling
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	}
-}
-
-bool Framebuffer::GetEnableSmoothing() const
-{
-	return enableSmoothing;
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, value ? GL_LINEAR : GL_NEAREST);
 }

@@ -4,7 +4,7 @@
 #include "glfw/glfw3.h"
 
 #include "App/App.h"
-#include "Framebuffer/Font.h"
+#include "Rendering/Font.h"
 #include "States/TestState.h"
 #include "Math/Color.h"
 
@@ -160,7 +160,7 @@ void App::initialize()
 		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	framebuffer = std::unique_ptr<Framebuffer>(new Framebuffer(*baseLog));
-	framebuffer->SetEnableSmoothing(settings->framebuffer.enableSmoothing);
+	framebuffer->enableSmoothing(settings->framebuffer.enableSmoothing);
 	
 	windowResized(settings->window.width, settings->window.height);
 
@@ -191,9 +191,9 @@ void App::windowResized(int width, int height)
 	glViewport(0, 0, windowWidth, windowHeight);
 
 	if (settings->framebuffer.enableResizing)
-		framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
+		framebuffer->setSize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
 	else if (framebuffer->getWidth() != settings->framebuffer.fixedWidth || framebuffer->getHeight() != settings->framebuffer.fixedHeight)
-		framebuffer->resize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
+		framebuffer->setSize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
 
 	if (currentState != AppStates::None)
 	{
@@ -279,7 +279,7 @@ void App::update(double timeStep)
 			if (settings->framebuffer.resizeScale > 1.0)
 				settings->framebuffer.resizeScale = 1.0;
 
-			framebuffer->resize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
+			framebuffer->setSize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
 			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
@@ -293,13 +293,16 @@ void App::update(double timeStep)
 		if (newWidth >= 2 && newHeight >= 2)
 		{
 			settings->framebuffer.resizeScale = newScale;
-			framebuffer->resize(newWidth, newHeight);
+			framebuffer->setSize(newWidth, newHeight);
 			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
 	if (keyWasPressed(GLFW_KEY_F9))
-		framebuffer->SetEnableSmoothing(!framebuffer->GetEnableSmoothing());
+	{
+		settings->framebuffer.enableSmoothing = !settings->framebuffer.enableSmoothing;
+		framebuffer->enableSmoothing(settings->framebuffer.enableSmoothing);
+	}
 
 	if (currentState != AppStates::None)
 		appStates[currentState]->update(timeStep);

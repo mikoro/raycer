@@ -9,7 +9,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
-#include "Framebuffer/Framebuffer.h"
+#include "Rendering/Framebuffer.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 
@@ -20,12 +20,11 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
+void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene)
 {
-	int width = framebuffer.getWidth();
-	int height = framebuffer.getHeight();
+	int width = renderTarget.getWidth();
+	int height = renderTarget.getHeight();
 	int pixelCount = width * height;
-	uint32_t* pixelData = framebuffer.getPixelData();
 
 	#pragma omp parallel for schedule(dynamic, 4096)
 	for (int i = 0; i < pixelCount; ++i)
@@ -45,7 +44,7 @@ void Raytracer::raytrace(const Framebuffer& framebuffer, const Scene& scene)
 			finalColor = Color::lerp(finalColor, scene.fogColor, t);
 		}
 
-		pixelData[y * width + x] = finalColor.clamped().getAbgrValue();
+		renderTarget.setPixel(x, y, finalColor.clamped());
 	}
 }
 

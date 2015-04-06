@@ -6,8 +6,8 @@
 #include "tinyformat/tinyformat.h"
 #include "utf8/utf8.h"
 
-#include "Framebuffer/Font.h"
-#include "Framebuffer/Framebuffer.h"
+#include "Rendering/Font.h"
+#include "Rendering/Framebuffer.h"
 #include "Utils/Log.h"
 #include "Math/Color.h"
 
@@ -120,7 +120,7 @@ Glyph& Font::getGlyph(char32_t characterCode)
 	return glyphs[characterCode];
 }
 
-void Font::drawText(Framebuffer& framebuffer, int x0, int y0, const std::string& text, const Color& color)
+void Font::drawText(RenderTarget& renderTarget, int x0, int y0, const std::string& text, const Color& color)
 {
 	std::vector<char32_t> utf32Text;
 	utf8::unchecked::utf8to32(text.begin(), text.end(), back_inserter(utf32Text));
@@ -137,14 +137,13 @@ void Font::drawText(Framebuffer& framebuffer, int x0, int y0, const std::string&
 		if (glyph.alphaMapWidth == 0 || glyph.alphaMapHeight == 0)
 			continue;
 
-		uint32_t* pixelData = framebuffer.getPixelData();
-		int framebufferWidth = framebuffer.getWidth();
-		int framebufferHeight = framebuffer.getHeight();
+		int width = renderTarget.getWidth();
+		int height = renderTarget.getHeight();
 
 		int minX = std::max(adjustedX, 0);
-		int maxX = std::min(adjustedX + glyph.alphaMapWidth, framebufferWidth);
+		int maxX = std::min(adjustedX + glyph.alphaMapWidth, width);
 		int minY = std::max(adjustedY, 0);
-		int maxY = std::min(adjustedY + glyph.alphaMapHeight, framebufferHeight);
+		int maxY = std::min(adjustedY + glyph.alphaMapHeight, height);
 
 		for (int y = minY; y < maxY; ++y)
 		{
@@ -161,10 +160,7 @@ void Font::drawText(Framebuffer& framebuffer, int x0, int y0, const std::string&
 				double glyphAlpha = glyphAlphaInt * (1.0 / 255.0);
 				double combinedAlpha = glyphAlpha * color.a;
 
-				uint32_t oldColorValue = pixelData[y * framebufferWidth + x];
-				uint32_t newColorValue = Color(color.r, color.g, color.b, combinedAlpha).getAbgrValue();
-
-				pixelData[y * framebufferWidth + x] = Color::alphaBlend(oldColorValue, newColorValue);
+				renderTarget.setPixel(x, y, Color::alphaBlend(renderTarget.getPixel(x, y), Color(color.r, color.g, color.b, combinedAlpha)));
 			}
 		}
 	}

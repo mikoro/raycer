@@ -6,7 +6,7 @@
 #include "States/TestState.h"
 #include "Utils/Log.h"
 #include "App/App.h"
-#include "Framebuffer/Framebuffer.h"
+#include "Rendering/Framebuffer.h"
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/Sphere.h"
 #include "Raytracing/Plane.h"
@@ -116,7 +116,7 @@ void TestState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	Raytracer::raytrace(framebuffer, scene);
+	Raytracer::traceFast(framebuffer, scene);
 }
 
 void TestState::windowResized(int width, int height)
