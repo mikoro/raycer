@@ -20,6 +20,26 @@
 
 using namespace Raycer;
 
+#ifdef WIN32
+
+namespace
+{
+	std::atomic<bool> interrupted = false;
+
+	BOOL consoleCtrlHandler(DWORD fdwCtrlType)
+	{
+		if (fdwCtrlType == CTRL_C_EVENT)
+		{
+			interrupted = true;
+			return true;
+		}
+		else
+			return false;
+	}
+}
+
+#endif
+
 namespace
 {
 	Scene createScene(int width, int height)
@@ -105,14 +125,18 @@ namespace
 
 int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
 {
+#ifdef WIN32
+	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
+#endif
+
 	auto startTime = system_clock::now();
 
 	Image image = Image(settings.width, settings.height);
 	Scene scene = createScene(settings.width, settings.height);
 
 	int totalPixelCount = settings.width * settings.height;
-	
-	printf("Image dimensions: %dx%d (%d pixels)\n", settings.width, settings.height, totalPixelCount);
+
+	printf("\nImage dimensions: %dx%d (%d pixels)\n", settings.width, settings.height, totalPixelCount);
 	printf("Primitives: %d\n", scene.primitives.size());
 	printf("Lights: %d\n", scene.lights.size());
 	printf("Max reflections: %d\n\n", scene.maxReflections);
@@ -124,7 +148,7 @@ int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
 
 	auto renderFunction = [&]()
 	{
-		Raytracer::traceFast(image, scene, pixelCount, rayCount);
+		Raytracer::traceFast(image, scene, interrupted, pixelCount, rayCount);
 		finished = true;
 	};
 
@@ -139,17 +163,34 @@ int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
 	renderThread.join();
 
 	printProgress(startTime, totalPixelCount, pixelCount, rayCount);
-	printf("\n\nWriting the image file...\n");
 
-	image.saveAs(settings.outputFileName);
+	if (!interrupted)
+		printf("\n\nFinished!\n\n");
+	else
+		printf("\n\nInterrupted!\n\n");
 
-	printf("\nFinished!");
+	auto elapsedTime = system_clock::now() - startTime;
+	int64_t elapsedMilliseconds = duration_cast<milliseconds>(elapsedTime).count();
 
-	if (settings.viewImage)
+	if (elapsedMilliseconds >= 1000)
+		printf("Total time: %02d:%02d:%02d\n", duration_cast<hours>(elapsedTime).count(), duration_cast<minutes>(elapsedTime).count(), duration_cast<seconds>(elapsedTime).count());
+	else
+		printf("Total time: %d ms\n", elapsedMilliseconds);
+
+	printf("Total pixels: %d\n", pixelCount);
+	printf("Total rays: %d\n", rayCount);
+
+	if (!interrupted)
 	{
+		printf("\nWriting the image file...\n");
+		image.saveAs(settings.outputFileName);
+
+		if (settings.viewImage)
+		{
 #ifdef WIN32
-		ShellExecuteA(NULL, "open", settings.outputFileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", settings.outputFileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #endif
+		}
 	}
 
 	return 0;
@@ -157,9 +198,8 @@ int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
 
 void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelCount, int rayCount)
 {
-	auto currentTime = system_clock::now();
-	auto elapsedTime = currentTime - startTime;
-
+	auto elapsedTime = system_clock::now() - startTime;
+	double elapsedSeconds = (double)duration_cast<milliseconds>(elapsedTime).count() / 1000.0;
 	double msPerPixel = 0;
 
 	if (pixelCount > 0)
@@ -185,10 +225,10 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 	}
 
 	printf("] ");
-	printf("%d %% / ", percentage);
-	printf("Remaining time: %02d:%02d:%02d / ", duration_cast<hours>(remainingTime).count(), duration_cast<minutes>(remainingTime).count(), duration_cast<seconds>(remainingTime).count());
-	printf("Total pixels: %d / ", pixelCount);
-	printf("Total rays: %d", rayCount);
+	printf("%d %% | ", percentage);
+	printf("Remaining time: %02d:%02d:%02d | ", duration_cast<hours>(remainingTime).count(), duration_cast<minutes>(remainingTime).count(), duration_cast<seconds>(remainingTime).count());
+	printf("Pixels/s: %.2f | ", pixelCount / elapsedSeconds);
+	printf("Rays/s: %.2f", rayCount / elapsedSeconds);
 
 	printf("\r");
 }

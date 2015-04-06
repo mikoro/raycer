@@ -20,7 +20,7 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
+void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
 {
 	int width = renderTarget.getWidth();
 	int height = renderTarget.getHeight();
@@ -29,11 +29,14 @@ void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::a
 	#pragma omp parallel for schedule(dynamic, 4096)
 	for (int i = 0; i < totalPixelCount; ++i)
 	{
+		if (interrupted)
+			continue;
+
 		int x = i % width;
 		int y = i / width;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(rayToScene, scene, rayCount);
+		shootRay(rayToScene, scene, interrupted, rayCount);
 		Color finalColor = rayToScene.color;
 
 		if (scene.fogEnabled)
@@ -49,16 +52,20 @@ void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::a
 	}
 }
 
-void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
+void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
 {
 	(void)renderTarget;
 	(void)scene;
+	(void)interrupted;
 	(void)pixelCount;
 	(void)rayCount;
 }
 
-void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<int>& rayCount)
+void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount)
 {
+	if (interrupted)
+		return;
+
 	++rayCount;
 
 	for (int p = 0; p < scene.primitives.size(); ++p)
@@ -73,7 +80,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<int>& rayCoun
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(reflectedRay, scene, rayCount);
+			shootRay(reflectedRay, scene, interrupted, rayCount);
 
 			lightColor += reflectedRay.color * ray.intersection.material->reflectivity;
 		}

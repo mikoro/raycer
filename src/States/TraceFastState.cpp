@@ -120,10 +120,11 @@ void TraceFastState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
+	std::atomic<bool> shouldStop = false;
 	std::atomic<int> pixelCount = 0;
 	std::atomic<int> rayCount = 0;
 
-	Raytracer::traceFast(framebuffer, scene, pixelCount, rayCount);
+	Raytracer::traceFast(framebuffer, scene, shouldStop, pixelCount, rayCount);
 }
 
 void TraceFastState::windowResized(int width, int height)
