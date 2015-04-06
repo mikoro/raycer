@@ -24,6 +24,7 @@ namespace Raycer
 		void setSize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		Color getPixel(int x, int y) const;
+		uint32_t* getPixelData() const;
 
 		void clear();
 		void clear(const Color& color);

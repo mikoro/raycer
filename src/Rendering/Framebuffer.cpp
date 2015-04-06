@@ -73,6 +73,11 @@ Color Framebuffer::getPixel(int x, int y) const
 	return Color::fromAbgrValue(pixelData[y * width + x]);
 }
 
+uint32_t* Framebuffer::getPixelData() const
+{
+	return pixelData;
+}
+
 void Framebuffer::clear()
 {
 	std::fill_n(pixelData, width * height, 0);

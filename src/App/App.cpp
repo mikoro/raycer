@@ -5,6 +5,7 @@
 
 #include "App/App.h"
 #include "Rendering/Font.h"
+#include "Rendering/Image.h"
 #include "States/TraceFastState.h"
 #include "Math/Color.h"
 
@@ -321,6 +322,12 @@ void App::render(double timeStep, double interpolation)
 
 	if (settings->app.showFps)
 		fpsFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->app.fpsFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
+
+	if (keyWasPressed(GLFW_KEY_F1))
+	{
+		Image image = Image(*framebuffer);
+		image.saveAs("screenshot.png");
+	}
 
 	framebuffer->render();
 	framebuffer->clear();
