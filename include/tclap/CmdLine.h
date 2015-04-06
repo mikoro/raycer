@@ -364,7 +364,7 @@ inline void CmdLine::_constructor()
 	if ( _helpAndVersion )
 	{
 		v = new HelpVisitor( this, &_output );
-		SwitchArg* help = new SwitchArg("h","help",
+		SwitchArg* help = new SwitchArg("","help",
 		                      "Displays usage information and exits.",
 		                      false, v);
 		add( help );
@@ -372,7 +372,7 @@ inline void CmdLine::_constructor()
 		deleteOnExit(v);
 
 		v = new VersionVisitor( this, &_output );
-		SwitchArg* vers = new SwitchArg("","version",
+		SwitchArg* vers = new SwitchArg("v","version",
 		                      "Displays version information and exits.",
 		                      false, v);
 		add( vers );

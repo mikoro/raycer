@@ -30,6 +30,14 @@ void Camera::setImagePlaneSize(int width, int height)
 	aspectRatio = (double)height / width;
 }
 
+void Camera::calculateVariables()
+{
+	forward = orientation.getDirectionVector().normalized();
+	right = forward.cross(Vector3::UP).normalized();
+	up = right.cross(forward).normalized();
+	imagePlaneCenter = position + (forward * imagePlaneDistance);
+}
+
 void Camera::update(double timeStep)
 {
 	MouseInfo mouseInfo = app->getMouseInfo();
@@ -39,10 +47,6 @@ void Camera::update(double timeStep)
 		orientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings->controls.mouseSpeed;
 		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
 	}
-
-	forward = orientation.getDirectionVector().normalized();
-	right = forward.cross(Vector3::UP).normalized();
-	up = right.cross(forward).normalized();
 
 	if (app->keyIsDown(GLFW_KEY_W) || app->keyIsDown(GLFW_KEY_UP))
 		position += forward * timeStep * settings->controls.moveSpeed;
@@ -62,7 +66,7 @@ void Camera::update(double timeStep)
 	if (app->keyIsDown(GLFW_KEY_E))
 		position += up * timeStep * settings->controls.moveSpeed;
 
-	imagePlaneCenter = position + (forward * imagePlaneDistance);
+	calculateVariables();
 }
 
 Ray Camera::getRay(int x, int y) const

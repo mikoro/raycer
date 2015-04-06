@@ -67,7 +67,7 @@
       <Cpp0xSupport>true</Cpp0xSupport>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -89,7 +89,7 @@
       <Cpp0xSupport>true</Cpp0xSupport>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
@@ -120,6 +120,7 @@
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
     <ClCompile Include="src\States\TraceFastState.cpp" />
+    <ClCompile Include="src\Utils\ConsoleRunner.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\States\TraceFastState.h" />
+    <ClInclude Include="src\Utils\ConsoleRunner.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />

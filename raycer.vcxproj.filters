@@ -91,6 +91,9 @@
     <ClCompile Include="src\States\TraceFastState.cpp">
       <Filter>States</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\ConsoleRunner.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -179,6 +182,9 @@
     </ClInclude>
     <ClInclude Include="src\States\TraceFastState.h">
       <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\ConsoleRunner.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

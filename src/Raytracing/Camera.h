@@ -19,6 +19,7 @@ namespace Raycer
 		void initialize(App* app, Settings* settings);
 		void setFov(double fov);
 		void setImagePlaneSize(int width, int height);
+		void calculateVariables();
 		void update(double timeStep);
 		
 		Ray getRay(int x, int y) const;

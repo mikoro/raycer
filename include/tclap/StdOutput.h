@@ -110,22 +110,25 @@ inline void StdOutput::version(CmdLineInterface& _cmd)
 	std::string progName = _cmd.getProgramName();
 	std::string xversion = _cmd.getVersion();
 
+	/*
 	std::cout << std::endl << progName << "  version: " 
 			  << xversion << std::endl << std::endl;
+	*/
+	
+	std::cout << "Raycer " << xversion << std::endl;
+	std::cout << "Copyright (C) 2015 Mikko Ronkainen" << std::endl;
+	std::cout << "License: MIT <http://opensource.org/licenses/MIT>" << std::endl;
 }
 
 inline void StdOutput::usage(CmdLineInterface& _cmd ) 
 {
-	std::cout << std::endl << "USAGE: " << std::endl << std::endl; 
+	std::cout << "Usage: " << std::endl << std::endl; 
 
 	_shortUsage( _cmd, std::cout );
 
-	std::cout << std::endl << std::endl << "Where: " << std::endl << std::endl;
+	std::cout << std::endl << "Where: " << std::endl << std::endl;
 
 	_longUsage( _cmd, std::cout );
-
-	std::cout << std::endl; 
-
 }
 
 inline void StdOutput::failure( CmdLineInterface& _cmd,
@@ -133,18 +136,18 @@ inline void StdOutput::failure( CmdLineInterface& _cmd,
 {
 	std::string progName = _cmd.getProgramName();
 
-	std::cerr << "PARSE ERROR: " << e.argId() << std::endl
+	std::cerr << "Parse error: " << e.argId() << std::endl
 		      << "             " << e.error() << std::endl << std::endl;
 
 	if ( _cmd.hasHelpAndVersion() )
 		{
-			std::cerr << "Brief USAGE: " << std::endl;
+			std::cerr << "Brief usage: " << std::endl << std::endl;
 
 			_shortUsage( _cmd, std::cerr );	
 
-			std::cerr << std::endl << "For complete USAGE and HELP type: " 
-					  << std::endl << "   " << progName << " --help" 
-					  << std::endl << std::endl;
+			std::cerr << std::endl << "For complete usage and help type: " 
+					  << std::endl << std::endl << "   " << progName << " --help" 
+					  << std::endl;
 		}
 	else
 		usage(_cmd);
@@ -220,10 +223,6 @@ StdOutput::_longUsage( CmdLineInterface& _cmd,
 				spacePrint( os, (*it)->getDescription(), 75, 5, 0 ); 
 				os << std::endl;
 			}
-
-	os << std::endl;
-
-	spacePrint( os, message, 75, 3, 0 );
 }
 
 inline void StdOutput::spacePrint( std::ostream& os, 
