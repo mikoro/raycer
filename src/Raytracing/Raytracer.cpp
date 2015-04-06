@@ -20,20 +20,20 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene)
+void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
 {
 	int width = renderTarget.getWidth();
 	int height = renderTarget.getHeight();
-	int pixelCount = width * height;
+	int totalPixelCount = width * height;
 
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int i = 0; i < pixelCount; ++i)
+	for (int i = 0; i < totalPixelCount; ++i)
 	{
 		int x = i % width;
 		int y = i / width;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(rayToScene, scene);
+		shootRay(rayToScene, scene, rayCount);
 		Color finalColor = rayToScene.color;
 
 		if (scene.fogEnabled)
@@ -45,17 +45,22 @@ void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene)
 		}
 
 		renderTarget.setPixel(x, y, finalColor.clamped());
+		++pixelCount;
 	}
 }
 
-void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene)
+void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
 {
 	(void)renderTarget;
 	(void)scene;
+	(void)pixelCount;
+	(void)rayCount;
 }
 
-void Raytracer::shootRay(Ray& ray, const Scene& scene)
+void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<int>& rayCount)
 {
+	++rayCount;
+
 	for (int p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
 
@@ -68,7 +73,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene)
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(reflectedRay, scene);
+			shootRay(reflectedRay, scene, rayCount);
 
 			lightColor += reflectedRay.color * ray.intersection.material->reflectivity;
 		}

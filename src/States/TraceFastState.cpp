@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <atomic>
+
 #include "glfw/glfw3.h"
 
 #include "States/TraceFastState.h"
@@ -118,7 +120,10 @@ void TraceFastState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	Raytracer::traceFast(framebuffer, scene);
+	std::atomic<int> pixelCount = 0;
+	std::atomic<int> rayCount = 0;
+
+	Raytracer::traceFast(framebuffer, scene, pixelCount, rayCount);
 }
 
 void TraceFastState::windowResized(int width, int height)

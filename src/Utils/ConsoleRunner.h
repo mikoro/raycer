@@ -4,6 +4,9 @@
 #pragma once
 
 #include <string>
+#include <chrono>
+
+using namespace std::chrono;
 
 namespace Raycer
 {
@@ -24,5 +27,6 @@ namespace Raycer
 
 	private:
 
+		static void printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelCount, int rayCount);
 	};
 }

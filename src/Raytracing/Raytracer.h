@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <atomic>
+
 namespace Raycer
 {
 	class RenderTarget;
@@ -13,11 +15,11 @@ namespace Raycer
 	{
 	public:
 
-		static void traceFast(RenderTarget& renderTarget, const Scene& scene);
-		static void traceFull(RenderTarget& renderTarget, const Scene& scene);
+		static void traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
+		static void traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
 
 	private:
 
-		static void shootRay(Ray& ray, const Scene& scene);
+		static void shootRay(Ray& ray, const Scene& scene, std::atomic<int>& rayCount);
 	};
 }
