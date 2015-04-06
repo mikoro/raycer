@@ -28,7 +28,7 @@ namespace Raycer
 		int deltaY = 0;
 	};
 
-	enum class AppStates { None, Test };
+	enum class AppStates { None, TraceFast };
 
 	class App
 	{

@@ -13,7 +13,6 @@ Settings::Settings(IniReader& iniReader)
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
-	window.fov = iniReader.getValue<double>("window", "fov");
 
 	framebuffer.fixedWidth = iniReader.getValue<int>("framebuffer", "fixedWidth");
 	framebuffer.fixedHeight = iniReader.getValue<int>("framebuffer", "fixedHeight");

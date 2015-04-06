@@ -48,6 +48,12 @@ void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene)
 	}
 }
 
+void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene)
+{
+	(void)renderTarget;
+	(void)scene;
+}
+
 void Raytracer::shootRay(Ray& ray, const Scene& scene)
 {
 	for (int p = 0; p < scene.primitives.size(); ++p)
@@ -57,7 +63,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene)
 	{
 		Color lightColor(0.0, 0.0, 0.0);
 
-		if (ray.intersection.material->reflectivity > 0.0 && ray.reflectionCount < MAX_REFLECTIONS)
+		if (ray.intersection.material->reflectivity > 0.0 && ray.reflectionCount < scene.maxReflections)
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);

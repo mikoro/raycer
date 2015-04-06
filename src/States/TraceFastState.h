@@ -16,11 +16,11 @@ namespace Raycer
 	class Framebuffer;
 	struct Settings;
 
-	class TestState : public AppStateBase
+	class TraceFastState : public AppStateBase
 	{
 	public:
 
-		TestState(BaseLog& baseLog, App& app, Framebuffer& framebuffer, Settings& settings);
+		TraceFastState(BaseLog& baseLog, App& app, Framebuffer& framebuffer, Settings& settings);
 
 		void initialize();
 		void pause();

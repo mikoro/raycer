@@ -20,6 +20,8 @@ namespace Raycer
 
 		Camera camera;
 
+		int maxReflections = 0;
+
 		bool fogEnabled = false;
 		double fogDistance = 0.0;
 		double fogSteepness = 0.0;

@@ -5,7 +5,7 @@
 
 #include "App/App.h"
 #include "Rendering/Font.h"
-#include "States/TestState.h"
+#include "States/TraceFastState.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -166,9 +166,9 @@ void App::initialize()
 
 	fpsFont = std::unique_ptr<Font>(new Font(*baseLog, settings->app.fpsFont, settings->app.fpsFontSize));
 
-	appStates[AppStates::Test] = std::unique_ptr<TestState>(new TestState(*baseLog, *this, *framebuffer, *settings));
+	appStates[AppStates::TraceFast] = std::unique_ptr<TraceFastState>(new TraceFastState(*baseLog, *this, *framebuffer, *settings));
 
-	changeState(AppStates::Test);
+	changeState(AppStates::TraceFast);
 }
 
 void App::shutdown()

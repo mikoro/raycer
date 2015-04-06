@@ -20,7 +20,6 @@ namespace Raycer
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
-			double fov;
 		} window;
 
 		struct Framebuffer

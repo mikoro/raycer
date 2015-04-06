@@ -3,7 +3,7 @@
 
 #include "glfw/glfw3.h"
 
-#include "States/TestState.h"
+#include "States/TraceFastState.h"
 #include "Utils/Log.h"
 #include "App/App.h"
 #include "Rendering/Framebuffer.h"
@@ -13,12 +13,12 @@
 
 using namespace Raycer;
 
-TestState::TestState(BaseLog& baseLog, App& app_, Framebuffer& framebuffer_, Settings& settings_) : app(app_), framebuffer(framebuffer_), settings(settings_)
+TraceFastState::TraceFastState(BaseLog& baseLog, App& app_, Framebuffer& framebuffer_, Settings& settings_) : app(app_), framebuffer(framebuffer_), settings(settings_)
 {
-	log = baseLog.getNamedLog("TestState");
+	log = baseLog.getNamedLog("TraceFastState");
 }
 
-void TestState::initialize()
+void TraceFastState::initialize()
 {
 	Material m1;
 	m1.color = Color(119, 158, 203);
@@ -70,6 +70,8 @@ void TestState::initialize()
 	l3.color = Color(1.0, 1.0, 1.0);
 	l3.intensity = 0.5;
 
+	scene.maxReflections = 1;
+
 	scene.fogEnabled = true;
 	scene.fogDistance = 40.0;
 	scene.fogSteepness = 4.0;
@@ -78,7 +80,7 @@ void TestState::initialize()
 	scene.camera.position = Vector3(0.0, 1.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 	scene.camera.initialize(&app, &settings);
-	scene.camera.setFov(settings.window.fov);
+	scene.camera.setFov(75.0);
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 
 	scene.primitives.push_back(std::shared_ptr<Primitive>(s1));
@@ -91,27 +93,27 @@ void TestState::initialize()
 	scene.lights.push_back(l3);
 }
 
-void TestState::pause()
+void TraceFastState::pause()
 {
 
 }
 
-void TestState::resume()
+void TraceFastState::resume()
 {
 
 }
 
-void TestState::shutdown()
+void TraceFastState::shutdown()
 {
 
 }
 
-void TestState::update(double timeStep)
+void TraceFastState::update(double timeStep)
 {
 	scene.camera.update(timeStep);
 }
 
-void TestState::render(double timeStep, double interpolation)
+void TraceFastState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
 	(void)interpolation;
@@ -119,13 +121,13 @@ void TestState::render(double timeStep, double interpolation)
 	Raytracer::traceFast(framebuffer, scene);
 }
 
-void TestState::windowResized(int width, int height)
+void TraceFastState::windowResized(int width, int height)
 {
 	(void)width;
 	(void)height;
 }
 
-void TestState::framebufferResized(int width, int height)
+void TraceFastState::framebufferResized(int width, int height)
 {
 	scene.camera.setImagePlaneSize(width, height);
 }

@@ -119,7 +119,7 @@
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
-    <ClCompile Include="src\States\TestState.cpp" />
+    <ClCompile Include="src\States\TraceFastState.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
@@ -150,7 +150,7 @@
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
-    <ClInclude Include="src\States\TestState.h" />
+    <ClInclude Include="src\States\TraceFastState.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />

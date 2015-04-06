@@ -14,8 +14,10 @@ namespace Raycer
 	public:
 
 		static void traceFast(RenderTarget& renderTarget, const Scene& scene);
-		static void shootRay(Ray& ray, const Scene& scene);
+		static void traceFull(RenderTarget& renderTarget, const Scene& scene);
 
-		static const int MAX_REFLECTIONS = 1;
+	private:
+
+		static void shootRay(Ray& ray, const Scene& scene);
 	};
 }

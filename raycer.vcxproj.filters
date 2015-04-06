@@ -52,9 +52,6 @@
     <ClCompile Include="src\Math\MathUtils.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\States\TestState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Mesh.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
@@ -91,6 +88,9 @@
     <ClCompile Include="src\Rendering\Image.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\States\TraceFastState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -119,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\MathUtils.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\States\TestState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="src\App\AppStateBase.h">
       <Filter>App</Filter>
@@ -179,6 +176,9 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\States\TraceFastState.h">
+      <Filter>States</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
