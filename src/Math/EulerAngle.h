@@ -27,6 +27,9 @@ namespace Raycer
 		EulerAngle(const EulerAngle& e);
 		EulerAngle& operator=(const EulerAngle& e);
 
+		void clampPitch();
+		void normalize();
+
 		Vector3 getDirectionVector() const;
 
 		double yaw;

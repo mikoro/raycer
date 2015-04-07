@@ -82,6 +82,11 @@ const MouseInfo& App::getMouseInfo() const
 	return mouseInfo;
 }
 
+Font& App::getInfoFont() const
+{
+	return *infoFont;
+}
+
 bool App::keyIsDown(int key)
 {
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
@@ -165,7 +170,7 @@ void App::initialize()
 	
 	windowResized(settings->window.width, settings->window.height);
 
-	fpsFont = std::unique_ptr<Font>(new Font(*baseLog, settings->app.fpsFont, settings->app.fpsFontSize));
+	infoFont = std::unique_ptr<Font>(new Font(*baseLog, settings->app.infoFont, settings->app.infoFontSize));
 
 	appStates[AppStates::TraceFast] = std::unique_ptr<TraceFastState>(new TraceFastState(*baseLog, *this, *framebuffer, *settings));
 
@@ -271,18 +276,16 @@ void App::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_ESCAPE))
 		shouldRun = false;
 
-	if (keyWasPressed(GLFW_KEY_F11) && settings->framebuffer.enableResizing)
+	if (keyWasPressed(GLFW_KEY_F1))
+		settings->app.showFps = !settings->app.showFps;
+
+	if (keyWasPressed(GLFW_KEY_F2))
+		settings->app.showCameraInfo = !settings->app.showCameraInfo;
+
+	if (keyWasPressed(GLFW_KEY_F9))
 	{
-		if (settings->framebuffer.resizeScale < 1.0)
-		{
-			settings->framebuffer.resizeScale *= 2.0;
-
-			if (settings->framebuffer.resizeScale > 1.0)
-				settings->framebuffer.resizeScale = 1.0;
-
-			framebuffer->setSize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
-			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
-		}
+		settings->framebuffer.enableSmoothing = !settings->framebuffer.enableSmoothing;
+		framebuffer->enableSmoothing(settings->framebuffer.enableSmoothing);
 	}
 
 	if (keyWasPressed(GLFW_KEY_F10) && settings->framebuffer.enableResizing)
@@ -299,10 +302,18 @@ void App::update(double timeStep)
 		}
 	}
 
-	if (keyWasPressed(GLFW_KEY_F9))
+	if (keyWasPressed(GLFW_KEY_F11) && settings->framebuffer.enableResizing)
 	{
-		settings->framebuffer.enableSmoothing = !settings->framebuffer.enableSmoothing;
-		framebuffer->enableSmoothing(settings->framebuffer.enableSmoothing);
+		if (settings->framebuffer.resizeScale < 1.0)
+		{
+			settings->framebuffer.resizeScale *= 2.0;
+
+			if (settings->framebuffer.resizeScale > 1.0)
+				settings->framebuffer.resizeScale = 1.0;
+
+			framebuffer->setSize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
+			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
+		}
 	}
 
 	if (currentState != AppStates::None)
@@ -321,9 +332,9 @@ void App::render(double timeStep, double interpolation)
 		throw std::runtime_error("App state has not been set");
 
 	if (settings->app.showFps)
-		fpsFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->app.fpsFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
+		infoFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->app.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
 
-	if (keyWasPressed(GLFW_KEY_F1))
+	if (keyWasPressed(GLFW_KEY_F8))
 	{
 		Image image = Image(*framebuffer);
 		image.saveAs("screenshot.png");

@@ -45,6 +45,9 @@ void Camera::update(double timeStep)
 		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
 	}
 
+	orientation.clampPitch();
+	orientation.normalize();
+
 	if (app->keyIsDown(GLFW_KEY_W) || app->keyIsDown(GLFW_KEY_UP))
 		position += forward * timeStep * settings->controls.moveSpeed;
 

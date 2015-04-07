@@ -25,9 +25,10 @@ Settings::Settings(IniReader& iniReader)
 
 	app.updateFrequency = iniReader.getValue<double>("app", "updateFrequency");
 	app.showFps = iniReader.getValue<bool>("app", "showFps");
-	app.fpsFont = iniReader.getValue<std::string>("app", "fpsFont");
-	app.fpsFontSize = iniReader.getValue<int>("app", "fpsFontSize");
-
+	app.showCameraInfo = iniReader.getValue<bool>("app", "showCameraInfo");
+	app.infoFont = iniReader.getValue<std::string>("app", "infoFont");
+	app.infoFontSize = iniReader.getValue<int>("app", "infoFontSize");
+	
 	controls.moveSpeed = iniReader.getValue<double>("controls", "moveSpeed");
 	controls.mouseSpeed = iniReader.getValue<double>("controls", "mouseSpeed");
 	controls.mouseLookWithButton = iniReader.getValue<bool>("controls", "mouseLookWithButton");

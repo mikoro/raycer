@@ -30,6 +30,27 @@ EulerAngle& EulerAngle::operator=(const EulerAngle& e)
 	return *this;
 }
 
+void EulerAngle::clampPitch()
+{
+	if (pitch > 89.0)
+		pitch = 89.0;
+
+	if (pitch < -89.0)
+		pitch = -89.0;
+}
+
+void EulerAngle::normalize()
+{
+	while (abs(yaw) > 180.0)
+		yaw += (yaw > 0.0) ? -360.0 : 360.0;
+
+	while (abs(pitch) > 180.0)
+		pitch += (pitch > 0.0) ? -360.0 : 360.0;
+
+	while (abs(roll) > 180.0)
+		roll += (roll > 0.0) ? -360.0 : 360.0;
+}
+
 Vector3 EulerAngle::getDirectionVector() const
 {
 	Vector3 result;

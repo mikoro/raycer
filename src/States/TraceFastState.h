@@ -4,6 +4,7 @@
 #pragma once
 
 #include <memory>
+#include <atomic>
 
 #include "App/AppStateBase.h"
 #include "Raytracing/Scene.h"
@@ -41,5 +42,9 @@ namespace Raycer
 		Framebuffer& framebuffer;
 		Settings& settings;
 		Scene scene;
+
+		std::atomic<bool> interrupted = false;
+		std::atomic<int> pixelCount = 0;
+		std::atomic<int> rayCount = 0;
 	};
 }

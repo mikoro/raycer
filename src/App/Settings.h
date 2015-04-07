@@ -41,8 +41,9 @@ namespace Raycer
 		{
 			double updateFrequency;
 			bool showFps;
-			std::string fpsFont;
-			int fpsFontSize;
+			bool showCameraInfo;
+			std::string infoFont;
+			int infoFontSize;
 		} app;
 
 		struct Controls

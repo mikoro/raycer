@@ -82,7 +82,7 @@ void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interr
 
 			shootRay(reflectedRay, scene, interrupted, rayCount);
 
-			lightColor += reflectedRay.color * ray.intersection.material->reflectivity;
+			lightColor = reflectedRay.color * ray.intersection.material->reflectivity;
 		}
 
 		for (size_t l = 0; l < scene.lights.size(); ++l)

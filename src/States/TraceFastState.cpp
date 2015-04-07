@@ -1,8 +1,6 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <atomic>
-
 #include "glfw/glfw3.h"
 
 #include "States/TraceFastState.h"
@@ -132,11 +130,17 @@ void TraceFastState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	std::atomic<bool> shouldStop = false;
-	std::atomic<int> pixelCount = 0;
-	std::atomic<int> rayCount = 0;
+	pixelCount = 0;
+	rayCount = 0;
 
-	Raytracer::traceFast(framebuffer, scene, shouldStop, pixelCount, rayCount);
+	Raytracer::traceFast(framebuffer, scene, interrupted, pixelCount, rayCount);
+
+	if (settings.app.showCameraInfo)
+	{
+		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.app.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
+		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.app.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
+		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.app.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
+	}
 }
 
 void TraceFastState::windowResized(int width, int height)

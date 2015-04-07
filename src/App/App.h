@@ -42,9 +42,12 @@ namespace Raycer
 		int getWindowHeight() const;
 		BaseLog& getBaseLog() const;
 		const MouseInfo& getMouseInfo() const;
+		Font& getInfoFont() const;
+
 		bool keyIsDown(int key);
 		bool mouseIsDown(int button);
 		bool keyWasPressed(int key);
+
 		void changeState(AppStates newState);
 
 	private:
@@ -63,7 +66,7 @@ namespace Raycer
 		std::unique_ptr<IniReader> iniReader;
 		std::unique_ptr<Settings> settings;
 		std::unique_ptr<Framebuffer> framebuffer;
-		std::unique_ptr<Font> fpsFont;
+		std::unique_ptr<Font> infoFont;
 
 		bool shouldRun = true;
 		bool glfwInitialized = false;
