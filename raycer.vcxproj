@@ -101,8 +101,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\App\App.cpp" />
-    <ClCompile Include="src\App\Settings.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -121,16 +119,15 @@
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
+    <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
+    <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
+    <ClCompile Include="src\Runners\InteractiveSettings.cpp" />
     <ClCompile Include="src\States\TraceFastState.cpp" />
-    <ClCompile Include="src\Utils\ConsoleRunner.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\App\App.h" />
-    <ClInclude Include="src\App\AppStateBase.h" />
-    <ClInclude Include="src\App\Settings.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
     <ClInclude Include="src\Math\Matrix4x4.h" />
@@ -153,8 +150,12 @@
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
+    <ClInclude Include="src\Runners\ConsoleRunner.h" />
+    <ClInclude Include="src\Runners\ConsoleSettings.h" />
+    <ClInclude Include="src\Runners\InteractiveRunner.h" />
+    <ClInclude Include="src\Runners\InteractiveSettings.h" />
+    <ClInclude Include="src\States\InteractiveState.h" />
     <ClInclude Include="src\States\TraceFastState.h" />
-    <ClInclude Include="src\Utils\ConsoleRunner.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />

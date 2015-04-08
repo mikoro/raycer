@@ -8,15 +8,15 @@
 
 namespace Raycer
 {
-	class App;
-	struct Settings;
+	class InteractiveRunner;
+	struct InteractiveSettings;
 	struct Ray;
 
 	class Camera
 	{
 	public:
 
-		void initialize(App* app, Settings* settings);
+		void initialize(InteractiveRunner* runner, InteractiveSettings* settings);
 		void setImagePlaneSize(int width, int height);
 		void calculateVariables();
 		void update(double timeStep);
@@ -37,8 +37,8 @@ namespace Raycer
 
 	private:
 
-		App* app = nullptr;
-		Settings* settings = nullptr;
+		InteractiveRunner* runner = nullptr;
+		InteractiveSettings* settings = nullptr;
 
 		Vector3 forward;
 		Vector3 right;

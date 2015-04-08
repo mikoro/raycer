@@ -5,15 +5,17 @@
 
 #include "States/TraceFastState.h"
 #include "Utils/Log.h"
-#include "App/App.h"
+#include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
+#include "Runners/InteractiveSettings.h"
 #include "Raytracing/Raytracer.h"
-#include "Raytracing/Sphere.h"
-#include "Raytracing/Plane.h"
+
+//#include "Raytracing/Sphere.h"
+//#include "Raytracing/Plane.h"
 
 using namespace Raycer;
 
-TraceFastState::TraceFastState(BaseLog& baseLog, App& app_, Framebuffer& framebuffer_, Settings& settings_) : app(app_), framebuffer(framebuffer_), settings(settings_)
+TraceFastState::TraceFastState(BaseLog& baseLog, InteractiveRunner& runner_, Framebuffer& framebuffer_, InteractiveSettings& settings_) : runner(runner_), framebuffer(framebuffer_), settings(settings_)
 {
 	log = baseLog.getNamedLog("TraceFastState");
 }
@@ -100,7 +102,7 @@ void TraceFastState::initialize()
 
 	scene.load("data/scenes/test_scene.json");
 	scene.initialize();
-	scene.camera.initialize(&app, &settings);
+	scene.camera.initialize(&runner, &settings);
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 	scene.camera.calculateVariables();
 }
@@ -135,11 +137,11 @@ void TraceFastState::render(double timeStep, double interpolation)
 
 	Raytracer::traceFast(framebuffer, scene, interrupted, pixelCount, rayCount);
 
-	if (settings.app.showCameraInfo)
+	if (settings.runner.showCameraInfo)
 	{
-		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.app.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
-		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.app.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
-		app.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.app.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
+		runner.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.runner.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
+		runner.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.runner.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
+		runner.getInfoFont().drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.runner.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
 	}
 }
 

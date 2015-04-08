@@ -5,11 +5,11 @@
 
 namespace Raycer
 {
-	class AppStateBase
+	class InteractiveState
 	{
 	public:
 
-		virtual ~AppStateBase() {}
+		virtual ~InteractiveState() {}
 
 		virtual void initialize() = 0;
 		virtual void pause() = 0;

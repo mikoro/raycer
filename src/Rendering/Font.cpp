@@ -55,7 +55,7 @@ void Font::initFreeType()
 	if (library == nullptr)
 	{
 		if (staticLog != nullptr)
-			staticLog->logInfo("Initializing FreeType");
+			staticLog->logInfo("Initializing FreeType library");
 
 		FT_Error error = FT_Init_FreeType(&library);
 
@@ -69,7 +69,7 @@ void Font::closeFreeType()
 	if (library != nullptr)
 	{
 		if (staticLog != nullptr)
-			staticLog->logInfo("Closing FreeType");
+			staticLog->logInfo("Closing FreeType library");
 
 		FT_Done_FreeType(library);
 		library = nullptr;

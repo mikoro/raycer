@@ -8,7 +8,8 @@
 #include <thread>
 #include <atomic>
 
-#include "Utils/ConsoleRunner.h"
+#include "Runners/ConsoleRunner.h"
+#include "Utils/Log.h"
 #include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
@@ -38,7 +39,12 @@ namespace
 
 #endif
 
-int ConsoleRunner::run(const ConsoleRunnerSettings& settings)
+ConsoleRunner::ConsoleRunner(BaseLog& baseLog)
+{
+	log = baseLog.getNamedLog("ConsoleRunner");
+}
+
+int ConsoleRunner::run(const ConsoleSettings& settings)
 {
 #ifdef WIN32
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);

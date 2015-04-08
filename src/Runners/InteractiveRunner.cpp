@@ -3,8 +3,7 @@
 
 #include "glfw/glfw3.h"
 
-#include "App/App.h"
-#include "Rendering/Font.h"
+#include "Runners/InteractiveRunner.h"
 #include "Rendering/Image.h"
 #include "States/TraceFastState.h"
 #include "Math/Color.h"
@@ -22,7 +21,12 @@ namespace
 	}
 }
 
-int App::run()
+InteractiveRunner::InteractiveRunner(BaseLog& baseLog_) : baseLog(baseLog_)
+{
+	log = baseLog_.getNamedLog("InteractiveRunner");
+}
+
+int InteractiveRunner::run()
 {
 	try
 	{
@@ -52,52 +56,47 @@ int App::run()
 	return 0;
 }
 
-void App::stop()
+void InteractiveRunner::stop()
 {
 	shouldRun = false;
 }
 
-GLFWwindow* App::getGlfwWindow() const
+GLFWwindow* InteractiveRunner::getGlfwWindow() const
 {
 	return glfwWindow;
 }
 
-int App::getWindowWidth() const
+int InteractiveRunner::getWindowWidth() const
 {
 	return windowWidth;
 }
 
-int App::getWindowHeight() const
+int InteractiveRunner::getWindowHeight() const
 {
 	return windowHeight;
 }
 
-BaseLog& App::getBaseLog() const
-{
-	return *baseLog;
-}
-
-const MouseInfo& App::getMouseInfo() const
+const MouseInfo& InteractiveRunner::getMouseInfo() const
 {
 	return mouseInfo;
 }
 
-Font& App::getInfoFont() const
+Font& InteractiveRunner::getInfoFont() const
 {
 	return *infoFont;
 }
 
-bool App::keyIsDown(int key)
+bool InteractiveRunner::keyIsDown(int key)
 {
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
 }
 
-bool App::mouseIsDown(int button)
+bool InteractiveRunner::mouseIsDown(int button)
 {
 	return (glfwGetMouseButton(glfwWindow, button) == GLFW_PRESS);
 }
 
-bool App::keyWasPressed(int key)
+bool InteractiveRunner::keyWasPressed(int key)
 {
 	if (keyIsDown(key))
 	{
@@ -113,31 +112,26 @@ bool App::keyWasPressed(int key)
 	return false;
 }
 
-void App::changeState(AppStates newState)
+void InteractiveRunner::changeState(RunnerStates newState)
 {
-	if (currentState != AppStates::None)
-		appStates[currentState]->shutdown();
+	if (currentState != RunnerStates::None)
+		runnerStates[currentState]->shutdown();
 
 	currentState = newState;
 
-	appStates[currentState]->initialize();
+	runnerStates[currentState]->initialize();
 }
 
-void App::initialize()
+void InteractiveRunner::initialize()
 {
-	baseLog = std::unique_ptr<BaseLog>(new BaseLog("raycer.log"));
-	log = baseLog->getNamedLog("App");
 	staticLog = log.get();
 
-	log->logInfo("Initializing");
+	log->logInfo("Initializing interactive runner");
 
-	iniReader = std::unique_ptr<IniReader>(new IniReader(*baseLog));
+	iniReader = std::unique_ptr<IniReader>(new IniReader(baseLog));
 	iniReader->readFile("settings.ini");
 
-	settings = std::unique_ptr<Settings>(new Settings(*iniReader));
-
-	baseLog->setMinimumMessageLevel((BaseLog::MessageLevel)settings->logger.minimumMessageLevel);
-	baseLog->setOutputToConsole(settings->logger.outputToConsole);
+	settings = std::unique_ptr<InteractiveSettings>(new InteractiveSettings(*iniReader));
 
 	log->logInfo("Initializing GLFW");
 
@@ -165,23 +159,23 @@ void App::initialize()
 	if (settings->window.hideCursor)
 		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	framebuffer = std::unique_ptr<Framebuffer>(new Framebuffer(*baseLog));
+	framebuffer = std::unique_ptr<Framebuffer>(new Framebuffer(baseLog));
 	framebuffer->enableSmoothing(settings->framebuffer.enableSmoothing);
 	
 	windowResized(settings->window.width, settings->window.height);
 
-	infoFont = std::unique_ptr<Font>(new Font(*baseLog, settings->app.infoFont, settings->app.infoFontSize));
+	infoFont = std::unique_ptr<Font>(new Font(baseLog, settings->runner.infoFont, settings->runner.infoFontSize));
 
-	appStates[AppStates::TraceFast] = std::unique_ptr<TraceFastState>(new TraceFastState(*baseLog, *this, *framebuffer, *settings));
+	runnerStates[RunnerStates::TraceFast] = std::unique_ptr<TraceFastState>(new TraceFastState(baseLog, *this, *framebuffer, *settings));
 
-	changeState(AppStates::TraceFast);
+	changeState(RunnerStates::TraceFast);
 }
 
-void App::shutdown()
+void InteractiveRunner::shutdown()
 {
-	log->logInfo("Shutting down");
+	log->logInfo("Shutting down interactive runner");
 
-	appStates[currentState]->shutdown();
+	runnerStates[currentState]->shutdown();
 
 	Font::closeFreeType();
 
@@ -189,7 +183,7 @@ void App::shutdown()
 		glfwTerminate();
 }
 
-void App::windowResized(int width, int height)
+void InteractiveRunner::windowResized(int width, int height)
 {
 	windowWidth = width;
 	windowHeight = height;
@@ -201,21 +195,21 @@ void App::windowResized(int width, int height)
 	else if (framebuffer->getWidth() != settings->framebuffer.fixedWidth || framebuffer->getHeight() != settings->framebuffer.fixedHeight)
 		framebuffer->setSize(settings->framebuffer.fixedWidth, settings->framebuffer.fixedHeight);
 
-	if (currentState != AppStates::None)
+	if (currentState != RunnerStates::None)
 	{
-		appStates[currentState]->windowResized(windowWidth, windowHeight);
-		appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
+		runnerStates[currentState]->windowResized(windowWidth, windowHeight);
+		runnerStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 	}
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
 // http://gamesfromwithin.com/casey-and-the-clearly-deterministic-contraptions
 // https://randomascii.wordpress.com/2012/02/13/dont-store-that-in-a-float/
-void App::mainLoop()
+void InteractiveRunner::mainLoop()
 {
 	log->logInfo("Entering the main loop");
 
-	double timeStep = 1.0 / settings->app.updateFrequency;
+	double timeStep = 1.0 / settings->runner.updateFrequency;
 	double previousTime = glfwGetTime();
 	double timeAccumulator = 0;
 
@@ -244,7 +238,7 @@ void App::mainLoop()
 	}
 }
 
-void App::update(double timeStep)
+void InteractiveRunner::update(double timeStep)
 {
 	updateFpsCounter.countFrame();
 	updateFpsCounter.update(timeStep);
@@ -277,10 +271,10 @@ void App::update(double timeStep)
 		shouldRun = false;
 
 	if (keyWasPressed(GLFW_KEY_F1))
-		settings->app.showFps = !settings->app.showFps;
+		settings->runner.showFps = !settings->runner.showFps;
 
 	if (keyWasPressed(GLFW_KEY_F2))
-		settings->app.showCameraInfo = !settings->app.showCameraInfo;
+		settings->runner.showCameraInfo = !settings->runner.showCameraInfo;
 
 	if (keyWasPressed(GLFW_KEY_F9))
 	{
@@ -298,7 +292,7 @@ void App::update(double timeStep)
 		{
 			settings->framebuffer.resizeScale = newScale;
 			framebuffer->setSize(newWidth, newHeight);
-			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
+			runnerStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
@@ -312,30 +306,32 @@ void App::update(double timeStep)
 				settings->framebuffer.resizeScale = 1.0;
 
 			framebuffer->setSize((int)(windowWidth * settings->framebuffer.resizeScale + 0.5), (int)(windowHeight * settings->framebuffer.resizeScale + 0.5));
-			appStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
+			runnerStates[currentState]->framebufferResized(framebuffer->getWidth(), framebuffer->getHeight());
 		}
 	}
 
-	if (currentState != AppStates::None)
-		appStates[currentState]->update(timeStep);
+	if (currentState != RunnerStates::None)
+		runnerStates[currentState]->update(timeStep);
 	else
 		throw std::runtime_error("App state has not been set");
 }
 
-void App::render(double timeStep, double interpolation)
+void InteractiveRunner::render(double timeStep, double interpolation)
 {
 	renderFpsCounter.countFrame();
 
-	if (currentState != AppStates::None)
-		appStates[currentState]->render(timeStep, interpolation);
+	if (currentState != RunnerStates::None)
+		runnerStates[currentState]->render(timeStep, interpolation);
 	else
 		throw std::runtime_error("App state has not been set");
 
-	if (settings->app.showFps)
-		infoFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->app.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
+	if (settings->runner.showFps)
+		infoFont->drawText(*framebuffer, 5, framebuffer->getHeight() - settings->runner.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
 
 	if (keyWasPressed(GLFW_KEY_F8))
 	{
+		log->logInfo("Saving a screenshot to screenshot.png");
+
 		Image image = Image(*framebuffer);
 		image.saveAs("screenshot.png");
 	}

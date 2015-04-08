@@ -9,9 +9,9 @@ namespace Raycer
 {
 	class IniReader;
 
-	struct Settings
+	struct InteractiveSettings
 	{
-		Settings(IniReader& iniReader);
+		InteractiveSettings(IniReader& iniReader);
 
 		struct Window
 		{
@@ -31,20 +31,14 @@ namespace Raycer
 			bool enableSmoothing;
 		} framebuffer;
 
-		struct Log
-		{
-			int minimumMessageLevel;
-			bool outputToConsole;
-		} logger;
-
-		struct App
+		struct Runner
 		{
 			double updateFrequency;
 			bool showFps;
 			bool showCameraInfo;
 			std::string infoFont;
 			int infoFontSize;
-		} app;
+		} runner;
 
 		struct Controls
 		{

@@ -14,7 +14,7 @@ Framebuffer::Framebuffer(BaseLog& baseLog)
 {
 	log = baseLog.getNamedLog("Framebuffer");
 
-	log->logInfo("Initializing");
+	log->logInfo("Initializing framebuffer");
 
 	glEnable(GL_TEXTURE_2D);
 	glGenTextures(1, &textureId);
@@ -43,7 +43,7 @@ void Framebuffer::setSize(int width_, int height_)
 	width = width_;
 	height = height_;
 
-	log->logInfo("Resizing to %sx%s", width, height);
+	log->logInfo("Resizing framebuffer to %sx%s", width, height);
 
 	if (pixelData != nullptr)
 		_mm_free(pixelData);

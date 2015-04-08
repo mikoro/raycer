@@ -10,9 +10,6 @@
     <Filter Include="Resources">
       <UniqueIdentifier>{0efe9c13-6183-4c2c-832f-7b9e03c0af81}</UniqueIdentifier>
     </Filter>
-    <Filter Include="App">
-      <UniqueIdentifier>{1ec16308-2ef3-45bb-a552-407793aa1a71}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Math">
       <UniqueIdentifier>{947ff596-4f44-479c-83da-3d73818002a9}</UniqueIdentifier>
     </Filter>
@@ -21,6 +18,9 @@
     </Filter>
     <Filter Include="Rendering">
       <UniqueIdentifier>{ee006dfd-3ff2-40be-ab1e-75c5401bdc0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runners">
+      <UniqueIdentifier>{d64a85d7-397e-4fdc-a313-bafb5e00147e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -33,12 +33,6 @@
     </ClCompile>
     <ClCompile Include="src\Utils\Log.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\App\App.cpp">
-      <Filter>App</Filter>
-    </ClCompile>
-    <ClCompile Include="src\App\Settings.cpp">
-      <Filter>App</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Color.cpp">
       <Filter>Math</Filter>
@@ -91,11 +85,17 @@
     <ClCompile Include="src\States\TraceFastState.cpp">
       <Filter>States</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\ConsoleRunner.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Scene.cpp">
       <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\ConsoleRunner.cpp">
+      <Filter>Runners</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\InteractiveRunner.cpp">
+      <Filter>Runners</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\InteractiveSettings.cpp">
+      <Filter>Runners</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -108,12 +108,6 @@
     <ClInclude Include="src\Utils\Log.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\App\App.h">
-      <Filter>App</Filter>
-    </ClInclude>
-    <ClInclude Include="src\App\Settings.h">
-      <Filter>App</Filter>
-    </ClInclude>
     <ClInclude Include="src\Math\Color.h">
       <Filter>Math</Filter>
     </ClInclude>
@@ -125,9 +119,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\MathUtils.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\App\AppStateBase.h">
-      <Filter>App</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Material.h">
       <Filter>Raytracing</Filter>
@@ -186,8 +177,20 @@
     <ClInclude Include="src\States\TraceFastState.h">
       <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\ConsoleRunner.h">
-      <Filter>Utils</Filter>
+    <ClInclude Include="src\States\InteractiveState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\ConsoleRunner.h">
+      <Filter>Runners</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\ConsoleSettings.h">
+      <Filter>Runners</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\InteractiveRunner.h">
+      <Filter>Runners</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\InteractiveSettings.h">
+      <Filter>Runners</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

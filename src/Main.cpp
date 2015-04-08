@@ -3,8 +3,9 @@
 
 #include "tclap/CmdLine.h"
 
-#include "App/App.h"
-#include "Utils/ConsoleRunner.h"
+#include "Runners/InteractiveRunner.h"
+#include "Runners/ConsoleRunner.h"
+#include "Utils/Log.h"
 
 using namespace Raycer;
 
@@ -28,12 +29,14 @@ int main(int argc, char** argv)
 		return -1;
 	}
 
-	if (interactiveSwitch.getValue())
-		return App().run();
-
 	try
 	{
-		ConsoleRunnerSettings settings;
+		BaseLog baseLog = BaseLog("raycer.log");
+
+		if (interactiveSwitch.getValue())
+			return InteractiveRunner(baseLog).run();
+
+		ConsoleSettings settings;
 
 		settings.sceneFileName = sceneFileArg.getValue();
 		settings.outputFileName = outputFileArg.getValue();
@@ -41,7 +44,7 @@ int main(int argc, char** argv)
 		settings.height = heightArg.getValue();
 		settings.viewImage = viewSwitch.getValue();
 
-		return ConsoleRunner::run(settings);
+		return ConsoleRunner(baseLog).run(settings);
 	}
 	catch (const std::exception& ex)
 	{

@@ -6,22 +6,22 @@
 #include <memory>
 #include <atomic>
 
-#include "App/AppStateBase.h"
+#include "States/InteractiveState.h"
 #include "Raytracing/Scene.h"
 
 namespace Raycer
 {
-	class App;
 	class BaseLog;
 	class NamedLog;
+	class InteractiveRunner;
 	class Framebuffer;
-	struct Settings;
+	struct InteractiveSettings;
 
-	class TraceFastState : public AppStateBase
+	class TraceFastState : public InteractiveState
 	{
 	public:
 
-		TraceFastState(BaseLog& baseLog, App& app, Framebuffer& framebuffer, Settings& settings);
+		TraceFastState(BaseLog& baseLog, InteractiveRunner& runner, Framebuffer& framebuffer, InteractiveSettings& settings);
 
 		void initialize();
 		void pause();
@@ -38,9 +38,9 @@ namespace Raycer
 
 		std::unique_ptr<NamedLog> log;
 
-		App& app;
+		InteractiveRunner& runner;
 		Framebuffer& framebuffer;
-		Settings& settings;
+		InteractiveSettings& settings;
 		Scene scene;
 
 		std::atomic<bool> interrupted = false;

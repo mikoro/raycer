@@ -5,16 +5,16 @@
 
 #include "glfw/glfw3.h"
 
-#include "App/App.h"
+#include "Runners/InteractiveRunner.h"
 #include "Raytracing/Camera.h"
 #include "Raytracing/Ray.h"
 #include "Math/MathUtils.h"
 
 using namespace Raycer;
 
-void Camera::initialize(App* app_, Settings* settings_)
+void Camera::initialize(InteractiveRunner* runner_, InteractiveSettings* settings_)
 {
-	app = app_;
+	runner = runner_;
 	settings = settings_;
 }
 
@@ -37,9 +37,9 @@ void Camera::calculateVariables()
 
 void Camera::update(double timeStep)
 {
-	MouseInfo mouseInfo = app->getMouseInfo();
+	MouseInfo mouseInfo = runner->getMouseInfo();
 
-	if (app->mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || !settings->controls.mouseLookWithButton)
+	if (runner->mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || !settings->controls.mouseLookWithButton)
 	{
 		orientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings->controls.mouseSpeed;
 		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings->controls.mouseSpeed;
@@ -48,22 +48,22 @@ void Camera::update(double timeStep)
 	orientation.clampPitch();
 	orientation.normalize();
 
-	if (app->keyIsDown(GLFW_KEY_W) || app->keyIsDown(GLFW_KEY_UP))
+	if (runner->keyIsDown(GLFW_KEY_W) || runner->keyIsDown(GLFW_KEY_UP))
 		position += forward * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_S) || app->keyIsDown(GLFW_KEY_DOWN))
+	if (runner->keyIsDown(GLFW_KEY_S) || runner->keyIsDown(GLFW_KEY_DOWN))
 		position -= forward * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_A) || app->keyIsDown(GLFW_KEY_LEFT))
+	if (runner->keyIsDown(GLFW_KEY_A) || runner->keyIsDown(GLFW_KEY_LEFT))
 		position -= right * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_D) || app->keyIsDown(GLFW_KEY_RIGHT))
+	if (runner->keyIsDown(GLFW_KEY_D) || runner->keyIsDown(GLFW_KEY_RIGHT))
 		position += right * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_Q))
+	if (runner->keyIsDown(GLFW_KEY_Q))
 		position -= up * timeStep * settings->controls.moveSpeed;
 
-	if (app->keyIsDown(GLFW_KEY_E))
+	if (runner->keyIsDown(GLFW_KEY_E))
 		position += up * timeStep * settings->controls.moveSpeed;
 
 	calculateVariables();
