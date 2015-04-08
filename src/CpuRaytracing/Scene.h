@@ -6,12 +6,12 @@
 #include <vector>
 #include <memory>
 
-#include "Raytracing/Primitive.h"
-#include "Raytracing/Sphere.h"
-#include "Raytracing/Plane.h"
-#include "Raytracing/Mesh.h"
-#include "Raytracing/Light.h"
-#include "Raytracing/Camera.h"
+#include "CpuRaytracing/Primitive.h"
+#include "CpuRaytracing/Sphere.h"
+#include "CpuRaytracing/Plane.h"
+#include "CpuRaytracing/Mesh.h"
+#include "CpuRaytracing/Light.h"
+#include "CpuRaytracing/Camera.h"
 #include "Math/Color.h"
 
 namespace Raycer

@@ -70,7 +70,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>platform\windows\post-build.bat Debug</Command>
@@ -94,13 +94,22 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>platform\windows\post-build.bat Release</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\CpuRaytracing\Camera.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Mesh.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Plane.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Ray.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Raytracer.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Scene.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Sphere.cpp" />
+    <ClCompile Include="src\CpuRaytracing\Triangle.cpp" />
+    <ClCompile Include="src\GpuRaytracing\OpenCLHelper.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -108,14 +117,6 @@
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
-    <ClCompile Include="src\Raytracing\Camera.cpp" />
-    <ClCompile Include="src\Raytracing\Mesh.cpp" />
-    <ClCompile Include="src\Raytracing\Plane.cpp" />
-    <ClCompile Include="src\Raytracing\Ray.cpp" />
-    <ClCompile Include="src\Raytracing\Raytracer.cpp" />
-    <ClCompile Include="src\Raytracing\Scene.cpp" />
-    <ClCompile Include="src\Raytracing\Sphere.cpp" />
-    <ClCompile Include="src\Raytracing\Triangle.cpp" />
     <ClCompile Include="src\Rendering\Font.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
@@ -128,24 +129,25 @@
     <ClCompile Include="src\Utils\Log.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\CpuRaytracing\Camera.h" />
+    <ClInclude Include="src\CpuRaytracing\Intersection.h" />
+    <ClInclude Include="src\CpuRaytracing\Light.h" />
+    <ClInclude Include="src\CpuRaytracing\Material.h" />
+    <ClInclude Include="src\CpuRaytracing\Mesh.h" />
+    <ClInclude Include="src\CpuRaytracing\Plane.h" />
+    <ClInclude Include="src\CpuRaytracing\Primitive.h" />
+    <ClInclude Include="src\CpuRaytracing\Ray.h" />
+    <ClInclude Include="src\CpuRaytracing\Raytracer.h" />
+    <ClInclude Include="src\CpuRaytracing\Scene.h" />
+    <ClInclude Include="src\CpuRaytracing\Sphere.h" />
+    <ClInclude Include="src\CpuRaytracing\Triangle.h" />
+    <ClInclude Include="src\GpuRaytracing\OpenCLHelper.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
     <ClInclude Include="src\Math\Matrix4x4.h" />
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
-    <ClInclude Include="src\Raytracing\Camera.h" />
-    <ClInclude Include="src\Raytracing\Intersection.h" />
-    <ClInclude Include="src\Raytracing\Light.h" />
-    <ClInclude Include="src\Raytracing\Material.h" />
-    <ClInclude Include="src\Raytracing\Mesh.h" />
-    <ClInclude Include="src\Raytracing\Plane.h" />
-    <ClInclude Include="src\Raytracing\Ray.h" />
-    <ClInclude Include="src\Raytracing\Raytracer.h" />
-    <ClInclude Include="src\Raytracing\Scene.h" />
-    <ClInclude Include="src\Raytracing\Primitive.h" />
-    <ClInclude Include="src\Raytracing\Sphere.h" />
-    <ClInclude Include="src\Raytracing\Triangle.h" />
     <ClInclude Include="src\Rendering\Font.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\Image.h" />
@@ -162,6 +164,11 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\GpuRaytracing\test.cl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

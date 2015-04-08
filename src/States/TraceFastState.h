@@ -7,7 +7,7 @@
 #include <atomic>
 
 #include "States/InteractiveState.h"
-#include "Raytracing/Scene.h"
+#include "CpuRaytracing/Scene.h"
 
 namespace Raycer
 {

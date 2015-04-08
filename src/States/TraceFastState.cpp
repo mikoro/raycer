@@ -8,10 +8,10 @@
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
 #include "Runners/InteractiveSettings.h"
-#include "Raytracing/Raytracer.h"
+#include "CpuRaytracing/Raytracer.h"
 
-//#include "Raytracing/Sphere.h"
-//#include "Raytracing/Plane.h"
+//#include "CpuRaytracing/Sphere.h"
+//#include "CpuRaytracing/Plane.h"
 
 using namespace Raycer;
 

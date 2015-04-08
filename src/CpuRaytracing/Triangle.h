@@ -3,28 +3,24 @@
 
 #pragma once
 
-#include "Raytracing/Primitive.h"
-#include "Raytracing/Material.h"
+#include "CpuRaytracing/Primitive.h"
+#include "CpuRaytracing/Material.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
 {
-	class Mesh : public Primitive
+	class Triangle : public Primitive
 	{
 	public:
 
-		Mesh();
+		Triangle();
 		
-		void intersect(Ray& ray) const;
-
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Material material;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(position),
-				CEREAL_NVP(material));
+			ar(CEREAL_NVP(material));
 		}
 	};
 }

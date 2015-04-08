@@ -14,7 +14,7 @@ namespace
 {
 	NamedLog* staticLog = nullptr;
 
-	void GlfwErrorCallback(int error, const char* description)
+	void glfwErrorCallback(int error, const char* description)
 	{
 		if (staticLog != nullptr)
 			staticLog->logError("GLFW error (%s): %s", error, description);
@@ -24,6 +24,7 @@ namespace
 InteractiveRunner::InteractiveRunner(BaseLog& baseLog_) : baseLog(baseLog_)
 {
 	log = baseLog_.getNamedLog("InteractiveRunner");
+	staticLog = log.get();
 }
 
 int InteractiveRunner::run(ConsoleSettings& consoleSettings_)
@@ -126,8 +127,6 @@ void InteractiveRunner::changeState(RunnerStates newState)
 
 void InteractiveRunner::initialize()
 {
-	staticLog = log.get();
-
 	log->logInfo("Initializing interactive runner");
 
 	iniReader = std::unique_ptr<IniReader>(new IniReader(baseLog));
@@ -137,7 +136,7 @@ void InteractiveRunner::initialize()
 
 	log->logInfo("Initializing GLFW library");
 
-	glfwSetErrorCallback(::GlfwErrorCallback);
+	glfwSetErrorCallback(::glfwErrorCallback);
 
 	if (!glfwInit())
 		throw std::runtime_error("Could not initialize GLFW");

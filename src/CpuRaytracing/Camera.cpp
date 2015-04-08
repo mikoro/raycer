@@ -6,8 +6,8 @@
 #include "glfw/glfw3.h"
 
 #include "Runners/InteractiveRunner.h"
-#include "Raytracing/Camera.h"
-#include "Raytracing/Ray.h"
+#include "CpuRaytracing/Camera.h"
+#include "CpuRaytracing/Ray.h"
 #include "Math/MathUtils.h"
 
 using namespace Raycer;

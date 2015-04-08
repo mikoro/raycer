@@ -9,6 +9,8 @@
 
 using namespace Raycer;
 
+#include "GpuRaytracing/OpenCLHelper.h"
+
 int main(int argc, char** argv)
 {
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
@@ -18,9 +20,9 @@ int main(int argc, char** argv)
 	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image", false, 800, "int", cmd);
 	TCLAP::ValueArg<int> platformIdArg("p", "platform", "OpenCL platform to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> deviceIdArg("d", "device", "OpenCL device to use", false, 0, "int", cmd);
-	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively (view settings.ini for more settings)", cmd, false);
+	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively (settings.ini for more settings)", cmd, false);
 	TCLAP::SwitchArg viewImageSwitch("v", "view", "View the image after completion", cmd, false);
-	TCLAP::SwitchArg useOpenClSwitch("g", "gpu", "Use GPU (or other OpenCL device) for raytracing", cmd, false);
+	TCLAP::SwitchArg useOpenClSwitch("g", "gpu", "Use GPU (OpenCL) for raytracing", cmd, false);
 
 	try
 	{
@@ -41,9 +43,16 @@ int main(int argc, char** argv)
 		settings.outputFileName = outputFileNameArg.getValue();
 		settings.width = widthArg.getValue();
 		settings.height = heightArg.getValue();
+		settings.platformId = platformIdArg.getValue();
+		settings.deviceId = deviceIdArg.getValue();
 		settings.interactive = interactiveSwitch.getValue();
 		settings.viewImage = viewImageSwitch.getValue();
 		settings.useOpenCl = useOpenClSwitch.getValue();
+
+		OpenCLHelper openCl = OpenCLHelper(baseLog);
+		openCl.initialize(settings);
+
+		return 0;
 
 		if (settings.interactive)
 			return InteractiveRunner(baseLog).run(settings);
@@ -52,7 +61,7 @@ int main(int argc, char** argv)
 	}
 	catch (const std::exception& ex)
 	{
-		std::cerr << "Unhandled exception: " << ex.what() << std::endl;
+		std::cerr << "Error: " << ex.what() << std::endl;
 		return -1;
 	}
 }

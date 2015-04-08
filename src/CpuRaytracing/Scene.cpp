@@ -6,7 +6,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 
-#include "Raytracing/Scene.h"
+#include "CpuRaytracing/Scene.h"
 #include "Utils/Log.h"
 
 using namespace Raycer;

@@ -4,11 +4,11 @@
 #include <algorithm>
 #include <limits>
 
-#include "Raytracing/Raytracer.h"
-#include "Raytracing/Scene.h"
-#include "Raytracing/Ray.h"
-#include "Raytracing/Intersection.h"
-#include "Raytracing/Material.h"
+#include "CpuRaytracing/Raytracer.h"
+#include "CpuRaytracing/Scene.h"
+#include "CpuRaytracing/Ray.h"
+#include "CpuRaytracing/Intersection.h"
+#include "CpuRaytracing/Material.h"
 #include "Rendering/Framebuffer.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"

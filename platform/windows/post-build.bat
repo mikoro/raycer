@@ -15,3 +15,7 @@ if not exist bin\%1\raycer.exe.config (
 if not exist bin\%1\settings.ini (
   xcopy /Y /Q misc\settings.ini bin\%1
 )
+
+if not exist bin\%1\data\kernels (
+  xcopy /E /I /Y /Q src\GpuRaytracing\*.cl bin\%1\data\kernels
+)

@@ -13,8 +13,8 @@
 #include "Runners/ConsoleRunner.h"
 #include "Utils/Log.h"
 #include "Rendering/Image.h"
-#include "Raytracing/Scene.h"
-#include "Raytracing/Raytracer.h"
+#include "CpuRaytracing/Scene.h"
+#include "CpuRaytracing/Raytracer.h"
 
 using namespace Raycer;
 
