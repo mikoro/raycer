@@ -13,6 +13,10 @@ namespace Raycer
 		std::string outputFileName;
 		int width;
 		int height;
+		int platformId;
+		int deviceId;
+		bool interactive;
 		bool viewImage;
+		bool useOpenCl;
 	};
 }

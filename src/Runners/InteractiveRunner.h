@@ -7,6 +7,7 @@
 #include <memory>
 
 #include "Runners/InteractiveSettings.h"
+#include "Runners/ConsoleSettings.h"
 #include "States/InteractiveState.h"
 #include "Utils/Log.h"
 #include "Utils/IniReader.h"
@@ -36,7 +37,7 @@ namespace Raycer
 
 		InteractiveRunner(BaseLog& baseLog);
 
-		int run();
+		int run(ConsoleSettings& consoleSettings);
 		void stop();
 		
 		GLFWwindow* getGlfwWindow() const;
@@ -69,6 +70,7 @@ namespace Raycer
 		std::unique_ptr<Font> infoFont;
 
 		BaseLog& baseLog;
+		ConsoleSettings consoleSettings;
 		bool shouldRun = true;
 		bool glfwInitialized = false;
 		GLFWwindow* glfwWindow = nullptr;

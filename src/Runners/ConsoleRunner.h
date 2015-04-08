@@ -21,12 +21,13 @@ namespace Raycer
 
 		ConsoleRunner(BaseLog& baseLog);
 
-		int run(const ConsoleSettings& settings);
+		int run(ConsoleSettings& settings);
 
 	private:
 
 		void printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelCount, int rayCount);
 
+		BaseLog& baseLog;
 		std::unique_ptr<NamedLog> log;
 	};
 }

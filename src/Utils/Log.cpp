@@ -67,7 +67,7 @@ std::string BaseLog::formatMessage(MessageLevel messageLevel, const std::string&
 	auto epochDurationMs = std::chrono::duration_cast<std::chrono::milliseconds>(epochDuration).count();
 	auto milliSeconds = epochDurationMs - epochDurationS * 1000;
 
-	return tfm::format("%s.%03d [%s] %s - %s", timeStringBuffer.str(), milliSeconds, messageLevelName, sourceName, message);
+	return tfm::format("%s.%03d [%s] %s", timeStringBuffer.str(), milliSeconds, messageLevelName, message);
 }
 
 void BaseLog::outputMessage(const std::string& message)

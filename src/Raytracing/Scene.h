@@ -16,12 +16,14 @@
 
 namespace Raycer
 {
+	class BaseLog;
+	class NamedLog;
+
 	class Scene
 	{
 	public:
 
-		Scene();
-		Scene(const std::string fileName);
+		Scene(BaseLog& baseLog);
 
 		void load(const std::string fileName);
 		void saveAs(const std::string fileName) const;
@@ -58,5 +60,9 @@ namespace Raycer
 				CEREAL_NVP(fogSteepness),
 				CEREAL_NVP(fogColor));
 		}
+
+	private:
+
+		std::unique_ptr<NamedLog> log;
 	};
 }

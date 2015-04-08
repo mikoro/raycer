@@ -26,8 +26,10 @@ InteractiveRunner::InteractiveRunner(BaseLog& baseLog_) : baseLog(baseLog_)
 	log = baseLog_.getNamedLog("InteractiveRunner");
 }
 
-int InteractiveRunner::run()
+int InteractiveRunner::run(ConsoleSettings& consoleSettings_)
 {
+	consoleSettings = consoleSettings_;
+
 	try
 	{
 		initialize();
@@ -133,7 +135,7 @@ void InteractiveRunner::initialize()
 
 	settings = std::unique_ptr<InteractiveSettings>(new InteractiveSettings(*iniReader));
 
-	log->logInfo("Initializing GLFW");
+	log->logInfo("Initializing GLFW library");
 
 	glfwSetErrorCallback(::GlfwErrorCallback);
 

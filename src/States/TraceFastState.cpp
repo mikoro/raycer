@@ -15,7 +15,7 @@
 
 using namespace Raycer;
 
-TraceFastState::TraceFastState(BaseLog& baseLog, InteractiveRunner& runner_, Framebuffer& framebuffer_, InteractiveSettings& settings_) : runner(runner_), framebuffer(framebuffer_), settings(settings_)
+TraceFastState::TraceFastState(BaseLog& baseLog, InteractiveRunner& runner_, Framebuffer& framebuffer_, InteractiveSettings& settings_) : runner(runner_), framebuffer(framebuffer_), settings(settings_), scene(baseLog)
 {
 	log = baseLog.getNamedLog("TraceFastState");
 }

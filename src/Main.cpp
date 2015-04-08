@@ -12,12 +12,15 @@ using namespace Raycer;
 int main(int argc, char** argv)
 {
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
-	TCLAP::ValueArg<std::string> sceneFileArg("s", "scene", "Path to the scene file", true, "", "string", cmd);
-	TCLAP::ValueArg<std::string> outputFileArg("o", "output", "Path to the output image file", false, "output.png", "string", cmd);
+	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", true, "", "string", cmd);
+	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "output.png", "string", cmd);
 	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image", false, 1280, "int", cmd);
 	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image", false, 800, "int", cmd);
-	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively", cmd, false);
-	TCLAP::SwitchArg viewSwitch("v", "view", "View the image after completion", cmd, false);
+	TCLAP::ValueArg<int> platformIdArg("p", "platform", "OpenCL platform to use", false, 0, "int", cmd);
+	TCLAP::ValueArg<int> deviceIdArg("d", "device", "OpenCL device to use", false, 0, "int", cmd);
+	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively (view settings.ini for more settings)", cmd, false);
+	TCLAP::SwitchArg viewImageSwitch("v", "view", "View the image after completion", cmd, false);
+	TCLAP::SwitchArg useOpenClSwitch("g", "gpu", "Use GPU (or other OpenCL device) for raytracing", cmd, false);
 
 	try
 	{
@@ -32,19 +35,20 @@ int main(int argc, char** argv)
 	try
 	{
 		BaseLog baseLog = BaseLog("raycer.log");
-
-		if (interactiveSwitch.getValue())
-			return InteractiveRunner(baseLog).run();
-
 		ConsoleSettings settings;
 
-		settings.sceneFileName = sceneFileArg.getValue();
-		settings.outputFileName = outputFileArg.getValue();
+		settings.sceneFileName = sceneFileNameArg.getValue();
+		settings.outputFileName = outputFileNameArg.getValue();
 		settings.width = widthArg.getValue();
 		settings.height = heightArg.getValue();
-		settings.viewImage = viewSwitch.getValue();
+		settings.interactive = interactiveSwitch.getValue();
+		settings.viewImage = viewImageSwitch.getValue();
+		settings.useOpenCl = useOpenClSwitch.getValue();
 
-		return ConsoleRunner(baseLog).run(settings);
+		if (settings.interactive)
+			return InteractiveRunner(baseLog).run(settings);
+		else
+			return ConsoleRunner(baseLog).run(settings);
 	}
 	catch (const std::exception& ex)
 	{
