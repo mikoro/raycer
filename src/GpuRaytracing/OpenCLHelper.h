@@ -22,6 +22,9 @@ namespace Raycer
 		~OpenCLHelper();
 		
 		void initialize(ConsoleSettings& consoleSettings);
+		void loadKernels();
+
+		cl_kernel raytraceKernel = nullptr;
 
 	private:
 
@@ -32,6 +35,5 @@ namespace Raycer
 		cl_context context = nullptr;
 		cl_command_queue commandQueue = nullptr;
 		cl_program program = nullptr;
-		cl_kernel kernel = nullptr;
 	};
 }

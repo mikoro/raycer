@@ -51,6 +51,7 @@ int main(int argc, char** argv)
 
 		OpenCLHelper openCl = OpenCLHelper(baseLog);
 		openCl.initialize(settings);
+		openCl.loadKernels();
 
 		return 0;
 

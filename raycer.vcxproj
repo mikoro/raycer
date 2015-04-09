@@ -166,7 +166,7 @@
     <ResourceCompile Include="platform\windows\raycer.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\GpuRaytracing\test.cl">
+    <None Include="src\GpuRaytracing\raytrace.cl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

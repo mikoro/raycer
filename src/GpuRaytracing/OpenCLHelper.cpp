@@ -34,10 +34,10 @@ OpenCLHelper::OpenCLHelper(BaseLog& baseLog)
 
 OpenCLHelper::~OpenCLHelper()
 {
-	if (kernel != nullptr)
+	if (raytraceKernel != nullptr)
 	{
-		clReleaseKernel(kernel);
-		kernel = nullptr;
+		clReleaseKernel(raytraceKernel);
+		raytraceKernel = nullptr;
 	}
 
 	if (program != nullptr)
@@ -61,8 +61,6 @@ OpenCLHelper::~OpenCLHelper()
 
 void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 {
-	consoleSettings.platformId = 1;
-
 	log->logInfo("Initializing OpenCL");
 
 	cl_uint platformCount = 0;
@@ -82,14 +80,14 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not get OpenCL platform info");
 
-	size_t textLength = 0;
-	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, NULL, &textLength);
-	char* platformName = new char[textLength];
-	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, textLength, platformName, NULL);
+	size_t length = 0;
+	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, NULL, &length);
+	char* platformName = new char[length];
+	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, platformName, NULL);
 
-	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, 0, NULL, &textLength);
-	char* platformVersion = new char[textLength];
-	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, textLength, platformVersion, NULL);
+	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, 0, NULL, &length);
+	char* platformVersion = new char[length];
+	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, platformVersion, NULL);
 
 	log->logInfo("OpenCL platform: %s", platformName);
 	log->logInfo("OpenCL version: %s", platformVersion);
@@ -114,9 +112,9 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not get OpenCL GPU device info");
 
-	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, NULL, &textLength);
-	char* deviceName = new char[textLength];
-	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, textLength, deviceName, NULL);
+	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, NULL, &length);
+	char* deviceName = new char[length];
+	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, deviceName, NULL);
 
 	log->logInfo("OpenCL device: %s", deviceName);
 
@@ -131,14 +129,20 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not create OpenCL command queue");
+}
 
-	log->logInfo("Compiling OpenCL kernel files");
+void OpenCLHelper::loadKernels()
+{
+	log->logInfo("Compiling OpenCL source files");
 
-	std::ifstream file("data/kernels/test.cl");
+	std::ifstream file("data/kernels/raytrace.cl");
 	std::stringstream ss;
 	ss << file.rdbuf();
 	std::string fileString = ss.str();
 	const char* fileStringPtr = fileString.c_str();
+
+	cl_int status = 0;
+	size_t length = 0;
 
 	program = clCreateProgramWithSource(context, 1, &fileStringPtr, NULL, &status);
 
@@ -149,9 +153,9 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 
 	if (status == CL_BUILD_PROGRAM_FAILURE)
 	{
-		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &textLength);
-		char* buildLog = new char[textLength];
-		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, textLength, buildLog, NULL);
+		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+		char* buildLog = new char[length];
+		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, buildLog, NULL);
 		log->logInfo("OpenCL build error:\n\n%s", buildLog);
 		delete buildLog;
 	}
@@ -159,7 +163,24 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not build OpenCL program");
 
-	kernel = clCreateKernel(program, "test_kernel", &status);
+#ifdef _DEBUG
+	log->logInfo("Outputting OpenCL binary to raytrace.bin");
+
+	size_t binarySize = 0;
+	clGetProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &binarySize, NULL);
+
+	if (binarySize > 0)
+	{
+		unsigned char* binary = new unsigned char[binarySize];
+		clGetProgramInfo(program, CL_PROGRAM_BINARIES, binarySize, &binary, NULL);
+		std::ofstream binaryFile("raytrace.bin", std::ios::binary);
+		binaryFile.write((const char*)binary, binarySize);
+		binaryFile.close();
+		delete binary;
+	}
+#endif
+
+	raytraceKernel = clCreateKernel(program, "raytrace", &status);
 
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not create OpenCL kernel");

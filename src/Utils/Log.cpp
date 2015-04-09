@@ -46,6 +46,8 @@ void BaseLog::handleMessage(MessageLevel messageLevel, const std::string& source
 
 std::string BaseLog::formatMessage(MessageLevel messageLevel, const std::string& sourceName, const std::string& message)
 {
+	(void)sourceName;
+
 	std::string messageLevelName = "Unknown";
 
 	switch (messageLevel)
