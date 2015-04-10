@@ -7,18 +7,14 @@
 #include "cereal/types/vector.hpp"
 
 #include "CpuRaytracing/Scene.h"
+#include "App.h"
 #include "Utils/Log.h"
 
 using namespace Raycer;
 
-Scene::Scene(BaseLog& baseLog)
+void Scene::load(const std::string& fileName)
 {
-	log = baseLog.getNamedLog("Scene");
-}
-
-void Scene::load(const std::string fileName)
-{
-	log->logInfo("Loading scene from %s", fileName);
+	App::getLog().logInfo("Loading scene from %s", fileName);
 
 	std::ifstream file(fileName);
 
@@ -29,9 +25,9 @@ void Scene::load(const std::string fileName)
 	archive(*this);
 }
 
-void Scene::saveAs(const std::string fileName) const
+void Scene::saveAs(const std::string& fileName) const
 {
-	log->logInfo("Saving scene to %s", fileName);
+	App::getLog().logInfo("Saving scene to %s", fileName);
 
 	std::ofstream file(fileName);
 

@@ -5,26 +5,15 @@
 #include "gl/glext.h"
 
 #include "Rendering/Framebuffer.h"
+#include "App.h"
 #include "Utils/Log.h"
+#include "Utils/Settings.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
 
-Framebuffer::Framebuffer(BaseLog& baseLog)
+Framebuffer::Framebuffer()
 {
-	log = baseLog.getNamedLog("Framebuffer");
-
-	log->logInfo("Initializing framebuffer");
-
-	glEnable(GL_TEXTURE_2D);
-	glGenTextures(1, &textureId);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-
-	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-	enableSmoothing(true);
 }
 
 Framebuffer::~Framebuffer()
@@ -36,6 +25,25 @@ Framebuffer::~Framebuffer()
 	}
 }
 
+void Framebuffer::initialize()
+{
+	App::getLog().logInfo("Initializing framebuffer");
+
+	glGenTextures(1, &cpuTextureId);
+	glGenTextures(1, &gpuTextureId);
+
+	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
+	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
 void Framebuffer::setSize(int width_, int height_)
 {
 	assert(width_ > 0 && height_ > 0);
@@ -43,7 +51,7 @@ void Framebuffer::setSize(int width_, int height_)
 	width = width_;
 	height = height_;
 
-	log->logInfo("Resizing framebuffer to %sx%s", width, height);
+	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
 	if (pixelData != nullptr)
 		_mm_free(pixelData);
@@ -54,7 +62,16 @@ void Framebuffer::setSize(int width_, int height_)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory
+	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	if (glGetError() != GL_NO_ERROR)
+		throw std::runtime_error("Could not allocate texture for the framebuffer");
 
 	clear();
 }
@@ -78,31 +95,14 @@ uint32_t* Framebuffer::getPixelData() const
 	return pixelData;
 }
 
-void Framebuffer::clear()
+uint32_t Framebuffer::getCpuTextureId() const
 {
-	std::fill_n(pixelData, width * height, 0);
+	return cpuTextureId;
 }
 
-void Framebuffer::clear(const Color& color)
+uint32_t Framebuffer::getGpuTextureId() const
 {
-	std::fill_n(pixelData, width * height, color.getAbgrValue());
-}
-
-void Framebuffer::render() const
-{
-	glClearColor(1.0, 0.0, 0.0, 0.0);
-	glClear(GL_COLOR_BUFFER_BIT);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
-
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, 1.0, 0.0);
-	glEnd();
+	return gpuTextureId;
 }
 
 int Framebuffer::getWidth() const
@@ -115,10 +115,57 @@ int Framebuffer::getHeight() const
 	return height;
 }
 
-void Framebuffer::enableSmoothing(bool value)
+void Framebuffer::clear()
 {
+	std::fill_n(pixelData, width * height, 0);
+}
+
+void Framebuffer::clear(const Color& color)
+{
+	std::fill_n(pixelData, width * height, color.getAbgrValue());
+}
+
+void Framebuffer::render() const
+{
+	Settings& settings = App::getSettings();
+
+	glClearColor(1.0, 0.0, 0.0, 0.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	if (settings.general.useOpenCL)
+		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	else
+	{
+		glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
+	}
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, value ? GL_LINEAR : GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, value ? GL_LINEAR : GL_NEAREST);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
+	glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
+	glTexCoord2f(1.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
+	glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, 1.0, 0.0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Framebuffer::enableSmoothing(bool state)
+{
+	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }

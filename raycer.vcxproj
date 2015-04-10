@@ -101,6 +101,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\CpuRaytracing\Camera.cpp" />
     <ClCompile Include="src\CpuRaytracing\Mesh.cpp" />
     <ClCompile Include="src\CpuRaytracing\Plane.cpp" />
@@ -110,8 +111,7 @@
     <ClCompile Include="src\CpuRaytracing\Sphere.cpp" />
     <ClCompile Include="src\CpuRaytracing\Triangle.cpp" />
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp" />
-    <ClCompile Include="src\GpuRaytracing\OpenCLHelper.cpp" />
-    <ClCompile Include="src\Main.cpp" />
+    <ClCompile Include="src\GpuRaytracing\OpenCL.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
@@ -123,13 +123,15 @@
     <ClCompile Include="src\Rendering\Image.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
-    <ClCompile Include="src\Runners\InteractiveSettings.cpp" />
-    <ClCompile Include="src\States\TraceFastState.cpp" />
+    <ClCompile Include="src\States\CpuTracingState.cpp" />
+    <ClCompile Include="src\States\GpuTracingState.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
+    <ClCompile Include="src\Utils\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\App.h" />
     <ClInclude Include="src\CpuRaytracing\Camera.h" />
     <ClInclude Include="src\CpuRaytracing\Intersection.h" />
     <ClInclude Include="src\CpuRaytracing\Light.h" />
@@ -143,7 +145,7 @@
     <ClInclude Include="src\CpuRaytracing\Sphere.h" />
     <ClInclude Include="src\CpuRaytracing\Triangle.h" />
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
-    <ClInclude Include="src\GpuRaytracing\OpenCLHelper.h" />
+    <ClInclude Include="src\GpuRaytracing\OpenCL.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
     <ClInclude Include="src\Math\Matrix4x4.h" />
@@ -155,14 +157,14 @@
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
-    <ClInclude Include="src\Runners\ConsoleSettings.h" />
     <ClInclude Include="src\Runners\InteractiveRunner.h" />
-    <ClInclude Include="src\Runners\InteractiveSettings.h" />
+    <ClInclude Include="src\States\GpuTracingState.h" />
     <ClInclude Include="src\States\InteractiveState.h" />
-    <ClInclude Include="src\States\TraceFastState.h" />
+    <ClInclude Include="src\States\CpuTracingState.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
+    <ClInclude Include="src\Utils\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc" />

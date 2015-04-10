@@ -3,32 +3,27 @@
 
 #pragma once
 
-#include <memory>
-
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #include <CL/cl.h>
 
 namespace Raycer
 {
-	class BaseLog;
-	class NamedLog;
-	struct ConsoleSettings;
-
-	class OpenCLHelper
+	class OpenCL
 	{
 	public:
 
-		OpenCLHelper(BaseLog& baseLog);
-		~OpenCLHelper();
+		OpenCL();
+		~OpenCL();
 		
-		void initialize(ConsoleSettings& consoleSettings);
+		void initialize();
 		void loadKernels();
 
 		cl_kernel raytraceKernel = nullptr;
 
 	private:
 
-		std::unique_ptr<NamedLog> log;
+		OpenCL(const OpenCL& openCL);
+		OpenCL& operator=(const OpenCL& openCL);
 
 		cl_platform_id platformId = nullptr;
 		cl_device_id deviceId = nullptr;

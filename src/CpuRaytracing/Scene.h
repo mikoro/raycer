@@ -4,7 +4,6 @@
 #pragma once
 
 #include <vector>
-#include <memory>
 
 #include "CpuRaytracing/Primitive.h"
 #include "CpuRaytracing/Sphere.h"
@@ -16,18 +15,12 @@
 
 namespace Raycer
 {
-	class BaseLog;
-	class NamedLog;
-
 	class Scene
 	{
 	public:
 
-		Scene(BaseLog& baseLog);
-
-		void load(const std::string fileName);
-		void saveAs(const std::string fileName) const;
-
+		void load(const std::string& fileName);
+		void saveAs(const std::string& fileName) const;
 		void initialize();
 
 		std::vector<Primitive*> primitives;
@@ -60,9 +53,5 @@ namespace Raycer
 				CEREAL_NVP(fogSteepness),
 				CEREAL_NVP(fogColor));
 		}
-
-	private:
-
-		std::unique_ptr<NamedLog> log;
 	};
 }

@@ -27,7 +27,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -64,20 +63,11 @@
     <ClCompile Include="src\Rendering\Image.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\States\TraceFastState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
     <ClCompile Include="src\Runners\ConsoleRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
     <ClCompile Include="src\Runners\InteractiveRunner.cpp">
       <Filter>Runners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Runners\InteractiveSettings.cpp">
-      <Filter>Runners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\GpuRaytracing\OpenCLHelper.cpp">
-      <Filter>GpuRaytracing</Filter>
     </ClCompile>
     <ClCompile Include="src\CpuRaytracing\Camera.cpp">
       <Filter>CpuRaytracing</Filter>
@@ -104,6 +94,19 @@
       <Filter>CpuRaytracing</Filter>
     </ClCompile>
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp">
+      <Filter>GpuRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\States\CpuTracingState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\States\GpuTracingState.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\Settings.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\GpuRaytracing\OpenCL.cpp">
       <Filter>GpuRaytracing</Filter>
     </ClCompile>
   </ItemGroup>
@@ -147,26 +150,14 @@
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\States\TraceFastState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="src\States\InteractiveState.h">
       <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
-    <ClInclude Include="src\Runners\ConsoleSettings.h">
-      <Filter>Runners</Filter>
-    </ClInclude>
     <ClInclude Include="src\Runners\InteractiveRunner.h">
       <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Runners\InteractiveSettings.h">
-      <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\OpenCLHelper.h">
-      <Filter>GpuRaytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\CpuRaytracing\Camera.h">
       <Filter>CpuRaytracing</Filter>
@@ -205,6 +196,19 @@
       <Filter>CpuRaytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\States\CpuTracingState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\States\GpuTracingState.h">
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Settings.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\GpuRaytracing\OpenCL.h">
       <Filter>GpuRaytracing</Filter>
     </ClInclude>
   </ItemGroup>

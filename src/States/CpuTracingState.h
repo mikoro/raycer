@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <memory>
 #include <atomic>
 
 #include "States/InteractiveState.h"
@@ -11,17 +10,9 @@
 
 namespace Raycer
 {
-	class BaseLog;
-	class NamedLog;
-	class InteractiveRunner;
-	class Framebuffer;
-	struct InteractiveSettings;
-
-	class TraceFastState : public InteractiveState
+	class CpuTracingState : public InteractiveState
 	{
 	public:
-
-		TraceFastState(BaseLog& baseLog, InteractiveRunner& runner, Framebuffer& framebuffer, InteractiveSettings& settings);
 
 		void initialize();
 		void pause();
@@ -36,11 +27,6 @@ namespace Raycer
 
 	private:
 
-		std::unique_ptr<NamedLog> log;
-
-		InteractiveRunner& runner;
-		Framebuffer& framebuffer;
-		InteractiveSettings& settings;
 		Scene scene;
 
 		std::atomic<bool> interrupted = false;

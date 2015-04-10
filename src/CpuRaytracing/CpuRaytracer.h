@@ -15,10 +15,10 @@ namespace Raycer
 	{
 	public:
 
-		static void trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
+		void trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
 
 	private:
 
-		static void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount);
+		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount);
 	};
 }

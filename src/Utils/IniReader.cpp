@@ -6,6 +6,7 @@
 #include <regex>
 
 #include "Utils/IniReader.h"
+#include "App.h"
 #include "Utils/Log.h"
 
 using namespace Raycer;
@@ -17,14 +18,9 @@ namespace
 	std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(\\S+).*");
 }
 
-IniReader::IniReader(BaseLog& baseLog)
-{
-	log = baseLog.getNamedLog("IniReader");
-}
-
 void IniReader::readFile(const std::string& fileName)
 {
-	log->logInfo("Parsing values from %s", fileName);
+	App::getLog().logInfo("Parsing ini file %s", fileName);
 
 	std::ifstream fileStream(fileName);
 	std::string line;

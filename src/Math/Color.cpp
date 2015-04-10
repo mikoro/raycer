@@ -31,6 +31,24 @@ Color::Color(int r_, int g_, int b_, int a_)
 	a = a_ * inv255;
 }
 
+Color::Color(const Color& c)
+{
+	r = c.r;
+	g = c.g;
+	b = c.b;
+	a = c.a;
+}
+
+Color& Color::operator=(const Color& c)
+{
+	r = c.r;
+	g = c.g;
+	b = c.b;
+	a = c.a;
+
+	return *this;
+}
+
 Color Raycer::operator+(const Color& c1, const Color& c2)
 {
 	return Color(c1.r + c2.r, c1.g + c2.g, c1.b + c2.b, c1.a + c2.a);

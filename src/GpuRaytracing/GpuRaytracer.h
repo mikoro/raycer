@@ -3,9 +3,13 @@
 
 #pragma once
 
+#include <atomic>
+
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#include <CL/cl.h>
+
 namespace Raycer
 {
-	class OpenCLHelper;
 	class Scene;
 	class Image;
 
@@ -13,14 +17,17 @@ namespace Raycer
 	{
 	public:
 
-		GpuRaytracer(OpenCLHelper& helper);
+		GpuRaytracer();
+		~GpuRaytracer();
 
+		void initialize();
 		void setSize(int width, int height);
-		void trace(const Scene& scene);
-		Image& getImage();
+		void trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
+		Image getImage();
 
 	private:
 
-		OpenCLHelper& helper;
+		GpuRaytracer(const GpuRaytracer& gpuRaytracer);
+		GpuRaytracer& operator=(const GpuRaytracer& gpuRaytracer);
 	};
 }

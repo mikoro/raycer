@@ -9,45 +9,32 @@
 
 using namespace Raycer;
 
-BaseLog::BaseLog(const std::string& fileName)
+Log::Log(const std::string& fileName)
 {
-	file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
 	file.open(fileName, std::ios_base::out);
 }
 
-BaseLog::~BaseLog()
+Log::~Log()
 {
 	file.close();
 }
 
-std::unique_ptr<NamedLog> BaseLog::getNamedLog(const std::string& name)
-{
-	return std::unique_ptr<NamedLog>(new NamedLog(*this, name));
-}
-
-void BaseLog::setMinimumMessageLevel(MessageLevel value)
+void Log::setMinimumMessageLevel(MessageLevel value)
 {
 	minimumMessageLevel = value;
 }
 
-void BaseLog::setOutputToConsole(bool value)
-{
-	outputToConsole = value;
-}
-
-void BaseLog::handleMessage(MessageLevel messageLevel, const std::string& sourceName, const std::string& message)
+void Log::handleMessage(MessageLevel messageLevel, const std::string& message)
 {
 	if (messageLevel >= minimumMessageLevel)
 	{
-		std::string formattedMessage = formatMessage(messageLevel, sourceName, message);
+		std::string formattedMessage = formatMessage(messageLevel, message);
 		outputMessage(formattedMessage);
 	}
 }
 
-std::string BaseLog::formatMessage(MessageLevel messageLevel, const std::string& sourceName, const std::string& message)
+std::string Log::formatMessage(MessageLevel messageLevel, const std::string& message)
 {
-	(void)sourceName;
-
 	std::string messageLevelName = "Unknown";
 
 	switch (messageLevel)
@@ -72,12 +59,10 @@ std::string BaseLog::formatMessage(MessageLevel messageLevel, const std::string&
 	return tfm::format("%s.%03d [%s] %s", timeStringBuffer.str(), milliSeconds, messageLevelName, message);
 }
 
-void BaseLog::outputMessage(const std::string& message)
+void Log::outputMessage(const std::string& message)
 {
 	std::lock_guard<std::mutex> lock(outputMutex);
-
-	if (outputToConsole)
-		std::cout << message << std::endl;
+	std::cout << message << std::endl;
 
 	if (file.is_open())
 	{
@@ -86,41 +71,32 @@ void BaseLog::outputMessage(const std::string& message)
 	}
 }
 
-NamedLog::NamedLog(BaseLog& baseLog_, const std::string& name_) : baseLog(baseLog_), name(name_)
+void Log::logMessage(MessageLevel messageLevel, const std::string& message)
 {
+	handleMessage(messageLevel, message);
 }
 
-BaseLog& NamedLog::getBaseLog() const
+void Log::logDebug(const std::string& message)
 {
-	return baseLog;
+	logMessage(MessageLevel::Debug, message);
 }
 
-void NamedLog::logMessage(BaseLog::MessageLevel messageLevel, const std::string& message)
+void Log::logInfo(const std::string& message)
 {
-	baseLog.handleMessage(messageLevel, name, message);
+	logMessage(MessageLevel::Info, message);
 }
 
-void NamedLog::logDebug(const std::string& message)
+void Log::logWarning(const std::string& message)
 {
-	logMessage(BaseLog::MessageLevel::Debug, message);
+	logMessage(MessageLevel::Warning, message);
 }
 
-void NamedLog::logInfo(const std::string& message)
+void Log::logError(const std::string& message)
 {
-	logMessage(BaseLog::MessageLevel::Info, message);
+	logMessage(MessageLevel::Error, message);
 }
 
-void NamedLog::logWarning(const std::string& message)
-{
-	logMessage(BaseLog::MessageLevel::Warning, message);
-}
-
-void NamedLog::logError(const std::string& message)
-{
-	logMessage(BaseLog::MessageLevel::Error, message);
-}
-
-void NamedLog::logException(const std::exception_ptr& exception)
+void Log::logException(const std::exception_ptr& exception)
 {
 	try
 	{
@@ -128,14 +104,14 @@ void NamedLog::logException(const std::exception_ptr& exception)
 	}
 	catch (const std::exception& ex)
 	{
-		logError("Exception (%s): %s", typeid(ex).name(), ex.what());
+		logError("%s: %s", typeid(ex).name(), ex.what());
 	}
 	catch (const std::string& s)
 	{
-		logError("Exception: %s", s);
+		logError(s);
 	}
 	catch (...)
 	{
-		logError("Unknown exception!");
+		logError("Unknown error!");
 	}
 }

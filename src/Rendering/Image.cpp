@@ -10,6 +10,8 @@
 #include "stb/stb_image_write.h"
 
 #include "Rendering/Image.h"
+#include "App.h"
+#include "Utils/Log.h"
 #include "Rendering/Framebuffer.h"
 #include "Math/Color.h"
 
@@ -80,6 +82,8 @@ Image& Image::operator=(const Image& image)
 
 void Image::load(const std::string& fileName)
 {
+	App::getLog().logInfo("Loading image from %s", fileName);
+
 	int newWidth, newHeight, components;
 	uint32_t* imageData = (uint32_t*)stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4);
 
@@ -104,6 +108,8 @@ namespace
 
 void Image::saveAs(const std::string& fileName) const
 {
+	App::getLog().logInfo("Saving image to %s", fileName);
+
 	Image tempImage = Image(*this);
 	tempImage.swapBytes();
 	tempImage.flip();

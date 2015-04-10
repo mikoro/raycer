@@ -5,34 +5,30 @@
 #include <fstream>
 #include <string>
 
-#include "GpuRaytracing/OpenCLHelper.h"
+#include "GpuRaytracing/OpenCL.h"
+#include "App.h"
 #include "Utils/Log.h"
-#include "Runners/ConsoleSettings.h"
+#include "Utils/Settings.h"
 
 using namespace Raycer;
 
 namespace
 {
-	NamedLog* staticLog = nullptr;
-
 	void CL_CALLBACK openClErrorCallback(const char* message, const void* privateInfo, size_t cb, void* userData)
 	{
 		(void)privateInfo;
 		(void)cb;
 		(void)userData;
 
-		if (staticLog != nullptr)
-			staticLog->logError("OpenCL error: %s", message);
+		App::getLog().logError("OpenCL error: %s", message);
 	}
 }
 
-OpenCLHelper::OpenCLHelper(BaseLog& baseLog)
+OpenCL::OpenCL()
 {
-	log = baseLog.getNamedLog("OpenCLHelper");
-	staticLog = log.get();
 }
 
-OpenCLHelper::~OpenCLHelper()
+OpenCL::~OpenCL()
 {
 	if (raytraceKernel != nullptr)
 	{
@@ -59,9 +55,12 @@ OpenCLHelper::~OpenCLHelper()
 	}
 }
 
-void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
+void OpenCL::initialize()
 {
-	log->logInfo("Initializing OpenCL");
+	Log& log = App::getLog();
+	Settings& settings = App::getSettings();
+
+	log.logInfo("Initializing OpenCL");
 
 	cl_uint platformCount = 0;
 	cl_int status = clGetPlatformIDs(0, NULL, &platformCount);
@@ -69,13 +68,13 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	if (status != CL_SUCCESS || platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
 
-	if (consoleSettings.platformId > (int)platformCount - 1)
+	if (settings.general.openCLPlatform > (int)platformCount - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	cl_platform_id* platformIds = new cl_platform_id[platformCount];
 	status = clGetPlatformIDs(platformCount, platformIds, NULL);
-	platformId = platformIds[consoleSettings.platformId];
-	delete platformIds;
+	platformId = platformIds[settings.general.openCLPlatform];
+	delete[] platformIds;
 
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not get OpenCL platform info");
@@ -89,11 +88,11 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	char* platformVersion = new char[length];
 	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, platformVersion, NULL);
 
-	log->logInfo("OpenCL platform: %s", platformName);
-	log->logInfo("OpenCL version: %s", platformVersion);
+	log.logInfo("OpenCL platform: %s", platformName);
+	log.logInfo("OpenCL version: %s", platformVersion);
 
-	delete platformName;
-	delete platformVersion;
+	delete[] platformName;
+	delete[] platformVersion;
 
 	cl_uint deviceCount = 0;
 	status = clGetDeviceIDs(platformId, CL_DEVICE_TYPE_GPU, 0, NULL, &deviceCount);
@@ -101,13 +100,13 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	if (status != CL_SUCCESS || deviceCount == 0)
 		throw std::runtime_error("Could not find any OpenCL GPU devices");
 
-	if (consoleSettings.deviceId > (int)deviceCount - 1)
+	if (settings.general.openCLDevice > (int)deviceCount - 1)
 		throw std::runtime_error("Invalid OpenCL device id");
 
 	cl_device_id* deviceIds = new cl_device_id[deviceCount];
 	status = clGetDeviceIDs(platformId, CL_DEVICE_TYPE_GPU, deviceCount, deviceIds, NULL);
-	deviceId = deviceIds[consoleSettings.deviceId];
-	delete deviceIds;
+	deviceId = deviceIds[settings.general.openCLDevice];
+	delete[] deviceIds;
 
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not get OpenCL GPU device info");
@@ -116,9 +115,9 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 	char* deviceName = new char[length];
 	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, deviceName, NULL);
 
-	log->logInfo("OpenCL device: %s", deviceName);
+	log.logInfo("OpenCL device: %s", deviceName);
 
-	delete deviceName;
+	delete[] deviceName;
 
 	context = clCreateContext(NULL, 1, &deviceId, openClErrorCallback, NULL, &status);
 
@@ -131,9 +130,10 @@ void OpenCLHelper::initialize(ConsoleSettings& consoleSettings)
 		throw std::runtime_error("Could not create OpenCL command queue");
 }
 
-void OpenCLHelper::loadKernels()
+void OpenCL::loadKernels()
 {
-	log->logInfo("Compiling OpenCL source files");
+	Log& log = App::getLog();
+	log.logInfo("Compiling OpenCL source files");
 
 	std::ifstream file("data/kernels/raytrace.cl");
 	std::stringstream ss;
@@ -156,8 +156,8 @@ void OpenCLHelper::loadKernels()
 		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
 		char* buildLog = new char[length];
 		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, buildLog, NULL);
-		log->logInfo("OpenCL build error:\n\n%s", buildLog);
-		delete buildLog;
+		log.logInfo("OpenCL build error:\n\n%s", buildLog);
+		delete[] buildLog;
 	}
 
 	if (status != CL_SUCCESS)
@@ -176,7 +176,7 @@ void OpenCLHelper::loadKernels()
 		std::ofstream binaryFile("raytrace.bin", std::ios::binary);
 		binaryFile.write((const char*)binary, binarySize);
 		binaryFile.close();
-		delete binary;
+		delete[] binary;
 	}
 #endif
 

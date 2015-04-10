@@ -3,56 +3,26 @@
 
 #pragma once
 
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <memory>
-#include <mutex>
 #include <string>
+#include <fstream>
+#include <mutex>
 
 #include "tinyformat/tinyformat.h"
 
 namespace Raycer
 {
-	class NamedLog;
+	enum class MessageLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 };
 
-	class BaseLog
+	class Log
 	{
 	public:
 
-		friend class NamedLog;
-
-		enum class MessageLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 };
-
-		BaseLog(const std::string& fileName);
-		~BaseLog();
-
-		std::unique_ptr<NamedLog> getNamedLog(const std::string& name);
+		Log(const std::string& fileName);
+		~Log();
 
 		void setMinimumMessageLevel(MessageLevel value);
-		void setOutputToConsole(bool value);
 
-	private:
-
-		void handleMessage(MessageLevel messageLevel, const std::string& sourceName, const std::string& message);
-		std::string formatMessage(MessageLevel messageLevel, const std::string& sourceName, const std::string& message);
-		void outputMessage(const std::string& message);
-
-		std::ofstream file;
-		std::mutex outputMutex;
-		MessageLevel minimumMessageLevel = MessageLevel::Debug;
-		bool outputToConsole = true;
-	};
-
-	class NamedLog
-	{
-	public:
-
-		NamedLog(BaseLog& baseLog, const std::string& name);
-
-		BaseLog& getBaseLog() const;
-
-		void logMessage(BaseLog::MessageLevel messageLevel, const std::string& message);
+		void logMessage(MessageLevel messageLevel, const std::string& message);
 		void logDebug(const std::string& message);
 		void logInfo(const std::string& message);
 		void logWarning(const std::string& message);
@@ -60,7 +30,7 @@ namespace Raycer
 		void logException(const std::exception_ptr& exception);
 
 		template<typename... Args>
-		void logMessage(BaseLog::MessageLevel messageLevel, const std::string& message, const Args&... args);
+		void logMessage(MessageLevel messageLevel, const std::string& message, const Args&... args);
 
 		template<typename... Args>
 		void logDebug(const std::string& message, const Args&... args);
@@ -76,40 +46,46 @@ namespace Raycer
 
 	private:
 
-		NamedLog(const NamedLog& n);
-		void operator=(const NamedLog& n); // suppress a warning
+		Log();
+		Log(const Log& log);
+		Log& operator=(const Log& log);
 
-		BaseLog& baseLog;
-		std::string name;
+		void handleMessage(MessageLevel messageLevel, const std::string& message);
+		std::string formatMessage(MessageLevel messageLevel, const std::string& message);
+		void outputMessage(const std::string& message);
+
+		std::ofstream file;
+		std::mutex outputMutex;
+		MessageLevel minimumMessageLevel = MessageLevel::Debug;
 	};
-}
 
-template<typename... Args>
-void Raycer::NamedLog::logMessage(BaseLog::MessageLevel messageLevel, const std::string& message, const Args&... args)
-{
-	baseLog.handleMessage(messageLevel, name, tfm::format(message.c_str(), args...));
-}
+	template<typename... Args>
+	void Log::logMessage(MessageLevel messageLevel, const std::string& message, const Args&... args)
+	{
+		handleMessage(messageLevel, tfm::format(message.c_str(), args...));
+	}
 
-template<typename... Args>
-void Raycer::NamedLog::logDebug(const std::string& message, const Args&... args)
-{
-	logMessage(BaseLog::MessageLevel::Debug, message, args...);
-}
+	template<typename... Args>
+	void Log::logDebug(const std::string& message, const Args&... args)
+	{
+		logMessage(MessageLevel::Debug, message, args...);
+	}
 
-template<typename... Args>
-void Raycer::NamedLog::logInfo(const std::string& message, const Args&... args)
-{
-	logMessage(BaseLog::MessageLevel::Info, message, args...);
-}
+	template<typename... Args>
+	void Log::logInfo(const std::string& message, const Args&... args)
+	{
+		logMessage(MessageLevel::Info, message, args...);
+	}
 
-template<typename... Args>
-void Raycer::NamedLog::logWarning(const std::string& message, const Args&... args)
-{
-	logMessage(BaseLog::MessageLevel::Warning, message, args...);
-}
+	template<typename... Args>
+	void Log::logWarning(const std::string& message, const Args&... args)
+	{
+		logMessage(MessageLevel::Warning, message, args...);
+	}
 
-template<typename... Args>
-void Raycer::NamedLog::logError(const std::string& message, const Args&... args)
-{
-	logMessage(BaseLog::MessageLevel::Error, message, args...);
+	template<typename... Args>
+	void Log::logError(const std::string& message, const Args&... args)
+	{
+		logMessage(MessageLevel::Error, message, args...);
+	}
 }

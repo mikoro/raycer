@@ -11,10 +11,13 @@
 #endif
 
 #include "Runners/ConsoleRunner.h"
+#include "App.h"
 #include "Utils/Log.h"
+#include "Utils/Settings.h"
 #include "Rendering/Image.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/CpuRaytracer.h"
+#include "GpuRaytracing/GpuRaytracer.h"
 
 using namespace Raycer;
 
@@ -38,31 +41,30 @@ namespace
 
 #endif
 
-ConsoleRunner::ConsoleRunner(BaseLog& baseLog_) : baseLog(baseLog_)
-{
-	log = baseLog_.getNamedLog("ConsoleRunner");
-}
-
-int ConsoleRunner::run(ConsoleSettings& settings)
+int ConsoleRunner::run()
 {
 #ifdef WIN32
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
 #endif
 
-	log->logInfo("Initializing console runner");
+	Log& log = App::getLog();
+	Settings& settings = App::getSettings();
+	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
+	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
-	auto startTime = system_clock::now();
+	if (settings.general.useOpenCL)
+		gpuRaytracer.initialize();
 
-	Image image = Image(settings.width, settings.height);
-	Scene scene = Scene(baseLog);
+	Image image = Image(settings.image.width, settings.image.height);
+	Scene scene;
 
-	scene.load(settings.sceneFileName);
+	scene.load(settings.scene.fileName);
 	scene.initialize();
-	scene.camera.setImagePlaneSize(settings.width, settings.height);
+	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.calculateVariables();
 
-	int totalPixelCount = settings.width * settings.height;
-	log->logInfo("Start raytracing (size: %dx%d, pixels: %d, reflections: %d)", settings.width, settings.height, totalPixelCount, scene.maxReflections);
+	int totalPixelCount = settings.image.width * settings.image.height;
+	log.logInfo("Start raytracing (size: %dx%d, pixels: %d, reflections: %d)", settings.image.width, settings.image.height, totalPixelCount, scene.maxReflections);
 
 	std::atomic<int> pixelCount = 0;
 	std::atomic<int> rayCount = 0;
@@ -70,11 +72,17 @@ int ConsoleRunner::run(ConsoleSettings& settings)
 
 	auto renderFunction = [&]()
 	{
-		CpuRaytracer::trace(image, scene, interrupted, pixelCount, rayCount);
+		if (!settings.general.useOpenCL)
+			cpuRaytracer.trace(image, scene, interrupted, pixelCount, rayCount);
+		else
+			gpuRaytracer.trace(scene, interrupted, pixelCount, rayCount);
+
 		finished = true;
 	};
 
 	printf("\n");
+
+	auto startTime = system_clock::now();
 	std::thread renderThread(renderFunction);
 
 	while (!finished)
@@ -90,24 +98,21 @@ int ConsoleRunner::run(ConsoleSettings& settings)
 	auto elapsedTime = system_clock::now() - startTime;
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", (int)duration_cast<hours>(elapsedTime).count(), (int)duration_cast<minutes>(elapsedTime).count(), (int)duration_cast<seconds>(elapsedTime).count(), (int)duration_cast<milliseconds>(elapsedTime).count());;
 
-	log->logInfo("Raytracing %s (time: %s, rays: %d)", interrupted ? "interrupted" : "finished", timeString, rayCount.load());
+	log.logInfo("Raytracing %s (time: %s, rays: %d)", interrupted ? "interrupted" : "finished", timeString, rayCount.load());
 
 	if (!interrupted)
 	{
-		log->logInfo("Saving the image to %s", settings.outputFileName);
-		image.saveAs(settings.outputFileName);
+		image.saveAs(settings.image.fileName);
 
-		if (settings.viewImage)
+		if (settings.image.autoView)
 		{
-			log->logInfo("Opening the image in an external viewer");
+			log.logInfo("Opening the image in an external viewer");
 
 #ifdef WIN32
-			ShellExecuteA(NULL, "open", settings.outputFileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+			ShellExecuteA(NULL, "open", settings.image.fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #endif
 		}
 	}
-
-	log->logInfo("Closing console runner");
 
 	return 0;
 }

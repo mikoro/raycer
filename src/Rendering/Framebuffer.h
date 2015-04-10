@@ -4,46 +4,50 @@
 #pragma once
 
 #include <cstdint>
-#include <memory>
 
 #include "Rendering/RenderTarget.h"
 
 namespace Raycer
 {
-	class BaseLog;
-	class NamedLog;
 	class Color;
 
 	class Framebuffer : public RenderTarget
 	{
 	public:
 
-		Framebuffer(BaseLog& baseLog);
+		Framebuffer();
 		~Framebuffer();
 
+		void initialize();
+
 		void setSize(int width, int height);
+
 		void setPixel(int x, int y, const Color& color);
 		Color getPixel(int x, int y) const;
+
 		uint32_t* getPixelData() const;
+		uint32_t getCpuTextureId() const;
+		uint32_t getGpuTextureId() const;
+		int getWidth() const;
+		int getHeight() const;
 
 		void clear();
 		void clear(const Color& color);
 		void render() const;
 
-		int getWidth() const;
-		int getHeight() const;
-
-		void enableSmoothing(bool value);
+		void enableSmoothing(bool state);
 
 	private:
 
-		std::unique_ptr<NamedLog> log;
+		Framebuffer(const Framebuffer& framebuffer);
+		Framebuffer& operator=(const Framebuffer& framebuffer);
 
 		int width = 0;
 		int height = 0;
 
 		uint32_t* pixelData = nullptr;
 
-		unsigned int textureId = 0;
+		uint32_t cpuTextureId = 0;
+		uint32_t gpuTextureId = 0;
 	};
 }
