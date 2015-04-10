@@ -14,6 +14,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "GpuRaytracing/OpenCL.h"
 #include "Rendering/Image.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/CpuRaytracer.h"
@@ -49,11 +50,16 @@ int ConsoleRunner::run()
 
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
+	OpenCL& openCl = App::getOpenCL();
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	if (settings.general.useOpenCL)
-		gpuRaytracer.initialize();
+	{
+		openCl.initialize();
+		openCl.loadKernels();
+		gpuRaytracer.setSize(settings.image.width, settings.image.height);
+	}
 
 	Image image = Image(settings.image.width, settings.image.height);
 	Scene scene;

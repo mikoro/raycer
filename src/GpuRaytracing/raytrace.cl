@@ -1,5 +1,5 @@
-__kernel void raytrace(float alpha, __global float* A, __global float* B, __global float* C)
+__kernel void raytrace(__write_only image2d_t pixels)
 {
-	int index = get_global_id(0);
-	C[index] = alpha * A[index] + B[index];
+	const int2 pos = (int2)(get_global_id(0), get_global_id(1));
+	write_imagef(pixels, pos, (float4)(0.5f, 0.5f, 0.5f, 0.5f));
 }

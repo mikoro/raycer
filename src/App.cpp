@@ -55,7 +55,6 @@ int App::run(int argc, char** argv)
 		Settings& settings = getSettings();
 		InteractiveRunner& interactiveRunner = getInteractiveRunner();
 		ConsoleRunner& consoleRunner = getConsoleRunner();
-		OpenCL& openCL = getOpenCL();
 
 		settings.load("settings.ini");
 
@@ -92,12 +91,6 @@ int App::run(int argc, char** argv)
 		if (useOpenClSwitch.isSet())
 			settings.general.useOpenCL = useOpenClSwitch.getValue();
 
-		if (settings.general.useOpenCL)
-		{
-			openCL.initialize();
-			openCL.loadKernels();
-		}
-		
 		if (settings.general.interactive)
 			return interactiveRunner.run();
 		else

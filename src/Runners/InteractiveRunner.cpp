@@ -8,6 +8,8 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
+#include "GpuRaytracing/OpenCL.h"
+#include "GpuRaytracing/GpuRaytracer.h"
 #include "Rendering/Image.h"
 #include "States/CpuTracingState.h"
 #include "States/GpuTracingState.h"
@@ -124,6 +126,7 @@ void InteractiveRunner::initialize()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	OpenCL& openCl = App::getOpenCL();
 
 	log.logInfo("Initializing GLFW library");
 
@@ -154,6 +157,12 @@ void InteractiveRunner::initialize()
 	framebuffer.initialize();
 	framebuffer.enableSmoothing(settings.framebuffer.smoothing);
 	
+	if (settings.general.useOpenCL)
+	{
+		openCl.initialize();
+		openCl.loadKernels();
+	}
+
 	windowResized(settings.window.width, settings.window.height);
 
 	infoFont.load(settings.interactive.infoFont, settings.interactive.infoFontSize);
@@ -178,6 +187,7 @@ void InteractiveRunner::windowResized(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	windowWidth = width;
 	windowHeight = height;
@@ -185,6 +195,9 @@ void InteractiveRunner::windowResized(int width, int height)
 	glViewport(0, 0, windowWidth, windowHeight);
 	framebuffer.setSize((int)(windowWidth * settings.framebuffer.scale + 0.5), (int)(windowHeight * settings.framebuffer.scale + 0.5));
 	
+	if (settings.general.useOpenCL)
+		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());
+
 	if (currentState != RunnerStates::None)
 	{
 		runnerStates[currentState]->windowResized(windowWidth, windowHeight);

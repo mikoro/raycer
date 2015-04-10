@@ -5,6 +5,14 @@
 #include <fstream>
 #include <string>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
+#include <CL/opencl.h>
+
 #include "GpuRaytracing/OpenCL.h"
 #include "App.h"
 #include "Utils/Log.h"
@@ -119,10 +127,39 @@ void OpenCL::initialize()
 
 	delete[] deviceName;
 
-	context = clCreateContext(NULL, 1, &deviceId, openClErrorCallback, NULL, &status);
+	if (settings.general.interactive)
+	{
+		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &length);
+		char* extensions = new char[length];
+		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, length, extensions, NULL);
+		std::string extensionsStr(extensions);
+		delete[] extensions;
 
-	if (status != CL_SUCCESS)
-		throw std::runtime_error("Could not create OpenCL device context");
+		if (extensionsStr.find("_gl_sharing") == std::string::npos)
+			throw std::runtime_error("OpenCL-OpenGL interoperation is not supported");
+
+		cl_context_properties properties[] =
+		{
+#ifdef WIN32
+			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
+			CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
+			CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
+			0
+#endif
+		};
+
+		context = clCreateContext(properties, 1, &deviceId, openClErrorCallback, NULL, &status);
+
+		if (status != CL_SUCCESS)
+			throw std::runtime_error("Could not create OpenCL interop device context");
+	}
+	else
+	{
+		context = clCreateContext(NULL, 1, &deviceId, openClErrorCallback, NULL, &status);
+
+		if (status != CL_SUCCESS)
+			throw std::runtime_error("Could not create OpenCL device context");
+	}
 
 	commandQueue = clCreateCommandQueue(context, deviceId, 0, &status);
 
@@ -177,7 +214,7 @@ void OpenCL::loadKernels()
 		binaryFile.write((const char*)binary, binarySize);
 		binaryFile.close();
 		delete[] binary;
-	}
+}
 #endif
 
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);

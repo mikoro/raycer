@@ -16,9 +16,6 @@ using namespace Raycer;
 void GpuTracingState::initialize()
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
-
-	gpuRaytracer.initialize();
 
 	scene.load("data/scenes/test_scene.json");
 	scene.initialize();

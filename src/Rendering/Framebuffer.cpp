@@ -71,7 +71,7 @@ void Framebuffer::setSize(int width_, int height_)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	if (glGetError() != GL_NO_ERROR)
-		throw std::runtime_error("Could not allocate texture for the framebuffer");
+		throw std::runtime_error("Could not allocate OpenGL texture for the framebuffer");
 
 	clear();
 }

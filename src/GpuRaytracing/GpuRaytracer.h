@@ -5,8 +5,7 @@
 
 #include <atomic>
 
-#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#include <CL/cl.h>
+#include <CL/opencl.h>
 
 namespace Raycer
 {
@@ -20,7 +19,6 @@ namespace Raycer
 		GpuRaytracer();
 		~GpuRaytracer();
 
-		void initialize();
 		void setSize(int width, int height);
 		void trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
 		Image getImage();
@@ -29,5 +27,11 @@ namespace Raycer
 
 		GpuRaytracer(const GpuRaytracer& gpuRaytracer);
 		GpuRaytracer& operator=(const GpuRaytracer& gpuRaytracer);
+
+		uint32_t width = 0;
+		uint32_t height = 0;
+		uint32_t totalPixels = 0;
+
+		cl_mem pixels = nullptr;
 	};
 }
