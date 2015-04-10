@@ -14,7 +14,7 @@
 #include "Utils/Log.h"
 #include "Rendering/Image.h"
 #include "CpuRaytracing/Scene.h"
-#include "CpuRaytracing/Raytracer.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 
 using namespace Raycer;
 
@@ -70,7 +70,7 @@ int ConsoleRunner::run(ConsoleSettings& settings)
 
 	auto renderFunction = [&]()
 	{
-		Raytracer::traceFast(image, scene, interrupted, pixelCount, rayCount);
+		CpuRaytracer::trace(image, scene, interrupted, pixelCount, rayCount);
 		finished = true;
 	};
 

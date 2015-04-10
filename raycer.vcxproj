@@ -105,10 +105,11 @@
     <ClCompile Include="src\CpuRaytracing\Mesh.cpp" />
     <ClCompile Include="src\CpuRaytracing\Plane.cpp" />
     <ClCompile Include="src\CpuRaytracing\Ray.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Raytracer.cpp" />
+    <ClCompile Include="src\CpuRaytracing\CpuRaytracer.cpp" />
     <ClCompile Include="src\CpuRaytracing\Scene.cpp" />
     <ClCompile Include="src\CpuRaytracing\Sphere.cpp" />
     <ClCompile Include="src\CpuRaytracing\Triangle.cpp" />
+    <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp" />
     <ClCompile Include="src\GpuRaytracing\OpenCLHelper.cpp" />
     <ClCompile Include="src\Main.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
@@ -137,10 +138,11 @@
     <ClInclude Include="src\CpuRaytracing\Plane.h" />
     <ClInclude Include="src\CpuRaytracing\Primitive.h" />
     <ClInclude Include="src\CpuRaytracing\Ray.h" />
-    <ClInclude Include="src\CpuRaytracing\Raytracer.h" />
+    <ClInclude Include="src\CpuRaytracing\CpuRaytracer.h" />
     <ClInclude Include="src\CpuRaytracing\Scene.h" />
     <ClInclude Include="src\CpuRaytracing\Sphere.h" />
     <ClInclude Include="src\CpuRaytracing\Triangle.h" />
+    <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
     <ClInclude Include="src\GpuRaytracing\OpenCLHelper.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />

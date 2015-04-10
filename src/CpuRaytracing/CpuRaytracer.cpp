@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <limits>
 
-#include "CpuRaytracing/Raytracer.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/Ray.h"
 #include "CpuRaytracing/Intersection.h"
@@ -20,7 +20,7 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
+void CpuRaytracer::trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
 {
 	int width = renderTarget.getWidth();
 	int height = renderTarget.getHeight();
@@ -52,16 +52,7 @@ void Raytracer::traceFast(RenderTarget& renderTarget, const Scene& scene, std::a
 	}
 }
 
-void Raytracer::traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
-{
-	(void)renderTarget;
-	(void)scene;
-	(void)interrupted;
-	(void)pixelCount;
-	(void)rayCount;
-}
-
-void Raytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount)
+void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount)
 {
 	if (interrupted)
 		return;

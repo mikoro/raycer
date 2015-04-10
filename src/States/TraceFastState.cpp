@@ -8,7 +8,7 @@
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
 #include "Runners/InteractiveSettings.h"
-#include "CpuRaytracing/Raytracer.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 
 //#include "CpuRaytracing/Sphere.h"
 //#include "CpuRaytracing/Plane.h"
@@ -135,7 +135,7 @@ void TraceFastState::render(double timeStep, double interpolation)
 	pixelCount = 0;
 	rayCount = 0;
 
-	Raytracer::traceFast(framebuffer, scene, interrupted, pixelCount, rayCount);
+	CpuRaytracer::trace(framebuffer, scene, interrupted, pixelCount, rayCount);
 
 	if (settings.runner.showCameraInfo)
 	{

@@ -11,12 +11,11 @@ namespace Raycer
 	class Scene;
 	struct Ray;
 
-	class Raytracer
+	class CpuRaytracer
 	{
 	public:
 
-		static void traceFast(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
-		static void traceFull(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
+		static void trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
 
 	private:
 

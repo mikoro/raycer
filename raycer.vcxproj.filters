@@ -91,9 +91,6 @@
     <ClCompile Include="src\CpuRaytracing\Ray.cpp">
       <Filter>CpuRaytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Raytracer.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\CpuRaytracing\Scene.cpp">
       <Filter>CpuRaytracing</Filter>
     </ClCompile>
@@ -102,6 +99,12 @@
     </ClCompile>
     <ClCompile Include="src\CpuRaytracing\Triangle.cpp">
       <Filter>CpuRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CpuRaytracing\CpuRaytracer.cpp">
+      <Filter>CpuRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp">
+      <Filter>GpuRaytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -189,9 +192,6 @@
     <ClInclude Include="src\CpuRaytracing\Ray.h">
       <Filter>CpuRaytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Raytracer.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\CpuRaytracing\Scene.h">
       <Filter>CpuRaytracing</Filter>
     </ClInclude>
@@ -200,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="src\CpuRaytracing\Triangle.h">
       <Filter>CpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CpuRaytracing\CpuRaytracer.h">
+      <Filter>CpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h">
+      <Filter>GpuRaytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

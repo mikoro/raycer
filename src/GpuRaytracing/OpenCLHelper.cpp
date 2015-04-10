@@ -163,7 +163,7 @@ void OpenCLHelper::loadKernels()
 	if (status != CL_SUCCESS)
 		throw std::runtime_error("Could not build OpenCL program");
 
-#ifdef _DEBUG
+#if 0
 	log->logInfo("Outputting OpenCL binary to raytrace.bin");
 
 	size_t binarySize = 0;
