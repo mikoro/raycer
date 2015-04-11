@@ -77,10 +77,10 @@ int App::run(int argc, char** argv)
 		}
 
 		if (platformIdArg.isSet())
-			settings.general.openCLPlatform = platformIdArg.getValue();
+			settings.openCl.platformId = platformIdArg.getValue();
 
 		if (deviceIdArg.isSet())
-			settings.general.openCLDevice = deviceIdArg.getValue();
+			settings.openCl.deviceId = deviceIdArg.getValue();
 
 		if (interactiveSwitch.isSet())
 			settings.general.interactive = interactiveSwitch.getValue();
@@ -89,7 +89,7 @@ int App::run(int argc, char** argv)
 			settings.image.autoView = autoViewSwitch.getValue();
 
 		if (useOpenClSwitch.isSet())
-			settings.general.useOpenCL = useOpenClSwitch.getValue();
+			settings.openCl.enabled = useOpenClSwitch.getValue();
 
 		if (settings.general.interactive)
 			return interactiveRunner.run();

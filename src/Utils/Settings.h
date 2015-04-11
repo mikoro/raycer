@@ -13,6 +13,19 @@ namespace Raycer
 
 		void load(const std::string& fileName);
 
+		struct General
+		{
+			bool interactive;
+		} general;
+
+		struct OpenCL
+		{
+			bool enabled;
+			int platformId;
+			int deviceId;
+			int deviceType;
+		} openCl;
+
 		struct Scene
 		{
 			std::string fileName;
@@ -26,14 +39,6 @@ namespace Raycer
 			bool autoView;
 		} image;
 
-		struct General
-		{
-			bool interactive;
-			bool useOpenCL;
-			int openCLPlatform;
-			int openCLDevice;
-		} general;
-
 		struct Window
 		{
 			int width;
@@ -41,6 +46,10 @@ namespace Raycer
 			bool fullscreen;
 			bool vsync;
 			bool hideCursor;
+			bool showFps;
+			bool showCameraInfo;
+			std::string infoFont;
+			int infoFontSize;
 		} window;
 
 		struct Framebuffer
@@ -48,14 +57,6 @@ namespace Raycer
 			double scale;
 			bool smoothing;
 		} framebuffer;
-
-		struct Interactive
-		{
-			bool showFps;
-			bool showCameraInfo;
-			std::string infoFont;
-			int infoFontSize;
-		} interactive;
 
 		struct Controls
 		{

@@ -157,7 +157,7 @@ void InteractiveRunner::initialize()
 	framebuffer.initialize();
 	framebuffer.enableSmoothing(settings.framebuffer.smoothing);
 	
-	if (settings.general.useOpenCL)
+	if (settings.openCl.enabled)
 	{
 		openCl.initialize();
 		openCl.loadKernels();
@@ -165,12 +165,12 @@ void InteractiveRunner::initialize()
 
 	windowResized(settings.window.width, settings.window.height);
 
-	infoFont.load(settings.interactive.infoFont, settings.interactive.infoFontSize);
+	infoFont.load(settings.window.infoFont, settings.window.infoFontSize);
 
 	runnerStates[RunnerStates::CpuTracing] = std::make_unique<CpuTracingState>();
 	runnerStates[RunnerStates::GpuTracing] = std::make_unique<GpuTracingState>();
 
-	changeState(settings.general.useOpenCL ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
+	changeState(settings.openCl.enabled ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
 }
 
 void InteractiveRunner::shutdown()
@@ -187,16 +187,24 @@ void InteractiveRunner::windowResized(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	OpenCL& openCl = App::getOpenCL();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	windowWidth = width;
 	windowHeight = height;
 
 	glViewport(0, 0, windowWidth, windowHeight);
+
+	if (settings.openCl.enabled)
+		openCl.releaseMemoryObjects();
+
 	framebuffer.setSize((int)(windowWidth * settings.framebuffer.scale + 0.5), (int)(windowHeight * settings.framebuffer.scale + 0.5));
 	
-	if (settings.general.useOpenCL)
+	if (settings.openCl.enabled)
+	{
+		openCl.setSize(framebuffer.getWidth(), framebuffer.getHeight());
 		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());
+	}
 
 	if (currentState != RunnerStates::None)
 	{
@@ -277,10 +285,10 @@ void InteractiveRunner::update(double timeStep)
 		shouldRun = false;
 
 	if (keyWasPressed(GLFW_KEY_F1))
-		settings.interactive.showFps = !settings.interactive.showFps;
+		settings.window.showFps = !settings.window.showFps;
 
 	if (keyWasPressed(GLFW_KEY_F2))
-		settings.interactive.showCameraInfo = !settings.interactive.showCameraInfo;
+		settings.window.showCameraInfo = !settings.window.showCameraInfo;
 
 	if (keyWasPressed(GLFW_KEY_F9))
 	{
@@ -334,8 +342,8 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 	else
 		throw std::runtime_error("Runner state has not been set");
 
-	if (settings.interactive.showFps)
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - settings.interactive.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
+	if (settings.window.showFps)
+		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - settings.window.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
 
 	if (keyWasPressed(GLFW_KEY_F8))
 	{

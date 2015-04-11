@@ -58,11 +58,11 @@ void CpuTracingState::render(double timeStep, double interpolation)
 
 	cpuRaytracer.trace(framebuffer, scene, interrupted, pixelCount, rayCount);
 
-	if (settings.interactive.showCameraInfo)
+	if (settings.window.showCameraInfo)
 	{
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.interactive.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.interactive.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.interactive.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
+		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.window.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
+		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.window.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
+		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.window.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
 	}
 }
 

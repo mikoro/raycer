@@ -8,6 +8,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/Errors.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -32,6 +33,8 @@ void Framebuffer::initialize()
 	glGenTextures(1, &cpuTextureId);
 	glGenTextures(1, &gpuTextureId);
 
+	checkGlError("Could not create OpenGL textures");
+
 	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
 	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -42,6 +45,8 @@ void Framebuffer::initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	checkGlError("Could not set OpenGL texture parameters");
 }
 
 void Framebuffer::setSize(int width_, int height_)
@@ -65,13 +70,12 @@ void Framebuffer::setSize(int width_, int height_)
 	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+	checkGlError("Could not reserve OpenGL texture memory (CPU texture)");
 
 	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	if (glGetError() != GL_NO_ERROR)
-		throw std::runtime_error("Could not allocate OpenGL texture for the framebuffer");
+	checkGlError("Could not reserve OpenGL texture memory (GPU texture)");
 
 	clear();
 }
@@ -132,12 +136,13 @@ void Framebuffer::render() const
 	glClearColor(1.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	if (settings.general.useOpenCL)
+	if (settings.openCl.enabled)
 		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
 	else
 	{
 		glBindTexture(GL_TEXTURE_2D, cpuTextureId);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
+		checkGlError("Could not upload OpenGL texture data");
 	}
 
 	glMatrixMode(GL_MODELVIEW);
@@ -155,6 +160,8 @@ void Framebuffer::render() const
 	glDisable(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	checkGlError("Could not render the framebuffer");
 }
 
 void Framebuffer::enableSmoothing(bool state)
@@ -168,4 +175,6 @@ void Framebuffer::enableSmoothing(bool state)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	checkGlError("Could not set OpenGL texture parameters");
 }

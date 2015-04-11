@@ -54,7 +54,7 @@ int ConsoleRunner::run()
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
-	if (settings.general.useOpenCL)
+	if (settings.openCl.enabled)
 	{
 		openCl.initialize();
 		openCl.loadKernels();
@@ -78,7 +78,7 @@ int ConsoleRunner::run()
 
 	auto renderFunction = [&]()
 	{
-		if (!settings.general.useOpenCL)
+		if (!settings.openCl.enabled)
 			cpuRaytracer.trace(image, scene, interrupted, pixelCount, rayCount);
 		else
 			gpuRaytracer.trace(scene, interrupted, pixelCount, rayCount);

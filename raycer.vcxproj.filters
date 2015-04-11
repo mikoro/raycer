@@ -109,6 +109,9 @@
     <ClCompile Include="src\GpuRaytracing\OpenCL.cpp">
       <Filter>GpuRaytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\Errors.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -210,6 +213,9 @@
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\GpuRaytracing\OpenCL.h">
       <Filter>GpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Errors.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
