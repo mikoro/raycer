@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
-#include <cassert>
 
 #include "Math/EulerAngle.h"
 #include "Math/Vector3.h"

@@ -48,8 +48,8 @@ namespace Raycer
 			bool hideCursor;
 			bool showFps;
 			bool showCameraInfo;
-			std::string infoFont;
-			int infoFontSize;
+			std::string defaultFont;
+			int defaultFontSize;
 		} window;
 
 		struct Framebuffer

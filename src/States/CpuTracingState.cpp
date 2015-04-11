@@ -1,8 +1,6 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "glfw/glfw3.h"
-
 #include "States/CpuTracingState.h"
 #include "App.h"
 #include "Utils/Log.h"
@@ -51,7 +49,8 @@ void CpuTracingState::render(double timeStep, double interpolation)
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
-	Font& infoFont = App::getInteractiveRunner().getInfoFont();
+	InteractiveRunner& runner = App::getInteractiveRunner();
+	Text& text = runner.getDefaultText();
 
 	pixelCount = 0;
 	rayCount = 0;
@@ -60,9 +59,9 @@ void CpuTracingState::render(double timeStep, double interpolation)
 
 	if (settings.window.showCameraInfo)
 	{
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 3 * settings.window.infoFontSize, tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z), Color(255, 255, 255, 200));
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 4 * settings.window.infoFontSize - 2, tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll), Color(255, 255, 255, 200));
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - 5 * settings.window.infoFontSize - 4, tfm::format("Rays: %d", rayCount.load()), Color(255, 255, 255, 200));
+		text.drawText(5.0, (double)(runner.getWindowHeight() - 3 * settings.window.defaultFontSize), Color(255, 255, 255, 255), tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z));
+		text.drawText(5.0, (double)(runner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll));
+		text.drawText(5.0, (double)(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Rays: %d", rayCount.load()));
 	}
 }
 

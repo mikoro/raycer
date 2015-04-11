@@ -1,7 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "glfw/glfw3.h"
+#ifdef WIN32
+#include <windows.h>
+#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include "Runners/InteractiveRunner.h"
 #include "App.h"
@@ -80,9 +85,9 @@ const MouseInfo& InteractiveRunner::getMouseInfo() const
 	return mouseInfo;
 }
 
-Font& InteractiveRunner::getInfoFont()
+Text& InteractiveRunner::getDefaultText()
 {
-	return infoFont;
+	return defaultText;
 }
 
 bool InteractiveRunner::keyIsDown(int key)
@@ -149,6 +154,14 @@ void InteractiveRunner::initialize()
 	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - (int)settings.window.width / 2), (videoMode->height / 2 - (int)settings.window.height / 2));
 	glfwShowWindow(glfwWindow);
 	glfwMakeContextCurrent(glfwWindow);
+
+	log.logInfo("Initializing GLEW library");
+
+	GLenum result = glewInit();
+
+	if (result != GLEW_OK)
+		throw std::runtime_error(tfm::format("Could not initialize GLEW library: %s", glewGetErrorString(result)));
+
 	glfwSwapInterval(settings.window.vsync ? 1 : 0);
 
 	if (settings.window.hideCursor)
@@ -163,9 +176,9 @@ void InteractiveRunner::initialize()
 		openCl.loadKernels();
 	}
 
-	windowResized(settings.window.width, settings.window.height);
+	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
 
-	infoFont.load(settings.window.infoFont, settings.window.infoFontSize);
+	windowResized(settings.window.width, settings.window.height);
 
 	runnerStates[RunnerStates::CpuTracing] = std::make_unique<CpuTracingState>();
 	runnerStates[RunnerStates::GpuTracing] = std::make_unique<GpuTracingState>();
@@ -177,8 +190,6 @@ void InteractiveRunner::shutdown()
 {
 	runnerStates[currentState]->shutdown();
 
-	Font::closeFreeType();
-
 	if (glfwInitialized)
 		glfwTerminate();
 }
@@ -187,29 +198,39 @@ void InteractiveRunner::windowResized(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCl = App::getOpenCL();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	
 
 	windowWidth = width;
 	windowHeight = height;
 
 	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
+	defaultText.setWindowSize(windowWidth, windowHeight);
 
-	if (settings.openCl.enabled)
-		openCl.releaseMemoryObjects();
-
-	framebuffer.setSize((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
-	
-	if (settings.openCl.enabled)
-	{
-		openCl.setSize(framebuffer.getWidth(), framebuffer.getHeight());
-		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());
-	}
+	resizeFramebuffer((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
 
 	if (currentState != RunnerStates::None)
 	{
 		runnerStates[currentState]->windowResized(windowWidth, windowHeight);
 		runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
+	}
+}
+
+void InteractiveRunner::resizeFramebuffer(size_t width, size_t height)
+{
+	Settings& settings = App::getSettings();
+	Framebuffer& framebuffer = App::getFramebuffer();
+	OpenCL& openCl = App::getOpenCL();
+	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+
+	if (settings.openCl.enabled)
+		openCl.releaseMemoryObjects();
+
+	framebuffer.setSize(width, height);
+
+	if (settings.openCl.enabled)
+	{
+		openCl.setSize(framebuffer.getWidth(), framebuffer.getHeight());
+		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());
 	}
 }
 
@@ -307,7 +328,7 @@ void InteractiveRunner::update(double timeStep)
 		if (newWidth >= 2 && newHeight >= 2)
 		{
 			settings.framebuffer.scale = newScale;
-			framebuffer.setSize(newWidth, newHeight);
+			resizeFramebuffer(newWidth, newHeight);
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}
@@ -321,7 +342,7 @@ void InteractiveRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			framebuffer.setSize((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
+			resizeFramebuffer((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}
@@ -339,22 +360,20 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 
 	renderFpsCounter.countFrame();
 
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//framebuffer.clear();
+
 	if (currentState != RunnerStates::None)
 		runnerStates[currentState]->render(timeStep, interpolation);
 	else
 		throw std::runtime_error("Runner state has not been set");
 
-	if (settings.window.showFps)
-		infoFont.drawText(framebuffer, 5, framebuffer.getHeight() - settings.window.infoFontSize - 2, renderFpsCounter.getFpsString(), Color(255, 255, 255, 200));
-
-	if (keyWasPressed(GLFW_KEY_F8))
-	{
-		Image image = Image(framebuffer);
-		image.saveAs("screenshot.png");
-	}
-
 	framebuffer.render();
-	framebuffer.clear();
+	
+	if (settings.window.showFps)
+		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), renderFpsCounter.getFpsString());
 
+	defaultText.render();
 	glfwSwapBuffers(glfwWindow);
 }

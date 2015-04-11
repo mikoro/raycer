@@ -54,9 +54,6 @@
     <ClCompile Include="src\Math\Vector2.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Font.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Framebuffer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -112,6 +109,9 @@
     <ClCompile Include="src\Utils\Errors.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Text.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -140,9 +140,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\Vector2.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\Font.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Framebuffer.h">
       <Filter>Rendering</Filter>
@@ -217,6 +214,9 @@
     <ClInclude Include="src\Utils\Errors.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\Rendering\Text.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -224,8 +224,8 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Intel_OpenCL_Build_Rules Include="src\GpuRaytracing\test.cl">
+    <None Include="src\GpuRaytracing\raytrace.cl">
       <Filter>GpuRaytracing</Filter>
-    </Intel_OpenCL_Build_Rules>
+    </None>
   </ItemGroup>
 </Project>

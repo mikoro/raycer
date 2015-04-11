@@ -5,8 +5,6 @@
 #include <fstream>
 #include <string>
 
-#include "tinyformat/tinyformat.h"
-
 #ifdef WIN32
 #include <windows.h>
 #endif
@@ -14,8 +12,9 @@
 #define CL_USE_DEPRECATED_OPENCL_1_1_APIS
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #include <CL/opencl.h>
-#include "glfw/glfw3.h"
-#include "gl/glext.h"
+#include <GL/glew.h>
+
+#include "tinyformat/tinyformat.h"
 
 #include "GpuRaytracing/OpenCL.h"
 #include "App.h"
@@ -199,7 +198,7 @@ void OpenCL::loadKernels()
 
 	checkClError(status, "Could not build OpenCL program");
 
-#if 1
+#if 1 && defined(_DEBUG)
 	log.logInfo("Writing OpenCL binary to raytrace.bin");
 
 	size_t binarySize = 0;

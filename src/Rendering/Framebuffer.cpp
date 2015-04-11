@@ -1,8 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "glfw/glfw3.h"
-#include "gl/glext.h"
+#include <GL/glew.h>
 
 #include "Rendering/Framebuffer.h"
 #include "App.h"
@@ -132,9 +131,6 @@ void Framebuffer::clear(const Color& color)
 void Framebuffer::render() const
 {
 	Settings& settings = App::getSettings();
-
-	glClearColor(1.0, 0.0, 0.0, 0.0);
-	glClear(GL_COLOR_BUFFER_BIT);
 
 	if (settings.openCl.enabled)
 		glBindTexture(GL_TEXTURE_2D, gpuTextureId);

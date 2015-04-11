@@ -32,8 +32,8 @@ void Settings::load(const std::string& fileName)
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showFps = iniReader.getValue<bool>("window", "showFps");
 	window.showCameraInfo = iniReader.getValue<bool>("window", "showCameraInfo");
-	window.infoFont = iniReader.getValue<std::string>("window", "infoFont");
-	window.infoFontSize = iniReader.getValue<int>("window", "infoFontSize");
+	window.defaultFont = iniReader.getValue<std::string>("window", "defaultFont");
+	window.defaultFontSize = iniReader.getValue<int>("window", "defaultFontSize");
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
 	framebuffer.smoothing = iniReader.getValue<bool>("framebuffer", "smoothing");

@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
-#include <limits>
 
 #include "CpuRaytracing/CpuRaytracer.h"
 #include "CpuRaytracing/Scene.h"

@@ -1,9 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
+#ifdef WIN32
+#include <windows.h>
+#endif
 
-#include "glfw/glfw3.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
 
 #include "CpuRaytracing/Camera.h"
 #include "App.h"

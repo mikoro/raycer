@@ -4,11 +4,11 @@
 #include <thread>
 #include <atomic>
 
-#include "tinyformat/tinyformat.h"
-
 #ifdef WIN32
 #include <windows.h>
 #endif
+
+#include "tinyformat/tinyformat.h"
 
 #include "Runners/ConsoleRunner.h"
 #include "App.h"

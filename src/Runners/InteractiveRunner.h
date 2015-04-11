@@ -7,7 +7,7 @@
 #include <memory>
 
 #include "States/InteractiveState.h"
-#include "Rendering/Font.h"
+#include "Rendering/Text.h"
 #include "Utils/FpsCounter.h"
 
 struct GLFWwindow;
@@ -39,7 +39,7 @@ namespace Raycer
 		size_t getWindowWidth() const;
 		size_t getWindowHeight() const;
 		const MouseInfo& getMouseInfo() const;
-		Font& getInfoFont();
+		Text& getDefaultText();
 
 		bool keyIsDown(int key);
 		bool mouseIsDown(int button);
@@ -56,6 +56,7 @@ namespace Raycer
 		void shutdown();
 
 		void windowResized(size_t width, size_t height);
+		void resizeFramebuffer(size_t width, size_t height);
 
 		void mainLoop();
 		void update(double timeStep);
@@ -72,7 +73,7 @@ namespace Raycer
 		std::map<int, bool> keyStates;
 		std::map<RunnerStates, std::unique_ptr<InteractiveState>> runnerStates;
 		RunnerStates currentState = RunnerStates::None;
-		Font infoFont;
+		Text defaultText;
 		FpsCounter updateFpsCounter;
 		FpsCounter renderFpsCounter;
 	};
