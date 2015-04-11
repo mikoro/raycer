@@ -21,32 +21,32 @@ Image::Image()
 {
 }
 
-Image::Image(int width_, int height_)
+Image::Image(size_t width_, size_t height_)
 {
 	setSize(width_, height_);
 }
 
 Image::Image(const Image& image)
 {
-	int otherWidth = image.getWidth();
-	int otherHeight = image.getHeight();
-	int pixelCount = otherWidth * otherHeight;
+	size_t otherWidth = image.getWidth();
+	size_t otherHeight = image.getHeight();
+	size_t pixelCount = otherWidth * otherHeight;
 
 	setSize(otherWidth, otherHeight);
 
-	for (int i = 0; i < pixelCount; ++i)
+	for (size_t i = 0; i < pixelCount; ++i)
 		pixelData[i] = image.pixelData[i];
 }
 
 Image::Image(const Framebuffer& framebuffer)
 {
-	int framebufferWidth = framebuffer.getWidth();
-	int framebufferHeight = framebuffer.getHeight();
-	int pixelCount = framebufferWidth * framebufferHeight;
+	size_t framebufferWidth = framebuffer.getWidth();
+	size_t framebufferHeight = framebuffer.getHeight();
+	size_t pixelCount = framebufferWidth * framebufferHeight;
 
 	setSize(framebufferWidth, framebufferHeight);
 
-	for (int i = 0; i < pixelCount; ++i)
+	for (size_t i = 0; i < pixelCount; ++i)
 		pixelData[i] = framebuffer.getPixelData()[i];
 
 	swapBytes();
@@ -68,13 +68,13 @@ Image::~Image()
 
 Image& Image::operator=(const Image& image)
 {
-	int otherWidth = image.getWidth();
-	int otherHeight = image.getHeight();
-	int pixelCount = otherWidth * otherHeight;
+	size_t otherWidth = image.getWidth();
+	size_t otherHeight = image.getHeight();
+	size_t pixelCount = otherWidth * otherHeight;
 
 	setSize(otherWidth, otherHeight);
 
-	for (int i = 0; i < pixelCount; ++i)
+	for (size_t i = 0; i < pixelCount; ++i)
 		pixelData[i] = image.pixelData[i];
 
 	return *this;
@@ -90,9 +90,9 @@ void Image::load(const std::string& fileName)
 	if (imageData == nullptr)
 		throw std::runtime_error("Could not load data from the image file");
 
-	setSize(newWidth, newHeight);
+	setSize((size_t)newWidth, (size_t)newHeight);
 
-	for (int i = 0; i < (newWidth * newHeight); ++i)
+	for (size_t i = 0; i < (size_t)(newWidth * newHeight); ++i)
 		pixelData[i] = imageData[i];
 
 	stbi_image_free(imageData);
@@ -117,11 +117,11 @@ void Image::saveAs(const std::string& fileName) const
 	int result = 0;
 
 	if (endsWith(fileName, ".png"))
-		result = stbi_write_png(fileName.c_str(), width, height, 4, (uint8_t*)tempImage.pixelData, width * sizeof(uint32_t));
+		result = stbi_write_png(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData, (int)(width * sizeof(uint32_t)));
 	else if (endsWith(fileName, ".bmp"))
-		result = stbi_write_bmp(fileName.c_str(), width, height, 4, (uint8_t*)tempImage.pixelData);
+		result = stbi_write_bmp(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData);
 	else if (endsWith(fileName, ".tga"))
-		result = stbi_write_tga(fileName.c_str(), width, height, 4, (uint8_t*)tempImage.pixelData);
+		result = stbi_write_tga(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData);
 	else
 		throw std::runtime_error("Could not save the image (non-supported format)");
 
@@ -129,7 +129,7 @@ void Image::saveAs(const std::string& fileName) const
 		throw std::runtime_error("Could not save the image");
 }
 
-void Image::setSize(int width_, int height_)
+void Image::setSize(size_t width_, size_t height_)
 {
 	assert(width_ > 0 && height_ > 0);
 
@@ -147,7 +147,7 @@ void Image::setSize(int width_, int height_)
 	memset(pixelData, 0, width * height * sizeof(uint32_t));
 }
 
-void Image::setPixel(int x, int y, const Color& color)
+void Image::setPixel(size_t x, size_t y, const Color& color)
 {
 	assert(x < width && y < height);
 
@@ -158,7 +158,7 @@ void Image::swapBytes()
 {
 	Image swappedImage(width, height);
 
-	for (int i = 0; i < (width * height); ++i)
+	for (size_t i = 0; i < (width * height); ++i)
 	{
 		uint32_t rgba = pixelData[i];
 		uint32_t abgr = 0;
@@ -178,26 +178,26 @@ void Image::flip()
 {
 	Image flippedImage(width, height);
 
-	for (int y = 0; y < height; ++y)
+	for (size_t y = 0; y < height; ++y)
 	{
-		for (int x = 0; x < width; ++x)
+		for (size_t x = 0; x < width; ++x)
 			flippedImage.pixelData[(height - 1 - y) * width + x] = pixelData[y * width + x];
 	}
 
 	*this = flippedImage;
 }
 
-int Image::getWidth() const
+size_t Image::getWidth() const
 {
 	return width;
 }
 
-int Image::getHeight() const
+size_t Image::getHeight() const
 {
 	return height;
 }
 
-Color Image::getPixel(int x, int y) const
+Color Image::getPixel(size_t x, size_t y) const
 {
 	assert(x < width && y < height);
 
@@ -208,5 +208,5 @@ Color Image::getPixel(double s, double t) const
 {
 	assert(s >= 0.0 && s <= 1.0 && t >= 0.0 && t <= 1.0);
 
-	return getPixel((int)(s * width + 0.5), (int)(t * height + 0.5));
+	return getPixel((size_t)(s * (double)width + 0.5), (size_t)(t * (double)height + 0.5));
 }

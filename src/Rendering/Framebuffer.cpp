@@ -49,7 +49,7 @@ void Framebuffer::initialize()
 	checkGlError("Could not set OpenGL texture parameters");
 }
 
-void Framebuffer::setSize(int width_, int height_)
+void Framebuffer::setSize(size_t width_, size_t height_)
 {
 	assert(width_ > 0 && height_ > 0);
 
@@ -68,26 +68,26 @@ void Framebuffer::setSize(int width_, int height_)
 
 	// reserve the texture memory
 	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	checkGlError("Could not reserve OpenGL texture memory (CPU texture)");
 
 	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 	checkGlError("Could not reserve OpenGL texture memory (GPU texture)");
 
 	clear();
 }
 
-void Framebuffer::setPixel(int x, int y, const Color& color)
+void Framebuffer::setPixel(size_t x, size_t y, const Color& color)
 {
 	assert(x < width && y < height);
 
 	pixelData[y * width + x] = color.getAbgrValue();
 }
 
-Color Framebuffer::getPixel(int x, int y) const
+Color Framebuffer::getPixel(size_t x, size_t y) const
 {
 	assert(x < width && y < height);
 
@@ -109,12 +109,12 @@ uint32_t Framebuffer::getGpuTextureId() const
 	return gpuTextureId;
 }
 
-int Framebuffer::getWidth() const
+size_t Framebuffer::getWidth() const
 {
 	return width;
 }
 
-int Framebuffer::getHeight() const
+size_t Framebuffer::getHeight() const
 {
 	return height;
 }
@@ -141,7 +141,7 @@ void Framebuffer::render() const
 	else
 	{
 		glBindTexture(GL_TEXTURE_2D, cpuTextureId);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
 		checkGlError("Could not upload OpenGL texture data");
 	}
 

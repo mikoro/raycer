@@ -20,16 +20,16 @@ namespace Raycer
 
 		void initialize();
 
-		void setSize(int width, int height);
+		void setSize(size_t width, size_t height);
 
-		void setPixel(int x, int y, const Color& color);
-		Color getPixel(int x, int y) const;
+		void setPixel(size_t x, size_t y, const Color& color);
+		Color getPixel(size_t x, size_t y) const;
 
 		uint32_t* getPixelData() const;
 		uint32_t getCpuTextureId() const;
 		uint32_t getGpuTextureId() const;
-		int getWidth() const;
-		int getHeight() const;
+		size_t getWidth() const;
+		size_t getHeight() const;
 
 		void clear();
 		void clear(const Color& color);
@@ -42,8 +42,8 @@ namespace Raycer
 		Framebuffer(const Framebuffer& framebuffer);
 		Framebuffer& operator=(const Framebuffer& framebuffer);
 
-		int width = 0;
-		int height = 0;
+		size_t width = 0;
+		size_t height = 0;
 
 		uint32_t* pixelData = nullptr;
 

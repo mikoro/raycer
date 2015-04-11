@@ -22,15 +22,15 @@ namespace Raycer
 		void update(double timeStep);
 		void render(double timeStep, double interpolation);
 
-		void windowResized(int width, int height);
-		void framebufferResized(int width, int height);
+		void windowResized(size_t width, size_t height);
+		void framebufferResized(size_t width, size_t height);
 
 	private:
 
 		Scene scene;
 
 		std::atomic<bool> interrupted = false;
-		std::atomic<int> pixelCount = 0;
-		std::atomic<int> rayCount = 0;
+		std::atomic<size_t> pixelCount = 0;
+		std::atomic<size_t> rayCount = 0;
 	};
 }

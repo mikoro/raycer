@@ -66,13 +66,13 @@ void CpuTracingState::render(double timeStep, double interpolation)
 	}
 }
 
-void CpuTracingState::windowResized(int width, int height)
+void CpuTracingState::windowResized(size_t width, size_t height)
 {
 	(void)width;
 	(void)height;
 }
 
-void CpuTracingState::framebufferResized(int width, int height)
+void CpuTracingState::framebufferResized(size_t width, size_t height)
 {
 	scene.camera.setImagePlaneSize(width, height);
 }

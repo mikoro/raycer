@@ -29,8 +29,8 @@ int App::run(int argc, char** argv)
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
 	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
 	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
-	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image or window", false, 1280, "int", cmd);
-	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 800, "int", cmd);
+	TCLAP::ValueArg<size_t> widthArg("w", "width", "Width of the output image or window", false, 1280, "int", cmd);
+	TCLAP::ValueArg<size_t> heightArg("h", "height", "Height of the output image or window", false, 800, "int", cmd);
 	TCLAP::ValueArg<int> platformIdArg("p", "platform", "OpenCL platform to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> deviceIdArg("d", "device", "OpenCL device to use", false, 0, "int", cmd);
 	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively", cmd, false);

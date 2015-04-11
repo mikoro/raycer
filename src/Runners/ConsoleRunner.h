@@ -17,6 +17,6 @@ namespace Raycer
 
 	private:
 
-		void printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelCount, int rayCount);
+		void printProgress(const time_point<system_clock>& startTime, size_t totalPixelCount, size_t pixelCount, size_t rayCount);
 	};
 }

@@ -69,11 +69,11 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.calculateVariables();
 
-	int totalPixelCount = settings.image.width * settings.image.height;
+	size_t totalPixelCount = settings.image.width * settings.image.height;
 	log.logInfo("Start raytracing (size: %dx%d, pixels: %d, reflections: %d)", settings.image.width, settings.image.height, totalPixelCount, scene.maxReflections);
 
-	std::atomic<int> pixelCount = 0;
-	std::atomic<int> rayCount = 0;
+	std::atomic<size_t> pixelCount = 0;
+	std::atomic<size_t> rayCount = 0;
 	std::atomic<bool> finished = false;
 
 	auto renderFunction = [&]()
@@ -123,19 +123,19 @@ int ConsoleRunner::run()
 	return 0;
 }
 
-void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelCount, int rayCount)
+void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, size_t totalPixelCount, size_t pixelCount, size_t rayCount)
 {
 	auto elapsedTime = system_clock::now() - startTime;
 	double elapsedSeconds = (double)duration_cast<milliseconds>(elapsedTime).count() / 1000.0;
 	double msPerPixel = 0;
 
 	if (pixelCount > 0)
-		msPerPixel = (double)duration_cast<milliseconds>(elapsedTime).count() / pixelCount;
+		msPerPixel = (double)duration_cast<milliseconds>(elapsedTime).count() / (double)pixelCount;
 
-	auto estimatedTime = milliseconds((int)(msPerPixel * totalPixelCount + 0.5));
+	auto estimatedTime = milliseconds((int)(msPerPixel * (double)totalPixelCount + 0.5));
 	auto remainingTime = estimatedTime - elapsedTime;
 
-	int percentage = (int)(((double)pixelCount / totalPixelCount) * 100.0 + 0.5);
+	int percentage = (int)(((double)pixelCount / (double)totalPixelCount) * 100.0 + 0.5);
 	int barCount = percentage / 4;
 
 	printf("[");
@@ -154,7 +154,7 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 	printf("] ");
 	printf("%d %% | ", percentage);
 	printf("Remaining time: %02d:%02d:%02d | ", (int)duration_cast<hours>(remainingTime).count(), (int)duration_cast<minutes>(remainingTime).count(), (int)duration_cast<seconds>(remainingTime).count());
-	printf("Pixels/s: %.2f | ", pixelCount / elapsedSeconds);
-	printf("Rays/s: %.2f", rayCount / elapsedSeconds);
+	printf("Pixels/s: %.2f | ", (double)pixelCount / elapsedSeconds);
+	printf("Rays/s: %.2f", (double)rayCount / elapsedSeconds);
 	printf("\r");
 }

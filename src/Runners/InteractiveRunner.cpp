@@ -65,12 +65,12 @@ GLFWwindow* InteractiveRunner::getGlfwWindow() const
 	return glfwWindow;
 }
 
-int InteractiveRunner::getWindowWidth() const
+size_t InteractiveRunner::getWindowWidth() const
 {
 	return windowWidth;
 }
 
-int InteractiveRunner::getWindowHeight() const
+size_t InteractiveRunner::getWindowHeight() const
 {
 	return windowHeight;
 }
@@ -140,13 +140,13 @@ void InteractiveRunner::initialize()
 	log.logInfo("Creating window (%sx%s, fullscreen: %s)", settings.window.width, settings.window.height, settings.window.fullscreen);
 
 	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-	glfwWindow = glfwCreateWindow(settings.window.width, settings.window.height, "Raycer", settings.window.fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
+	glfwWindow = glfwCreateWindow((int)settings.window.width, (int)settings.window.height, "Raycer", settings.window.fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
 
 	if (!glfwWindow)
 		throw std::runtime_error("Could not create the window");
 
 	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - settings.window.width / 2), (videoMode->height / 2 - settings.window.height / 2));
+	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - (int)settings.window.width / 2), (videoMode->height / 2 - (int)settings.window.height / 2));
 	glfwShowWindow(glfwWindow);
 	glfwMakeContextCurrent(glfwWindow);
 	glfwSwapInterval(settings.window.vsync ? 1 : 0);
@@ -183,7 +183,7 @@ void InteractiveRunner::shutdown()
 		glfwTerminate();
 }
 
-void InteractiveRunner::windowResized(int width, int height)
+void InteractiveRunner::windowResized(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -193,12 +193,12 @@ void InteractiveRunner::windowResized(int width, int height)
 	windowWidth = width;
 	windowHeight = height;
 
-	glViewport(0, 0, windowWidth, windowHeight);
+	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
 
 	if (settings.openCl.enabled)
 		openCl.releaseMemoryObjects();
 
-	framebuffer.setSize((int)(windowWidth * settings.framebuffer.scale + 0.5), (int)(windowHeight * settings.framebuffer.scale + 0.5));
+	framebuffer.setSize((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
 	
 	if (settings.openCl.enabled)
 	{
@@ -260,8 +260,10 @@ void InteractiveRunner::update(double timeStep)
 
 	glfwPollEvents();
 
-	int newWindowWidth, newWindowHeight;
-	glfwGetFramebufferSize(glfwWindow, &newWindowWidth, &newWindowHeight);
+	int newWindowWidthTemp, newWindowHeightTemp;
+	glfwGetFramebufferSize(glfwWindow, &newWindowWidthTemp, &newWindowHeightTemp);
+	size_t newWindowWidth = (size_t)newWindowWidthTemp;
+	size_t newWindowHeight = (size_t)newWindowHeightTemp;
 
 	if (newWindowWidth != windowWidth || newWindowHeight != windowHeight)
 		windowResized(newWindowWidth, newWindowHeight);
@@ -269,10 +271,10 @@ void InteractiveRunner::update(double timeStep)
 	double newMouseX, newMouseY;
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
 
-	mouseInfo.windowX = (int)newMouseX;
-	mouseInfo.windowY = windowHeight - (int)newMouseY - 1;
-	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / windowWidth * framebuffer.getWidth());
-	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / windowHeight * framebuffer.getHeight());
+	mouseInfo.windowX = (int)(newMouseX + 0.5);
+	mouseInfo.windowY = (int)((double)windowHeight - newMouseY - 1.0 + 0.5);
+	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / (double)(windowWidth * framebuffer.getWidth()) + 0.5);
+	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / (double)(windowHeight * framebuffer.getHeight()) + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
@@ -299,8 +301,8 @@ void InteractiveRunner::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_F10))
 	{
 		double newScale = settings.framebuffer.scale * 0.5;
-		int newWidth = (int)(windowWidth * newScale + 0.5);
-		int newHeight = (int)(windowHeight * newScale + 0.5);
+		size_t newWidth = (size_t)((double)windowWidth * newScale + 0.5);
+		size_t newHeight = (size_t)((double)windowHeight * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
@@ -319,7 +321,7 @@ void InteractiveRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			framebuffer.setSize((int)(windowWidth * settings.framebuffer.scale + 0.5), (int)(windowHeight * settings.framebuffer.scale + 0.5));
+			framebuffer.setSize((size_t)((double)windowWidth * settings.framebuffer.scale + 0.5), (size_t)((double)windowHeight * settings.framebuffer.scale + 0.5));
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}

@@ -229,7 +229,7 @@ void OpenCL::releaseMemoryObjects()
 	}
 }
 
-void OpenCL::setSize(int width_, int height_)
+void OpenCL::setSize(size_t width_, size_t height_)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();

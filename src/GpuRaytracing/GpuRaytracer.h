@@ -14,13 +14,13 @@ namespace Raycer
 	{
 	public:
 
-		void setSize(int width, int height);
-		void trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount);
+		void setSize(size_t width, size_t height);
+		void trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount);
 		Image getImage();
 
 	private:
 
-		uint32_t width = 0;
-		uint32_t height = 0;
+		size_t width = 0;
+		size_t height = 0;
 	};
 }

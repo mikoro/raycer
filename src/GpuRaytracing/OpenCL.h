@@ -17,7 +17,7 @@ namespace Raycer
 		void initialize();
 		void loadKernels();
 		void releaseMemoryObjects();
-		void setSize(int width, int height);
+		void setSize(size_t width, size_t height);
 
 		cl_platform_id platformId = nullptr;
 		cl_device_id deviceId = nullptr;
@@ -32,7 +32,7 @@ namespace Raycer
 		OpenCL(const OpenCL& openCL);
 		OpenCL& operator=(const OpenCL& openCL);
 
-		int width = 0;
-		int height = 0;
+		size_t width = 0;
+		size_t height = 0;
 	};
 }

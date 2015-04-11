@@ -46,7 +46,7 @@ void Font::load(const std::string& fontFileName, int fontSize)
 	FT_Set_Pixel_Sizes(face, 0, fontSize);
 }
 
-void Font::drawText(RenderTarget& renderTarget, int x0, int y0, const std::string& text, const Color& color)
+void Font::drawText(RenderTarget& renderTarget, size_t x0, size_t y0, const std::string& text, const Color& color)
 {
 	std::vector<char32_t> utf32Text;
 	utf8::unchecked::utf8to32(text.begin(), text.end(), back_inserter(utf32Text));
@@ -55,16 +55,16 @@ void Font::drawText(RenderTarget& renderTarget, int x0, int y0, const std::strin
 	{
 		Glyph& glyph = getGlyph(characterCode);
 
-		int adjustedX = x0 + glyph.adjustX;
-		int adjustedY = y0 - glyph.adjustY;
+		int adjustedX = (int)x0 + glyph.adjustX;
+		int adjustedY = (int)y0 - glyph.adjustY;
 
 		x0 += glyph.advanceX;
 
 		if (glyph.alphaMapWidth == 0 || glyph.alphaMapHeight == 0)
 			continue;
 
-		int width = renderTarget.getWidth();
-		int height = renderTarget.getHeight();
+		int width = (int)renderTarget.getWidth();
+		int height = (int)renderTarget.getHeight();
 
 		int minX = std::max(adjustedX, 0);
 		int maxX = std::min(adjustedX + glyph.alphaMapWidth, width);

@@ -20,13 +20,13 @@ void Settings::load(const std::string& fileName)
 
 	scene.fileName = iniReader.getValue<std::string>("scene", "fileName");
 
-	image.width = iniReader.getValue<int>("image", "width");
-	image.height = iniReader.getValue<int>("image", "height");
+	image.width = iniReader.getValue<size_t>("image", "width");
+	image.height = iniReader.getValue<size_t>("image", "height");
 	image.fileName = iniReader.getValue<std::string>("image", "fileName");
 	image.autoView = iniReader.getValue<bool>("image", "autoView");
 
-	window.width = iniReader.getValue<int>("window", "width");
-	window.height = iniReader.getValue<int>("window", "height");
+	window.width = iniReader.getValue<size_t>("window", "width");
+	window.height = iniReader.getValue<size_t>("window", "height");
 	window.fullscreen = iniReader.getValue<bool>("window", "fullscreen");
 	window.vsync = iniReader.getValue<bool>("window", "vsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");

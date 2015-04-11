@@ -20,20 +20,20 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void CpuRaytracer::trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
+void CpuRaytracer::trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount)
 {
-	int width = renderTarget.getWidth();
-	int height = renderTarget.getHeight();
-	int totalPixelCount = width * height;
+	size_t width = renderTarget.getWidth();
+	size_t height = renderTarget.getHeight();
+	size_t totalPixelCount = width * height;
 
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int i = 0; i < totalPixelCount; ++i)
+	for (int i = 0; i < (int)totalPixelCount; ++i)
 	{
 		if (interrupted)
 			continue;
 
-		int x = i % width;
-		int y = i / width;
+		size_t x = (size_t)i % width;
+		size_t y = (size_t)i / width;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
 		shootRay(rayToScene, scene, interrupted, rayCount);
@@ -52,7 +52,7 @@ void CpuRaytracer::trace(RenderTarget& renderTarget, const Scene& scene, std::at
 	}
 }
 
-void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& rayCount)
+void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& rayCount)
 {
 	if (interrupted)
 		return;

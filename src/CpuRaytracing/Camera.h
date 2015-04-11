@@ -14,11 +14,11 @@ namespace Raycer
 	{
 	public:
 
-		void setImagePlaneSize(int width, int height);
+		void setImagePlaneSize(size_t width, size_t height);
 		void calculateVariables();
 		void update(double timeStep);
 		
-		Ray getRay(int x, int y) const;
+		Ray getRay(size_t x, size_t y) const;
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);

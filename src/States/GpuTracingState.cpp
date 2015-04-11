@@ -56,13 +56,13 @@ void GpuTracingState::render(double timeStep, double interpolation)
 	gpuRaytracer.trace(scene, interrupted, pixelCount, rayCount);
 }
 
-void GpuTracingState::windowResized(int width, int height)
+void GpuTracingState::windowResized(size_t width, size_t height)
 {
 	(void)width;
 	(void)height;
 }
 
-void GpuTracingState::framebufferResized(int width, int height)
+void GpuTracingState::framebufferResized(size_t width, size_t height)
 {
 	scene.camera.setImagePlaneSize(width, height);
 }

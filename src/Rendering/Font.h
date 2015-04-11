@@ -23,7 +23,7 @@ namespace Raycer
 		~Font();
 
 		void load(const std::string& fontFileName, int fontSize);
-		void drawText(RenderTarget& renderTarget, int x, int y, const std::string& text, const Color& color);
+		void drawText(RenderTarget& renderTarget, size_t x, size_t y, const std::string& text, const Color& color);
 
 		static void initFreeType();
 		static void closeFreeType();

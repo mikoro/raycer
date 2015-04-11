@@ -21,13 +21,13 @@
 
 using namespace Raycer;
 
-void GpuRaytracer::setSize(int width_, int height_)
+void GpuRaytracer::setSize(size_t width_, size_t height_)
 {
-	width = (uint32_t)width_;
-	height = (uint32_t)height_;
+	width = width_;
+	height = height_;
 }
 
-void GpuRaytracer::trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& pixelCount, std::atomic<int>& rayCount)
+void GpuRaytracer::trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount)
 {
 	(void)scene;
 	(void)interrupted;
