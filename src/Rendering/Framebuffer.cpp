@@ -1,12 +1,11 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <GL/glew.h>
-
 #include "Rendering/Framebuffer.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/OpenGL.h"
 #include "Utils/Errors.h"
 #include "Math/Color.h"
 
@@ -46,6 +45,36 @@ void Framebuffer::initialize()
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	checkGlError("Could not set OpenGL texture parameters");
+
+	programId = OpenGL::buildProgram("data/shaders/framebuffer.vert", "data/shaders/framebuffer.frag");
+	samplerId = glGetUniformLocation(programId, "tex0");
+
+	const GLfloat vertexData[] = {
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		1.0f, -1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		-1.0f, -1.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 1.0f, 1.0f,
+		-1.0f, 1.0f, 0.0f, 1.0f,
+	};
+
+	glGenBuffers(1, &vertexBufferId);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertexData), vertexData, GL_STATIC_DRAW);
+
+	glGenVertexArrays(1, &vaoId);
+	glBindVertexArray(vaoId);
+	glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glBindVertexArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+
+	checkGlError("Could not set OpenGL buffer parameters");
 }
 
 void Framebuffer::setSize(size_t width_, size_t height_)
@@ -65,7 +94,7 @@ void Framebuffer::setSize(size_t width_, size_t height_)
 	if (pixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
-	// reserve the texture memory
+	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -132,6 +161,10 @@ void Framebuffer::render() const
 {
 	Settings& settings = App::getSettings();
 
+	glUseProgram(programId);
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(samplerId, 0);
+
 	if (settings.openCl.enabled)
 		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
 	else
@@ -141,22 +174,13 @@ void Framebuffer::render() const
 		checkGlError("Could not upload OpenGL texture data");
 	}
 
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	glEnable(GL_TEXTURE_2D);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-1.0, -1.0, 0.0);
-	glTexCoord2f(1.0, 0.0); glVertex3f(1.0, -1.0, 0.0);
-	glTexCoord2f(1.0, 1.0); glVertex3f(1.0, 1.0, 0.0);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-1.0, 1.0, 0.0);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
+	glBindVertexArray(vaoId);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
-
+	glUseProgram(0);
+	
 	checkGlError("Could not render the framebuffer");
 }
 

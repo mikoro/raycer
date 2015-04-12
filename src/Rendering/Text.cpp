@@ -16,6 +16,7 @@
 #include "Rendering/Text.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/OpenGL.h"
 #include "Utils/Errors.h"
 #include "Math/Color.h"
 
@@ -63,7 +64,10 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 
 	buffer = ftgl::vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f");
 	ftgl::texture_font_load_glyphs(font, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
-	shader = ftgl::shader_load("data/shaders/text.vert", "data/shaders/text.frag");
+
+	programId = OpenGL::buildProgram("data/shaders/text.vert", "data/shaders/text.frag");
+	samplerId = glGetUniformLocation(programId, "tex0");
+	matrixId = glGetUniformLocation(programId, "mvp");
 
 	ftgl::mat4_set_identity(&mvp);
 }
@@ -120,23 +124,23 @@ void Text::drawText(double x, double y, const Color& color, const std::string& t
 
 void Text::render()
 {
-	glBindTexture(GL_TEXTURE_2D, atlas->id);
-
-	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glUseProgram(shader);
-	glUniform1i(glGetUniformLocation(shader, "tex0"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(shader, "mvp"), 1, 0, mvp.data);
+	glUseProgram(programId);
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(samplerId, 0);
+	glUniformMatrix4fv(matrixId, 1, 0, mvp.data);
+
+	glBindTexture(GL_TEXTURE_2D, atlas->id);
 
 	ftgl::vertex_buffer_render(buffer, GL_TRIANGLES);
 	ftgl::vertex_buffer_clear(buffer);
 
+	glBindTexture(GL_TEXTURE_2D, 0);
+
 	glUseProgram(0);
 	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, 0);
 	
 	checkGlError("Could not render text");
 }

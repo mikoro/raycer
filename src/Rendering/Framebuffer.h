@@ -5,6 +5,8 @@
 
 #include <cstdint>
 
+#include <GL/glew.h>
+
 #include "Rendering/RenderTarget.h"
 
 namespace Raycer
@@ -47,7 +49,11 @@ namespace Raycer
 
 		uint32_t* pixelData = nullptr;
 
-		uint32_t cpuTextureId = 0;
-		uint32_t gpuTextureId = 0;
+		GLuint cpuTextureId = 0;
+		GLuint gpuTextureId = 0;
+		GLuint programId = 0;
+		GLuint vaoId = 0;
+		GLuint vertexBufferId = 0;
+		GLuint samplerId = 0;
 	};
 }

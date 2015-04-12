@@ -112,6 +112,9 @@
     <ClCompile Include="src\Rendering\Text.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\OpenGL.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -216,6 +219,9 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Text.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\OpenGL.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
