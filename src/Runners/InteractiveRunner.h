@@ -62,6 +62,8 @@ namespace Raycer
 		void update(double timeStep);
 		void render(double timeStep, double interpolation);
 
+		void takeScreenshot() const;
+
 		bool shouldRun = true;
 		bool glfwInitialized = false;
 		GLFWwindow* glfwWindow = nullptr;

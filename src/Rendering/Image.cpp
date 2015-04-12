@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <cassert>
+#include <algorithm>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
@@ -20,6 +21,11 @@ Image::Image()
 {
 }
 
+Image::Image(size_t length)
+{
+	setSize(length);
+}
+
 Image::Image(size_t width_, size_t height_)
 {
 	setSize(width_, height_);
@@ -35,20 +41,6 @@ Image::Image(const Image& image)
 
 	for (size_t i = 0; i < pixelCount; ++i)
 		pixelData[i] = image.pixelData[i];
-}
-
-Image::Image(const Framebuffer& framebuffer)
-{
-	size_t framebufferWidth = framebuffer.getWidth();
-	size_t framebufferHeight = framebuffer.getHeight();
-	size_t pixelCount = framebufferWidth * framebufferHeight;
-
-	setSize(framebufferWidth, framebufferHeight);
-
-	for (size_t i = 0; i < pixelCount; ++i)
-		pixelData[i] = framebuffer.getPixelData()[i];
-
-	swapBytes();
 }
 
 Image::Image(const std::string& fileName)
@@ -109,23 +101,24 @@ void Image::saveAs(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
 
-	Image tempImage = Image(*this);
-	tempImage.swapBytes();
-	tempImage.flip();
-
 	int result = 0;
 
 	if (endsWith(fileName, ".png"))
-		result = stbi_write_png(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData, (int)(width * sizeof(uint32_t)));
+		result = stbi_write_png(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)pixelData, (int)(width * sizeof(uint32_t)));
 	else if (endsWith(fileName, ".bmp"))
-		result = stbi_write_bmp(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData);
+		result = stbi_write_bmp(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)pixelData);
 	else if (endsWith(fileName, ".tga"))
-		result = stbi_write_tga(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)tempImage.pixelData);
+		result = stbi_write_tga(fileName.c_str(), (int)width, (int)height, 4, (uint8_t*)pixelData);
 	else
 		throw std::runtime_error("Could not save the image (non-supported format)");
 
 	if (result == 0)
 		throw std::runtime_error("Could not save the image");
+}
+
+void Image::setSize(size_t length)
+{
+	setSize(length, 1);
 }
 
 void Image::setSize(size_t width_, size_t height_)
@@ -170,7 +163,7 @@ void Image::swapBytes()
 		swappedImage.pixelData[i] = abgr;
 	}
 
-	*this = swappedImage;
+	std::swap(pixelData, swappedImage.pixelData);
 }
 
 void Image::flip()
@@ -183,7 +176,7 @@ void Image::flip()
 			flippedImage.pixelData[(height - 1 - y) * width + x] = pixelData[y * width + x];
 	}
 
-	*this = flippedImage;
+	std::swap(pixelData, flippedImage.pixelData);
 }
 
 size_t Image::getWidth() const

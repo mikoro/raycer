@@ -6,6 +6,7 @@
 #include <atomic>
 
 #include "States/InteractiveState.h"
+#include "CpuRaytracing/RaytraceInfo.h"
 #include "CpuRaytracing/Scene.h"
 
 namespace Raycer
@@ -27,10 +28,9 @@ namespace Raycer
 
 	private:
 
+		RaytraceInfo info;
 		Scene scene;
 
 		std::atomic<bool> interrupted = false;
-		std::atomic<size_t> pixelCount = 0;
-		std::atomic<size_t> rayCount = 0;
 	};
 }

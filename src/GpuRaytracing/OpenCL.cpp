@@ -224,14 +224,11 @@ void OpenCL::releaseMemoryObjects()
 	}
 }
 
-void OpenCL::setSize(size_t width_, size_t height_)
+void OpenCL::resizeBuffers(size_t width, size_t height)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-
-	width = width_;
-	height = height_;
 
 	log.logInfo("Resizing OpenCL buffer");
 	releaseMemoryObjects();
@@ -251,4 +248,14 @@ void OpenCL::setSize(size_t width_, size_t height_)
 		pixels = clCreateImage2D(context, CL_MEM_WRITE_ONLY, &imageFormat, width, height, 0, NULL, &status);
 		checkClError(status, "Could not create OpenCL image");
 	}
+}
+
+void OpenCL::readBufferImage()
+{
+
+}
+
+Image& OpenCL::getBufferImage()
+{
+	return bufferImage;
 }

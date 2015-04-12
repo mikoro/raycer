@@ -5,6 +5,8 @@
 
 #include <CL/opencl.h>
 
+#include "Rendering/Image.h"
+
 namespace Raycer
 {
 	class OpenCL
@@ -17,7 +19,9 @@ namespace Raycer
 		void initialize();
 		void loadKernels();
 		void releaseMemoryObjects();
-		void setSize(size_t width, size_t height);
+		void resizeBuffers(size_t width, size_t height);
+		void readBufferImage();
+		Image& getBufferImage();
 
 		cl_platform_id platformId = nullptr;
 		cl_device_id deviceId = nullptr;
@@ -32,7 +36,6 @@ namespace Raycer
 		OpenCL(const OpenCL& openCL);
 		OpenCL& operator=(const OpenCL& openCL);
 
-		size_t width = 0;
-		size_t height = 0;
+		Image bufferImage;
 	};
 }

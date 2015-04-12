@@ -18,9 +18,9 @@ namespace Raycer
 	public:
 
 		Image();
+		Image(size_t length);
 		Image(size_t width, size_t height);
 		Image(const Image& image);
-		Image(const Framebuffer& framebuffer);
 		Image(const std::string& fileName);
 		~Image();
 
@@ -28,6 +28,7 @@ namespace Raycer
 
 		void load(const std::string& fileName);
 		void saveAs(const std::string& fileName) const;
+		void setSize(size_t length);
 		void setSize(size_t width, size_t height);
 		void setPixel(size_t x, size_t y, const Color& color);
 		void swapBytes();
@@ -38,10 +39,9 @@ namespace Raycer
 		Color getPixel(size_t x, size_t y) const;
 		Color getPixel(double s, double t) const;
 
-	private:
+		uint32_t* pixelData = nullptr; // RGBA
 
 		size_t width = 0;
 		size_t height = 0;
-		uint32_t* pixelData = nullptr; // RGBA
 	};
 }

@@ -52,16 +52,22 @@ void CpuTracingState::render(double timeStep, double interpolation)
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
 
-	pixelCount = 0;
-	rayCount = 0;
+	info.renderTarget = &framebuffer;
+	info.scene = &scene;
+	info.sceneWidth = framebuffer.getWidth();
+	info.sceneHeight = framebuffer.getHeight();
+	info.pixelStartOffset = 0;
+	info.pixelTotalCount = info.sceneWidth * info.sceneHeight;
+	info.pixelsProcessed = 0;
+	info.raysProcessed = 0;
 
-	cpuRaytracer.trace(framebuffer, scene, interrupted, pixelCount, rayCount);
+	cpuRaytracer.trace(info, interrupted);
 
 	if (settings.window.showCameraInfo)
 	{
 		text.drawText(5.0, (double)(runner.getWindowHeight() - 3 * settings.window.defaultFontSize), Color(255, 255, 255, 255), tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z));
 		text.drawText(5.0, (double)(runner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll));
-		text.drawText(5.0, (double)(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Rays: %d", rayCount.load()));
+		text.drawText(5.0, (double)(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Rays: %d", info.raysProcessed.load()));
 	}
 }
 

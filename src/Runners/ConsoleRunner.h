@@ -4,19 +4,30 @@
 #pragma once
 
 #include <chrono>
+#include <atomic>
 
-using namespace std::chrono;
+#include "Rendering/Image.h"
 
 namespace Raycer
 {
+	struct RaytraceInfo;
+
 	class ConsoleRunner
 	{
 	public:
 
 		int run();
+		void run(RaytraceInfo& info);
+		void interrupt();
+
+		Image& getResultImage();
 
 	private:
 
-		void printProgress(const time_point<system_clock>& startTime, size_t totalPixelCount, size_t pixelCount, size_t rayCount);
+		void printProgress(const std::chrono::time_point<std::chrono::system_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed, size_t raysProcessed);
+
+		bool openCLInitialized = false;
+		std::atomic<bool> interrupted = false;
+		Image resultImage;
 	};
 }

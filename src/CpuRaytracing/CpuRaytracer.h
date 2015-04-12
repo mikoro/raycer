@@ -7,18 +7,18 @@
 
 namespace Raycer
 {
-	class RenderTarget;
-	class Scene;
+	struct RaytraceInfo;
 	struct Ray;
+	class Scene;
 
 	class CpuRaytracer
 	{
 	public:
 
-		void trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount);
+		void trace(RaytraceInfo& info, std::atomic<bool>& interrupted);
 
 	private:
 
-		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& rayCount);
+		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& raysProcessed);
 	};
 }

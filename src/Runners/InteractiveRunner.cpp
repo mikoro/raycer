@@ -220,7 +220,6 @@ void InteractiveRunner::resizeFramebuffer(size_t width, size_t height)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 	OpenCL& openCl = App::getOpenCL();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	if (settings.openCL.enabled)
 		openCl.releaseMemoryObjects();
@@ -228,10 +227,7 @@ void InteractiveRunner::resizeFramebuffer(size_t width, size_t height)
 	framebuffer.setSize(width, height);
 
 	if (settings.openCL.enabled)
-	{
-		openCl.setSize(framebuffer.getWidth(), framebuffer.getHeight());
-		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());
-	}
+		openCl.resizeBuffers(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
@@ -362,7 +358,7 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//framebuffer.clear();
+	//framebuffer.clear(); // not needed if every pixel is written every time
 
 	if (currentState != RunnerStates::None)
 		runnerStates[currentState]->render(timeStep, interpolation);
@@ -376,4 +372,16 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 
 	defaultText.render();
 	glfwSwapBuffers(glfwWindow);
+
+	if (keyWasPressed(GLFW_KEY_F8))
+		takeScreenshot();
+}
+
+void InteractiveRunner::takeScreenshot() const
+{
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	Image tempImage(windowWidth, windowHeight);
+	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, tempImage.pixelData);
+	tempImage.flip();
+	tempImage.saveAs("screenshot.png");
 }

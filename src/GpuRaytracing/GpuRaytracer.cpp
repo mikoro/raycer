@@ -13,23 +13,15 @@
 #include "GpuRaytracing/OpenCL.h"
 #include "Rendering/Framebuffer.h"
 #include "CpuRaytracing/Scene.h"
+#include "CpuRaytracing/RaytraceInfo.h"
 #include "Rendering/Image.h"
 
 using namespace Raycer;
 
-void GpuRaytracer::setSize(size_t width_, size_t height_)
+void GpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 {
-	width = width_;
-	height = height_;
-}
-
-void GpuRaytracer::trace(const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount)
-{
-	(void)scene;
 	(void)interrupted;
-	(void)pixelCount;
-	(void)rayCount;
-
+	
 	Settings& settings = App::getSettings();
 	OpenCL& openCl = App::getOpenCL();
 
@@ -41,7 +33,7 @@ void GpuRaytracer::trace(const Scene& scene, std::atomic<bool>& interrupted, std
 
 	checkClError(clSetKernelArg(openCl.raytraceKernel, 0, sizeof(cl_mem), &openCl.pixels), "Could not set OpenCL kernel argument");
 
-	const size_t globalSizes[] = { width, height };
+	const size_t globalSizes[] = { info.sceneWidth, info.sceneHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
 	checkClError(clEnqueueNDRangeKernel(openCl.commandQueue, openCl.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
@@ -50,10 +42,4 @@ void GpuRaytracer::trace(const Scene& scene, std::atomic<bool>& interrupted, std
 		checkClError(clEnqueueReleaseGLObjects(openCl.commandQueue, 1, &openCl.pixels, 0, NULL, NULL), "Could not enqueue OpenCL GL object release");
 
 	checkClError(clFinish(openCl.commandQueue), "Could not finish OpenCL command queue");
-}
-
-Image GpuRaytracer::getImage()
-{
-	Image image;
-	return image;
 }

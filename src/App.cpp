@@ -5,6 +5,10 @@
 #include <ctime>
 #include <iomanip>
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include "tclap/CmdLine.h"
 
 #include "App.h"
@@ -24,8 +28,25 @@ int main(int argc, char** argv)
 	return App().run(argc, argv);
 }
 
+#ifdef WIN32
+BOOL consoleCtrlHandler(DWORD fdwCtrlType)
+{
+	if (fdwCtrlType == CTRL_C_EVENT)
+	{
+		App::getConsoleRunner().interrupt();
+		return true;
+	}
+	else
+		return false;
+}
+#endif
+
 int App::run(int argc, char** argv)
 {
+#ifdef WIN32
+	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
+#endif
+
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
 	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
 	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
@@ -49,9 +70,6 @@ int App::run(int argc, char** argv)
 
 	try
 	{
-		Log& log = getLog();
-		log.logInfo("Starting application");
-
 		Settings& settings = getSettings();
 		InteractiveRunner& interactiveRunner = getInteractiveRunner();
 		ConsoleRunner& consoleRunner = getConsoleRunner();

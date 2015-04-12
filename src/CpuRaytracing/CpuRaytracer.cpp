@@ -4,6 +4,7 @@
 #include <algorithm>
 
 #include "CpuRaytracing/CpuRaytracer.h"
+#include "CpuRaytracing/RaytraceInfo.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/Ray.h"
 #include "CpuRaytracing/Intersection.h"
@@ -19,44 +20,40 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void CpuRaytracer::trace(RenderTarget& renderTarget, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& pixelCount, std::atomic<size_t>& rayCount)
+void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 {
-	size_t width = renderTarget.getWidth();
-	size_t height = renderTarget.getHeight();
-	size_t totalPixelCount = width * height;
-
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int i = 0; i < (int)totalPixelCount; ++i)
+	for (int i = (int)info.pixelStartOffset; i < (int)info.pixelTotalCount; ++i)
 	{
 		if (interrupted)
 			continue;
 
-		size_t x = (size_t)i % width;
-		size_t y = (size_t)i / width;
+		size_t x = (size_t)i % info.sceneWidth;
+		size_t y = (size_t)i / info.sceneWidth;
 
-		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(rayToScene, scene, interrupted, rayCount);
+		Ray rayToScene = info.scene->camera.getRay(x, y);
+		shootRay(rayToScene, *info.scene, interrupted, info.raysProcessed);
 		Color finalColor = rayToScene.color;
 
-		if (scene.fogEnabled)
+		if (info.scene->fogEnabled)
 		{
-			double t = rayToScene.intersection.distance / scene.fogDistance;
+			double t = rayToScene.intersection.distance / info.scene->fogDistance;
 			t = std::max(0.0, std::min(t, 1.0));
-			t = pow(t, scene.fogSteepness);
-			finalColor = Color::lerp(finalColor, scene.fogColor, t);
+			t = pow(t, info.scene->fogSteepness);
+			finalColor = Color::lerp(finalColor, info.scene->fogColor, t);
 		}
 
-		renderTarget.setPixel(x, y, finalColor.clamped());
-		++pixelCount;
+		info.renderTarget->setPixel(x, y, finalColor.clamped());
+		++info.pixelsProcessed;
 	}
 }
 
-void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& rayCount)
+void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& raysProcessed)
 {
 	if (interrupted)
 		return;
 
-	++rayCount;
+	++raysProcessed;
 
 	for (size_t p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
@@ -70,7 +67,7 @@ void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& int
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(reflectedRay, scene, interrupted, rayCount);
+			shootRay(reflectedRay, scene, interrupted, raysProcessed);
 
 			lightColor = reflectedRay.color * ray.intersection.material->reflectivity;
 		}
