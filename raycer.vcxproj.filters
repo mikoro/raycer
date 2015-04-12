@@ -25,9 +25,6 @@
     <Filter Include="GpuRaytracing">
       <UniqueIdentifier>{8e46c315-d15d-4be8-96cb-153f59924555}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shaders">
-      <UniqueIdentifier>{7397a6e3-6881-4a39-9b6a-0e8336ee7cf9}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -235,18 +232,6 @@
   <ItemGroup>
     <None Include="src\GpuRaytracing\raytrace.cl">
       <Filter>GpuRaytracing</Filter>
-    </None>
-    <None Include="data\shaders\framebuffer.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="data\shaders\framebuffer.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="data\shaders\text.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="data\shaders\text.vert">
-      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
 </Project>

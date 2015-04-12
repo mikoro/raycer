@@ -54,6 +54,10 @@ namespace Raycer
 		GLuint programId = 0;
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;
-		GLuint samplerId = 0;
+		GLuint samplerUniformId = 0;
+		GLuint textureWidthUniformId = 0;
+		GLuint textureHeightUniformId = 0;
+		GLuint texelWidthUniformId = 0;
+		GLuint texelHeightUniformId = 0;
 	};
 }

@@ -49,7 +49,11 @@ void Framebuffer::initialize()
 	checkGlError("Could not set OpenGL texture parameters");
 
 	programId = OpenGL::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
-	samplerId = glGetUniformLocation(programId, "tex0");
+	samplerUniformId = glGetUniformLocation(programId, "tex0");
+	textureWidthUniformId = glGetUniformLocation(programId, "textureWidth");
+	textureHeightUniformId = glGetUniformLocation(programId, "textureHeight");
+	texelWidthUniformId = glGetUniformLocation(programId, "texelWidth");
+	texelHeightUniformId = glGetUniformLocation(programId, "texelHeight");
 
 	const GLfloat vertexData[] = {
 		-1.0f, -1.0f, 0.0f, 0.0f,
@@ -165,7 +169,11 @@ void Framebuffer::render() const
 
 	glUseProgram(programId);
 	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(samplerId, 0);
+	glUniform1i(samplerUniformId, 0);
+	glUniform1f(textureWidthUniformId, (float)width);
+	glUniform1f(textureHeightUniformId, (float)height);
+	glUniform1f(texelWidthUniformId, 1.0f / (float)width);
+	glUniform1f(texelHeightUniformId, 1.0f / (float)height);
 
 	if (settings.openCL.enabled)
 		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
