@@ -175,6 +175,10 @@
     <ResourceCompile Include="platform\windows\raycer.rc" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="data\shaders\framebuffer.frag" />
+    <None Include="data\shaders\framebuffer.vert" />
+    <None Include="data\shaders\text.frag" />
+    <None Include="data\shaders\text.vert" />
     <None Include="src\GpuRaytracing\raytrace.cl">
       <FileType>Document</FileType>
     </None>

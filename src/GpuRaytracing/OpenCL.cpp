@@ -4,6 +4,7 @@
 #include <stdexcept>
 #include <fstream>
 #include <string>
+#include <vector>
 
 #ifdef WIN32
 #include <windows.h>
@@ -87,60 +88,54 @@ void OpenCL::initialize()
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
 
-	if (settings.openCl.platformId > (int)platformCount - 1)
+	if (settings.openCL.platformId > (int)platformCount - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	cl_platform_id* platformIds = new cl_platform_id[platformCount];
 	checkClError(clGetPlatformIDs(platformCount, platformIds, NULL), "Could not get OpenCL platforms");
-	platformId = platformIds[settings.openCl.platformId];
+	platformId = platformIds[settings.openCL.platformId];
 	delete[] platformIds;
 
 	size_t length = 0;
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, NULL, &length);
-	char* platformName = new char[length];
-	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, platformName, NULL);
+	std::vector<char> platformName(length);
+	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, &platformName[0], NULL);
 
 	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, 0, NULL, &length);
-	char* platformVersion = new char[length];
-	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, platformVersion, NULL);
+	std::vector<char> platformVersion(length);
+	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, &platformVersion[0], NULL);
 
-	log.logInfo("OpenCL platform: %s", platformName);
-	log.logInfo("OpenCL version: %s", platformVersion);
-
-	delete[] platformName;
-	delete[] platformVersion;
+	log.logInfo("OpenCL platform: %s", &platformName[0]);
+	log.logInfo("OpenCL version: %s", &platformVersion[0]);
 
 	cl_uint deviceCount = 0;
-	checkClError(clGetDeviceIDs(platformId, settings.openCl.deviceType, 0, NULL, &deviceCount), "Could not get OpenCL device count");
+	checkClError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, NULL, &deviceCount), "Could not get OpenCL device count");
 
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any OpenCL devices");
 
-	if (settings.openCl.deviceId > (int)deviceCount - 1)
+	if (settings.openCL.deviceId > (int)deviceCount - 1)
 		throw std::runtime_error("Invalid OpenCL device id");
 
 	cl_device_id* deviceIds = new cl_device_id[deviceCount];
-	checkClError(clGetDeviceIDs(platformId, settings.openCl.deviceType, deviceCount, deviceIds, NULL), "Could not get OpenCL devices");
-	deviceId = deviceIds[settings.openCl.deviceId];
+	checkClError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, deviceIds, NULL), "Could not get OpenCL devices");
+	deviceId = deviceIds[settings.openCL.deviceId];
 	delete[] deviceIds;
 
 	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, NULL, &length);
-	char* deviceName = new char[length];
-	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, deviceName, NULL);
+	std::vector<char> deviceName(length);
+	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, &deviceName[0], NULL);
 
-	log.logInfo("OpenCL device: %s", deviceName);
-
-	delete[] deviceName;
+	log.logInfo("OpenCL device: %s", &deviceName[0]);
 
 	cl_int status = 0;
 
 	if (settings.general.interactive)
 	{
 		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &length);
-		char* extensions = new char[length];
-		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, length, extensions, NULL);
-		std::string extensionsStr(extensions);
-		delete[] extensions;
+		std::vector<char> extensions(length);
+		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, length, &extensions[0], NULL);
+		std::string extensionsStr(&extensions[0]);
 
 		if (extensionsStr.find("_gl_sharing") == std::string::npos)
 			throw std::runtime_error("OpenCL-OpenGL interoperation is not supported");
@@ -171,6 +166,8 @@ void OpenCL::initialize()
 void OpenCL::loadKernels()
 {
 	Log& log = App::getLog();
+	Settings& settings = App::getSettings();
+
 	log.logInfo("Compiling OpenCL source files");
 
 	std::ifstream file("data/kernels/raytrace.cl");
@@ -185,15 +182,14 @@ void OpenCL::loadKernels()
 	program = clCreateProgramWithSource(context, 1, &fileStringPtr, NULL, &status);
 	checkClError(status, "Could not read OpenCL program source file");
 
-	status = clBuildProgram(program, 1, &deviceId, NULL, NULL, NULL);
+	status = clBuildProgram(program, 1, &deviceId, settings.openCL.options.c_str(), NULL, NULL);
 
 	if (status == CL_BUILD_PROGRAM_FAILURE)
 	{
 		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
-		char* buildLog = new char[length];
-		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, buildLog, NULL);
-		log.logInfo("OpenCL build error:\n\n%s", buildLog);
-		delete[] buildLog;
+		std::vector<char> buildLog(length);
+		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, &buildLog[0], NULL);
+		log.logInfo("OpenCL build error:\n\n%s", &buildLog[0]);
 	}
 
 	checkClError(status, "Could not build OpenCL program");

@@ -15,7 +15,8 @@ namespace
 {
 	std::regex commentRegex("^\\s*[#;].*");
 	std::regex sectionRegex("^\\s*\\[(\\S+)\\].*");
-	std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(\\S+).*");
+	//std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(\\S+).*"); // captures everything until first whitespace after =
+	std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(.+)"); // captures everything after =
 }
 
 void IniReader::readFile(const std::string& fileName)
@@ -42,4 +43,12 @@ void IniReader::readFile(const std::string& fileName)
 		if (std::regex_match(line, match, valueRegex))
 			sections[sectionName][match[1]] = match[2];
 	}
+}
+
+std::string IniReader::getValue(const std::string& sectionName, const std::string& keyName)
+{
+	if (sections.count(sectionName) == 0 || sections[sectionName].count(keyName) == 0)
+		throw std::runtime_error(tfm::format("Could not find %s::%s from the ini file", sectionName, keyName));
+
+	return sections[sectionName][keyName];
 }

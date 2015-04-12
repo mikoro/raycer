@@ -26,6 +26,8 @@ Framebuffer::~Framebuffer()
 
 void Framebuffer::initialize()
 {
+	Settings& settings = App::getSettings();
+
 	App::getLog().logInfo("Initializing framebuffer");
 
 	glGenTextures(1, &cpuTextureId);
@@ -46,7 +48,7 @@ void Framebuffer::initialize()
 
 	checkGlError("Could not set OpenGL texture parameters");
 
-	programId = OpenGL::buildProgram("data/shaders/framebuffer.vert", "data/shaders/framebuffer.frag");
+	programId = OpenGL::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
 	samplerId = glGetUniformLocation(programId, "tex0");
 
 	const GLfloat vertexData[] = {
@@ -165,7 +167,7 @@ void Framebuffer::render() const
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(samplerId, 0);
 
-	if (settings.openCl.enabled)
+	if (settings.openCL.enabled)
 		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
 	else
 	{

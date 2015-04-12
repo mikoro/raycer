@@ -13,16 +13,17 @@ void Settings::load(const std::string& fileName)
 
 	general.interactive = iniReader.getValue<bool>("general", "interactive");
 
-	openCl.enabled = iniReader.getValue<bool>("openCl", "enabled");
-	openCl.platformId = iniReader.getValue<int>("openCl", "platformId");
-	openCl.deviceId = iniReader.getValue<int>("openCl", "deviceId");
-	openCl.deviceType = iniReader.getValue<int>("openCl", "deviceType");
+	openCL.enabled = iniReader.getValue<bool>("openCL", "enabled");
+	openCL.platformId = iniReader.getValue<int>("openCL", "platformId");
+	openCL.deviceType = iniReader.getValue<int>("openCL", "deviceType");
+	openCL.deviceId = iniReader.getValue<int>("openCL", "deviceId");
+	openCL.options = iniReader.getValue("openCL", "options");
 
-	scene.fileName = iniReader.getValue<std::string>("scene", "fileName");
+	scene.fileName = iniReader.getValue("scene", "fileName");
 
 	image.width = iniReader.getValue<size_t>("image", "width");
 	image.height = iniReader.getValue<size_t>("image", "height");
-	image.fileName = iniReader.getValue<std::string>("image", "fileName");
+	image.fileName = iniReader.getValue("image", "fileName");
 	image.autoView = iniReader.getValue<bool>("image", "autoView");
 
 	window.width = iniReader.getValue<size_t>("window", "width");
@@ -32,11 +33,13 @@ void Settings::load(const std::string& fileName)
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showFps = iniReader.getValue<bool>("window", "showFps");
 	window.showCameraInfo = iniReader.getValue<bool>("window", "showCameraInfo");
-	window.defaultFont = iniReader.getValue<std::string>("window", "defaultFont");
+	window.defaultFont = iniReader.getValue("window", "defaultFont");
 	window.defaultFontSize = iniReader.getValue<int>("window", "defaultFontSize");
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
 	framebuffer.smoothing = iniReader.getValue<bool>("framebuffer", "smoothing");
+	framebuffer.vertexShader = iniReader.getValue("framebuffer", "vertexShader");
+	framebuffer.fragmentShader = iniReader.getValue("framebuffer", "fragmentShader");
 
 	controls.moveSpeed = iniReader.getValue<double>("controls", "moveSpeed");
 	controls.mouseSpeed = iniReader.getValue<double>("controls", "mouseSpeed");

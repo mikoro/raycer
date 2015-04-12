@@ -170,7 +170,7 @@ void InteractiveRunner::initialize()
 	framebuffer.initialize();
 	framebuffer.enableSmoothing(settings.framebuffer.smoothing);
 	
-	if (settings.openCl.enabled)
+	if (settings.openCL.enabled)
 	{
 		openCl.initialize();
 		openCl.loadKernels();
@@ -183,7 +183,7 @@ void InteractiveRunner::initialize()
 	runnerStates[RunnerStates::CpuTracing] = std::make_unique<CpuTracingState>();
 	runnerStates[RunnerStates::GpuTracing] = std::make_unique<GpuTracingState>();
 
-	changeState(settings.openCl.enabled ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
+	changeState(settings.openCL.enabled ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
 }
 
 void InteractiveRunner::shutdown()
@@ -222,12 +222,12 @@ void InteractiveRunner::resizeFramebuffer(size_t width, size_t height)
 	OpenCL& openCl = App::getOpenCL();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
-	if (settings.openCl.enabled)
+	if (settings.openCL.enabled)
 		openCl.releaseMemoryObjects();
 
 	framebuffer.setSize(width, height);
 
-	if (settings.openCl.enabled)
+	if (settings.openCL.enabled)
 	{
 		openCl.setSize(framebuffer.getWidth(), framebuffer.getHeight());
 		gpuRaytracer.setSize(framebuffer.getWidth(), framebuffer.getHeight());

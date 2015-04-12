@@ -22,9 +22,10 @@ namespace Raycer
 		{
 			bool enabled;
 			int platformId;
-			int deviceId;
 			int deviceType;
-		} openCl;
+			int deviceId;
+			std::string options;
+		} openCL;
 
 		struct Scene
 		{
@@ -56,6 +57,8 @@ namespace Raycer
 		{
 			double scale;
 			bool smoothing;
+			std::string vertexShader;
+			std::string fragmentShader;
 		} framebuffer;
 
 		struct Controls
