@@ -65,14 +65,12 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 	ftgl::texture_font_load_glyphs(font, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 	shader = ftgl::shader_load("data/shaders/text.vert", "data/shaders/text.frag");
 
-	ftgl::mat4_set_identity(&model);
-	ftgl::mat4_set_identity(&view);
-	ftgl::mat4_set_identity(&projection);
+	ftgl::mat4_set_identity(&mvp);
 }
 
 void Text::setWindowSize(size_t width, size_t height)
 {
-	ftgl::mat4_set_orthographic(&projection, 0, (float)width, 0, (float)height, -1, 1);
+	ftgl::mat4_set_orthographic(&mvp, 0, (float)width, 0, (float)height, -1, 1);
 }
 
 void Text::drawText(double x, double y, const Color& color, const std::string& text)
@@ -129,10 +127,8 @@ void Text::render()
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glUseProgram(shader);
-	glUniform1i(glGetUniformLocation(shader, "texture"), 0);
-	glUniformMatrix4fv(glGetUniformLocation(shader, "model"), 1, 0, model.data);
-	glUniformMatrix4fv(glGetUniformLocation(shader, "view"), 1, 0, view.data);
-	glUniformMatrix4fv(glGetUniformLocation(shader, "projection"), 1, 0, projection.data);
+	glUniform1i(glGetUniformLocation(shader, "tex0"), 0);
+	glUniformMatrix4fv(glGetUniformLocation(shader, "mvp"), 1, 0, mvp.data);
 
 	ftgl::vertex_buffer_render(buffer, GL_TRIANGLES);
 	ftgl::vertex_buffer_clear(buffer);

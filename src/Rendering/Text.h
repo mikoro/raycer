@@ -31,10 +31,7 @@ namespace Raycer
 		ftgl::texture_font_t* font = nullptr;
 		ftgl::vertex_buffer_t* buffer = nullptr;
 
-		ftgl::mat4 model;
-		ftgl::mat4 view;
-		ftgl::mat4 projection;
-
 		GLuint shader = 0;
+		ftgl::mat4 mvp;
 	};
 }
