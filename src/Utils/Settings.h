@@ -64,6 +64,8 @@ namespace Raycer
 		struct Controls
 		{
 			double moveSpeed;
+			double fastModifier;
+			double slowModifier;
 			double mouseSpeed;
 			bool freeLook;
 		} controls;

@@ -41,7 +41,7 @@ void Camera::update(double timeStep)
 
 	MouseInfo mouseInfo = runner.getMouseInfo();
 
-	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || !settings.controls.freeLook)
+	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.controls.freeLook)
 	{
 		orientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings.controls.mouseSpeed;
 		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings.controls.mouseSpeed;
@@ -50,23 +50,31 @@ void Camera::update(double timeStep)
 	orientation.clampPitch();
 	orientation.normalize();
 
+	double moveSpeed = settings.controls.moveSpeed;
+
+	if (runner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || runner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
+		moveSpeed *= settings.controls.fastModifier;
+
+	if (runner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || runner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
+		moveSpeed *= settings.controls.slowModifier;
+
 	if (runner.keyIsDown(GLFW_KEY_W) || runner.keyIsDown(GLFW_KEY_UP))
-		position += forward * timeStep * settings.controls.moveSpeed;
+		position += forward * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_S) || runner.keyIsDown(GLFW_KEY_DOWN))
-		position -= forward * timeStep * settings.controls.moveSpeed;
+		position -= forward * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_A) || runner.keyIsDown(GLFW_KEY_LEFT))
-		position -= right * timeStep * settings.controls.moveSpeed;
+		position -= right * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_D) || runner.keyIsDown(GLFW_KEY_RIGHT))
-		position += right * timeStep * settings.controls.moveSpeed;
+		position += right * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_Q))
-		position -= up * timeStep * settings.controls.moveSpeed;
+		position -= up * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_E))
-		position += up * timeStep * settings.controls.moveSpeed;
+		position += up * timeStep * moveSpeed;
 
 	calculateVariables();
 }

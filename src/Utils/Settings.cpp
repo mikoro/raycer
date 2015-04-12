@@ -42,6 +42,8 @@ void Settings::load(const std::string& fileName)
 	framebuffer.fragmentShader = iniReader.getValue("framebuffer", "fragmentShader");
 
 	controls.moveSpeed = iniReader.getValue<double>("controls", "moveSpeed");
+	controls.fastModifier = iniReader.getValue<double>("controls", "fastModifier");
+	controls.slowModifier = iniReader.getValue<double>("controls", "slowModifier");
 	controls.mouseSpeed = iniReader.getValue<double>("controls", "mouseSpeed");
 	controls.freeLook = iniReader.getValue<bool>("controls", "freeLook");
 }
