@@ -6,7 +6,7 @@
 #include <string>
 #include <vector>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -142,10 +142,18 @@ void OpenCL::initialize()
 
 		cl_context_properties properties[] =
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
 			CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
 			CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
+			0
+#elif __linux
+			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
+			CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
+			CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
+			0
+#elif __APPLE__
+			CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,(cl_context_properties)CGLGetShareGroup(CGLGetCurrentContext()),
 			0
 #endif
 		};
@@ -168,7 +176,7 @@ void OpenCL::loadKernels()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 
-	log.logInfo("Compiling OpenCL source files");
+	log.logInfo("Building OpenCL programs");
 
 	std::ifstream file("data/kernels/raytrace.cl");
 	std::stringstream ss;
@@ -230,7 +238,7 @@ void OpenCL::resizeBuffers(size_t width, size_t height)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
-	log.logInfo("Resizing OpenCL buffer");
+	log.logInfo("Resizing OpenCL buffers");
 	releaseMemoryObjects();
 	cl_int status = 0;
 

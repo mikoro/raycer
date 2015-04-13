@@ -9,7 +9,7 @@
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 

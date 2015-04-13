@@ -4,7 +4,7 @@
 #include <thread>
 #include <atomic>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -56,7 +56,7 @@ int ConsoleRunner::run()
 		if (settings.image.autoView)
 		{
 			log.logInfo("Opening the image in an external viewer");
-#ifdef WIN32
+#ifdef _WIN32
 			ShellExecuteA(NULL, "open", settings.image.fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
 #endif
 		}

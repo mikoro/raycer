@@ -18,7 +18,7 @@
 #include "CpuRaytracing/CpuRaytracer.h"
 #include "GpuRaytracing/GpuRaytracer.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #endif
 
@@ -29,7 +29,7 @@ int main(int argc, char** argv)
 	return App().run(argc, argv);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 BOOL consoleCtrlHandler(DWORD fdwCtrlType)
 {
 	if (fdwCtrlType == CTRL_C_EVENT)
@@ -46,7 +46,7 @@ BOOL consoleCtrlHandler(DWORD fdwCtrlType)
 
 int App::run(int argc, char** argv)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
 #endif
 
