@@ -29,6 +29,8 @@ int ConsoleRunner::run()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 
+	interrupted = false;
+
 	Scene scene;
 	scene.load(settings.scene.fileName);
 	scene.initialize();
@@ -67,7 +69,7 @@ void ConsoleRunner::run(RaytraceInfo& info)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
-	OpenCL& openCl = App::getOpenCL();
+	OpenCL& openCL = App::getOpenCL();
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
@@ -75,14 +77,14 @@ void ConsoleRunner::run(RaytraceInfo& info)
 
 	if (settings.openCL.enabled && !openCLInitialized)
 	{
-		openCl.initialize();
-		openCl.loadKernels();
+		openCL.initialize();
+		openCL.loadKernels();
 
 		openCLInitialized = true;
 	}
 
 	if (settings.openCL.enabled)
-		openCl.resizeBuffers(info.sceneWidth, info.sceneHeight);
+		openCL.resizeBuffers(info.sceneWidth, info.sceneHeight);
 
 	std::atomic<bool> finished = false;
 
@@ -123,7 +125,7 @@ void ConsoleRunner::run(RaytraceInfo& info)
 	log.logInfo("Raytracing %s (time: %s, rays: %d)", interrupted ? "interrupted" : "finished", timeString, info.raysProcessed.load());
 
 	//if (settings.openCL.enabled)
-		//resultImage = openCl.getBufferAsImage();
+		//resultImage = openCL.getBufferAsImage();
 }
 
 void ConsoleRunner::interrupt()

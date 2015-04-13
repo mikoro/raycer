@@ -27,6 +27,16 @@ namespace Raycer
 			std::string options;
 		} openCL;
 
+		struct Network
+		{
+			bool client;
+			bool server;
+			int clientPort;
+			int serverPort;
+			int broadcastPort;
+			std::string subnetBroadcast;
+		} network;
+
 		struct Scene
 		{
 			std::string fileName;

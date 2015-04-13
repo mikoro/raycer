@@ -11,6 +11,7 @@ namespace Raycer
 	class OpenCL;
 	class InteractiveRunner;
 	class ConsoleRunner;
+	class NetworkRunner;
 	class CpuRaytracer;
 	class GpuRaytracer;
 
@@ -26,6 +27,7 @@ namespace Raycer
 		static OpenCL& getOpenCL();
 		static InteractiveRunner& getInteractiveRunner();
 		static ConsoleRunner& getConsoleRunner();
+		static NetworkRunner& getNetworkRunner();
 		static CpuRaytracer& getCpuRaytracer();
 		static GpuRaytracer& getGpuRaytracer();
 	};

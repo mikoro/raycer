@@ -131,7 +131,7 @@ void InteractiveRunner::initialize()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCl = App::getOpenCL();
+	OpenCL& openCL = App::getOpenCL();
 
 	log.logInfo("Initializing GLFW library");
 
@@ -172,8 +172,8 @@ void InteractiveRunner::initialize()
 	
 	if (settings.openCL.enabled)
 	{
-		openCl.initialize();
-		openCl.loadKernels();
+		openCL.initialize();
+		openCL.loadKernels();
 	}
 
 	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
@@ -219,15 +219,15 @@ void InteractiveRunner::resizeFramebuffer(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCl = App::getOpenCL();
+	OpenCL& openCL = App::getOpenCL();
 
 	if (settings.openCL.enabled)
-		openCl.releaseMemoryObjects();
+		openCL.releaseMemoryObjects();
 
 	framebuffer.setSize(width, height);
 
 	if (settings.openCL.enabled)
-		openCl.resizeBuffers(framebuffer.getWidth(), framebuffer.getHeight());
+		openCL.resizeBuffers(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
@@ -381,7 +381,7 @@ void InteractiveRunner::takeScreenshot() const
 {
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	Image tempImage(windowWidth, windowHeight);
-	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, tempImage.pixelData);
+	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, tempImage.getPixelData());
 	tempImage.flip();
 	tempImage.saveAs("screenshot.png");
 }

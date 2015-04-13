@@ -22,28 +22,31 @@ namespace
 
 void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 {
+	Scene& scene = *info.scene;
+
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int i = (int)info.pixelStartOffset; i < (int)info.pixelTotalCount; ++i)
+	for (int pixelIndex = 0; pixelIndex < (int)info.pixelTotalCount; ++pixelIndex)
 	{
 		if (interrupted)
 			continue;
 
-		size_t x = (size_t)i % info.sceneWidth;
-		size_t y = (size_t)i / info.sceneWidth;
+		size_t pixelOffsetIndex = (size_t)pixelIndex + info.pixelStartOffset;
+		size_t x = pixelOffsetIndex % info.sceneWidth;
+		size_t y = pixelOffsetIndex / info.sceneWidth;
 
-		Ray rayToScene = info.scene->camera.getRay(x, y);
-		shootRay(rayToScene, *info.scene, interrupted, info.raysProcessed);
+		Ray rayToScene = scene.camera.getRay(x, y);
+		shootRay(rayToScene, scene, interrupted, info.raysProcessed);
 		Color finalColor = rayToScene.color;
 
-		if (info.scene->fogEnabled)
+		if (scene.fogEnabled)
 		{
-			double t = rayToScene.intersection.distance / info.scene->fogDistance;
+			double t = rayToScene.intersection.distance / scene.fogDistance;
 			t = std::max(0.0, std::min(t, 1.0));
-			t = pow(t, info.scene->fogSteepness);
-			finalColor = Color::lerp(finalColor, info.scene->fogColor, t);
+			t = pow(t, scene.fogSteepness);
+			finalColor = Color::lerp(finalColor, scene.fogColor, t);
 		}
 
-		info.renderTarget->setPixel(x, y, finalColor.clamped());
+		info.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 		++info.pixelsProcessed;
 	}
 }

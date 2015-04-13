@@ -146,6 +146,13 @@ void Image::setPixel(size_t x, size_t y, const Color& color)
 	pixelData[y * width + x] = color.getRgbaValue();
 }
 
+void Image::setPixel(size_t index, const Color& color)
+{
+	assert(index < width * height);
+
+	pixelData[index] = color.getRgbaValue();
+}
+
 void Image::swapBytes()
 {
 	Image swappedImage(width, height);
@@ -201,4 +208,9 @@ Color Image::getPixel(double s, double t) const
 	assert(s >= 0.0 && s <= 1.0 && t >= 0.0 && t <= 1.0);
 
 	return getPixel((size_t)(s * (double)width + 0.5), (size_t)(t * (double)height + 0.5));
+}
+
+uint32_t* Image::getPixelData() const
+{
+	return pixelData;
 }

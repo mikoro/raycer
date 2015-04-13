@@ -3,6 +3,11 @@
 
 #pragma once
 
+#include <atomic>
+#include <vector>
+
+#include <boost/asio.hpp>
+
 namespace Raycer
 {
 	class NetworkRunner
@@ -10,8 +15,18 @@ namespace Raycer
 	public:
 
 		int run();
+		void interrupt();
 
 	private:
 
+		void runClient();
+		void runServer();
+		void sendBroadcasts();
+		void receiveBroadcasts();
+
+		std::atomic<bool> interrupted = false;
+		std::atomic<bool> receiveBroadcastsInterrupted = false;
+
+		std::vector<boost::asio::ip::udp::endpoint> serverEndpoints;
 	};
 }

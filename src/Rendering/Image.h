@@ -31,6 +31,7 @@ namespace Raycer
 		void setSize(size_t length);
 		void setSize(size_t width, size_t height);
 		void setPixel(size_t x, size_t y, const Color& color);
+		void setPixel(size_t index, const Color& color);
 		void swapBytes();
 		void flip();
 
@@ -38,6 +39,9 @@ namespace Raycer
 		size_t getHeight() const;
 		Color getPixel(size_t x, size_t y) const;
 		Color getPixel(double s, double t) const;
+		uint32_t* getPixelData() const;
+
+	private:
 
 		uint32_t* pixelData = nullptr; // RGBA
 

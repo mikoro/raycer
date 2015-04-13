@@ -121,6 +121,13 @@ void Framebuffer::setPixel(size_t x, size_t y, const Color& color)
 	pixelData[y * width + x] = color.getAbgrValue();
 }
 
+void Framebuffer::setPixel(size_t index, const Color& color)
+{
+	assert(index < width * height);
+
+	pixelData[index] = color.getAbgrValue();
+}
+
 Color Framebuffer::getPixel(size_t x, size_t y) const
 {
 	assert(x < width && y < height);

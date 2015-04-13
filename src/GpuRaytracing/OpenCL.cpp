@@ -28,7 +28,7 @@ using namespace Raycer;
 
 namespace
 {
-	void CL_CALLBACK openClErrorCallback(const char* message, const void* privateInfo, size_t cb, void* userData)
+	void CL_CALLBACK openCLErrorCallback(const char* message, const void* privateInfo, size_t cb, void* userData)
 	{
 		(void)privateInfo;
 		(void)cb;
@@ -150,12 +150,12 @@ void OpenCL::initialize()
 #endif
 		};
 
-		context = clCreateContext(properties, 1, &deviceId, openClErrorCallback, NULL, &status);
+		context = clCreateContext(properties, 1, &deviceId, openCLErrorCallback, NULL, &status);
 		checkClError(status, "Could not create OpenCL interop device context");
 	}
 	else
 	{
-		context = clCreateContext(NULL, 1, &deviceId, openClErrorCallback, NULL, &status);
+		context = clCreateContext(NULL, 1, &deviceId, openCLErrorCallback, NULL, &status);
 		checkClError(status, "Could not create OpenCL device context");
 	}
 

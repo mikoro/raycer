@@ -16,5 +16,6 @@ namespace Raycer
 
 		virtual Color getPixel(size_t x, size_t y) const = 0;
 		virtual void setPixel(size_t x, size_t y, const Color& color) = 0;
+		virtual void setPixel(size_t index, const Color& color) = 0;
 	};
 }
