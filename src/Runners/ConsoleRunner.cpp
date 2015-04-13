@@ -86,7 +86,7 @@ void ConsoleRunner::run(RaytraceInfo& info)
 	if (settings.openCL.enabled)
 		openCL.resizeBuffers(info.sceneWidth, info.sceneHeight);
 
-	std::atomic<bool> finished = false;
+	std::atomic<bool> finished;
 
 	auto renderFunction = [&]()
 	{

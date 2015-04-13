@@ -180,8 +180,8 @@ void InteractiveRunner::initialize()
 
 	windowResized(settings.window.width, settings.window.height);
 
-	runnerStates[RunnerStates::CpuTracing] = std::make_unique<CpuTracingState>();
-	runnerStates[RunnerStates::GpuTracing] = std::make_unique<GpuTracingState>();
+	runnerStates[RunnerStates::CpuTracing] = std::unique_ptr<CpuTracingState>(new CpuTracingState());
+	runnerStates[RunnerStates::GpuTracing] = std::unique_ptr<GpuTracingState>(new GpuTracingState());
 
 	changeState(settings.openCL.enabled ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
 }

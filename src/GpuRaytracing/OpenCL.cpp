@@ -14,6 +14,7 @@
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #include <CL/opencl.h>
 #include <GL/glew.h>
+#include <GL/glxew.h>
 
 #include "tinyformat/tinyformat.h"
 

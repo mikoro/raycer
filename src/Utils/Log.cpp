@@ -46,10 +46,10 @@ std::string Log::formatMessage(MessageLevel messageLevel, const std::string& mes
 	}
 
 	std::stringstream timeStringBuffer;
-	std::time_t t = std::time(nullptr);
-	std::tm tm;
-	localtime_s(&tm, &t);
-	timeStringBuffer << std::put_time(&tm, "%H:%M:%S");
+	//std::time_t t = std::time(nullptr);
+	//std::tm tm;
+	//localtime_s(&tm, &t);
+	//timeStringBuffer << std::put_time(&tm, "%H:%M:%S");
 
 	auto epochDuration = std::chrono::system_clock::now().time_since_epoch();
 	auto epochDurationS = std::chrono::duration_cast<std::chrono::seconds>(epochDuration).count();

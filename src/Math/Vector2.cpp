@@ -27,44 +27,47 @@ Vector2& Vector2::operator=(const Vector2& v)
 	return *this;
 }
 
-Vector2 Raycer::operator+(const Vector2& v, const Vector2& w)
+namespace Raycer
 {
-	return Vector2(v.x + w.x, v.y + w.y);
-}
+	Vector2 operator+(const Vector2& v, const Vector2& w)
+	{
+		return Vector2(v.x + w.x, v.y + w.y);
+	}
 
-Vector2 Raycer::operator-(const Vector2& v, const Vector2& w)
-{
-	return Vector2(v.x - w.x, v.y - w.y);
-}
+	Vector2 operator-(const Vector2& v, const Vector2& w)
+	{
+		return Vector2(v.x - w.x, v.y - w.y);
+	}
 
-Vector2 Raycer::operator*(const Vector2& v, double s)
-{
-	return Vector2(v.x * s, v.y * s);
-}
+	Vector2 operator*(const Vector2& v, double s)
+	{
+		return Vector2(v.x * s, v.y * s);
+	}
 
-Vector2 Raycer::operator*(double s, const Vector2& v)
-{
-	return Vector2(v.x * s, v.y * s);
-}
+	Vector2 operator*(double s, const Vector2& v)
+	{
+		return Vector2(v.x * s, v.y * s);
+	}
 
-Vector2 Raycer::operator/(const Vector2& v, double s)
-{
-	return Vector2(v.x / s, v.y / s);
-}
+	Vector2 operator/(const Vector2& v, double s)
+	{
+		return Vector2(v.x / s, v.y / s);
+	}
 
-Vector2 Raycer::operator-(const Vector2& v)
-{
-	return Vector2(-v.x, -v.y);
-}
+	Vector2 operator-(const Vector2& v)
+	{
+		return Vector2(-v.x, -v.y);
+	}
 
-bool Raycer::operator==(const Vector2& v, const Vector2& w)
-{
-	return MathUtils::almostSame(v.x, w.x) && MathUtils::almostSame(v.y, w.y);
-}
+	bool operator==(const Vector2& v, const Vector2& w)
+	{
+		return MathUtils::almostSame(v.x, w.x) && MathUtils::almostSame(v.y, w.y);
+	}
 
-bool Raycer::operator!=(const Vector2& v, const Vector2& w)
-{
-	return !(v == w);
+	bool operator!=(const Vector2& v, const Vector2& w)
+	{
+		return !(v == w);
+	}
 }
 
 Vector2& Vector2::operator+=(const Vector2& v)

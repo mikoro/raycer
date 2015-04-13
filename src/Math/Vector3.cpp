@@ -33,44 +33,47 @@ Vector3& Vector3::operator=(const Vector3& v)
 	return *this;
 }
 
-Vector3 Raycer::operator+(const Vector3& v, const Vector3& w)
+namespace Raycer
 {
-	return Vector3(v.x + w.x, v.y + w.y, v.z + w.z);
-}
+	Vector3 operator+(const Vector3& v, const Vector3& w)
+	{
+		return Vector3(v.x + w.x, v.y + w.y, v.z + w.z);
+	}
 
-Vector3 Raycer::operator-(const Vector3& v, const Vector3& w)
-{
-	return Vector3(v.x - w.x, v.y - w.y, v.z - w.z);
-}
+	Vector3 operator-(const Vector3& v, const Vector3& w)
+	{
+		return Vector3(v.x - w.x, v.y - w.y, v.z - w.z);
+	}
 
-Vector3 Raycer::operator*(const Vector3& v, double s)
-{
-	return Vector3(v.x * s, v.y * s, v.z * s);
-}
+	Vector3 operator*(const Vector3& v, double s)
+	{
+		return Vector3(v.x * s, v.y * s, v.z * s);
+	}
 
-Vector3 Raycer::operator*(double s, const Vector3& v)
-{
-	return Vector3(v.x * s, v.y * s, v.z * s);
-}
+	Vector3 operator*(double s, const Vector3& v)
+	{
+		return Vector3(v.x * s, v.y * s, v.z * s);
+	}
 
-Vector3 Raycer::operator/(const Vector3& v, double s)
-{
-	return Vector3(v.x / s, v.y / s, v.z / s);
-}
+	Vector3 operator/(const Vector3& v, double s)
+	{
+		return Vector3(v.x / s, v.y / s, v.z / s);
+	}
 
-Vector3 Raycer::operator-(const Vector3& v)
-{
-	return Vector3(-v.x, -v.y, -v.z);
-}
+	Vector3 operator-(const Vector3& v)
+	{
+		return Vector3(-v.x, -v.y, -v.z);
+	}
 
-bool Raycer::operator==(const Vector3& v, const Vector3& w)
-{
-	return MathUtils::almostSame(v.x, w.x) && MathUtils::almostSame(v.y, w.y) && MathUtils::almostSame(v.z, w.z);
-}
+	bool operator==(const Vector3& v, const Vector3& w)
+	{
+		return MathUtils::almostSame(v.x, w.x) && MathUtils::almostSame(v.y, w.y) && MathUtils::almostSame(v.z, w.z);
+	}
 
-bool Raycer::operator!=(const Vector3& v, const Vector3& w)
-{
-	return !(v == w);
+	bool operator!=(const Vector3& v, const Vector3& w)
+	{
+		return !(v == w);
+	}
 }
 
 Vector3& Vector3::operator+=(const Vector3& v)

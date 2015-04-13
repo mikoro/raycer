@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 /*
 
 yaw = rotation around y-axis [0 1 0]

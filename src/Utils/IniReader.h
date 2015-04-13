@@ -5,6 +5,7 @@
 
 #include <fstream>
 #include <map>
+#include <typeinfo>
 
 #include "tinyformat/tinyformat.h"
 

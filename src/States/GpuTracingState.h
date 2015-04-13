@@ -31,6 +31,6 @@ namespace Raycer
 		RaytraceInfo info;
 		Scene scene;
 
-		std::atomic<bool> interrupted = false;
+		std::atomic<bool> interrupted;
 	};
 }

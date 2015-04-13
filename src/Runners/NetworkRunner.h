@@ -24,8 +24,8 @@ namespace Raycer
 		void sendBroadcasts();
 		void receiveBroadcasts();
 
-		std::atomic<bool> interrupted = false;
-		std::atomic<bool> receiveBroadcastsInterrupted = false;
+		std::atomic<bool> interrupted;
+		std::atomic<bool> receiveBroadcastsInterrupted;
 
 		std::vector<boost::asio::ip::udp::endpoint> serverEndpoints;
 	};

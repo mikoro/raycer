@@ -20,7 +20,7 @@ namespace Raycer
 		size_t pixelStartOffset = 0;
 		size_t pixelTotalCount = 0;
 
-		std::atomic<size_t> pixelsProcessed = 0;
-		std::atomic<size_t> raysProcessed = 0;
+		std::atomic<size_t> pixelsProcessed;
+		std::atomic<size_t> raysProcessed;
 	};
 }
