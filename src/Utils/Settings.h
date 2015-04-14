@@ -44,16 +44,16 @@ namespace Raycer
 
 		struct Image
 		{
-			size_t width;
-			size_t height;
+			int width;
+			int height;
 			std::string fileName;
 			bool autoView;
 		} image;
 
 		struct Window
 		{
-			size_t width;
-			size_t height;
+			int width;
+			int height;
 			bool fullscreen;
 			bool vsync;
 			bool hideCursor;

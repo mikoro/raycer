@@ -21,7 +21,7 @@ namespace Raycer
 		~Text();
 
 		void initialize(const std::string& fontFileName, double fontSize);
-		void setWindowSize(size_t width, size_t height);
+		void setWindowSize(int width, int height);
 		void drawText(double x, double y, const Color& color, const std::string& text);
 		void render();
 

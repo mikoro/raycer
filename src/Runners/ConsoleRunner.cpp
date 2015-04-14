@@ -138,7 +138,7 @@ Image& ConsoleRunner::getResultImage()
 	return resultImage;
 }
 
-void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed, size_t raysProcessed)
+void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)
 {
 	auto elapsedTime = system_clock::now() - startTime;
 	double elapsedSeconds = (double)duration_cast<milliseconds>(elapsedTime).count() / 1000.0;

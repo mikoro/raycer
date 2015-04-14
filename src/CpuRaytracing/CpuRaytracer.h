@@ -19,6 +19,6 @@ namespace Raycer
 
 	private:
 
-		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<size_t>& raysProcessed);
+		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& raysProcessed);
 	};
 }

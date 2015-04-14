@@ -24,7 +24,7 @@ namespace Raycer
 
 	private:
 
-		void printProgress(const std::chrono::time_point<std::chrono::system_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed, size_t raysProcessed);
+		void printProgress(const std::chrono::time_point<std::chrono::system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed);
 
 		bool openCLInitialized = false;
 		std::atomic<bool> interrupted;

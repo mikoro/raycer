@@ -14,7 +14,10 @@
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #include <CL/opencl.h>
 #include <GL/glew.h>
+
+#ifdef __linux
 #include <GL/glxew.h>
+#endif
 
 #include "tinyformat/tinyformat.h"
 
@@ -233,7 +236,7 @@ void OpenCL::releaseMemoryObjects()
 	}
 }
 
-void OpenCL::resizeBuffers(size_t width, size_t height)
+void OpenCL::resizeBuffers(int width, int height)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();

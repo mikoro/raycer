@@ -8,6 +8,7 @@
 #include "Utils/Log.h"
 
 using namespace Raycer;
+using namespace std::chrono;
 
 Log::Log(const std::string& fileName)
 {
@@ -45,18 +46,15 @@ std::string Log::formatMessage(MessageLevel messageLevel, const std::string& mes
 		case MessageLevel::Error: messageLevelName = "Error"; break;
 	}
 
-	std::stringstream timeStringBuffer;
-	//std::time_t t = std::time(nullptr);
-	//std::tm tm;
-	//localtime_s(&tm, &t);
-	//timeStringBuffer << std::put_time(&tm, "%H:%M:%S");
+	auto now = std::chrono::system_clock::now();
+	auto epoch = now.time_since_epoch();
+	time_t tt = system_clock::to_time_t(now);
+	tm local_tm = *localtime(&tt);
+	int seconds = (int)std::chrono::duration_cast<std::chrono::seconds>(epoch).count();
+	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
+	milliseconds = milliseconds - seconds * 1000;
 
-	auto epochDuration = std::chrono::system_clock::now().time_since_epoch();
-	auto epochDurationS = std::chrono::duration_cast<std::chrono::seconds>(epochDuration).count();
-	auto epochDurationMs = std::chrono::duration_cast<std::chrono::milliseconds>(epochDuration).count();
-	auto milliSeconds = epochDurationMs - epochDurationS * 1000;
-
-	return tfm::format("%s.%03d [%s] %s", timeStringBuffer.str(), milliSeconds, messageLevelName, message);
+	return tfm::format("%02d:%02d:%02d.%03d [%s] %s", local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec, milliseconds, messageLevelName, message);
 }
 
 void Log::outputMessage(const std::string& message)

@@ -23,8 +23,8 @@ namespace Raycer
 		void update(double timeStep);
 		void render(double timeStep, double interpolation);
 
-		void windowResized(size_t width, size_t height);
-		void framebufferResized(size_t width, size_t height);
+		void windowResized(int width, int height);
+		void framebufferResized(int width, int height);
 
 	private:
 

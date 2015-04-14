@@ -15,12 +15,12 @@ namespace Raycer
 		RenderTarget* renderTarget = nullptr;
 		Scene* scene = nullptr;
 
-		size_t sceneWidth = 0;
-		size_t sceneHeight = 0;
-		size_t pixelStartOffset = 0;
-		size_t pixelTotalCount = 0;
+		int sceneWidth = 0;
+		int sceneHeight = 0;
+		int pixelStartOffset = 0;
+		int pixelTotalCount = 0;
 
-		std::atomic<size_t> pixelsProcessed;
-		std::atomic<size_t> raysProcessed;
+		std::atomic<int> pixelsProcessed;
+		std::atomic<int> raysProcessed;
 	};
 }

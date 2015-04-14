@@ -19,7 +19,7 @@ namespace Raycer
 		void initialize();
 		void loadKernels();
 		void releaseMemoryObjects();
-		void resizeBuffers(size_t width, size_t height);
+		void resizeBuffers(int width, int height);
 		void readBufferImage();
 		Image& getBufferImage();
 

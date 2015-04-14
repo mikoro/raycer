@@ -72,7 +72,7 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 	ftgl::mat4_set_identity(&mvp);
 }
 
-void Text::setWindowSize(size_t width, size_t height)
+void Text::setWindowSize(int width, int height)
 {
 	ftgl::mat4_set_orthographic(&mvp, 0, (float)width, 0, (float)height, -1, 1);
 }

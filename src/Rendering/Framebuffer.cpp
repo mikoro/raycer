@@ -83,7 +83,7 @@ void Framebuffer::initialize()
 	checkGlError("Could not set OpenGL buffer parameters");
 }
 
-void Framebuffer::setSize(size_t width_, size_t height_)
+void Framebuffer::setSize(int width_, int height_)
 {
 	assert(width_ > 0 && height_ > 0);
 
@@ -114,21 +114,21 @@ void Framebuffer::setSize(size_t width_, size_t height_)
 	clear();
 }
 
-void Framebuffer::setPixel(size_t x, size_t y, const Color& color)
+void Framebuffer::setPixel(int x, int y, const Color& color)
 {
 	assert(x < width && y < height);
 
 	pixelData[y * width + x] = color.getAbgrValue();
 }
 
-void Framebuffer::setPixel(size_t index, const Color& color)
+void Framebuffer::setPixel(int index, const Color& color)
 {
 	assert(index < width * height);
 
 	pixelData[index] = color.getAbgrValue();
 }
 
-Color Framebuffer::getPixel(size_t x, size_t y) const
+Color Framebuffer::getPixel(int x, int y) const
 {
 	assert(x < width && y < height);
 
@@ -150,12 +150,12 @@ uint32_t Framebuffer::getGpuTextureId() const
 	return gpuTextureId;
 }
 
-size_t Framebuffer::getWidth() const
+int Framebuffer::getWidth() const
 {
 	return width;
 }
 
-size_t Framebuffer::getHeight() const
+int Framebuffer::getHeight() const
 {
 	return height;
 }

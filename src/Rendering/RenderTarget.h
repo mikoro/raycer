@@ -11,11 +11,11 @@ namespace Raycer
 	{
 	public:
 
-		virtual size_t getWidth() const = 0;
-		virtual size_t getHeight() const = 0;
+		virtual int getWidth() const = 0;
+		virtual int getHeight() const = 0;
 
-		virtual Color getPixel(size_t x, size_t y) const = 0;
-		virtual void setPixel(size_t x, size_t y, const Color& color) = 0;
-		virtual void setPixel(size_t index, const Color& color) = 0;
+		virtual Color getPixel(int x, int y) const = 0;
+		virtual void setPixel(int x, int y, const Color& color) = 0;
+		virtual void setPixel(int index, const Color& color) = 0;
 	};
 }

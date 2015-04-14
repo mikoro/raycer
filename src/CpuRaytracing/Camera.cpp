@@ -19,7 +19,7 @@
 
 using namespace Raycer;
 
-void Camera::setImagePlaneSize(size_t width, size_t height)
+void Camera::setImagePlaneSize(int width, int height)
 {
 	imagePlaneWidth = (double)(width - 1);
 	imagePlaneHeight = (double)(height - 1);
@@ -81,7 +81,7 @@ void Camera::update(double timeStep)
 	calculateVariables();
 }
 
-Ray Camera::getRay(size_t x, size_t y) const
+Ray Camera::getRay(int x, int y) const
 {
 	double dx = ((double)x / imagePlaneWidth) - 0.5;
 	double dy = ((double)y / imagePlaneHeight) - 0.5;
