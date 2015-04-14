@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <limits>
+#include <cmath>
 
 #include "CpuRaytracing/Plane.h"
 #include "CpuRaytracing/Ray.h"
@@ -22,7 +23,7 @@ void Plane::intersect(Ray& ray) const
 
 	double denominator = ray.direction.dot(normal);
 
-	if (abs(denominator) < epsilon)
+	if (fabs(denominator) < epsilon)
 		return;
 
 	double t = (position - ray.origin).dot(normal) / denominator;

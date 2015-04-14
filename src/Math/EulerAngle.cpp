@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 
 #include "Math/EulerAngle.h"
 #include "Math/Vector3.h"
@@ -40,13 +41,13 @@ void EulerAngle::clampPitch()
 
 void EulerAngle::normalize()
 {
-	while (abs(yaw) > 180.0)
+	while (fabs(yaw) > 180.0)
 		yaw += (yaw > 0.0) ? -360.0 : 360.0;
 
-	while (abs(pitch) > 180.0)
+	while (fabs(pitch) > 180.0)
 		pitch += (pitch > 0.0) ? -360.0 : 360.0;
 
-	while (abs(roll) > 180.0)
+	while (fabs(roll) > 180.0)
 		roll += (roll > 0.0) ? -360.0 : 360.0;
 }
 
