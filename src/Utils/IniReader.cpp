@@ -30,6 +30,7 @@ void IniReader::readFile(const std::string& fileName)
 	while (std::getline(fileStream, line))
 	{
 		std::smatch match;
+		line.erase(std::remove(line.begin(), line.end(), '\r'), line.end());
 
 		if (std::regex_match(line, match, commentRegex))
 			continue;

@@ -33,7 +33,7 @@ void GpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 
 	checkClError(clSetKernelArg(openCL.raytraceKernel, 0, sizeof(cl_mem), &openCL.pixels), "Could not set OpenCL kernel argument");
 
-	const size_t globalSizes[] = { info.sceneWidth, info.sceneHeight };
+	const size_t globalSizes[] = { (size_t)info.sceneWidth, (size_t)info.sceneHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
 	checkClError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
