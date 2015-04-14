@@ -8,6 +8,8 @@
 
 #include <boost/asio.hpp>
 
+namespace ba = boost::asio;
+
 namespace Raycer
 {
 	class NetworkRunner
@@ -23,10 +25,14 @@ namespace Raycer
 		void runServer();
 		void sendBroadcasts();
 		void receiveBroadcasts();
+		void receiveJobs();
+		void sendJob();
+
+		ba::ip::address_v4 getLocalAddress();
 
 		std::atomic<bool> interrupted;
 		std::atomic<bool> receiveBroadcastsInterrupted;
-
-		std::vector<boost::asio::ip::udp::endpoint> serverEndpoints;
+		std::vector<ba::ip::tcp::endpoint> serverEndpoints;
+		ba::ip::address_v4 localAddress;
 	};
 }

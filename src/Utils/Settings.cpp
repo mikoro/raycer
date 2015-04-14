@@ -19,12 +19,12 @@ void Settings::load(const std::string& fileName)
 	openCL.deviceId = iniReader.getValue<int>("openCL", "deviceId");
 	openCL.options = iniReader.getValue("openCL", "options");
 
-	network.client = iniReader.getValue<bool>("network", "client");
-	network.server = iniReader.getValue<bool>("network", "server");
-	network.clientPort = iniReader.getValue<int>("network", "clientPort");
-	network.serverPort = iniReader.getValue<int>("network", "serverPort");
+	network.isClient = iniReader.getValue<bool>("network", "isClient");
+	network.isServer = iniReader.getValue<bool>("network", "isServer");
+	network.localAddress = iniReader.getValue("network", "localAddress");
+	network.localPort = iniReader.getValue<int>("network", "localPort");
+	network.broadcastAddress = iniReader.getValue("network", "broadcastAddress");
 	network.broadcastPort = iniReader.getValue<int>("network", "broadcastPort");
-	network.subnetBroadcast = iniReader.getValue("network", "subnetBroadcast");
 
 	scene.fileName = iniReader.getValue("scene", "fileName");
 

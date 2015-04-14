@@ -29,12 +29,12 @@ namespace Raycer
 
 		struct Network
 		{
-			bool client;
-			bool server;
-			int clientPort;
-			int serverPort;
+			bool isClient;
+			bool isServer;
+			std::string localAddress;
+			int localPort;
+			std::string broadcastAddress;
 			int broadcastPort;
-			std::string subnetBroadcast;
 		} network;
 
 		struct Scene

@@ -52,18 +52,17 @@ int App::run(int argc, char** argv)
 
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
 	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively", cmd, false);
-	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
-	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image or window", false, 0, "int", cmd);
-	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
-	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
-	TCLAP::SwitchArg autoViewSwitch("v", "view", "View the image after completion", cmd, false);
 	TCLAP::SwitchArg useOpenCLSwitch("l", "opencl", "Use OpenCL for raytracing", cmd, false);
 	TCLAP::ValueArg<int> platformIdArg("p", "platform", "OpenCL platform to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> deviceTypeArg("t", "type", "OpenCL device type to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> deviceIdArg("d", "device", "OpenCL device to use", false, 0, "int", cmd);
 	TCLAP::SwitchArg clientSwitch("c", "client", "Enable network client mode", cmd, false);
 	TCLAP::SwitchArg serverSwitch("e", "server", "Enable network server mode", cmd, false);
-	TCLAP::ValueArg<std::string> broadcastArg("b", "broadcast", "Local subnet broadcast address", false, "", "string", cmd);
+	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
+	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image or window", false, 0, "int", cmd);
+	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
+	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
+	TCLAP::SwitchArg autoViewSwitch("v", "view", "View the image after completion", cmd, false);
 	
 	try
 	{
@@ -87,6 +86,30 @@ int App::run(int argc, char** argv)
 		if (interactiveSwitch.isSet())
 			settings.general.interactive = interactiveSwitch.getValue();
 
+		if (useOpenCLSwitch.isSet())
+			settings.openCL.enabled = useOpenCLSwitch.getValue();
+
+		if (platformIdArg.isSet())
+			settings.openCL.platformId = platformIdArg.getValue();
+
+		if (deviceTypeArg.isSet())
+			settings.openCL.deviceType = deviceTypeArg.getValue();
+
+		if (deviceIdArg.isSet())
+			settings.openCL.deviceId = deviceIdArg.getValue();
+
+		if (clientSwitch.isSet())
+		{
+			settings.network.isClient = clientSwitch.getValue();
+			settings.network.isServer = !settings.network.isClient;
+		}
+
+		if (serverSwitch.isSet())
+		{
+			settings.network.isServer = serverSwitch.getValue();
+			settings.network.isClient = !settings.network.isServer;
+		}
+
 		if (sceneFileNameArg.isSet())
 			settings.scene.fileName = sceneFileNameArg.getValue();
 
@@ -108,38 +131,11 @@ int App::run(int argc, char** argv)
 		if (autoViewSwitch.isSet())
 			settings.image.autoView = autoViewSwitch.getValue();
 
-		if (useOpenCLSwitch.isSet())
-			settings.openCL.enabled = useOpenCLSwitch.getValue();
-
-		if (platformIdArg.isSet())
-			settings.openCL.platformId = platformIdArg.getValue();
-
-		if (deviceTypeArg.isSet())
-			settings.openCL.deviceType = deviceTypeArg.getValue();
-
-		if (deviceIdArg.isSet())
-			settings.openCL.deviceId = deviceIdArg.getValue();
-
-		if (clientSwitch.isSet())
-		{
-			settings.network.client = clientSwitch.getValue();
-			settings.network.server = !settings.network.client;
-		}
-
-		if (serverSwitch.isSet())
-		{
-			settings.network.server = serverSwitch.getValue();
-			settings.network.client = !settings.network.server;
-		}
-
-		if (broadcastArg.isSet())
-			settings.network.subnetBroadcast = broadcastArg.getValue();
-
 		if (settings.general.interactive)
 			return interactiveRunner.run();
 		else
 		{
-			if (settings.network.client || settings.network.server)
+			if (settings.network.isClient || settings.network.isServer)
 				return networkRunner.run();
 			else
 				return consoleRunner.run();

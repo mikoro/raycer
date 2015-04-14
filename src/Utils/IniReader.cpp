@@ -13,10 +13,10 @@ using namespace Raycer;
 
 namespace
 {
-	std::regex commentRegex("^\\s*[#;].*");
-	std::regex sectionRegex("^\\s*\\[(\\S+)\\].*");
-	//std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(\\S+).*"); // captures everything until first whitespace after =
-	std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(.+)"); // captures everything after =
+	const std::regex commentRegex("^\\s*[#;].*");
+	const std::regex sectionRegex("^\\s*\\[(\\S+)\\].*");
+	//const std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(\\S+).*"); // captures everything until first whitespace after =
+	const std::regex valueRegex("^\\s*(\\S+)\\s*=\\s*(.+)"); // captures everything after =
 }
 
 void IniReader::readFile(const std::string& fileName)

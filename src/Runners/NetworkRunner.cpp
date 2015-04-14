@@ -4,7 +4,7 @@
 #include <stdexcept>
 #include <thread>
 #include <atomic>
-
+#include <regex>
 #include <iostream>
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
@@ -29,9 +29,18 @@ int NetworkRunner::run()
 
 	interrupted = false;
 
-	if (settings.network.client)
+	boost::system::error_code error;
+	localAddress = ip::address_v4::from_string(settings.network.localAddress, error);
+
+	if (error)
+		localAddress = getLocalAddress();
+
+	if (localAddress.is_unspecified())
+		throw std::runtime_error("Could not find local IP address");
+	
+	if (settings.network.isClient)
 		runClient();
-	else if (settings.network.server)
+	else if (settings.network.isServer)
 		runServer();
 
 	return 0;
@@ -44,16 +53,15 @@ void NetworkRunner::interrupt()
 
 void NetworkRunner::runClient()
 {
-	Log& log = App::getLog();
-
-	log.logInfo("Client is now waiting for server broadcasts");
-
 	auto receiveBroadcastsFunction = [&]()
 	{
 		receiveBroadcasts();
 	};
 
 	std::thread receiveBroadcastsThread(receiveBroadcastsFunction);
+
+	std::cout << "\nClient is now waiting for servers\n";
+	std::cout << "Press CTRL+C to cancel the wait and quit.\nPress Enter to finish the wait and continue.\n\n";
 
 	std::cin.get();
 	receiveBroadcastsInterrupted = true;
@@ -65,7 +73,7 @@ void NetworkRunner::runClient()
 
 void NetworkRunner::runServer()
 {
-	Log& log = App::getLog();
+	Settings& settings = App::getSettings();
 
 	auto sendBroadcastsFunction = [&]()
 	{
@@ -74,8 +82,10 @@ void NetworkRunner::runServer()
 
 	std::thread sendBroadcastsThread(sendBroadcastsFunction);
 
-	log.logInfo("Server is now broadcasting and waiting for clients");
-
+	std::cout << tfm::format("\nServer is announcing its presence (UDP port %d)\n", (int)settings.network.broadcastPort);
+	std::cout << tfm::format("Server is listening for jobs on %s:%d\n", localAddress.to_string(), settings.network.localPort);
+	std::cout << "\nPress CTRL+C to close the server.\n\n";
+	
 	while (!interrupted)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -91,26 +101,22 @@ void NetworkRunner::sendBroadcasts()
 		Settings& settings = App::getSettings();
 
 		io_service io;
-		//ip::udp::socket socket(io, ip::udp::v4());
-		ip::udp::socket socket(io, ip::udp::endpoint(ip::address_v4::from_string("192.168.1.2"), (unsigned short)settings.network.broadcastPort));
-		
+		boost::system::error_code error;
+		ip::udp::socket socket(io, ip::udp::v4());
+
 		socket.set_option(ip::udp::socket::reuse_address(true));
 		socket.set_option(socket_base::broadcast(true));
 
 		std::vector<ip::udp::endpoint> endpoints;
-
 		endpoints.push_back(ip::udp::endpoint(ip::address_v4::broadcast(), (unsigned short)settings.network.broadcastPort));
 
-		boost::system::error_code error;
-		ip::address_v4 ipAddress = ip::address_v4::from_string(settings.network.subnetBroadcast, error);
+		ip::address_v4 broadcastAddress = ip::address_v4::from_string(settings.network.broadcastAddress, error);
 
-		if (!error)
-			endpoints.push_back(ip::udp::endpoint(ipAddress, (unsigned short)settings.network.broadcastPort));
+		if (!error && broadcastAddress != ip::address_v4::broadcast())
+			endpoints.push_back(ip::udp::endpoint(broadcastAddress, (unsigned short)settings.network.broadcastPort));
 		
-		std::string message = "Raycer 1.0.0";
+		std::string message = tfm::format("Raycer Server 1.0.0\nAddress: %s\nPort: %d\n", localAddress.to_string(), settings.network.localPort);
 		int counter = 0;
-
-		std::cout << "\nPress CTRL+C to close the server.\n\n";
 
 		while (!interrupted)
 		{
@@ -140,32 +146,54 @@ void NetworkRunner::receiveBroadcasts()
 		Settings& settings = App::getSettings();
 
 		io_service io;
-		//ip::udp::socket socket(io, ip::udp::endpoint(ip::udp::v4(), settings.network.broadcastPort));
-		ip::udp::socket socket(io, ip::udp::endpoint(ip::address_v4::from_string("192.168.1.3"), (unsigned short)settings.network.broadcastPort));
+		ip::udp::socket socket(io, ip::udp::v4());
 
+		socket.bind(ip::udp::endpoint(ip::udp::v4(), (unsigned short)settings.network.broadcastPort));
 		socket.set_option(ip::udp::socket::reuse_address(true));
 		socket.set_option(socket_base::broadcast(true));
 
 		serverEndpoints.clear();
 
-		std::cout << "\nPress CTRL+C to cancel the wait and quit.\nPress Enter to finish the wait and continue.\n\n";
+		std::regex addressRegex("^Address: (.+)$");
+		std::regex portRegex("^Port: (.+)$");
 
 		while (!interrupted && !receiveBroadcastsInterrupted)
 		{
 			boost::array<char, 128> buffer;
-			ip::udp::endpoint serverEndpoint;
-			size_t length = socket.receive_from(boost::asio::buffer(buffer), serverEndpoint);
+			ip::udp::endpoint ignoredEndpoint;
+			size_t length = socket.receive_from(boost::asio::buffer(buffer), ignoredEndpoint);
 
 			if (length > 0)
 			{
 				std::string message(buffer.data(), length);
+				std::istringstream ss(message);
+				std::string line, addressString;
+				std::getline(ss, line);
 
-				if (message == "Raycer 1.0.0")
+				if (line == "Raycer Server 1.0.0")
 				{
-					if (std::find(serverEndpoints.begin(), serverEndpoints.end(), serverEndpoint) == serverEndpoints.end())
+					std::smatch match;
+					std::getline(ss, line);
+
+					if (std::regex_match(line, match, addressRegex))
 					{
-						serverEndpoints.push_back(serverEndpoint);
-						std::cout << tfm::format("Server found (%d): %s\n", serverEndpoints.size(), serverEndpoint);
+						addressString = match[1];
+						std::getline(ss, line);
+
+						if (std::regex_match(line, match, portRegex))
+						{
+							std::istringstream portString(match[1]);
+							int port;
+							portString >> port;
+
+							ip::tcp::endpoint serverEndpoint(ip::address_v4::from_string(addressString), (unsigned short)port);
+
+							if (std::find(serverEndpoints.begin(), serverEndpoints.end(), serverEndpoint) == serverEndpoints.end())
+							{
+								serverEndpoints.push_back(serverEndpoint);
+								std::cout << tfm::format("Server found (%d): %s\n", serverEndpoints.size(), serverEndpoint);
+							}
+						}
 					}
 				}
 			}
@@ -174,10 +202,53 @@ void NetworkRunner::receiveBroadcasts()
 		}
 
 		socket.close();
-		std::cout << std::endl;
 	}
 	catch (const std::exception& ex)
 	{
 		App::getLog().logError("Could not receive broadcast messages: %s", ex.what());
 	}
+}
+
+void NetworkRunner::receiveJobs()
+{
+	try
+	{
+		//Settings& settings = App::getSettings();
+
+		//io_service io;
+		//ip::tcp::socket socket(io, ip::tcp::v4());
+		//socket.bind(ip::tcp::endpoint(localAddress, (unsigned short)settings.network.localPort));
+
+	}
+	catch (const std::exception& ex)
+	{
+		App::getLog().logError("Could not receive jobs: %s", ex.what());
+	}
+}
+
+void NetworkRunner::sendJob()
+{
+
+}
+
+ip::address_v4 NetworkRunner::getLocalAddress()
+{
+	io_service io;
+	boost::system::error_code error;
+
+	ip::tcp::resolver resolver(io);
+	ip::tcp::resolver::query query(boost::asio::ip::host_name(), "");
+	ip::tcp::resolver::iterator it = resolver.resolve(query);
+	ip::tcp::resolver::iterator end;
+
+	while (it != end)
+	{
+		ip::address ipAddress = it->endpoint().address();
+		++it;
+
+		if (ipAddress.is_v4())
+			return ipAddress.to_v4();
+	}
+
+	return ip::address_v4();
 }
