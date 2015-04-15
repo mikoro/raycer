@@ -125,6 +125,7 @@ void Image::setSize(int width_, int height_)
 {
 	width = width_;
 	height = height_;
+	length = width * height;
 
 	if (pixelData != nullptr)
 	{
@@ -198,6 +199,11 @@ int Image::getWidth() const
 int Image::getHeight() const
 {
 	return height;
+}
+
+int Image::getLength() const
+{
+	return length;
 }
 
 Color Image::getPixel(int x, int y) const

@@ -24,8 +24,8 @@ namespace Raycer
 		Scene scene;
 		Image image;
 
-		int width;
-		int height;
+		int sceneWidth;
+		int sceneHeight;
 		int pixelOffset;
 		int pixelCount;
 	};

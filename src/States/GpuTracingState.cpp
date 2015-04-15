@@ -53,8 +53,8 @@ void GpuTracingState::render(double timeStep, double interpolation)
 	info.scene = &scene;
 	info.sceneWidth = framebuffer.getWidth();
 	info.sceneHeight = framebuffer.getHeight();
-	info.pixelStartOffset = 0;
-	info.pixelTotalCount = info.sceneWidth * info.sceneHeight;
+	info.pixelOffset = 0;
+	info.pixelCount = info.sceneWidth * info.sceneHeight;
 	info.pixelsProcessed = 0;
 	info.raysProcessed = 0;
 

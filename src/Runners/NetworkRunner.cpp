@@ -8,6 +8,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
+#include <algorithm>
+
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
 
@@ -65,7 +68,7 @@ void NetworkRunner::runClient()
 	std::thread receiveBroadcastsThread(receiveBroadcastsFunction);
 
 	std::cout << "\nClient is now waiting for servers\n\n";
-	std::cout << "Press CTRL+C to cancel the wait and quit.\nPress Enter to finish the wait and continue.\n\n";
+	std::cout << "Press CTRL+C to cancel the wait and quit\nPress Enter to finish the wait and continue\n\n";
 
 	std::cin.get();
 	receiveBroadcastsInterrupted = true;
@@ -74,10 +77,10 @@ void NetworkRunner::runClient()
 	if (interrupted || serverEndpoints.size() == 0)
 		return;
 
-	std::cout << "Sending the job to servers\n\n";
+	std::cout << "Sending a job to servers...\n\n";
 	sendJobs();
 
-	std::cout << "Waiting for results\n\n";
+	std::cout << "Waiting for results...\n\n";
 	receiveResults();
 }
 
@@ -106,7 +109,7 @@ void NetworkRunner::runServer()
 
 	std::cout << tfm::format("\nServer is announcing its presence (UDP port %d)\n", (int)settings.network.broadcastPort);
 	std::cout << tfm::format("Server is listening for jobs on %s:%d\n", localAddress.to_string(), settings.network.localPort);
-	std::cout << "\nPress CTRL+C to close the server.\n\n";
+	std::cout << "\nPress CTRL+C to close the server\n";
 
 	while (!interrupted)
 	{
@@ -335,11 +338,11 @@ void NetworkRunner::receiveJobs()
 
 			ss.clear();
 			ss.str(match[3]);
-			ss >> job.width;
+			ss >> job.sceneWidth;
 
 			ss.clear();
 			ss.str(match[4]);
-			ss >> job.height;
+			ss >> job.sceneHeight;
 
 			ss.clear();
 			ss.str(match[5]);
@@ -348,6 +351,8 @@ void NetworkRunner::receiveJobs()
 			ss.clear();
 			ss.str(match[6]);
 			ss >> job.pixelCount;
+
+			std::cout << "\nJob received!\n\n";
 
 			job.scene.loadFromString(bodyString);
 
@@ -412,17 +417,43 @@ void NetworkRunner::handleJobs()
 			RaytraceInfo info;
 			info.renderTarget = &job.image;
 			info.scene = &job.scene;
-			info.sceneWidth = job.width;
-			info.sceneHeight = job.height;
-			info.pixelStartOffset = job.pixelOffset;
-			info.pixelTotalCount = job.pixelCount;
+			info.sceneWidth = job.sceneWidth;
+			info.sceneHeight = job.sceneHeight;
+			info.pixelOffset = job.pixelOffset;
+			info.pixelCount = job.pixelCount;
 
 			job.scene.initialize();
 			job.scene.camera.setImagePlaneSize(info.sceneWidth, info.sceneHeight);
 			job.scene.camera.calculateVariables();
-			job.image.setSize(info.sceneWidth, info.sceneHeight);
+			job.image.setSize(info.pixelCount);
 
 			App::getConsoleRunner().run(info);
+
+			std::cout << "Sending results back...\n\n";
+
+			io_service io;
+			std::string message = tfm::format("Raycer 1.0.0\nPixelOffset: %d\nPixelCount: %d\n\n", job.pixelOffset, job.pixelCount);
+
+			for (int i = 0; i < 60 && !interrupted; ++i)
+			{
+				try
+				{
+					ip::tcp::socket socket(io);
+					socket.connect(job.clientEndpoint);
+					boost::asio::write(socket, boost::asio::buffer(message));
+					boost::asio::write(socket, boost::asio::buffer(job.image.getPixelData(), job.image.getLength() * 4));
+					socket.close();
+
+					break;
+				}
+				catch (const std::exception& ex)
+				{
+					std::cout << tfm::format("Sending results failed: %s. Retrying in one second...\n\n", ex.what());
+					std::this_thread::sleep_for(std::chrono::seconds(1));
+				}
+			}
+
+			std::cout << "Finished! Waiting for more jobs...\n\n";
 		}
 	}
 	catch (const std::exception& ex)
@@ -431,15 +462,139 @@ void NetworkRunner::handleJobs()
 	}
 }
 
+namespace
+{
+	struct ImagePart
+	{
+		int pixelOffset = 0;
+		int pixelCount = 0;
+		char* pixelData = nullptr;
+	};
+}
+
 void NetworkRunner::receiveResults()
 {
-	// 	try
-	// 	{
-	// 	}
-	// 	catch (const std::exception& ex)
-	// 	{
-	// 		App::getLog().logError("Could not handle results: %s", ex.what());
-	// 	}
+	Settings& settings = App::getSettings();
+
+	int imagePartCount = (int)serverEndpoints.size();
+	std::vector<ImagePart> imageParts;
+	Image resultImage;
+
+	try
+	{
+		resultImage.setSize(settings.image.width, settings.image.height);
+
+		io_service io;
+		ip::tcp::socket socket(io);
+		ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(localAddress, (unsigned short)settings.network.localPort));
+		deadline_timer timer(io, boost::posix_time::milliseconds(100));
+		bool timerHasRun = false;
+
+		auto acceptHandler = [&](const boost::system::error_code& error)
+		{
+			if (error)
+				return;
+
+			streambuf receiveBuffer;
+			boost::system::error_code readError;
+
+			while (!readError)
+			{
+				size_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(1024*1024)), readError);
+				receiveBuffer.commit(bytes);
+			}
+
+			std::ostream os(&receiveBuffer);
+			os << '\0';
+
+			streambuf::const_buffers_type receiveBufferConst = receiveBuffer.data();
+			const char* receiveBufferPtr = boost::asio::buffer_cast<const char*>(receiveBufferConst);
+			const char* headerEndPtr = strstr(receiveBufferPtr, "\n\n");
+			const char* dataStartPtr = headerEndPtr + 2;
+
+			if (headerEndPtr == nullptr)
+				return;
+
+			int headerSize = (int)(headerEndPtr - receiveBufferPtr);
+			int dataSize = (int)receiveBuffer.size() - headerSize - 2 - 1;
+
+			std::string headerString(buffers_begin(receiveBufferConst), buffers_begin(receiveBufferConst) + headerSize);
+			std::smatch match;
+			std::istringstream ss;
+
+			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nPixelOffset: (.+)\nPixelCount: (.+)$")))
+				return;
+
+			int pixelOffset, pixelCount;
+			ss.str(match[1]);
+			ss >> pixelOffset;
+			ss.clear();
+			ss.str(match[2]);
+			ss >> pixelCount;
+
+			assert(dataSize == pixelCount * 4);
+
+			ImagePart imagePart;
+			imagePart.pixelOffset = pixelOffset;
+			imagePart.pixelCount = pixelCount;
+			imagePart.pixelData = new char[dataSize];
+
+			memcpy(imagePart.pixelData, dataStartPtr, dataSize);
+			imageParts.push_back(imagePart);
+
+			std::cout << tfm::format("Image part %d of %d received!\n", imageParts.size(), imagePartCount);
+		};
+
+		auto timerHandler = [&](const boost::system::error_code& error)
+		{
+			(void)error;
+			timerHasRun = true;
+		};
+
+		timer.async_wait(timerHandler);
+		acceptor.async_accept(socket, acceptHandler);
+
+		while (!interrupted && imageParts.size() < imagePartCount)
+		{
+			io.run_one();
+
+			if (timerHasRun)
+			{
+				timerHasRun = false;
+				timer.async_wait(timerHandler);
+			}
+			else
+			{
+				socket.close();
+				acceptor.async_accept(socket, acceptHandler);
+			}
+		}
+
+		std::cout << std::endl;
+
+		acceptor.close();
+		socket.close();
+
+		if (interrupted)
+			return;
+
+		for (ImagePart& part : imageParts)
+			memcpy((char*)resultImage.getPixelData() + part.pixelOffset * 4, part.pixelData, part.pixelCount * 4);
+
+		resultImage.swapBytes();
+		resultImage.flip();
+		resultImage.saveAs(settings.image.fileName);
+	}
+	catch (const std::exception& ex)
+	{
+		App::getLog().logError("Could not receive results: %s", ex.what());
+	}
+
+	for (ImagePart& part : imageParts)
+	{
+		if (part.pixelData != nullptr)
+			delete[] part.pixelData;
+	}
 }
 
 ip::address_v4 NetworkRunner::getLocalAddress()

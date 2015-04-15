@@ -25,12 +25,12 @@ void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 	Scene& scene = *info.scene;
 
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int pixelIndex = 0; pixelIndex < info.pixelTotalCount; ++pixelIndex)
+	for (int pixelIndex = 0; pixelIndex < info.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)
 			continue;
 
-		int pixelOffsetIndex = pixelIndex + info.pixelStartOffset;
+		int pixelOffsetIndex = pixelIndex + info.pixelOffset;
 		int x = pixelOffsetIndex % info.sceneWidth;
 		int y = pixelOffsetIndex / info.sceneWidth;
 

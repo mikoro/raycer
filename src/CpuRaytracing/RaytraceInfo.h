@@ -17,8 +17,8 @@ namespace Raycer
 
 		int sceneWidth = 0;
 		int sceneHeight = 0;
-		int pixelStartOffset = 0;
-		int pixelTotalCount = 0;
+		int pixelOffset = 0;
+		int pixelCount = 0;
 
 		std::atomic<int> pixelsProcessed;
 		std::atomic<int> raysProcessed;

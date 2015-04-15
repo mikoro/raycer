@@ -37,6 +37,7 @@ namespace Raycer
 
 		int getWidth() const;
 		int getHeight() const;
+		int getLength() const;
 		Color getPixel(int x, int y) const;
 		Color getPixel(double s, double t) const;
 		uint32_t* getPixelData() const;
@@ -47,5 +48,6 @@ namespace Raycer
 
 		int width = 0;
 		int height = 0;
+		int length = 0;
 	};
 }

@@ -42,8 +42,8 @@ int ConsoleRunner::run()
 	info.scene = &scene;
 	info.sceneWidth = settings.image.width;
 	info.sceneHeight = settings.image.height;
-	info.pixelStartOffset = 0;
-	info.pixelTotalCount = info.sceneWidth * info.sceneHeight;
+	info.pixelOffset = 0;
+	info.pixelCount = info.sceneWidth * info.sceneHeight;
 
 	resultImage.setSize(info.sceneWidth, info.sceneHeight);
 
@@ -67,7 +67,6 @@ int ConsoleRunner::run()
 
 void ConsoleRunner::run(RaytraceInfo& info)
 {
-	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	OpenCL& openCL = App::getOpenCL();
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
@@ -98,20 +97,19 @@ void ConsoleRunner::run(RaytraceInfo& info)
 		finished = true;
 	};
 
-	log.logInfo("Start raytracing (size: %dx%d, pixels: %d, offset: %d)", info.sceneWidth, info.sceneHeight, info.pixelTotalCount, info.pixelStartOffset);
-	printf("\n");
+	std::cout << tfm::format("\nStart raytracing (size: %dx%d, offset: %d, pixels: %d)\n\n", info.sceneWidth, info.sceneHeight, info.pixelOffset, info.pixelCount);
 
 	auto startTime = system_clock::now();
 	std::thread renderThread(renderFunction);
 
 	while (!finished)
 	{
-		printProgress(startTime, info.pixelTotalCount, info.pixelsProcessed, info.raysProcessed);
+		printProgress(startTime, info.pixelCount, info.pixelsProcessed, info.raysProcessed);
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	renderThread.join();
-	printProgress(startTime, info.pixelTotalCount, info.pixelsProcessed, info.raysProcessed);
+	printProgress(startTime, info.pixelCount, info.pixelsProcessed, info.raysProcessed);
 
 	auto elapsedTime = system_clock::now() - startTime;
 	int hours = (int)duration_cast<std::chrono::hours>(elapsedTime).count();
@@ -121,8 +119,7 @@ void ConsoleRunner::run(RaytraceInfo& info)
 	milliseconds = milliseconds - seconds * 1000;
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
 
-	printf("\n\n");
-	log.logInfo("Raytracing %s (time: %s, rays: %d)", interrupted ? "interrupted" : "finished", timeString, info.raysProcessed.load());
+	std::cout << tfm::format("\n\nRaytracing %s (time: %s, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, info.raysProcessed.load());
 
 	//if (settings.openCL.enabled)
 		//resultImage = openCL.getBufferAsImage();
