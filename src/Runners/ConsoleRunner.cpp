@@ -32,7 +32,7 @@ int ConsoleRunner::run()
 	interrupted = false;
 
 	Scene scene;
-	scene.load(settings.scene.fileName);
+	scene.loadFromFile(settings.scene.fileName);
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.calculateVariables();

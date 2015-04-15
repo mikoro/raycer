@@ -15,7 +15,7 @@ void GpuTracingState::initialize()
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
 
-	scene.load("data/scenes/test_scene.json");
+	scene.loadFromFile("data/scenes/test_scene.json");
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 	scene.camera.calculateVariables();

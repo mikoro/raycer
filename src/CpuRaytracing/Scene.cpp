@@ -12,7 +12,16 @@
 
 using namespace Raycer;
 
-void Scene::load(const std::string& fileName)
+void Scene::loadFromString(const std::string& text)
+{
+	App::getLog().logInfo("Loading scene from string data");
+
+	std::stringstream ss(text);
+	cereal::JSONInputArchive archive(ss);
+	archive(*this);
+}
+
+void Scene::loadFromFile(const std::string& fileName)
 {
 	App::getLog().logInfo("Loading scene from %s", fileName);
 

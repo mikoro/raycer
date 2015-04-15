@@ -123,13 +123,17 @@ void Image::setSize(int length)
 
 void Image::setSize(int width_, int height_)
 {
-	assert(width_ > 0 && height_ > 0);
-
 	width = width_;
 	height = height_;
 
 	if (pixelData != nullptr)
+	{
 		_mm_free(pixelData);
+		pixelData = nullptr;
+	}
+
+	if (width == 0 || height == 0)
+		return;
 
 	pixelData = (uint32_t*)_mm_malloc(width * height * sizeof(uint32_t), 64);
 

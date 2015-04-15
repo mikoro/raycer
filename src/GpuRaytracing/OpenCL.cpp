@@ -187,6 +187,7 @@ void OpenCL::loadKernels()
 	ss << file.rdbuf();
 	std::string fileString = ss.str();
 	const char* fileStringPtr = fileString.c_str();
+	file.close();
 
 	cl_int status = 0;
 	size_t length = 0;

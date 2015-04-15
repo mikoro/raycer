@@ -19,7 +19,8 @@ namespace Raycer
 	{
 	public:
 
-		void load(const std::string& fileName);
+		void loadFromString(const std::string& text);
+		void loadFromFile(const std::string& fileName);
 		void saveAs(const std::string& fileName) const;
 		void initialize();
 
