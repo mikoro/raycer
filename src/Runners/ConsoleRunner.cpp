@@ -51,6 +51,8 @@ int ConsoleRunner::run()
 
 	if (!interrupted)
 	{
+		resultImage.flip();
+		resultImage.swapBytes();
 		resultImage.saveAs(settings.image.fileName);
 
 		if (settings.image.autoView)
@@ -121,8 +123,11 @@ void ConsoleRunner::run(RaytraceInfo& info)
 
 	std::cout << tfm::format("\n\nRaytracing %s (time: %s, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, info.raysProcessed.load());
 
-	//if (settings.openCL.enabled)
-		//resultImage = openCL.getBufferAsImage();
+	if (settings.openCL.enabled)
+	{
+		openCL.readBufferImage();
+		resultImage = openCL.getBufferImage();
+	}
 }
 
 void ConsoleRunner::interrupt()

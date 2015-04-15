@@ -5,6 +5,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <memory>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -27,6 +28,7 @@
 #include "Utils/Settings.h"
 #include "Utils/Errors.h"
 #include "Rendering/Framebuffer.h"
+#include "Math/Color.h"
 
 using namespace Raycer;
 
@@ -87,7 +89,7 @@ void OpenCL::initialize()
 	log.logInfo("Initializing OpenCL");
 
 	cl_uint platformCount = 0;
-	checkClError(clGetPlatformIDs(0, NULL, &platformCount), "Could not get OpenCL platform count");
+	checkCLError(clGetPlatformIDs(0, NULL, &platformCount), "Could not get OpenCL platform count");
 
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
@@ -96,7 +98,7 @@ void OpenCL::initialize()
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	cl_platform_id* platformIds = new cl_platform_id[platformCount];
-	checkClError(clGetPlatformIDs(platformCount, platformIds, NULL), "Could not get OpenCL platforms");
+	checkCLError(clGetPlatformIDs(platformCount, platformIds, NULL), "Could not get OpenCL platforms");
 	platformId = platformIds[settings.openCL.platformId];
 	delete[] platformIds;
 
@@ -113,7 +115,7 @@ void OpenCL::initialize()
 	log.logInfo("OpenCL version: %s", &platformVersion[0]);
 
 	cl_uint deviceCount = 0;
-	checkClError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, NULL, &deviceCount), "Could not get OpenCL device count");
+	checkCLError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, NULL, &deviceCount), "Could not get OpenCL device count");
 
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any OpenCL devices");
@@ -122,7 +124,7 @@ void OpenCL::initialize()
 		throw std::runtime_error("Invalid OpenCL device id");
 
 	cl_device_id* deviceIds = new cl_device_id[deviceCount];
-	checkClError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, deviceIds, NULL), "Could not get OpenCL devices");
+	checkCLError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, deviceIds, NULL), "Could not get OpenCL devices");
 	deviceId = deviceIds[settings.openCL.deviceId];
 	delete[] deviceIds;
 
@@ -163,16 +165,16 @@ void OpenCL::initialize()
 		};
 
 		context = clCreateContext(properties, 1, &deviceId, openCLErrorCallback, NULL, &status);
-		checkClError(status, "Could not create OpenCL interop device context");
+		checkCLError(status, "Could not create OpenCL interop device context");
 	}
 	else
 	{
 		context = clCreateContext(NULL, 1, &deviceId, openCLErrorCallback, NULL, &status);
-		checkClError(status, "Could not create OpenCL device context");
+		checkCLError(status, "Could not create OpenCL device context");
 	}
 
 	commandQueue = clCreateCommandQueue(context, deviceId, 0, &status);
-	checkClError(status, "Could not create OpenCL command queue");
+	checkCLError(status, "Could not create OpenCL command queue");
 }
 
 void OpenCL::loadKernels()
@@ -193,7 +195,7 @@ void OpenCL::loadKernels()
 	size_t length = 0;
 
 	program = clCreateProgramWithSource(context, 1, &fileStringPtr, NULL, &status);
-	checkClError(status, "Could not read OpenCL program source file");
+	checkCLError(status, "Could not read OpenCL program source file");
 
 	status = clBuildProgram(program, 1, &deviceId, settings.openCL.options.c_str(), NULL, NULL);
 
@@ -205,7 +207,7 @@ void OpenCL::loadKernels()
 		log.logInfo("OpenCL build error:\n\n%s", &buildLog[0]);
 	}
 
-	checkClError(status, "Could not build OpenCL program");
+	checkCLError(status, "Could not build OpenCL program");
 
 #if 1 && defined(_DEBUG)
 	log.logInfo("Writing OpenCL binary to raytrace.bin");
@@ -225,23 +227,26 @@ void OpenCL::loadKernels()
 #endif
 
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);
-	checkClError(status, "Could not create OpenCL kernel");
+	checkCLError(status, "Could not create OpenCL kernel");
 }
 
 void OpenCL::releaseMemoryObjects()
 {
 	if (pixels != nullptr)
 	{
-		checkClError(clReleaseMemObject(pixels), "Could not release OpenCL memory object");
+		checkCLError(clReleaseMemObject(pixels), "Could not release OpenCL memory object");
 		pixels = nullptr;
 	}
 }
 
-void OpenCL::resizeBuffers(int width, int height)
+void OpenCL::resizeBuffers(int width_, int height_)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+
+	width = width_;
+	height = height_;
 
 	log.logInfo("Resizing OpenCL buffers");
 	releaseMemoryObjects();
@@ -250,7 +255,7 @@ void OpenCL::resizeBuffers(int width, int height)
 	if (settings.general.interactive)
 	{
 		pixels = clCreateFromGLTexture2D(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getGpuTextureId(), &status);
-		checkClError(status, "Could not create OpenCL image from OpenGL texture");
+		checkCLError(status, "Could not create OpenCL image from OpenGL texture");
 	}
 	else
 	{
@@ -259,13 +264,32 @@ void OpenCL::resizeBuffers(int width, int height)
 		imageFormat.image_channel_order = CL_RGBA;
 
 		pixels = clCreateImage2D(context, CL_MEM_WRITE_ONLY, &imageFormat, width, height, 0, NULL, &status);
-		checkClError(status, "Could not create OpenCL image");
+		checkCLError(status, "Could not create OpenCL image");
 	}
 }
 
 void OpenCL::readBufferImage()
 {
+	size_t origin[3] = { 0, 0, 0 };
+	size_t region[3] = { width, height, 1 };
 
+	std::vector<float> pixelData(width * height * 4);
+
+	cl_int status = clEnqueueReadImage(commandQueue, pixels, CL_TRUE, &origin[0], &region[0], 0, 0, &pixelData[0], 0, NULL, NULL);
+	checkCLError(status, "Could not read OpenCL image buffer");
+
+	bufferImage.setSize(width, height);
+	int length = width * height * 4;
+
+	for (int i = 0; i < length; i += 4)
+	{
+		float r = pixelData[i];
+		float g = pixelData[i + 1];
+		float b = pixelData[i + 2];
+		float a = pixelData[i + 3];
+
+		bufferImage.setPixel(i / 4, Color(r, g, b, a));
+	}
 }
 
 Image& OpenCL::getBufferImage()

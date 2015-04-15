@@ -7,8 +7,8 @@
 
 namespace Raycer
 {
-	void checkClError(int result, const std::string& message);
-	void checkGlError(const std::string& message);
-	std::string getClErrorMessage(int result);
-	std::string getGlErrorMessage(int result);
+	void checkCLError(int result, const std::string& message);
+	void checkGLError(const std::string& message);
+	std::string getCLErrorMessage(int result);
+	std::string getGLErrorMessage(int result);
 }

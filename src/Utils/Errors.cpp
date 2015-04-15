@@ -12,21 +12,21 @@
 
 #include "Utils/Errors.h"
 
-void Raycer::checkClError(int result, const std::string& message)
+void Raycer::checkCLError(int result, const std::string& message)
 {
 	if (result != CL_SUCCESS)
-		throw std::runtime_error(tfm::format("%s: %s", message, getClErrorMessage(result)));
+		throw std::runtime_error(tfm::format("%s: %s", message, getCLErrorMessage(result)));
 }
 
-void Raycer::checkGlError(const std::string& message)
+void Raycer::checkGLError(const std::string& message)
 {
 	int result = glGetError();
 
 	if (result != GL_NO_ERROR)
-		throw std::runtime_error(tfm::format("%s: %s", message, getGlErrorMessage(result)));
+		throw std::runtime_error(tfm::format("%s: %s", message, getGLErrorMessage(result)));
 }
 
-std::string Raycer::getClErrorMessage(int result)
+std::string Raycer::getCLErrorMessage(int result)
 {
 	switch (result)
 	{
@@ -99,7 +99,7 @@ std::string Raycer::getClErrorMessage(int result)
 	}
 }
 
-std::string Raycer::getGlErrorMessage(int result)
+std::string Raycer::getGLErrorMessage(int result)
 {
 	switch (result)
 	{

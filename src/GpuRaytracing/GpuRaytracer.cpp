@@ -28,18 +28,18 @@ void GpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 	if (settings.general.interactive)
 	{
 		glFinish();
-		checkClError(clEnqueueAcquireGLObjects(openCL.commandQueue, 1, &openCL.pixels, 0, NULL, NULL), "Could not enqueue OpenCL GL object acquire");
+		checkCLError(clEnqueueAcquireGLObjects(openCL.commandQueue, 1, &openCL.pixels, 0, NULL, NULL), "Could not enqueue OpenCL GL object acquire");
 	}
 
-	checkClError(clSetKernelArg(openCL.raytraceKernel, 0, sizeof(cl_mem), &openCL.pixels), "Could not set OpenCL kernel argument");
+	checkCLError(clSetKernelArg(openCL.raytraceKernel, 0, sizeof(cl_mem), &openCL.pixels), "Could not set OpenCL kernel argument");
 
 	const size_t globalSizes[] = { (size_t)info.sceneWidth, (size_t)info.sceneHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
-	checkClError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
+	checkCLError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
 
 	if (settings.general.interactive)
-		checkClError(clEnqueueReleaseGLObjects(openCL.commandQueue, 1, &openCL.pixels, 0, NULL, NULL), "Could not enqueue OpenCL GL object release");
+		checkCLError(clEnqueueReleaseGLObjects(openCL.commandQueue, 1, &openCL.pixels, 0, NULL, NULL), "Could not enqueue OpenCL GL object release");
 
-	checkClError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
+	checkCLError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
 }

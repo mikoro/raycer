@@ -142,5 +142,5 @@ void Text::render()
 	glUseProgram(0);
 	glDisable(GL_BLEND);
 	
-	checkGlError("Could not render text");
+	checkGLError("Could not render text");
 }
