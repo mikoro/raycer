@@ -21,9 +21,9 @@ Image::Image()
 {
 }
 
-Image::Image(int length)
+Image::Image(int length_)
 {
-	setSize(length);
+	setSize(length_);
 }
 
 Image::Image(int width_, int height_)
@@ -116,9 +116,9 @@ void Image::saveAs(const std::string& fileName) const
 		throw std::runtime_error("Could not save the image");
 }
 
-void Image::setSize(int length)
+void Image::setSize(int length_)
 {
-	setSize(length, 1);
+	setSize(length_, 1);
 }
 
 void Image::setSize(int width_, int height_)

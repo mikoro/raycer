@@ -42,17 +42,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost_1_57_0;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost\boost_1_57_0-msvc;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;C:\boost_1_57_0\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;C:\boost\boost_1_57_0-msvc\stage\lib;C:\boost\boost_1_57_0-intel\stage\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost_1_57_0;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost\boost_1_57_0-msvc;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;C:\boost_1_57_0\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;C:\boost\boost_1_57_0-msvc\stage\lib;C:\boost\boost_1_57_0-intel\stage\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -178,7 +178,15 @@
     <ResourceCompile Include="platform\windows\raycer.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="src\GpuRaytracing\raytrace.cl">
+    <None Include="data\shaders\framebuffer.frag" />
+    <None Include="data\shaders\framebuffer.vert" />
+    <None Include="data\shaders\framebuffer_bicubic.frag" />
+    <None Include="data\shaders\framebuffer_bicubic.vert" />
+    <None Include="data\shaders\text.frag" />
+    <None Include="data\shaders\text.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\kernels\raytrace.cl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

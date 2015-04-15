@@ -12,6 +12,8 @@
 #include "Rendering/Framebuffer.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
+#include "App.h"
+#include "Utils/Settings.h"
 
 using namespace Raycer;
 
@@ -22,6 +24,7 @@ namespace
 
 void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 {
+	Settings& settings = App::getSettings();
 	Scene& scene = *info.scene;
 
 	#pragma omp parallel for schedule(dynamic, 4096)
@@ -47,7 +50,9 @@ void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 		}
 
 		info.renderTarget->setPixel(pixelIndex, finalColor.clamped());
-		++info.pixelsProcessed;
+
+		if (!settings.general.interactive)
+			++info.pixelsProcessed;
 	}
 }
 
@@ -56,7 +61,10 @@ void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& int
 	if (interrupted)
 		return;
 
-	++raysProcessed;
+	Settings& settings = App::getSettings();
+
+	if (!settings.general.interactive)
+		++raysProcessed;
 
 	for (size_t p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
