@@ -7,18 +7,18 @@
 #include <GL/glew.h>
 
 #include "GpuRaytracing/GpuRaytracer.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 #include "App.h"
 #include "Utils/Settings.h"
 #include "Utils/Errors.h"
 #include "GpuRaytracing/OpenCL.h"
 #include "Rendering/Framebuffer.h"
 #include "CpuRaytracing/Scene.h"
-#include "CpuRaytracing/RaytraceInfo.h"
 #include "Rendering/Image.h"
 
 using namespace Raycer;
 
-void GpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
+void GpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted)
 {
 	(void)interrupted;
 	
@@ -33,7 +33,7 @@ void GpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 
 	checkCLError(clSetKernelArg(openCL.raytraceKernel, 0, sizeof(cl_mem), &openCL.pixels), "Could not set OpenCL kernel argument");
 
-	const size_t globalSizes[] = { (size_t)info.sceneWidth, (size_t)info.sceneHeight };
+	const size_t globalSizes[] = { (size_t)config.sceneWidth, (size_t)config.sceneHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
 	checkCLError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");

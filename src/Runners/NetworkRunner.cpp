@@ -24,7 +24,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "CpuRaytracing/RaytraceInfo.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 #include "Runners/ConsoleRunner.h"
 
 using namespace Raycer;
@@ -414,20 +414,21 @@ void NetworkRunner::handleJobs()
 			jobQueue.pop();
 			jobQueueMutex.unlock();
 
-			RaytraceInfo info;
-			info.renderTarget = &job.image;
-			info.scene = &job.scene;
-			info.sceneWidth = job.sceneWidth;
-			info.sceneHeight = job.sceneHeight;
-			info.pixelOffset = job.pixelOffset;
-			info.pixelCount = job.pixelCount;
+			CpuRaytracerConfig config;
+			config.renderTarget = &job.image;
+			config.scene = &job.scene;
+			config.sceneWidth = job.sceneWidth;
+			config.sceneHeight = job.sceneHeight;
+			config.pixelOffset = job.pixelOffset;
+			config.pixelCount = job.pixelCount;
+			config.isInteractive = false;
 
 			job.scene.initialize();
-			job.scene.camera.setImagePlaneSize(info.sceneWidth, info.sceneHeight);
+			job.scene.camera.setImagePlaneSize(config.sceneWidth, config.sceneHeight);
 			job.scene.camera.calculateVariables();
-			job.image.setSize(info.pixelCount);
+			job.image.setSize(config.pixelCount);
 
-			App::getConsoleRunner().run(info);
+			App::getConsoleRunner().run(config);
 
 			std::cout << "Sending results back...\n\n";
 

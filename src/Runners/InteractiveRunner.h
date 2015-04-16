@@ -40,6 +40,7 @@ namespace Raycer
 		int getWindowHeight() const;
 		const MouseInfo& getMouseInfo() const;
 		Text& getDefaultText();
+		double getElapsedTime() const;
 
 		bool keyIsDown(int key);
 		bool mouseIsDown(int button);
@@ -71,6 +72,7 @@ namespace Raycer
 		int windowHeight = 0;
 		int previousMouseX = 0;
 		int previousMouseY = 0;
+		double startTime = 0.0;
 		MouseInfo mouseInfo;
 		std::map<int, bool> keyStates;
 		std::map<RunnerStates, std::unique_ptr<InteractiveState>> runnerStates;

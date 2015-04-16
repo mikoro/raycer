@@ -7,18 +7,34 @@
 
 namespace Raycer
 {
-	struct RaytraceInfo;
-	struct Ray;
+	class RenderTarget;
 	class Scene;
+	struct Ray;
+
+	struct CpuRaytracerConfig
+	{
+		RenderTarget* renderTarget = nullptr;
+		Scene* scene = nullptr;
+
+		int sceneWidth = 0;
+		int sceneHeight = 0;
+		int pixelOffset = 0;
+		int pixelCount = 0;
+
+		bool isInteractive = false;
+
+		std::atomic<int> pixelsProcessed;
+		std::atomic<int> raysProcessed;
+	};
 
 	class CpuRaytracer
 	{
 	public:
 
-		void trace(RaytraceInfo& info, std::atomic<bool>& interrupted);
+		void trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted);
 
 	private:
 
-		void shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& raysProcessed);
+		void shootRay(CpuRaytracerConfig& config, Ray& ray, std::atomic<bool>& interrupted);
 	};
 }

@@ -235,9 +235,6 @@
     <ClInclude Include="src\Runners\NetworkRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\RaytraceInfo.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

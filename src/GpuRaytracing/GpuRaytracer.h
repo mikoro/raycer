@@ -7,12 +7,12 @@
 
 namespace Raycer
 {
-	struct RaytraceInfo;
+	struct CpuRaytracerConfig;
 
 	class GpuRaytracer
 	{
 	public:
 
-		void trace(RaytraceInfo& info, std::atomic<bool>& interrupted);
+		void trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted);
 	};
 }

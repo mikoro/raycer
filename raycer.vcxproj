@@ -145,7 +145,6 @@
     <ClInclude Include="src\CpuRaytracing\Primitive.h" />
     <ClInclude Include="src\CpuRaytracing\Ray.h" />
     <ClInclude Include="src\CpuRaytracing\CpuRaytracer.h" />
-    <ClInclude Include="src\CpuRaytracing\RaytraceInfo.h" />
     <ClInclude Include="src\CpuRaytracing\Scene.h" />
     <ClInclude Include="src\CpuRaytracing\Sphere.h" />
     <ClInclude Include="src\CpuRaytracing\Triangle.h" />

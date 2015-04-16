@@ -6,7 +6,7 @@
 #include <atomic>
 
 #include "States/InteractiveState.h"
-#include "CpuRaytracing/RaytraceInfo.h"
+#include "CpuRaytracing/CpuRaytracer.h"
 #include "CpuRaytracing/Scene.h"
 
 namespace Raycer
@@ -28,7 +28,7 @@ namespace Raycer
 
 	private:
 
-		RaytraceInfo info;
+		CpuRaytracerConfig config;
 		Scene scene;
 
 		std::atomic<bool> interrupted;

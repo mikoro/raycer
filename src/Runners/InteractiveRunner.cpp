@@ -90,6 +90,11 @@ Text& InteractiveRunner::getDefaultText()
 	return defaultText;
 }
 
+double InteractiveRunner::getElapsedTime() const
+{
+	return glfwGetTime() - startTime;
+}
+
 bool InteractiveRunner::keyIsDown(int key)
 {
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
@@ -141,6 +146,7 @@ void InteractiveRunner::initialize()
 		throw std::runtime_error("Could not initialize GLFW library");
 
 	glfwInitialized = true;
+	startTime = glfwGetTime();
 
 	log.logInfo("Creating window (%sx%s, fullscreen: %s)", settings.window.width, settings.window.height, settings.window.fullscreen);
 
@@ -371,7 +377,7 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 	defaultText.render();
 	glfwSwapBuffers(glfwWindow);
 
-	if (keyWasPressed(GLFW_KEY_F8))
+	if (keyWasPressed(GLFW_KEY_F3))
 		takeScreenshot();
 }
 

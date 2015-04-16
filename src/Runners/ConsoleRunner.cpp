@@ -18,7 +18,6 @@
 #include "Rendering/Image.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/CpuRaytracer.h"
-#include "CpuRaytracing/RaytraceInfo.h"
 #include "GpuRaytracing/GpuRaytracer.h"
 
 using namespace Raycer;
@@ -37,17 +36,18 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.calculateVariables();
 
-	RaytraceInfo info;
-	info.renderTarget = &resultImage;
-	info.scene = &scene;
-	info.sceneWidth = settings.image.width;
-	info.sceneHeight = settings.image.height;
-	info.pixelOffset = 0;
-	info.pixelCount = info.sceneWidth * info.sceneHeight;
+	CpuRaytracerConfig config;
+	config.renderTarget = &resultImage;
+	config.scene = &scene;
+	config.sceneWidth = settings.image.width;
+	config.sceneHeight = settings.image.height;
+	config.pixelOffset = 0;
+	config.pixelCount = config.sceneWidth * config.sceneHeight;
+	config.isInteractive = false;
 
-	resultImage.setSize(info.sceneWidth, info.sceneHeight);
+	resultImage.setSize(config.sceneWidth, config.sceneHeight);
 
-	run(info);
+	run(config);
 
 	if (!interrupted)
 	{
@@ -67,7 +67,7 @@ int ConsoleRunner::run()
 	return 0;
 }
 
-void ConsoleRunner::run(RaytraceInfo& info)
+void ConsoleRunner::run(CpuRaytracerConfig& config)
 {
 	Settings& settings = App::getSettings();
 	OpenCL& openCL = App::getOpenCL();
@@ -85,33 +85,40 @@ void ConsoleRunner::run(RaytraceInfo& info)
 	}
 
 	if (settings.openCL.enabled)
-		openCL.resizeBuffers(info.sceneWidth, info.sceneHeight);
+		openCL.resizeBuffers(config.sceneWidth, config.sceneHeight);
 
 	std::atomic<bool> finished;
 
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			cpuRaytracer.trace(info, interrupted);
+			cpuRaytracer.trace(config, interrupted);
 		else
-			gpuRaytracer.trace(info, interrupted);
+			gpuRaytracer.trace(config, interrupted);
 
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (size: %dx%d, offset: %d, pixels: %d)\n\n", info.sceneWidth, info.sceneHeight, info.pixelOffset, info.pixelCount);
+	std::cout << tfm::format("\nStart raytracing (size: %dx%d, offset: %d, pixels: %d)\n\n", config.sceneWidth, config.sceneHeight, config.pixelOffset, config.pixelCount);
+
+	if (settings.openCL.enabled)
+		config.pixelsProcessed = config.pixelCount / 2;
 
 	auto startTime = system_clock::now();
 	std::thread renderThread(renderFunction);
 
 	while (!finished)
 	{
-		printProgress(startTime, info.pixelCount, info.pixelsProcessed, info.raysProcessed);
+		printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	renderThread.join();
-	printProgress(startTime, info.pixelCount, info.pixelsProcessed, info.raysProcessed);
+
+	if (settings.openCL.enabled)
+		config.pixelsProcessed = config.pixelCount;
+
+	printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
 
 	auto elapsedTime = system_clock::now() - startTime;
 	int hours = (int)duration_cast<std::chrono::hours>(elapsedTime).count();
@@ -121,7 +128,7 @@ void ConsoleRunner::run(RaytraceInfo& info)
 	milliseconds = milliseconds - seconds * 1000;
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
 
-	std::cout << tfm::format("\n\nRaytracing %s (time: %s, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, info.raysProcessed.load());
+	std::cout << tfm::format("\n\nRaytracing %s (time: %s, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, config.raysProcessed.load());
 
 	if (settings.openCL.enabled)
 	{

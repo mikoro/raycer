@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <cmath>
+#include <algorithm>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -77,6 +78,14 @@ void Camera::update(double timeStep)
 
 	if (runner.keyIsDown(GLFW_KEY_E))
 		position += up * timeStep * moveSpeed;
+
+	if (runner.keyIsDown(GLFW_KEY_F7))
+		fov -= 50.0 * timeStep;
+
+	if (runner.keyIsDown(GLFW_KEY_F8))
+		fov += 50.0 * timeStep;
+
+	fov = std::max(1.0, std::min(fov, 180.0));
 
 	calculateVariables();
 }

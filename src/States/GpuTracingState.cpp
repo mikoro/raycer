@@ -49,16 +49,17 @@ void GpuTracingState::render(double timeStep, double interpolation)
 	Framebuffer& framebuffer = App::getFramebuffer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
-	info.renderTarget = nullptr;
-	info.scene = &scene;
-	info.sceneWidth = framebuffer.getWidth();
-	info.sceneHeight = framebuffer.getHeight();
-	info.pixelOffset = 0;
-	info.pixelCount = info.sceneWidth * info.sceneHeight;
-	info.pixelsProcessed = 0;
-	info.raysProcessed = 0;
+	config.renderTarget = nullptr;
+	config.scene = &scene;
+	config.sceneWidth = framebuffer.getWidth();
+	config.sceneHeight = framebuffer.getHeight();
+	config.pixelOffset = 0;
+	config.pixelCount = config.sceneWidth * config.sceneHeight;
+	config.pixelsProcessed = 0;
+	config.raysProcessed = 0;
+	config.isInteractive = true;
 
-	gpuRaytracer.trace(info, interrupted);
+	gpuRaytracer.trace(config, interrupted);
 }
 
 void GpuTracingState::windowResized(int width, int height)

@@ -4,7 +4,6 @@
 #include <algorithm>
 
 #include "CpuRaytracing/CpuRaytracer.h"
-#include "CpuRaytracing/RaytraceInfo.h"
 #include "CpuRaytracing/Scene.h"
 #include "CpuRaytracing/Ray.h"
 #include "CpuRaytracing/Intersection.h"
@@ -12,8 +11,6 @@
 #include "Rendering/Framebuffer.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
-#include "App.h"
-#include "Utils/Settings.h"
 
 using namespace Raycer;
 
@@ -22,23 +19,22 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
+void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted)
 {
-	Settings& settings = App::getSettings();
-	Scene& scene = *info.scene;
+	Scene& scene = *config.scene;
 
 	#pragma omp parallel for schedule(dynamic, 4096)
-	for (int pixelIndex = 0; pixelIndex < info.pixelCount; ++pixelIndex)
+	for (int pixelIndex = 0; pixelIndex < config.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)
 			continue;
 
-		int pixelOffsetIndex = pixelIndex + info.pixelOffset;
-		int x = pixelOffsetIndex % info.sceneWidth;
-		int y = pixelOffsetIndex / info.sceneWidth;
+		int pixelOffsetIndex = pixelIndex + config.pixelOffset;
+		int x = pixelOffsetIndex % config.sceneWidth;
+		int y = pixelOffsetIndex / config.sceneWidth;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(rayToScene, scene, interrupted, info.raysProcessed);
+		shootRay(config, rayToScene, interrupted);
 		Color finalColor = rayToScene.color;
 
 		if (scene.fogEnabled)
@@ -49,22 +45,22 @@ void CpuRaytracer::trace(RaytraceInfo& info, std::atomic<bool>& interrupted)
 			finalColor = Color::lerp(finalColor, scene.fogColor, t);
 		}
 
-		info.renderTarget->setPixel(pixelIndex, finalColor.clamped());
+		config.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
-		if (!settings.general.interactive)
-			++info.pixelsProcessed;
+		if (!config.isInteractive)
+			++config.pixelsProcessed;
 	}
 }
 
-void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& interrupted, std::atomic<int>& raysProcessed)
+void CpuRaytracer::shootRay(CpuRaytracerConfig& config, Ray& ray, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
 
-	Settings& settings = App::getSettings();
+	if (!config.isInteractive)
+		++config.raysProcessed;
 
-	if (!settings.general.interactive)
-		++raysProcessed;
+	Scene& scene = *config.scene;
 
 	for (size_t p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
@@ -78,7 +74,7 @@ void CpuRaytracer::shootRay(Ray& ray, const Scene& scene, std::atomic<bool>& int
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(reflectedRay, scene, interrupted, raysProcessed);
+			shootRay(config, reflectedRay, interrupted);
 
 			lightColor = reflectedRay.color * ray.intersection.material->reflectivity;
 		}
