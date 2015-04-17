@@ -128,7 +128,7 @@ void ConsoleRunner::run(CpuRaytracerConfig& config)
 	milliseconds = milliseconds - seconds * 1000;
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
 
-	std::cout << tfm::format("\n\nRaytracing %s (time: %s, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, config.raysProcessed.load());
+	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %d, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, config.pixelsProcessed.load(), config.raysProcessed.load());
 
 	if (settings.openCL.enabled)
 	{
@@ -178,7 +178,7 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 	printf("] ");
 	printf("%d %% | ", percentage);
 	printf("Remaining time: %02d:%02d:%02d | ", (int)duration_cast<hours>(remainingTime).count(), (int)duration_cast<minutes>(remainingTime).count(), (int)duration_cast<seconds>(remainingTime).count());
-	printf("Pixels/s: %.2f | ", (double)pixelsProcessed / elapsedSeconds);
-	printf("Rays/s: %.2f", (double)raysProcessed / elapsedSeconds);
+	printf("Pixels/s: %.1f | ", (double)pixelsProcessed / elapsedSeconds);
+	printf("Rays/s: %.1f", (double)raysProcessed / elapsedSeconds);
 	printf("\r");
 }

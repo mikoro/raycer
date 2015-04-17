@@ -22,8 +22,10 @@ namespace
 void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *config.scene;
+	int rayCount = 0;
+	int previousRayCount = 0;
 
-	#pragma omp parallel for schedule(dynamic, 4096)
+	#pragma omp parallel for schedule(dynamic, 1000) reduction(+:rayCount) firstprivate(previousRayCount)
 	for (int pixelIndex = 0; pixelIndex < config.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)
@@ -34,7 +36,7 @@ void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrup
 		int y = pixelOffsetIndex / config.sceneWidth;
 
 		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(config, rayToScene, interrupted);
+		shootRay(config, rayToScene, rayCount, interrupted);
 		Color finalColor = rayToScene.color;
 
 		if (scene.fogEnabled)
@@ -47,20 +49,25 @@ void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrup
 
 		config.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
-		if (!config.isInteractive)
-			++config.pixelsProcessed;
+		if ((pixelIndex + 1) % 100 == 0)
+		{
+			config.pixelsProcessed += 100;
+			config.raysProcessed += (rayCount - previousRayCount);
+			previousRayCount = rayCount;
+		}
 	}
+
+	config.pixelsProcessed = config.pixelCount;
+	config.raysProcessed = rayCount;
 }
 
-void CpuRaytracer::shootRay(CpuRaytracerConfig& config, Ray& ray, std::atomic<bool>& interrupted)
+void CpuRaytracer::shootRay(CpuRaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
 
-	if (!config.isInteractive)
-		++config.raysProcessed;
-
 	Scene& scene = *config.scene;
+	++rayCount;
 
 	for (size_t p = 0; p < scene.primitives.size(); ++p)
 		scene.primitives[p]->intersect(ray);
@@ -74,7 +81,7 @@ void CpuRaytracer::shootRay(CpuRaytracerConfig& config, Ray& ray, std::atomic<bo
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(config, reflectedRay, interrupted);
+			shootRay(config, reflectedRay, rayCount, interrupted);
 
 			lightColor = reflectedRay.color * ray.intersection.material->reflectivity;
 		}

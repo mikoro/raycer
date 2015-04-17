@@ -35,6 +35,6 @@ namespace Raycer
 
 	private:
 
-		void shootRay(CpuRaytracerConfig& config, Ray& ray, std::atomic<bool>& interrupted);
+		void shootRay(CpuRaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
 	};
 }
