@@ -39,3 +39,8 @@ double MathUtils::degToRad(double degrees)
 {
 	return (degrees * (M_PI / 180.0));
 }
+
+double MathUtils::radToDeg(double radians)
+{
+	return (radians * (180.0 / M_PI));
+}

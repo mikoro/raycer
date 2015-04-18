@@ -39,6 +39,7 @@ namespace Raycer
 		double dot(const Vector3& v) const;
 		Vector3 cross(const Vector3& v) const;
 		Vector3 reflect(const Vector3& normal) const;
+
 		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
 
 		static const Vector3 RIGHT;   // [1 0 0]

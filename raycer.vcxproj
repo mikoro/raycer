@@ -113,10 +113,12 @@
     <ClCompile Include="src\CpuRaytracing\Triangle.cpp" />
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp" />
     <ClCompile Include="src\GpuRaytracing\OpenCL.cpp" />
+    <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
+    <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
@@ -150,10 +152,12 @@
     <ClInclude Include="src\CpuRaytracing\Triangle.h" />
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
     <ClInclude Include="src\GpuRaytracing\OpenCL.h" />
+    <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
     <ClInclude Include="src\Math\Matrix4x4.h" />
     <ClInclude Include="src\Math\MathUtils.h" />
+    <ClInclude Include="src\Math\Quaternion.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />

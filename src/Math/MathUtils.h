@@ -12,5 +12,6 @@ namespace Raycer
 		static bool almostZero(double value, int epsilons = 4);
 		static bool almostSame(double first, double second, int epsilons = 4);
 		static double degToRad(double degrees);
+		static double radToDeg(double radians);
 	};
 }

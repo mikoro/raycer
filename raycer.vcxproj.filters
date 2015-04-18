@@ -124,6 +124,12 @@
     <ClCompile Include="src\Runners\NetworkRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\Quaternion.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\AxisAngle.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -234,6 +240,12 @@
     </ClInclude>
     <ClInclude Include="src\Runners\NetworkRunner.h">
       <Filter>Runners</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Quaternion.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\AxisAngle.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
