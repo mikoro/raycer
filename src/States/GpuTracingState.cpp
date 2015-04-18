@@ -18,22 +18,18 @@ void GpuTracingState::initialize()
 	scene.loadFromFile("data/scenes/test_scene.json");
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
-	scene.camera.calculateVariables();
 }
 
 void GpuTracingState::pause()
 {
-
 }
 
 void GpuTracingState::resume()
 {
-
 }
 
 void GpuTracingState::shutdown()
 {
-
 }
 
 void GpuTracingState::update(double timeStep)
@@ -48,6 +44,9 @@ void GpuTracingState::render(double timeStep, double interpolation)
 
 	Framebuffer& framebuffer = App::getFramebuffer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+
+	scene.camera.interpolate(interpolation);
+	scene.camera.precalculate();
 
 	config.renderTarget = nullptr;
 	config.scene = &scene;

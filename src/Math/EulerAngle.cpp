@@ -61,3 +61,15 @@ Vector3 EulerAngle::getDirectionVector() const
 
 	return result;
 }
+
+EulerAngle EulerAngle::lerp(const EulerAngle& e1, const EulerAngle& e2, double t)
+{
+	EulerAngle result;
+	double oneMinusT = 1.0 - t;
+
+	result.yaw = e1.yaw * oneMinusT + e2.yaw * t;
+	result.pitch = e1.pitch * oneMinusT + e2.pitch * t;
+	result.roll = e1.roll * oneMinusT + e2.roll * t;
+
+	return result;
+}

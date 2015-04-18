@@ -59,4 +59,6 @@ void Scene::initialize()
 
 	for (Mesh& mesh : meshes)
 		primitives.push_back(&mesh);
+
+	camera.initialize();
 }

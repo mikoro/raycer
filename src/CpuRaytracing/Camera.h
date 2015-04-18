@@ -14,9 +14,11 @@ namespace Raycer
 	{
 	public:
 
+		void initialize();
 		void setImagePlaneSize(int width, int height);
-		void calculateVariables();
 		void update(double timeStep);
+		void interpolate(double interpolation);
+		void precalculate();
 		
 		Ray getRay(int x, int y) const;
 
@@ -33,6 +35,11 @@ namespace Raycer
 		}
 
 	private:
+
+		Vector3 oldPosition = Vector3(0.0, 0.0, 0.0);
+		Vector3 newPosition = Vector3(0.0, 0.0, 0.0);
+		EulerAngle oldOrientation = EulerAngle(0.0, 0.0, 0.0);
+		EulerAngle newOrientation = EulerAngle(0.0, 0.0, 0.0);
 
 		Vector3 forward;
 		Vector3 right;

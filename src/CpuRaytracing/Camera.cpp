@@ -20,6 +20,12 @@
 
 using namespace Raycer;
 
+void Camera::initialize()
+{
+	oldPosition = newPosition = position;
+	oldOrientation = newOrientation = orientation;
+}
+
 void Camera::setImagePlaneSize(int width, int height)
 {
 	imagePlaneWidth = (double)(width - 1);
@@ -27,31 +33,24 @@ void Camera::setImagePlaneSize(int width, int height)
 	aspectRatio = (double)height / (double)width;
 }
 
-void Camera::calculateVariables()
-{
-	forward = orientation.getDirectionVector().normalized();
-	right = forward.cross(Vector3::UP).normalized();
-	up = right.cross(forward).normalized();
-
-	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
-	imagePlaneCenter = position + (forward * imagePlaneDistance);
-}
-
 void Camera::update(double timeStep)
 {
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Settings& settings = App::getSettings();
 
+	oldPosition = newPosition;
+	oldOrientation = newOrientation;
+
 	MouseInfo mouseInfo = runner.getMouseInfo();
 
 	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.controls.freeLook)
 	{
-		orientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings.controls.mouseSpeed;
-		orientation.pitch += (double)mouseInfo.deltaY * timeStep * settings.controls.mouseSpeed;
+		newOrientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings.controls.mouseSpeed;
+		newOrientation.pitch += (double)mouseInfo.deltaY * timeStep * settings.controls.mouseSpeed;
 	}
 
-	orientation.clampPitch();
-	orientation.normalize();
+	newOrientation.clampPitch();
+	// newOrientation.normalize(); // breaks the yaw interpolation
 
 	double moveSpeed = settings.controls.moveSpeed;
 
@@ -62,22 +61,22 @@ void Camera::update(double timeStep)
 		moveSpeed *= settings.controls.slowModifier;
 
 	if (runner.keyIsDown(GLFW_KEY_W) || runner.keyIsDown(GLFW_KEY_UP))
-		position += forward * timeStep * moveSpeed;
+		newPosition += forward * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_S) || runner.keyIsDown(GLFW_KEY_DOWN))
-		position -= forward * timeStep * moveSpeed;
+		newPosition -= forward * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_A) || runner.keyIsDown(GLFW_KEY_LEFT))
-		position -= right * timeStep * moveSpeed;
+		newPosition -= right * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_D) || runner.keyIsDown(GLFW_KEY_RIGHT))
-		position += right * timeStep * moveSpeed;
+		newPosition += right * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_Q))
-		position -= up * timeStep * moveSpeed;
+		newPosition -= up * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_E))
-		position += up * timeStep * moveSpeed;
+		newPosition += up * timeStep * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_F7))
 		fov -= 50.0 * timeStep;
@@ -86,8 +85,22 @@ void Camera::update(double timeStep)
 		fov += 50.0 * timeStep;
 
 	fov = std::max(1.0, std::min(fov, 180.0));
+}
 
-	calculateVariables();
+void Camera::interpolate(double interpolation)
+{
+	position = Vector3::lerp(oldPosition, newPosition, interpolation);
+	orientation = EulerAngle::lerp(oldOrientation, newOrientation, interpolation);
+}
+
+void Camera::precalculate()
+{
+	forward = orientation.getDirectionVector().normalized();
+	right = forward.cross(Vector3::UP).normalized();
+	up = right.cross(forward).normalized();
+
+	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
+	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
 Ray Camera::getRay(int x, int y) const

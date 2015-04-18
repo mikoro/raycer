@@ -18,22 +18,18 @@ void CpuTracingState::initialize()
 	scene.loadFromFile("data/scenes/test_scene.json");
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
-	scene.camera.calculateVariables();
 }
 
 void CpuTracingState::pause()
 {
-
 }
 
 void CpuTracingState::resume()
 {
-
 }
 
 void CpuTracingState::shutdown()
 {
-
 }
 
 void CpuTracingState::update(double timeStep)
@@ -44,13 +40,15 @@ void CpuTracingState::update(double timeStep)
 void CpuTracingState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
-	(void)interpolation;
 
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
 	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
+
+	scene.camera.interpolate(interpolation);
+	scene.camera.precalculate();
 
 	config.renderTarget = &framebuffer;
 	config.scene = &scene;

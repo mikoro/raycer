@@ -34,6 +34,8 @@ namespace Raycer
 
 		Vector3 getDirectionVector() const;
 
+		static EulerAngle lerp(const EulerAngle& e1, const EulerAngle& e2, double t);
+
 		double yaw;
 		double pitch;
 		double roll;

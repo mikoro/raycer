@@ -34,7 +34,7 @@ int ConsoleRunner::run()
 	scene.loadFromFile(settings.scene.fileName);
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
-	scene.camera.calculateVariables();
+	scene.camera.precalculate();
 
 	CpuRaytracerConfig config;
 	config.renderTarget = &resultImage;
