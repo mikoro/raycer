@@ -57,6 +57,16 @@ void GpuRaytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted
 	checkCLError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
 }
 
+void GpuRaytracer::runTestKernel()
+{
+	OpenCL& openCL = App::getOpenCL();
+
+	const size_t globalSize = 1;
+	checkCLError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.testKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
+
+	checkCLError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
+}
+
 void GpuRaytracer::resize(int width_, int height_)
 {
 	Settings& settings = App::getSettings();
@@ -116,7 +126,7 @@ void GpuRaytracer::readImage()
 		float b = pixelData[i + 2];
 		float a = pixelData[i + 3];
 
-		image.setPixel(i / 4, Color(r, g, b, a));
+		image.setPixel(i / 4, Color(r, g, b, a).clamped());
 	}
 }
 

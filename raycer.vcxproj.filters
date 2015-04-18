@@ -247,6 +247,9 @@
     <ClInclude Include="src\Raytracing\Triangle.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\Structs.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

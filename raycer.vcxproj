@@ -139,6 +139,7 @@
   <ItemGroup>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
+    <ClInclude Include="src\GpuRaytracing\Structs.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />

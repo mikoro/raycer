@@ -50,6 +50,12 @@ OpenCL::OpenCL()
 
 OpenCL::~OpenCL()
 {
+	if (testKernel != nullptr)
+	{
+		clReleaseKernel(testKernel);
+		testKernel = nullptr;
+	}
+
 	if (raytraceKernel != nullptr)
 	{
 		clReleaseKernel(raytraceKernel);
@@ -221,5 +227,8 @@ void OpenCL::loadKernels()
 #endif
 
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);
+	checkCLError(status, "Could not create OpenCL kernel");
+
+	testKernel = clCreateKernel(program, "test", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
 }

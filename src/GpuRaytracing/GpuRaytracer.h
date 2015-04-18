@@ -20,6 +20,7 @@ namespace Raycer
 		~GpuRaytracer();
 
 		void trace(RaytracerConfig& config, std::atomic<bool>& interrupted);
+		void runTestKernel();
 
 		void resize(int width, int height);
 		void release();
