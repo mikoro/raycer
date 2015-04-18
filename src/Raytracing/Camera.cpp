@@ -11,10 +11,10 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
-#include "CpuRaytracing/Camera.h"
+#include "Raytracing/Camera.h"
 #include "App.h"
 #include "Utils/Settings.h"
-#include "CpuRaytracing/Ray.h"
+#include "Raytracing/Ray.h"
 #include "Math/MathUtils.h"
 #include "Runners/InteractiveRunner.h"
 

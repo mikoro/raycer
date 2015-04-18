@@ -3,11 +3,11 @@
 
 #include <algorithm>
 
-#include "CpuRaytracing/CpuRaytracer.h"
-#include "CpuRaytracing/Scene.h"
-#include "CpuRaytracing/Ray.h"
-#include "CpuRaytracing/Intersection.h"
-#include "CpuRaytracing/Material.h"
+#include "Raytracing/Raytracer.h"
+#include "Raytracing/Scene.h"
+#include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
+#include "Raytracing/Material.h"
 #include "Rendering/Framebuffer.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
@@ -19,7 +19,7 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted)
+void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *config.scene;
 	int rayCount = 0;
@@ -61,7 +61,7 @@ void CpuRaytracer::trace(CpuRaytracerConfig& config, std::atomic<bool>& interrup
 	config.raysProcessed = rayCount;
 }
 
-void CpuRaytracer::shootRay(CpuRaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;

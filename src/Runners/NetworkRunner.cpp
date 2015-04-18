@@ -24,7 +24,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "CpuRaytracing/CpuRaytracer.h"
+#include "Raytracing/Raytracer.h"
 #include "Runners/ConsoleRunner.h"
 
 using namespace Raycer;
@@ -414,7 +414,7 @@ void NetworkRunner::handleJobs()
 			jobQueue.pop();
 			jobQueueMutex.unlock();
 
-			CpuRaytracerConfig config;
+			RaytracerConfig config;
 			config.renderTarget = &job.image;
 			config.scene = &job.scene;
 			config.sceneWidth = job.sceneWidth;

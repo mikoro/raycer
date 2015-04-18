@@ -103,16 +103,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Camera.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Mesh.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Plane.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Ray.cpp" />
-    <ClCompile Include="src\CpuRaytracing\CpuRaytracer.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Scene.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Sphere.cpp" />
-    <ClCompile Include="src\CpuRaytracing\Triangle.cpp" />
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp" />
-    <ClCompile Include="src\GpuRaytracing\OpenCL.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -121,6 +112,14 @@
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
+    <ClCompile Include="src\Raytracing\Camera.cpp" />
+    <ClCompile Include="src\Raytracing\Mesh.cpp" />
+    <ClCompile Include="src\Raytracing\Plane.cpp" />
+    <ClCompile Include="src\Raytracing\Ray.cpp" />
+    <ClCompile Include="src\Raytracing\Raytracer.cpp" />
+    <ClCompile Include="src\Raytracing\Scene.cpp" />
+    <ClCompile Include="src\Raytracing\Sphere.cpp" />
+    <ClCompile Include="src\Raytracing\Triangle.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp" />
@@ -133,25 +132,13 @@
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
+    <ClCompile Include="src\Utils\OpenCL.cpp" />
     <ClCompile Include="src\Utils\OpenGL.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\CpuRaytracing\Camera.h" />
-    <ClInclude Include="src\CpuRaytracing\Intersection.h" />
-    <ClInclude Include="src\CpuRaytracing\Light.h" />
-    <ClInclude Include="src\CpuRaytracing\Material.h" />
-    <ClInclude Include="src\CpuRaytracing\Mesh.h" />
-    <ClInclude Include="src\CpuRaytracing\Plane.h" />
-    <ClInclude Include="src\CpuRaytracing\Primitive.h" />
-    <ClInclude Include="src\CpuRaytracing\Ray.h" />
-    <ClInclude Include="src\CpuRaytracing\CpuRaytracer.h" />
-    <ClInclude Include="src\CpuRaytracing\Scene.h" />
-    <ClInclude Include="src\CpuRaytracing\Sphere.h" />
-    <ClInclude Include="src\CpuRaytracing\Triangle.h" />
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
-    <ClInclude Include="src\GpuRaytracing\OpenCL.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
@@ -160,6 +147,18 @@
     <ClInclude Include="src\Math\Quaternion.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
+    <ClInclude Include="src\Raytracing\Camera.h" />
+    <ClInclude Include="src\Raytracing\Intersection.h" />
+    <ClInclude Include="src\Raytracing\Light.h" />
+    <ClInclude Include="src\Raytracing\Material.h" />
+    <ClInclude Include="src\Raytracing\Mesh.h" />
+    <ClInclude Include="src\Raytracing\Plane.h" />
+    <ClInclude Include="src\Raytracing\Primitive.h" />
+    <ClInclude Include="src\Raytracing\Ray.h" />
+    <ClInclude Include="src\Raytracing\Raytracer.h" />
+    <ClInclude Include="src\Raytracing\Scene.h" />
+    <ClInclude Include="src\Raytracing\Sphere.h" />
+    <ClInclude Include="src\Raytracing\Triangle.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
@@ -174,6 +173,7 @@
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
+    <ClInclude Include="src\Utils\OpenCL.h" />
     <ClInclude Include="src\Utils\OpenGL.h" />
     <ClInclude Include="src\Utils\Settings.h" />
   </ItemGroup>

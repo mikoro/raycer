@@ -4,8 +4,8 @@
 #include <limits>
 #include <cmath>
 
-#include "CpuRaytracing/Plane.h"
-#include "CpuRaytracing/Ray.h"
+#include "Raytracing/Plane.h"
+#include "Raytracing/Ray.h"
 
 using namespace Raycer;
 

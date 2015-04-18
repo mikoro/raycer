@@ -10,7 +10,7 @@
 
 #include <boost/asio.hpp>
 
-#include "CpuRaytracing/Scene.h"
+#include "Raytracing/Scene.h"
 #include "Rendering/Image.h"
 
 namespace ba = boost::asio;

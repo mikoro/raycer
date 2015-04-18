@@ -22,7 +22,7 @@
 
 #include "tinyformat/tinyformat.h"
 
-#include "GpuRaytracing/OpenCL.h"
+#include "Utils/OpenCL.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -50,12 +50,6 @@ OpenCL::OpenCL()
 
 OpenCL::~OpenCL()
 {
-	if (pixels != nullptr)
-	{
-		clReleaseMemObject(pixels);
-		pixels = nullptr;
-	}
-
 	if (raytraceKernel != nullptr)
 	{
 		clReleaseKernel(raytraceKernel);
@@ -228,71 +222,4 @@ void OpenCL::loadKernels()
 
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
-}
-
-void OpenCL::releaseMemoryObjects()
-{
-	if (pixels != nullptr)
-	{
-		checkCLError(clReleaseMemObject(pixels), "Could not release OpenCL memory object");
-		pixels = nullptr;
-	}
-}
-
-void OpenCL::resizeBuffers(int width_, int height_)
-{
-	Log& log = App::getLog();
-	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
-
-	width = width_;
-	height = height_;
-
-	log.logInfo("Resizing OpenCL buffers");
-	releaseMemoryObjects();
-	cl_int status = 0;
-
-	if (settings.general.interactive)
-	{
-		pixels = clCreateFromGLTexture2D(context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getGpuTextureId(), &status);
-		checkCLError(status, "Could not create OpenCL image from OpenGL texture");
-	}
-	else
-	{
-		cl_image_format imageFormat;
-		imageFormat.image_channel_data_type = CL_FLOAT;
-		imageFormat.image_channel_order = CL_RGBA;
-
-		pixels = clCreateImage2D(context, CL_MEM_WRITE_ONLY, &imageFormat, width, height, 0, NULL, &status);
-		checkCLError(status, "Could not create OpenCL image");
-	}
-}
-
-void OpenCL::readBufferImage()
-{
-	size_t origin[3] = { 0, 0, 0 };
-	size_t region[3] = { width, height, 1 };
-
-	std::vector<float> pixelData(width * height * 4);
-
-	cl_int status = clEnqueueReadImage(commandQueue, pixels, CL_TRUE, &origin[0], &region[0], 0, 0, &pixelData[0], 0, NULL, NULL);
-	checkCLError(status, "Could not read OpenCL image buffer");
-
-	bufferImage.setSize(width, height);
-	int length = width * height * 4;
-
-	for (int i = 0; i < length; i += 4)
-	{
-		float r = pixelData[i];
-		float g = pixelData[i + 1];
-		float b = pixelData[i + 2];
-		float a = pixelData[i + 3];
-
-		bufferImage.setPixel(i / 4, Color(r, g, b, a));
-	}
-}
-
-Image& OpenCL::getBufferImage()
-{
-	return bufferImage;
 }

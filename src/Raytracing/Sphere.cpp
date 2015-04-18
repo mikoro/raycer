@@ -3,9 +3,9 @@
 
 #include <cmath>
 
-#include "CpuRaytracing/Sphere.h"
-#include "CpuRaytracing/Ray.h"
-#include "CpuRaytracing/Intersection.h"
+#include "Raytracing/Sphere.h"
+#include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
 
 using namespace Raycer;
 

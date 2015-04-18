@@ -11,11 +11,11 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "GpuRaytracing/OpenCL.h"
+#include "Utils/OpenCL.h"
 #include "Runners/InteractiveRunner.h"
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
-#include "CpuRaytracing/CpuRaytracer.h"
+#include "Raytracing/Raytracer.h"
 #include "GpuRaytracing/GpuRaytracer.h"
 
 #ifdef _WIN32
@@ -190,10 +190,10 @@ NetworkRunner& App::getNetworkRunner()
 	return networkRunner;
 }
 
-CpuRaytracer& App::getCpuRaytracer()
+Raytracer& App::getRaytracer()
 {
-	static CpuRaytracer cpuRaytracer;
-	return cpuRaytracer;
+	static Raytracer raytracer;
+	return raytracer;
 }
 
 GpuRaytracer& App::getGpuRaytracer()

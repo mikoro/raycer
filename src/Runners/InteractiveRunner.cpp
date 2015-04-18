@@ -13,7 +13,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "GpuRaytracing/OpenCL.h"
+#include "Utils/OpenCL.h"
 #include "GpuRaytracing/GpuRaytracer.h"
 #include "Rendering/Image.h"
 #include "States/CpuTracingState.h"
@@ -225,15 +225,15 @@ void InteractiveRunner::resizeFramebuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCL = App::getOpenCL();
+	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	if (settings.openCL.enabled)
-		openCL.releaseMemoryObjects();
+		gpuRaytracer.release();
 
-	framebuffer.setSize(width, height);
+	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		openCL.resizeBuffers(framebuffer.getWidth(), framebuffer.getHeight());
+		gpuRaytracer.resize(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

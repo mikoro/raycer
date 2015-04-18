@@ -25,4 +25,6 @@ AxisAngle& AxisAngle::operator=(const AxisAngle& a)
 {
 	axis = a.axis;
 	angle = a.angle;
+
+	return *this;
 }

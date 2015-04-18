@@ -6,7 +6,7 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
 
-#include "CpuRaytracing/Scene.h"
+#include "Raytracing/Scene.h"
 #include "App.h"
 #include "Utils/Log.h"
 

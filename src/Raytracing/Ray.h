@@ -5,7 +5,7 @@
 
 #include "Math/Vector3.h"
 #include "Math/Color.h"
-#include "CpuRaytracing/Intersection.h"
+#include "Raytracing/Intersection.h"
 
 namespace Raycer
 {

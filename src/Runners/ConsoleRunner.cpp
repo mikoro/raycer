@@ -14,10 +14,10 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "GpuRaytracing/OpenCL.h"
+#include "Utils/OpenCL.h"
 #include "Rendering/Image.h"
-#include "CpuRaytracing/Scene.h"
-#include "CpuRaytracing/CpuRaytracer.h"
+#include "Raytracing/Scene.h"
+#include "Raytracing/Raytracer.h"
 #include "GpuRaytracing/GpuRaytracer.h"
 
 using namespace Raycer;
@@ -36,7 +36,7 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();
 
-	CpuRaytracerConfig config;
+	RaytracerConfig config;
 	config.renderTarget = &resultImage;
 	config.scene = &scene;
 	config.sceneWidth = settings.image.width;
@@ -67,11 +67,11 @@ int ConsoleRunner::run()
 	return 0;
 }
 
-void ConsoleRunner::run(CpuRaytracerConfig& config)
+void ConsoleRunner::run(RaytracerConfig& config)
 {
 	Settings& settings = App::getSettings();
 	OpenCL& openCL = App::getOpenCL();
-	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
+	Raytracer& raytracer = App::getRaytracer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	interrupted = false;
@@ -85,14 +85,14 @@ void ConsoleRunner::run(CpuRaytracerConfig& config)
 	}
 
 	if (settings.openCL.enabled)
-		openCL.resizeBuffers(config.sceneWidth, config.sceneHeight);
+		gpuRaytracer.resize(config.sceneWidth, config.sceneHeight);
 
 	std::atomic<bool> finished;
 
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			cpuRaytracer.trace(config, interrupted);
+			raytracer.trace(config, interrupted);
 		else
 			gpuRaytracer.trace(config, interrupted);
 
@@ -132,8 +132,8 @@ void ConsoleRunner::run(CpuRaytracerConfig& config)
 
 	if (settings.openCL.enabled)
 	{
-		openCL.readBufferImage();
-		resultImage = openCL.getBufferImage();
+		gpuRaytracer.readImage();
+		resultImage = gpuRaytracer.getImage();
 	}
 }
 

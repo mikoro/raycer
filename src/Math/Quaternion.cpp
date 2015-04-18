@@ -25,6 +25,8 @@ Quaternion& Quaternion::operator=(const Quaternion& q)
 	x = q.x;
 	y = q.y;
 	z = q.z;
+
+	return *this;
 }
 
 Quaternion::Quaternion(const Vector3& axis, double angle)

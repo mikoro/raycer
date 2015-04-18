@@ -83,7 +83,7 @@ void Framebuffer::initialize()
 	checkGLError("Could not set OpenGL buffer parameters");
 }
 
-void Framebuffer::setSize(int width_, int height_)
+void Framebuffer::resize(int width_, int height_)
 {
 	assert(width_ > 0 && height_ > 0);
 

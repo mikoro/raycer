@@ -19,9 +19,6 @@
     <Filter Include="Runners">
       <UniqueIdentifier>{d64a85d7-397e-4fdc-a313-bafb5e00147e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CpuRaytracing">
-      <UniqueIdentifier>{99754385-78c4-4170-a243-c1513a21c797}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GpuRaytracing">
       <UniqueIdentifier>{8e46c315-d15d-4be8-96cb-153f59924555}</UniqueIdentifier>
     </Filter>
@@ -30,6 +27,9 @@
     </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{bc99656a-ab0c-42c5-b368-084057c2ebf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Raytracing">
+      <UniqueIdentifier>{99754385-78c4-4170-a243-c1513a21c797}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -72,30 +72,6 @@
     <ClCompile Include="src\Runners\InteractiveRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Camera.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Mesh.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Plane.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Ray.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Scene.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Sphere.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\Triangle.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CpuRaytracing\CpuRaytracer.cpp">
-      <Filter>CpuRaytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp">
       <Filter>GpuRaytracing</Filter>
     </ClCompile>
@@ -109,9 +85,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\GpuRaytracing\OpenCL.cpp">
-      <Filter>GpuRaytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utils\Errors.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -129,6 +102,33 @@
     </ClCompile>
     <ClCompile Include="src\Math\AxisAngle.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\OpenCL.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Camera.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Mesh.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Plane.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Ray.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Raytracer.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Scene.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Sphere.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Triangle.cpp">
+      <Filter>Raytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -177,42 +177,6 @@
     <ClInclude Include="src\Runners\InteractiveRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Camera.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Intersection.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Light.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Material.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Mesh.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Plane.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Primitive.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Ray.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Scene.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Sphere.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\Triangle.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CpuRaytracing\CpuRaytracer.h">
-      <Filter>CpuRaytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h">
       <Filter>GpuRaytracing</Filter>
     </ClInclude>
@@ -226,9 +190,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\GpuRaytracing\OpenCL.h">
-      <Filter>GpuRaytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\Errors.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -246,6 +207,45 @@
     </ClInclude>
     <ClInclude Include="src\Math\AxisAngle.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\OpenCL.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Camera.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Intersection.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Light.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Material.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Mesh.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Plane.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Primitive.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Ray.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Raytracer.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Scene.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Sphere.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Triangle.h">
+      <Filter>Raytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

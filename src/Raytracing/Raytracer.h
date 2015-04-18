@@ -11,7 +11,7 @@ namespace Raycer
 	class Scene;
 	struct Ray;
 
-	struct CpuRaytracerConfig
+	struct RaytracerConfig
 	{
 		RenderTarget* renderTarget = nullptr;
 		Scene* scene = nullptr;
@@ -27,14 +27,14 @@ namespace Raycer
 		std::atomic<int> raysProcessed;
 	};
 
-	class CpuRaytracer
+	class Raytracer
 	{
 	public:
 
-		void trace(CpuRaytracerConfig& config, std::atomic<bool>& interrupted);
+		void trace(RaytracerConfig& config, std::atomic<bool>& interrupted);
 
 	private:
 
-		void shootRay(CpuRaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
+		void shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
 	};
 }

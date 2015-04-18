@@ -7,7 +7,7 @@
 #include "Utils/Settings.h"
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
-#include "CpuRaytracing/CpuRaytracer.h"
+#include "Raytracing/Raytracer.h"
 
 using namespace Raycer;
 
@@ -43,7 +43,7 @@ void CpuTracingState::render(double timeStep, double interpolation)
 
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
-	CpuRaytracer& cpuRaytracer = App::getCpuRaytracer();
+	Raytracer& raytracer = App::getRaytracer();
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
 
@@ -60,7 +60,7 @@ void CpuTracingState::render(double timeStep, double interpolation)
 	config.raysProcessed = 0;
 	config.isInteractive = true;
 
-	cpuRaytracer.trace(config, interrupted);
+	raytracer.trace(config, interrupted);
 
 	if (settings.window.showCameraInfo)
 	{

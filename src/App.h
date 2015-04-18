@@ -12,7 +12,7 @@ namespace Raycer
 	class InteractiveRunner;
 	class ConsoleRunner;
 	class NetworkRunner;
-	class CpuRaytracer;
+	class Raytracer;
 	class GpuRaytracer;
 
 	class App
@@ -28,7 +28,7 @@ namespace Raycer
 		static InteractiveRunner& getInteractiveRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();
-		static CpuRaytracer& getCpuRaytracer();
+		static Raytracer& getRaytracer();
 		static GpuRaytracer& getGpuRaytracer();
 	};
 }

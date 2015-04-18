@@ -21,7 +21,7 @@ namespace Raycer
 		~Framebuffer();
 
 		void initialize();
-		void setSize(int width, int height);
+		void resize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		void setPixel(int index, const Color& color);
 		Color getPixel(int x, int y) const;
