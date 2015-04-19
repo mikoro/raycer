@@ -50,10 +50,10 @@ OpenCL::OpenCL()
 
 OpenCL::~OpenCL()
 {
-	if (testKernel != nullptr)
+	if (printSizesKernel != nullptr)
 	{
-		clReleaseKernel(testKernel);
-		testKernel = nullptr;
+		clReleaseKernel(printSizesKernel);
+		printSizesKernel = nullptr;
 	}
 
 	if (raytraceKernel != nullptr)
@@ -74,11 +74,12 @@ OpenCL::~OpenCL()
 		commandQueue = nullptr;
 	}
 
-	if (context != nullptr)
+	// this seems to hang for 5 seconds at shutdown
+	/*if (context != nullptr)
 	{
 		clReleaseContext(context);
 		context = nullptr;
-	}
+	}*/
 }
 
 void OpenCL::initialize()
@@ -184,17 +185,30 @@ void OpenCL::loadKernels()
 
 	log.logInfo("Building OpenCL programs");
 
-	std::ifstream file("data/kernels/raytrace.cl");
-	std::stringstream ss;
-	ss << file.rdbuf();
-	std::string fileString = ss.str();
-	const char* fileStringPtr = fileString.c_str();
-	file.close();
+	std::vector<std::string> filePaths;
+	filePaths.push_back("data/kernels/structs.cl");
+	filePaths.push_back("data/kernels/raytrace.cl");
 
+	std::stringstream sourceStringSs;
+
+	for (std::string& filePath : filePaths)
+	{
+		std::ifstream file(filePath);
+
+		if (!file.good())
+			throw std::runtime_error("Could not open OpenCL source file");
+
+		sourceStringSs << file.rdbuf();
+		file.close();
+	}
+
+	std::string sourceString = sourceStringSs.str();
+	const char* sourceStringPtr = sourceString.c_str();
+	
 	cl_int status = 0;
 	size_t length = 0;
 
-	program = clCreateProgramWithSource(context, 1, &fileStringPtr, NULL, &status);
+	program = clCreateProgramWithSource(context, 1, &sourceStringPtr, NULL, &status);
 	checkCLError(status, "Could not read OpenCL program source file");
 
 	status = clBuildProgram(program, 1, &deviceId, settings.openCL.options.c_str(), NULL, NULL);
@@ -229,6 +243,6 @@ void OpenCL::loadKernels()
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
 
-	testKernel = clCreateKernel(program, "test", &status);
+	printSizesKernel = clCreateKernel(program, "printSizes", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
 }

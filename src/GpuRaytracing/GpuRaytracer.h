@@ -6,11 +6,13 @@
 #include <atomic>
 #include <CL/opencl.h>
 
+#include "GpuRaytracing/Structs.h"
+#include "GpuRaytracing/GpuScene.h"
 #include "Rendering/Image.h"
 
 namespace Raycer
 {
-	struct RaytracerConfig;
+	class Scene;
 
 	class GpuRaytracer
 	{
@@ -19,20 +21,37 @@ namespace Raycer
 		GpuRaytracer();
 		~GpuRaytracer();
 
-		void trace(RaytracerConfig& config, std::atomic<bool>& interrupted);
-		void runTestKernel();
-
-		void resize(int width, int height);
-		void release();
-		void readImage();
+		void initialize();
+		void resizePixelBuffer(int width, int height);
+		void releasePixelBuffer();
+		void readScene(const Scene& scene);
+		void uploadData();
+		void trace(std::atomic<bool>& interrupted);
+		void downloadImage();
 		Image& getImage();
+
+		void printSizes();
 
 	private:
 
-		cl_mem pixels = nullptr;
+		GpuRaytracer(const GpuRaytracer& gpuRaytracer);
+		GpuRaytracer& operator=(const GpuRaytracer& gpuRaytracer);
 
-		int width = 0;
-		int height = 0;
+		cl_mem pixelsPtr = nullptr;
+		cl_mem infoPtr = nullptr;
+		cl_mem cameraPtr = nullptr;
+		cl_mem lightsPtr = nullptr;
+		cl_mem planesPtr = nullptr;
+		cl_mem spheresPtr = nullptr;
+
+		const int MAX_LIGHTS = 100;
+		const int MAX_PLANES = 100;
+		const int MAX_SPHERES = 100;
+
+		GpuScene gpuScene;
+
+		int bufferWidth = 0;
+		int bufferHeight = 0;
 
 		Image image;
 	};

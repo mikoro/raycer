@@ -130,6 +130,9 @@
     <ClCompile Include="src\Raytracing\Triangle.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\GpuRaytracing\GpuScene.cpp">
+      <Filter>GpuRaytracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -250,6 +253,9 @@
     <ClInclude Include="src\GpuRaytracing\Structs.h">
       <Filter>GpuRaytracing</Filter>
     </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\GpuScene.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -275,8 +281,13 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="data\kernels\raytrace.cl">
+  </ItemGroup>
+  <ItemGroup>
+    <Intel_OpenCL_Build_Rules Include="data\kernels\raytrace.cl">
       <Filter>Kernels</Filter>
-    </None>
+    </Intel_OpenCL_Build_Rules>
+    <Intel_OpenCL_Build_Rules Include="data\kernels\structs.cl">
+      <Filter>Kernels</Filter>
+    </Intel_OpenCL_Build_Rules>
   </ItemGroup>
 </Project>

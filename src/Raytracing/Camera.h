@@ -26,6 +26,16 @@ namespace Raycer
 		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
 		double fov = 75.0;
 
+		Vector3 forward;
+		Vector3 right;
+		Vector3 up;
+		Vector3 imagePlaneCenter;
+
+		double aspectRatio = 1.0;
+		double imagePlaneDistance = 1.0;
+		double imagePlaneWidth = 0.0;
+		double imagePlaneHeight = 0.0;
+
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
@@ -40,15 +50,5 @@ namespace Raycer
 		Vector3 newPosition = Vector3(0.0, 0.0, 0.0);
 		EulerAngle oldOrientation = EulerAngle(0.0, 0.0, 0.0);
 		EulerAngle newOrientation = EulerAngle(0.0, 0.0, 0.0);
-
-		Vector3 forward;
-		Vector3 right;
-		Vector3 up;
-		Vector3 imagePlaneCenter;
-
-		double aspectRatio = 1.0;
-		double imagePlaneDistance = 1.0;
-		double imagePlaneWidth = 0.0;
-		double imagePlaneHeight = 0.0;
 	};
 }

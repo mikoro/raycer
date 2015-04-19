@@ -14,10 +14,13 @@ using namespace Raycer;
 void GpuTracingState::initialize()
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
+	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	scene.loadFromFile("data/scenes/test_scene.json");
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+
+	gpuRaytracer.initialize();
 }
 
 void GpuTracingState::pause()
@@ -42,23 +45,14 @@ void GpuTracingState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	Framebuffer& framebuffer = App::getFramebuffer();
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	scene.camera.interpolate(interpolation);
 	scene.camera.precalculate();
 
-	config.renderTarget = nullptr;
-	config.scene = &scene;
-	config.sceneWidth = framebuffer.getWidth();
-	config.sceneHeight = framebuffer.getHeight();
-	config.pixelOffset = 0;
-	config.pixelCount = config.sceneWidth * config.sceneHeight;
-	config.pixelsProcessed = 0;
-	config.raysProcessed = 0;
-	config.isInteractive = true;
-
-	gpuRaytracer.trace(config, interrupted);
+	gpuRaytracer.readScene(scene);
+	gpuRaytracer.uploadData();
+	gpuRaytracer.trace(interrupted);
 }
 
 void GpuTracingState::windowResized(int width, int height)

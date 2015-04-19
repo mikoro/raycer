@@ -205,7 +205,6 @@ void InteractiveRunner::windowResized(int width, int height)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 	
-
 	windowWidth = width;
 	windowHeight = height;
 
@@ -228,12 +227,12 @@ void InteractiveRunner::resizeFramebuffer(int width, int height)
 	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	if (settings.openCL.enabled)
-		gpuRaytracer.release();
+		gpuRaytracer.releasePixelBuffer();
 
 	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		gpuRaytracer.resize(framebuffer.getWidth(), framebuffer.getHeight());
+		gpuRaytracer.resizePixelBuffer(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

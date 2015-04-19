@@ -20,6 +20,8 @@ namespace Raycer
 		void intersect(Ray& ray) const;
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		double radius = 1.0;
+		double radius2 = 1.0;
 		Material material;
 
 		template<class Archive>
@@ -29,10 +31,5 @@ namespace Raycer
 				CEREAL_NVP(material),
 				CEREAL_NVP(radius));
 		}
-
-	private:
-
-		double radius = 1.0;
-		double radius2 = 1.0;
 	};
 }

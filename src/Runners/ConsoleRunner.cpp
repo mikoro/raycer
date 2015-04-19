@@ -19,6 +19,7 @@
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "GpuRaytracing/GpuRaytracer.h"
+#include "GpuRaytracing/Structs.h"
 
 using namespace Raycer;
 using namespace std::chrono;
@@ -85,8 +86,13 @@ void ConsoleRunner::run(RaytracerConfig& config)
 	}
 
 	if (settings.openCL.enabled)
-		gpuRaytracer.resize(config.sceneWidth, config.sceneHeight);
-
+	{
+		gpuRaytracer.initialize();
+		gpuRaytracer.resizePixelBuffer(config.sceneWidth, config.sceneHeight);
+		gpuRaytracer.readScene(*config.scene);
+		gpuRaytracer.uploadData();
+	}
+	
 	std::atomic<bool> finished;
 
 	auto renderFunction = [&]()
@@ -94,7 +100,7 @@ void ConsoleRunner::run(RaytracerConfig& config)
 		if (!settings.openCL.enabled)
 			raytracer.trace(config, interrupted);
 		else
-			gpuRaytracer.trace(config, interrupted);
+			gpuRaytracer.trace(interrupted);
 
 		finished = true;
 	};
@@ -132,7 +138,7 @@ void ConsoleRunner::run(RaytracerConfig& config)
 
 	if (settings.openCL.enabled)
 	{
-		gpuRaytracer.readImage();
+		gpuRaytracer.downloadImage();
 		resultImage = gpuRaytracer.getImage();
 	}
 }

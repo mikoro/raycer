@@ -104,6 +104,7 @@
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp" />
+    <ClCompile Include="src\GpuRaytracing\GpuScene.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -139,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h" />
+    <ClInclude Include="src\GpuRaytracing\GpuScene.h" />
     <ClInclude Include="src\GpuRaytracing\Structs.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
@@ -191,6 +193,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="data\kernels\raytrace.cl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="data\kernels\structs.cl">
       <FileType>Document</FileType>
     </None>
   </ItemGroup>

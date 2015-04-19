@@ -23,7 +23,7 @@ namespace Raycer
 		cl_command_queue commandQueue = nullptr;
 		cl_program program = nullptr;
 		cl_kernel raytraceKernel = nullptr;
-		cl_kernel testKernel = nullptr;
+		cl_kernel printSizesKernel = nullptr;
 
 	private:
 

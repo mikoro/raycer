@@ -1,16 +1,9 @@
-typedef struct Sphere
+kernel void raytrace(constant Info* info, constant Camera* camera, constant Light* lights, constant Plane* planes, constant Sphere* spheres, write_only image2d_t pixels)
 {
-	float4 position;
-	float radius;
-} Sphere;
+	float x = (float)get_global_id(0);
+	float y = (float)get_global_id(1);
+	float k = fabs(cos(x + info->time)) * fabs(cos(y + info->time));
+	float4 color = (float4)(fabs(cos(info->time)) * k, fabs(cos(info->time + 0.5f)) * k, fabs(cos(info->time + 1.0f)) * k, 1.0f);
 
-__kernel void raytrace(__write_only image2d_t pixels)
-{
-	const int2 pos = (int2)(get_global_id(0), get_global_id(1));
-	write_imagef(pixels, pos, (float4)((float)pos.x / 1280.0f, (float)pos.y / 800.0f, (float)pos.x / 1280.0f, 1.0f));
-}
-
-__kernel void test()
-{
-	printf("Sphere: %d\n", sizeof(Sphere));
+	write_imagef(pixels, (int2)(x, y), color);
 }
