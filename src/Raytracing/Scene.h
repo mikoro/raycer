@@ -33,6 +33,7 @@ namespace Raycer
 
 		Camera camera;
 
+		int multisamples = 1;
 		int maxReflections = 0;
 		bool fogEnabled = false;
 		double fogDistance = 0.0;
@@ -57,6 +58,7 @@ namespace Raycer
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(camera),
+				CEREAL_NVP(multisamples),
 				CEREAL_NVP(maxReflections),
 				CEREAL_NVP(fogEnabled),
 				CEREAL_NVP(fogDistance),

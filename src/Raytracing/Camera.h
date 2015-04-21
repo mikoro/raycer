@@ -20,7 +20,7 @@ namespace Raycer
 		void interpolate(double interpolation);
 		void precalculate();
 		
-		Ray getRay(int x, int y) const;
+		Ray getRay(double x, double y) const;
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);

@@ -182,10 +182,14 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 			printf(" ");
 	}
 
+	int hours = (int)duration_cast<std::chrono::hours>(remainingTime).count();
+	int minutes = (int)duration_cast<std::chrono::minutes>(remainingTime).count() % 60;
+	int seconds = (int)duration_cast<std::chrono::seconds>(remainingTime).count() % 60;
+
 	printf("] ");
 	printf("%d %% | ", percentage);
-	printf("Remaining time: %02d:%02d:%02d | ", (int)duration_cast<hours>(remainingTime).count(), (int)duration_cast<minutes>(remainingTime).count(), (int)duration_cast<seconds>(remainingTime).count());
+	printf("Remaining time: %02d:%02d:%02d | ", hours, minutes, seconds);
 	printf("Pixels/s: %.1f | ", (double)pixelsProcessed / elapsedSeconds);
 	printf("Rays/s: %.1f", (double)raysProcessed / elapsedSeconds);
-	printf("\r");
+	printf("          \r");
 }

@@ -103,10 +103,10 @@ void Camera::precalculate()
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
-Ray Camera::getRay(int x, int y) const
+Ray Camera::getRay(double x, double y) const
 {
-	double dx = ((double)x / imagePlaneWidth) - 0.5;
-	double dy = ((double)y / imagePlaneHeight) - 0.5;
+	double dx = (x / imagePlaneWidth) - 0.5;
+	double dy = (y / imagePlaneHeight) - 0.5;
 
 	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 	Vector3 rayDirection = (imagePlanePixelPosition - position).normalized();

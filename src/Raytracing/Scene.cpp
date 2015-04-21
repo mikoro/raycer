@@ -95,6 +95,7 @@ Scene Scene::createTestScene()
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
+	scene.multisamples = 16;
 	scene.maxReflections = 1;
 
 	scene.fogEnabled = false;
@@ -125,8 +126,8 @@ Scene Scene::createTestScene()
 
 	CheckerboardTexture t4;
 	t4.id = 4;
-	t4.color1 = Color(1.0, 0.0, 0.0);
-	t4.color2 = Color(0.0, 1.0, 0.0);
+	t4.color1 = Color(0.0, 0.0, 0.0);
+	t4.color2 = Color(1.0, 1.0, 1.0);
 
 	scene.checkerboardTextures.push_back(t4);
 
@@ -138,7 +139,7 @@ Scene Scene::createTestScene()
 
 	Material m0;
 	m0.id = 0;
-	m0.textureId = 5;
+	m0.textureId = 4;
 	m0.diffuseness = 1.0;
 	m0.specularity = 0.0;
 	m0.shininess = 0.0;
@@ -186,7 +187,7 @@ Scene Scene::createTestScene()
 	p1.materialId = 0;
 	p1.position = Vector3(0.0, 0.0, 0.0);
 	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	p1.texcoordScale = Vector2(5.0, 5.0);
+	p1.texcoordScale = Vector2(1.0, 1.0);
 
 	scene.planes.push_back(p1);
 

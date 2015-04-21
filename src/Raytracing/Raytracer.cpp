@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <random>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/Scene.h"
@@ -22,8 +23,13 @@ namespace
 void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *config.scene;
+
 	int rayCount = 0;
 	int previousRayCount = 0;
+
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<double> random(0.0, std::nextafter(1.0, DBL_MAX));
 
 	#pragma omp parallel for schedule(dynamic, 1000) reduction(+:rayCount) firstprivate(previousRayCount)
 	for (int pixelIndex = 0; pixelIndex < config.pixelCount; ++pixelIndex)
@@ -32,21 +38,52 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 			continue;
 
 		int pixelOffsetIndex = pixelIndex + config.pixelOffset;
-		int x = pixelOffsetIndex % config.sceneWidth;
-		int y = pixelOffsetIndex / config.sceneWidth;
+		double x = (double)(pixelOffsetIndex % config.sceneWidth);
+		double y = (double)(pixelOffsetIndex / config.sceneWidth);
 
-		Ray rayToScene = scene.camera.getRay(x, y);
-		shootRay(config, rayToScene, rayCount, interrupted);
-		Color finalColor = rayToScene.color;
+		Color finalColor(0.0, 0.0, 0.0, 1.0);
+		double intersectionDistance = 0.0;
+
+		if (scene.multisamples < 2)
+		{
+			double rx = x + 0.5;
+			double ry = y + 0.5;
+
+			Ray rayToScene = scene.camera.getRay(rx, ry);
+			shootRay(config, rayToScene, rayCount, interrupted);
+			finalColor = rayToScene.color;
+			intersectionDistance = rayToScene.intersection.distance;
+		}
+		else
+		{
+			for (int i = 0; i < scene.multisamples; ++i)
+			{
+				for (int j = 0; j < scene.multisamples; ++j)
+				{
+					double rx = x + ((double)j + random(mt)) / (double)scene.multisamples;
+					double ry = y + ((double)i + random(mt)) / (double)scene.multisamples;
+
+					Ray rayToScene = scene.camera.getRay(rx, ry);
+					shootRay(config, rayToScene, rayCount, interrupted);
+					finalColor += rayToScene.color;
+					intersectionDistance += rayToScene.intersection.distance;
+				}
+			}
+
+			double multisamples2 = scene.multisamples * scene.multisamples;
+			finalColor /= multisamples2;
+			intersectionDistance /= multisamples2;
+		}
 
 		if (scene.fogEnabled)
 		{
-			double t = rayToScene.intersection.distance / scene.fogDistance;
+			double t = intersectionDistance / scene.fogDistance;
 			t = std::max(0.0, std::min(t, 1.0));
 			t = pow(t, scene.fogSteepness);
 			finalColor = Color::lerp(finalColor, scene.fogColor, t);
 		}
 
+		finalColor.a = 1.0;
 		config.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
 		if ((pixelIndex + 1) % 100 == 0)
@@ -74,7 +111,7 @@ void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::
 
 	if (ray.intersection.wasFound)
 	{
-		Color combinedLightColor(0.0, 0.0, 0.0);
+		Color combinedLightColor(0.0, 0.0, 0.0, 1.0);
 
 		Material* material = scene.materialMap[ray.intersection.materialId];
 		Texture* texture = scene.textureMap[material->textureId];
