@@ -55,7 +55,6 @@ namespace Raycer
 			cl_float4 ALIGN(16) position;
 			cl_float4 ALIGN(16) color;
 			cl_float ALIGN(4) radius;
-			cl_float ALIGN(4) radius2;
 		};
 	}
 }

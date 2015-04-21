@@ -35,11 +35,11 @@ Image::Image(const Image& image)
 {
 	int otherWidth = image.getWidth();
 	int otherHeight = image.getHeight();
-	int pixelCount = otherWidth * otherHeight;
+	int otherLength = image.getLength();
 
 	setSize(otherWidth, otherHeight);
 
-	for (int i = 0; i < pixelCount; ++i)
+	for (int i = 0; i < otherLength; ++i)
 		pixelData[i] = image.pixelData[i];
 }
 
@@ -61,11 +61,11 @@ Image& Image::operator=(const Image& image)
 {
 	int otherWidth = image.getWidth();
 	int otherHeight = image.getHeight();
-	int pixelCount = otherWidth * otherHeight;
+	int otherLength = image.getLength();
 
 	setSize(otherWidth, otherHeight);
 
-	for (int i = 0; i < pixelCount; ++i)
+	for (int i = 0; i < otherLength; ++i)
 		pixelData[i] = image.pixelData[i];
 
 	return *this;
@@ -75,15 +75,16 @@ void Image::load(const std::string& fileName)
 {
 	App::getLog().logInfo("Loading image from %s", fileName);
 
-	int newWidth, newHeight, components;
+	int newWidth, newHeight, newLength, components;
 	uint32_t* imageData = (uint32_t*)stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4);
+	newLength = newWidth * newHeight;
 
 	if (imageData == nullptr)
 		throw std::runtime_error("Could not load data from the image file");
 
 	setSize(newWidth, newHeight);
 
-	for (int i = 0; i < newWidth * newHeight; ++i)
+	for (int i = 0; i < newLength; ++i)
 		pixelData[i] = imageData[i];
 
 	stbi_image_free(imageData);
@@ -133,15 +134,15 @@ void Image::setSize(int width_, int height_)
 		pixelData = nullptr;
 	}
 
-	if (width == 0 || height == 0)
+	if (length == 0)
 		return;
 
-	pixelData = (uint32_t*)_mm_malloc(width * height * sizeof(uint32_t), 64);
+	pixelData = (uint32_t*)_mm_malloc(length * sizeof(uint32_t), 64);
 
 	if (pixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the image");
 
-	memset(pixelData, 0, width * height * sizeof(uint32_t));
+	memset(pixelData, 0, length * sizeof(uint32_t));
 }
 
 void Image::setPixel(int x, int y, const Color& color)
@@ -153,7 +154,7 @@ void Image::setPixel(int x, int y, const Color& color)
 
 void Image::setPixel(int index, const Color& color)
 {
-	assert(index < width * height);
+	assert(index < length);
 
 	pixelData[index] = color.getRgbaValue();
 }
@@ -162,7 +163,7 @@ void Image::swapBytes()
 {
 	Image swappedImage(width, height);
 
-	for (int i = 0; i < (width * height); ++i)
+	for (int i = 0; i < length; ++i)
 	{
 		uint32_t rgba = pixelData[i];
 		uint32_t abgr = 0;
@@ -213,11 +214,14 @@ Color Image::getPixel(int x, int y) const
 	return Color::fromRgbaValue(pixelData[y * width + x]);
 }
 
-Color Image::getPixel(double s, double t) const
+Color Image::getPixel(double u, double v) const
 {
-	assert(s >= 0.0 && s <= 1.0 && t >= 0.0 && t <= 1.0);
+	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
 
-	return getPixel((int)(s * (double)width + 0.5), (int)(t * (double)height + 0.5));
+	int x = (int)(u * (double)(width - 1) + 0.5);
+	int y = (int)(v * (double)(height - 1) + 0.5);
+
+	return getPixel(x, y);
 }
 
 uint32_t* Image::getPixelData() const

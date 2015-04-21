@@ -9,19 +9,21 @@ namespace Raycer
 {
 	struct Material
 	{
-		Color color = Color::WHITE;
+		int id = 0;
+		int textureId = 0;
 
-		double diffuseConstant = 1.0;
-		double specularConstant = 1.0;
+		double diffuseness = 1.0;
+		double specularity = 1.0;
 		double shininess = 1.0;
 		double reflectivity = 0.0;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(color),
-				CEREAL_NVP(diffuseConstant),
-				CEREAL_NVP(specularConstant),
+			ar(CEREAL_NVP(id),
+				CEREAL_NVP(textureId),
+				CEREAL_NVP(diffuseness),
+				CEREAL_NVP(specularity),
 				CEREAL_NVP(shininess),
 				CEREAL_NVP(reflectivity));
 		}

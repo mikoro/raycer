@@ -69,33 +69,35 @@ void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::
 	Scene& scene = *config.scene;
 	++rayCount;
 
-	for (size_t p = 0; p < scene.primitives.size(); ++p)
-		scene.primitives[p]->intersect(ray);
+	for (const Primitive* primitive : scene.primitiveList)
+		primitive->intersect(ray);
 
 	if (ray.intersection.wasFound)
 	{
-		Color lightColor(0.0, 0.0, 0.0);
+		Color combinedLightColor(0.0, 0.0, 0.0);
 
-		if (ray.intersection.material->reflectivity > 0.0 && ray.reflectionCount < scene.maxReflections)
+		Material* material = scene.materialMap[ray.intersection.materialId];
+		Texture* texture = scene.textureMap[material->textureId];
+
+		if (material->reflectivity > 0.0 && ray.reflectionCount < scene.maxReflections)
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
 			shootRay(config, reflectedRay, rayCount, interrupted);
 
-			lightColor = reflectedRay.color * ray.intersection.material->reflectivity;
+			combinedLightColor = reflectedRay.color * material->reflectivity;
 		}
 
-		for (size_t l = 0; l < scene.lights.size(); ++l)
+		for (const Light& light : scene.lights)
 		{
-			const Light& light = scene.lights[l];
 			Vector3 vectorToLight = light.position - ray.intersection.position;
 			Vector3 directionToLight = vectorToLight.normalized();
 			double distanceToLight = vectorToLight.length();
 			Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
 
-			for (size_t p = 0; p < scene.primitives.size(); ++p)
-				scene.primitives[p]->intersect(rayToLight);
+			for (const Primitive* primitive : scene.primitiveList)
+				primitive->intersect(rayToLight);
 
 			if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
 			{
@@ -103,20 +105,20 @@ void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::
 
 				if (diffuseAmount > 0.0)
 				{
-					lightColor += light.color * light.intensity * diffuseAmount * ray.intersection.material->diffuseConstant;
+					combinedLightColor += light.color * light.intensity * diffuseAmount * material->diffuseness;
 
 					Vector3 lightReflectionDirection = (2.0 * diffuseAmount * ray.intersection.normal) - directionToLight;
 					double specularAmount = lightReflectionDirection.dot(-ray.direction);
 
 					if (specularAmount > 0.0)
 					{
-						specularAmount = pow(specularAmount, ray.intersection.material->shininess);
-						lightColor += light.color * light.intensity * specularAmount * ray.intersection.material->specularConstant;
+						specularAmount = pow(specularAmount, material->shininess);
+						combinedLightColor += light.color * light.intensity * specularAmount * material->specularity;
 					}
 				}
 			}
 		}
 
-		ray.color = lightColor * ray.intersection.material->color;
+		ray.color = combinedLightColor * texture->getColor(ray.intersection.texcoord.x, ray.intersection.texcoord.y);
 	}
 }

@@ -3,9 +3,13 @@
 
 #pragma once
 
+#include <string>
+#include <vector>
+
 #include "Raytracing/Primitive.h"
-#include "Raytracing/Material.h"
 #include "Math/Vector3.h"
+#include "Math/EulerAngle.h"
+#include "Math/Triangle.h"
 
 namespace Raycer
 {
@@ -13,18 +17,23 @@ namespace Raycer
 	{
 	public:
 
-		Mesh();
-		
+		void initialize();
 		void intersect(Ray& ray) const;
 
+		std::string meshFilePath;
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
-		Material material;
+		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
+
+		std::vector<Triangle> triangles;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(position),
-				CEREAL_NVP(material));
+			ar(CEREAL_NVP(meshFilePath),
+				CEREAL_NVP(position),
+				CEREAL_NVP(orientation),
+				CEREAL_NVP(materialId),
+				CEREAL_NVP(texcoordScale));
 		}
 	};
 }

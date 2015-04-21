@@ -7,7 +7,6 @@
 
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
-#include "Raytracing/Material.h"
 
 namespace Raycer
 {
@@ -17,7 +16,7 @@ namespace Raycer
 		double distance = std::numeric_limits<double>::max();
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		Vector3 normal = Vector3(0.0, 0.0, 0.0);
-		Vector2 textureCoordinate = Vector2(0.0, 0.0);
-		const Material* material = nullptr;
+		Vector2 texcoord = Vector2(0.0, 0.0);
+		int materialId = 0;
 	};
 }

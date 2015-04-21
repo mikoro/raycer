@@ -31,6 +31,12 @@
     <Filter Include="Raytracing">
       <UniqueIdentifier>{99754385-78c4-4170-a243-c1513a21c797}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Raytracing\Textures">
+      <UniqueIdentifier>{d73b8e7d-f944-4896-b047-8c84164fb12e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Raytracing\Primitives">
+      <UniqueIdentifier>{27f5fe11-303d-4371-a98d-afd1d77015bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -109,12 +115,6 @@
     <ClCompile Include="src\Raytracing\Camera.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Mesh.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\Plane.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Ray.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
@@ -124,14 +124,29 @@
     <ClCompile Include="src\Raytracing\Scene.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Sphere.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\Triangle.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\GpuRaytracing\GpuScene.cpp">
       <Filter>GpuRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\ImageTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\ColorTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Mesh.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Plane.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Sphere.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Vertex3.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,15 +241,6 @@
     <ClInclude Include="src\Raytracing\Material.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Mesh.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Plane.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Primitive.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Ray.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
@@ -244,17 +250,41 @@
     <ClInclude Include="src\Raytracing\Scene.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Sphere.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Triangle.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\GpuRaytracing\Structs.h">
       <Filter>GpuRaytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\GpuRaytracing\GpuScene.h">
       <Filter>GpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\ImageTexture.h">
+      <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Texture.h">
+      <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\ColorTexture.h">
+      <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Mesh.h">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Plane.h">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Primitive.h">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Sphere.h">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Vertex3.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Triangle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\CheckerboardTexture.h">
+      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

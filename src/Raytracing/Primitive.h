@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "Math/Vector2.h"
+
 namespace Raycer
 {
 	struct Ray;
@@ -13,6 +15,10 @@ namespace Raycer
 
 		virtual ~Primitive() {}
 
+		virtual void initialize() = 0;
 		virtual void intersect(Ray& ray) const = 0;
+
+		int materialId = 0;
+		Vector2 texcoordScale = Vector2(1.0, 1.0);
 	};
 }

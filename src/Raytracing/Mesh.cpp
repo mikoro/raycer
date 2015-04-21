@@ -6,7 +6,7 @@
 
 using namespace Raycer;
 
-Mesh::Mesh()
+void Mesh::initialize()
 {
 }
 

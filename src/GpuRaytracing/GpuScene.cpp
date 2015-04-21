@@ -92,7 +92,6 @@ void GpuScene::readScene(const Scene& scene)
 		gpuSphere.color.w = 1.0f;
 
 		gpuSphere.radius = (float)sphere.radius;
-		gpuSphere.radius2 = (float)sphere.radius2;
 
 		spheres.push_back(gpuSphere);
 	}

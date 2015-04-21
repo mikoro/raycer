@@ -15,7 +15,7 @@ void CpuTracingState::initialize()
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
 
-	scene.loadFromFile("data/scenes/test_scene.json");
+	scene = Scene::createTestScene();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 }

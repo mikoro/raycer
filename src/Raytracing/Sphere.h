@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Raytracing/Primitive.h"
-#include "Raytracing/Material.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
@@ -13,23 +12,19 @@ namespace Raycer
 	{
 	public:
 
-		Sphere();
-		Sphere(const Vector3& position, double radius, const Material& material);
-
-		void setRadius(double radius);
+		void initialize();
 		void intersect(Ray& ray) const;
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
 		double radius = 1.0;
-		double radius2 = 1.0;
-		Material material;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(position),
-				CEREAL_NVP(material),
-				CEREAL_NVP(radius));
+				CEREAL_NVP(radius),
+				CEREAL_NVP(materialId),
+				CEREAL_NVP(texcoordScale));
 		}
 	};
 }

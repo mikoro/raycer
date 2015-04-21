@@ -9,24 +9,15 @@
 
 using namespace Raycer;
 
-Sphere::Sphere()
+void Sphere::initialize()
 {
-}
-
-Sphere::Sphere(const Vector3& position_, double radius_, const Material& material_) : position(position_), material(material_), radius(radius_)
-{
-}
-
-void Sphere::setRadius(double radius_)
-{
-	radius = radius_;
-	radius2 = radius * radius;
 }
 
 void Sphere::intersect(Ray& ray) const
 {
 	Vector3 originToCenter = position - ray.origin;
 	double originToSphereDistance2 = originToCenter.lengthSquared();
+	double radius2 = radius * radius;
 
 	// ray origin inside the sphere
 	if (originToSphereDistance2 < radius2)
@@ -55,5 +46,6 @@ void Sphere::intersect(Ray& ray) const
 	ray.intersection.distance = t;
 	ray.intersection.position = ray.origin + (t * ray.direction);
 	ray.intersection.normal = (ray.intersection.position - position).normalized();
-	ray.intersection.material = &material;
+	ray.intersection.texcoord = Vector2(0.0, 0.0);
+	ray.intersection.materialId = materialId;
 }
