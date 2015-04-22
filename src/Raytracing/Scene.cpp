@@ -95,7 +95,7 @@ Scene Scene::createTestScene()
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
-	scene.multisamples = 16;
+	scene.multisamples = 1;
 	scene.maxReflections = 1;
 
 	scene.fogEnabled = false;
@@ -147,7 +147,7 @@ Scene Scene::createTestScene()
 
 	Material m1;
 	m1.id = 1;
-	m1.textureId = 1;
+	m1.textureId = 4;
 	m1.diffuseness = 1.0;
 	m1.specularity = 0.0;
 	m1.shininess = 0.0;
@@ -195,6 +195,7 @@ Scene Scene::createTestScene()
 	s1.materialId = 1;
 	s1.position = Vector3(0.0, 1.0, -5.0);
 	s1.radius = 1.0;
+	s1.texcoordScale = Vector2(0.05, 0.05);
 
 	Sphere s2;
 	s2.materialId = 2;

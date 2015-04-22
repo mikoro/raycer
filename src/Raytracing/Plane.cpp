@@ -40,17 +40,8 @@ void Plane::intersect(Ray& ray) const
 	ray.intersection.normal = (denominator > 0.0) ? -normal : normal;
 	ray.intersection.materialId = materialId;
 
-	double u1 = uAxis.dot(intersectionPosition) / texcoordScale.x;
-	double v1 = vAxis.dot(intersectionPosition) / texcoordScale.y;
-	double u2 = fabs(u1 - (int)u1);
-	double v2 = fabs(v1 - (int)v1);
-
-	if (u1 < 0.0)
-		u2 = 1.0 - u2;
-
-	if (v1 < 0.0)
-		v2 = 1.0 - v2;
-
-	ray.intersection.texcoord.x = u2;
-	ray.intersection.texcoord.y = v2;
+	double u = uAxis.dot(intersectionPosition) / texcoordScale.x;
+	double v = vAxis.dot(intersectionPosition) / texcoordScale.y;
+	ray.intersection.texcoord.x = fabs(u - floor(u));
+	ray.intersection.texcoord.y = fabs(v - floor(v));
 }

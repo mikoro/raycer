@@ -113,7 +113,6 @@
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
-    <ClCompile Include="src\Math\Vertex3.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
     <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp" />
     <ClCompile Include="src\Raytracing\ColorTexture.cpp" />
@@ -154,7 +153,6 @@
     <ClInclude Include="src\Math\Triangle.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
-    <ClInclude Include="src\Math\Vertex3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />
     <ClInclude Include="src\Raytracing\CheckerboardTexture.h" />
     <ClInclude Include="src\Raytracing\ColorTexture.h" />

@@ -6,6 +6,10 @@
 *.user
 *.log
 *.settings
+*.jpg
+*.tga
+*.bmp
+*.png
 My*
 Thumbs.db
 .directory

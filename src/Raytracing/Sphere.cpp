@@ -42,10 +42,19 @@ void Sphere::intersect(Ray& ray) const
 	if (t > ray.intersection.distance)
 		return;
 
+	Vector3 intersectionPosition = ray.origin + (t * ray.direction);
+	Vector3 intersectionNormal = (intersectionPosition - position).normalized();
+
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
-	ray.intersection.position = ray.origin + (t * ray.direction);
-	ray.intersection.normal = (ray.intersection.position - position).normalized();
-	ray.intersection.texcoord = Vector2(0.0, 0.0);
+	ray.intersection.position = intersectionPosition;
+	ray.intersection.normal = intersectionNormal;
 	ray.intersection.materialId = materialId;
+
+	double u = 0.5 + atan2(intersectionNormal.z, intersectionNormal.x) / (2.0 * M_PI);
+	double v = 0.5 - asin(intersectionNormal.y) / M_PI;
+	u /= texcoordScale.x;
+	v /= texcoordScale.y;
+	ray.intersection.texcoord.x = u - floor(u);
+	ray.intersection.texcoord.y = v - floor(v);
 }
