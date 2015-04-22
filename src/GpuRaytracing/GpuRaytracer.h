@@ -8,7 +8,7 @@
 
 #include "GpuRaytracing/Structs.h"
 #include "GpuRaytracing/GpuScene.h"
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 
 namespace Raycer
 {

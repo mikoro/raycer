@@ -69,9 +69,6 @@
     <ClCompile Include="src\Rendering\Framebuffer.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Image.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Runners\ConsoleRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
@@ -145,6 +142,9 @@
     <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\Image.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -178,9 +178,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\RenderTarget.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\States\InteractiveState.h">
@@ -279,6 +276,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\CheckerboardTexture.h">
       <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Image.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

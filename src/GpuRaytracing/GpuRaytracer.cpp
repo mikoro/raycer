@@ -14,7 +14,7 @@
 #include "Utils/OpenCL.h"
 #include "Rendering/Framebuffer.h"
 #include "Raytracing/Scene.h"
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 #include "Runners/InteractiveRunner.h"
 
 using namespace Raycer;

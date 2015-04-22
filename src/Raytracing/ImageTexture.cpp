@@ -14,5 +14,5 @@ void ImageTexture::initialize()
 
 Color ImageTexture::getColor(double u, double v) const
 {
-	return image.getPixel(u, v);
+	return image.getPixelLinear(u, v);
 }

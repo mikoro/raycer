@@ -9,11 +9,11 @@
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
 
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 #include "App.h"
 #include "Utils/Log.h"
-#include "Rendering/Framebuffer.h"
 #include "Math/Color.h"
+#include "Math/MathUtils.h"
 
 using namespace Raycer;
 
@@ -214,7 +214,12 @@ Color Image::getPixel(int x, int y) const
 	return Color::fromRgbaValue(pixelData[y * width + x]);
 }
 
-Color Image::getPixel(double u, double v) const
+uint32_t* Image::getPixelData() const
+{
+	return pixelData;
+}
+
+Color Image::getPixelNearest(double u, double v) const
 {
 	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
 
@@ -224,7 +229,25 @@ Color Image::getPixel(double u, double v) const
 	return getPixel(x, y);
 }
 
-uint32_t* Image::getPixelData() const
+Color Image::getPixelLinear(double u, double v) const
 {
-	return pixelData;
+	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
+
+	double dx = u * (double)(width - 1) - 0.5;
+	double dy = v * (double)(height - 1) - 0.5;
+	int ix = (int)dx;
+	int iy = (int)dy;
+	double tx2 = dx - (double)ix;
+	double ty2 = dy - (double)iy;
+	tx2 = MathUtils::smoothstep(tx2);
+	ty2 = MathUtils::smoothstep(ty2);
+	double tx1 = 1.0 - tx2;
+	double ty1 = 1.0 - ty2;
+
+	Color c11 = getPixel(ix, iy);
+	Color c21 = getPixel(ix + 1, iy);
+	Color c12 = getPixel(ix, iy + 1);
+	Color c22 = getPixel(ix + 1, iy + 1);
+
+	return (tx1 * c11 + tx2 * c21) * ty1 + (tx1 * c12 + tx2 * c22) * ty2;
 }

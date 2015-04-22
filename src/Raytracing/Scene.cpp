@@ -109,15 +109,15 @@ Scene Scene::createTestScene()
 
 	ColorTexture t1;
 	t1.id = 1;
-	t1.color = Color(1.0, 0.0, 0.0);
+	t1.color = Color(0.5, 0.0, 0.0);
 
 	ColorTexture t2;
 	t2.id = 2;
-	t2.color = Color(0.0, 1.0, 0.0);
+	t2.color = Color(0.0, 0.5, 0.0);
 
 	ColorTexture t3;
 	t3.id = 3;
-	t3.color = Color(0.0, 0.0, 1.0);
+	t3.color = Color(0.0, 0.0, 0.5);
 
 	scene.colorTextures.push_back(t0);
 	scene.colorTextures.push_back(t1);
@@ -139,7 +139,7 @@ Scene Scene::createTestScene()
 
 	Material m0;
 	m0.id = 0;
-	m0.textureId = 4;
+	m0.textureId = 5;
 	m0.diffuseness = 1.0;
 	m0.specularity = 0.0;
 	m0.shininess = 0.0;
@@ -158,7 +158,7 @@ Scene Scene::createTestScene()
 	m2.textureId = 2;
 	m2.diffuseness = 1.0;
 	m2.specularity = 1.0;
-	m2.shininess = 32.0;
+	m2.shininess = 128.0;
 	m2.reflectivity = 1.0;
 
 	Material m3;
@@ -166,7 +166,7 @@ Scene Scene::createTestScene()
 	m3.textureId = 3;
 	m3.diffuseness = 1.0;
 	m3.specularity = 1.0;
-	m3.shininess = 32.0;
+	m3.shininess = 8.0;
 	m3.reflectivity = 1.0;
 
 	Material m4;
@@ -187,7 +187,7 @@ Scene Scene::createTestScene()
 	p1.materialId = 0;
 	p1.position = Vector3(0.0, 0.0, 0.0);
 	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	p1.texcoordScale = Vector2(1.0, 1.0);
+	p1.texcoordScale = Vector2(5.0, 5.0);
 
 	scene.planes.push_back(p1);
 

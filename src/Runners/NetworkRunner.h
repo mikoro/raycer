@@ -11,7 +11,7 @@
 #include <boost/asio.hpp>
 
 #include "Raytracing/Scene.h"
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 
 namespace ba = boost::asio;
 

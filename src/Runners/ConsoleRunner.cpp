@@ -15,7 +15,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Utils/OpenCL.h"
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "GpuRaytracing/GpuRaytracer.h"

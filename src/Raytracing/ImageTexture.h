@@ -6,7 +6,7 @@
 #include <string>
 
 #include "Raytracing/Texture.h"
-#include "Rendering/Image.h"
+#include "Utils/Image.h"
 
 namespace Raycer
 {

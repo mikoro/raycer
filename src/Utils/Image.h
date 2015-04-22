@@ -11,7 +11,6 @@
 namespace Raycer
 {
 	class Color;
-	class Framebuffer;
 
 	class Image : public RenderTarget
 	{
@@ -39,8 +38,10 @@ namespace Raycer
 		int getHeight() const;
 		int getLength() const;
 		Color getPixel(int x, int y) const;
-		Color getPixel(double u, double v) const;
 		uint32_t* getPixelData() const;
+
+		Color getPixelNearest(double u, double v) const;
+		Color getPixelLinear(double u, double v) const;
 
 	private:
 
