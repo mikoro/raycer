@@ -145,6 +145,9 @@
     <ClCompile Include="src\Utils\Image.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\PerlinNoise.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -278,6 +281,9 @@
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\Image.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\PerlinNoise.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

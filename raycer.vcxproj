@@ -137,6 +137,7 @@
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\Utils\OpenCL.cpp" />
     <ClCompile Include="src\Utils\OpenGL.cpp" />
+    <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -184,6 +185,7 @@
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\Utils\OpenCL.h" />
     <ClInclude Include="src\Utils\OpenGL.h" />
+    <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\Settings.h" />
   </ItemGroup>
   <ItemGroup>
