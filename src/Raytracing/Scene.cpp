@@ -63,6 +63,9 @@ void Scene::initialize()
 	for (ImageTexture& imageTexture : imageTextures)
 		textureList.push_back(&imageTexture);
 
+	for (WoodTexture& woodTexture : woodTextures)
+		textureList.push_back(&woodTexture);
+
 	for (Texture* texture : textureList)
 	{
 		texture->initialize();
@@ -137,9 +140,14 @@ Scene Scene::createTestScene()
 
 	scene.imageTextures.push_back(t5);
 
+	WoodTexture t6;
+	t6.id = 6;
+
+	scene.woodTextures.push_back(t6);
+
 	Material m0;
 	m0.id = 0;
-	m0.textureId = 5;
+	m0.textureId = 6;
 	m0.diffuseness = 1.0;
 	m0.specularity = 0.0;
 	m0.shininess = 0.0;
@@ -147,7 +155,7 @@ Scene Scene::createTestScene()
 
 	Material m1;
 	m1.id = 1;
-	m1.textureId = 4;
+	m1.textureId = 6;
 	m1.diffuseness = 1.0;
 	m1.specularity = 0.0;
 	m1.shininess = 0.0;
@@ -189,7 +197,7 @@ Scene Scene::createTestScene()
 	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	p1.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.planes.push_back(p1);
+	//scene.planes.push_back(p1);
 
 	Sphere s1;
 	s1.materialId = 1;
@@ -208,8 +216,8 @@ Scene Scene::createTestScene()
 	s3.radius = 1.0;
 
 	scene.spheres.push_back(s1);
-	scene.spheres.push_back(s2);
-	scene.spheres.push_back(s3);
+	//scene.spheres.push_back(s2);
+	//scene.spheres.push_back(s3);
 
 	Light l1;
 	l1.position = Vector3(0.0, 10.0, 5.0);

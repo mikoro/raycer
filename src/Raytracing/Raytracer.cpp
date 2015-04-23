@@ -156,6 +156,6 @@ void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::
 			}
 		}
 
-		ray.color = combinedLightColor * texture->getColor(ray.intersection.texcoord.x, ray.intersection.texcoord.y);
+		ray.color = combinedLightColor * texture->getColor(ray.intersection.position, ray.intersection.texcoord);
 	}
 }

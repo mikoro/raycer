@@ -123,6 +123,7 @@
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
     <ClCompile Include="src\Raytracing\Sphere.cpp" />
+    <ClCompile Include="src\Raytracing\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="src\Raytracing\Scene.h" />
     <ClInclude Include="src\Raytracing\Sphere.h" />
     <ClInclude Include="src\Raytracing\Texture.h" />
+    <ClInclude Include="src\Raytracing\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Text.h" />

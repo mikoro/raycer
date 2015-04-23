@@ -2,6 +2,9 @@
 // License: MIT, see the LICENSE file.
 
 #include "Raytracing/ColorTexture.h"
+#include "Math/Color.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 
@@ -9,10 +12,10 @@ void ColorTexture::initialize()
 {
 }
 
-Color ColorTexture::getColor(double u, double v) const
+Color ColorTexture::getColor(const Vector3& position, const Vector2& texcoord) const
 {
-	(void)u;
-	(void)v;
+	(void)position;
+	(void)texcoord;
 
 	return color;
 }

@@ -11,6 +11,7 @@
 #include "Raytracing/ColorTexture.h"
 #include "Raytracing/CheckerboardTexture.h"
 #include "Raytracing/ImageTexture.h"
+#include "Raytracing/WoodTexture.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Primitive.h"
 #include "Raytracing/Plane.h"
@@ -43,6 +44,7 @@ namespace Raycer
 		std::vector<ColorTexture> colorTextures;
 		std::vector<CheckerboardTexture> checkerboardTextures;
 		std::vector<ImageTexture> imageTextures;
+		std::vector<WoodTexture> woodTextures;
 		std::vector<Material> materials;
 		std::vector<Plane> planes;
 		std::vector<Sphere> spheres;
@@ -67,6 +69,7 @@ namespace Raycer
 				CEREAL_NVP(colorTextures),
 				CEREAL_NVP(checkerboardTextures),
 				CEREAL_NVP(imageTextures),
+				CEREAL_NVP(woodTextures),
 				CEREAL_NVP(materials),
 				CEREAL_NVP(planes),
 				CEREAL_NVP(spheres),

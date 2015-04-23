@@ -40,7 +40,7 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 	int BA = permutations[B] + Z;
 	int BB = permutations[B + 1] + Z;
 
-	return lerp(w, lerp(v, lerp(u, grad(permutations[AA], x, y, z),
+	double n = lerp(w, lerp(v, lerp(u, grad(permutations[AA], x, y, z),
 		grad(permutations[BA], x - 1, y, z)),
 		lerp(u, grad(permutations[AB], x, y - 1, z),
 		grad(permutations[BB], x - 1, y - 1, z))),
@@ -48,6 +48,8 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 		grad(permutations[BA + 1], x - 1, y, z - 1)),
 		lerp(u, grad(permutations[AB + 1], x, y - 1, z - 1),
 		grad(permutations[BB + 1], x - 1, y - 1, z - 1))));
+
+	return 0.5 + n / 2.0;
 }
 
 double PerlinNoise::getOctaveNoise(int octaves, double persistence, double x, double y, double z) const

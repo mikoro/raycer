@@ -2,6 +2,9 @@
 // License: MIT, see the LICENSE file.
 
 #include "Raytracing/CheckerboardTexture.h"
+#include "Math/Color.h"
+#include "Math/Vector3.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 
@@ -9,10 +12,12 @@ void CheckerboardTexture::initialize()
 {
 }
 
-Color CheckerboardTexture::getColor(double u, double v) const
+Color CheckerboardTexture::getColor(const Vector3& position, const Vector2& texcoord) const
 {
-	if (u < 0.5)
-		return (v < 0.5) ? color1 : color2;
+	(void)position;
+
+	if (texcoord.x < 0.5)
+		return (texcoord.y < 0.5) ? color1 : color2;
 	else
-		return (v < 0.5) ? color2 : color1;
+		return (texcoord.y < 0.5) ? color2 : color1;
 }

@@ -6,13 +6,15 @@
 namespace Raycer
 {
 	class Color;
+	class Vector3;
+	class Vector2;
 
 	class Texture
 	{
 		public:
 
 			virtual void initialize() = 0;
-			virtual Color getColor(double u, double v) const = 0;
+			virtual Color getColor(const Vector3& position, const Vector2& texcoord) const = 0;
 
 			int id = 0;
 	};

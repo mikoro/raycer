@@ -11,13 +11,15 @@
 namespace Raycer
 {
 	class Color;
+	class Vector3;
+	class Vector2;
 
 	class ImageTexture : public Texture
 	{
 		public:
 
 			void initialize();
-			Color getColor(double u, double v) const;
+			Color getColor(const Vector3& position, const Vector2& texcoord) const;
 
 			std::string imageFilePath;
 
