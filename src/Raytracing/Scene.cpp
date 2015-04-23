@@ -191,11 +191,11 @@ Scene Scene::createTestScene()
 
 	Material m4;
 	m4.id = 4;
-	m4.textureId = 3;
+	m4.textureId = 0;
 	m4.diffuseness = 1.0;
-	m4.specularity = 1.0;
-	m4.shininess = 8.0;
-	m4.reflectivity = 1.0;
+	m4.specularity = 0.0;
+	m4.shininess = 0.0;
+	m4.reflectivity = 0.0;
 
 	scene.materials.push_back(m0);
 	scene.materials.push_back(m1);
@@ -229,7 +229,7 @@ Scene Scene::createTestScene()
 
 	scene.spheres.push_back(s1);
 	scene.spheres.push_back(s2);
-	//scene.spheres.push_back(s3);
+	scene.spheres.push_back(s3);
 
 	Light l1;
 	l1.position = Vector3(0.0, 10.0, 5.0);

@@ -35,6 +35,7 @@ namespace Raycer
 
 		Camera camera;
 
+		double gamma = 1.0 / 2.2;
 		int multisamples = 1;
 		int maxReflections = 0;
 		bool fogEnabled = false;

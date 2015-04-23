@@ -230,3 +230,15 @@ Color Color::alphaBlend(const Color& first, const Color& second)
 
 	return c;
 }
+
+Color Color::pow(const Color& color, double power)
+{
+	Color result;
+
+	result.r = ::pow(color.r, power);
+	result.g = ::pow(color.g, power);
+	result.b = ::pow(color.b, power);
+	result.a = color.a;
+
+	return result;
+}

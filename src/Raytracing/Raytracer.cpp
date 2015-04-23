@@ -84,6 +84,7 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 		}
 
 		finalColor.a = 1.0;
+		finalColor = Color::pow(finalColor, scene.gamma);
 		config.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
 		if ((pixelIndex + 1) % 100 == 0)
