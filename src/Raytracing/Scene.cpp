@@ -66,6 +66,9 @@ void Scene::initialize()
 	for (WoodTexture& woodTexture : woodTextures)
 		textureList.push_back(&woodTexture);
 
+	for (MarbleTexture& marbleTexture : marbleTextures)
+		textureList.push_back(&marbleTexture);
+
 	for (Texture* texture : textureList)
 	{
 		texture->initialize();
@@ -145,30 +148,39 @@ Scene Scene::createTestScene()
 
 	scene.woodTextures.push_back(t6);
 
+	MarbleTexture t7;
+	t7.id = 7;
+
+	scene.marbleTextures.push_back(t7);
+	
+	// p1
 	Material m0;
 	m0.id = 0;
-	m0.textureId = 6;
+	m0.textureId = 0;
 	m0.diffuseness = 1.0;
-	m0.specularity = 0.0;
-	m0.shininess = 0.0;
+	m0.specularity = 0.5;
+	m0.shininess = 2.0;
 	m0.reflectivity = 0.0;
 
+	// s1
 	Material m1;
 	m1.id = 1;
 	m1.textureId = 6;
 	m1.diffuseness = 1.0;
-	m1.specularity = 0.0;
-	m1.shininess = 0.0;
+	m1.specularity = 1.0;
+	m1.shininess = 1.0;
 	m1.reflectivity = 0.0;
 
+	// s2
 	Material m2;
 	m2.id = 2;
-	m2.textureId = 2;
+	m2.textureId = 7;
 	m2.diffuseness = 1.0;
 	m2.specularity = 1.0;
-	m2.shininess = 128.0;
-	m2.reflectivity = 1.0;
+	m2.shininess = 64.0;
+	m2.reflectivity = 0.0;
 
+	// s3
 	Material m3;
 	m3.id = 3;
 	m3.textureId = 3;
@@ -197,7 +209,7 @@ Scene Scene::createTestScene()
 	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	p1.texcoordScale = Vector2(5.0, 5.0);
 
-	//scene.planes.push_back(p1);
+	scene.planes.push_back(p1);
 
 	Sphere s1;
 	s1.materialId = 1;
@@ -216,7 +228,7 @@ Scene Scene::createTestScene()
 	s3.radius = 1.0;
 
 	scene.spheres.push_back(s1);
-	//scene.spheres.push_back(s2);
+	scene.spheres.push_back(s2);
 	//scene.spheres.push_back(s3);
 
 	Light l1;

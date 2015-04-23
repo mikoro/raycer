@@ -117,6 +117,7 @@
     <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp" />
     <ClCompile Include="src\Raytracing\ColorTexture.cpp" />
     <ClCompile Include="src\Raytracing\ImageTexture.cpp" />
+    <ClCompile Include="src\Raytracing\MarbleTexture.cpp" />
     <ClCompile Include="src\Raytracing\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Plane.cpp" />
     <ClCompile Include="src\Raytracing\Ray.cpp" />
@@ -161,6 +162,7 @@
     <ClInclude Include="src\Raytracing\ImageTexture.h" />
     <ClInclude Include="src\Raytracing\Intersection.h" />
     <ClInclude Include="src\Raytracing\Light.h" />
+    <ClInclude Include="src\Raytracing\MarbleTexture.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
     <ClInclude Include="src\Raytracing\Mesh.h" />
     <ClInclude Include="src\Raytracing\Plane.h" />

@@ -151,6 +151,9 @@
     <ClCompile Include="src\Raytracing\WoodTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\MarbleTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -290,6 +293,9 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\WoodTexture.h">
+      <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\MarbleTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
