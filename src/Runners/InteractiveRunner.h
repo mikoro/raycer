@@ -6,7 +6,7 @@
 #include <map>
 #include <memory>
 
-#include "States/InteractiveState.h"
+#include "InteractiveStates/InteractiveState.h"
 #include "Rendering/Text.h"
 #include "Utils/FpsCounter.h"
 
@@ -24,7 +24,7 @@ namespace Raycer
 		int deltaY = 0;
 	};
 
-	enum class RunnerStates { None, CpuTracing, GpuTracing };
+	enum class RunnerStates { None, Raytracing, CLRaytracing };
 
 	class InteractiveRunner
 	{

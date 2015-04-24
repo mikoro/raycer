@@ -38,61 +38,61 @@ void CLScene::readScene(const Scene& scene)
 
 	for (const Light& light : scene.lights)
 	{
-		Gpu::Light gpuLight;
+		OpenCL::Light clLight;
 
-		gpuLight.position.x = (float)light.position.x;
-		gpuLight.position.y = (float)light.position.y;
-		gpuLight.position.z = (float)light.position.z;
-		gpuLight.position.w = 0.0f;
+		clLight.position.x = (float)light.position.x;
+		clLight.position.y = (float)light.position.y;
+		clLight.position.z = (float)light.position.z;
+		clLight.position.w = 0.0f;
 
-		gpuLight.color.x = (float)light.color.r;
-		gpuLight.color.y = (float)light.color.g;
-		gpuLight.color.z = (float)light.color.b;
-		gpuLight.color.w = (float)light.color.a;
+		clLight.color.x = (float)light.color.r;
+		clLight.color.y = (float)light.color.g;
+		clLight.color.z = (float)light.color.b;
+		clLight.color.w = (float)light.color.a;
 
-		gpuLight.intensity = (float)light.intensity;
+		clLight.intensity = (float)light.intensity;
 
-		lights.push_back(gpuLight);
+		lights.push_back(clLight);
 	}
 
 	for (const Plane& plane : scene.planes)
 	{
-		Gpu::Plane gpuPlane;
+		OpenCL::Plane clPlane;
 
-		gpuPlane.position.x = (float)plane.position.x;
-		gpuPlane.position.y = (float)plane.position.y;
-		gpuPlane.position.z = (float)plane.position.z;
-		gpuPlane.position.w = 0.0f;
+		clPlane.position.x = (float)plane.position.x;
+		clPlane.position.y = (float)plane.position.y;
+		clPlane.position.z = (float)plane.position.z;
+		clPlane.position.w = 0.0f;
 
-		gpuPlane.normal.x = (float)plane.normal.x;
-		gpuPlane.normal.y = (float)plane.normal.y;
-		gpuPlane.normal.z = (float)plane.normal.z;
-		gpuPlane.normal.w = 0.0f;
+		clPlane.normal.x = (float)plane.normal.x;
+		clPlane.normal.y = (float)plane.normal.y;
+		clPlane.normal.z = (float)plane.normal.z;
+		clPlane.normal.w = 0.0f;
 
-		gpuPlane.color.x = 1.0f;
-		gpuPlane.color.y = 0.0f;
-		gpuPlane.color.z = 0.0f;
-		gpuPlane.color.w = 1.0f;
+		clPlane.color.x = 1.0f;
+		clPlane.color.y = 0.0f;
+		clPlane.color.z = 0.0f;
+		clPlane.color.w = 1.0f;
 
-		planes.push_back(gpuPlane);
+		planes.push_back(clPlane);
 	}
 
 	for (const Sphere& sphere : scene.spheres)
 	{
-		Gpu::Sphere gpuSphere;
+		OpenCL::Sphere clSphere;
 
-		gpuSphere.position.x = (float)sphere.position.x;
-		gpuSphere.position.y = (float)sphere.position.y;
-		gpuSphere.position.z = (float)sphere.position.z;
-		gpuSphere.position.w = 0.0f;
+		clSphere.position.x = (float)sphere.position.x;
+		clSphere.position.y = (float)sphere.position.y;
+		clSphere.position.z = (float)sphere.position.z;
+		clSphere.position.w = 0.0f;
 
-		gpuSphere.color.x = 0.0f;
-		gpuSphere.color.y = 1.0f;
-		gpuSphere.color.z = 0.0f;
-		gpuSphere.color.w = 1.0f;
+		clSphere.color.x = 0.0f;
+		clSphere.color.y = 1.0f;
+		clSphere.color.z = 0.0f;
+		clSphere.color.w = 1.0f;
 
-		gpuSphere.radius = (float)sphere.radius;
+		clSphere.radius = (float)sphere.radius;
 
-		spheres.push_back(gpuSphere);
+		spheres.push_back(clSphere);
 	}
 }

@@ -5,12 +5,13 @@
 
 #include <atomic>
 
-#include "States/InteractiveState.h"
+#include "InteractiveStates/InteractiveState.h"
+#include "Raytracing/Raytracer.h"
 #include "Raytracing/Scene.h"
 
 namespace Raycer
 {
-	class GpuTracingState : public InteractiveState
+	class RaytracingState : public InteractiveState
 	{
 	public:
 
@@ -27,6 +28,7 @@ namespace Raycer
 
 	private:
 
+		RaytracerConfig config;
 		Scene scene;
 
 		std::atomic<bool> interrupted;

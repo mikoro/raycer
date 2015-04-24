@@ -15,3 +15,7 @@ if not exist bin\%1\raycer.exe.config (
 if not exist bin\%1\settings.ini (
   xcopy /Y /Q misc\settings.ini bin\%1
 )
+
+if not exist bin\%1\data\opencl (
+  xcopy /E /I /Y /Q src\CLRaytracing\*.cl bin\%1\data\opencl
+)

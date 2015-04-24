@@ -30,18 +30,18 @@ void Framebuffer::initialize()
 
 	App::getLog().logInfo("Initializing framebuffer");
 
-	glGenTextures(1, &cpuTextureId);
-	glGenTextures(1, &gpuTextureId);
+	glGenTextures(1, &textureId);
+	glGenTextures(1, &clTextureId);
 
 	checkGLError("Could not create OpenGL textures");
 
 	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
-	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, clTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -101,15 +101,15 @@ void Framebuffer::resize(int width_, int height_)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory on the device
-	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not reserve OpenGL texture memory (CPU texture)");
+	checkGLError("Could not reserve OpenGL texture memory");
 
-	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, clTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not reserve OpenGL texture memory (GPU texture)");
+	checkGLError("Could not reserve OpenGL texture memory (OpenCL)");
 
 	clear();
 }
@@ -140,14 +140,14 @@ uint32_t* Framebuffer::getPixelData() const
 	return pixelData;
 }
 
-uint32_t Framebuffer::getCpuTextureId() const
+uint32_t Framebuffer::getTextureId() const
 {
-	return cpuTextureId;
+	return textureId;
 }
 
-uint32_t Framebuffer::getGpuTextureId() const
+uint32_t Framebuffer::getCLTextureId() const
 {
-	return gpuTextureId;
+	return clTextureId;
 }
 
 int Framebuffer::getWidth() const
@@ -183,10 +183,10 @@ void Framebuffer::render() const
 	glUniform1f(texelHeightUniformId, 1.0f / (float)height);
 
 	if (settings.openCL.enabled)
-		glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+		glBindTexture(GL_TEXTURE_2D, clTextureId);
 	else
 	{
-		glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+		glBindTexture(GL_TEXTURE_2D, textureId);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
 		checkGLError("Could not upload OpenGL texture data");
 	}
@@ -203,12 +203,12 @@ void Framebuffer::render() const
 
 void Framebuffer::enableSmoothing(bool state)
 {
-	glBindTexture(GL_TEXTURE_2D, cpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, textureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	glBindTexture(GL_TEXTURE_2D, gpuTextureId);
+	glBindTexture(GL_TEXTURE_2D, clTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);

@@ -106,6 +106,8 @@
     <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp" />
     <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
     <ClCompile Include="src\CLRaytracing\CLManager.cpp" />
+    <ClCompile Include="src\InteractiveStates\RaytracingState.cpp" />
+    <ClCompile Include="src\InteractiveStates\CLRaytracingState.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -133,8 +135,6 @@
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
-    <ClCompile Include="src\States\CpuTracingState.cpp" />
-    <ClCompile Include="src\States\GpuTracingState.cpp" />
     <ClCompile Include="src\Utils\Errors.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\Image.cpp" />
@@ -149,6 +149,9 @@
     <ClInclude Include="src\CLRaytracing\CLScene.h" />
     <ClInclude Include="src\CLRaytracing\CLStructs.h" />
     <ClInclude Include="src\CLRaytracing\CLManager.h" />
+    <ClInclude Include="src\InteractiveStates\RaytracingState.h" />
+    <ClInclude Include="src\InteractiveStates\CLRaytracingState.h" />
+    <ClInclude Include="src\InteractiveStates\InteractiveState.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
@@ -183,9 +186,6 @@
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
     <ClInclude Include="src\Runners\InteractiveRunner.h" />
     <ClInclude Include="src\Runners\NetworkRunner.h" />
-    <ClInclude Include="src\States\GpuTracingState.h" />
-    <ClInclude Include="src\States\InteractiveState.h" />
-    <ClInclude Include="src\States\CpuTracingState.h" />
     <ClInclude Include="src\Utils\Errors.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\Image.h" />

@@ -4,9 +4,6 @@
     <Filter Include="Utils">
       <UniqueIdentifier>{6897ec37-10ba-46bb-af5a-d87e8155dbbf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="States">
-      <UniqueIdentifier>{7bb3215d-2403-44f1-9685-2b5c83e9f9ea}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Resources">
       <UniqueIdentifier>{0efe9c13-6183-4c2c-832f-7b9e03c0af81}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="CLRaytracing">
       <UniqueIdentifier>{08159d90-8e48-4e1d-98fe-53296966efc5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InteractiveStates">
+      <UniqueIdentifier>{230aa0b1-03c2-47c7-9bc9-3458032bb98a}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -71,12 +71,6 @@
     </ClCompile>
     <ClCompile Include="src\Runners\InteractiveRunner.cpp">
       <Filter>Runners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\States\CpuTracingState.cpp">
-      <Filter>States</Filter>
-    </ClCompile>
-    <ClCompile Include="src\States\GpuTracingState.cpp">
-      <Filter>States</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\Settings.cpp">
       <Filter>Utils</Filter>
@@ -154,6 +148,12 @@
     <ClCompile Include="src\Rendering\GLHelper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\InteractiveStates\RaytracingState.cpp">
+      <Filter>InteractiveStates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\InteractiveStates\CLRaytracingState.cpp">
+      <Filter>InteractiveStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -189,20 +189,11 @@
     <ClInclude Include="src\Rendering\RenderTarget.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\States\InteractiveState.h">
-      <Filter>States</Filter>
-    </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
     <ClInclude Include="src\Runners\InteractiveRunner.h">
       <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\States\CpuTracingState.h">
-      <Filter>States</Filter>
-    </ClInclude>
-    <ClInclude Include="src\States\GpuTracingState.h">
-      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\Settings.h">
       <Filter>Utils</Filter>
@@ -300,6 +291,15 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\GLHelper.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InteractiveStates\InteractiveState.h">
+      <Filter>InteractiveStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InteractiveStates\RaytracingState.h">
+      <Filter>InteractiveStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\InteractiveStates\CLRaytracingState.h">
+      <Filter>InteractiveStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

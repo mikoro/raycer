@@ -24,11 +24,11 @@ namespace Raycer
 		static Log& getLog();
 		static Settings& getSettings();
 		static Framebuffer& getFramebuffer();
-		static CLManager& getOpenCL();
+		static CLManager& getCLManager();
 		static InteractiveRunner& getInteractiveRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();
 		static Raytracer& getRaytracer();
-		static CLRaytracer& getGpuRaytracer();
+		static CLRaytracer& getCLRaytracer();
 	};
 }

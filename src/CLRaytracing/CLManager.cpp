@@ -186,8 +186,8 @@ void CLManager::loadKernels()
 	log.logInfo("Building OpenCL programs");
 
 	std::vector<std::string> filePaths;
-	filePaths.push_back("data/kernels/structs.cl");
-	filePaths.push_back("data/kernels/raytrace.cl");
+	filePaths.push_back("data/opencl/structs.cl");
+	filePaths.push_back("data/opencl/raytrace.cl");
 
 	std::stringstream sourceStringSs;
 

@@ -34,8 +34,8 @@ namespace Raycer
 
 	private:
 
-		CLRaytracer(const CLRaytracer& gpuRaytracer);
-		CLRaytracer& operator=(const CLRaytracer& gpuRaytracer);
+		CLRaytracer(const CLRaytracer& clRaytracer);
+		CLRaytracer& operator=(const CLRaytracer& clRaytracer);
 
 		cl_mem pixelsPtr = nullptr;
 		cl_mem infoPtr = nullptr;
@@ -48,7 +48,7 @@ namespace Raycer
 		const int MAX_PLANES = 100;
 		const int MAX_SPHERES = 100;
 
-		CLScene gpuScene;
+		CLScene clScene;
 
 		int bufferWidth = 0;
 		int bufferHeight = 0;

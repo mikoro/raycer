@@ -27,8 +27,8 @@ namespace Raycer
 		Color getPixel(int x, int y) const;
 
 		uint32_t* getPixelData() const;
-		uint32_t getCpuTextureId() const;
-		uint32_t getGpuTextureId() const;
+		uint32_t getTextureId() const;
+		uint32_t getCLTextureId() const;
 		int getWidth() const;
 		int getHeight() const;
 
@@ -48,8 +48,8 @@ namespace Raycer
 
 		uint32_t* pixelData = nullptr;
 
-		GLuint cpuTextureId = 0;
-		GLuint gpuTextureId = 0;
+		GLuint textureId = 0;
+		GLuint clTextureId = 0;
 		GLuint programId = 0;
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;

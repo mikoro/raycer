@@ -13,7 +13,7 @@
 
 namespace Raycer
 {
-	namespace Gpu
+	namespace OpenCL
 	{
 		struct Info
 		{

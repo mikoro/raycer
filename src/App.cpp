@@ -166,10 +166,10 @@ Framebuffer& App::getFramebuffer()
 	return framebuffer;
 }
 
-CLManager& App::getOpenCL()
+CLManager& App::getCLManager()
 {
-	static CLManager openCL;
-	return openCL;
+	static CLManager clManager;
+	return clManager;
 }
 
 InteractiveRunner& App::getInteractiveRunner()
@@ -196,8 +196,8 @@ Raytracer& App::getRaytracer()
 	return raytracer;
 }
 
-CLRaytracer& App::getGpuRaytracer()
+CLRaytracer& App::getCLRaytracer()
 {
-	static CLRaytracer gpuRaytracer;
-	return gpuRaytracer;
+	static CLRaytracer clRaytracer;
+	return clRaytracer;
 }

@@ -79,26 +79,26 @@ int ConsoleRunner::run()
 void ConsoleRunner::run(RaytracerConfig& config)
 {
 	Settings& settings = App::getSettings();
-	CLManager& openCL = App::getOpenCL();
+	CLManager& clManager = App::getCLManager();
 	Raytracer& raytracer = App::getRaytracer();
-	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	interrupted = false;
 
 	if (settings.openCL.enabled && !openCLInitialized)
 	{
-		openCL.initialize();
-		openCL.loadKernels();
+		clManager.initialize();
+		clManager.loadKernels();
 
 		openCLInitialized = true;
 	}
 
 	if (settings.openCL.enabled)
 	{
-		gpuRaytracer.initialize();
-		gpuRaytracer.resizePixelBuffer(config.sceneWidth, config.sceneHeight);
-		gpuRaytracer.readScene(*config.scene);
-		gpuRaytracer.uploadData();
+		clRaytracer.initialize();
+		clRaytracer.resizePixelBuffer(config.sceneWidth, config.sceneHeight);
+		clRaytracer.readScene(*config.scene);
+		clRaytracer.uploadData();
 	}
 	
 	std::atomic<bool> finished;
@@ -108,7 +108,7 @@ void ConsoleRunner::run(RaytracerConfig& config)
 		if (!settings.openCL.enabled)
 			raytracer.trace(config, interrupted);
 		else
-			gpuRaytracer.trace(interrupted);
+			clRaytracer.trace(interrupted);
 
 		finished = true;
 	};
@@ -164,8 +164,8 @@ void ConsoleRunner::run(RaytracerConfig& config)
 
 	if (!interrupted && settings.openCL.enabled)
 	{
-		gpuRaytracer.downloadImage();
-		resultImage = gpuRaytracer.getImage();
+		clRaytracer.downloadImage();
+		resultImage = clRaytracer.getImage();
 	}
 }
 

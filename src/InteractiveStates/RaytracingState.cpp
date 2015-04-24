@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "States/CpuTracingState.h"
+#include "InteractiveStates/RaytracingState.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -11,33 +11,35 @@
 
 using namespace Raycer;
 
-void CpuTracingState::initialize()
+void RaytracingState::initialize()
 {
+	//Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
+	//scene.loadFromFile(settings.scene.fileName);
 	scene = Scene::createTestScene();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
-void CpuTracingState::pause()
+void RaytracingState::pause()
 {
 }
 
-void CpuTracingState::resume()
+void RaytracingState::resume()
 {
 }
 
-void CpuTracingState::shutdown()
+void RaytracingState::shutdown()
 {
 }
 
-void CpuTracingState::update(double timeStep)
+void RaytracingState::update(double timeStep)
 {
 	scene.camera.update(timeStep);
 }
 
-void CpuTracingState::render(double timeStep, double interpolation)
+void RaytracingState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
 
@@ -70,13 +72,13 @@ void CpuTracingState::render(double timeStep, double interpolation)
 	}
 }
 
-void CpuTracingState::windowResized(int width, int height)
+void RaytracingState::windowResized(int width, int height)
 {
 	(void)width;
 	(void)height;
 }
 
-void CpuTracingState::framebufferResized(int width, int height)
+void RaytracingState::framebufferResized(int width, int height)
 {
 	scene.camera.setImagePlaneSize(width, height);
 }

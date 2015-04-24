@@ -17,10 +17,10 @@ namespace Raycer
 
 		void readScene(const Scene& scene);
 
-		Gpu::Info info;
-		Gpu::Camera camera;
-		std::vector<Gpu::Light> lights;
-		std::vector<Gpu::Plane> planes;
-		std::vector<Gpu::Sphere> spheres;
+		OpenCL::Info info;
+		OpenCL::Camera camera;
+		std::vector<OpenCL::Light> lights;
+		std::vector<OpenCL::Plane> planes;
+		std::vector<OpenCL::Sphere> spheres;
 	};
 }

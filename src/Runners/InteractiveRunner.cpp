@@ -16,8 +16,8 @@
 #include "CLRaytracing/CLManager.h"
 #include "CLRaytracing/CLRaytracer.h"
 #include "Utils/Image.h"
-#include "States/CpuTracingState.h"
-#include "States/GpuTracingState.h"
+#include "InteractiveStates/RaytracingState.h"
+#include "InteractiveStates/CLRaytracingState.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -136,7 +136,7 @@ void InteractiveRunner::initialize()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	CLManager& openCL = App::getOpenCL();
+	CLManager& clManager = App::getCLManager();
 
 	log.logInfo("Initializing GLFW library");
 
@@ -178,18 +178,18 @@ void InteractiveRunner::initialize()
 	
 	if (settings.openCL.enabled)
 	{
-		openCL.initialize();
-		openCL.loadKernels();
+		clManager.initialize();
+		clManager.loadKernels();
 	}
 
 	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
 
 	windowResized(settings.window.width, settings.window.height);
 
-	runnerStates[RunnerStates::CpuTracing] = std::unique_ptr<CpuTracingState>(new CpuTracingState());
-	runnerStates[RunnerStates::GpuTracing] = std::unique_ptr<GpuTracingState>(new GpuTracingState());
+	runnerStates[RunnerStates::Raytracing] = std::unique_ptr<RaytracingState>(new RaytracingState());
+	runnerStates[RunnerStates::CLRaytracing] = std::unique_ptr<CLRaytracingState>(new CLRaytracingState());
 
-	changeState(settings.openCL.enabled ? RunnerStates::GpuTracing : RunnerStates::CpuTracing);
+	changeState(settings.openCL.enabled ? RunnerStates::CLRaytracing : RunnerStates::Raytracing);
 }
 
 void InteractiveRunner::shutdown()
@@ -224,15 +224,15 @@ void InteractiveRunner::resizeFramebuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	if (settings.openCL.enabled)
-		gpuRaytracer.releasePixelBuffer();
+		clRaytracer.releasePixelBuffer();
 
 	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		gpuRaytracer.resizePixelBuffer(framebuffer.getWidth(), framebuffer.getHeight());
+		clRaytracer.resizePixelBuffer(framebuffer.getWidth(), framebuffer.getHeight());
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
