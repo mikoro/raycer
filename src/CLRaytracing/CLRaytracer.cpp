@@ -128,13 +128,13 @@ void CLRaytracer::readScene(const Scene& scene)
 
 	clScene.readScene(scene);
 
-	if (clScene.lights.size() > MAX_LIGHTS)
+	if ((int)clScene.lights.size() > MAX_LIGHTS)
 		throw std::runtime_error("Too many lights");
 
-	if (clScene.planes.size() > MAX_PLANES)
+	if ((int)clScene.planes.size() > MAX_PLANES)
 		throw std::runtime_error("Too many planes");
 
-	if (clScene.spheres.size() > MAX_SPHERES)
+	if ((int)clScene.spheres.size() > MAX_SPHERES)
 		throw std::runtime_error("Too many spheres");
 
 	clScene.info.width = (float)bufferWidth;

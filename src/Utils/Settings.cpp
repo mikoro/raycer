@@ -48,9 +48,12 @@ void Settings::load(const std::string& fileName)
 	framebuffer.vertexShader = iniReader.getValue("framebuffer", "vertexShader");
 	framebuffer.fragmentShader = iniReader.getValue("framebuffer", "fragmentShader");
 
-	controls.moveSpeed = iniReader.getValue<double>("controls", "moveSpeed");
-	controls.fastModifier = iniReader.getValue<double>("controls", "fastModifier");
-	controls.slowModifier = iniReader.getValue<double>("controls", "slowModifier");
-	controls.mouseSpeed = iniReader.getValue<double>("controls", "mouseSpeed");
-	controls.freeLook = iniReader.getValue<bool>("controls", "freeLook");
+	camera.moveSpeed = iniReader.getValue<double>("camera", "moveSpeed");
+	camera.moveDrag = iniReader.getValue<double>("camera", "moveDrag");
+	camera.mouseSpeed = iniReader.getValue<double>("camera", "mouseSpeed");
+	camera.mouseDrag = iniReader.getValue<double>("camera", "mouseDrag");
+	camera.slowModifier = iniReader.getValue<double>("camera", "slowModifier");
+	camera.fastModifier = iniReader.getValue<double>("camera", "fastModifier");
+	camera.veryFastModifier = iniReader.getValue<double>("camera", "veryFastModifier");
+	camera.freeLook = iniReader.getValue<bool>("camera", "freeLook");
 }

@@ -17,9 +17,8 @@ namespace Raycer
 		void initialize();
 		void setImagePlaneSize(int width, int height);
 		void update(double timeStep);
-		void interpolate(double interpolation);
 		void precalculate();
-		
+
 		Ray getRay(double x, double y) const;
 
 		Vector3 position = Vector3(0.0, 0.0, 0.0);
@@ -46,9 +45,9 @@ namespace Raycer
 
 	private:
 
-		Vector3 oldPosition = Vector3(0.0, 0.0, 0.0);
-		Vector3 newPosition = Vector3(0.0, 0.0, 0.0);
-		EulerAngle oldOrientation = EulerAngle(0.0, 0.0, 0.0);
-		EulerAngle newOrientation = EulerAngle(0.0, 0.0, 0.0);
+		Vector3 velocity = Vector3(0.0, 0.0, 0.0);
+		Vector3 acceleration = Vector3(0.0, 0.0, 0.0);
+		Vector3 angularVelocity = Vector3(0.0, 0.0, 0.0);
+		Vector3 angularAcceleration = Vector3(0.0, 0.0, 0.0);
 	};
 }

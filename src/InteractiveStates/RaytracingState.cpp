@@ -37,20 +37,19 @@ void RaytracingState::shutdown()
 void RaytracingState::update(double timeStep)
 {
 	scene.camera.update(timeStep);
+	scene.camera.precalculate();
 }
 
 void RaytracingState::render(double timeStep, double interpolation)
 {
 	(void)timeStep;
+	(void)interpolation;
 
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
 	Raytracer& raytracer = App::getRaytracer();
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
-
-	scene.camera.interpolate(interpolation);
-	scene.camera.precalculate();
 
 	state.renderTarget = &framebuffer;
 	state.scene = &scene;

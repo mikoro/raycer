@@ -45,6 +45,11 @@ namespace Raycer
 		return Vector3(v.x - w.x, v.y - w.y, v.z - w.z);
 	}
 
+	Vector3 operator*(const Vector3& v, const Vector3& w)
+	{
+		return Vector3(v.x * w.x, v.y * w.y, v.z * w.z);
+	}
+
 	Vector3 operator*(const Vector3& v, double s)
 	{
 		return Vector3(v.x * s, v.y * s, v.z * s);

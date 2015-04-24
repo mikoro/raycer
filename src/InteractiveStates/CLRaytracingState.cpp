@@ -40,6 +40,7 @@ void CLRaytracingState::shutdown()
 void CLRaytracingState::update(double timeStep)
 {
 	scene.camera.update(timeStep);
+	scene.camera.precalculate();
 }
 
 void CLRaytracingState::render(double timeStep, double interpolation)
@@ -48,9 +49,6 @@ void CLRaytracingState::render(double timeStep, double interpolation)
 	(void)interpolation;
 
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
-
-	scene.camera.interpolate(interpolation);
-	scene.camera.precalculate();
 
 	clRaytracer.readScene(scene);
 	clRaytracer.uploadData();

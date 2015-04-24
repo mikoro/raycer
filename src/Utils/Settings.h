@@ -71,13 +71,16 @@ namespace Raycer
 			std::string fragmentShader;
 		} framebuffer;
 
-		struct Controls
+		struct Camera
 		{
 			double moveSpeed;
-			double fastModifier;
-			double slowModifier;
+			double moveDrag;
 			double mouseSpeed;
+			double mouseDrag;
+			double slowModifier;
+			double fastModifier;
+			double veryFastModifier;
 			bool freeLook;
-		} controls;
+		} camera;
 	};
 }

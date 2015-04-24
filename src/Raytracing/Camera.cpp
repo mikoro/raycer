@@ -22,8 +22,6 @@ using namespace Raycer;
 
 void Camera::initialize()
 {
-	oldPosition = newPosition = position;
-	oldOrientation = newOrientation = orientation;
 }
 
 void Camera::setImagePlaneSize(int width, int height)
@@ -38,45 +36,55 @@ void Camera::update(double timeStep)
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Settings& settings = App::getSettings();
 
-	oldPosition = newPosition;
-	oldOrientation = newOrientation;
+	double velocityLength = velocity.length();
+	double angularVelocityLength = angularVelocity.length();
+
+	if (velocityLength > 0.0)
+		acceleration = settings.camera.moveDrag * (-velocity.normalized() * velocityLength);
+	else
+		acceleration = Vector3(0.0, 0.0, 0.0);
+	
+	if (angularVelocityLength > 0.0)
+		angularAcceleration = settings.camera.mouseDrag * (-angularVelocity.normalized() * angularVelocityLength);
+	else
+		angularAcceleration = Vector3(0.0, 0.0, 0.0);
 
 	MouseInfo mouseInfo = runner.getMouseInfo();
 
-	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.controls.freeLook)
+	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
 	{
-		newOrientation.yaw -= (double)mouseInfo.deltaX * timeStep * settings.controls.mouseSpeed;
-		newOrientation.pitch += (double)mouseInfo.deltaY * timeStep * settings.controls.mouseSpeed;
+		angularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
+		angularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
 	}
 
-	newOrientation.clampPitch();
-	// newOrientation.normalize(); // breaks the yaw interpolation
-
-	double moveSpeed = settings.controls.moveSpeed;
-
-	if (runner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || runner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
-		moveSpeed *= settings.controls.fastModifier;
+	double moveSpeed = settings.camera.moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || runner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
-		moveSpeed *= settings.controls.slowModifier;
+		moveSpeed *= settings.camera.slowModifier;
+
+	if (runner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || runner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
+		moveSpeed *= settings.camera.fastModifier;
+
+	if (runner.keyIsDown(GLFW_KEY_LEFT_ALT) || runner.keyIsDown(GLFW_KEY_RIGHT_ALT))
+		moveSpeed *= settings.camera.veryFastModifier;
 
 	if (runner.keyIsDown(GLFW_KEY_W) || runner.keyIsDown(GLFW_KEY_UP))
-		newPosition += forward * timeStep * moveSpeed;
+		acceleration += forward * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_S) || runner.keyIsDown(GLFW_KEY_DOWN))
-		newPosition -= forward * timeStep * moveSpeed;
+		acceleration -= forward * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_A) || runner.keyIsDown(GLFW_KEY_LEFT))
-		newPosition -= right * timeStep * moveSpeed;
-
+		acceleration -= right * moveSpeed;
+	
 	if (runner.keyIsDown(GLFW_KEY_D) || runner.keyIsDown(GLFW_KEY_RIGHT))
-		newPosition += right * timeStep * moveSpeed;
+		acceleration += right * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_Q))
-		newPosition -= up * timeStep * moveSpeed;
+		acceleration -= up * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_E))
-		newPosition += up * timeStep * moveSpeed;
+		acceleration += up * moveSpeed;
 
 	if (runner.keyIsDown(GLFW_KEY_F7))
 		fov -= 50.0 * timeStep;
@@ -85,12 +93,16 @@ void Camera::update(double timeStep)
 		fov += 50.0 * timeStep;
 
 	fov = std::max(1.0, std::min(fov, 180.0));
-}
 
-void Camera::interpolate(double interpolation)
-{
-	position = Vector3::lerp(oldPosition, newPosition, interpolation);
-	orientation = EulerAngle::lerp(oldOrientation, newOrientation, interpolation);
+	velocity += acceleration * timeStep;
+	position += velocity * timeStep;
+
+	angularVelocity += angularAcceleration * timeStep;
+	orientation.yaw += angularVelocity.y * timeStep;
+	orientation.pitch += angularVelocity.x * timeStep;
+
+	orientation.clampPitch();
+	orientation.normalize();
 }
 
 void Camera::precalculate()
