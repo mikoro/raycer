@@ -11,14 +11,14 @@
 
 namespace Raycer
 {
-	struct RaytracerConfig;
+	struct RaytracerState;
 
 	class ConsoleRunner
 	{
 	public:
 
 		int run();
-		void run(RaytracerConfig& config);
+		void run(RaytracerState& state);
 		void interrupt();
 
 		Image& getResultImage();

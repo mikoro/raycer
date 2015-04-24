@@ -28,7 +28,7 @@ namespace Raycer
 
 	private:
 
-		RaytracerConfig config;
+		RaytracerState state;
 		Scene scene;
 
 		std::atomic<bool> interrupted;

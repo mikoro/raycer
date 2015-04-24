@@ -414,21 +414,21 @@ void NetworkRunner::handleJobs()
 			jobQueue.pop();
 			jobQueueMutex.unlock();
 
-			RaytracerConfig config;
-			config.renderTarget = &job.image;
-			config.scene = &job.scene;
-			config.sceneWidth = job.sceneWidth;
-			config.sceneHeight = job.sceneHeight;
-			config.pixelOffset = job.pixelOffset;
-			config.pixelCount = job.pixelCount;
-			config.isInteractive = false;
+			RaytracerState state;
+			state.renderTarget = &job.image;
+			state.scene = &job.scene;
+			state.sceneWidth = job.sceneWidth;
+			state.sceneHeight = job.sceneHeight;
+			state.pixelOffset = job.pixelOffset;
+			state.pixelCount = job.pixelCount;
+			state.isInteractive = false;
 
 			job.scene.initialize();
-			job.scene.camera.setImagePlaneSize(config.sceneWidth, config.sceneHeight);
+			job.scene.camera.setImagePlaneSize(state.sceneWidth, state.sceneHeight);
 			job.scene.camera.precalculate();
-			job.image.setSize(config.pixelCount);
+			job.image.setSize(state.pixelCount);
 
-			App::getConsoleRunner().run(config);
+			App::getConsoleRunner().run(state);
 
 			std::cout << "Sending results back...\n\n";
 

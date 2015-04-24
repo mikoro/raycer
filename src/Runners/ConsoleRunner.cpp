@@ -45,18 +45,18 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();
 
-	RaytracerConfig config;
-	config.renderTarget = &resultImage;
-	config.scene = &scene;
-	config.sceneWidth = settings.image.width;
-	config.sceneHeight = settings.image.height;
-	config.pixelOffset = 0;
-	config.pixelCount = config.sceneWidth * config.sceneHeight;
-	config.isInteractive = false;
+	RaytracerState state;
+	state.renderTarget = &resultImage;
+	state.scene = &scene;
+	state.sceneWidth = settings.image.width;
+	state.sceneHeight = settings.image.height;
+	state.pixelOffset = 0;
+	state.pixelCount = state.sceneWidth * state.sceneHeight;
+	state.isInteractive = false;
 
-	resultImage.setSize(config.sceneWidth, config.sceneHeight);
+	resultImage.setSize(state.sceneWidth, state.sceneHeight);
 
-	run(config);
+	run(state);
 
 	if (!interrupted)
 	{
@@ -76,7 +76,7 @@ int ConsoleRunner::run()
 	return 0;
 }
 
-void ConsoleRunner::run(RaytracerConfig& config)
+void ConsoleRunner::run(RaytracerState& state)
 {
 	Settings& settings = App::getSettings();
 	CLManager& clManager = App::getCLManager();
@@ -96,8 +96,8 @@ void ConsoleRunner::run(RaytracerConfig& config)
 	if (settings.openCL.enabled)
 	{
 		clRaytracer.initialize();
-		clRaytracer.resizePixelBuffer(config.sceneWidth, config.sceneHeight);
-		clRaytracer.readScene(*config.scene);
+		clRaytracer.resizePixelBuffer(state.sceneWidth, state.sceneHeight);
+		clRaytracer.readScene(*state.scene);
 		clRaytracer.uploadData();
 	}
 	
@@ -106,14 +106,14 @@ void ConsoleRunner::run(RaytracerConfig& config)
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			raytracer.trace(config, interrupted);
+			raytracer.trace(state, interrupted);
 		else
 			clRaytracer.trace(interrupted);
 
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", config.sceneWidth, config.sceneHeight, humanizeNumberDecimal(config.pixelCount), humanizeNumberBytes(config.pixelCount * 4 * 4), config.pixelOffset);
+	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.sceneWidth, state.sceneHeight, humanizeNumberDecimal(state.pixelCount), humanizeNumberBytes(state.pixelCount * 4 * 4), state.pixelOffset);
 
 	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderFunction);
@@ -123,7 +123,7 @@ void ConsoleRunner::run(RaytracerConfig& config)
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		if (!settings.openCL.enabled)
-			printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
+			printProgress(startTime, state.pixelCount, state.pixelsProcessed, state.raysProcessed);
 		else
 			printProgressOpenCL(startTime);
 	}
@@ -131,12 +131,12 @@ void ConsoleRunner::run(RaytracerConfig& config)
 	renderThread.join();
 
 	if (!settings.openCL.enabled)
-		printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
+		printProgress(startTime, state.pixelCount, state.pixelsProcessed, state.raysProcessed);
 	else
 		printProgressOpenCL(startTime);
 
 	if (settings.openCL.enabled)
-		config.pixelsProcessed = config.pixelCount;
+		state.pixelsProcessed = state.pixelCount;
 
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	int totalElapsedSeconds = (int)duration_cast<std::chrono::seconds>(elapsedTime).count();
@@ -151,16 +151,16 @@ void ConsoleRunner::run(RaytracerConfig& config)
 
 	if (totalElapsedMilliseconds > 0)
 	{
-		totalPixelsPerSecond = (double)config.pixelsProcessed / ((double)totalElapsedMilliseconds / 1000.0);
-		totalRaysPerSecond = (double)config.raysProcessed / ((double)totalElapsedMilliseconds / 1000.0);
+		totalPixelsPerSecond = (double)state.pixelsProcessed / ((double)totalElapsedMilliseconds / 1000.0);
+		totalRaysPerSecond = (double)state.raysProcessed / ((double)totalElapsedMilliseconds / 1000.0);
 	}
 	
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
 
 	if (!settings.openCL.enabled)
-		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s, rays: %s, rays/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(config.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond), humanizeNumberDecimal(config.raysProcessed.load()), humanizeNumberDecimal(totalRaysPerSecond));
+		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s, rays: %s, rays/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond), humanizeNumberDecimal(state.raysProcessed.load()), humanizeNumberDecimal(totalRaysPerSecond));
 	else
-		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(config.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
+		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
 	{

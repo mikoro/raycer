@@ -52,23 +52,23 @@ void RaytracingState::render(double timeStep, double interpolation)
 	scene.camera.interpolate(interpolation);
 	scene.camera.precalculate();
 
-	config.renderTarget = &framebuffer;
-	config.scene = &scene;
-	config.sceneWidth = framebuffer.getWidth();
-	config.sceneHeight = framebuffer.getHeight();
-	config.pixelOffset = 0;
-	config.pixelCount = config.sceneWidth * config.sceneHeight;
-	config.pixelsProcessed = 0;
-	config.raysProcessed = 0;
-	config.isInteractive = true;
+	state.renderTarget = &framebuffer;
+	state.scene = &scene;
+	state.sceneWidth = framebuffer.getWidth();
+	state.sceneHeight = framebuffer.getHeight();
+	state.pixelOffset = 0;
+	state.pixelCount = state.sceneWidth * state.sceneHeight;
+	state.pixelsProcessed = 0;
+	state.raysProcessed = 0;
+	state.isInteractive = true;
 
-	raytracer.trace(config, interrupted);
+	raytracer.trace(state, interrupted);
 
 	if (settings.window.showCameraInfo)
 	{
 		text.drawText(5.0, (double)(runner.getWindowHeight() - 3 * settings.window.defaultFontSize), Color(255, 255, 255, 255), tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z));
 		text.drawText(5.0, (double)(runner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.yaw, scene.camera.orientation.pitch, scene.camera.orientation.roll));
-		text.drawText(5.0, (double)(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Rays: %d", config.raysProcessed.load()));
+		text.drawText(5.0, (double)(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Rays: %d", state.raysProcessed.load()));
 	}
 }
 

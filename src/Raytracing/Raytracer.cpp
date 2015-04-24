@@ -20,9 +20,9 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
+void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 {
-	Scene& scene = *config.scene;
+	Scene& scene = *state.scene;
 
 	int rayCount = 0;
 	int previousRayCount = 0;
@@ -32,14 +32,14 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 	std::uniform_real_distribution<double> random(0.0, std::nextafter(1.0, DBL_MAX));
 
 	#pragma omp parallel for schedule(dynamic, 1000) reduction(+:rayCount) firstprivate(previousRayCount)
-	for (int pixelIndex = 0; pixelIndex < config.pixelCount; ++pixelIndex)
+	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)
 			continue;
 
-		int pixelOffsetIndex = pixelIndex + config.pixelOffset;
-		double x = (double)(pixelOffsetIndex % config.sceneWidth);
-		double y = (double)(pixelOffsetIndex / config.sceneWidth);
+		int pixelOffsetIndex = pixelIndex + state.pixelOffset;
+		double x = (double)(pixelOffsetIndex % state.sceneWidth);
+		double y = (double)(pixelOffsetIndex / state.sceneWidth);
 
 		Color finalColor(0.0, 0.0, 0.0, 1.0);
 		double intersectionDistance = 0.0;
@@ -50,7 +50,7 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 			double ry = y + 0.5;
 
 			Ray rayToScene = scene.camera.getRay(rx, ry);
-			shootRay(config, rayToScene, rayCount, interrupted);
+			shootRay(state, rayToScene, rayCount, interrupted);
 			finalColor = rayToScene.color;
 			intersectionDistance = rayToScene.intersection.distance;
 		}
@@ -64,7 +64,7 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 					double ry = y + ((double)i + random(mt)) / (double)scene.multisamples;
 
 					Ray rayToScene = scene.camera.getRay(rx, ry);
-					shootRay(config, rayToScene, rayCount, interrupted);
+					shootRay(state, rayToScene, rayCount, interrupted);
 					finalColor += rayToScene.color;
 					intersectionDistance += rayToScene.intersection.distance;
 				}
@@ -85,28 +85,28 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 
 		finalColor.a = 1.0;
 		finalColor = Color::pow(finalColor, scene.gamma);
-		config.renderTarget->setPixel(pixelIndex, finalColor.clamped());
+		state.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
 		if ((pixelIndex + 1) % 100 == 0)
 		{
-			config.pixelsProcessed += 100;
-			config.raysProcessed += (rayCount - previousRayCount);
+			state.pixelsProcessed += 100;
+			state.raysProcessed += (rayCount - previousRayCount);
 			previousRayCount = rayCount;
 		}
 	}
 
-	config.raysProcessed = rayCount;
+	state.raysProcessed = rayCount;
 
 	if (!interrupted)
-		config.pixelsProcessed = config.pixelCount;
+		state.pixelsProcessed = state.pixelCount;
 }
 
-void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+void Raytracer::shootRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
 
-	Scene& scene = *config.scene;
+	Scene& scene = *state.scene;
 	++rayCount;
 
 	for (const Primitive* primitive : scene.primitiveList)
@@ -124,7 +124,7 @@ void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(config, reflectedRay, rayCount, interrupted);
+			shootRay(state, reflectedRay, rayCount, interrupted);
 
 			combinedLightColor = reflectedRay.color * material->reflectivity;
 		}
