@@ -101,13 +101,14 @@ Scene Scene::createTestScene()
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
+	scene.gamma = 1.0 / 2.2;
 	scene.multisamples = 1;
 	scene.maxReflections = 1;
 
-	scene.fogEnabled = false;
-	scene.fogDistance = 40.0;
-	scene.fogSteepness = 8.0;
-	scene.fogColor = Color(1.0, 1.0, 1.0);
+	scene.fog.enabled = false;
+	scene.fog.distance = 40.0;
+	scene.fog.steepness = 8.0;
+	scene.fog.color = Color(1.0, 1.0, 1.0);
 
 	ColorTexture t0;
 	t0.id = 0;

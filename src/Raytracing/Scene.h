@@ -7,6 +7,7 @@
 #include <map>
 
 #include "Raytracing/Camera.h"
+#include "Raytracing/Fog.h"
 #include "Raytracing/Texture.h"
 #include "Raytracing/ColorTexture.h"
 #include "Raytracing/CheckerboardTexture.h"
@@ -33,15 +34,12 @@ namespace Raycer
 		void initialize();
 		static Scene createTestScene();
 
-		Camera camera;
-
 		double gamma = 1.0 / 2.2;
 		int multisamples = 1;
 		int maxReflections = 0;
-		bool fogEnabled = false;
-		double fogDistance = 0.0;
-		double fogSteepness = 0.0;
-		Color fogColor = Color(0.0, 0.0, 0.0);
+
+		Camera camera;
+		Fog fog;
 
 		std::vector<ColorTexture> colorTextures;
 		std::vector<CheckerboardTexture> checkerboardTextures;
@@ -62,13 +60,11 @@ namespace Raycer
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(camera),
+			ar(CEREAL_NVP(gamma),
 				CEREAL_NVP(multisamples),
 				CEREAL_NVP(maxReflections),
-				CEREAL_NVP(fogEnabled),
-				CEREAL_NVP(fogDistance),
-				CEREAL_NVP(fogSteepness),
-				CEREAL_NVP(fogColor),
+				CEREAL_NVP(camera),
+				CEREAL_NVP(fog),
 				CEREAL_NVP(colorTextures),
 				CEREAL_NVP(checkerboardTextures),
 				CEREAL_NVP(imageTextures),

@@ -75,13 +75,8 @@ void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 			intersectionDistance /= multisamples2;
 		}
 
-		if (scene.fogEnabled)
-		{
-			double t = intersectionDistance / scene.fogDistance;
-			t = std::max(0.0, std::min(t, 1.0));
-			t = pow(t, scene.fogSteepness);
-			finalColor = Color::lerp(finalColor, scene.fogColor, t);
-		}
+		if (scene.fog.enabled)
+			finalColor = scene.fog.apply(finalColor, intersectionDistance);
 
 		finalColor.a = 1.0;
 		finalColor = Color::pow(finalColor, scene.gamma);

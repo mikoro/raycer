@@ -154,6 +154,9 @@
     <ClCompile Include="src\InteractiveStates\CLRaytracingState.cpp">
       <Filter>InteractiveStates</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Fog.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -300,6 +303,9 @@
     </ClInclude>
     <ClInclude Include="src\InteractiveStates\CLRaytracingState.h">
       <Filter>InteractiveStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Fog.h">
+      <Filter>Raytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

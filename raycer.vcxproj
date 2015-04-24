@@ -120,6 +120,7 @@
     <ClCompile Include="src\Raytracing\Camera.cpp" />
     <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp" />
     <ClCompile Include="src\Raytracing\ColorTexture.cpp" />
+    <ClCompile Include="src\Raytracing\Fog.cpp" />
     <ClCompile Include="src\Raytracing\ImageTexture.cpp" />
     <ClCompile Include="src\Raytracing\MarbleTexture.cpp" />
     <ClCompile Include="src\Raytracing\Mesh.cpp" />
@@ -165,6 +166,7 @@
     <ClInclude Include="src\Raytracing\Camera.h" />
     <ClInclude Include="src\Raytracing\CheckerboardTexture.h" />
     <ClInclude Include="src\Raytracing\ColorTexture.h" />
+    <ClInclude Include="src\Raytracing\Fog.h" />
     <ClInclude Include="src\Raytracing\ImageTexture.h" />
     <ClInclude Include="src\Raytracing\Intersection.h" />
     <ClInclude Include="src\Raytracing\Light.h" />
