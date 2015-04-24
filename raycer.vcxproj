@@ -105,6 +105,7 @@
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp" />
     <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
+    <ClCompile Include="src\CLRaytracing\CLManager.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -138,7 +139,6 @@
     <ClCompile Include="src\Utils\Image.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
-    <ClCompile Include="src\Utils\OpenCL.cpp" />
     <ClCompile Include="src\Utils\OpenGL.cpp" />
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
@@ -148,6 +148,7 @@
     <ClInclude Include="src\CLRaytracing\CLRaytracer.h" />
     <ClInclude Include="src\CLRaytracing\CLScene.h" />
     <ClInclude Include="src\CLRaytracing\CLStructs.h" />
+    <ClInclude Include="src\CLRaytracing\CLManager.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
@@ -189,7 +190,6 @@
     <ClInclude Include="src\Utils\Image.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
-    <ClInclude Include="src\Utils\OpenCL.h" />
     <ClInclude Include="src\Utils\OpenGL.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\Settings.h" />

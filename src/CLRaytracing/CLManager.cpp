@@ -22,7 +22,7 @@
 
 #include "tinyformat/tinyformat.h"
 
-#include "Utils/OpenCL.h"
+#include "CLRaytracing/CLManager.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -44,11 +44,11 @@ namespace
 	}
 }
 
-OpenCL::OpenCL()
+CLManager::CLManager()
 {
 }
 
-OpenCL::~OpenCL()
+CLManager::~CLManager()
 {
 	if (printSizesKernel != nullptr)
 	{
@@ -82,7 +82,7 @@ OpenCL::~OpenCL()
 	}*/
 }
 
-void OpenCL::initialize()
+void CLManager::initialize()
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
@@ -178,7 +178,7 @@ void OpenCL::initialize()
 	checkCLError(status, "Could not create OpenCL command queue");
 }
 
-void OpenCL::loadKernels()
+void CLManager::loadKernels()
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();

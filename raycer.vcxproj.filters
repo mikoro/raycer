@@ -100,9 +100,6 @@
     <ClCompile Include="src\Math\AxisAngle.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\OpenCL.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Camera.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
@@ -152,6 +149,9 @@
       <Filter>CLRaytracing</Filter>
     </ClCompile>
     <ClCompile Include="src\CLRaytracing\CLScene.cpp">
+      <Filter>CLRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\CLRaytracing\CLManager.cpp">
       <Filter>CLRaytracing</Filter>
     </ClCompile>
   </ItemGroup>
@@ -226,9 +226,6 @@
     <ClInclude Include="src\Math\AxisAngle.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\OpenCL.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Camera.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
@@ -299,6 +296,9 @@
       <Filter>CLRaytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\CLRaytracing\CLStructs.h">
+      <Filter>CLRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\CLRaytracing\CLManager.h">
       <Filter>CLRaytracing</Filter>
     </ClInclude>
   </ItemGroup>

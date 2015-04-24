@@ -11,7 +11,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "Utils/OpenCL.h"
+#include "CLRaytracing/CLManager.h"
 #include "Runners/InteractiveRunner.h"
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
@@ -166,9 +166,9 @@ Framebuffer& App::getFramebuffer()
 	return framebuffer;
 }
 
-OpenCL& App::getOpenCL()
+CLManager& App::getOpenCL()
 {
-	static OpenCL openCL;
+	static CLManager openCL;
 	return openCL;
 }
 

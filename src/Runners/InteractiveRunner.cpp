@@ -13,7 +13,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "Utils/OpenCL.h"
+#include "CLRaytracing/CLManager.h"
 #include "CLRaytracing/CLRaytracer.h"
 #include "Utils/Image.h"
 #include "States/CpuTracingState.h"
@@ -136,7 +136,7 @@ void InteractiveRunner::initialize()
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 
 	log.logInfo("Initializing GLFW library");
 

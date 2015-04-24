@@ -12,7 +12,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Utils/Errors.h"
-#include "Utils/OpenCL.h"
+#include "CLRaytracing/CLManager.h"
 #include "Rendering/Framebuffer.h"
 #include "Raytracing/Scene.h"
 #include "Utils/Image.h"
@@ -65,7 +65,7 @@ CLRaytracer::~CLRaytracer()
 
 void CLRaytracer::initialize()
 {
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 	cl_int status = 0;
 
 	infoPtr = clCreateBuffer(openCL.context, CL_MEM_READ_ONLY, sizeof(Gpu::Info), NULL, &status);
@@ -88,7 +88,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 
 	bufferWidth = width;
 	bufferHeight = height;
@@ -152,7 +152,7 @@ void CLRaytracer::readScene(const Scene& scene)
 
 void CLRaytracer::uploadData()
 {
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 	cl_int status = 0;
 
 	status = clEnqueueWriteBuffer(openCL.commandQueue, infoPtr, CL_FALSE, 0, sizeof(Gpu::Info), &gpuScene.info, 0, NULL, NULL);
@@ -176,7 +176,7 @@ void CLRaytracer::trace(std::atomic<bool>& interrupted)
 	(void)interrupted;
 	
 	Settings& settings = App::getSettings();
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 
 	if (settings.general.interactive)
 	{
@@ -205,7 +205,7 @@ void CLRaytracer::trace(std::atomic<bool>& interrupted)
 void CLRaytracer::downloadImage()
 {
 	Log& log = App::getLog();
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 
 	log.logInfo("Downloading image data from the OpenCL device");
 
@@ -238,7 +238,7 @@ Image& CLRaytracer::getImage()
 
 void CLRaytracer::printSizes()
 {
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 
 	const size_t globalSize = 1;
 	checkCLError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.printSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");

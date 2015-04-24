@@ -7,12 +7,12 @@
 
 namespace Raycer
 {
-	class OpenCL
+	class CLManager
 	{
 	public:
 
-		OpenCL();
-		~OpenCL();
+		CLManager();
+		~CLManager();
 
 		void initialize();
 		void loadKernels();
@@ -27,7 +27,7 @@ namespace Raycer
 
 	private:
 
-		OpenCL(const OpenCL& openCL);
-		OpenCL& operator=(const OpenCL& openCL);
+		CLManager(const CLManager& clManager);
+		CLManager& operator=(const CLManager& clManager);
 	};
 }

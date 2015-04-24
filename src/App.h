@@ -8,7 +8,7 @@ namespace Raycer
 	class Log;
 	class Settings;
 	class Framebuffer;
-	class OpenCL;
+	class CLManager;
 	class InteractiveRunner;
 	class ConsoleRunner;
 	class NetworkRunner;
@@ -24,7 +24,7 @@ namespace Raycer
 		static Log& getLog();
 		static Settings& getSettings();
 		static Framebuffer& getFramebuffer();
-		static OpenCL& getOpenCL();
+		static CLManager& getOpenCL();
 		static InteractiveRunner& getInteractiveRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();

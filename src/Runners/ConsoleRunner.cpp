@@ -14,7 +14,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Utils/OpenCL.h"
+#include "CLRaytracing/CLManager.h"
 #include "Utils/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
@@ -79,7 +79,7 @@ int ConsoleRunner::run()
 void ConsoleRunner::run(RaytracerConfig& config)
 {
 	Settings& settings = App::getSettings();
-	OpenCL& openCL = App::getOpenCL();
+	CLManager& openCL = App::getOpenCL();
 	Raytracer& raytracer = App::getRaytracer();
 	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
