@@ -54,7 +54,7 @@ void CLRaytracingState::render(double timeStep, double interpolation)
 
 	clRaytracer.readScene(scene);
 	clRaytracer.uploadData();
-	clRaytracer.trace(interrupted);
+	clRaytracer.run(interrupted);
 }
 
 void CLRaytracingState::windowResized(int width, int height)

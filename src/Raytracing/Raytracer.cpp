@@ -20,7 +20,7 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
-void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
+void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *state.scene;
 
@@ -50,7 +50,7 @@ void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 			double ry = y + 0.5;
 
 			Ray rayToScene = scene.camera.getRay(rx, ry);
-			shootRay(state, rayToScene, rayCount, interrupted);
+			traceRay(state, rayToScene, rayCount, interrupted);
 			finalColor = rayToScene.color;
 			intersectionDistance = rayToScene.intersection.distance;
 		}
@@ -64,7 +64,7 @@ void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 					double ry = y + ((double)i + random(mt)) / (double)scene.multisamples;
 
 					Ray rayToScene = scene.camera.getRay(rx, ry);
-					shootRay(state, rayToScene, rayCount, interrupted);
+					traceRay(state, rayToScene, rayCount, interrupted);
 					finalColor += rayToScene.color;
 					intersectionDistance += rayToScene.intersection.distance;
 				}
@@ -97,7 +97,7 @@ void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-void Raytracer::shootRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+void Raytracer::traceRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
@@ -120,7 +120,7 @@ void Raytracer::shootRay(RaytracerState& state, Ray& ray, int& rayCount, std::at
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			shootRay(state, reflectedRay, rayCount, interrupted);
+			traceRay(state, reflectedRay, rayCount, interrupted);
 
 			combinedLightColor = reflectedRay.color * material->reflectivity;
 		}

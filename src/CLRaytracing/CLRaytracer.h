@@ -26,7 +26,7 @@ namespace Raycer
 		void releasePixelBuffer();
 		void readScene(const Scene& scene);
 		void uploadData();
-		void trace(std::atomic<bool>& interrupted);
+		void run(std::atomic<bool>& interrupted);
 		void downloadImage();
 		Image& getImage();
 

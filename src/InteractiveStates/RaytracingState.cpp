@@ -62,7 +62,7 @@ void RaytracingState::render(double timeStep, double interpolation)
 	state.raysProcessed = 0;
 	state.isInteractive = true;
 
-	raytracer.trace(state, interrupted);
+	raytracer.run(state, interrupted);
 
 	if (settings.window.showCameraInfo)
 	{

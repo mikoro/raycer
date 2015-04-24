@@ -106,9 +106,9 @@ void ConsoleRunner::run(RaytracerState& state)
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			raytracer.trace(state, interrupted);
+			raytracer.run(state, interrupted);
 		else
-			clRaytracer.trace(interrupted);
+			clRaytracer.run(interrupted);
 
 		finished = true;
 	};

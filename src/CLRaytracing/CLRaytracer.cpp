@@ -171,7 +171,7 @@ void CLRaytracer::uploadData()
 	checkCLError(status, "Could not write OpenCL spheres buffer");
 }
 
-void CLRaytracer::trace(std::atomic<bool>& interrupted)
+void CLRaytracer::run(std::atomic<bool>& interrupted)
 {
 	(void)interrupted;
 	

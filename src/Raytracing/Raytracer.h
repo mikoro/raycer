@@ -31,10 +31,10 @@ namespace Raycer
 	{
 	public:
 
-		void trace(RaytracerState& state, std::atomic<bool>& interrupted);
+		void run(RaytracerState& state, std::atomic<bool>& interrupted);
 
 	private:
 
-		void shootRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
+		void traceRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
 	};
 }
