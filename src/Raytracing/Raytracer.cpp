@@ -78,8 +78,9 @@ void Raytracer::trace(RaytracerState& state, std::atomic<bool>& interrupted)
 		if (scene.fog.enabled)
 			finalColor = scene.fog.apply(finalColor, intersectionDistance);
 
-		finalColor.a = 1.0;
-		finalColor = Color::pow(finalColor, scene.gamma);
+		if (scene.toneMapper.enabled)
+			finalColor = scene.toneMapper.apply(finalColor);
+
 		state.renderTarget->setPixel(pixelIndex, finalColor.clamped());
 
 		if ((pixelIndex + 1) % 100 == 0)

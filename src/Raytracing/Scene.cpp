@@ -101,7 +101,6 @@ Scene Scene::createTestScene()
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
-	scene.gamma = 1.0 / 2.2;
 	scene.multisamples = 1;
 	scene.maxReflections = 1;
 
@@ -109,6 +108,10 @@ Scene Scene::createTestScene()
 	scene.fog.distance = 40.0;
 	scene.fog.steepness = 8.0;
 	scene.fog.color = Color(1.0, 1.0, 1.0);
+
+	scene.toneMapper.enabled = true;
+	scene.toneMapper.type = ToneMapType::GAMMA;
+	scene.toneMapper.gamma = 1.0 / 2.2;
 
 	ColorTexture t0;
 	t0.id = 0;

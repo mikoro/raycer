@@ -157,6 +157,9 @@
     <ClCompile Include="src\Raytracing\CheckerTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\ToneMapper.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -306,6 +309,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\CheckerTexture.h">
       <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\ToneMapper.h">
+      <Filter>Raytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
