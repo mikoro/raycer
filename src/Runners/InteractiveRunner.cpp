@@ -276,7 +276,7 @@ void InteractiveRunner::update(double timeStep)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
-	updateFpsCounter.countFrame();
+	updateFpsCounter.count();
 	updateFpsCounter.update(timeStep);
 	renderFpsCounter.update(timeStep);
 
@@ -357,7 +357,7 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
-	renderFpsCounter.countFrame();
+	renderFpsCounter.count();
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

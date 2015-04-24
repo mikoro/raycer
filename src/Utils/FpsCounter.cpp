@@ -13,30 +13,32 @@ using namespace Raycer;
 FpsCounter::FpsCounter()
 {
 	lastTime = glfwGetTime();
+
+	averageFrameTime.setAlpha(0.05);
+	averageFrameTime.setAverage(1.0 / 30.0);
 }
 
-void FpsCounter::countFrame()
+void FpsCounter::count()
 {
 	double currentTime = glfwGetTime();
 	frameTime = currentTime - lastTime;
 	lastTime = currentTime;
 
 	// prevent too large frametime changes
-	if (frameTime > 2 * averageFrameTime)
-		frameTime = 2 * averageFrameTime;
+	if (frameTime > 2 * averageFrameTime.getAverage())
+		frameTime = 2 * averageFrameTime.getAverage();
 }
 
 void FpsCounter::update(double timeStep)
 {
 	(void)timeStep;
 
-	double alpha = 0.05;
-	averageFrameTime = alpha * frameTime + (1.0 - alpha) * averageFrameTime;
+	averageFrameTime.addMeasurement(frameTime);
 }
 
 double FpsCounter::getFps() const
 {
-	return 1.0 / averageFrameTime;
+	return 1.0 / averageFrameTime.getAverage();
 }
 
 std::string FpsCounter::getFpsString() const

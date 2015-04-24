@@ -154,6 +154,9 @@
     <ClCompile Include="src\Raytracing\MarbleTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\MovingAverage.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -298,6 +301,9 @@
     <ClInclude Include="src\Raytracing\MarbleTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
+    <ClInclude Include="src\Math\MovingAverage.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -323,13 +329,7 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Intel_OpenCL_Build_Rules Include="data\kernels\raytrace.cl">
-      <Filter>Kernels</Filter>
-    </Intel_OpenCL_Build_Rules>
-    <Intel_OpenCL_Build_Rules Include="data\kernels\structs.cl">
-      <Filter>Kernels</Filter>
-    </Intel_OpenCL_Build_Rules>
+    <None Include="data\kernels\raytrace.cl" />
+    <None Include="data\kernels\structs.cl" />
   </ItemGroup>
 </Project>

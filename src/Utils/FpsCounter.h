@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "Math/MovingAverage.h"
+
 namespace Raycer
 {
 	class FpsCounter
@@ -13,15 +15,15 @@ namespace Raycer
 
 		FpsCounter();
 
-		void countFrame();
+		void count();
 		void update(double timeStep);
 		double getFps() const;
 		std::string getFpsString() const;
 
 	private:
 
-		double lastTime = 0;
-		double frameTime = 0;
-		double averageFrameTime = 1.0 / 30;
+		double lastTime = 0.0;
+		double frameTime = 0.0;
+		MovingAverage averageFrameTime;
 	};
 }
