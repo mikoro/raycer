@@ -7,14 +7,14 @@
 #include "Utils/Settings.h"
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
-#include "GpuRaytracing/GpuRaytracer.h"
+#include "GpuRaytracing/CLRaytracer.h"
 
 using namespace Raycer;
 
 void GpuTracingState::initialize()
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	scene.loadFromFile("data/scenes/test_scene.json");
 	scene.initialize();
@@ -45,7 +45,7 @@ void GpuTracingState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	scene.camera.interpolate(interpolation);
 	scene.camera.precalculate();

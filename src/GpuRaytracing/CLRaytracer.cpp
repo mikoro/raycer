@@ -6,7 +6,7 @@
 #include <CL/opencl.h>
 #include <GL/glew.h>
 
-#include "GpuRaytracing/GpuRaytracer.h"
+#include "GpuRaytracing/CLRaytracer.h"
 #include "Raytracing/Raytracer.h"
 #include "App.h"
 #include "Utils/Log.h"
@@ -20,11 +20,11 @@
 
 using namespace Raycer;
 
-GpuRaytracer::GpuRaytracer()
+CLRaytracer::CLRaytracer()
 {
 }
 
-GpuRaytracer::~GpuRaytracer()
+CLRaytracer::~CLRaytracer()
 {
 	if (pixelsPtr != nullptr)
 	{
@@ -63,7 +63,7 @@ GpuRaytracer::~GpuRaytracer()
 	}
 }
 
-void GpuRaytracer::initialize()
+void CLRaytracer::initialize()
 {
 	OpenCL& openCL = App::getOpenCL();
 	cl_int status = 0;
@@ -84,7 +84,7 @@ void GpuRaytracer::initialize()
 	checkCLError(status, "Could not create OpenCL spheres buffer");
 }
 
-void GpuRaytracer::resizePixelBuffer(int width, int height)
+void CLRaytracer::resizePixelBuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -112,7 +112,7 @@ void GpuRaytracer::resizePixelBuffer(int width, int height)
 	}
 }
 
-void GpuRaytracer::releasePixelBuffer()
+void CLRaytracer::releasePixelBuffer()
 {
 	if (pixelsPtr != nullptr)
 	{
@@ -121,7 +121,7 @@ void GpuRaytracer::releasePixelBuffer()
 	}
 }
 
-void GpuRaytracer::readScene(const Scene& scene)
+void CLRaytracer::readScene(const Scene& scene)
 {
 	Settings& settings = App::getSettings();
 	InteractiveRunner& interactiveRunner = App::getInteractiveRunner();
@@ -150,7 +150,7 @@ void GpuRaytracer::readScene(const Scene& scene)
 	gpuScene.info.sphereCount = (cl_int)gpuScene.spheres.size();
 }
 
-void GpuRaytracer::uploadData()
+void CLRaytracer::uploadData()
 {
 	OpenCL& openCL = App::getOpenCL();
 	cl_int status = 0;
@@ -171,7 +171,7 @@ void GpuRaytracer::uploadData()
 	checkCLError(status, "Could not write OpenCL spheres buffer");
 }
 
-void GpuRaytracer::trace(std::atomic<bool>& interrupted)
+void CLRaytracer::trace(std::atomic<bool>& interrupted)
 {
 	(void)interrupted;
 	
@@ -202,7 +202,7 @@ void GpuRaytracer::trace(std::atomic<bool>& interrupted)
 	checkCLError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
 }
 
-void GpuRaytracer::downloadImage()
+void CLRaytracer::downloadImage()
 {
 	Log& log = App::getLog();
 	OpenCL& openCL = App::getOpenCL();
@@ -231,12 +231,12 @@ void GpuRaytracer::downloadImage()
 	}
 }
 
-Image& GpuRaytracer::getImage()
+Image& CLRaytracer::getImage()
 {
 	return image;
 }
 
-void GpuRaytracer::printSizes()
+void CLRaytracer::printSizes()
 {
 	OpenCL& openCL = App::getOpenCL();
 

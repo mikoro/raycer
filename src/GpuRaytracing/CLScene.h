@@ -5,13 +5,13 @@
 
 #include <vector>
 
-#include "GpuRaytracing/Structs.h"
+#include "GpuRaytracing/CLStructs.h"
 
 namespace Raycer
 {
 	class Scene;
 
-	class GpuScene
+	class CLScene
 	{
 	public:
 

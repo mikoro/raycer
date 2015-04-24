@@ -22,9 +22,6 @@
     <Filter Include="GpuRaytracing">
       <UniqueIdentifier>{8e46c315-d15d-4be8-96cb-153f59924555}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Kernels">
-      <UniqueIdentifier>{101e979b-c4d1-40cb-9415-6c700e651a99}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{bc99656a-ab0c-42c5-b368-084057c2ebf8}</UniqueIdentifier>
     </Filter>
@@ -75,9 +72,6 @@
     <ClCompile Include="src\Runners\InteractiveRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
-    <ClCompile Include="src\GpuRaytracing\GpuRaytracer.cpp">
-      <Filter>GpuRaytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\States\CpuTracingState.cpp">
       <Filter>States</Filter>
     </ClCompile>
@@ -121,9 +115,6 @@
     <ClCompile Include="src\Raytracing\Scene.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\GpuRaytracing\GpuScene.cpp">
-      <Filter>GpuRaytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\ImageTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
@@ -156,6 +147,12 @@
     </ClCompile>
     <ClCompile Include="src\Math\MovingAverage.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GpuRaytracing\CLRaytracer.cpp">
+      <Filter>GpuRaytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GpuRaytracing\CLScene.cpp">
+      <Filter>GpuRaytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -200,9 +197,6 @@
     </ClInclude>
     <ClInclude Include="src\Runners\InteractiveRunner.h">
       <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\GpuRaytracer.h">
-      <Filter>GpuRaytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\States\CpuTracingState.h">
       <Filter>States</Filter>
@@ -256,12 +250,6 @@
     <ClInclude Include="src\Raytracing\Scene.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\Structs.h">
-      <Filter>GpuRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\GpuScene.h">
-      <Filter>GpuRaytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\ImageTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
@@ -304,6 +292,15 @@
     <ClInclude Include="src\Math\MovingAverage.h">
       <Filter>Math</Filter>
     </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\CLRaytracer.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\CLScene.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GpuRaytracing\CLStructs.h">
+      <Filter>GpuRaytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -328,12 +325,6 @@
     </None>
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
-    </None>
-    <None Include="data\kernels\raytrace.cl">
-      <Filter>Kernels</Filter>
-    </None>
-    <None Include="data\kernels\structs.cl">
-      <Filter>Kernels</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
 #include "Raytracing/Raytracer.h"
-#include "GpuRaytracing/GpuRaytracer.h"
+#include "GpuRaytracing/CLRaytracer.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -196,8 +196,8 @@ Raytracer& App::getRaytracer()
 	return raytracer;
 }
 
-GpuRaytracer& App::getGpuRaytracer()
+CLRaytracer& App::getGpuRaytracer()
 {
-	static GpuRaytracer gpuRaytracer;
+	static CLRaytracer gpuRaytracer;
 	return gpuRaytracer;
 }

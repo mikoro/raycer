@@ -18,8 +18,8 @@
 #include "Utils/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
-#include "GpuRaytracing/GpuRaytracer.h"
-#include "GpuRaytracing/Structs.h"
+#include "GpuRaytracing/CLRaytracer.h"
+#include "GpuRaytracing/CLStructs.h"
 
 using namespace Raycer;
 using namespace std::chrono;
@@ -81,7 +81,7 @@ void ConsoleRunner::run(RaytracerConfig& config)
 	Settings& settings = App::getSettings();
 	OpenCL& openCL = App::getOpenCL();
 	Raytracer& raytracer = App::getRaytracer();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	interrupted = false;
 

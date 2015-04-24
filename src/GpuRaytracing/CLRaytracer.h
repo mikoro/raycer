@@ -6,20 +6,20 @@
 #include <atomic>
 #include <CL/opencl.h>
 
-#include "GpuRaytracing/Structs.h"
-#include "GpuRaytracing/GpuScene.h"
+#include "GpuRaytracing/CLStructs.h"
+#include "GpuRaytracing/CLScene.h"
 #include "Utils/Image.h"
 
 namespace Raycer
 {
 	class Scene;
 
-	class GpuRaytracer
+	class CLRaytracer
 	{
 	public:
 
-		GpuRaytracer();
-		~GpuRaytracer();
+		CLRaytracer();
+		~CLRaytracer();
 
 		void initialize();
 		void resizePixelBuffer(int width, int height);
@@ -34,8 +34,8 @@ namespace Raycer
 
 	private:
 
-		GpuRaytracer(const GpuRaytracer& gpuRaytracer);
-		GpuRaytracer& operator=(const GpuRaytracer& gpuRaytracer);
+		CLRaytracer(const CLRaytracer& gpuRaytracer);
+		CLRaytracer& operator=(const CLRaytracer& gpuRaytracer);
 
 		cl_mem pixelsPtr = nullptr;
 		cl_mem infoPtr = nullptr;
@@ -48,7 +48,7 @@ namespace Raycer
 		const int MAX_PLANES = 100;
 		const int MAX_SPHERES = 100;
 
-		GpuScene gpuScene;
+		CLScene gpuScene;
 
 		int bufferWidth = 0;
 		int bufferHeight = 0;

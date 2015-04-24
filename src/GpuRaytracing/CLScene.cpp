@@ -1,12 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "GpuRaytracing/GpuScene.h"
+#include "GpuRaytracing/CLScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
-void GpuScene::readScene(const Scene& scene)
+void CLScene::readScene(const Scene& scene)
 {
 	camera.position.x = (float)scene.camera.position.x;
 	camera.position.y = (float)scene.camera.position.y;

@@ -13,7 +13,7 @@ namespace Raycer
 	class ConsoleRunner;
 	class NetworkRunner;
 	class Raytracer;
-	class GpuRaytracer;
+	class CLRaytracer;
 
 	class App
 	{
@@ -29,6 +29,6 @@ namespace Raycer
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();
 		static Raytracer& getRaytracer();
-		static GpuRaytracer& getGpuRaytracer();
+		static CLRaytracer& getGpuRaytracer();
 	};
 }

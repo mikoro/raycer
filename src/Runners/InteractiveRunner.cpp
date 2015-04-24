@@ -14,7 +14,7 @@
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
 #include "Utils/OpenCL.h"
-#include "GpuRaytracing/GpuRaytracer.h"
+#include "GpuRaytracing/CLRaytracer.h"
 #include "Utils/Image.h"
 #include "States/CpuTracingState.h"
 #include "States/GpuTracingState.h"
@@ -224,7 +224,7 @@ void InteractiveRunner::resizeFramebuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	GpuRaytracer& gpuRaytracer = App::getGpuRaytracer();
+	CLRaytracer& gpuRaytracer = App::getGpuRaytracer();
 
 	if (settings.openCL.enabled)
 		gpuRaytracer.releasePixelBuffer();
