@@ -103,8 +103,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\GpuRaytracing\CLRaytracer.cpp" />
-    <ClCompile Include="src\GpuRaytracing\CLScene.cpp" />
+    <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp" />
+    <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -145,9 +145,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\GpuRaytracing\CLRaytracer.h" />
-    <ClInclude Include="src\GpuRaytracing\CLScene.h" />
-    <ClInclude Include="src\GpuRaytracing\CLStructs.h" />
+    <ClInclude Include="src\CLRaytracing\CLRaytracer.h" />
+    <ClInclude Include="src\CLRaytracing\CLScene.h" />
+    <ClInclude Include="src\CLRaytracing\CLStructs.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
@@ -204,6 +204,14 @@
     <None Include="data\shaders\framebuffer_bicubic.vert" />
     <None Include="data\shaders\text.frag" />
     <None Include="data\shaders\text.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\CLRaytracing\raytrace.cl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="src\CLRaytracing\structs.cl">
+      <FileType>Document</FileType>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

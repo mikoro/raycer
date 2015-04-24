@@ -18,8 +18,8 @@
 #include "Utils/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
-#include "GpuRaytracing/CLRaytracer.h"
-#include "GpuRaytracing/CLStructs.h"
+#include "CLRaytracing/CLRaytracer.h"
+#include "CLRaytracing/CLStructs.h"
 
 using namespace Raycer;
 using namespace std::chrono;

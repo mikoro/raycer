@@ -19,9 +19,6 @@
     <Filter Include="Runners">
       <UniqueIdentifier>{d64a85d7-397e-4fdc-a313-bafb5e00147e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GpuRaytracing">
-      <UniqueIdentifier>{8e46c315-d15d-4be8-96cb-153f59924555}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shaders">
       <UniqueIdentifier>{bc99656a-ab0c-42c5-b368-084057c2ebf8}</UniqueIdentifier>
     </Filter>
@@ -33,6 +30,9 @@
     </Filter>
     <Filter Include="Raytracing\Primitives">
       <UniqueIdentifier>{27f5fe11-303d-4371-a98d-afd1d77015bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CLRaytracing">
+      <UniqueIdentifier>{08159d90-8e48-4e1d-98fe-53296966efc5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -148,11 +148,11 @@
     <ClCompile Include="src\Math\MovingAverage.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\GpuRaytracing\CLRaytracer.cpp">
-      <Filter>GpuRaytracing</Filter>
+    <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp">
+      <Filter>CLRaytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\GpuRaytracing\CLScene.cpp">
-      <Filter>GpuRaytracing</Filter>
+    <ClCompile Include="src\CLRaytracing\CLScene.cpp">
+      <Filter>CLRaytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -292,14 +292,14 @@
     <ClInclude Include="src\Math\MovingAverage.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\CLRaytracer.h">
-      <Filter>GpuRaytracing</Filter>
+    <ClInclude Include="src\CLRaytracing\CLRaytracer.h">
+      <Filter>CLRaytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\CLScene.h">
-      <Filter>GpuRaytracing</Filter>
+    <ClInclude Include="src\CLRaytracing\CLScene.h">
+      <Filter>CLRaytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\GpuRaytracing\CLStructs.h">
-      <Filter>GpuRaytracing</Filter>
+    <ClInclude Include="src\CLRaytracing\CLStructs.h">
+      <Filter>CLRaytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -326,5 +326,13 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Intel_OpenCL_Build_Rules Include="src\CLRaytracing\raytrace.cl">
+      <Filter>CLRaytracing</Filter>
+    </Intel_OpenCL_Build_Rules>
+    <Intel_OpenCL_Build_Rules Include="src\CLRaytracing\structs.cl">
+      <Filter>CLRaytracing</Filter>
+    </Intel_OpenCL_Build_Rules>
   </ItemGroup>
 </Project>

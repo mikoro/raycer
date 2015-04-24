@@ -6,7 +6,7 @@
 #include <CL/opencl.h>
 #include <GL/glew.h>
 
-#include "GpuRaytracing/CLRaytracer.h"
+#include "CLRaytracing/CLRaytracer.h"
 #include "Raytracing/Raytracer.h"
 #include "App.h"
 #include "Utils/Log.h"

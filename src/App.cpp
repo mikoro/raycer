@@ -16,7 +16,7 @@
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
 #include "Raytracing/Raytracer.h"
-#include "GpuRaytracing/CLRaytracer.h"
+#include "CLRaytracing/CLRaytracer.h"
 
 #ifdef _WIN32
 #include <windows.h>

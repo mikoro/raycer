@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "GpuRaytracing/CLScene.h"
+#include "CLRaytracing/CLScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;

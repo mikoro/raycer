@@ -6,8 +6,8 @@
 #include <atomic>
 #include <CL/opencl.h>
 
-#include "GpuRaytracing/CLStructs.h"
-#include "GpuRaytracing/CLScene.h"
+#include "CLRaytracing/CLStructs.h"
+#include "CLRaytracing/CLScene.h"
 #include "Utils/Image.h"
 
 namespace Raycer

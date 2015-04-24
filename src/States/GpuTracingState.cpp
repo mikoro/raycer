@@ -7,7 +7,7 @@
 #include "Utils/Settings.h"
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
-#include "GpuRaytracing/CLRaytracer.h"
+#include "CLRaytracing/CLRaytracer.h"
 
 using namespace Raycer;
 

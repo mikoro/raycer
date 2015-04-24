@@ -14,7 +14,7 @@
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
 #include "Utils/OpenCL.h"
-#include "GpuRaytracing/CLRaytracer.h"
+#include "CLRaytracing/CLRaytracer.h"
 #include "Utils/Image.h"
 #include "States/CpuTracingState.h"
 #include "States/GpuTracingState.h"

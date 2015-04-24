@@ -5,7 +5,7 @@
 
 #include <vector>
 
-#include "GpuRaytracing/CLStructs.h"
+#include "CLRaytracing/CLStructs.h"
 
 namespace Raycer
 {
