@@ -9,11 +9,10 @@
 
 namespace Raycer
 {
-	class OpenGL
+	class GLHelper
 	{
 	public:
 
 		static GLuint buildProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-		
 	};
 }

@@ -128,6 +128,7 @@
     <ClCompile Include="src\Raytracing\Sphere.cpp" />
     <ClCompile Include="src\Raytracing\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
+    <ClCompile Include="src\Rendering\GLHelper.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
@@ -139,7 +140,6 @@
     <ClCompile Include="src\Utils\Image.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
-    <ClCompile Include="src\Utils\OpenGL.cpp" />
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
   </ItemGroup>
@@ -177,6 +177,7 @@
     <ClInclude Include="src\Raytracing\Texture.h" />
     <ClInclude Include="src\Raytracing\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
+    <ClInclude Include="src\Rendering\GLHelper.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Text.h" />
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
@@ -190,7 +191,6 @@
     <ClInclude Include="src\Utils\Image.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
-    <ClInclude Include="src\Utils\OpenGL.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\Settings.h" />
   </ItemGroup>

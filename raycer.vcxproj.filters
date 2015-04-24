@@ -88,9 +88,6 @@
     <ClCompile Include="src\Rendering\Text.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\OpenGL.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Runners\NetworkRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
@@ -154,6 +151,9 @@
     <ClCompile Include="src\CLRaytracing\CLManager.cpp">
       <Filter>CLRaytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\GLHelper.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -213,9 +213,6 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Text.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\OpenGL.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\Runners\NetworkRunner.h">
       <Filter>Runners</Filter>
@@ -300,6 +297,9 @@
     </ClInclude>
     <ClInclude Include="src\CLRaytracing\CLManager.h">
       <Filter>CLRaytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\GLHelper.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

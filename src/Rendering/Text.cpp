@@ -16,7 +16,7 @@
 #include "Rendering/Text.h"
 #include "App.h"
 #include "Utils/Log.h"
-#include "Utils/OpenGL.h"
+#include "Rendering/GLHelper.h"
 #include "Utils/Errors.h"
 #include "Math/Color.h"
 
@@ -65,7 +65,7 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 	buffer = ftgl::vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f");
 	ftgl::texture_font_load_glyphs(font, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
-	programId = OpenGL::buildProgram("data/shaders/text.vert", "data/shaders/text.frag");
+	programId = GLHelper::buildProgram("data/shaders/text.vert", "data/shaders/text.frag");
 	samplerId = glGetUniformLocation(programId, "tex0");
 	matrixId = glGetUniformLocation(programId, "mvp");
 

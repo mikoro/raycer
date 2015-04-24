@@ -5,7 +5,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Utils/OpenGL.h"
+#include "Rendering/GLHelper.h"
 #include "Utils/Errors.h"
 #include "Math/Color.h"
 
@@ -48,7 +48,7 @@ void Framebuffer::initialize()
 
 	checkGLError("Could not set OpenGL texture parameters");
 
-	programId = OpenGL::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
+	programId = GLHelper::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
 	samplerUniformId = glGetUniformLocation(programId, "tex0");
 	textureWidthUniformId = glGetUniformLocation(programId, "textureWidth");
 	textureHeightUniformId = glGetUniformLocation(programId, "textureHeight");

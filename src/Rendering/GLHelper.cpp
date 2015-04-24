@@ -6,13 +6,13 @@
 #include <string>
 #include <vector>
 
-#include "Utils/OpenGL.h"
+#include "Rendering/GLHelper.h"
 #include "App.h"
 #include "Utils/Log.h"
 
 using namespace Raycer;
 
-GLuint OpenGL::buildProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
+GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::string& fragmentShaderPath)
 {
 	Log& log = App::getLog();
 
