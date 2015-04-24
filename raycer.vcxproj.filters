@@ -118,9 +118,6 @@
     <ClCompile Include="src\Raytracing\Sphere.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utils\Image.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -156,6 +153,9 @@
     </ClCompile>
     <ClCompile Include="src\Raytracing\Fog.cpp">
       <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\CheckerTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -262,9 +262,6 @@
     <ClInclude Include="src\Math\Triangle.h">
       <Filter>Math</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\CheckerboardTexture.h">
-      <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\Image.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -306,6 +303,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Fog.h">
       <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\CheckerTexture.h">
+      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

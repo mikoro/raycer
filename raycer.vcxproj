@@ -118,7 +118,7 @@
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
-    <ClCompile Include="src\Raytracing\CheckerboardTexture.cpp" />
+    <ClCompile Include="src\Raytracing\CheckerTexture.cpp" />
     <ClCompile Include="src\Raytracing\ColorTexture.cpp" />
     <ClCompile Include="src\Raytracing\Fog.cpp" />
     <ClCompile Include="src\Raytracing\ImageTexture.cpp" />
@@ -164,7 +164,7 @@
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />
-    <ClInclude Include="src\Raytracing\CheckerboardTexture.h" />
+    <ClInclude Include="src\Raytracing\CheckerTexture.h" />
     <ClInclude Include="src\Raytracing\ColorTexture.h" />
     <ClInclude Include="src\Raytracing\Fog.h" />
     <ClInclude Include="src\Raytracing\ImageTexture.h" />

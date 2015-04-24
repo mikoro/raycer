@@ -10,7 +10,7 @@
 #include "Raytracing/Fog.h"
 #include "Raytracing/Texture.h"
 #include "Raytracing/ColorTexture.h"
-#include "Raytracing/CheckerboardTexture.h"
+#include "Raytracing/CheckerTexture.h"
 #include "Raytracing/ImageTexture.h"
 #include "Raytracing/WoodTexture.h"
 #include "Raytracing/MarbleTexture.h"
@@ -42,7 +42,7 @@ namespace Raycer
 		Fog fog;
 
 		std::vector<ColorTexture> colorTextures;
-		std::vector<CheckerboardTexture> checkerboardTextures;
+		std::vector<CheckerTexture> checkerTextures;
 		std::vector<ImageTexture> imageTextures;
 		std::vector<WoodTexture> woodTextures;
 		std::vector<MarbleTexture> marbleTextures;
@@ -66,7 +66,7 @@ namespace Raycer
 				CEREAL_NVP(camera),
 				CEREAL_NVP(fog),
 				CEREAL_NVP(colorTextures),
-				CEREAL_NVP(checkerboardTextures),
+				CEREAL_NVP(checkerTextures),
 				CEREAL_NVP(imageTextures),
 				CEREAL_NVP(woodTextures),
 				CEREAL_NVP(marbleTextures),

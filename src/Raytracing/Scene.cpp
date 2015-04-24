@@ -57,8 +57,8 @@ void Scene::initialize()
 	for (ColorTexture& colorTexture : colorTextures)
 		textureList.push_back(&colorTexture);
 
-	for (CheckerboardTexture& checkerboardTexture : checkerboardTextures)
-		textureList.push_back(&checkerboardTexture);
+	for (CheckerTexture& checkerTexture : checkerTextures)
+		textureList.push_back(&checkerTexture);
 
 	for (ImageTexture& imageTexture : imageTextures)
 		textureList.push_back(&imageTexture);
@@ -131,12 +131,10 @@ Scene Scene::createTestScene()
 	scene.colorTextures.push_back(t2);
 	scene.colorTextures.push_back(t3);
 
-	CheckerboardTexture t4;
+	CheckerTexture t4;
 	t4.id = 4;
-	t4.color1 = Color(0.0, 0.0, 0.0);
-	t4.color2 = Color(1.0, 1.0, 1.0);
 
-	scene.checkerboardTextures.push_back(t4);
+	scene.checkerTextures.push_back(t4);
 
 	ImageTexture t5;
 	t5.id = 5;
@@ -157,7 +155,7 @@ Scene Scene::createTestScene()
 	// p1
 	Material m0;
 	m0.id = 0;
-	m0.textureId = 0;
+	m0.textureId = 4;
 	m0.diffuseness = 1.0;
 	m0.specularity = 0.5;
 	m0.shininess = 2.0;
