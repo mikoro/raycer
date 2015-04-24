@@ -329,7 +329,11 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="data\kernels\raytrace.cl" />
-    <None Include="data\kernels\structs.cl" />
+    <None Include="data\kernels\raytrace.cl">
+      <Filter>Kernels</Filter>
+    </None>
+    <None Include="data\kernels\structs.cl">
+      <Filter>Kernels</Filter>
+    </None>
   </ItemGroup>
 </Project>

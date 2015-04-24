@@ -95,8 +95,10 @@ void Raytracer::trace(RaytracerConfig& config, std::atomic<bool>& interrupted)
 		}
 	}
 
-	config.pixelsProcessed = config.pixelCount;
 	config.raysProcessed = rayCount;
+
+	if (!interrupted)
+		config.pixelsProcessed = config.pixelCount;
 }
 
 void Raytracer::shootRay(RaytracerConfig& config, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)

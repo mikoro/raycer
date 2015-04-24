@@ -31,6 +31,13 @@ int ConsoleRunner::run()
 
 	interrupted = false;
 
+	pixelsPerSecondAverage.setAlpha(0.1);
+	pixelsPerSecondAverage.setAverage(1.0);
+	raysPerSecondAverage.setAlpha(0.1);
+	raysPerSecondAverage.setAverage(1.0);
+	remainingTimeAverage.setAlpha(0.1);
+	remainingTimeAverage.setAverage(0.0);
+
 	Scene scene;
 	//scene.loadFromFile(settings.scene.fileName);
 	scene = Scene::createTestScene();
@@ -106,38 +113,56 @@ void ConsoleRunner::run(RaytracerConfig& config)
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (size: %dx%d, offset: %d, pixels: %d)\n\n", config.sceneWidth, config.sceneHeight, config.pixelOffset, config.pixelCount);
+	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", config.sceneWidth, config.sceneHeight, humanizeNumberDecimal(config.pixelCount), humanizeNumberBytes(config.pixelCount * 4 * 4), config.pixelOffset);
 
-	if (settings.openCL.enabled)
-		config.pixelsProcessed = config.pixelCount / 2;
-
-	auto startTime = system_clock::now();
+	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderFunction);
 
 	while (!finished)
 	{
-		printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+		if (!settings.openCL.enabled)
+			printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
+		else
+			printProgressOpenCL(startTime);
 	}
 
 	renderThread.join();
 
+	if (!settings.openCL.enabled)
+		printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
+	else
+		printProgressOpenCL(startTime);
+
 	if (settings.openCL.enabled)
 		config.pixelsProcessed = config.pixelCount;
 
-	printProgress(startTime, config.pixelCount, config.pixelsProcessed, config.raysProcessed);
+	auto elapsedTime = high_resolution_clock::now() - startTime;
+	int totalElapsedSeconds = (int)duration_cast<std::chrono::seconds>(elapsedTime).count();
+	int totalElapsedMilliseconds = (int)duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	int elapsedHours = totalElapsedSeconds / 3600;
+	int elapsedMinutes = (totalElapsedSeconds - elapsedHours * 3600) / 60;
+	int elapsedSeconds = totalElapsedSeconds - elapsedHours * 3600 - elapsedMinutes * 60;
+	int elapsedMilliseconds = totalElapsedMilliseconds - totalElapsedSeconds * 1000;
 
-	auto elapsedTime = system_clock::now() - startTime;
-	int hours = (int)duration_cast<std::chrono::hours>(elapsedTime).count();
-	int minutes = (int)duration_cast<std::chrono::minutes>(elapsedTime).count();
-	int seconds = (int)duration_cast<std::chrono::seconds>(elapsedTime).count();
-	int milliseconds = (int)duration_cast<std::chrono::milliseconds>(elapsedTime).count();
-	milliseconds = milliseconds - seconds * 1000;
-	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
+	double totalPixelsPerSecond = 0.0;
+	double totalRaysPerSecond = 0.0;
 
-	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %d, rays: %d)\n\n", interrupted ? "interrupted" : "finished", timeString, config.pixelsProcessed.load(), config.raysProcessed.load());
+	if (totalElapsedMilliseconds > 0)
+	{
+		totalPixelsPerSecond = (double)config.pixelsProcessed / ((double)totalElapsedMilliseconds / 1000.0);
+		totalRaysPerSecond = (double)config.raysProcessed / ((double)totalElapsedMilliseconds / 1000.0);
+	}
+	
+	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
 
-	if (settings.openCL.enabled)
+	if (!settings.openCL.enabled)
+		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s, rays: %s, rays/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(config.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond), humanizeNumberDecimal(config.raysProcessed.load()), humanizeNumberDecimal(totalRaysPerSecond));
+	else
+		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(config.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
+
+	if (!interrupted && settings.openCL.enabled)
 	{
 		gpuRaytracer.downloadImage();
 		resultImage = gpuRaytracer.getImage();
@@ -156,14 +181,14 @@ Image& ConsoleRunner::getResultImage()
 
 void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)
 {
-	auto elapsedTime = system_clock::now() - startTime;
-	double elapsedSeconds = (double)duration_cast<milliseconds>(elapsedTime).count() / 1000.0;
-	double msPerPixel = 0;
+	auto elapsedTime = high_resolution_clock::now() - startTime;
+	double elapsedSeconds = (double)duration_cast<std::chrono::milliseconds>(elapsedTime).count() / 1000.0;
+	double msPerPixel = 0.0;
 
 	if (pixelsProcessed > 0)
-		msPerPixel = (double)duration_cast<milliseconds>(elapsedTime).count() / (double)pixelsProcessed;
+		msPerPixel = (double)duration_cast<std::chrono::milliseconds>(elapsedTime).count() / (double)pixelsProcessed;
 
-	auto estimatedTime = milliseconds((int)(msPerPixel * (double)totalPixelCount + 0.5));
+	auto estimatedTime = std::chrono::milliseconds((int)(msPerPixel * (double)totalPixelCount + 0.5));
 	auto remainingTime = estimatedTime - elapsedTime;
 
 	int percentage = (int)(((double)pixelsProcessed / (double)totalPixelCount) * 100.0 + 0.5);
@@ -182,14 +207,82 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 			printf(" ");
 	}
 
-	int hours = (int)duration_cast<std::chrono::hours>(remainingTime).count();
-	int minutes = (int)duration_cast<std::chrono::minutes>(remainingTime).count() % 60;
-	int seconds = (int)duration_cast<std::chrono::seconds>(remainingTime).count() % 60;
+	if (elapsedSeconds > 0.0)
+	{
+		pixelsPerSecondAverage.addMeasurement((double)pixelsProcessed / elapsedSeconds);
+		raysPerSecondAverage.addMeasurement((double)raysProcessed / elapsedSeconds);
+	}
+	
+	remainingTimeAverage.addMeasurement((double)duration_cast<std::chrono::seconds>(remainingTime).count());
+
+	if (pixelsProcessed == totalPixelCount)
+		remainingTimeAverage.setAverage(0.0);
+
+	int totalRemainingSeconds = (int)(remainingTimeAverage.getAverage() + 0.5);
+	int remainingHours = totalRemainingSeconds / 3600;
+	int remainingMinutes = (totalRemainingSeconds - remainingHours * 3600) / 60;
+	int remainingSeconds = totalRemainingSeconds - remainingHours * 3600 - remainingMinutes * 60;
 
 	printf("] ");
 	printf("%d %% | ", percentage);
-	printf("Remaining time: %02d:%02d:%02d | ", hours, minutes, seconds);
-	printf("Pixels/s: %.1f | ", (double)pixelsProcessed / elapsedSeconds);
-	printf("Rays/s: %.1f", (double)raysProcessed / elapsedSeconds);
+	printf("Remaining time: %02d:%02d:%02d | ", remainingHours, remainingMinutes, remainingSeconds);
+	printf("Pixels/s: %s | ", humanizeNumberDecimal(pixelsPerSecondAverage.getAverage()).c_str());
+	printf("Rays/s: %s", humanizeNumberDecimal(raysPerSecondAverage.getAverage()).c_str());
 	printf("          \r");
+}
+
+void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chrono::system_clock>& startTime)
+{
+	auto elapsedTime = high_resolution_clock::now() - startTime;
+	int totalElapsedSeconds = (int)duration_cast<std::chrono::seconds>(elapsedTime).count();
+	int elapsedHours = totalElapsedSeconds / 3600;
+	int elapsedMinutes = (totalElapsedSeconds - elapsedHours * 3600) / 60;
+	int elapsedSeconds = totalElapsedSeconds - elapsedHours * 3600 - elapsedMinutes * 60;
+
+	if (++openCLProgressCounter1 % 5 == 0)
+		++openCLProgressCounter2;
+
+	char progressChar;
+
+	switch (openCLProgressCounter2 % 4)
+	{
+		case 1: progressChar = '\\'; break;
+		case 2: progressChar = '|'; break;
+		case 3: progressChar = '/'; break;
+		default: progressChar = '-'; break;
+	}
+
+	printf("[%c] ", progressChar);
+	printf("Elapsed time: %02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+	printf("          \r");
+}
+
+std::string ConsoleRunner::humanizeNumberDecimal(double value)
+{
+	const char* prefixes[] = {"", "k", "M", "G", "T", "P", "E", "Z", "Y"};
+
+	for (int i = 0; i < 9; ++i)
+	{
+		if (value < 1000.0)
+			return tfm::format("%.2f %s", value, prefixes[i]);
+		else
+			value /= 1000.0;
+	}
+
+	return tfm::format("%.2f %s", value, "Y");
+}
+
+std::string ConsoleRunner::humanizeNumberBytes(double value)
+{
+	const char* prefixes[] = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+	for (int i = 0; i < 9; ++i)
+	{
+		if (value < 1024.0)
+			return tfm::format("%.2f %s", value, prefixes[i]);
+		else
+			value /= 1024.0;
+	}
+
+	return tfm::format("%.2f %s", value, "YB");
 }

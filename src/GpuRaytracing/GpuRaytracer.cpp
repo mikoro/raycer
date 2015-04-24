@@ -9,6 +9,7 @@
 #include "GpuRaytracing/GpuRaytracer.h"
 #include "Raytracing/Raytracer.h"
 #include "App.h"
+#include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Utils/Errors.h"
 #include "Utils/OpenCL.h"
@@ -203,7 +204,10 @@ void GpuRaytracer::trace(std::atomic<bool>& interrupted)
 
 void GpuRaytracer::downloadImage()
 {
+	Log& log = App::getLog();
 	OpenCL& openCL = App::getOpenCL();
+
+	log.logInfo("Downloading image data from the OpenCL device");
 
 	size_t origin[3] = { 0, 0, 0 };
 	size_t region[3] = { bufferWidth, bufferHeight, 1 };
@@ -238,6 +242,5 @@ void GpuRaytracer::printSizes()
 
 	const size_t globalSize = 1;
 	checkCLError(clEnqueueNDRangeKernel(openCL.commandQueue, openCL.printSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
-
 	checkCLError(clFinish(openCL.commandQueue), "Could not finish OpenCL command queue");
 }

@@ -7,6 +7,7 @@
 #include <atomic>
 
 #include "Utils/Image.h"
+#include "Math/MovingAverage.h"
 
 namespace Raycer
 {
@@ -25,9 +26,19 @@ namespace Raycer
 	private:
 
 		void printProgress(const std::chrono::time_point<std::chrono::system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed);
+		void printProgressOpenCL(const std::chrono::time_point<std::chrono::system_clock>& startTime);
+		std::string humanizeNumberDecimal(double value);
+		std::string humanizeNumberBytes(double value);
 
 		bool openCLInitialized = false;
 		std::atomic<bool> interrupted;
 		Image resultImage;
+
+		MovingAverage pixelsPerSecondAverage;
+		MovingAverage raysPerSecondAverage;
+		MovingAverage remainingTimeAverage;
+
+		int openCLProgressCounter1 = 0;
+		int openCLProgressCounter2 = 0;
 	};
 }
