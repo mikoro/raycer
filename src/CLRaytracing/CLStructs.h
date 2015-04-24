@@ -8,7 +8,7 @@
 #ifdef _MSC_VER
 #define ALIGN(x) __declspec(align(x))
 #elif __GNUC__
-#define ALIGN(x) __attribute__ (aligned(x))
+#define ALIGN(x) __attribute__ ((aligned(x)))
 #endif
 
 namespace Raycer

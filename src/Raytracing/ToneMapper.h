@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 namespace Raycer
 {
 	class Color;

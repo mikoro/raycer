@@ -210,7 +210,7 @@ void CLRaytracer::downloadImage()
 	log.logInfo("Downloading image data from the OpenCL device");
 
 	size_t origin[3] = { 0, 0, 0 };
-	size_t region[3] = { bufferWidth, bufferHeight, 1 };
+	size_t region[3] = { (size_t)bufferWidth, (size_t)bufferHeight, 1 };
 
 	std::vector<float> pixelData(bufferWidth * bufferHeight * 4);
 

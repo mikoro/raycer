@@ -8,25 +8,25 @@ using namespace Raycer;
 
 void CLScene::readScene(const Scene& scene)
 {
-	camera.position.x = (float)scene.camera.position.x;
-	camera.position.y = (float)scene.camera.position.y;
-	camera.position.z = (float)scene.camera.position.z;
-	camera.position.w = 0.0f;
+	camera.position.s[0]= (float)scene.camera.position.x;
+	camera.position.s[1]= (float)scene.camera.position.y;
+	camera.position.s[2]= (float)scene.camera.position.z;
+	camera.position.s[3]= 0.0f;
 
-	camera.up.x = (float)scene.camera.up.x;
-	camera.up.y = (float)scene.camera.up.y;
-	camera.up.z = (float)scene.camera.up.z;
-	camera.up.w = 0.0f;
+	camera.up.s[0]= (float)scene.camera.up.x;
+	camera.up.s[1]= (float)scene.camera.up.y;
+	camera.up.s[2]= (float)scene.camera.up.z;
+	camera.up.s[3]= 0.0f;
 
-	camera.right.x = (float)scene.camera.right.x;
-	camera.right.y = (float)scene.camera.right.y;
-	camera.right.z = (float)scene.camera.right.z;
-	camera.right.w = 0.0f;
+	camera.right.s[0]= (float)scene.camera.right.x;
+	camera.right.s[1]= (float)scene.camera.right.y;
+	camera.right.s[2]= (float)scene.camera.right.z;
+	camera.right.s[3]= 0.0f;
 
-	camera.imagePlaneCenter.x = (float)scene.camera.imagePlaneCenter.x;
-	camera.imagePlaneCenter.y = (float)scene.camera.imagePlaneCenter.y;
-	camera.imagePlaneCenter.z = (float)scene.camera.imagePlaneCenter.z;
-	camera.imagePlaneCenter.w = 0.0f;
+	camera.imagePlaneCenter.s[0]= (float)scene.camera.imagePlaneCenter.x;
+	camera.imagePlaneCenter.s[1]= (float)scene.camera.imagePlaneCenter.y;
+	camera.imagePlaneCenter.s[2]= (float)scene.camera.imagePlaneCenter.z;
+	camera.imagePlaneCenter.s[3]= 0.0f;
 
 	camera.imagePlaneWidth = (float)scene.camera.imagePlaneWidth;
 	camera.imagePlaneHeight = (float)scene.camera.imagePlaneHeight;
@@ -40,15 +40,15 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Light clLight;
 
-		clLight.position.x = (float)light.position.x;
-		clLight.position.y = (float)light.position.y;
-		clLight.position.z = (float)light.position.z;
-		clLight.position.w = 0.0f;
+		clLight.position.s[0]= (float)light.position.x;
+		clLight.position.s[1]= (float)light.position.y;
+		clLight.position.s[2]= (float)light.position.z;
+		clLight.position.s[3]= 0.0f;
 
-		clLight.color.x = (float)light.color.r;
-		clLight.color.y = (float)light.color.g;
-		clLight.color.z = (float)light.color.b;
-		clLight.color.w = (float)light.color.a;
+		clLight.color.s[0]= (float)light.color.r;
+		clLight.color.s[1]= (float)light.color.g;
+		clLight.color.s[2]= (float)light.color.b;
+		clLight.color.s[3]= (float)light.color.a;
 
 		clLight.intensity = (float)light.intensity;
 
@@ -59,20 +59,20 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Plane clPlane;
 
-		clPlane.position.x = (float)plane.position.x;
-		clPlane.position.y = (float)plane.position.y;
-		clPlane.position.z = (float)plane.position.z;
-		clPlane.position.w = 0.0f;
+		clPlane.position.s[0]= (float)plane.position.x;
+		clPlane.position.s[1]= (float)plane.position.y;
+		clPlane.position.s[2]= (float)plane.position.z;
+		clPlane.position.s[3]= 0.0f;
 
-		clPlane.normal.x = (float)plane.normal.x;
-		clPlane.normal.y = (float)plane.normal.y;
-		clPlane.normal.z = (float)plane.normal.z;
-		clPlane.normal.w = 0.0f;
+		clPlane.normal.s[0]= (float)plane.normal.x;
+		clPlane.normal.s[1]= (float)plane.normal.y;
+		clPlane.normal.s[2]= (float)plane.normal.z;
+		clPlane.normal.s[3]= 0.0f;
 
-		clPlane.color.x = 1.0f;
-		clPlane.color.y = 0.0f;
-		clPlane.color.z = 0.0f;
-		clPlane.color.w = 1.0f;
+		clPlane.color.s[0]= 1.0f;
+		clPlane.color.s[1]= 0.0f;
+		clPlane.color.s[2]= 0.0f;
+		clPlane.color.s[3]= 1.0f;
 
 		planes.push_back(clPlane);
 	}
@@ -81,15 +81,15 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Sphere clSphere;
 
-		clSphere.position.x = (float)sphere.position.x;
-		clSphere.position.y = (float)sphere.position.y;
-		clSphere.position.z = (float)sphere.position.z;
-		clSphere.position.w = 0.0f;
+		clSphere.position.s[0]= (float)sphere.position.x;
+		clSphere.position.s[1]= (float)sphere.position.y;
+		clSphere.position.s[2]= (float)sphere.position.z;
+		clSphere.position.s[3]= 0.0f;
 
-		clSphere.color.x = 0.0f;
-		clSphere.color.y = 1.0f;
-		clSphere.color.z = 0.0f;
-		clSphere.color.w = 1.0f;
+		clSphere.color.s[0]= 0.0f;
+		clSphere.color.s[1]= 1.0f;
+		clSphere.color.s[2]= 0.0f;
+		clSphere.color.s[3]= 1.0f;
 
 		clSphere.radius = (float)sphere.radius;
 

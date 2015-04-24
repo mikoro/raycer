@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Texture.h"
 #include "Utils/Image.h"
 

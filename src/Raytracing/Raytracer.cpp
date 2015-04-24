@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <random>
+#include <limits>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/Scene.h"
@@ -29,7 +30,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 
 	std::random_device rd;
 	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> random(0.0, std::nextafter(1.0, DBL_MAX));
+	std::uniform_real_distribution<double> random(0.0, std::nextafter(1.0, std::numeric_limits<double>::max()));
 
 	#pragma omp parallel for schedule(dynamic, 1000) reduction(+:rayCount) firstprivate(previousRayCount)
 	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
