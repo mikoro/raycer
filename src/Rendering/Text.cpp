@@ -63,7 +63,6 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 		throw std::runtime_error("Could not load font");
 
 	buffer = ftgl::vertex_buffer_new("vertex:3f,tex_coord:2f,color:4f");
-	ftgl::texture_font_load_glyphs(font, L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 
 	programId = GLHelper::buildProgram("data/shaders/text.vert", "data/shaders/text.frag");
 	samplerId = glGetUniformLocation(programId, "tex0");

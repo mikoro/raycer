@@ -34,7 +34,8 @@ namespace Raycer
 
 		int run();
 		void stop();
-		
+		void pause();
+
 		GLFWwindow* getGlfwWindow() const;
 		int getWindowWidth() const;
 		int getWindowHeight() const;
@@ -66,6 +67,7 @@ namespace Raycer
 		void takeScreenshot() const;
 
 		bool shouldRun = true;
+		bool isPaused = false;
 		bool glfwInitialized = false;
 		GLFWwindow* glfwWindow = nullptr;
 		int windowWidth = 0;
@@ -78,6 +80,7 @@ namespace Raycer
 		std::map<RunnerStates, std::unique_ptr<InteractiveState>> runnerStates;
 		RunnerStates currentState = RunnerStates::None;
 		Text defaultText;
+		Text pauseText;
 		FpsCounter updateFpsCounter;
 		FpsCounter renderFpsCounter;
 	};

@@ -5,6 +5,8 @@
 #include <windows.h>
 #endif
 
+#include <thread>
+
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
@@ -63,6 +65,11 @@ int InteractiveRunner::run()
 void InteractiveRunner::stop()
 {
 	shouldRun = false;
+}
+
+void InteractiveRunner::pause()
+{
+	isPaused = true;
 }
 
 GLFWwindow* InteractiveRunner::getGlfwWindow() const
@@ -183,6 +190,7 @@ void InteractiveRunner::initialize()
 	}
 
 	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
+	pauseText.initialize(settings.window.defaultFont, 100);
 
 	windowResized(settings.window.width, settings.window.height);
 
@@ -209,6 +217,7 @@ void InteractiveRunner::windowResized(int width, int height)
 
 	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
 	defaultText.setWindowSize(windowWidth, windowHeight);
+	pauseText.setWindowSize(windowWidth, windowHeight);
 
 	resizeFramebuffer((int)((double)windowWidth * settings.framebuffer.scale + 0.5), (int)((double)windowHeight * settings.framebuffer.scale + 0.5));
 
@@ -345,8 +354,14 @@ void InteractiveRunner::update(double timeStep)
 		}
 	}
 
+	if (keyWasPressed(GLFW_KEY_P))
+		isPaused = !isPaused;
+
 	if (currentState != RunnerStates::None)
-		runnerStates[currentState]->update(timeStep);
+	{
+		if (!isPaused)
+			runnerStates[currentState]->update(timeStep);
+	}
 	else
 		throw std::runtime_error("Runner state has not been set");
 }
@@ -363,16 +378,28 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 	//framebuffer.clear(); // not needed if every pixel is written every time
 
 	if (currentState != RunnerStates::None)
-		runnerStates[currentState]->render(timeStep, interpolation);
+	{
+		if (!isPaused)
+			runnerStates[currentState]->render(timeStep, interpolation);
+		else
+			std::this_thread::sleep_for(std::chrono::milliseconds(100));
+	}
 	else
 		throw std::runtime_error("Runner state has not been set");
 
 	framebuffer.render();
 	
 	if (settings.window.showFps)
-		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), renderFpsCounter.getFpsString());
+		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
 
 	defaultText.render();
+
+	if (isPaused)
+	{
+		pauseText.drawText((double)windowWidth / 2.0 - 200.0, (double)windowHeight / 2.0 - 40.0, Color::WHITE, "PAUSED");
+		pauseText.render();
+	}
+	
 	glfwSwapBuffers(glfwWindow);
 
 	if (keyWasPressed(GLFW_KEY_F12))
