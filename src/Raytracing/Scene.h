@@ -37,6 +37,7 @@ namespace Raycer
 		void loadFromFile(const std::string& fileName);
 		void saveAs(const std::string& fileName) const;
 		void initialize();
+		void validate();
 		static Scene createTestScene();
 
 		struct Tracer
@@ -90,10 +91,10 @@ namespace Raycer
 		std::vector<Mesh> meshes;
 		std::vector<Light> lights;
 		
-		std::vector<Texture*> textureList;
-		std::map<int, Texture*> textureMap;
-		std::map<int, Material*> materialMap;
-		std::vector<Primitive*> primitiveList;
+		std::vector<Texture*> texturesList;
+		std::map<int, Texture*> texturesMap;
+		std::map<int, Material*> materialsMap;
+		std::vector<Primitive*> primitivesList;
 
 		template<class Archive>
 		void serialize(Archive& ar)

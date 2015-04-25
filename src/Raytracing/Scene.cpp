@@ -49,48 +49,65 @@ void Scene::saveAs(const std::string& fileName) const
 
 void Scene::initialize()
 {
-	textureList.clear();
-	textureMap.clear();
-	materialMap.clear();
-	primitiveList.clear();
+	texturesList.clear();
+	texturesMap.clear();
+	materialsMap.clear();
+	primitivesList.clear();
 
 	for (ColorTexture& colorTexture : colorTextures)
-		textureList.push_back(&colorTexture);
+		texturesList.push_back(&colorTexture);
 
 	for (CheckerTexture& checkerTexture : checkerTextures)
-		textureList.push_back(&checkerTexture);
+		texturesList.push_back(&checkerTexture);
 
 	for (ImageTexture& imageTexture : imageTextures)
-		textureList.push_back(&imageTexture);
+		texturesList.push_back(&imageTexture);
 
 	for (WoodTexture& woodTexture : woodTextures)
-		textureList.push_back(&woodTexture);
+		texturesList.push_back(&woodTexture);
 
 	for (MarbleTexture& marbleTexture : marbleTextures)
-		textureList.push_back(&marbleTexture);
+		texturesList.push_back(&marbleTexture);
 
-	for (Texture* texture : textureList)
+	for (Texture* texture : texturesList)
 	{
 		texture->initialize();
-		textureMap[texture->id] = texture;
+		texturesMap[texture->id] = texture;
 	}
 
 	for (Material& material : materials)
-		materialMap[material.id] = &material;
+		materialsMap[material.id] = &material;
 
 	for (Sphere& sphere : spheres)
-		primitiveList.push_back(&sphere);
+		primitivesList.push_back(&sphere);
 
 	for (Plane& plane : planes)
-		primitiveList.push_back(&plane);
+		primitivesList.push_back(&plane);
 
 	for (Mesh& mesh : meshes)
-		primitiveList.push_back(&mesh);
+		primitivesList.push_back(&mesh);
 
-	for (Primitive* primitive : primitiveList)
+	for (Primitive* primitive : primitivesList)
 		primitive->initialize();
 
 	camera.initialize();
+	validate();
+}
+
+void Scene::validate()
+{
+	for (Primitive* primitive : primitivesList)
+	{
+		if (materialsMap.count(primitive->materialId))
+		{
+			Material* material = materialsMap[primitive->materialId];
+
+			if (!texturesMap.count(material->textureId))
+				throw std::runtime_error("A material has an invalid texture id");
+		}
+		else
+			throw std::runtime_error("A primitive has an invalid material id");
+	}
 }
 
 Scene Scene::createTestScene()

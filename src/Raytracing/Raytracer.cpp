@@ -149,15 +149,15 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 
 	++rayCount;
 
-	for (const Primitive* primitive : scene.primitiveList)
+	for (const Primitive* primitive : scene.primitivesList)
 		primitive->intersect(ray);
 
 	if (ray.intersection.wasFound)
 	{
 		Color reflectedColor(0.0, 0.0, 0.0);
 
-		Material* material = scene.materialMap[ray.intersection.materialId];
-		Texture* texture = scene.textureMap[material->textureId];
+		Material* material = scene.materialsMap[ray.intersection.materialId];
+		Texture* texture = scene.texturesMap[material->textureId];
 
 		if (material->reflectivity > 0.0 && ray.reflectionCount < scene.tracer.maxReflections)
 		{
@@ -177,7 +177,7 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::a
 {
 	Color lightColor(0.0, 0.0, 0.0);
 
-	Material* material = scene.materialMap[ray.intersection.materialId];
+	Material* material = scene.materialsMap[ray.intersection.materialId];
 
 	for (const Light& light : scene.lights)
 	{
@@ -190,7 +190,7 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::a
 		Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
 		++rayCount;
 
-		for (const Primitive* primitive : scene.primitiveList)
+		for (const Primitive* primitive : scene.primitivesList)
 			primitive->intersect(rayToLight);
 
 		if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
