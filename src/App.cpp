@@ -51,18 +51,19 @@ int App::run(int argc, char** argv)
 #endif
 
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
-	TCLAP::SwitchArg interactiveSwitch("i", "interactive", "View the scene interactively", cmd, false);
-	TCLAP::SwitchArg useOpenCLSwitch("l", "opencl", "Use OpenCL for raytracing", cmd, false);
-	TCLAP::ValueArg<int> platformIdArg("p", "platform", "OpenCL platform to use", false, 0, "int", cmd);
-	TCLAP::ValueArg<int> deviceTypeArg("t", "type", "OpenCL device type to use", false, 0, "int", cmd);
-	TCLAP::ValueArg<int> deviceIdArg("d", "device", "OpenCL device to use", false, 0, "int", cmd);
-	TCLAP::SwitchArg clientSwitch("c", "client", "Enable network client mode", cmd, false);
-	TCLAP::SwitchArg serverSwitch("e", "server", "Enable network server mode", cmd, false);
+	TCLAP::SwitchArg interactiveSwitch("", "interactive", "View the scene interactively", cmd, false);
+	TCLAP::SwitchArg nonInteractiveSwitch("", "non-interactive", "Force non-interactive mode", cmd, false);
+	TCLAP::SwitchArg enableOpenCLSwitch("", "opencl", "Use OpenCL for raytracing", cmd, false);
+	TCLAP::ValueArg<int> clPlatformIdArg("", "cl-platform", "OpenCL platform to use", false, 0, "int", cmd);
+	TCLAP::ValueArg<int> clDeviceTypeArg("", "cl-device-type", "OpenCL device type to use", false, 0, "int", cmd);
+	TCLAP::ValueArg<int> clDeviceIdArg("", "cl-device", "OpenCL device to use", false, 0, "int", cmd);
+	TCLAP::SwitchArg clientSwitch("", "client", "Enable network client mode", cmd, false);
+	TCLAP::SwitchArg serverSwitch("", "server", "Enable network server mode", cmd, false);
 	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
 	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image or window", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
 	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
-	TCLAP::SwitchArg autoViewSwitch("v", "view", "View the image after completion", cmd, false);
+	TCLAP::SwitchArg autoViewSwitch("", "view", "Open the image automatically after completion", cmd, false);
 	
 	try
 	{
@@ -84,52 +85,49 @@ int App::run(int argc, char** argv)
 		settings.load("settings.ini");
 
 		if (interactiveSwitch.isSet())
-			settings.general.interactive = interactiveSwitch.getValue();
+			settings.general.interactive = true;
 
-		if (useOpenCLSwitch.isSet())
-			settings.openCL.enabled = useOpenCLSwitch.getValue();
+		if (nonInteractiveSwitch.isSet())
+			settings.general.interactive = false;
 
-		if (platformIdArg.isSet())
-			settings.openCL.platformId = platformIdArg.getValue();
+		if (enableOpenCLSwitch.isSet())
+			settings.openCL.enabled = true;
 
-		if (deviceTypeArg.isSet())
-			settings.openCL.deviceType = deviceTypeArg.getValue();
+		if (clPlatformIdArg.isSet())
+			settings.openCL.platformId = clPlatformIdArg.getValue();
 
-		if (deviceIdArg.isSet())
-			settings.openCL.deviceId = deviceIdArg.getValue();
+		if (clDeviceTypeArg.isSet())
+			settings.openCL.deviceType = clDeviceTypeArg.getValue();
+
+		if (clDeviceIdArg.isSet())
+			settings.openCL.deviceId = clDeviceIdArg.getValue();
 
 		if (clientSwitch.isSet())
 		{
-			settings.network.isClient = clientSwitch.getValue();
-			settings.network.isServer = !settings.network.isClient;
+			settings.network.isClient = true;
+			settings.network.isServer = false;
 		}
 
 		if (serverSwitch.isSet())
 		{
-			settings.network.isServer = serverSwitch.getValue();
-			settings.network.isClient = !settings.network.isServer;
+			settings.network.isServer = true;
+			settings.network.isClient = false;
 		}
 
 		if (sceneFileNameArg.isSet())
 			settings.scene.fileName = sceneFileNameArg.getValue();
 
 		if (widthArg.isSet())
-		{
-			settings.image.width = widthArg.getValue();
-			settings.window.width = widthArg.getValue();
-		}
+			settings.image.width = settings.window.width = widthArg.getValue();
 		
 		if (heightArg.isSet())
-		{
-			settings.image.height = heightArg.getValue();
-			settings.window.height = heightArg.getValue();
-		}
+			settings.image.height = settings.window.height = heightArg.getValue();
 
 		if (outputFileNameArg.isSet())
 			settings.image.fileName = outputFileNameArg.getValue();
 
 		if (autoViewSwitch.isSet())
-			settings.image.autoView = autoViewSwitch.getValue();
+			settings.image.autoView = true;
 
 		if (settings.general.interactive)
 			return interactiveRunner.run();
