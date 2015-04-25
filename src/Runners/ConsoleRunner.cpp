@@ -15,7 +15,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "CLRaytracing/CLManager.h"
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "CLRaytracing/CLRaytracer.h"
@@ -60,8 +60,6 @@ int ConsoleRunner::run()
 
 	if (!interrupted)
 	{
-		resultImage.flip();
-		resultImage.swapBytes();
 		resultImage.saveAs(settings.image.fileName);
 
 		if (settings.image.autoView)

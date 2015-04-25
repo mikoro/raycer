@@ -130,14 +130,13 @@
     <ClCompile Include="src\Raytracing\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\GLHelper.cpp" />
-    <ClCompile Include="src\Rendering\Image2.cpp" />
+    <ClCompile Include="src\Rendering\Image.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
     <ClCompile Include="src\Utils\Errors.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
-    <ClCompile Include="src\Utils\Image.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
@@ -183,7 +182,7 @@
     <ClInclude Include="src\Raytracing\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\GLHelper.h" />
-    <ClInclude Include="src\Rendering\Image2.h" />
+    <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\RenderTarget.h" />
     <ClInclude Include="src\Rendering\Text.h" />
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
@@ -191,7 +190,6 @@
     <ClInclude Include="src\Runners\NetworkRunner.h" />
     <ClInclude Include="src\Utils\Errors.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
-    <ClInclude Include="src\Utils\Image.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />

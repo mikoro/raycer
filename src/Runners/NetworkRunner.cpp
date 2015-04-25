@@ -442,7 +442,7 @@ void NetworkRunner::handleJobs()
 					ip::tcp::socket socket(io);
 					socket.connect(job.clientEndpoint);
 					boost::asio::write(socket, boost::asio::buffer(message));
-					boost::asio::write(socket, boost::asio::buffer(job.image.getPixelData(), job.image.getLength() * 4));
+					boost::asio::write(socket, boost::asio::buffer(job.image.pixelData, job.image.getLength() * sizeof(Color)));
 					socket.close();
 
 					break;
@@ -580,10 +580,8 @@ void NetworkRunner::receiveResults()
 			return;
 
 		for (ImagePart& part : imageParts)
-			memcpy((char*)resultImage.getPixelData() + part.pixelOffset * 4, part.pixelData, part.pixelCount * 4);
+			memcpy((char*)resultImage.pixelData + part.pixelOffset * sizeof(Color), part.pixelData, part.pixelCount * sizeof(Color));
 
-		resultImage.swapBytes();
-		resultImage.flip();
 		resultImage.saveAs(settings.image.fileName);
 	}
 	catch (const std::exception& ex)

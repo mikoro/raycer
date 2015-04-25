@@ -86,10 +86,10 @@ void Camera::update(double timeStep)
 	if (runner.keyIsDown(GLFW_KEY_E))
 		acceleration += up * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_F7))
+	if (runner.keyIsDown(GLFW_KEY_PAGE_DOWN))
 		fov -= 50.0 * timeStep;
 
-	if (runner.keyIsDown(GLFW_KEY_F8))
+	if (runner.keyIsDown(GLFW_KEY_PAGE_UP))
 		fov += 50.0 * timeStep;
 
 	fov = std::max(1.0, std::min(fov, 180.0));

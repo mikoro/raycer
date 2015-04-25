@@ -8,7 +8,7 @@
 #include "cereal/cereal.hpp"
 
 #include "Raytracing/Texture.h"
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 
 namespace Raycer
 {

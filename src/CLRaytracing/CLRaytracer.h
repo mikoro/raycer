@@ -8,7 +8,7 @@
 
 #include "CLRaytracing/CLStructs.h"
 #include "CLRaytracing/CLScene.h"
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 
 namespace Raycer
 {

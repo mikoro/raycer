@@ -6,7 +6,7 @@
 #include <chrono>
 #include <atomic>
 
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 #include "Math/MovingAverage.h"
 
 namespace Raycer

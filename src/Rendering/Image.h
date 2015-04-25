@@ -3,10 +3,15 @@
 
 #pragma once
 
-#include <cstdint>
 #include <string>
 
 #include "Rendering/RenderTarget.h"
+
+/*
+
+Origin (0, 0) is at the bottom left corner.
+
+*/
 
 namespace Raycer
 {
@@ -19,11 +24,12 @@ namespace Raycer
 		Image();
 		Image(int length);
 		Image(int width, int height);
-		Image(const Image& image);
+		Image(int width, int height, float* rgbaData);
+		Image(const Image& other);
 		Image(const std::string& fileName);
 		~Image();
 
-		Image& operator=(const Image& image);
+		Image& operator=(const Image& other);
 
 		void load(const std::string& fileName);
 		void saveAs(const std::string& fileName) const;
@@ -31,24 +37,23 @@ namespace Raycer
 		void setSize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		void setPixel(int index, const Color& color);
-		void swapBytes();
+		void clear(const Color& color);
+		void applyGamma(double gamma);
+		void swapComponents();
 		void flip();
 
 		int getWidth() const;
 		int getHeight() const;
 		int getLength() const;
-		Color getPixel(int x, int y) const;
-		uint32_t* getPixelData() const;
 
+		Color getPixel(int x, int y) const;
 		Color getPixelNearest(double u, double v) const;
 		Color getPixelLinear(double u, double v) const;
-
-	private:
-
-		uint32_t* pixelData = nullptr; // RGBA
 
 		int width = 0;
 		int height = 0;
 		int length = 0;
+
+		Color* pixelData = nullptr;
 	};
 }

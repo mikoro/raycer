@@ -15,7 +15,7 @@
 #include "CLRaytracing/CLManager.h"
 #include "Rendering/Framebuffer.h"
 #include "Raytracing/Scene.h"
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 #include "Runners/InteractiveRunner.h"
 
 using namespace Raycer;
@@ -98,7 +98,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 
 	if (settings.general.interactive)
 	{
-		pixelsPtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getCLTextureId(), &status);
+		pixelsPtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getTextureId(), &status);
 		checkCLError(status, "Could not create OpenCL image from OpenGL texture");
 	}
 	else

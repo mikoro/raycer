@@ -10,7 +10,7 @@
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
 
-#include "Rendering/Image2.h"
+#include "Rendering/Image.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Math/Color.h"
@@ -18,34 +18,49 @@
 
 using namespace Raycer;
 
-Image2::Image2()
+Image::Image()
 {
 }
 
-Image2::Image2(int length_)
+Image::Image(int length_)
 {
 	setSize(length_);
 }
 
-Image2::Image2(int width_, int height_)
+Image::Image(int width_, int height_)
 {
 	setSize(width_, height_);
 }
 
-Image2::Image2(const Image2& other)
+Image::Image(int width_, int height_, float* rgbaData)
+{
+	setSize(width_, height_);
+
+	for (int i = 0; i < length; ++i)
+	{
+		int dataIndex = i * 4;
+
+		pixelData[i].r = rgbaData[dataIndex];
+		pixelData[i].g = rgbaData[dataIndex + 1];
+		pixelData[i].b = rgbaData[dataIndex + 2];
+		pixelData[i].a = rgbaData[dataIndex + 3];
+	}
+}
+
+Image::Image(const Image& other)
 {
 	setSize(other.width, other.height);
 
-	for (int i = 0; i < other.length; ++i)
+	for (int i = 0; i < length; ++i)
 		pixelData[i] = other.pixelData[i];
 }
 
-Image2::Image2(const std::string& fileName)
+Image::Image(const std::string& fileName)
 {
 	load(fileName);
 }
 
-Image2::~Image2()
+Image::~Image()
 {
 	if (pixelData != nullptr)
 	{
@@ -54,11 +69,11 @@ Image2::~Image2()
 	}
 }
 
-Image2& Image2::operator=(const Image2& other)
+Image& Image::operator=(const Image& other)
 {
 	setSize(other.width, other.height);
 
-	for (int i = 0; i < other.length; ++i)
+	for (int i = 0; i < length; ++i)
 		pixelData[i] = other.pixelData[i];
 
 	return *this;
@@ -72,7 +87,7 @@ namespace
 	}
 }
 
-void Image2::load(const std::string& fileName)
+void Image::load(const std::string& fileName)
 {
 	App::getLog().logInfo("Loading image from %s", fileName);
 
@@ -122,7 +137,7 @@ void Image2::load(const std::string& fileName)
 	}
 }
 
-void Image2::saveAs(const std::string& fileName) const
+void Image::saveAs(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
 
@@ -180,12 +195,12 @@ void Image2::saveAs(const std::string& fileName) const
 		throw std::runtime_error(tfm::format("Could not save the image: %s", stbi_failure_reason()));
 }
 
-void Image2::setSize(int length_)
+void Image::setSize(int length_)
 {
 	setSize(length_, 1);
 }
 
-void Image2::setSize(int width_, int height_)
+void Image::setSize(int width_, int height_)
 {
 	width = width_;
 	height = height_;
@@ -209,33 +224,33 @@ void Image2::setSize(int width_, int height_)
 	memset(pixelData, 0, length * sizeof(Color));
 }
 
-void Image2::setPixel(int x, int y, const Color& color)
+void Image::setPixel(int x, int y, const Color& color)
 {
 	assert(x < width && y < height);
 
 	pixelData[y * width + x] = color;
 }
 
-void Image2::setPixel(int index, const Color& color)
+void Image::setPixel(int index, const Color& color)
 {
 	assert(index < length);
 
 	pixelData[index] = color;
 }
 
-void Image2::clear(const Color& color)
+void Image::clear(const Color& color)
 {
 	for (int i = 0; i < length; ++i)
 		pixelData[i] = color;
 }
 
-void Image2::applyGamma(double gamma)
+void Image::applyGamma(double gamma)
 {
 	for (int i = 0; i < length; ++i)
 		pixelData[i] = Color::pow(pixelData[i], gamma);
 }
 
-void Image2::swapComponents()
+void Image::swapComponents()
 {
 	for (int i = 0; i < length; ++i)
 	{
@@ -248,9 +263,9 @@ void Image2::swapComponents()
 	}
 }
 
-void Image2::flip()
+void Image::flip()
 {
-	Image2 tempImage(width, height);
+	Image tempImage(width, height);
 
 	for (int y = 0; y < height; ++y)
 	{
@@ -261,29 +276,29 @@ void Image2::flip()
 	std::swap(pixelData, tempImage.pixelData);
 }
 
-int Image2::getWidth() const
+int Image::getWidth() const
 {
 	return width;
 }
 
-int Image2::getHeight() const
+int Image::getHeight() const
 {
 	return height;
 }
 
-int Image2::getLength() const
+int Image::getLength() const
 {
 	return length;
 }
 
-Color Image2::getPixel(int x, int y) const
+Color Image::getPixel(int x, int y) const
 {
 	assert(x < width && y < height);
 
 	return pixelData[y * width + x];
 }
 
-Color Image2::getPixelNearest(double u, double v) const
+Color Image::getPixelNearest(double u, double v) const
 {
 	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
 
@@ -293,7 +308,7 @@ Color Image2::getPixelNearest(double u, double v) const
 	return getPixel(x, y);
 }
 
-Color Image2::getPixelLinear(double u, double v) const
+Color Image::getPixelLinear(double u, double v) const
 {
 	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
 

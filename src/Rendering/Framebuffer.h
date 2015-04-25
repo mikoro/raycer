@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <cstdint>
-
 #include <GL/glew.h>
 
 #include "Rendering/RenderTarget.h"
@@ -24,11 +22,9 @@ namespace Raycer
 		void resize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		void setPixel(int index, const Color& color);
-		Color getPixel(int x, int y) const;
 
-		uint32_t* getPixelData() const;
-		uint32_t getTextureId() const;
-		uint32_t getCLTextureId() const;
+		float* getPixelData() const;
+		GLuint getTextureId() const;
 		int getWidth() const;
 		int getHeight() const;
 
@@ -45,11 +41,11 @@ namespace Raycer
 
 		int width = 0;
 		int height = 0;
+		int length = 0;
 
-		uint32_t* pixelData = nullptr;
+		float* pixelData = nullptr;
 
 		GLuint textureId = 0;
-		GLuint clTextureId = 0;
 		GLuint programId = 0;
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;

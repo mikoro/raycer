@@ -31,8 +31,6 @@ void Framebuffer::initialize()
 	App::getLog().logInfo("Initializing framebuffer");
 
 	glGenTextures(1, &textureId);
-	glGenTextures(1, &clTextureId);
-
 	checkGLError("Could not create OpenGL textures");
 
 	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
@@ -40,15 +38,10 @@ void Framebuffer::initialize()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glBindTexture(GL_TEXTURE_2D, clTextureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
 	checkGLError("Could not set OpenGL texture parameters");
 
 	programId = GLHelper::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
+
 	samplerUniformId = glGetUniformLocation(programId, "tex0");
 	textureWidthUniformId = glGetUniformLocation(programId, "textureWidth");
 	textureHeightUniformId = glGetUniformLocation(programId, "textureHeight");
@@ -89,27 +82,23 @@ void Framebuffer::resize(int width_, int height_)
 
 	width = width_;
 	height = height_;
+	length = width * height;
 
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
 	if (pixelData != nullptr)
 		_mm_free(pixelData);
 
-	pixelData = (uint32_t*)_mm_malloc(width * height * sizeof(uint32_t), 64);
+	pixelData = (float*)_mm_malloc(length * sizeof(float) * 4, 64);
 
 	if (pixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, 0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not reserve OpenGL texture memory");
-
-	glBindTexture(GL_TEXTURE_2D, clTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not reserve OpenGL texture memory (OpenCL)");
+	checkGLError("Could not reserve OpenGL texture memory");
 
 	clear();
 }
@@ -118,36 +107,34 @@ void Framebuffer::setPixel(int x, int y, const Color& color)
 {
 	assert(x < width && y < height);
 
-	pixelData[y * width + x] = color.getAbgrValue();
+	int pixelIndex = y * width * 4 + x * 4;
+
+	pixelData[pixelIndex] = (float)color.r;
+	pixelData[pixelIndex + 1] = (float)color.g;
+	pixelData[pixelIndex + 2] = (float)color.b;
+	pixelData[pixelIndex + 3] = (float)color.a;
 }
 
 void Framebuffer::setPixel(int index, const Color& color)
 {
-	assert(index < width * height);
+	assert(index < length);
 
-	pixelData[index] = color.getAbgrValue();
+	int pixelIndex = index * 4;
+
+	pixelData[pixelIndex] = (float)color.r;
+	pixelData[pixelIndex + 1] = (float)color.g;
+	pixelData[pixelIndex + 2] = (float)color.b;
+	pixelData[pixelIndex + 3] = (float)color.a;
 }
 
-Color Framebuffer::getPixel(int x, int y) const
-{
-	assert(x < width && y < height);
-
-	return Color::fromAbgrValue(pixelData[y * width + x]);
-}
-
-uint32_t* Framebuffer::getPixelData() const
+float* Framebuffer::getPixelData() const
 {
 	return pixelData;
 }
 
-uint32_t Framebuffer::getTextureId() const
+GLuint Framebuffer::getTextureId() const
 {
 	return textureId;
-}
-
-uint32_t Framebuffer::getCLTextureId() const
-{
-	return clTextureId;
 }
 
 int Framebuffer::getWidth() const
@@ -162,12 +149,21 @@ int Framebuffer::getHeight() const
 
 void Framebuffer::clear()
 {
-	std::fill_n(pixelData, width * height, 0);
+	for (int i = 0; i < length * 4; ++i)
+		pixelData[i] = 0.0f;
 }
 
 void Framebuffer::clear(const Color& color)
 {
-	std::fill_n(pixelData, width * height, color.getAbgrValue());
+	for (int i = 0; i < length; ++i)
+	{
+		int pixelIndex = i * 4;
+
+		pixelData[pixelIndex] = (float)color.r;
+		pixelData[pixelIndex + 1] = (float)color.g;
+		pixelData[pixelIndex + 2] = (float)color.b;
+		pixelData[pixelIndex + 3] = (float)color.a;
+	}
 }
 
 void Framebuffer::render() const
@@ -182,12 +178,11 @@ void Framebuffer::render() const
 	glUniform1f(texelWidthUniformId, 1.0f / (float)width);
 	glUniform1f(texelHeightUniformId, 1.0f / (float)height);
 
-	if (settings.openCL.enabled)
-		glBindTexture(GL_TEXTURE_2D, clTextureId);
-	else
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+	if (!settings.openCL.enabled)
 	{
-		glBindTexture(GL_TEXTURE_2D, textureId);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_UNSIGNED_INT_8_8_8_8_REV, pixelData);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, pixelData);
 		checkGLError("Could not upload OpenGL texture data");
 	}
 
@@ -197,18 +192,13 @@ void Framebuffer::render() const
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
-	
+
 	checkGLError("Could not render the framebuffer");
 }
 
 void Framebuffer::enableSmoothing(bool state)
 {
 	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glBindTexture(GL_TEXTURE_2D, clTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);

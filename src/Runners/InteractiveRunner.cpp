@@ -12,10 +12,11 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/Errors.h"
 #include "Rendering/Framebuffer.h"
 #include "CLRaytracing/CLManager.h"
 #include "CLRaytracing/CLRaytracer.h"
-#include "Utils/Image.h"
+#include "Rendering/Image.h"
 #include "InteractiveStates/RaytracingState.h"
 #include "InteractiveStates/CLRaytracingState.h"
 #include "Math/Color.h"
@@ -376,15 +377,21 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 	defaultText.render();
 	glfwSwapBuffers(glfwWindow);
 
-	if (keyWasPressed(GLFW_KEY_F3))
+	if (keyWasPressed(GLFW_KEY_F12))
 		takeScreenshot();
 }
 
 void InteractiveRunner::takeScreenshot() const
 {
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-	Image tempImage(windowWidth, windowHeight);
-	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_UNSIGNED_BYTE, tempImage.getPixelData());
-	tempImage.flip();
-	tempImage.saveAs("screenshot.png");
+	float* data = (float*)malloc(windowWidth * windowHeight * sizeof(float) * 4);
+	
+	if (data == nullptr)
+		throw std::runtime_error("Could not allocate memory for screenshot");
+
+	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_FLOAT, data);
+	checkGLError("Could not read pixels from renderbuffer");
+
+	Image image(windowWidth, windowHeight, data);
+	free(data);
+	image.saveAs("screenshot.png");
 }
