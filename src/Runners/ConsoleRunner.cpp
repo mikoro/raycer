@@ -18,6 +18,7 @@
 #include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
+#include "Raytracing/RaytracerState.h"
 #include "CLRaytracing/CLRaytracer.h"
 #include "CLRaytracing/CLStructs.h"
 
@@ -94,8 +95,6 @@ void ConsoleRunner::run(RaytracerState& state)
 	{
 		clRaytracer.initialize();
 		clRaytracer.resizePixelBuffer(state.sceneWidth, state.sceneHeight);
-		clRaytracer.readScene(*state.scene);
-		clRaytracer.uploadData();
 	}
 	
 	std::atomic<bool> finished;
@@ -105,7 +104,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		if (!settings.openCL.enabled)
 			raytracer.run(state, interrupted);
 		else
-			clRaytracer.run(interrupted);
+			clRaytracer.run(state, interrupted);
 
 		finished = true;
 	};
@@ -160,10 +159,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
-	{
-		clRaytracer.downloadImage();
 		resultImage = clRaytracer.getImage();
-	}
 }
 
 void ConsoleRunner::interrupt()

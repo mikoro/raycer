@@ -24,7 +24,7 @@ namespace Raycer
 		int deltaY = 0;
 	};
 
-	enum class RunnerStates { None, Raytracing, CLRaytracing };
+	enum class RunnerStates { None, Raytracing };
 
 	class InteractiveRunner
 	{

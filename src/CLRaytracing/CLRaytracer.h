@@ -12,7 +12,7 @@
 
 namespace Raycer
 {
-	class Scene;
+	struct RaytracerState;
 
 	class CLRaytracer
 	{
@@ -24,15 +24,14 @@ namespace Raycer
 		void initialize();
 		void resizePixelBuffer(int width, int height);
 		void releasePixelBuffer();
-		void readScene(const Scene& scene);
-		void uploadData();
-		void run(std::atomic<bool>& interrupted);
-		void downloadImage();
+		void run(RaytracerState& state, std::atomic<bool>& interrupted);
 		Image& getImage();
-
-		void printSizes();
+		void printStructSizes();
 
 	private:
+
+		void convertSceneData(const Scene& scene);
+		void uploadSceneData();
 
 		CLRaytracer(const CLRaytracer& clRaytracer);
 		CLRaytracer& operator=(const CLRaytracer& clRaytracer);

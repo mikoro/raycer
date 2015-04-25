@@ -6,7 +6,7 @@
 #include <atomic>
 
 #include "InteractiveStates/InteractiveState.h"
-#include "Raytracing/Raytracer.h"
+#include "Raytracing/RaytracerState.h"
 #include "Raytracing/Scene.h"
 
 namespace Raycer

@@ -15,18 +15,23 @@
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
 #include "Raytracing/Raytracer.h"
+#include "CLRaytracing/CLRaytracer.h"
 
 using namespace Raycer;
 
 void RaytracingState::initialize()
 {
-	//Settings& settings = App::getSettings();
+	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	//scene.loadFromFile(settings.scene.fileName);
 	scene = Scene::createTestScene();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+
+	if (settings.openCL.enabled)
+		clRaytracer.initialize();
 }
 
 void RaytracingState::pause()
@@ -60,6 +65,7 @@ void RaytracingState::render(double timeStep, double interpolation)
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
 	Raytracer& raytracer = App::getRaytracer();
+	CLRaytracer& clRaytracer = App::getCLRaytracer();
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
 
@@ -72,7 +78,10 @@ void RaytracingState::render(double timeStep, double interpolation)
 	state.pixelsProcessed = 0;
 	state.raysProcessed = 0;
 
-	raytracer.run(state, interrupted);
+	if (!settings.openCL.enabled)
+		raytracer.run(state, interrupted);
+	else
+		clRaytracer.run(state, interrupted);
 
 	if (settings.window.showCameraInfo)
 	{

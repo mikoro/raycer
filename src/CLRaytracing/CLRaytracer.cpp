@@ -8,6 +8,7 @@
 
 #include "CLRaytracing/CLRaytracer.h"
 #include "Raytracing/Raytracer.h"
+#include "Raytracing/RaytracerState.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -121,7 +122,7 @@ void CLRaytracer::releasePixelBuffer()
 	}
 }
 
-void CLRaytracer::readScene(const Scene& scene)
+void CLRaytracer::convertSceneData(const Scene& scene)
 {
 	Settings& settings = App::getSettings();
 	InteractiveRunner& interactiveRunner = App::getInteractiveRunner();
@@ -150,7 +151,7 @@ void CLRaytracer::readScene(const Scene& scene)
 	clScene.info.sphereCount = (cl_int)clScene.spheres.size();
 }
 
-void CLRaytracer::uploadData()
+void CLRaytracer::uploadSceneData()
 {
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
@@ -171,12 +172,15 @@ void CLRaytracer::uploadData()
 	checkCLError(status, "Could not write OpenCL spheres buffer");
 }
 
-void CLRaytracer::run(std::atomic<bool>& interrupted)
+void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 {
 	(void)interrupted;
 	
 	Settings& settings = App::getSettings();
 	CLManager& clManager = App::getCLManager();
+
+	convertSceneData(*state.scene);
+	uploadSceneData();
 
 	if (settings.general.interactive)
 	{
@@ -202,7 +206,7 @@ void CLRaytracer::run(std::atomic<bool>& interrupted)
 	checkCLError(clFinish(clManager.commandQueue), "Could not finish OpenCL command queue");
 }
 
-void CLRaytracer::downloadImage()
+Image& CLRaytracer::getImage()
 {
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
@@ -218,14 +222,11 @@ void CLRaytracer::downloadImage()
 	checkCLError(status, "Could not read OpenCL image buffer");
 
 	image.load(bufferWidth, bufferHeight, &data[0]);
-}
 
-Image& CLRaytracer::getImage()
-{
 	return image;
 }
 
-void CLRaytracer::printSizes()
+void CLRaytracer::printStructSizes()
 {
 	CLManager& clManager = App::getCLManager();
 

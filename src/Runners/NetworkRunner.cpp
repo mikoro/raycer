@@ -25,6 +25,7 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Raytracing/Raytracer.h"
+#include "Raytracing/RaytracerState.h"
 #include "Runners/ConsoleRunner.h"
 
 using namespace Raycer;

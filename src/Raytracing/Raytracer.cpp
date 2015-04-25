@@ -6,6 +6,7 @@
 #include <limits>
 
 #include "Raytracing/Raytracer.h"
+#include "Raytracing/RaytracerState.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"

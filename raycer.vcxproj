@@ -104,7 +104,6 @@
     <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
     <ClCompile Include="src\CLRaytracing\CLManager.cpp" />
     <ClCompile Include="src\InteractiveStates\RaytracingState.cpp" />
-    <ClCompile Include="src\InteractiveStates\CLRaytracingState.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -149,7 +148,6 @@
     <ClInclude Include="src\CLRaytracing\CLStructs.h" />
     <ClInclude Include="src\CLRaytracing\CLManager.h" />
     <ClInclude Include="src\InteractiveStates\RaytracingState.h" />
-    <ClInclude Include="src\InteractiveStates\CLRaytracingState.h" />
     <ClInclude Include="src\InteractiveStates\InteractiveState.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
@@ -175,6 +173,7 @@
     <ClInclude Include="src\Raytracing\Primitive.h" />
     <ClInclude Include="src\Raytracing\Ray.h" />
     <ClInclude Include="src\Raytracing\Raytracer.h" />
+    <ClInclude Include="src\Raytracing\RaytracerState.h" />
     <ClInclude Include="src\Raytracing\Scene.h" />
     <ClInclude Include="src\Raytracing\Sphere.h" />
     <ClInclude Include="src\Raytracing\Texture.h" />

@@ -18,7 +18,6 @@
 #include "CLRaytracing/CLRaytracer.h"
 #include "Rendering/Image.h"
 #include "InteractiveStates/RaytracingState.h"
-#include "InteractiveStates/CLRaytracingState.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -188,9 +187,8 @@ void InteractiveRunner::initialize()
 	windowResized(settings.window.width, settings.window.height);
 
 	runnerStates[RunnerStates::Raytracing] = std::unique_ptr<RaytracingState>(new RaytracingState());
-	runnerStates[RunnerStates::CLRaytracing] = std::unique_ptr<CLRaytracingState>(new CLRaytracingState());
 
-	changeState(settings.openCL.enabled ? RunnerStates::CLRaytracing : RunnerStates::Raytracing);
+	changeState(RunnerStates::Raytracing);
 }
 
 void InteractiveRunner::shutdown()

@@ -145,9 +145,6 @@
     <ClCompile Include="src\InteractiveStates\RaytracingState.cpp">
       <Filter>InteractiveStates</Filter>
     </ClCompile>
-    <ClCompile Include="src\InteractiveStates\CLRaytracingState.cpp">
-      <Filter>InteractiveStates</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Fog.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
@@ -298,9 +295,6 @@
     <ClInclude Include="src\InteractiveStates\RaytracingState.h">
       <Filter>InteractiveStates</Filter>
     </ClInclude>
-    <ClInclude Include="src\InteractiveStates\CLRaytracingState.h">
-      <Filter>InteractiveStates</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Fog.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
@@ -312,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\RaytracerState.h">
+      <Filter>Raytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
