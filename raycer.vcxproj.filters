@@ -338,13 +338,11 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Intel_OpenCL_Build_Rules Include="src\CLRaytracing\raytrace.cl">
+    <None Include="src\CLRaytracing\raytrace.cl">
       <Filter>CLRaytracing</Filter>
-    </Intel_OpenCL_Build_Rules>
-    <Intel_OpenCL_Build_Rules Include="src\CLRaytracing\structs.cl">
+    </None>
+    <None Include="src\CLRaytracing\structs.cl">
       <Filter>CLRaytracing</Filter>
-    </Intel_OpenCL_Build_Rules>
+    </None>
   </ItemGroup>
 </Project>
