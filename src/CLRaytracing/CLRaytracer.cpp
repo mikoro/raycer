@@ -69,7 +69,7 @@ void CLRaytracer::initialize()
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
 
-	infoPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Info), NULL, &status);
+	infoPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), NULL, &status);
 	checkCLError(status, "Could not create OpenCL info buffer");
 
 	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), NULL, &status);
@@ -127,7 +127,7 @@ void CLRaytracer::convertSceneData(const Scene& scene)
 	Settings& settings = App::getSettings();
 	InteractiveRunner& interactiveRunner = App::getInteractiveRunner();
 
-	clScene.readScene(scene);
+	clScene.convertSceneData(scene);
 
 	if ((int)clScene.lights.size() > MAX_LIGHTS)
 		throw std::runtime_error("Too many lights");
@@ -138,17 +138,17 @@ void CLRaytracer::convertSceneData(const Scene& scene)
 	if ((int)clScene.spheres.size() > MAX_SPHERES)
 		throw std::runtime_error("Too many spheres");
 
-	clScene.info.width = (float)bufferWidth;
-	clScene.info.height = (float)bufferHeight;
+	clScene.state.imageWidth = (float)bufferWidth;
+	clScene.state.imageHeight = (float)bufferHeight;
 
 	if (settings.general.interactive)
-		clScene.info.time = (float)interactiveRunner.getElapsedTime();
+		clScene.state.time = (float)interactiveRunner.getElapsedTime();
 	else
-		clScene.info.time = 1.0f;
+		clScene.state.time = 1.0f;
 
-	clScene.info.lightCount = (cl_int)clScene.lights.size();
-	clScene.info.planeCount = (cl_int)clScene.planes.size();
-	clScene.info.sphereCount = (cl_int)clScene.spheres.size();
+	clScene.state.lightCount = (cl_int)clScene.lights.size();
+	clScene.state.planeCount = (cl_int)clScene.planes.size();
+	clScene.state.sphereCount = (cl_int)clScene.spheres.size();
 }
 
 void CLRaytracer::uploadSceneData()
@@ -156,7 +156,7 @@ void CLRaytracer::uploadSceneData()
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, infoPtr, CL_FALSE, 0, sizeof(OpenCL::Info), &clScene.info, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, infoPtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, NULL, NULL);
 	checkCLError(status, "Could not write OpenCL info buffer");
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
@@ -231,6 +231,6 @@ void CLRaytracer::printStructSizes()
 	CLManager& clManager = App::getCLManager();
 
 	const size_t globalSize = 1;
-	checkCLError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.printSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
+	checkCLError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.printStructSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
 	checkCLError(clFinish(clManager.commandQueue), "Could not finish OpenCL command queue");
 }

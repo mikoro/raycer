@@ -50,10 +50,10 @@ CLManager::CLManager()
 
 CLManager::~CLManager()
 {
-	if (printSizesKernel != nullptr)
+	if (printStructSizesKernel != nullptr)
 	{
-		clReleaseKernel(printSizesKernel);
-		printSizesKernel = nullptr;
+		clReleaseKernel(printStructSizesKernel);
+		printStructSizesKernel = nullptr;
 	}
 
 	if (raytraceKernel != nullptr)
@@ -243,6 +243,6 @@ void CLManager::loadKernels()
 	raytraceKernel = clCreateKernel(program, "raytrace", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
 
-	printSizesKernel = clCreateKernel(program, "printSizes", &status);
+	printStructSizesKernel = clCreateKernel(program, "printStructSizes", &status);
 	checkCLError(status, "Could not create OpenCL kernel");
 }

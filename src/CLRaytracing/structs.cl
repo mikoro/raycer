@@ -41,7 +41,7 @@ typedef struct Sphere
 	float radius2;
 } Sphere;
 
-__kernel void printSizes()
+__kernel void printStructSizes()
 {
 	printf("Info: %d\n", sizeof(Info));
 	printf("Camera: %d\n", sizeof(Camera));

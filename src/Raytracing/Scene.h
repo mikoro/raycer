@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Camera.h"
 #include "Raytracing/Fog.h"
 #include "Raytracing/ToneMapper.h"

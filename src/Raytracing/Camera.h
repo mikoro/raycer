@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
 

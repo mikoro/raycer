@@ -6,7 +6,7 @@
 
 using namespace Raycer;
 
-void CLScene::readScene(const Scene& scene)
+void CLScene::convertSceneData(const Scene& scene)
 {
 	camera.position.s[0]= (float)scene.camera.position.x;
 	camera.position.s[1]= (float)scene.camera.position.y;

@@ -15,10 +15,10 @@ namespace Raycer
 {
 	namespace OpenCL
 	{
-		struct Info
+		struct State
 		{
-			cl_float ALIGN(4) width;
-			cl_float ALIGN(4) height;
+			cl_float ALIGN(4) imageWidth;
+			cl_float ALIGN(4) imageHeight;
 			cl_float ALIGN(4) time;
 			cl_int ALIGN(4) lightCount;
 			cl_int ALIGN(4) planeCount;

@@ -15,9 +15,9 @@ namespace Raycer
 	{
 	public:
 
-		void readScene(const Scene& scene);
+		void convertSceneData(const Scene& scene);
 
-		OpenCL::Info info;
+		OpenCL::State state;
 		OpenCL::Camera camera;
 		std::vector<OpenCL::Light> lights;
 		std::vector<OpenCL::Plane> planes;
