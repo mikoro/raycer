@@ -160,6 +160,9 @@
     <ClCompile Include="src\Raytracing\ToneMapper.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Image2.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -312,6 +315,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\ToneMapper.h">
       <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Image2.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
