@@ -5,11 +5,14 @@
 #include <cmath>
 
 #include "Raytracing/Fog.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 
-Color Fog::apply(const Color& pixelColor, double pixelDistance)
+Color Fog::calculate(const Color& pixelColor, const Vector3& pixelPosition, double pixelDistance)
 {
+	(void)pixelPosition;
+
 	double t = pixelDistance / distance;
 	t = std::max(0.0, std::min(t, 1.0));
 	t = pow(t, steepness);

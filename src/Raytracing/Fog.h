@@ -9,11 +9,13 @@
 
 namespace Raycer
 {
+	class Vector3;
+
 	class Fog
 	{
 		public:
 
-			Color apply(const Color& pixelColor, double pixelDistance);
+			Color calculate(const Color& pixelColor, const Vector3& pixelPosition, double pixelDistance);
 
 			bool enabled = false;
 			double distance = 0.0;

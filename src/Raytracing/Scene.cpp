@@ -97,21 +97,22 @@ Scene Scene::createTestScene()
 {
 	Scene scene;
 
+	scene.tracer.maxReflections = 1;
+
+	scene.multisampler.type = MultisampleType::NONE;
+	scene.multisampler.multisamples = 4;
+
+	scene.toneMapper.type = ToneMapType::GAMMA;
+	scene.toneMapper.gamma = 1.0 / 2.2;
+
 	scene.camera.position = Vector3(0.0, 3.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
-
-	scene.multisamples = 1;
-	scene.maxReflections = 1;
 
 	scene.fog.enabled = false;
 	scene.fog.distance = 40.0;
 	scene.fog.steepness = 8.0;
 	scene.fog.color = Color(1.0, 1.0, 1.0);
-
-	scene.toneMapper.enabled = true;
-	scene.toneMapper.type = ToneMapType::GAMMA;
-	scene.toneMapper.gamma = 1.0 / 2.2;
 
 	ColorTexture t0;
 	t0.id = 0;
@@ -170,7 +171,7 @@ Scene Scene::createTestScene()
 	m1.textureId = 6;
 	m1.diffuseness = 1.0;
 	m1.specularity = 1.0;
-	m1.shininess = 1.0;
+	m1.shininess = 2.0;
 	m1.reflectivity = 0.0;
 
 	// s2
@@ -234,7 +235,7 @@ Scene Scene::createTestScene()
 	scene.spheres.push_back(s3);
 
 	Light l1;
-	l1.position = Vector3(0.0, 10.0, 5.0);
+	l1.position = Vector3(2.0, 10.0, 5.0);
 	l1.color = Color(1.0, 1.0, 1.0);
 	l1.intensity = 1.0;
 

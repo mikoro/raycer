@@ -10,7 +10,6 @@
 
 #include "Raytracing/Camera.h"
 #include "Raytracing/Fog.h"
-#include "Raytracing/ToneMapper.h"
 #include "Raytracing/Texture.h"
 #include "Raytracing/ColorTexture.h"
 #include "Raytracing/CheckerTexture.h"
@@ -27,6 +26,9 @@
 
 namespace Raycer
 {
+	enum class MultisampleType { NONE, UNIFORM, REGULAR, JITTER, POISSON };
+	enum class ToneMapType { NONE, GAMMA, REINHARD };
+
 	class Scene
 	{
 	public:
@@ -37,12 +39,45 @@ namespace Raycer
 		void initialize();
 		static Scene createTestScene();
 
-		int multisamples = 1;
-		int maxReflections = 0;
+		struct Tracer
+		{
+			int maxReflections = 0;
+
+			template<class Archive>
+			void serialize(Archive& ar)
+			{
+				ar(CEREAL_NVP(maxReflections));
+			}
+		} tracer;
+
+		struct Multisampler
+		{
+			MultisampleType type = MultisampleType::NONE;
+			int multisamples = 4;
+
+			template<class Archive>
+			void serialize(Archive& ar)
+			{
+				ar(CEREAL_NVP(type),
+					CEREAL_NVP(multisamples));
+			}
+		} multisampler;
+		
+		struct ToneMapper
+		{
+			ToneMapType type = ToneMapType::GAMMA;
+			double gamma = 1.0 / 2.2;
+
+			template<class Archive>
+			void serialize(Archive& ar)
+			{
+				ar(CEREAL_NVP(type),
+					CEREAL_NVP(gamma));
+			}
+		} toneMapper;
 
 		Camera camera;
 		Fog fog;
-		ToneMapper toneMapper;
 
 		std::vector<ColorTexture> colorTextures;
 		std::vector<CheckerTexture> checkerTextures;
@@ -63,11 +98,11 @@ namespace Raycer
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(multisamples),
-				CEREAL_NVP(maxReflections),
+			ar(CEREAL_NVP(tracer),
+				CEREAL_NVP(multisampler),
+				CEREAL_NVP(toneMapper),
 				CEREAL_NVP(camera),
 				CEREAL_NVP(fog),
-				CEREAL_NVP(toneMapper),
 				CEREAL_NVP(colorTextures),
 				CEREAL_NVP(checkerTextures),
 				CEREAL_NVP(imageTextures),

@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
-#include <random>
 #include <limits>
 
 #include "Raytracing/Raytracer.h"
@@ -12,6 +11,7 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
 #include "Rendering/Framebuffer.h"
+#include "Rendering/ToneMapper.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 
@@ -22,16 +22,19 @@ namespace
 	const double rayStartOffset = 0.000001;
 }
 
+Raytracer::Raytracer()
+{
+	std::random_device rd;
+	mt.seed(rd());
+	random = std::uniform_real_distribution<double>(0.0, std::nextafter(1.0, std::numeric_limits<double>::max()));
+}
+
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *state.scene;
 
 	int rayCount = 0;
 	int previousRayCount = 0;
-
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_real_distribution<double> random(0.0, std::nextafter(1.0, std::numeric_limits<double>::max()));
 
 	#pragma omp parallel for schedule(dynamic, 1000) reduction(+:rayCount) firstprivate(previousRayCount)
 	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
@@ -43,47 +46,20 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		double x = (double)(pixelOffsetIndex % state.sceneWidth);
 		double y = (double)(pixelOffsetIndex / state.sceneWidth);
 
-		Color finalColor(0.0, 0.0, 0.0, 1.0);
-		double intersectionDistance = 0.0;
-
-		if (scene.multisamples < 2)
-		{
-			double rx = x + 0.5;
-			double ry = y + 0.5;
-
-			Ray rayToScene = scene.camera.getRay(rx, ry);
-			traceRay(state, rayToScene, rayCount, interrupted);
-			finalColor = rayToScene.color;
-			intersectionDistance = rayToScene.intersection.distance;
-		}
-		else
-		{
-			for (int i = 0; i < scene.multisamples; ++i)
-			{
-				for (int j = 0; j < scene.multisamples; ++j)
-				{
-					double rx = x + ((double)j + random(mt)) / (double)scene.multisamples;
-					double ry = y + ((double)i + random(mt)) / (double)scene.multisamples;
-
-					Ray rayToScene = scene.camera.getRay(rx, ry);
-					traceRay(state, rayToScene, rayCount, interrupted);
-					finalColor += rayToScene.color;
-					intersectionDistance += rayToScene.intersection.distance;
-				}
-			}
-
-			double multisamples2 = scene.multisamples * scene.multisamples;
-			finalColor /= multisamples2;
-			intersectionDistance /= multisamples2;
-		}
-
+		TraceResult result = shootRays(scene, x, y, rayCount, interrupted);
+		
 		if (scene.fog.enabled)
-			finalColor = scene.fog.apply(finalColor, intersectionDistance);
+			result.pixelColor = scene.fog.calculate(result.pixelColor, result.pixelPosition, result.pixelDistance);
 
-		if (scene.toneMapper.enabled)
-			finalColor = scene.toneMapper.apply(finalColor);
+		switch (scene.toneMapper.type)
+		{
+			case ToneMapType::NONE: break;
+			case ToneMapType::GAMMA: result.pixelColor = ToneMapper::gamma(result.pixelColor, scene.toneMapper.gamma); break;
+			case ToneMapType::REINHARD: break;
+			default: break;
+		}
 
-		state.renderTarget->setPixel(pixelIndex, finalColor.clamped());
+		state.renderTarget->setPixel(pixelIndex, result.pixelColor);
 
 		if ((pixelIndex + 1) % 100 == 0)
 		{
@@ -99,12 +75,78 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-void Raytracer::traceRay(RaytracerState& state, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+TraceResult Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted)
+{
+	TraceResult result;
+
+	if (scene.multisampler.type == MultisampleType::NONE)
+	{
+		double rx = x + 0.5;
+		double ry = y + 0.5;
+
+		Ray rayToScene = scene.camera.getRay(rx, ry);
+		traceRay(scene, rayToScene, rayCount, interrupted);
+
+		result.pixelColor = rayToScene.color;
+		result.pixelPosition = rayToScene.intersection.position;
+		result.pixelDistance = rayToScene.intersection.distance;
+
+		return result;
+	}
+	
+	int multisamples = scene.multisampler.multisamples;
+	double multisamples2 = multisamples * multisamples;
+	
+	if (scene.multisampler.type == MultisampleType::UNIFORM || scene.multisampler.type == MultisampleType::REGULAR || scene.multisampler.type == MultisampleType::JITTER)
+	{
+		for (int i = 0; i < multisamples; ++i)
+		{
+			for (int j = 0; j < multisamples; ++j)
+			{
+				double rx = 0.0;
+				double ry = 0.0;
+
+				if (scene.multisampler.type == MultisampleType::UNIFORM)
+				{
+					rx = x + random(mt);
+					ry = y + random(mt);
+				}
+				else if (scene.multisampler.type == MultisampleType::REGULAR)
+				{
+					rx = x + ((double)j + 0.5) / (double)multisamples;
+					ry = y + ((double)i + 0.5) / (double)multisamples;
+				}
+				else if (scene.multisampler.type == MultisampleType::JITTER)
+				{
+					rx = x + ((double)j + random(mt)) / (double)multisamples;
+					ry = y + ((double)i + random(mt)) / (double)multisamples;
+				}
+
+				Ray rayToScene = scene.camera.getRay(rx, ry);
+				traceRay(scene, rayToScene, rayCount, interrupted);
+
+				result.pixelColor += rayToScene.color;
+				result.pixelPosition += rayToScene.intersection.position;
+				result.pixelDistance += rayToScene.intersection.distance;
+			}
+		}
+	}
+	else if (scene.multisampler.type == MultisampleType::POISSON)
+	{
+	}
+
+	result.pixelColor /= multisamples2;
+	result.pixelPosition /= multisamples2;
+	result.pixelDistance /= multisamples2;
+
+	return result;
+}
+
+void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
 
-	Scene& scene = *state.scene;
 	++rayCount;
 
 	for (const Primitive* primitive : scene.primitiveList)
@@ -112,51 +154,64 @@ void Raytracer::traceRay(RaytracerState& state, Ray& ray, int& rayCount, std::at
 
 	if (ray.intersection.wasFound)
 	{
-		Color combinedLightColor(0.0, 0.0, 0.0, 1.0);
+		Color reflectedColor(0.0, 0.0, 0.0);
 
 		Material* material = scene.materialMap[ray.intersection.materialId];
 		Texture* texture = scene.textureMap[material->textureId];
 
-		if (material->reflectivity > 0.0 && ray.reflectionCount < scene.maxReflections)
+		if (material->reflectivity > 0.0 && ray.reflectionCount < scene.tracer.maxReflections)
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
 
-			traceRay(state, reflectedRay, rayCount, interrupted);
-
-			combinedLightColor = reflectedRay.color * material->reflectivity;
+			traceRay(scene, reflectedRay, rayCount, interrupted);
+			reflectedColor = reflectedRay.color * material->reflectivity;
 		}
 
-		for (const Light& light : scene.lights)
+		Color lightColor = calculateLighting(scene, ray, rayCount, interrupted);
+		ray.color = (reflectedColor + lightColor) * texture->getColor(ray.intersection.position, ray.intersection.texcoord);
+	}
+}
+
+Color Raytracer::calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+{
+	Color lightColor(0.0, 0.0, 0.0);
+
+	Material* material = scene.materialMap[ray.intersection.materialId];
+
+	for (const Light& light : scene.lights)
+	{
+		if (interrupted)
+			break;
+
+		Vector3 vectorToLight = light.position - ray.intersection.position;
+		Vector3 directionToLight = vectorToLight.normalized();
+		double distanceToLight = vectorToLight.length();
+		Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
+		++rayCount;
+
+		for (const Primitive* primitive : scene.primitiveList)
+			primitive->intersect(rayToLight);
+
+		if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
 		{
-			Vector3 vectorToLight = light.position - ray.intersection.position;
-			Vector3 directionToLight = vectorToLight.normalized();
-			double distanceToLight = vectorToLight.length();
-			Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
+			double diffuseAmount = directionToLight.dot(ray.intersection.normal);
 
-			for (const Primitive* primitive : scene.primitiveList)
-				primitive->intersect(rayToLight);
-
-			if (!rayToLight.intersection.wasFound || distanceToLight < rayToLight.intersection.distance)
+			if (diffuseAmount > 0.0)
 			{
-				double diffuseAmount = directionToLight.dot(ray.intersection.normal);
+				lightColor += light.color * light.intensity * diffuseAmount * material->diffuseness;
 
-				if (diffuseAmount > 0.0)
+				Vector3 lightReflectionDirection = (2.0 * diffuseAmount * ray.intersection.normal) - directionToLight;
+				double specularAmount = lightReflectionDirection.dot(-ray.direction);
+
+				if (specularAmount > 0.0)
 				{
-					combinedLightColor += light.color * light.intensity * diffuseAmount * material->diffuseness;
-
-					Vector3 lightReflectionDirection = (2.0 * diffuseAmount * ray.intersection.normal) - directionToLight;
-					double specularAmount = lightReflectionDirection.dot(-ray.direction);
-
-					if (specularAmount > 0.0)
-					{
-						specularAmount = pow(specularAmount, material->shininess);
-						combinedLightColor += light.color * light.intensity * specularAmount * material->specularity;
-					}
+					specularAmount = pow(specularAmount, material->shininess);
+					lightColor += light.color * light.intensity * specularAmount * material->specularity;
 				}
 			}
 		}
-
-		ray.color = combinedLightColor * texture->getColor(ray.intersection.position, ray.intersection.texcoord);
 	}
+
+	return lightColor;
 }

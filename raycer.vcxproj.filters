@@ -151,10 +151,10 @@
     <ClCompile Include="src\Raytracing\CheckerTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\ToneMapper.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Image.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\ToneMapper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
   </ItemGroup>
@@ -301,14 +301,14 @@
     <ClInclude Include="src\Raytracing\CheckerTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\ToneMapper.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\RaytracerState.h">
       <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMapper.h">
+      <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
