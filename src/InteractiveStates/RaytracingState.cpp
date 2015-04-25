@@ -1,6 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
 #include "InteractiveStates/RaytracingState.h"
 #include "App.h"
 #include "Utils/Log.h"
@@ -36,8 +43,13 @@ void RaytracingState::shutdown()
 
 void RaytracingState::update(double timeStep)
 {
+	InteractiveRunner& runner = App::getInteractiveRunner();
+
 	scene.camera.update(timeStep);
 	scene.camera.precalculate();
+
+	if (runner.keyWasPressed(GLFW_KEY_F8))
+		scene.saveAs("scene.json");
 }
 
 void RaytracingState::render(double timeStep, double interpolation)
@@ -59,7 +71,6 @@ void RaytracingState::render(double timeStep, double interpolation)
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
 	state.pixelsProcessed = 0;
 	state.raysProcessed = 0;
-	state.isInteractive = true;
 
 	raytracer.run(state, interrupted);
 

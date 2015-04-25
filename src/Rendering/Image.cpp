@@ -34,17 +34,7 @@ Image::Image(int width_, int height_)
 
 Image::Image(int width_, int height_, float* rgbaData)
 {
-	setSize(width_, height_);
-
-	for (int i = 0; i < length; ++i)
-	{
-		int dataIndex = i * 4;
-
-		pixelData[i].r = rgbaData[dataIndex];
-		pixelData[i].g = rgbaData[dataIndex + 1];
-		pixelData[i].b = rgbaData[dataIndex + 2];
-		pixelData[i].a = rgbaData[dataIndex + 3];
-	}
+	load(width_, height_, rgbaData);
 }
 
 Image::Image(const Image& other)
@@ -79,11 +69,18 @@ Image& Image::operator=(const Image& other)
 	return *this;
 }
 
-namespace
+void Image::load(int width_, int height_, float* rgbaData)
 {
-	bool endsWith(const std::string& text, const std::string& suffix)
+	setSize(width_, height_);
+
+	for (int i = 0; i < length; ++i)
 	{
-		return text.rfind(suffix) == (text.size() - suffix.size());
+		int dataIndex = i * 4;
+
+		pixelData[i].r = rgbaData[dataIndex];
+		pixelData[i].g = rgbaData[dataIndex + 1];
+		pixelData[i].b = rgbaData[dataIndex + 2];
+		pixelData[i].a = rgbaData[dataIndex + 3];
 	}
 }
 
@@ -137,6 +134,14 @@ void Image::load(const std::string& fileName)
 	}
 }
 
+namespace
+{
+	bool endsWith(const std::string& text, const std::string& suffix)
+	{
+		return text.rfind(suffix) == (text.size() - suffix.size());
+	}
+}
+
 void Image::saveAs(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
@@ -145,10 +150,7 @@ void Image::saveAs(const std::string& fileName) const
 
 	if (endsWith(fileName, ".png") || endsWith(fileName, ".bmp") || endsWith(fileName, ".tga"))
 	{
-		uint32_t* data = (uint32_t*)_mm_malloc(length * sizeof(uint32_t), 64);
-
-		if (data == nullptr)
-			throw std::runtime_error("Could not allocate memory for the image");
+		std::vector<uint32_t> data(length);
 
 		for (int y = 0; y < height; ++y)
 		{
@@ -157,20 +159,15 @@ void Image::saveAs(const std::string& fileName) const
 		}
 
 		if (endsWith(fileName, ".png"))
-			result = stbi_write_png(fileName.c_str(), width, height, 4, data, width * sizeof(uint32_t));
+			result = stbi_write_png(fileName.c_str(), width, height, 4, &data[0], width * sizeof(uint32_t));
 		else if (endsWith(fileName, ".bmp"))
-			result = stbi_write_bmp(fileName.c_str(), width, height, 4, data);
+			result = stbi_write_bmp(fileName.c_str(), width, height, 4, &data[0]);
 		else if (endsWith(fileName, ".tga"))
-			result = stbi_write_tga(fileName.c_str(), width, height, 4, data);
-
-		_mm_free(data);
+			result = stbi_write_tga(fileName.c_str(), width, height, 4, &data[0]);
 	}
 	else if (endsWith(fileName, ".hdr"))
 	{
-		float* data = (float*)_mm_malloc(length * sizeof(float) * 3, 64);
-
-		if (data == nullptr)
-			throw std::runtime_error("Could not allocate memory for the image");
+		std::vector<float> data(length * 3);
 
 		for (int y = 0; y < height; ++y)
 		{
@@ -185,8 +182,7 @@ void Image::saveAs(const std::string& fileName) const
 			}
 		}
 
-		result = stbi_write_hdr(fileName.c_str(), width, height, 3, data);
-		_mm_free(data);
+		result = stbi_write_hdr(fileName.c_str(), width, height, 3, &data[0]);
 	}
 	else
 		throw std::runtime_error("Could not save the image (non-supported format)");

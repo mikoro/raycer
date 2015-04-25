@@ -421,7 +421,6 @@ void NetworkRunner::handleJobs()
 			state.sceneHeight = job.sceneHeight;
 			state.pixelOffset = job.pixelOffset;
 			state.pixelCount = job.pixelCount;
-			state.isInteractive = false;
 
 			job.scene.initialize();
 			job.scene.camera.setImagePlaneSize(state.sceneWidth, state.sceneHeight);

@@ -383,15 +383,11 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 
 void InteractiveRunner::takeScreenshot() const
 {
-	float* data = (float*)malloc(windowWidth * windowHeight * sizeof(float) * 4);
-	
-	if (data == nullptr)
-		throw std::runtime_error("Could not allocate memory for screenshot");
+	std::vector<float> data(windowWidth * windowHeight * 4);
 
-	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_FLOAT, data);
+	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_FLOAT, &data[0]);
 	checkGLError("Could not read pixels from renderbuffer");
 
-	Image image(windowWidth, windowHeight, data);
-	free(data);
+	Image image(windowWidth, windowHeight, &data[0]);
 	image.saveAs("screenshot.png");
 }

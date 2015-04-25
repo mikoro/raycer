@@ -106,12 +106,14 @@ int App::run(int argc, char** argv)
 		{
 			settings.network.isClient = true;
 			settings.network.isServer = false;
+			settings.general.interactive = false;
 		}
 
 		if (serverSwitch.isSet())
 		{
 			settings.network.isServer = true;
 			settings.network.isClient = false;
+			settings.general.interactive = false;
 		}
 
 		if (sceneFileNameArg.isSet())

@@ -212,23 +212,12 @@ void CLRaytracer::downloadImage()
 	size_t origin[3] = { 0, 0, 0 };
 	size_t region[3] = { (size_t)bufferWidth, (size_t)bufferHeight, 1 };
 
-	std::vector<float> pixelData(bufferWidth * bufferHeight * 4);
+	std::vector<float> data(bufferWidth * bufferHeight * 4);
 
-	cl_int status = clEnqueueReadImage(clManager.commandQueue, pixelsPtr, CL_TRUE, &origin[0], &region[0], 0, 0, &pixelData[0], 0, NULL, NULL);
+	cl_int status = clEnqueueReadImage(clManager.commandQueue, pixelsPtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, NULL, NULL);
 	checkCLError(status, "Could not read OpenCL image buffer");
 
-	image.setSize(bufferWidth, bufferHeight);
-	int length = bufferWidth * bufferHeight * 4;
-
-	for (int i = 0; i < length; i += 4)
-	{
-		float r = pixelData[i];
-		float g = pixelData[i + 1];
-		float b = pixelData[i + 2];
-		float a = pixelData[i + 3];
-
-		image.setPixel(i / 4, Color(r, g, b, a).clamped());
-	}
+	image.load(bufferWidth, bufferHeight, &data[0]);
 }
 
 Image& CLRaytracer::getImage()

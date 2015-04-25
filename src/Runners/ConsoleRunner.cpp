@@ -52,7 +52,6 @@ int ConsoleRunner::run()
 	state.sceneHeight = settings.image.height;
 	state.pixelOffset = 0;
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
-	state.isInteractive = false;
 
 	resultImage.setSize(state.sceneWidth, state.sceneHeight);
 

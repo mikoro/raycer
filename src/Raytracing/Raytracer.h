@@ -21,8 +21,6 @@ namespace Raycer
 		int pixelOffset = 0;
 		int pixelCount = 0;
 
-		bool isInteractive = false;
-
 		std::atomic<int> pixelsProcessed;
 		std::atomic<int> raysProcessed;
 	};

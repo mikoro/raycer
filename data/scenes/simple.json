@@ -1,0 +1,225 @@
+{
+    "scene": {
+        "multisamples": 1,
+        "maxReflections": 1,
+        "camera": {
+            "position": {
+                "x": 0,
+                "y": 3,
+                "z": 0
+            },
+            "orientation": {
+                "yaw": 0,
+                "pitch": -20,
+                "roll": 0
+            },
+            "fov": 75
+        },
+        "fog": {
+            "enabled": false,
+            "distance": 40,
+            "steepness": 8,
+            "color": {
+                "r": 1,
+                "g": 1,
+                "b": 1,
+                "a": 1
+            }
+        },
+        "toneMapper": {
+            "enabled": true,
+            "type": 0,
+            "gamma": 0.45454545454545453
+        },
+        "colorTextures": [
+            {
+                "id": 0,
+                "color": {
+                    "r": 0.5,
+                    "g": 0.5,
+                    "b": 0.5,
+                    "a": 1
+                }
+            },
+            {
+                "id": 1,
+                "color": {
+                    "r": 0.5,
+                    "g": 0,
+                    "b": 0,
+                    "a": 1
+                }
+            },
+            {
+                "id": 2,
+                "color": {
+                    "r": 0,
+                    "g": 0.5,
+                    "b": 0,
+                    "a": 1
+                }
+            },
+            {
+                "id": 3,
+                "color": {
+                    "r": 0,
+                    "g": 0,
+                    "b": 0.5,
+                    "a": 1
+                }
+            }
+        ],
+        "checkerTextures": [
+            {
+                "id": 4,
+                "color1": {
+                    "r": 0.78431372549019607,
+                    "g": 0.78431372549019607,
+                    "b": 0.78431372549019607,
+                    "a": 1
+                },
+                "color2": {
+                    "r": 0.43137254901960786,
+                    "g": 0.43137254901960786,
+                    "b": 0.43137254901960786,
+                    "a": 1
+                }
+            }
+        ],
+        "imageTextures": [
+            {
+                "id": 5,
+                "imageFilePath": "data/images/grass.jpg"
+            }
+        ],
+        "woodTextures": [
+            {
+                "id": 6
+            }
+        ],
+        "marbleTextures": [
+            {
+                "id": 7
+            }
+        ],
+        "materials": [
+            {
+                "id": 0,
+                "textureId": 4,
+                "diffuseness": 1,
+                "specularity": 0.5,
+                "shininess": 2,
+                "reflectivity": 0
+            },
+            {
+                "id": 1,
+                "textureId": 6,
+                "diffuseness": 1,
+                "specularity": 1,
+                "shininess": 1,
+                "reflectivity": 0
+            },
+            {
+                "id": 2,
+                "textureId": 7,
+                "diffuseness": 1,
+                "specularity": 1,
+                "shininess": 64,
+                "reflectivity": 0
+            },
+            {
+                "id": 3,
+                "textureId": 3,
+                "diffuseness": 1,
+                "specularity": 1,
+                "shininess": 8,
+                "reflectivity": 1
+            },
+            {
+                "id": 4,
+                "textureId": 0,
+                "diffuseness": 1,
+                "specularity": 0,
+                "shininess": 0,
+                "reflectivity": 0
+            }
+        ],
+        "planes": [
+            {
+                "position": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "normal": {
+                    "x": 0,
+                    "y": 1,
+                    "z": 0
+                },
+                "materialId": 0,
+                "texcoordScale": {
+                    "x": 5,
+                    "y": 5
+                }
+            }
+        ],
+        "spheres": [
+            {
+                "position": {
+                    "x": 0,
+                    "y": 1,
+                    "z": -5
+                },
+                "radius": 1,
+                "materialId": 1,
+                "texcoordScale": {
+                    "x": 0.050000000000000003,
+                    "y": 0.050000000000000003
+                }
+            },
+            {
+                "position": {
+                    "x": 2.5,
+                    "y": 1,
+                    "z": -5
+                },
+                "radius": 1,
+                "materialId": 2,
+                "texcoordScale": {
+                    "x": 1,
+                    "y": 1
+                }
+            },
+            {
+                "position": {
+                    "x": -2.5,
+                    "y": 1,
+                    "z": -5
+                },
+                "radius": 1,
+                "materialId": 3,
+                "texcoordScale": {
+                    "x": 1,
+                    "y": 1
+                }
+            }
+        ],
+        "meshes": [],
+        "lights": [
+            {
+                "position": {
+                    "x": 0,
+                    "y": 10,
+                    "z": 5
+                },
+                "color": {
+                    "r": 1,
+                    "g": 1,
+                    "b": 1,
+                    "a": 1
+                },
+                "intensity": 1
+            }
+        ]
+    }
+}

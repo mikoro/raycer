@@ -31,6 +31,7 @@ namespace Raycer
 
 		Image& operator=(const Image& other);
 
+		void load(int width, int height, float* rgbaData);
 		void load(const std::string& fileName);
 		void saveAs(const std::string& fileName) const;
 		void setSize(int length);
