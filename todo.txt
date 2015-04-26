@@ -1,0 +1,30 @@
+logon piirtäminen
+
+lisää primitiivejä
+ - laatikko
+ - sylinteri
+ - kolmio
+ - suorakulmio
+ - ympyrä
+ - implisiittinen
+
+kamera
+ - aperture & dof
+ 
+valot
+ - directional valo
+ - ambient valo
+ - valojen muoto (suorakulmio, neliö)
+ - soft shadows
+ - vaimentuminen
+ - suuntaavuus (eteen/taakse, light cone)
+
+tekstuurit
+ - tulitekstuuri
+ - tekstuurien asetukset sceneen
+ 
+noiset
+ - worley noise
+ - gaussian noise
+ - poisson disk sampling
+ 
