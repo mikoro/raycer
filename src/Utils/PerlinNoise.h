@@ -10,6 +10,8 @@
 http://mrl.nyu.edu/~perlin/noise/
 http://mrl.nyu.edu/~perlin/paper445.pdf
 
+Returns values between 0.0 - 1.0
+
 */
 
 namespace Raycer
@@ -18,8 +20,10 @@ namespace Raycer
 	{
 	public:
 
+		PerlinNoise();
 		PerlinNoise(int seed);
 
+		void seed(int seed);
 		double getNoise(double x, double y = 0.0, double z = 0.0) const;
 		double getOctaveNoise(int octaves, double persistence, double x, double y = 0.0, double z = 0.0) const;
 

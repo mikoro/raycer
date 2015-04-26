@@ -217,7 +217,7 @@ void Image::setSize(int width_, int height_)
 	if (pixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the image");
 
-	memset(pixelData, 0, length * sizeof(Color));
+	clear();
 }
 
 void Image::setPixel(int x, int y, const Color& color)
@@ -237,7 +237,7 @@ void Image::setPixel(int index, const Color& color)
 void Image::clear()
 {
 	for (int i = 0; i < length; ++i)
-		pixelData[i] = Color(0.0, 0.0, 0.0, 0.0);
+		pixelData[i] = Color(0.0, 0.0, 0.0, 1.0);
 }
 
 void Image::clear(const Color& color)

@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
-#include <limits>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -20,7 +19,7 @@ Raytracer::Raytracer()
 {
 	std::random_device rd;
 	mt.seed(rd());
-	random = std::uniform_real_distribution<double>(0.0, std::nextafter(1.0, std::numeric_limits<double>::max()));
+	random = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)

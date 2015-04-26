@@ -9,8 +9,20 @@
 
 using namespace Raycer;
 
-PerlinNoise::PerlinNoise(int seed)
+PerlinNoise::PerlinNoise()
 {
+	std::random_device rd;
+	seed(rd());
+}
+
+PerlinNoise::PerlinNoise(int seed_)
+{
+	seed(seed_);
+}
+
+void PerlinNoise::seed(int seed)
+{
+	permutations.clear();
 	permutations.resize(256);
 	std::iota(permutations.begin(), permutations.end(), 0);
 	std::mt19937 mt(seed);

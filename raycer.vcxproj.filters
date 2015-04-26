@@ -157,6 +157,9 @@
     <ClCompile Include="src\Rendering\ToneMapper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\PoissonDisc.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -309,6 +312,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Pixel.h">
       <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\PoissonDisc.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
