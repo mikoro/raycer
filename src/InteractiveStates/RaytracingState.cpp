@@ -14,6 +14,7 @@
 #include "Utils/Settings.h"
 #include "Runners/InteractiveRunner.h"
 #include "Rendering/Framebuffer.h"
+#include "Rendering/ToneMapper.h"
 #include "Raytracing/Raytracer.h"
 #include "CLRaytracing/CLRaytracer.h"
 
@@ -91,6 +92,14 @@ void RaytracingState::render(double timeStep, double interpolation)
 		raytracer.run(state, interrupted);
 	else
 		clRaytracer.run(state, interrupted);
+
+	switch (scene.toneMapper.type)
+	{
+		case ToneMapType::NONE: break;
+		case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapper.gamma); break;
+		case ToneMapType::REINHARD: break;
+		default: break;
+	}
 
 	if (settings.window.showCameraInfo)
 	{

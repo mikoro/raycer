@@ -17,7 +17,7 @@ namespace Raycer
 		void initialize();
 		void intersect(Ray& ray) const;
 
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		Vector3 position;
 		double radius = 1.0;
 
 		template<class Archive>

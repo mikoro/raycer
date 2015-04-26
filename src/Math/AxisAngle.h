@@ -11,8 +11,7 @@ namespace Raycer
 	{
 	public:
 
-		AxisAngle();
-		AxisAngle(const Vector3& axis, double angle);
+		AxisAngle(const Vector3& axis = Vector3::UP, double angle = 0.0);
 		AxisAngle(const AxisAngle& a);
 		AxisAngle& operator=(const AxisAngle& a);
 

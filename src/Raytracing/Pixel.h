@@ -3,14 +3,15 @@
 
 #pragma once
 
+#include "Math/Color.h"
+#include "Math/Vector3.h"
+
 namespace Raycer
 {
-	class Image;
-
-	class ToneMapper
+	struct Pixel
 	{
-		public:
-
-			static void gamma(Image& image, double gamma);
+		Color color;
+		Vector3 position;
+		double distance = 0.0;
 	};
 }

@@ -16,6 +16,7 @@
 #include "Utils/Settings.h"
 #include "CLRaytracing/CLManager.h"
 #include "Rendering/Image.h"
+#include "Rendering/ToneMapper.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -47,20 +48,20 @@ int ConsoleRunner::run()
 	scene.camera.precalculate();
 
 	RaytracerState state;
-	state.image = &resultImage;
+	state.image = &image;
 	state.scene = &scene;
 	state.sceneWidth = settings.image.width;
 	state.sceneHeight = settings.image.height;
 	state.pixelOffset = 0;
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
 
-	resultImage.setSize(state.sceneWidth, state.sceneHeight);
+	image.setSize(state.sceneWidth, state.sceneHeight);
 
 	run(state);
 
 	if (!interrupted)
 	{
-		resultImage.saveAs(settings.image.fileName);
+		image.saveAs(settings.image.fileName);
 
 		if (settings.image.autoView)
 		{
@@ -105,6 +106,14 @@ void ConsoleRunner::run(RaytracerState& state)
 			raytracer.run(state, interrupted);
 		else
 			clRaytracer.run(state, interrupted);
+
+		switch (state.scene->toneMapper.type)
+		{
+			case ToneMapType::NONE: break;
+			case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapper.gamma); break;
+			case ToneMapType::REINHARD: break;
+			default: break;
+		}
 
 		finished = true;
 	};
@@ -159,7 +168,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
-		resultImage = clRaytracer.getImage();
+		image = clRaytracer.getImage();
 }
 
 void ConsoleRunner::interrupt()
@@ -169,7 +178,7 @@ void ConsoleRunner::interrupt()
 
 Image& ConsoleRunner::getResultImage()
 {
-	return resultImage;
+	return image;
 }
 
 void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)

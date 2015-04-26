@@ -9,18 +9,19 @@
 
 namespace Raycer
 {
-	class Vector3;
+	class Scene;
+	struct Pixel;
 
 	class Fog
 	{
 		public:
 
-			Color calculate(const Color& pixelColor, const Vector3& pixelPosition, double pixelDistance);
+			Color calculate(const Scene& scene, const Pixel& pixel);
 
 			bool enabled = false;
 			double distance = 0.0;
 			double steepness = 0.0;
-			Color color = Color(0.0, 0.0, 0.0);
+			Color color;
 
 			template<class Archive>
 			void serialize(Archive& ar)

@@ -6,6 +6,7 @@
 
 #include "Math/Matrix4x4.h"
 #include "Math/MathUtils.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 

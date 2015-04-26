@@ -32,7 +32,7 @@ namespace Raycer
 
 		bool openCLInitialized = false;
 		std::atomic<bool> interrupted;
-		Image resultImage;
+		Image image;
 
 		MovingAverage pixelsPerSecondAverage;
 		MovingAverage raysPerSecondAverage;

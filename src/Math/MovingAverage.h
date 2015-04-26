@@ -19,7 +19,7 @@ namespace Raycer
 
 	private:
 
-		double alpha = 1.0;
-		double averageValue = 0.0;
+		double alpha;
+		double averageValue;
 	};
 }

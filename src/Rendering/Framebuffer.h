@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <cstdint>
-
 #include <GL/glew.h>
 
 #include "Rendering/Image.h"
@@ -43,7 +41,6 @@ namespace Raycer
 		int length = 0;
 
 		float* floatPixelData = nullptr;
-		uint32_t* intPixelData = nullptr;
 
 		GLuint textureId = 0;
 		GLuint programId = 0;

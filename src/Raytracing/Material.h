@@ -17,7 +17,7 @@ namespace Raycer
 		double diffuseness = 1.0;
 		double specularity = 1.0;
 		double shininess = 1.0;
-		double reflectivity = 0.0;
+		double reflectivity = 1.0;
 
 		template<class Archive>
 		void serialize(Archive& ar)

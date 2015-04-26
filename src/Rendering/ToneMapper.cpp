@@ -2,14 +2,19 @@
 // License: MIT, see the LICENSE file.
 
 #include "Rendering/ToneMapper.h"
+#include "Rendering/Image.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
 
-Color ToneMapper::gamma(const Color& pixelColor, double gamma)
+void ToneMapper::gamma(Image& image, double gamma)
 {
-	Color result = pixelColor;
-	result.a = 1.0;
+	int length = image.getLength();
 
-	return Color::pow(result, gamma).clamped();
+	#pragma omp parallel for
+	for (int i = 0; i < length; ++i)
+	{
+		image.pixelData[i] = Color::pow(image.pixelData[i], gamma).clamped();
+		image.pixelData[i].a = 1.0;
+	}
 }

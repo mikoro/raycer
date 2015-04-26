@@ -8,19 +8,13 @@
 #include "Raytracing/RaytracerState.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
+#include "Raytracing/Pixel.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
-#include "Rendering/Framebuffer.h"
-#include "Rendering/ToneMapper.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
-
-namespace
-{
-	const double rayStartOffset = 0.000001;
-}
 
 Raytracer::Raytracer()
 {
@@ -31,6 +25,7 @@ Raytracer::Raytracer()
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 {
+	Image& image = *state.image;
 	Scene& scene = *state.scene;
 
 	int rayCount = 0;
@@ -46,21 +41,14 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		double x = (double)(pixelOffsetIndex % state.sceneWidth);
 		double y = (double)(pixelOffsetIndex / state.sceneWidth);
 
-		TraceResult result = shootRays(scene, x, y, rayCount, interrupted);
+		Pixel pixel = shootRays(scene, x, y, rayCount, interrupted);
 		
 		if (scene.fog.enabled)
-			result.pixelColor = scene.fog.calculate(result.pixelColor, result.pixelPosition, result.pixelDistance);
+			pixel.color = scene.fog.calculate(scene, pixel);
 
-		switch (scene.toneMapper.type)
-		{
-			case ToneMapType::NONE: break;
-			case ToneMapType::GAMMA: result.pixelColor = ToneMapper::gamma(result.pixelColor, scene.toneMapper.gamma); break;
-			case ToneMapType::REINHARD: break;
-			default: break;
-		}
+		image.setPixel(pixelIndex, pixel.color);
 
-		state.image->setPixel(pixelIndex, result.pixelColor);
-
+		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)
 		{
 			state.pixelsProcessed += 100;
@@ -75,23 +63,23 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-TraceResult Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted)
+Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted)
 {
-	TraceResult result;
+	Pixel pixel;
 
 	if (scene.multisampler.type == MultisampleType::NONE)
 	{
 		double rx = x + 0.5;
 		double ry = y + 0.5;
 
-		Ray rayToScene = scene.camera.getRay(rx, ry);
-		traceRay(scene, rayToScene, rayCount, interrupted);
+		Ray ray = scene.camera.getRay(rx, ry);
+		traceRay(scene, ray, rayCount, interrupted);
 
-		result.pixelColor = rayToScene.color;
-		result.pixelPosition = rayToScene.intersection.position;
-		result.pixelDistance = rayToScene.intersection.distance;
+		pixel.color = ray.color;
+		pixel.position = ray.intersection.position;
+		pixel.distance = ray.intersection.distance;
 
-		return result;
+		return pixel;
 	}
 	
 	int multisamples = scene.multisampler.multisamples;
@@ -122,12 +110,12 @@ TraceResult Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount
 					ry = y + ((double)i + random(mt)) / (double)multisamples;
 				}
 
-				Ray rayToScene = scene.camera.getRay(rx, ry);
-				traceRay(scene, rayToScene, rayCount, interrupted);
+				Ray ray = scene.camera.getRay(rx, ry);
+				traceRay(scene, ray, rayCount, interrupted);
 
-				result.pixelColor += rayToScene.color;
-				result.pixelPosition += rayToScene.intersection.position;
-				result.pixelDistance += rayToScene.intersection.distance;
+				pixel.color += ray.color;
+				pixel.position += ray.intersection.position;
+				pixel.distance += ray.intersection.distance;
 			}
 		}
 	}
@@ -135,11 +123,11 @@ TraceResult Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount
 	{
 	}
 
-	result.pixelColor /= multisamples2;
-	result.pixelPosition /= multisamples2;
-	result.pixelDistance /= multisamples2;
+	pixel.color /= multisamples2;
+	pixel.position /= multisamples2;
+	pixel.distance /= multisamples2;
 
-	return result;
+	return pixel;
 }
 
 void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
@@ -163,7 +151,6 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
 			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
-
 			traceRay(scene, reflectedRay, rayCount, interrupted);
 			reflectedColor = reflectedRay.color * material->reflectivity;
 		}

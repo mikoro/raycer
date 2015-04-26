@@ -17,8 +17,8 @@ namespace Raycer
 		void initialize();
 		void intersect(Ray& ray) const;
 
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
-		Vector3 normal = Vector3(0.0, 1.0, 0.0);
+		Vector3 position;
+		Vector3 normal;
 
 		template<class Archive>
 		void serialize(Archive& ar)
@@ -31,7 +31,7 @@ namespace Raycer
 
 	private:
 
-		Vector3 uAxis = Vector3(0.0, 0.0, 0.0);
-		Vector3 vAxis = Vector3(0.0, 0.0, 0.0);
+		Vector3 uAxis;
+		Vector3 vAxis;
 	};
 }

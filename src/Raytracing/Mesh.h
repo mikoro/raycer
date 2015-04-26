@@ -23,8 +23,8 @@ namespace Raycer
 		void intersect(Ray& ray) const;
 
 		std::string meshFilePath;
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
-		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
+		Vector3 position;
+		EulerAngle orientation;
 
 		std::vector<Triangle> triangles;
 

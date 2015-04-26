@@ -307,6 +307,9 @@
     <ClInclude Include="src\Rendering\ToneMapper.h">
       <Filter>Rendering</Filter>
     </ClInclude>
+    <ClInclude Include="src\Raytracing\Pixel.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

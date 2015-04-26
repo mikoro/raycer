@@ -5,20 +5,12 @@
 
 using namespace Raycer;
 
-AxisAngle::AxisAngle()
+AxisAngle::AxisAngle(const Vector3& axis_, double angle_) : axis(axis_), angle(angle_)
 {
 }
 
-AxisAngle::AxisAngle(const Vector3& axis_, double angle_)
+AxisAngle::AxisAngle(const AxisAngle& a) : axis(a.axis), angle(a.angle)
 {
-	axis = axis_;
-	angle = angle_;
-}
-
-AxisAngle::AxisAngle(const AxisAngle& a)
-{
-	axis = a.axis;
-	angle = a.angle;
 }
 
 AxisAngle& AxisAngle::operator=(const AxisAngle& a)

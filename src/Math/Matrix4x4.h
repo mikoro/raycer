@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "Math/Vector3.h"
-
 /*
 
 column major
@@ -26,6 +24,8 @@ T = translation
 
 namespace Raycer
 {
+	class Vector3;
+
 	class Matrix4x4
 	{
 	public:

@@ -12,7 +12,7 @@ namespace Raycer
 {
 	struct Light
 	{
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		Vector3 position;
 		Color color = Color::WHITE;
 		double intensity = 1.0;
 

@@ -23,8 +23,8 @@ namespace Raycer
 
 		Ray getRay(double x, double y) const;
 
-		Vector3 position = Vector3(0.0, 0.0, 0.0);
-		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
+		Vector3 position;
+		EulerAngle orientation;
 		double fov = 75.0;
 
 		Vector3 forward;
@@ -47,9 +47,9 @@ namespace Raycer
 
 	private:
 
-		Vector3 velocity = Vector3(0.0, 0.0, 0.0);
-		Vector3 acceleration = Vector3(0.0, 0.0, 0.0);
-		Vector3 angularVelocity = Vector3(0.0, 0.0, 0.0);
-		Vector3 angularAcceleration = Vector3(0.0, 0.0, 0.0);
+		Vector3 velocity;
+		Vector3 acceleration;
+		Vector3 angularVelocity;
+		Vector3 angularAcceleration;
 	};
 }

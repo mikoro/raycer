@@ -6,21 +6,13 @@
 #include <atomic>
 #include <random>
 
-#include "Math/Color.h"
-#include "Math/Vector3.h"
-
 namespace Raycer
 {
 	struct RaytracerState;
 	class Scene;
 	struct Ray;
-
-	struct TraceResult
-	{
-		Color pixelColor;
-		Vector3 pixelPosition;
-		double pixelDistance = 0.0;
-	};
+	struct Pixel;
+	class Color;
 
 	class Raytracer
 	{
@@ -32,11 +24,16 @@ namespace Raycer
 
 	private:
 
-		TraceResult shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted);
+		Raytracer(const Raytracer& raytracer);
+		Raytracer& operator=(const Raytracer& raytracer);
+
+		Pixel shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted);
 		void traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
 		Color calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
 
 		std::mt19937 mt;
 		std::uniform_real_distribution<double> random;
+
+		double rayStartOffset = 0.000001;
 	};
 }

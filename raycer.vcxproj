@@ -169,6 +169,7 @@
     <ClInclude Include="src\Raytracing\MarbleTexture.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
     <ClInclude Include="src\Raytracing\Mesh.h" />
+    <ClInclude Include="src\Raytracing\Pixel.h" />
     <ClInclude Include="src\Raytracing\Plane.h" />
     <ClInclude Include="src\Raytracing\Primitive.h" />
     <ClInclude Include="src\Raytracing\Ray.h" />
