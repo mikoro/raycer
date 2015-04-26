@@ -189,9 +189,6 @@
     <ClInclude Include="src\Rendering\Framebuffer.h">
       <Filter>Rendering</Filter>
     </ClInclude>
-    <ClInclude Include="src\Rendering\RenderTarget.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>

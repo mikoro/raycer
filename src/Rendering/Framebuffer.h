@@ -3,15 +3,17 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include <GL/glew.h>
 
-#include "Rendering/RenderTarget.h"
+#include "Rendering/Image.h"
 
 namespace Raycer
 {
 	class Color;
 
-	class Framebuffer : public RenderTarget
+	class Framebuffer
 	{
 	public:
 
@@ -20,19 +22,16 @@ namespace Raycer
 
 		void initialize();
 		void resize(int width, int height);
-		void setPixel(int x, int y, const Color& color);
-		void setPixel(int index, const Color& color);
-
-		float* getPixelData() const;
-		GLuint getTextureId() const;
-		int getWidth() const;
-		int getHeight() const;
-
 		void clear();
 		void clear(const Color& color);
 		void render() const;
-
 		void enableSmoothing(bool state);
+
+		int getWidth() const;
+		int getHeight() const;
+		GLuint getTextureId() const;
+		
+		Image image;
 
 	private:
 
@@ -43,7 +42,8 @@ namespace Raycer
 		int height = 0;
 		int length = 0;
 
-		float* pixelData = nullptr;
+		float* floatPixelData = nullptr;
+		uint32_t* intPixelData = nullptr;
 
 		GLuint textureId = 0;
 		GLuint programId = 0;

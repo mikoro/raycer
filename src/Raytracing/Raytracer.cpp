@@ -59,7 +59,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 			default: break;
 		}
 
-		state.renderTarget->setPixel(pixelIndex, result.pixelColor);
+		state.image->setPixel(pixelIndex, result.pixelColor);
 
 		if ((pixelIndex + 1) % 100 == 0)
 		{

@@ -416,7 +416,7 @@ void NetworkRunner::handleJobs()
 			jobQueueMutex.unlock();
 
 			RaytracerState state;
-			state.renderTarget = &job.image;
+			state.image = &job.image;
 			state.scene = &job.scene;
 			state.sceneWidth = job.sceneWidth;
 			state.sceneHeight = job.sceneHeight;

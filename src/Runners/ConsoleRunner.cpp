@@ -47,7 +47,7 @@ int ConsoleRunner::run()
 	scene.camera.precalculate();
 
 	RaytracerState state;
-	state.renderTarget = &resultImage;
+	state.image = &resultImage;
 	state.scene = &scene;
 	state.sceneWidth = settings.image.width;
 	state.sceneHeight = settings.image.height;

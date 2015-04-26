@@ -78,7 +78,7 @@ void RaytracingState::render(double timeStep, double interpolation)
 	InteractiveRunner& runner = App::getInteractiveRunner();
 	Text& text = runner.getDefaultText();
 
-	state.renderTarget = &framebuffer;
+	state.image = &framebuffer.image;
 	state.scene = &scene;
 	state.sceneWidth = framebuffer.getWidth();
 	state.sceneHeight = framebuffer.getHeight();

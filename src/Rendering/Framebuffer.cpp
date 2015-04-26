@@ -17,10 +17,10 @@ Framebuffer::Framebuffer()
 
 Framebuffer::~Framebuffer()
 {
-	if (pixelData != nullptr)
+	if (floatPixelData != nullptr)
 	{
-		_mm_free(pixelData);
-		pixelData = nullptr;
+		_mm_free(floatPixelData);
+		floatPixelData = nullptr;
 	}
 }
 
@@ -86,12 +86,14 @@ void Framebuffer::resize(int width_, int height_)
 
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
-	if (pixelData != nullptr)
-		_mm_free(pixelData);
+	image.setSize(width, height);
 
-	pixelData = (float*)_mm_malloc(length * sizeof(float) * 4, 64);
+	if (floatPixelData != nullptr)
+		_mm_free(floatPixelData);
 
-	if (pixelData == nullptr)
+	floatPixelData = (float*)_mm_malloc(length * sizeof(float) * 4, 64);
+
+	if (floatPixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory on the device
@@ -103,72 +105,29 @@ void Framebuffer::resize(int width_, int height_)
 	clear();
 }
 
-void Framebuffer::setPixel(int x, int y, const Color& color)
-{
-	assert(x < width && y < height);
-
-	int pixelIndex = y * width * 4 + x * 4;
-
-	pixelData[pixelIndex] = (float)color.r;
-	pixelData[pixelIndex + 1] = (float)color.g;
-	pixelData[pixelIndex + 2] = (float)color.b;
-	pixelData[pixelIndex + 3] = (float)color.a;
-}
-
-void Framebuffer::setPixel(int index, const Color& color)
-{
-	assert(index < length);
-
-	int pixelIndex = index * 4;
-
-	pixelData[pixelIndex] = (float)color.r;
-	pixelData[pixelIndex + 1] = (float)color.g;
-	pixelData[pixelIndex + 2] = (float)color.b;
-	pixelData[pixelIndex + 3] = (float)color.a;
-}
-
-float* Framebuffer::getPixelData() const
-{
-	return pixelData;
-}
-
-GLuint Framebuffer::getTextureId() const
-{
-	return textureId;
-}
-
-int Framebuffer::getWidth() const
-{
-	return width;
-}
-
-int Framebuffer::getHeight() const
-{
-	return height;
-}
-
 void Framebuffer::clear()
 {
-	for (int i = 0; i < length * 4; ++i)
-		pixelData[i] = 0.0f;
+	image.clear();
 }
 
 void Framebuffer::clear(const Color& color)
 {
-	for (int i = 0; i < length; ++i)
-	{
-		int pixelIndex = i * 4;
-
-		pixelData[pixelIndex] = (float)color.r;
-		pixelData[pixelIndex + 1] = (float)color.g;
-		pixelData[pixelIndex + 2] = (float)color.b;
-		pixelData[pixelIndex + 3] = (float)color.a;
-	}
+	image.clear(color);
 }
 
 void Framebuffer::render() const
 {
 	Settings& settings = App::getSettings();
+
+	for (int i = 0; i < length; ++i)
+	{
+		int pixelIndex = i * 4;
+
+		floatPixelData[pixelIndex] = (float)image.pixelData[i].r;
+		floatPixelData[pixelIndex + 1] = (float)image.pixelData[i].g;
+		floatPixelData[pixelIndex + 2] = (float)image.pixelData[i].b;
+		floatPixelData[pixelIndex + 3] = (float)image.pixelData[i].a;
+	}
 
 	glUseProgram(programId);
 	glActiveTexture(GL_TEXTURE0);
@@ -182,7 +141,7 @@ void Framebuffer::render() const
 
 	if (!settings.openCL.enabled)
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, pixelData);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, floatPixelData);
 		checkGLError("Could not upload OpenGL texture data");
 	}
 
@@ -204,4 +163,19 @@ void Framebuffer::enableSmoothing(bool state)
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	checkGLError("Could not set OpenGL texture parameters");
+}
+
+int Framebuffer::getWidth() const
+{
+	return width;
+}
+
+int Framebuffer::getHeight() const
+{
+	return height;
+}
+
+GLuint Framebuffer::getTextureId() const
+{
+	return textureId;
 }

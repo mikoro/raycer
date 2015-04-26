@@ -7,12 +7,12 @@
 
 namespace Raycer
 {
-	class RenderTarget;
+	class Image;
 	class Scene;
 
 	struct RaytracerState
 	{
-		RenderTarget* renderTarget = nullptr;
+		Image* image = nullptr;
 		Scene* scene = nullptr;
 
 		int sceneWidth = 0;

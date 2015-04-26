@@ -234,6 +234,12 @@ void Image::setPixel(int index, const Color& color)
 	pixelData[index] = color;
 }
 
+void Image::clear()
+{
+	for (int i = 0; i < length; ++i)
+		pixelData[i] = Color(0.0, 0.0, 0.0, 0.0);
+}
+
 void Image::clear(const Color& color)
 {
 	for (int i = 0; i < length; ++i)

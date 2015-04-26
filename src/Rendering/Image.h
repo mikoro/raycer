@@ -5,8 +5,6 @@
 
 #include <string>
 
-#include "Rendering/RenderTarget.h"
-
 /*
 
 Origin (0, 0) is at the bottom left corner.
@@ -17,7 +15,7 @@ namespace Raycer
 {
 	class Color;
 
-	class Image : public RenderTarget
+	class Image
 	{
 	public:
 
@@ -38,6 +36,7 @@ namespace Raycer
 		void setSize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		void setPixel(int index, const Color& color);
+		void clear();
 		void clear(const Color& color);
 		void applyGamma(double gamma);
 		void swapComponents();
