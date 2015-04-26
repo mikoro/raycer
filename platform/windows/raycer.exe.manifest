@@ -22,7 +22,25 @@
       </requestedPrivileges>
     </security>
   </trustInfo>
-
+  
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity type="win32" name="msvcr120.dll" version="9.9.9.9" processorArchitecture="amd64" />
+    </dependentAssembly>
+  </dependency>
+  
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity type="win32" name="msvcp120.dll" version="9.9.9.9" processorArchitecture="amd64" />
+    </dependentAssembly>
+  </dependency>
+  
+  <dependency>
+    <dependentAssembly>
+      <assemblyIdentity type="win32" name="vcomp120.dll" version="9.9.9.9" processorArchitecture="amd64" />
+    </dependentAssembly>
+  </dependency>
+  
   <dependency>
     <dependentAssembly>
       <assemblyIdentity type="win32" name="glfw.dll" version="9.9.9.9" processorArchitecture="amd64" />
