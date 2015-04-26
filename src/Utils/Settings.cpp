@@ -12,6 +12,8 @@ void Settings::load(const std::string& fileName)
 	iniReader.readFile(fileName);
 
 	general.interactive = iniReader.getValue<bool>("general", "interactive");
+	general.checkGLErrors = iniReader.getValue<bool>("general", "checkGLErrors");
+	general.checkCLErrors = iniReader.getValue<bool>("general", "checkCLErrors");
 
 	openCL.enabled = iniReader.getValue<bool>("openCL", "enabled");
 	openCL.platformId = iniReader.getValue<int>("openCL", "platformId");

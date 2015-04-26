@@ -16,6 +16,8 @@ namespace Raycer
 		struct General
 		{
 			bool interactive;
+			bool checkGLErrors;
+			bool checkCLErrors;
 		} general;
 
 		struct OpenCL

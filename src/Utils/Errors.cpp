@@ -11,18 +11,24 @@
 #include "tinyformat/tinyformat.h"
 
 #include "Utils/Errors.h"
+#include "App.h"
+#include "Utils/Settings.h"
 
 void Raycer::checkCLError(int result, const std::string& message)
 {
-	if (result != CL_SUCCESS)
+	Settings& settings = App::getSettings();
+
+	if (result != CL_SUCCESS && settings.general.checkCLErrors)
 		throw std::runtime_error(tfm::format("%s: %s", message, getCLErrorMessage(result)));
 }
 
 void Raycer::checkGLError(const std::string& message)
 {
+	Settings& settings = App::getSettings();
+
 	int result = glGetError();
 
-	if (result != GL_NO_ERROR)
+	if (result != GL_NO_ERROR && settings.general.checkGLErrors)
 		throw std::runtime_error(tfm::format("%s: %s", message, getGLErrorMessage(result)));
 }
 
