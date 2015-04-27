@@ -23,7 +23,7 @@ Color MarbleTexture::getColor(const Vector3& position, const Vector2& texcoord) 
 {
 	(void)texcoord;
 
-	double n1 = fabs(cos(position.x * 10.0 + perlinNoise.getOctaveNoise(8, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * 15.0));
+	double n1 = fabs(cos(position.x * 10.0 + perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * 15.0));
 	n1 = (1.0 - n1) / 2.0;
 
 	Color marbleWhite(255, 252, 240);

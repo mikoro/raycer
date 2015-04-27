@@ -24,7 +24,5 @@ tekstuurit
  - tekstuurien asetukset sceneen
  
 noiset
- - worley noise
- - gaussian noise
- - poisson disk sampling
- 
+ - value noise
+ - poissoni 3D:ksi

@@ -134,6 +134,7 @@
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
+    <ClCompile Include="src\Utils\CellNoise.cpp" />
     <ClCompile Include="src\Utils\Errors.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
     <ClInclude Include="src\Runners\InteractiveRunner.h" />
     <ClInclude Include="src\Runners\NetworkRunner.h" />
+    <ClInclude Include="src\Utils\CellNoise.h" />
     <ClInclude Include="src\Utils\Errors.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />

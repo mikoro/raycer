@@ -38,7 +38,9 @@ namespace Raycer
 		bool isNormal() const;
 		double dot(const Vector2& v) const;
 		Vector2 reflect(const Vector2& normal) const;
+
 		static Vector2 lerp(const Vector2& v1, const Vector2& v2, double t);
+		static Vector2 abs(const Vector2& v);
 
 		double x;
 		double y;

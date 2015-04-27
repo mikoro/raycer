@@ -42,6 +42,7 @@ namespace Raycer
 		Vector3 reflect(const Vector3& normal) const;
 
 		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
+		static Vector3 abs(const Vector3& v);
 
 		static const Vector3 RIGHT;   // [1 0 0]
 		static const Vector3 UP;      // [0 1 0]

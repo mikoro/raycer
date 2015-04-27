@@ -64,16 +64,17 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 	return 0.5 + n / 2.0;
 }
 
-double PerlinNoise::getOctaveNoise(int octaves, double persistence, double x, double y, double z) const
+double PerlinNoise::getFbmNoise(int octaves, double lacunarity, double persistence, double x, double y, double z) const
 {
 	double result = 0.0;
+	double frequency = 1.0;
+	double amplitude = 1.0;
 
 	for (int i = 0; i < octaves; ++i)
 	{
-		double frequency = pow(2.0, (double)i);
-		double amplitude = pow(persistence, (double)i);
-
 		result += getNoise(x * frequency, y * frequency, z * frequency) * amplitude;
+		frequency *= lacunarity;
+		amplitude *= persistence;
 	}
 
 	return result;

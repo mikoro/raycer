@@ -144,3 +144,8 @@ Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, double t)
 
 	return v1 * (1.0 - t) + v2 * t;
 }
+
+Vector2 Vector2::abs(const Vector2& v)
+{
+	return Vector2(fabs(v.x), fabs(v.y));
+}

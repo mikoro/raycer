@@ -160,6 +160,9 @@
     <ClCompile Include="src\Utils\PoissonDisc.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\CellNoise.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -314,6 +317,9 @@
       <Filter>Raytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\PoissonDisc.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\CellNoise.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

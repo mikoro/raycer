@@ -166,3 +166,8 @@ Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, double t)
 
 	return v1 * (1.0 - t) + v2 * t;
 }
+
+Vector3 Vector3::abs(const Vector3& v)
+{
+	return Vector3(fabs(v.x), fabs(v.y), fabs(v.z));
+}
