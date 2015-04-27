@@ -3,13 +3,13 @@
 
 #pragma once
 
-#include <random>
+#include <vector>
 
 /*
 
 http://graphics.ucsd.edu/courses/cse168_s06/ucsd/cellular_noise.pdf
 
-Returns values between 0.0 - 1.0
+Returns sorted distances to all neighbours (non-normalized)
 
 */
 
@@ -28,24 +28,17 @@ namespace Raycer
 		CellNoise(int seed);
 
 		void seed(int seed);
-		double getNoise2D(CellNoiseType type, int order, int density, double x, double y) const;
-		double getNoise3D(CellNoiseType type, int order, int density, double x, double y, double z) const;
-		double getFbmNoise2D(CellNoiseType type, int order, int density, int octaves, double lacunarity, double persistence, double x, double y) const;
-		double getFbmNoise3D(CellNoiseType type, int order, int density, int octaves, double lacunarity, double persistence, double x, double y, double z) const;
+
+		std::vector<double> getNoise(CellNoiseType type, int density, double x, double y, double z) const;
 
 	private:
 
-		int getHashcode2D(int x, int y) const;
-		int getHashcode3D(int x, int y, int z) const;
+		int getHashcode(int x, int y, int z) const;
 
-		static double euclideanDistance2D(const Vector2& v1, const Vector2& v2);
-		static double euclideanDistance3D(const Vector3& v1, const Vector3& v2);
-		static double euclideanDistanceSquared2D(const Vector2& v1, const Vector2& v2);
-		static double euclideanDistanceSquared3D(const Vector3& v1, const Vector3& v2);
-		static double manhattanDistance2D(const Vector2& v1, const Vector2& v2);
-		static double manhattanDistance3D(const Vector3& v1, const Vector3& v2);
-		static double chebyshevDistance2D(const Vector2& v1, const Vector2& v2);
-		static double chebyshevDistance3D(const Vector3& v1, const Vector3& v2);
+		static double euclideanDistance(const Vector3& v1, const Vector3& v2);
+		static double euclideanDistanceSquared(const Vector3& v1, const Vector3& v2);
+		static double manhattanDistance(const Vector3& v1, const Vector3& v2);
+		static double chebyshevDistance(const Vector3& v1, const Vector3& v2);
 
 		int m_seed;
 	};
