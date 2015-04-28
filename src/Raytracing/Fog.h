@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "cereal/cereal.hpp"
-
 #include "Math/Color.h"
 
 namespace Raycer
@@ -22,14 +20,5 @@ namespace Raycer
 			double distance = 0.0;
 			double steepness = 0.0;
 			Color color;
-
-			template<class Archive>
-			void serialize(Archive& ar)
-			{
-				ar(CEREAL_NVP(enabled),
-					CEREAL_NVP(distance),
-					CEREAL_NVP(steepness),
-					CEREAL_NVP(color));
-			}
 	};
 }

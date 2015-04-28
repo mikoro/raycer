@@ -6,8 +6,6 @@
 #include <string>
 #include <vector>
 
-#include "cereal/cereal.hpp"
-
 #include "Raytracing/Primitive.h"
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
@@ -27,15 +25,5 @@ namespace Raycer
 		EulerAngle orientation;
 
 		std::vector<Triangle> triangles;
-
-		template<class Archive>
-		void serialize(Archive& ar)
-		{
-			ar(CEREAL_NVP(meshFilePath),
-				CEREAL_NVP(position),
-				CEREAL_NVP(orientation),
-				CEREAL_NVP(materialId),
-				CEREAL_NVP(texcoordScale));
-		}
 	};
 }

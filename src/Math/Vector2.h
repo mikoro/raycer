@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "cereal/cereal.hpp"
-
 namespace Raycer
 {
 	class Vector2
@@ -44,12 +42,5 @@ namespace Raycer
 
 		double x;
 		double y;
-
-		template<class Archive>
-		void serialize(Archive& ar)
-		{
-			ar(CEREAL_NVP(x),
-				CEREAL_NVP(y));
-		}
 	};
 }

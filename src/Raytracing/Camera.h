@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "cereal/cereal.hpp"
-
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
 
@@ -36,14 +34,6 @@ namespace Raycer
 		double imagePlaneDistance = 1.0;
 		double imagePlaneWidth = 0.0;
 		double imagePlaneHeight = 0.0;
-
-		template<class Archive>
-		void serialize(Archive& ar)
-		{
-			ar(CEREAL_NVP(position),
-				CEREAL_NVP(orientation),
-				CEREAL_NVP(fov));
-		}
 
 	private:
 

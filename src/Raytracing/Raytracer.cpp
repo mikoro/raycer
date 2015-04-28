@@ -155,24 +155,25 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 		}
 
 		Color lightColor = calculateLighting(scene, ray, rayCount, interrupted);
-		ray.color = (reflectedColor + lightColor) * texture->getColor(ray.intersection.position, ray.intersection.texcoord);
+		ray.color = (reflectedColor + lightColor) * texture->getColor(ray.intersection.position, ray.intersection.texcoord) * texture->intensity;
 	}
 }
 
 Color Raytracer::calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
 {
+	(void)interrupted;
+
 	Color lightColor(0.0, 0.0, 0.0);
 
 	Material* material = scene.materialsMap[ray.intersection.materialId];
 
-	for (const Light& light : scene.lights)
-	{
-		if (interrupted)
-			break;
+	for (const AmbientLight& ambientLight : scene.lights.ambientLights)
+		lightColor += ambientLight.color * ambientLight.intensity;
 
-		Vector3 vectorToLight = light.position - ray.intersection.position;
-		Vector3 directionToLight = vectorToLight.normalized();
-		double distanceToLight = vectorToLight.length();
+	for (const DirectionalLight& light : scene.lights.directionalLights)
+	{
+		Vector3 directionToLight = -light.direction;
+		double distanceToLight = 99999999.0;
 		Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
 		++rayCount;
 

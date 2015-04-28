@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "cereal/cereal.hpp"
-
 /*
 
 yaw = rotation around y-axis [0 1 0]
@@ -39,13 +37,5 @@ namespace Raycer
 		double yaw;
 		double pitch;
 		double roll;
-
-		template<class Archive>
-		void serialize(Archive& ar)
-		{
-			ar(CEREAL_NVP(yaw),
-				CEREAL_NVP(pitch),
-				CEREAL_NVP(roll));
-		}
 	};
 }

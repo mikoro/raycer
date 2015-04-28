@@ -114,18 +114,14 @@
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
-    <ClCompile Include="src\Raytracing\CheckerTexture.cpp" />
-    <ClCompile Include="src\Raytracing\ColorTexture.cpp" />
     <ClCompile Include="src\Raytracing\Fog.cpp" />
-    <ClCompile Include="src\Raytracing\ImageTexture.cpp" />
-    <ClCompile Include="src\Raytracing\MarbleTexture.cpp" />
     <ClCompile Include="src\Raytracing\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Plane.cpp" />
     <ClCompile Include="src\Raytracing\Ray.cpp" />
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
     <ClCompile Include="src\Raytracing\Sphere.cpp" />
-    <ClCompile Include="src\Raytracing\WoodTexture.cpp" />
+    <ClCompile Include="src\Raytracing\Textures.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\GLHelper.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
@@ -162,13 +158,9 @@
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />
-    <ClInclude Include="src\Raytracing\CheckerTexture.h" />
-    <ClInclude Include="src\Raytracing\ColorTexture.h" />
     <ClInclude Include="src\Raytracing\Fog.h" />
-    <ClInclude Include="src\Raytracing\ImageTexture.h" />
     <ClInclude Include="src\Raytracing\Intersection.h" />
-    <ClInclude Include="src\Raytracing\Light.h" />
-    <ClInclude Include="src\Raytracing\MarbleTexture.h" />
+    <ClInclude Include="src\Raytracing\Lights.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
     <ClInclude Include="src\Raytracing\Mesh.h" />
     <ClInclude Include="src\Raytracing\Pixel.h" />
@@ -179,8 +171,7 @@
     <ClInclude Include="src\Raytracing\RaytracerState.h" />
     <ClInclude Include="src\Raytracing\Scene.h" />
     <ClInclude Include="src\Raytracing\Sphere.h" />
-    <ClInclude Include="src\Raytracing\Texture.h" />
-    <ClInclude Include="src\Raytracing\WoodTexture.h" />
+    <ClInclude Include="src\Raytracing\Textures.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\GLHelper.h" />
     <ClInclude Include="src\Rendering\Image.h" />
@@ -196,6 +187,7 @@
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
+    <ClInclude Include="src\Utils\Serialization.h" />
     <ClInclude Include="src\Utils\Settings.h" />
   </ItemGroup>
   <ItemGroup>

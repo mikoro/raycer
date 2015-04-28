@@ -22,9 +22,6 @@
     <Filter Include="Raytracing">
       <UniqueIdentifier>{99754385-78c4-4170-a243-c1513a21c797}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Raytracing\Textures">
-      <UniqueIdentifier>{d73b8e7d-f944-4896-b047-8c84164fb12e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Raytracing\Primitives">
       <UniqueIdentifier>{27f5fe11-303d-4371-a98d-afd1d77015bf}</UniqueIdentifier>
     </Filter>
@@ -103,12 +100,6 @@
     <ClCompile Include="src\Raytracing\Scene.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\ImageTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\ColorTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Mesh.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
@@ -120,12 +111,6 @@
     </ClCompile>
     <ClCompile Include="src\Utils\PerlinNoise.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\WoodTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\MarbleTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\MovingAverage.cpp">
       <Filter>Math</Filter>
@@ -148,9 +133,6 @@
     <ClCompile Include="src\Raytracing\Fog.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\CheckerTexture.cpp">
-      <Filter>Raytracing\Textures</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Image.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -162,6 +144,9 @@
     </ClCompile>
     <ClCompile Include="src\Utils\CellNoise.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Textures.cpp">
+      <Filter>Raytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -226,9 +211,6 @@
     <ClInclude Include="src\Raytracing\Intersection.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Light.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Material.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
@@ -240,15 +222,6 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Scene.h">
       <Filter>Raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\ImageTexture.h">
-      <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Texture.h">
-      <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\ColorTexture.h">
-      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Mesh.h">
       <Filter>Raytracing\Primitives</Filter>
@@ -267,12 +240,6 @@
     </ClInclude>
     <ClInclude Include="src\Utils\PerlinNoise.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\WoodTexture.h">
-      <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\MarbleTexture.h">
-      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\MovingAverage.h">
       <Filter>Math</Filter>
@@ -301,9 +268,6 @@
     <ClInclude Include="src\Raytracing\Fog.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\CheckerTexture.h">
-      <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -321,6 +285,15 @@
     </ClInclude>
     <ClInclude Include="src\Utils\CellNoise.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Lights.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\Serialization.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Textures.h">
+      <Filter>Raytracing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

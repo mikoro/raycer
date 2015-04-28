@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include "cereal/cereal.hpp"
-
 #include "Math/Color.h"
 
 namespace Raycer
@@ -18,16 +16,5 @@ namespace Raycer
 		double specularity = 1.0;
 		double shininess = 1.0;
 		double reflectivity = 1.0;
-
-		template<class Archive>
-		void serialize(Archive& ar)
-		{
-			ar(CEREAL_NVP(id),
-				CEREAL_NVP(textureId),
-				CEREAL_NVP(diffuseness),
-				CEREAL_NVP(specularity),
-				CEREAL_NVP(shininess),
-				CEREAL_NVP(reflectivity));
-		}
 	};
 }

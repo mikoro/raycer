@@ -1,12 +1,14 @@
 logon piirtäminen
 
 lisää primitiivejä
+ - primitiivit omaan kansioon
  - laatikko
  - sylinteri
  - kolmio
  - suorakulmio
  - ympyrä
  - implisiittinen
+ - CSG
 
 kamera
  - aperture & dof
@@ -20,9 +22,9 @@ valot
  - suuntaavuus (eteen/taakse, light cone)
 
 tekstuurit
+ - tekstuurit omaan kansioon
  - tulitekstuuri
  - tekstuurien asetukset sceneen
  
 noiset
  - value noise
- - poissoni 3D:ksi

@@ -8,6 +8,9 @@ using namespace Raycer;
 
 void CLScene::convertSceneData(const Scene& scene)
 {
+	(void)scene;
+
+	/*
 	camera.position.s[0]= (float)scene.camera.position.x;
 	camera.position.s[1]= (float)scene.camera.position.y;
 	camera.position.s[2]= (float)scene.camera.position.z;
@@ -95,4 +98,5 @@ void CLScene::convertSceneData(const Scene& scene)
 
 		spheres.push_back(clSphere);
 	}
+	*/
 }

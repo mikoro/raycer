@@ -3,6 +3,7 @@
 
 #include <random>
 #include <algorithm>
+#include <functional>
 
 #include "Utils/CellNoise.h"
 #include "Math/Vector2.h"
@@ -64,7 +65,7 @@ std::vector<double> CellNoise::getNoise(CellNoiseType type, int density, double 
 
 				int pointCount = randomPoisson(mt);
 
-				for (int i = 0; i < 5; ++i)
+				for (int i = 0; i < pointCount; ++i)
 				{
 					Vector3 newPoint;
 

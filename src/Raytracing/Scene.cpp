@@ -9,6 +9,7 @@
 #include "Raytracing/Scene.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/Serialization.h"
 
 using namespace Raycer;
 
@@ -54,20 +55,29 @@ void Scene::initialize()
 	materialsMap.clear();
 	primitivesList.clear();
 
-	for (ColorTexture& colorTexture : colorTextures)
-		texturesList.push_back(&colorTexture);
+	for (ColorTexture& texture : textures.colorTextures)
+		texturesList.push_back(&texture);
 
-	for (CheckerTexture& checkerTexture : checkerTextures)
-		texturesList.push_back(&checkerTexture);
+	for (CheckerTexture& texture : textures.checkerTextures)
+		texturesList.push_back(&texture);
 
-	for (ImageTexture& imageTexture : imageTextures)
-		texturesList.push_back(&imageTexture);
+	for (ImageTexture& texture : textures.imageTextures)
+		texturesList.push_back(&texture);
 
-	for (WoodTexture& woodTexture : woodTextures)
-		texturesList.push_back(&woodTexture);
+	for (PerlinNoiseTexture& texture : textures.perlinNoiseTextures)
+		texturesList.push_back(&texture);
 
-	for (MarbleTexture& marbleTexture : marbleTextures)
-		texturesList.push_back(&marbleTexture);
+	for (CellNoiseTexture& texture : textures.cellNoiseTextures)
+		texturesList.push_back(&texture);
+
+	for (MarbleTexture& texture : textures.marbleTextures)
+		texturesList.push_back(&texture);
+
+	for (WoodTexture& texture : textures.woodTextures)
+		texturesList.push_back(&texture);
+
+	for (FireTexture& texture : textures.fireTextures)
+		texturesList.push_back(&texture);
 
 	for (Texture* texture : texturesList)
 	{
@@ -78,13 +88,13 @@ void Scene::initialize()
 	for (Material& material : materials)
 		materialsMap[material.id] = &material;
 
-	for (Sphere& sphere : spheres)
+	for (Sphere& sphere : primitives.spheres)
 		primitivesList.push_back(&sphere);
 
-	for (Plane& plane : planes)
+	for (Plane& plane : primitives.planes)
 		primitivesList.push_back(&plane);
 
-	for (Mesh& mesh : meshes)
+	for (Mesh& mesh : primitives.meshes)
 		primitivesList.push_back(&mesh);
 
 	for (Primitive* primitive : primitivesList)
@@ -147,31 +157,32 @@ Scene Scene::createTestScene()
 	t3.id = 3;
 	t3.color = Color(0.0, 0.0, 0.5);
 
-	scene.colorTextures.push_back(t0);
-	scene.colorTextures.push_back(t1);
-	scene.colorTextures.push_back(t2);
-	scene.colorTextures.push_back(t3);
+	scene.textures.colorTextures.push_back(t0);
+	scene.textures.colorTextures.push_back(t1);
+	scene.textures.colorTextures.push_back(t2);
+	scene.textures.colorTextures.push_back(t3);
 
 	CheckerTexture t4;
 	t4.id = 4;
 
-	scene.checkerTextures.push_back(t4);
+	scene.textures.checkerTextures.push_back(t4);
 
 	ImageTexture t5;
 	t5.id = 5;
 	t5.imageFilePath = "data/images/grass.jpg";
 
-	scene.imageTextures.push_back(t5);
+	scene.textures.imageTextures.push_back(t5);
 
 	WoodTexture t6;
 	t6.id = 6;
 
-	scene.woodTextures.push_back(t6);
+	scene.textures.woodTextures.push_back(t6);
 
 	MarbleTexture t7;
 	t7.id = 7;
+	t7.intensity = 0.2;
 
-	scene.marbleTextures.push_back(t7);
+	scene.textures.marbleTextures.push_back(t7);
 	
 	// p1
 	Material m0;
@@ -185,7 +196,7 @@ Scene Scene::createTestScene()
 	// s1
 	Material m1;
 	m1.id = 1;
-	m1.textureId = 4;
+	m1.textureId = 6;
 	m1.diffuseness = 1.0;
 	m1.specularity = 0.0;
 	m1.shininess = 2.0;
@@ -229,7 +240,7 @@ Scene Scene::createTestScene()
 	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	p1.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.planes.push_back(p1);
+	scene.primitives.planes.push_back(p1);
 
 	Sphere s1;
 	s1.materialId = 1;
@@ -247,16 +258,22 @@ Scene Scene::createTestScene()
 	s3.position = Vector3(-2.5, 1.0, -5.0);
 	s3.radius = 1.0;
 
-	//scene.spheres.push_back(s1);
-	//scene.spheres.push_back(s2);
-	//scene.spheres.push_back(s3);
+	scene.primitives.spheres.push_back(s1);
+	scene.primitives.spheres.push_back(s2);
+	scene.primitives.spheres.push_back(s3);
 
-	Light l1;
-	l1.position = Vector3(2.0, 10.0, 5.0);
-	l1.color = Color(1.0, 1.0, 1.0);
-	l1.intensity = 1.0;
+	AmbientLight l1;
+	l1.color = Color::WHITE;
+	l1.intensity = 0.01;
 
-	scene.lights.push_back(l1);
+	scene.lights.ambientLights.push_back(l1);
+
+	DirectionalLight l2;
+	l2.color = Color(192, 191, 173);
+	l2.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
+	l2.intensity = 1.0;
+
+	scene.lights.directionalLights.push_back(l2);
 
 	return scene;
 }
