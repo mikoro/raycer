@@ -1,7 +1,6 @@
 logon piirtäminen
 
 lisää primitiivejä
- - primitiivit omaan kansioon
  - laatikko
  - sylinteri
  - kolmio
@@ -21,10 +20,5 @@ valot
  - vaimentuminen
  - suuntaavuus (eteen/taakse, light cone)
 
-tekstuurit
- - tekstuurit omaan kansioon
- - tulitekstuuri
- - tekstuurien asetukset sceneen
- 
 noiset
- - value noise
+ - value noise (gaussian?)
