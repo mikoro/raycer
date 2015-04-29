@@ -6,7 +6,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="tests\Main.cpp" />
     <ClCompile Include="tests\Tests\Vector3Test.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -19,5 +18,12 @@
     <ClCompile Include="tests\Tests\EulerAngleTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="tests\Tests\ColorGradientTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\Tests\ImageTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="tests\TestMain.cpp" />
   </ItemGroup>
 </Project>

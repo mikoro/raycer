@@ -172,6 +172,9 @@
     <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\ColorGradient.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -345,6 +348,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\Triangle.h">
       <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\ColorGradient.h">
+      <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
