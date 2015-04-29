@@ -23,5 +23,20 @@ TEST_CASE("Image functionality", "[image]")
 		}
 	}
 
-	image.saveAs("test1.png");
+	image.saveAs("image1.png");
+	image.saveAs("image1.tga");
+	image.saveAs("image1.bmp");
+	image.saveAs("image1.hdr");
+
+	image.load("image1.png");
+	image.saveAs("image2.png");
+
+	image.load("image1.tga");
+	image.saveAs("image2.tga");
+
+	image.load("image1.bmp");
+	image.saveAs("image2.bmp");
+
+	image.load("image1.hdr");
+	image.saveAs("image2.hdr");
 }

@@ -5,10 +5,11 @@
 
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/PerlinNoise.h"
-#include "Math/Color.h"
+#include "Math/ColorGradient.h"
 
 namespace Raycer
 {
+	class Color;
 	class Vector2;
 	class Vector3;
 
@@ -22,12 +23,10 @@ namespace Raycer
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
 		int seed = 1;
-		Color baseColor;
-		Color fireColor1;
-		Color fireColor2;
 
 	private:
 
 		PerlinNoise perlinNoise;
+		ColorGradient colorGradient;
 	};
 }

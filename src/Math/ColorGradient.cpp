@@ -16,27 +16,29 @@ void ColorGradient::addSegment(const Color& start, const Color& end, int length)
 	segment.startColor = start;
 	segment.endColor = end;
 	segment.startIndex = totalLength;
-	segment.endIndex = (totalLength += length);
+	segment.endIndex = totalLength + length;
 
 	segments.push_back(segment);
+
+	totalLength += length;
 }
 
-Color ColorGradient::getColor(double alpha)
+Color ColorGradient::getColor(double alpha) const
 {
 	assert(alpha >= 0.0 && alpha <= 1.0);
 
 	Color result;
-	int index = (int)(alpha * totalLength + 0.5);
+	int index = (int)ceil(alpha * (double)totalLength);
 
-	for (ColorGradientSegment& segment : segments)
+	for (const ColorGradientSegment& segment : segments)
 	{
 		if (index >= segment.startIndex && index <= segment.endIndex)
 		{
-			int segmentLength = segment.endIndex - segment.startIndex;
-			int segmentIndex = index - segment.startIndex;
-			double interpolation = (double)segmentIndex / (double)segmentLength;
+			double alphaStart = (double)segment.startIndex / (double)totalLength;
+			double alphaEnd = (double)segment.endIndex / (double)totalLength;
+			double segmentAlpha = (alpha - alphaStart) / (alphaEnd - alphaStart);
 
-			result = Color::lerp(segment.startColor, segment.endColor, interpolation);
+			result = Color::lerp(segment.startColor, segment.endColor, segmentAlpha);
 
 			break;
 		}

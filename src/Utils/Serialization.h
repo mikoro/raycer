@@ -348,6 +348,7 @@ namespace Raycer
 	void serialize(Archive& a, FireTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed));
 	}
 }

@@ -24,7 +24,7 @@ namespace Raycer
 
 		void addSegment(const Color& start, const Color& end, int length);
 
-		Color getColor(double alpha);
+		Color getColor(double alpha) const;
 
 	private:
 

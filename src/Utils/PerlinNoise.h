@@ -10,7 +10,8 @@
 http://mrl.nyu.edu/~perlin/noise/
 http://mrl.nyu.edu/~perlin/paper445.pdf
 
-Returns values between 0.0 - 1.0
+getNoise returns values between 0.0 - 1.0
+getFbmNoise return values between 0.0 - inf
 
 */
 

@@ -61,7 +61,7 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 		lerp(u, grad(permutations[AB + 1], x, y - 1, z - 1),
 		grad(permutations[BB + 1], x - 1, y - 1, z - 1))));
 
-	return 0.5 + n / 2.0;
+	return std::min(0.5 + n / 2.0, 1.0); // move and clamp to 0.0-1.0 range
 }
 
 double PerlinNoise::getFbmNoise(int octaves, double lacunarity, double persistence, double x, double y, double z) const
