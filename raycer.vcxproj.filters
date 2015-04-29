@@ -196,6 +196,9 @@
     <ClCompile Include="src\Tests\Vector3Test.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\StringUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -372,6 +375,9 @@
     </ClInclude>
     <ClInclude Include="src\Math\ColorGradient.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\StringUtils.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

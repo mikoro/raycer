@@ -34,9 +34,13 @@ namespace Raycer
 	{
 	public:
 
-		void loadFromString(const std::string& text);
 		void loadFromFile(const std::string& fileName);
-		void saveAs(const std::string& fileName) const;
+		void loadFromJsonString(const std::string& text);
+		void loadFromXmlString(const std::string& text);
+		void saveToFile(const std::string& fileName) const;
+		std::string saveToJsonString() const;
+		std::string saveToXmlString() const;
+
 		void initialize();
 		void validate();
 

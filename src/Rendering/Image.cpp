@@ -14,6 +14,7 @@
 #include "Rendering/Image.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/StringUtils.h"
 #include "Math/Color.h"
 #include "Math/MathUtils.h"
 
@@ -135,21 +136,13 @@ void Image::load(const std::string& fileName)
 	}
 }
 
-namespace
-{
-	bool endsWith(const std::string& text, const std::string& suffix)
-	{
-		return text.rfind(suffix) == (text.size() - suffix.size());
-	}
-}
-
 void Image::saveAs(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
 
 	int result = 0;
 
-	if (endsWith(fileName, ".png") || endsWith(fileName, ".bmp") || endsWith(fileName, ".tga"))
+	if (StringUtils::endsWith(fileName, ".png") || StringUtils::endsWith(fileName, ".bmp") || StringUtils::endsWith(fileName, ".tga"))
 	{
 		std::vector<uint32_t> data(length);
 
@@ -159,14 +152,14 @@ void Image::saveAs(const std::string& fileName) const
 				data[(height - 1 - y) * width + x] = pixelData[y * width + x].getAbgrValue(); // flip vertically
 		}
 
-		if (endsWith(fileName, ".png"))
+		if (StringUtils::endsWith(fileName, ".png"))
 			result = stbi_write_png(fileName.c_str(), width, height, 4, &data[0], width * sizeof(uint32_t));
-		else if (endsWith(fileName, ".bmp"))
+		else if (StringUtils::endsWith(fileName, ".bmp"))
 			result = stbi_write_bmp(fileName.c_str(), width, height, 4, &data[0]);
-		else if (endsWith(fileName, ".tga"))
+		else if (StringUtils::endsWith(fileName, ".tga"))
 			result = stbi_write_tga(fileName.c_str(), width, height, 4, &data[0]);
 	}
-	else if (endsWith(fileName, ".hdr"))
+	else if (StringUtils::endsWith(fileName, ".hdr"))
 	{
 		std::vector<float> data(length * 3);
 

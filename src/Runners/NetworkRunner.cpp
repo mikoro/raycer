@@ -355,7 +355,7 @@ void NetworkRunner::receiveJobs()
 
 			std::cout << "\nJob received!\n\n";
 
-			job.scene.loadFromString(bodyString);
+			job.scene.loadFromJsonString(bodyString);
 
 			jobQueueMutex.lock();
 			jobQueue.push(job);
@@ -533,7 +533,7 @@ void NetworkRunner::receiveResults()
 			ss.str(match[2]);
 			ss >> pixelCount;
 
-			assert(dataSize == pixelCount * 4);
+			assert(dataSize == pixelCount * sizeof(Color));
 
 			ImagePart imagePart;
 			imagePart.pixelOffset = pixelOffset;

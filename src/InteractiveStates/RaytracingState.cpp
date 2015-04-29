@@ -55,12 +55,12 @@ void RaytracingState::update(double timeStep)
 	scene.camera.precalculate();
 
 	if (runner.keyWasPressed(GLFW_KEY_F7))
-		scene.saveAs("scene.json");
+		scene.saveToFile("scene.json");
 
 	if (runner.keyWasPressed(GLFW_KEY_F8))
 	{
 		runner.pause();
-		scene.saveAs("temp.json");
+		scene.saveToFile("temp.json");
 #ifdef _WIN32
 		ShellExecuteA(NULL, "open", "raycer.exe", "-s temp.json --non-interactive --view", NULL, SW_SHOWNORMAL);
 #endif

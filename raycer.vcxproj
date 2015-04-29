@@ -194,6 +194,7 @@
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
+    <ClCompile Include="src\Utils\StringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
@@ -255,6 +256,7 @@
     <ClInclude Include="src\Utils\PoissonDisc.h" />
     <ClInclude Include="src\Utils\Serialization.h" />
     <ClInclude Include="src\Utils\Settings.h" />
+    <ClInclude Include="src\Utils\StringUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc" />

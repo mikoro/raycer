@@ -3,49 +3,115 @@
 
 #include <fstream>
 
-#include "cereal/archives/json.hpp"
 #include "cereal/types/vector.hpp"
+#include "cereal/archives/json.hpp"
+#include "cereal/archives/xml.hpp"
+#include "cereal/archives/binary.hpp"
 
 #include "Raytracing/Scene.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/StringUtils.h"
 #include "Utils/Serialization.h"
 
 using namespace Raycer;
 
-void Scene::loadFromString(const std::string& text)
+void Scene::loadFromFile(const std::string& fileName)
 {
-	App::getLog().logInfo("Loading scene from string data");
+	App::getLog().logInfo("Loading scene from %s", fileName);
+
+	std::ifstream file(fileName, std::ios::binary);
+
+	if (!file.good())
+		throw std::runtime_error("Could not open the scene file");
+
+	if (StringUtils::endsWith(fileName, ".json"))
+	{
+		cereal::JSONInputArchive archive(file);
+		archive(*this);
+	}
+	else if (StringUtils::endsWith(fileName, ".xml"))
+	{
+		cereal::XMLInputArchive archive(file);
+		archive(*this);
+	}
+	else if (StringUtils::endsWith(fileName, ".bin"))
+	{
+		// TODO: will not compile
+		//cereal::BinaryInputArchive archive(file);
+		//archive(*this);
+	}
+	else
+		throw std::runtime_error("Unsupported scene file format");
+}
+
+void Scene::loadFromJsonString(const std::string& text)
+{
+	App::getLog().logInfo("Loading scene from JSON string");
 
 	std::stringstream ss(text);
 	cereal::JSONInputArchive archive(ss);
 	archive(*this);
 }
 
-void Scene::loadFromFile(const std::string& fileName)
+void Scene::loadFromXmlString(const std::string& text)
 {
-	App::getLog().logInfo("Loading scene from %s", fileName);
+	App::getLog().logInfo("Loading scene from XML string");
 
-	std::ifstream file(fileName);
-
-	if (!file.good())
-		throw std::runtime_error("Could not open the scene file");
-
-	cereal::JSONInputArchive archive(file);
+	std::stringstream ss(text);
+	cereal::XMLInputArchive archive(ss);
 	archive(*this);
 }
 
-void Scene::saveAs(const std::string& fileName) const
+
+void Scene::saveToFile(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving scene to %s", fileName);
 
-	std::ofstream file(fileName);
+	std::ofstream file(fileName, std::ios::binary);
 
 	if (!file.good())
 		throw std::runtime_error("Could not open the scene file");
 
-	cereal::JSONOutputArchive archive(file);
-	archive(cereal::make_nvp("scene", *this));
+	if (StringUtils::endsWith(fileName, ".json"))
+	{
+		cereal::JSONOutputArchive archive(file);
+		archive(cereal::make_nvp("scene", *this));
+	}
+	else if (StringUtils::endsWith(fileName, ".xml"))
+	{
+		cereal::XMLOutputArchive archive(file);
+		archive(cereal::make_nvp("scene", *this));
+	}
+	else if (StringUtils::endsWith(fileName, ".bin"))
+	{
+		//cereal::BinaryOutputArchive archive(file);
+		//archive(cereal::make_nvp("scene", *this));
+	}
+	else
+		throw std::runtime_error("Unsupported scene file format");
+}
+
+std::string Scene::saveToJsonString() const
+{
+	App::getLog().logInfo("Saving the scene to JSON string");
+
+	std::stringstream ss;
+	cereal::JSONOutputArchive archive(ss);
+	archive(*this);
+
+	return ss.str();
+}
+
+std::string Scene::saveToXmlString() const
+{
+	App::getLog().logInfo("Saving the scene to XML string");
+
+	std::stringstream ss;
+	cereal::XMLOutputArchive archive(ss);
+	archive(*this);
+
+	return ss.str();
 }
 
 void Scene::initialize()
