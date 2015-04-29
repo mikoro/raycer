@@ -34,6 +34,9 @@
     <Filter Include="Raytracing\Textures">
       <UniqueIdentifier>{9786b36f-6f8d-405f-a1c0-325c839b331d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Tests">
+      <UniqueIdentifier>{092f7e45-4acb-4fe5-b817-f311ac78a8de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -174,6 +177,24 @@
     </ClCompile>
     <ClCompile Include="src\Math\ColorGradient.cpp">
       <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\ColorGradientTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\EulerAngleTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\ImageTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\MathUtilsTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\Matrix4x4Test.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\Vector3Test.cpp">
+      <Filter>Tests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

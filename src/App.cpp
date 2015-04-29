@@ -22,11 +22,18 @@
 #include <windows.h>
 #endif
 
+#define CATCH_CONFIG_RUNNER
+#include "catch/catch.hpp"
+
 using namespace Raycer;
 
 int main(int argc, char** argv)
 {
+#ifdef RUN_UNIT_TESTS
+	return Catch::Session().run(argc, argv);
+#else
 	return App().run(argc, argv);
+#endif
 }
 
 #ifdef _WIN32
