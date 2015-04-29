@@ -12,6 +12,7 @@ using namespace Raycer;
 
 void FireTexture::initialize()
 {
+	perlinNoise.seed(seed);
 }
 
 Color FireTexture::getColor(const Vector3& position, const Vector2& texcoord) const
@@ -19,7 +20,13 @@ Color FireTexture::getColor(const Vector3& position, const Vector2& texcoord) co
 	(void)position;
 	(void)texcoord;
 
-	return Color();
+	double n1 = perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 5.0, position.y * 5.0, position.z * 5.0);
+	//n1 = n1 * n1 * n1;
+
+	if (n1 < 0.9)
+		n1 /= 5.0;
+
+	return Color(n1, n1, n1);
 }
 
 double FireTexture::getValue(const Vector3& position, const Vector2& texcoord) const

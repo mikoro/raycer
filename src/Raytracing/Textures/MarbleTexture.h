@@ -21,8 +21,12 @@ namespace Raycer
 		Color getColor(const Vector3& position, const Vector2& texcoord) const;
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
-		Color marbleColor;
-		Color streakColor;
+		int seed = 1;
+		Color marbleColor = Color(255, 252, 240);
+		Color streakColor = Color(0, 33, 71);
+		double density = 10.0;
+		double swirliness = 15.0;
+		double transparency = 2.0;
 
 	private:
 

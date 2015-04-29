@@ -324,14 +324,24 @@ namespace Raycer
 	void serialize(Archive& a, MarbleTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("marbleColor", b.marbleColor),
+			cereal::make_nvp("streakColor", b.streakColor),
+			cereal::make_nvp("density", b.density),
+			cereal::make_nvp("swirliness", b.swirliness),
+			cereal::make_nvp("transparency", b.transparency));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, WoodTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("woodColor", b.woodColor),
+			cereal::make_nvp("density", b.density),
+			cereal::make_nvp("bumpiness", b.bumpiness));
 	}
 
 	template<class Archive>

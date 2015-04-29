@@ -12,20 +12,20 @@ using namespace Raycer;
 
 void MarbleTexture::initialize()
 {
+	perlinNoise.seed(seed);
 }
 
 Color MarbleTexture::getColor(const Vector3& position, const Vector2& texcoord) const
 {
 	(void)texcoord;
 
-	double n1 = fabs(cos(position.x * 10.0 + perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * 15.0));
-	n1 = (1.0 - n1) / 2.0;
+	double n1 = fabs(cos(position.x * density + perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * swirliness));
+	n1 = (1.0 - n1) / transparency;
 
-	Color marbleWhite(255, 252, 240);
-	Color oxfordBlue(0, 33, 71);
-	oxfordBlue.a = n1;
+	Color streakColor1(streakColor);
+	streakColor1.a = n1;
 
-	return Color::alphaBlend(marbleWhite, oxfordBlue);
+	return Color::alphaBlend(marbleColor, streakColor1);
 }
 
 double MarbleTexture::getValue(const Vector3& position, const Vector2& texcoord) const

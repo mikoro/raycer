@@ -21,9 +21,10 @@ namespace Raycer
 		Color getColor(const Vector3& position, const Vector2& texcoord) const;
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
-		Color color1;
-		Color color2;
-		Color color3;
+		int seed = 1;
+		Color baseColor;
+		Color fireColor1;
+		Color fireColor2;
 
 	private:
 

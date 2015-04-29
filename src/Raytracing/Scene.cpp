@@ -180,9 +180,13 @@ Scene Scene::createTestScene()
 
 	MarbleTexture t7;
 	t7.id = 7;
-	t7.intensity = 0.2;
 
 	scene.textures.marbleTextures.push_back(t7);
+
+	FireTexture t8;
+	t8.id = 8;
+
+	scene.textures.fireTextures.push_back(t8);
 	
 	// p1
 	Material m0;
@@ -214,11 +218,11 @@ Scene Scene::createTestScene()
 	// s3
 	Material m3;
 	m3.id = 3;
-	m3.textureId = 3;
+	m3.textureId = 8;
 	m3.diffuseness = 1.0;
-	m3.specularity = 1.0;
-	m3.shininess = 8.0;
-	m3.reflectivity = 1.0;
+	m3.specularity = 0.0;
+	m3.shininess = 0.0;
+	m3.reflectivity = 0.0;
 
 	Material m4;
 	m4.id = 4;
