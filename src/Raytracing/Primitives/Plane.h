@@ -3,12 +3,12 @@
 
 #pragma once
 
-#include "Raytracing/Primitive.h"
+#include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
 {
-	class Sphere : public Primitive
+	class Plane : public Primitive
 	{
 	public:
 
@@ -16,6 +16,11 @@ namespace Raycer
 		void intersect(Ray& ray) const;
 
 		Vector3 position;
-		double radius = 1.0;
+		Vector3 normal;
+
+	private:
+
+		Vector3 uAxis;
+		Vector3 vAxis;
 	};
 }

@@ -1,10 +1,16 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Ray.h"
 
 using namespace Raycer;
 
-Ray::Ray(const Vector3& origin_, const Vector3& direction_, int reflectionCount_) : origin(origin_), direction(direction_), reflectionCount(reflectionCount_)
+void Mesh::initialize()
 {
+}
+
+void Mesh::intersect(Ray& ray) const
+{
+	(void)ray;
 }

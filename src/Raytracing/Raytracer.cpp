@@ -174,7 +174,7 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, int& rayCount, std::a
 	{
 		Vector3 directionToLight = -light.direction;
 		double distanceToLight = 99999999.0;
-		Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight);
+		Ray rayToLight = Ray(ray.intersection.position + directionToLight * rayStartOffset, directionToLight, 0);
 		++rayCount;
 
 		for (const Primitive* primitive : scene.primitivesList)

@@ -123,5 +123,5 @@ Ray Camera::getRay(double x, double y) const
 	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 	Vector3 rayDirection = (imagePlanePixelPosition - position).normalized();
 
-	return Ray(position, rayDirection);
+	return Ray(position, rayDirection, 0);
 }

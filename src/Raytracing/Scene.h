@@ -8,13 +8,22 @@
 
 #include "Raytracing/Camera.h"
 #include "Raytracing/Fog.h"
-#include "Raytracing/Textures.h"
+#include "Raytracing/Textures/Texture.h"
+#include "Raytracing/Textures/ColorTexture.h"
+#include "Raytracing/Textures/CheckerTexture.h"
+#include "Raytracing/Textures/ImageTexture.h"
+#include "Raytracing/Textures/PerlinNoiseTexture.h"
+#include "Raytracing/Textures/CellNoiseTexture.h"
+#include "Raytracing/Textures/MarbleTexture.h"
+#include "Raytracing/Textures/WoodTexture.h"
+#include "Raytracing/Textures/FireTexture.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Lights.h"
-#include "Raytracing/Primitive.h"
-#include "Raytracing/Plane.h"
-#include "Raytracing/Sphere.h"
-#include "Raytracing/Mesh.h"
+#include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/Primitives/Plane.h"
+#include "Raytracing/Primitives/Sphere.h"
+#include "Raytracing/Primitives/Triangle.h"
+#include "Raytracing/Primitives/Mesh.h"
 
 namespace Raycer
 {
@@ -79,6 +88,7 @@ namespace Raycer
 		{
 			std::vector<Plane> planes;
 			std::vector<Sphere> spheres;
+			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 		} primitives;
 		

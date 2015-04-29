@@ -11,12 +11,19 @@ namespace Raycer
 {
 	struct Ray
 	{
-		Ray(const Vector3& origin, const Vector3& direction, int reflectionCount = 0);
+		Ray() {}
+
+		Ray(const Vector3& origin_, const Vector3& direction_, int reflectionCount_)
+		{
+			origin = origin_;
+			direction = direction_;
+			reflectionCount = reflectionCount_;
+		}
 		
 		Vector3 origin;
 		Vector3 direction;
 		Intersection intersection;
 		Color color;
-		int reflectionCount;
+		int reflectionCount = 0;
 	};
 }

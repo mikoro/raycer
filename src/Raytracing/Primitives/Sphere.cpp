@@ -3,7 +3,7 @@
 
 #include <cmath>
 
-#include "Raytracing/Sphere.h"
+#include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 

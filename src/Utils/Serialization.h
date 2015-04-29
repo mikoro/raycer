@@ -19,7 +19,22 @@
 #include "Raytracing/Lights.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Scene.h"
-#include "Raytracing/Textures.h"
+
+#include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/Primitives/Plane.h"
+#include "Raytracing/Primitives/Sphere.h"
+#include "Raytracing/Primitives/Triangle.h"
+#include "Raytracing/Primitives/Mesh.h"
+
+#include "Raytracing/Textures/Texture.h"
+#include "Raytracing/Textures/ColorTexture.h"
+#include "Raytracing/Textures/CheckerTexture.h"
+#include "Raytracing/Textures/ImageTexture.h"
+#include "Raytracing/Textures/PerlinNoiseTexture.h"
+#include "Raytracing/Textures/CellNoiseTexture.h"
+#include "Raytracing/Textures/MarbleTexture.h"
+#include "Raytracing/Textures/WoodTexture.h"
+#include "Raytracing/Textures/FireTexture.h"
 
 namespace Raycer
 {
@@ -86,36 +101,6 @@ namespace Raycer
 			cereal::make_nvp("z", b.z));
 	}
 
-	/* PRIMITIVES */
-
-	template<class Archive>
-	void serialize(Archive& a, Mesh& b)
-	{
-		a(cereal::make_nvp("meshFilePath", b.meshFilePath),
-			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("orientation", b.orientation),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Plane& b)
-	{
-		a(cereal::make_nvp("position", b.position),
-			cereal::make_nvp("normal", b.normal),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Sphere& b)
-	{
-		a(cereal::make_nvp("position", b.position),
-			cereal::make_nvp("radius", b.radius),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
-	}
-
 	/* CAMERA */
 
 	template<class Archive>
@@ -160,7 +145,7 @@ namespace Raycer
 		a(cereal::make_nvp("color", b.color),
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("position", b.radius));
+			cereal::make_nvp("radius", b.radius));
 	}
 
 	template<class Archive>
@@ -250,7 +235,48 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("planes", b.planes),
 			cereal::make_nvp("spheres", b.spheres),
+			cereal::make_nvp("triangles", b.triangles),
 			cereal::make_nvp("meshes", b.meshes));
+	}
+
+	/* PRIMITIVES */
+
+	template<class Archive>
+	void serialize(Archive& a, Plane& b)
+	{
+		a(cereal::make_nvp("position", b.position),
+			cereal::make_nvp("normal", b.normal),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Sphere& b)
+	{
+		a(cereal::make_nvp("position", b.position),
+			cereal::make_nvp("radius", b.radius),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Triangle& b)
+	{
+		a(cereal::make_nvp("vertices", b.vertices),
+			cereal::make_nvp("normals", b.normals),
+			cereal::make_nvp("texcoords", b.texcoords),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Mesh& b)
+	{
+		a(cereal::make_nvp("meshFilePath", b.meshFilePath),
+			cereal::make_nvp("position", b.position),
+			cereal::make_nvp("orientation", b.orientation),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
 	}
 
 	/* TEXTURES */

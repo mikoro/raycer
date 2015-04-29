@@ -6,10 +6,10 @@
 #include <string>
 #include <vector>
 
-#include "Raytracing/Primitive.h"
+#include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/Primitives/Triangle.h"
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
-#include "Math/Triangle.h"
 
 namespace Raycer
 {
