@@ -1,5 +1,5 @@
-RT_ICON ICON "raycer.ico"
-GLFW_ICON ICON "raycer.ico"
+RT_ICON ICON "../../misc/icons/raycer.ico"
+GLFW_ICON ICON "../../misc/icons/raycer.ico"
 
 1 24 "raycer.exe.manifest"
 

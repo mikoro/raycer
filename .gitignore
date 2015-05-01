@@ -1,15 +1,12 @@
 /bin
 /build
+/data/images
 *.sdf
 *.opensdf
 *.suo
 *.user
 *.log
 *.settings
-*.jpg
-*.tga
-*.bmp
-*.png
 My*
 Thumbs.db
 .directory
