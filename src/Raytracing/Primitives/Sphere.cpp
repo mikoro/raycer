@@ -15,28 +15,28 @@ void Sphere::initialize()
 
 void Sphere::intersect(Ray& ray) const
 {
-	Vector3 originToCenter = position - ray.origin;
-	double originToSphereDistance2 = originToCenter.lengthSquared();
+	Vector3 rayOriginToSphere = position - ray.origin;
+	double rayOriginToSphereDistance2 = rayOriginToSphere.lengthSquared();
 	double radius2 = radius * radius;
 
-	// ray origin inside the sphere
-	if (originToSphereDistance2 < radius2)
-		return;
+	double t1 = rayOriginToSphere.dot(ray.direction);
+	double sphereToRayDistance2 = rayOriginToSphereDistance2 - (t1 * t1);
+	
+	bool rayOriginIsOutside = (rayOriginToSphereDistance2 >= radius2);
 
-	double ta = originToCenter.dot(ray.direction);
+	if (rayOriginIsOutside)
+	{
+		// whole sphere is behind the ray origin
+		if (t1 < 0.0)
+			return;
 
-	// sphere is behind the ray
-	if (ta < 0.0)
-		return;
-
-	double sphereToRayDistance2 = originToSphereDistance2 - (ta * ta);
-
-	// ray misses the sphere
-	if (sphereToRayDistance2 > radius2)
-		return;
-
-	double tb = sqrt(radius2 - sphereToRayDistance2);
-	double t = ta - tb;
+		// ray misses the sphere completely
+		if (sphereToRayDistance2 > radius2)
+			return;
+	}
+	
+	double t2 = sqrt(radius2 - sphereToRayDistance2);
+	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 
 	// there was another intersection closer to camera
 	if (t > ray.intersection.distance)
@@ -48,9 +48,10 @@ void Sphere::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = intersectionPosition;
-	ray.intersection.normal = intersectionNormal;
+	ray.intersection.normal = rayOriginIsOutside ? intersectionNormal : -intersectionNormal;
 	ray.intersection.materialId = materialId;
 
+	// spherical texture coordinate calculation
 	double u = 0.5 + atan2(intersectionNormal.z, intersectionNormal.x) / (2.0 * M_PI);
 	double v = 0.5 - asin(intersectionNormal.y) / M_PI;
 	u /= texcoordScale.x;
