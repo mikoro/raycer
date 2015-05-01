@@ -17,18 +17,27 @@ void Plane::initialize()
 
 void Plane::intersect(Ray& ray) const
 {
+	/*
+	    (P0-R0) dot N
+	t = -------------
+		   Rd dot N
+	*/
+
 	const double epsilon = std::numeric_limits<double>::epsilon();
 
 	double denominator = ray.direction.dot(normal);
 
+	// ray and plane are parallel -> no intersection
 	if (fabs(denominator) < epsilon)
 		return;
 
 	double t = (position - ray.origin).dot(normal) / denominator;
 
+	// intersection is behind ray origin
 	if (t < 0.0)
 		return;
 
+	// another intersection is closer
 	if (t > ray.intersection.distance)
 		return;
 
@@ -37,9 +46,10 @@ void Plane::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = intersectionPosition;
-	ray.intersection.normal = (denominator > 0.0) ? -normal : normal;
+	ray.intersection.normal = (denominator < 0.0) ? normal : -normal;
 	ray.intersection.materialId = materialId;
 
+	// texture coordinate calculation
 	double u = uAxis.dot(intersectionPosition) / texcoordScale.x;
 	double v = vAxis.dot(intersectionPosition) / texcoordScale.y;
 	ray.intersection.texcoord.x = fabs(u - floor(u));

@@ -15,6 +15,8 @@ void Sphere::initialize()
 
 void Sphere::intersect(Ray& ray) const
 {
+	// http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+
 	Vector3 rayOriginToSphere = position - ray.origin;
 	double rayOriginToSphereDistance2 = rayOriginToSphere.lengthSquared();
 	double radius2 = radius * radius;
