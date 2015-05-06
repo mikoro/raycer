@@ -26,7 +26,7 @@ TEST_CASE("ColorGradient functionality", "[colorgradient]")
 	gradient.addSegment(Color(75, 75, 75), Color(255, 0, 0), 10);
 	gradient.addSegment(Color(255, 0, 0), Color(255, 255, 0), 40);
 
-	for (int y = 990; y < 1000; ++y)
+	for (int y = 0; y < 1000; ++y)
 	{
 		double alpha = (double)y / 999.0;
 		Color color = gradient.getColor(alpha);

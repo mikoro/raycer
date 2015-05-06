@@ -18,11 +18,12 @@ Download the sources and run the commands from a corresponding developer console
 
 ## Linux
 
-- Install both boost headers and libraries.
-- Install both OpenCL headers and a graphics driver that has OpenCL support.
+- Install boost.
 - Install Freetype.
 - Install GLFW.
-- Compile using the Makefile (either GCC or Clang).
+- Install GLEW.
+- Install OpenCL headers, libraries and a suitable driver for the compute device (CPU/GPU/etc). E.g. for Intel CPUs: https://software.intel.com/en-us/articles/opencl-drivers
+- Compile using the Makefile.
 
 ## Mac
 

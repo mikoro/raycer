@@ -1,6 +1,6 @@
 # Raycer
 
-Raycer.
+A raytracer. Work in progress.
 
 * Author: [Mikko Ronkainen](http://mikkoronkainen.com)
 * Website: [github.com/mikoro/raycer](https://github.com/mikoro/raycer)

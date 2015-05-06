@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <cassert>
+#include <cmath>
 
 #include "Math/ColorGradient.h"
 
