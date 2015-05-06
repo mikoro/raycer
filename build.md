@@ -28,3 +28,17 @@ Download the sources and run the commands from a corresponding developer console
 ## Mac
 
 TBD
+
+## Framework versions
+
+- boost 1.57.0
+- Freetype 2.5.5
+- GLFW 3.1.1
+- GLEW 1.12.0
+- freetype-gl (github master ?)
+- CATCH CATCH v1.1 build 1 (master branch)
+- cereal 1.1.1
+- stb (github 947bdcd027)
+- tclap 1.2.1
+- tinyformat (github 3913307c28)
+- utf8 2.3.4

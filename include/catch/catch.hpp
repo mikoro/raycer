@@ -9242,8 +9242,7 @@ namespace Catch {
 
 // Standard C/C++ main entry point
 int main (int argc, char * const argv[]) {
-	Catch::Session().run( argc, argv );
-    return 0;
+    return Catch::Session().run( argc, argv );
 }
 
 #else // __OBJC__
@@ -9425,4 +9424,3 @@ using Catch::Detail::Approx;
 #endif
 
 #endif // TWOBLUECUBES_SINGLE_INCLUDE_CATCH_HPP_INCLUDED
-

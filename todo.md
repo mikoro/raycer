@@ -1,5 +1,3 @@
-logon piirtäminen
-
 lisää primitiivejä
  - laatikko
  - sylinteri

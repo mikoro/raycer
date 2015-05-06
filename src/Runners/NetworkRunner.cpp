@@ -533,7 +533,7 @@ void NetworkRunner::receiveResults()
 			ss.str(match[2]);
 			ss >> pixelCount;
 
-			assert(dataSize == pixelCount * sizeof(Color));
+			assert(dataSize == pixelCount * (int)sizeof(Color));
 
 			ImagePart imagePart;
 			imagePart.pixelOffset = pixelOffset;
