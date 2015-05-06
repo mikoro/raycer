@@ -199,6 +199,12 @@
     <ClCompile Include="src\Utils\StringUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\ObjReader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\ObjReaderTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -377,6 +383,9 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\StringUtils.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\ObjReader.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
