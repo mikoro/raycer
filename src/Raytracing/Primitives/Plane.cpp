@@ -41,17 +41,18 @@ void Plane::intersect(Ray& ray) const
 	if (t > ray.intersection.distance)
 		return;
 
-	Vector3 intersectionPosition = ray.origin + (t * ray.direction);
+	// intersection position
+	Vector3 ip = ray.origin + (t * ray.direction);
 
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
-	ray.intersection.position = intersectionPosition;
+	ray.intersection.position = ip;
 	ray.intersection.normal = (denominator < 0.0) ? normal : -normal;
 	ray.intersection.materialId = materialId;
 
 	// texture coordinate calculation
-	double u = uAxis.dot(intersectionPosition) / texcoordScale.x;
-	double v = vAxis.dot(intersectionPosition) / texcoordScale.y;
+	double u = uAxis.dot(ip) / texcoordScale.x;
+	double v = vAxis.dot(ip) / texcoordScale.y;
 	ray.intersection.texcoord.x = fabs(u - floor(u));
 	ray.intersection.texcoord.y = fabs(v - floor(v));
 }

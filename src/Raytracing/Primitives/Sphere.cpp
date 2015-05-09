@@ -44,18 +44,19 @@ void Sphere::intersect(Ray& ray) const
 	if (t > ray.intersection.distance)
 		return;
 
-	Vector3 intersectionPosition = ray.origin + (t * ray.direction);
-	Vector3 intersectionNormal = (intersectionPosition - position).normalized();
+	// intersection position and normal
+	Vector3 ip = ray.origin + (t * ray.direction);
+	Vector3 normal = (ip - position).normalized();
 
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
-	ray.intersection.position = intersectionPosition;
-	ray.intersection.normal = rayOriginIsOutside ? intersectionNormal : -intersectionNormal;
+	ray.intersection.position = ip;
+	ray.intersection.normal = rayOriginIsOutside ? normal : -normal;
 	ray.intersection.materialId = materialId;
 
 	// spherical texture coordinate calculation
-	double u = 0.5 + atan2(intersectionNormal.z, intersectionNormal.x) / (2.0 * M_PI);
-	double v = 0.5 - asin(intersectionNormal.y) / M_PI;
+	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
+	double v = 0.5 - asin(normal.y) / M_PI;
 	u /= texcoordScale.x;
 	v /= texcoordScale.y;
 	ray.intersection.texcoord.x = u - floor(u);

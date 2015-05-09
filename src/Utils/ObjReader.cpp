@@ -161,20 +161,21 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 			triangle.texcoords[2] = texcoords[texcoordIndices[i]];
 		}
 
+		// calculate triangle normal CCW
+		Vector3 v0tov1 = triangle.vertices[1] - triangle.vertices[0];
+		Vector3 v0tov2 = triangle.vertices[2] - triangle.vertices[0];
+		Vector3 normal = v0tov1.cross(v0tov2).normalized();
+
+		triangle.normal = normal;
+
 		if (hasNormals)
 		{
 			triangle.normals[0] = normals[normalIndices[0]];
 			triangle.normals[1] = normals[normalIndices[i - 1]];
 			triangle.normals[2] = normals[normalIndices[i]];
 		}
-		else // calculate normals manually
-		{
-			Vector3 v0tov1 = triangle.vertices[1] - triangle.vertices[0];
-			Vector3 v0tov2 = triangle.vertices[2] - triangle.vertices[0];
-			Vector3 normal = v0tov1.cross(v0tov2).normalized();
-
+		else
 			triangle.normals[0] = triangle.normals[1] = triangle.normals[2] = normal;
-		}
 
 		triangles.push_back(triangle);
 	}

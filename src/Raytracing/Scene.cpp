@@ -154,11 +154,14 @@ void Scene::initialize()
 	for (Material& material : materials)
 		materialsMap[material.id] = &material;
 
+	for (Plane& plane : primitives.planes)
+		primitivesList.push_back(&plane);
+
 	for (Sphere& sphere : primitives.spheres)
 		primitivesList.push_back(&sphere);
 
-	for (Plane& plane : primitives.planes)
-		primitivesList.push_back(&plane);
+	for (Triangle& triangle : primitives.triangles)
+		primitivesList.push_back(&triangle);
 
 	for (Mesh& mesh : primitives.meshes)
 		primitivesList.push_back(&mesh);
@@ -290,9 +293,10 @@ Scene Scene::createTestScene()
 	m3.shininess = 0.0;
 	m3.reflectivity = 0.0;
 
+	// tr1
 	Material m4;
 	m4.id = 4;
-	m4.textureId = 0;
+	m4.textureId = 1;
 	m4.diffuseness = 1.0;
 	m4.specularity = 0.0;
 	m4.shininess = 0.0;
@@ -328,9 +332,18 @@ Scene Scene::createTestScene()
 	s3.position = Vector3(-2.5, 1.0, -5.0);
 	s3.radius = 1.0;
 
-	scene.primitives.spheres.push_back(s1);
-	scene.primitives.spheres.push_back(s2);
-	scene.primitives.spheres.push_back(s3);
+	//scene.primitives.spheres.push_back(s1);
+	//scene.primitives.spheres.push_back(s2);
+	//scene.primitives.spheres.push_back(s3);
+
+	Triangle tr1;
+	tr1.materialId = 4;
+	tr1.vertices[0] = Vector3(0.0, 0.0, 0.0);
+	tr1.vertices[1] = Vector3(1.0, 0.0, 0.0);
+	tr1.vertices[2] = Vector3(1.0, 1.0, 0.0);
+	tr1.normal = Vector3(0.0, 0.0, 1.0);
+
+	scene.primitives.triangles.push_back(tr1);
 
 	AmbientLight l1;
 	l1.color = Color::WHITE;
