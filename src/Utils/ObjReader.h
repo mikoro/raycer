@@ -8,6 +8,8 @@
 
 namespace Raycer
 {
+	class Vector3;
+	class Vector2;
 	class Triangle;
 
 	class ObjReader
@@ -15,5 +17,9 @@ namespace Raycer
 	public:
 
 		static std::vector<Triangle> readFile(const std::string& fileName);
+
+	private:
+
+		static void processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<Triangle>& triangles);
 	};
 }

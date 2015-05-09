@@ -10,5 +10,18 @@ using namespace Raycer;
 
 TEST_CASE("ObjReader functionality", "[objreader]")
 {
-	ObjReader::readFile("data/meshes/cube.obj");
+	std::vector<Triangle> triangles = ObjReader::readFile("data/meshes/cube1.obj");
+	REQUIRE(triangles.size() == 12);
+
+	triangles = ObjReader::readFile("data/meshes/cube2.obj");
+	REQUIRE(triangles.size() == 12);
+
+	triangles = ObjReader::readFile("data/meshes/cube3.obj");
+	REQUIRE(triangles.size() == 12);
+
+	triangles = ObjReader::readFile("data/meshes/cube4.obj");
+	REQUIRE(triangles.size() == 12);
+
+	triangles = ObjReader::readFile("data/meshes/cube5.obj");
+	REQUIRE(triangles.size() == 12);
 }

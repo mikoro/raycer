@@ -214,7 +214,6 @@
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\MovingAverage.h" />
     <ClInclude Include="src\Math\Quaternion.h" />
-    <ClInclude Include="src\Math\Triangle.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\Raytracing\Camera.h" />

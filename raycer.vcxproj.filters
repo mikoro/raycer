@@ -280,9 +280,6 @@
     <ClInclude Include="src\Raytracing\Scene.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\Triangle.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\PerlinNoise.h">
       <Filter>Utils</Filter>
     </ClInclude>
