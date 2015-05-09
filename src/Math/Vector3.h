@@ -18,6 +18,7 @@ namespace Raycer
 		friend Vector3 operator*(const Vector3& v, const Vector3& w);
 		friend Vector3 operator*(const Vector3& v, double s);
 		friend Vector3 operator*(double s, const Vector3& v);
+		friend Vector3 operator/(const Vector3& v, const Vector3& w);
 		friend Vector3 operator/(const Vector3& v, double s);
 		friend Vector3 operator-(const Vector3& v);
 
@@ -26,7 +27,9 @@ namespace Raycer
 
 		Vector3& operator+=(const Vector3& v);
 		Vector3& operator-=(const Vector3& v);
+		Vector3& operator*=(const Vector3& v);
 		Vector3& operator*=(double s);
+		Vector3& operator/=(const Vector3& v);
 		Vector3& operator/=(double s);
 
 		double length() const;

@@ -22,6 +22,7 @@ namespace Raycer
 
 		std::string meshFilePath;
 		Vector3 position;
+		Vector3 scale;
 		EulerAngle orientation;
 
 		std::vector<Triangle> triangles;

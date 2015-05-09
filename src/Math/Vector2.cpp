@@ -39,6 +39,11 @@ namespace Raycer
 		return Vector2(v.x - w.x, v.y - w.y);
 	}
 
+	Vector2 operator*(const Vector2& v, const Vector2& w)
+	{
+		return Vector2(v.x * w.x, v.y * w.y);
+	}
+
 	Vector2 operator*(const Vector2& v, double s)
 	{
 		return Vector2(v.x * s, v.y * s);
@@ -47,6 +52,11 @@ namespace Raycer
 	Vector2 operator*(double s, const Vector2& v)
 	{
 		return Vector2(v.x * s, v.y * s);
+	}
+
+	Vector2 operator/(const Vector2& v, const Vector2& w)
+	{
+		return Vector2(v.x / w.x, v.y / w.y);
 	}
 
 	Vector2 operator/(const Vector2& v, double s)
@@ -84,9 +94,23 @@ Vector2& Vector2::operator-=(const Vector2& v)
 	return *this;
 }
 
+Vector2& Vector2::operator*=(const Vector2& v)
+{
+	*this = *this * v;
+
+	return *this;
+}
+
 Vector2& Vector2::operator*=(double s)
 {
 	*this = *this * s;
+
+	return *this;
+}
+
+Vector2& Vector2::operator/=(const Vector2& v)
+{
+	*this = *this / v;
 
 	return *this;
 }

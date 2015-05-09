@@ -160,9 +160,6 @@ void Scene::initialize()
 	for (Sphere& sphere : primitives.spheres)
 		primitivesList.push_back(&sphere);
 
-	for (Triangle& triangle : primitives.triangles)
-		primitivesList.push_back(&triangle);
-
 	for (Mesh& mesh : primitives.meshes)
 		primitivesList.push_back(&mesh);
 
@@ -201,7 +198,7 @@ Scene Scene::createTestScene()
 	scene.toneMapper.type = ToneMapType::GAMMA;
 	scene.toneMapper.gamma = 1.0 / 2.2;
 
-	scene.camera.position = Vector3(0.0, 3.0, 0.0);
+	scene.camera.position = Vector3(0.0, 6.0, 8.0);
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
@@ -336,18 +333,18 @@ Scene Scene::createTestScene()
 	//scene.primitives.spheres.push_back(s2);
 	//scene.primitives.spheres.push_back(s3);
 
-	Triangle tr1;
-	tr1.materialId = 4;
-	tr1.vertices[0] = Vector3(0.0, 0.0, 0.0);
-	tr1.vertices[1] = Vector3(1.0, 0.0, 0.0);
-	tr1.vertices[2] = Vector3(1.0, 1.0, 0.0);
-	tr1.normal = tr1.normals[0] = tr1.normals[1] = tr1.normals[2] = Vector3(0.0, 0.0, 1.0);
+	Mesh mh1;
+	mh1.materialId = 4;
+	mh1.position = Vector3(0.0, 2.0, 0.0);
+	mh1.scale = Vector3(1.0, 1.0, 1.0);
+	mh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+	mh1.meshFilePath = "data/meshes/monkey1.obj";
 
-	scene.primitives.triangles.push_back(tr1);
+	scene.primitives.meshes.push_back(mh1);
 
 	AmbientLight l1;
 	l1.color = Color::WHITE;
-	l1.intensity = 0.01;
+	l1.intensity = 0.1;
 
 	scene.lights.ambientLights.push_back(l1);
 

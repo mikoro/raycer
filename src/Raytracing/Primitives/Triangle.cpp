@@ -9,11 +9,7 @@
 
 using namespace Raycer;
 
-void Triangle::initialize()
-{
-}
-
-void Triangle::intersect(Ray& ray) const
+bool Triangle::intersect(Ray& ray) const
 {
 	// http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
 
@@ -29,17 +25,17 @@ void Triangle::intersect(Ray& ray) const
 
 	// ray and triangle are parallel -> no intersection
 	if (fabs(denominator) < epsilon)
-		return;
+		return false;
 
 	double t = (vertices[0] - ray.origin).dot(normal) / denominator;
 
 	// intersection is behind ray origin
 	if (t < 0.0)
-		return;
+		return false;
 
 	// another intersection is closer
 	if (t > ray.intersection.distance)
-		return;
+		return false;
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
@@ -54,7 +50,7 @@ void Triangle::intersect(Ray& ray) const
 	Vector3 c0 = v0v1.cross(v0ip);
 
 	if (normal2.dot(c0) < 0.0)
-		return;
+		return false;
 
 	// edge 1
 	Vector3 v1v2 = vertices[2] - vertices[1];
@@ -63,7 +59,7 @@ void Triangle::intersect(Ray& ray) const
 	double u = normal2.dot(c1);
 
 	if (u < 0.0)
-		return;
+		return false;
 
 	// edge 2
 	Vector3 v2v0 = vertices[0] - vertices[2];
@@ -72,7 +68,7 @@ void Triangle::intersect(Ray& ray) const
 	double v = normal2.dot(c2);
 
 	if (v < 0.0)
-		return;
+		return false;
 
 	double denominator2 = normal2.dot(normal2);
 	u /= denominator2;
@@ -86,6 +82,7 @@ void Triangle::intersect(Ray& ray) const
 	ray.intersection.distance = t;
 	ray.intersection.position = ip;
 	ray.intersection.normal = (denominator < 0.0) ? normal3 : -normal3;
-	ray.intersection.materialId = materialId;
 	ray.intersection.texcoord = texcoord;
+
+	return true;
 }
