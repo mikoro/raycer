@@ -43,34 +43,49 @@ void Triangle::intersect(Ray& ray) const
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
-
-	// edge 0
+	
+	// barycentric coordinates precalc
 	Vector3 v0v1 = vertices[1] - vertices[0];
+	Vector3 v0v2 = vertices[2] - vertices[0];
+	Vector3 normal2 = v0v1.cross(v0v2);
+	
+	// edge 0
 	Vector3 v0ip = ip - vertices[0];
 	Vector3 c0 = v0v1.cross(v0ip);
 
-	if (normal.dot(c0) < 0.0)
+	if (normal2.dot(c0) < 0.0)
 		return;
 
 	// edge 1
 	Vector3 v1v2 = vertices[2] - vertices[1];
 	Vector3 v1ip = ip - vertices[1];
 	Vector3 c1 = v1v2.cross(v1ip);
+	double u = normal2.dot(c1);
 
-	if (normal.dot(c1) < 0.0)
+	if (u < 0.0)
 		return;
 
 	// edge 2
 	Vector3 v2v0 = vertices[0] - vertices[2];
 	Vector3 v2ip = ip - vertices[2];
 	Vector3 c2 = v2v0.cross(v2ip);
+	double v = normal2.dot(c2);
 
-	if (normal.dot(c2) < 0.0)
+	if (v < 0.0)
 		return;
+
+	double denominator2 = normal2.dot(normal2);
+	u /= denominator2;
+	v /= denominator2;
+	double w = 1.0 - u - v;
+
+	Vector3 normal3 = u * normals[0] + v * normals[1] + w * normals[2];
+	Vector2 texcoord = u * texcoords[0] + v * texcoords[1] + w * texcoords[2];
 
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = ip;
-	ray.intersection.normal = (denominator < 0.0) ? normal : -normal;
+	ray.intersection.normal = (denominator < 0.0) ? normal3 : -normal3;
 	ray.intersection.materialId = materialId;
+	ray.intersection.texcoord = texcoord;
 }

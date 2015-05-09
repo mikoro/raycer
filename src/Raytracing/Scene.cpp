@@ -341,7 +341,7 @@ Scene Scene::createTestScene()
 	tr1.vertices[0] = Vector3(0.0, 0.0, 0.0);
 	tr1.vertices[1] = Vector3(1.0, 0.0, 0.0);
 	tr1.vertices[2] = Vector3(1.0, 1.0, 0.0);
-	tr1.normal = Vector3(0.0, 0.0, 1.0);
+	tr1.normal = tr1.normals[0] = tr1.normals[1] = tr1.normals[2] = Vector3(0.0, 0.0, 1.0);
 
 	scene.primitives.triangles.push_back(tr1);
 
