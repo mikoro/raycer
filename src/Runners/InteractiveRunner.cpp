@@ -14,8 +14,8 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Utils/Errors.h"
 #include "Rendering/Framebuffer.h"
+#include "Rendering/GLHelper.h"
 #include "CLRaytracing/CLManager.h"
 #include "CLRaytracing/CLRaytracer.h"
 #include "Rendering/Image.h"
@@ -411,7 +411,7 @@ void InteractiveRunner::takeScreenshot() const
 	std::vector<float> data(windowWidth * windowHeight * 4);
 
 	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_FLOAT, &data[0]);
-	checkGLError("Could not read pixels from renderbuffer");
+	GLHelper::checkError("Could not read pixels from renderbuffer");
 
 	Image image(windowWidth, windowHeight, &data[0]);
 	image.saveAs("screenshot.png");

@@ -9,6 +9,7 @@
 #include "Rendering/GLHelper.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/Settings.h"
 
 using namespace Raycer;
 
@@ -105,4 +106,30 @@ GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::st
 	glDeleteShader(fragmentShader);
 
 	return program;
+}
+
+void GLHelper::checkError(const std::string& message)
+{
+	Settings& settings = App::getSettings();
+
+	int result = glGetError();
+
+	if (result != GL_NO_ERROR && settings.general.checkGLErrors)
+		throw std::runtime_error(tfm::format("OpenGL error: %s: %s", message, getErrorMessage(result)));
+}
+
+std::string GLHelper::getErrorMessage(int result)
+{
+	switch (result)
+	{
+		case GL_NO_ERROR: return "GL_NO_ERROR";
+		case GL_INVALID_ENUM: return "GL_INVALID_ENUM​";
+		case GL_INVALID_VALUE: return "GL_INVALID_VALUE";
+		case GL_INVALID_OPERATION: return "GL_INVALID_OPERATION";
+		case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
+		case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
+		case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY​";
+		case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
+		default: return "Unknown error";
+	}
 }

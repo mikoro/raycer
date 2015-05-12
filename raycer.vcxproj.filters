@@ -79,9 +79,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\App.cpp" />
-    <ClCompile Include="src\Utils\Errors.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Text.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -247,9 +244,6 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\App.h" />
-    <ClInclude Include="src\Utils\Errors.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Text.h">
       <Filter>Rendering</Filter>
     </ClInclude>

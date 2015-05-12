@@ -17,7 +17,6 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Rendering/GLHelper.h"
-#include "Utils/Errors.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -141,5 +140,5 @@ void Text::render()
 	glUseProgram(0);
 	glDisable(GL_BLEND);
 	
-	checkGLError("Could not render text");
+	GLHelper::checkError("Could not render text");
 }

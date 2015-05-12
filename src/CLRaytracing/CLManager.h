@@ -17,6 +17,9 @@ namespace Raycer
 		void initialize();
 		void loadKernels();
 
+		static void checkError(int result, const std::string& message);
+		static std::string getErrorMessage(int result);
+
 		cl_platform_id platformId = nullptr;
 		cl_device_id deviceId = nullptr;
 		cl_context context = nullptr;

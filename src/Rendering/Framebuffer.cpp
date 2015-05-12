@@ -6,7 +6,6 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/GLHelper.h"
-#include "Utils/Errors.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
@@ -31,14 +30,14 @@ void Framebuffer::initialize()
 	App::getLog().logInfo("Initializing framebuffer");
 
 	glGenTextures(1, &textureId);
-	checkGLError("Could not create OpenGL textures");
+	GLHelper::checkError("Could not create OpenGL textures");
 
 	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not set OpenGL texture parameters");
+	GLHelper::checkError("Could not set OpenGL texture parameters");
 
 	programId = GLHelper::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
 
@@ -73,7 +72,7 @@ void Framebuffer::initialize()
 	glDisableVertexAttribArray(0);
 	glDisableVertexAttribArray(1);
 
-	checkGLError("Could not set OpenGL buffer parameters");
+	GLHelper::checkError("Could not set OpenGL buffer parameters");
 }
 
 void Framebuffer::resize(int width_, int height_)
@@ -100,7 +99,7 @@ void Framebuffer::resize(int width_, int height_)
 	glBindTexture(GL_TEXTURE_2D, textureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
-	checkGLError("Could not reserve OpenGL texture memory");
+	GLHelper::checkError("Could not reserve OpenGL texture memory");
 
 	clear();
 }
@@ -142,7 +141,7 @@ void Framebuffer::render() const
 	if (!settings.openCL.enabled)
 	{
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, floatPixelData);
-		checkGLError("Could not upload OpenGL texture data");
+		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
 
 	glBindVertexArray(vaoId);
@@ -152,7 +151,7 @@ void Framebuffer::render() const
 	glBindTexture(GL_TEXTURE_2D, 0);
 	glUseProgram(0);
 
-	checkGLError("Could not render the framebuffer");
+	GLHelper::checkError("Could not render the framebuffer");
 }
 
 void Framebuffer::enableSmoothing(bool state)
@@ -162,7 +161,7 @@ void Framebuffer::enableSmoothing(bool state)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	checkGLError("Could not set OpenGL texture parameters");
+	GLHelper::checkError("Could not set OpenGL texture parameters");
 }
 
 int Framebuffer::getWidth() const

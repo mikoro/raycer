@@ -12,7 +12,6 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Utils/Errors.h"
 #include "CLRaytracing/CLManager.h"
 #include "Rendering/Framebuffer.h"
 #include "Raytracing/Scene.h"
@@ -70,19 +69,19 @@ void CLRaytracer::initialize()
 	cl_int status = 0;
 
 	infoPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), NULL, &status);
-	checkCLError(status, "Could not create OpenCL info buffer");
+	CLManager::checkError(status, "Could not create info buffer");
 
 	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), NULL, &status);
-	checkCLError(status, "Could not create OpenCL camera buffer");
+	CLManager::checkError(status, "Could not create camera buffer");
 
 	lightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Light) * MAX_LIGHTS, NULL, &status);
-	checkCLError(status, "Could not create OpenCL lights buffer");
+	CLManager::checkError(status, "Could not create lights buffer");
 
 	planesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Plane) * MAX_PLANES, NULL, &status);
-	checkCLError(status, "Could not create OpenCL planes buffer");
+	CLManager::checkError(status, "Could not create planes buffer");
 
 	spheresPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Sphere) * MAX_SPHERES, NULL, &status);
-	checkCLError(status, "Could not create OpenCL spheres buffer");
+	CLManager::checkError(status, "Could not create spheres buffer");
 }
 
 void CLRaytracer::resizePixelBuffer(int width, int height)
@@ -100,7 +99,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 	if (settings.general.interactive)
 	{
 		pixelsPtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getTextureId(), &status);
-		checkCLError(status, "Could not create OpenCL image from OpenGL texture");
+		CLManager::checkError(status, "Could not create image from OpenGL texture");
 	}
 	else
 	{
@@ -109,7 +108,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 		imageFormat.image_channel_order = CL_RGBA;
 
 		pixelsPtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, bufferWidth, bufferHeight, 0, NULL, &status);
-		checkCLError(status, "Could not create OpenCL image");
+		CLManager::checkError(status, "Could not create image");
 	}
 }
 
@@ -117,7 +116,7 @@ void CLRaytracer::releasePixelBuffer()
 {
 	if (pixelsPtr != nullptr)
 	{
-		checkCLError(clReleaseMemObject(pixelsPtr), "Could not release OpenCL memory object");
+		CLManager::checkError(clReleaseMemObject(pixelsPtr), "Could not release memory object");
 		pixelsPtr = nullptr;
 	}
 }
@@ -157,19 +156,19 @@ void CLRaytracer::uploadSceneData()
 	cl_int status = 0;
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, infoPtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, NULL, NULL);
-	checkCLError(status, "Could not write OpenCL info buffer");
+	CLManager::checkError(status, "Could not write info buffer");
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
-	checkCLError(status, "Could not write OpenCL camera buffer");
+	CLManager::checkError(status, "Could not write camera buffer");
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, lightsPtr, CL_FALSE, 0, sizeof(OpenCL::Light) * clScene.lights.size(), &clScene.lights[0], 0, NULL, NULL);
-	checkCLError(status, "Could not write OpenCL lights buffer");
+	CLManager::checkError(status, "Could not write lights buffer");
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, planesPtr, CL_FALSE, 0, sizeof(OpenCL::Plane) * clScene.planes.size(), &clScene.planes[0], 0, NULL, NULL);
-	checkCLError(status, "Could not write OpenCL planes buffer");
+	CLManager::checkError(status, "Could not write planes buffer");
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, spheresPtr, CL_FALSE, 0, sizeof(OpenCL::Sphere) * clScene.spheres.size(), &clScene.spheres[0], 0, NULL, NULL);
-	checkCLError(status, "Could not write OpenCL spheres buffer");
+	CLManager::checkError(status, "Could not write spheres buffer");
 }
 
 void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -185,25 +184,25 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	if (settings.general.interactive)
 	{
 		glFinish();
-		checkCLError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &pixelsPtr, 0, NULL, NULL), "Could not enqueue OpenCL GL object acquire");
+		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &pixelsPtr, 0, NULL, NULL), "Could not enqueue GL object acquire");
 	}
 
-	checkCLError(clSetKernelArg(clManager.raytraceKernel, 0, sizeof(cl_mem), &infoPtr), "Could not set OpenCL kernel argument (info)");
-	checkCLError(clSetKernelArg(clManager.raytraceKernel, 1, sizeof(cl_mem), &cameraPtr), "Could not set OpenCL kernel argument (camera)");
-	checkCLError(clSetKernelArg(clManager.raytraceKernel, 2, sizeof(cl_mem), &lightsPtr), "Could not set OpenCL kernel argument (lights)");
-	checkCLError(clSetKernelArg(clManager.raytraceKernel, 3, sizeof(cl_mem), &planesPtr), "Could not set OpenCL kernel argument (planes)");
-	checkCLError(clSetKernelArg(clManager.raytraceKernel, 4, sizeof(cl_mem), &spheresPtr), "Could not set OpenCL kernel argument (spheres)");
- 	checkCLError(clSetKernelArg(clManager.raytraceKernel, 5, sizeof(cl_mem), &pixelsPtr), "Could not set OpenCL kernel argument (pixels)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 0, sizeof(cl_mem), &infoPtr), "Could not set kernel argument (info)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 1, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 2, sizeof(cl_mem), &lightsPtr), "Could not set kernel argument (lights)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 3, sizeof(cl_mem), &planesPtr), "Could not set kernel argument (planes)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 4, sizeof(cl_mem), &spheresPtr), "Could not set kernel argument (spheres)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 5, sizeof(cl_mem), &pixelsPtr), "Could not set kernel argument (pixels)");
 
 	const size_t globalSizes[] = { (size_t)bufferWidth, (size_t)bufferHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
-	checkCLError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
+	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue kernel");
 
 	if (settings.general.interactive)
-		checkCLError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &pixelsPtr, 0, NULL, NULL), "Could not enqueue OpenCL GL object release");
+		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &pixelsPtr, 0, NULL, NULL), "Could not enqueue GL object release");
 
-	checkCLError(clFinish(clManager.commandQueue), "Could not finish OpenCL command queue");
+	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
 
 Image& CLRaytracer::getImage()
@@ -219,7 +218,7 @@ Image& CLRaytracer::getImage()
 	std::vector<float> data(bufferWidth * bufferHeight * 4);
 
 	cl_int status = clEnqueueReadImage(clManager.commandQueue, pixelsPtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, NULL, NULL);
-	checkCLError(status, "Could not read OpenCL image buffer");
+	CLManager::checkError(status, "Could not read image buffer");
 
 	image.load(bufferWidth, bufferHeight, &data[0]);
 
@@ -231,6 +230,6 @@ void CLRaytracer::printStructSizes()
 	CLManager& clManager = App::getCLManager();
 
 	const size_t globalSize = 1;
-	checkCLError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.printStructSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue OpenCL kernel");
-	checkCLError(clFinish(clManager.commandQueue), "Could not finish OpenCL command queue");
+	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.printStructSizesKernel, 1, NULL, &globalSize, NULL, 0, NULL, NULL), "Could not enqueue kernel");
+	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
