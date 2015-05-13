@@ -18,10 +18,10 @@ endif
 default: raycer
 
 raycer: $(OBJS)
-	@echo "CC $CC"
-	@echo "CXX $CXX"
-	@echo "CFLAGS $CFLAGS"
-	@echo "LDFLAGS $LDFLAGS"
+	@echo "CC: $(CC)"
+	@echo "CXX: $(CXX)"
+	@echo "CFLAGS: $(CFLAGS)"
+	@echo "LDFLAGS: $(LDFLAGS)"
 	@mkdir -p bin
 	@echo "Linking $@"
 	@$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
