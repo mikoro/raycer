@@ -5,7 +5,8 @@ sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-prec
 sudo add-apt-repository -y ppa:boost-latest/ppa
 wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
 
-sudo apt-get autoremove --purge -y gcc g++
+sudo apt-get autoremove --purge -y gcc g++ gcc-4.6 g++-4.6
+sudo apt-get autoremove -y
 
 sudo apt-get update -qq
 

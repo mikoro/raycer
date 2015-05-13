@@ -18,9 +18,7 @@ endif
 default: raycer
 
 raycer: $(OBJS)
-	clang++ -v
-	clang++-3.6 -v
-	dpkg --get-selections
+	$(CXX) -v
 	@mkdir -p bin
 	@echo "Linking $@"
 	@$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
