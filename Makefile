@@ -19,7 +19,7 @@ default: raycer
 
 raycer: $(OBJS)
 	clang++ -v
-	clang++-3.5 -v
+	clang++-3.6 -v
 	dpkg --get-selections
 	@mkdir -p bin
 	@echo "Linking $@"

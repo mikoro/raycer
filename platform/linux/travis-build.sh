@@ -1,7 +1,8 @@
 #!/bin/sh
 
 if [ "$CXX" = "clang++" ]; then
-	scan-build make
+	export CXX=clang++-3.6
+	scan-build-3.6 make
 else
 	make
 fi
