@@ -47,7 +47,7 @@ namespace Raycer
 
 		struct Tracer
 		{
-			int maxReflections = 0;
+			int maxIterations = 0;
 		} tracer;
 
 		struct Multisampler

@@ -13,17 +13,17 @@ namespace Raycer
 	{
 		Ray() {}
 
-		Ray(const Vector3& origin_, const Vector3& direction_, int reflectionCount_)
+		Ray(const Vector3& origin_, const Vector3& direction_, int iterations_)
 		{
 			origin = origin_;
 			direction = direction_;
-			reflectionCount = reflectionCount_;
+			iterations = iterations_;
 		}
 		
 		Vector3 origin;
 		Vector3 direction;
 		Intersection intersection;
 		Color color;
-		int reflectionCount = 0;
+		int iterations = 0;
 	};
 }

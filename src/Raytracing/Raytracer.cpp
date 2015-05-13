@@ -146,10 +146,10 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 		Material* material = scene.materialsMap[ray.intersection.materialId];
 		Texture* texture = scene.texturesMap[material->textureId];
 
-		if (material->reflectivity > 0.0 && ray.reflectionCount < scene.tracer.maxReflections)
+		if (material->reflectivity > 0.0 && ray.iterations < scene.tracer.maxIterations)
 		{
 			Vector3 reflectionDirection = ray.direction.reflect(ray.intersection.normal);
-			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.reflectionCount + 1);
+			Ray reflectedRay = Ray(ray.intersection.position + reflectionDirection * rayStartOffset, reflectionDirection, ray.iterations + 1);
 			traceRay(scene, reflectedRay, rayCount, interrupted);
 			reflectedColor = reflectedRay.color * material->reflectivity;
 		}

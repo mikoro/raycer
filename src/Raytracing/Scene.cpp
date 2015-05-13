@@ -190,7 +190,7 @@ Scene Scene::createTestScene()
 {
 	Scene scene;
 
-	scene.tracer.maxReflections = 1;
+	scene.tracer.maxIterations = 1;
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 4;
