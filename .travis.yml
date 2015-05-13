@@ -5,8 +5,7 @@ compiler:
   - clang
 
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y clang
+  - platform/linux/travis.sh
 
 script:
   - make
