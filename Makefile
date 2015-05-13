@@ -18,14 +18,17 @@ endif
 default: raycer
 
 raycer: $(OBJS)
-	@echo "CC $CC"
-	@echo "CXX $CXX"
-	@echo "CFLAGS $CFLAGS"
-	@echo "LDFLAGS $LDFLAGS"
+	@echo "CC: $(CC)"
+	@echo "CXX: $(CXX)"
+	@echo "CFLAGS: $(CFLAGS)"
+	@echo "LDFLAGS: $(LDFLAGS)"
 	gcc -v
 	g++ -v
 	clang -v
 	clang++ -v
+	clang++-3.5 -v
+	ls -al /usr/bin
+	ls -al /etc/alternatives
 	@mkdir -p bin
 	@echo "Linking $@"
 	@$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
