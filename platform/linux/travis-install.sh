@@ -3,9 +3,8 @@
 sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
 sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main'
 sudo add-apt-repository -y ppa:boost-latest/ppa
-wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
 
-sudo apt-get autoremove --purge -y gcc g++ gcc-4.6 g++-4.6
+wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
 
 sudo apt-get update -qq
 
