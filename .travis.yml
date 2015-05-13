@@ -6,7 +6,7 @@ compiler:
   - clang
 
 before_install:
-  - ./travis.sh
+  - sh platform/linux/travis.sh
 
 script:
   - make
