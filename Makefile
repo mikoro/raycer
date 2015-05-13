@@ -6,11 +6,11 @@ CFLAGS = -isystem /var/tmp/travis/include -isystem include -Isrc -std=c++11 -Wal
 LDFLAGS = -L/var/tmp/travis/lib -Lplatform/linux/lib -lGL -lGLEW -lglfw3 -lfreetype-gl -lfreetype -lOpenCL -lboost_system -lm -lstdc++ -lXrandr -lXi -lXcursor -lXinerama
 TARGET = raycer
 
-ifeq ($(TRAVIS),true)
+ifeq "$(TRAVIS)" "true"
 	CFLAGS += -DRUN_UNIT_TESTS
 endif
 
-ifeq ($(CXX),g++)
+ifeq "$(findstring clang,$(CXX))" ""
 	CFLAGS += -fopenmp
 	LDFLAGS += -fopenmp
 endif
@@ -26,7 +26,7 @@ raycer: $(OBJS)
 build/%.o: src/%.cpp
 	@mkdir -p $(@D)
 	@echo "Compiling $<"
-	$(CXX) $(CFLAGS) -c -o $@ $<
+	@$(CXX) $(CFLAGS) -c -o $@ $<
 
 clean:
 	@rm -rf bin build
