@@ -26,7 +26,7 @@ raycer: $(OBJS)
 build/%.o: src/%.cpp
 	@mkdir -p $(@D)
 	@echo "Compiling $<"
-	@$(CXX) $(CFLAGS) -c -o $@ $<
+	$(CXX) $(CFLAGS) -c -o $@ $<
 
 clean:
 	@rm -rf bin build
