@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [ "$CXX" == "clang" ]; then
+if [ "$CXX" == "clang++" ]; then
 	scan-build make
 else
 	make

@@ -10,7 +10,7 @@ ifeq ($(TRAVIS),true)
 	CFLAGS += -DRUN_UNIT_TESTS
 endif
 
-ifneq ($(CXX),clang)
+ifeq ($(CXX),g++)
 	CFLAGS += -fopenmp
 	LDFLAGS += -fopenmp
 endif
@@ -18,10 +18,14 @@ endif
 default: raycer
 
 raycer: $(OBJS)
-	@echo "CC: $(CC)"
-	@echo "CXX: $(CXX)"
-	@echo "CFLAGS: $(CFLAGS)"
-	@echo "LDFLAGS: $(LDFLAGS)"
+	@echo "CC $CC"
+	@echo "CXX $CXX"
+	@echo "CFLAGS $CFLAGS"
+	@echo "LDFLAGS $LDFLAGS"
+	gcc -v
+	g++ -v
+	clang -v
+	clang++ -v
 	@mkdir -p bin
 	@echo "Linking $@"
 	@$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
