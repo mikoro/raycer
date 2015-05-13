@@ -18,10 +18,9 @@ endif
 default: raycer
 
 raycer: $(OBJS)
-	$(CXX) -v
 	@mkdir -p bin
 	@echo "Linking $@"
-	@$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
+	$(CXX) $(OBJS) $(LDFLAGS) -o bin/$(TARGET)
 	@platform/linux/post-build.sh
 
 build/%.o: src/%.cpp

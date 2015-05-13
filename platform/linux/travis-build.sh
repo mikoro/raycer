@@ -2,6 +2,7 @@
 
 if [ "$CXX" = "clang++" ]; then
 	export CXX=clang++-3.6
+	$CXX -v
 	scan-build-3.6 make
 else
 	make
