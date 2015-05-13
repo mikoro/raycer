@@ -1,9 +1,10 @@
 language: cpp
 sudo: required
 
-compiler:
-  - gcc
-  - clang
+env:
+  - BUILD=gcc
+  - BUILD=clang
+  - BUILD=analyze
 
 install:
   - sh platform/linux/travis-install.sh

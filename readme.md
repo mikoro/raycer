@@ -5,6 +5,8 @@ A raytracer. Work in progress.
 * Author: [Mikko Ronkainen](http://mikkoronkainen.com)
 * Website: [github.com/mikoro/raycer](https://github.com/mikoro/raycer)
 
+[![Travis Status](https://travis-ci.org/mikoro/raycer.svg?branch=master)](https://travis-ci.org/mikoro/raycer)
+
 ## License
 
     Raycer
