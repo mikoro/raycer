@@ -146,7 +146,7 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 		throw std::runtime_error("Too few vertices in a face");
 
 	// triangulate
-	for (int i = 2; i < vertexIndices.size(); ++i)
+	for (int i = 2; i < (int)vertexIndices.size(); ++i)
 	{
 		Triangle triangle;
 

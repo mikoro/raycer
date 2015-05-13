@@ -191,7 +191,7 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene::Tracer& b)
 	{
-		a(cereal::make_nvp("maxReflections", b.maxReflections));
+		a(cereal::make_nvp("maxIterations", b.maxIterations));
 	}
 
 	template<class Archive>
@@ -263,9 +263,7 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
-			cereal::make_nvp("texcoords", b.texcoords),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("texcoords", b.texcoords));
 	}
 
 	template<class Archive>
