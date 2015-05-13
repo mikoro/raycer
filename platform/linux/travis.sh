@@ -1,19 +1,19 @@
 #!/bin/sh
 
-sudo add-apt-repository ppa:ubuntu-toolchain-r/test
-sudo add-apt-repository 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main'
-sudo add-apt-repository ppa:boost-latest/ppa
+sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+sudo add-apt-repository -y 'deb http://llvm.org/apt/precise/ llvm-toolchain-precise-3.6 main'
+sudo add-apt-repository -y ppa:boost-latest/ppa
 wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key|sudo apt-key add -
 
-sudo apt-get purge gcc g++ llvm clang
+sudo apt-get purge -y gcc g++ llvm clang
 
 sudo apt-get update -qq
 
-sudo apt-get install gcc-4.9 g++-4.9 llvm-3.6 clang-3.6
-sudo apt-get install libglew-dev
-sudo apt-get install opencl-headers
-sudo apt-get install libboost1.55-all-dev
-#sudo apt-get install libfreetype6-dev
+sudo apt-get install -y gcc-4.9 g++-4.9 llvm-3.6 clang-3.6
+sudo apt-get install -y libglew-dev
+sudo apt-get install -y opencl-headers
+sudo apt-get install -y libboost1.55-all-dev
+#sudo apt-get install -y libfreetype6-dev
 
 sudo update-alternatives --remove-all gcc
 sudo update-alternatives --remove-all g++
