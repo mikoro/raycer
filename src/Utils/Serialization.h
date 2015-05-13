@@ -71,13 +71,6 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, MovingAverage& b)
-	{
-		a(cereal::make_nvp("alpha", b.alpha),
-			cereal::make_nvp("averageValue", b.averageValue));
-	}
-
-	template<class Archive>
 	void serialize(Archive& a, Quaternion& b)
 	{
 		a(cereal::make_nvp("w", b.w),

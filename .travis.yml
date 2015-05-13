@@ -5,8 +5,8 @@ compiler:
   - gcc
   - clang
 
-before_install:
-  - sh platform/linux/travis.sh
+install:
+  - sh platform/linux/travis-install.sh
 
 script:
-  - make
+  - sh platform/linux/travis-build.sh
