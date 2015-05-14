@@ -10,20 +10,22 @@ using namespace Raycer;
 
 void PerlinNoiseTexture::initialize()
 {
+	perlinNoise.seed(seed);
 }
 
 Color PerlinNoiseTexture::getColor(const Vector3& position, const Vector2& texcoord) const
 {
-	(void)position;
-	(void)texcoord;
+	double n = getValue(position, texcoord);
 
-	return Color();
+	return baseColor * n;
 }
 
 double PerlinNoiseTexture::getValue(const Vector3& position, const Vector2& texcoord) const
 {
-	(void)position;
 	(void)texcoord;
 
-	return 1.0;
+	if (isFbm)
+		return perlinNoise.getFbmNoise(octaves, lacunarity, persistence, position.x * scale.x, position.y * scale.y, position.z * scale.z);
+	else
+		return perlinNoise.getNoise(position.x * scale.x, position.y * scale.y, position.z * scale.z);
 }

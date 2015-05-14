@@ -205,10 +205,35 @@ Scene Scene::createTestScene1()
 
 	// FLOOR //
 
+	/*
 	CheckerTexture floorTexture;
 	floorTexture.id = 0;
 	floorTexture.color1 = Color(0.1, 0.1, 0.1);
 	floorTexture.color2 = Color(0.3, 0.3, 0.3);
+	*/
+
+	/*
+	PerlinNoiseTexture floorTexture;
+	floorTexture.id = 0;
+	floorTexture.intensity = 0.5;
+	floorTexture.seed = 1;
+	floorTexture.scale = Vector3(1.0, 1.0, 1.0);
+	floorTexture.baseColor = Color(1.0, 1.0, 1.0);
+	floorTexture.isFbm = false;
+	floorTexture.octaves = 4;
+	floorTexture.lacunarity = 2.0;
+	floorTexture.persistence = 0.5;
+	*/
+
+	CellNoiseTexture floorTexture;
+	floorTexture.id = 0;
+	floorTexture.intensity = 0.5;
+	floorTexture.seed = 1;
+	floorTexture.scale = Vector3(1.0, 1.0, 1.0);
+	floorTexture.baseColor = Color(1.0, 1.0, 1.0);
+	floorTexture.distanceType = CellNoiseDistanceType::EUCLIDEAN;
+	floorTexture.combineType = CellNoiseCombineType::D1_MINUS_D2;
+	floorTexture.density = 1;
 
 	Material floorMaterial;
 	floorMaterial.id = 0;
@@ -227,7 +252,7 @@ Scene Scene::createTestScene1()
 	floorPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	floorPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.checkerTextures.push_back(floorTexture);
+	scene.textures.cellNoiseTextures.push_back(floorTexture);
 	scene.materials.push_back(floorMaterial);
 	scene.primitives.planes.push_back(floorPlane);
 

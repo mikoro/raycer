@@ -25,5 +25,5 @@ double ColorTexture::getValue(const Vector3& position, const Vector2& texcoord) 
 	(void)position;
 	(void)texcoord;
 
-	return 1.0;
+	return staticValue;
 }

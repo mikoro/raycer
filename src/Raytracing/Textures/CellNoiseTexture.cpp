@@ -10,20 +10,19 @@ using namespace Raycer;
 
 void CellNoiseTexture::initialize()
 {
+	cellNoise.seed(seed);
 }
 
 Color CellNoiseTexture::getColor(const Vector3& position, const Vector2& texcoord) const
 {
-	(void)position;
-	(void)texcoord;
+	double n = getValue(position, texcoord);
 
-	return Color();
+	return baseColor * n;
 }
 
 double CellNoiseTexture::getValue(const Vector3& position, const Vector2& texcoord) const
 {
-	(void)position;
 	(void)texcoord;
 
-	return 1.0;
+	return cellNoise.getNoise(distanceType, combineType, density, position.x * scale.x, position.y * scale.y, position.z * scale.z);
 }

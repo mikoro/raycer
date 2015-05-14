@@ -5,12 +5,12 @@
 
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/PerlinNoise.h"
+#include "Math/Vector3.h"
+#include "Math/Color.h"
 
 namespace Raycer
 {
-	class Color;
 	class Vector2;
-	class Vector3;
 
 	class PerlinNoiseTexture : public Texture
 	{
@@ -20,6 +20,14 @@ namespace Raycer
 
 		Color getColor(const Vector3& position, const Vector2& texcoord) const;
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
+
+		int seed = 1;
+		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		Color baseColor = Color(1.0, 1.0, 1.0);
+		bool isFbm = false;
+		int octaves = 4;
+		double lacunarity = 2.0;
+		double persistence = 0.5;
 
 	private:
 

@@ -3,19 +3,18 @@
 
 #pragma once
 
-#include <vector>
-
 /*
 
 http://graphics.ucsd.edu/courses/cse168_s06/ucsd/cellular_noise.pdf
 
-Returns sorted distances to all neighbours (non-normalized)
+Returns distance to closest neighbour (non-normalized) 0.0 - inf
 
 */
 
 namespace Raycer
 {
-	enum class CellNoiseType { EUCLIDEAN, EUCLIDEAN_SQUARED, MANHATTAN, CHEBYSHEV };
+	enum class CellNoiseDistanceType { EUCLIDEAN, EUCLIDEAN_SQUARED, MANHATTAN, CHEBYSHEV };
+	enum class CellNoiseCombineType { D1, D2, D1_PLUS_D2, D1_MINUS_D2, D2_MINUS_D1 };
 
 	class Vector2;
 	class Vector3;
@@ -29,7 +28,7 @@ namespace Raycer
 
 		void seed(int seed);
 
-		std::vector<double> getNoise(CellNoiseType type, int density, double x, double y, double z) const;
+		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, int density, double x, double y, double z) const;
 
 	private:
 

@@ -21,5 +21,6 @@ namespace Raycer
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
 		Color color;
+		double staticValue = 1.0;
 	};
 }

@@ -27,7 +27,7 @@ void CellNoise::seed(int seed)
 	m_seed = seed;
 }
 
-std::vector<double> CellNoise::getNoise(CellNoiseType type, int density, double x, double y, double z) const
+double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, int density, double x, double y, double z) const
 {
 	std::vector<double> distances;
 	Vector3 evaluationPoint(x, y, z);
@@ -42,12 +42,12 @@ std::vector<double> CellNoise::getNoise(CellNoiseType type, int density, double 
 
 	std::function<double(const Vector3& v1, const Vector3& v2)> distanceFunction;
 
-	switch (type)
+	switch (distanceType)
 	{
-		case CellNoiseType::EUCLIDEAN: distanceFunction = &euclideanDistance; break;
-		case CellNoiseType::EUCLIDEAN_SQUARED: distanceFunction = &euclideanDistanceSquared; break;
-		case CellNoiseType::MANHATTAN: distanceFunction = &manhattanDistance; break;
-		case CellNoiseType::CHEBYSHEV: distanceFunction = &chebyshevDistance; break;
+		case CellNoiseDistanceType::EUCLIDEAN: distanceFunction = &euclideanDistance; break;
+		case CellNoiseDistanceType::EUCLIDEAN_SQUARED: distanceFunction = &euclideanDistanceSquared; break;
+		case CellNoiseDistanceType::MANHATTAN: distanceFunction = &manhattanDistance; break;
+		case CellNoiseDistanceType::CHEBYSHEV: distanceFunction = &chebyshevDistance; break;
 		default: distanceFunction = &euclideanDistance; break;
 	}
 
@@ -67,21 +67,62 @@ std::vector<double> CellNoise::getNoise(CellNoiseType type, int density, double 
 
 				for (int i = 0; i < pointCount; ++i)
 				{
-					Vector3 newPoint;
+					Vector3 cubePoint;
 
-					newPoint.x = (double)cx + randomUniform(mt);
-					newPoint.y = (double)cy + randomUniform(mt);
-					newPoint.z = (double)cz + randomUniform(mt);
+					cubePoint.x = (double)cx + randomUniform(mt);
+					cubePoint.y = (double)cy + randomUniform(mt);
+					cubePoint.z = (double)cz + randomUniform(mt);
 
-					distances.push_back(distanceFunction(evaluationPoint, newPoint));
+					distances.push_back(distanceFunction(evaluationPoint, cubePoint));
 				}
 			}
 		}
 	}
 
 	std::sort(distances.begin(), distances.end());
+	double distance = 0.0;
 
-	return distances;
+	switch (combineType)
+	{
+		case CellNoiseCombineType::D1:
+		{
+			if (distances.size() >= 1)
+				distance = distances[0];
+
+		} break;
+
+		case CellNoiseCombineType::D2:
+		{
+			if (distances.size() >= 2)
+				distance = distances[1];
+
+		} break;
+
+		case CellNoiseCombineType::D1_PLUS_D2:
+		{
+			if (distances.size() >= 2)
+				distance = distances[0] + distances[1];
+
+		} break;
+
+		case CellNoiseCombineType::D1_MINUS_D2:
+		{
+			if (distances.size() >= 2)
+				distance = distances[0] - distances[1];
+
+		} break;
+
+		case CellNoiseCombineType::D2_MINUS_D1:
+		{
+			if (distances.size() >= 2)
+				distance = distances[1] - distances[0];
+
+		} break;
+
+		default: break;
+	}
+
+	return fabs(distance);
 }
 
 int CellNoise::getHashcode(int x, int y, int z) const

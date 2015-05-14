@@ -305,14 +305,27 @@ namespace Raycer
 	void serialize(Archive& a, PerlinNoiseTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("baseColor", b.baseColor),
+			cereal::make_nvp("isFbm", b.isFbm),
+			cereal::make_nvp("octaves", b.octaves),
+			cereal::make_nvp("lacunarity", b.lacunarity),
+			cereal::make_nvp("persistence", b.persistence));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, CellNoiseTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("baseColor", b.baseColor),
+			cereal::make_nvp("distanceType", b.distanceType),
+			cereal::make_nvp("combineType", b.combineType),
+			cereal::make_nvp("density", b.density));
 	}
 
 	template<class Archive>
