@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <random>
 
 #include "Math/Color.h"
 #include "Math/MathUtils.h"
@@ -233,12 +234,28 @@ Color Color::alphaBlend(const Color& first, const Color& second)
 
 Color Color::pow(const Color& color, double power)
 {
-	Color result;
+	Color c;
 
-	result.r = ::pow(color.r, power);
-	result.g = ::pow(color.g, power);
-	result.b = ::pow(color.b, power);
-	result.a = color.a;
+	c.r = ::pow(color.r, power);
+	c.g = ::pow(color.g, power);
+	c.b = ::pow(color.b, power);
+	c.a = color.a;
 
-	return result;
+	return c;
+}
+
+Color Color::random()
+{
+	std::random_device rd;
+	std::uniform_real_distribution<double> realDist(0.0, 1.0);
+	std::minstd_rand gen(rd());
+
+	Color c;
+
+	c.r = realDist(gen);
+	c.g = realDist(gen);
+	c.b = realDist(gen);
+	c.a = 1.0;
+
+	return c;
 }

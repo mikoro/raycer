@@ -3,6 +3,10 @@
 
 #pragma once
 
+#include <vector>
+
+#include "Math/Color.h"
+
 /*
 
 http://graphics.ucsd.edu/courses/cse168_s06/ucsd/cellular_noise.pdf
@@ -33,6 +37,10 @@ namespace Raycer
 		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, int density, double x, double y, double z) const;
 		double getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, int density, double x, double y) const;
 
+		void setVoronoiColors(const std::vector<Color>& colors);
+		Color getVoronoiColor(CellNoiseDistanceType distanceType, int density, double x, double y, double z) const;
+		Color getVoronoiColor2D(CellNoiseDistanceType distanceType, int density, double x, double y) const;
+
 	private:
 
 		int getHashcode(int x, int y, int z) const;
@@ -46,5 +54,6 @@ namespace Raycer
 		static double chebyshevDistance(const Vector3& v1, const Vector3& v2);
 
 		int m_seed;
+		std::vector<Color> voronoiColors;
 	};
 }
