@@ -232,7 +232,7 @@ Scene Scene::createTestScene1()
 	floorTexture.scale = Vector3(1.0, 1.0, 1.0);
 	floorTexture.baseColor = Color(1.0, 1.0, 1.0);
 	floorTexture.distanceType = CellNoiseDistanceType::EUCLIDEAN;
-	floorTexture.combineType = CellNoiseCombineType::D1_MINUS_D2;
+	floorTexture.combineType = CellNoiseCombineType::D1_TIMES_D2;
 	floorTexture.density = 1;
 
 	Material floorMaterial;
