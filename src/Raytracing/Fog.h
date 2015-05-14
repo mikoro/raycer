@@ -17,8 +17,8 @@ namespace Raycer
 			Color calculate(const Scene& scene, const Pixel& pixel);
 
 			bool enabled = false;
-			double distance = 0.0;
-			double steepness = 0.0;
+			double distance = 40.0;
+			double steepness = 8.0;
 			Color color;
 	};
 }

@@ -168,7 +168,7 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	Vector3& P = ray.intersection.position;
 	double c1 = -D.dot(N);
 
-	if (material->reflectivity > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	if (material->reflectance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
 	{
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
@@ -179,10 +179,10 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 		reflectedRay.iterationCount = ray.iterationCount + 1;
 
 		traceRay(scene, reflectedRay, rayCount, interrupted);
-		reflectionColor = reflectedRay.color * material->reflectivity;
+		reflectionColor = reflectedRay.color * material->reflectance;
 	}
 
-	if (material->refractivity > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	if (material->transmittance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
 	{
 		double n1, n2;
 
@@ -213,7 +213,7 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 			refractedRay.iterationCount = ray.iterationCount + 1;
 
 			traceRay(scene, refractedRay, rayCount, interrupted);
-			refractionColor = refractedRay.color * material->refractivity;
+			refractionColor = refractedRay.color * material->transmittance;
 		}
 	}
 

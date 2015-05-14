@@ -187,7 +187,7 @@ void Scene::validate()
 	}
 }
 
-Scene Scene::createTestScene()
+Scene Scene::createTestScene1()
 {
 	Scene scene;
 
@@ -196,14 +196,6 @@ Scene Scene::createTestScene()
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 4;
-
-	scene.toneMapper.type = ToneMapType::GAMMA;
-	scene.toneMapper.gamma = 1.0 / 2.2;
-
-	scene.fog.enabled = false;
-	scene.fog.distance = 40.0;
-	scene.fog.steepness = 8.0;
-	scene.fog.color = Color(1.0, 1.0, 1.0);
 
 	// CAMERA //
 
@@ -225,8 +217,8 @@ Scene Scene::createTestScene()
 	floorMaterial.diffuseness = 1.0;
 	floorMaterial.specularity = 1.0;
 	floorMaterial.shininess = 2.0;
-	floorMaterial.reflectivity = 1.0;
-	floorMaterial.refractivity = 0.0;
+	floorMaterial.reflectance = 1.0;
+	floorMaterial.transmittance = 0.0;
 	floorMaterial.refractiveIndex = 1.0;
 
 	Plane floorPlane;
@@ -253,8 +245,8 @@ Scene Scene::createTestScene()
 	sphere1Material.diffuseness = 1.0;
 	sphere1Material.specularity = 1.0;
 	sphere1Material.shininess = 32.0;
-	sphere1Material.reflectivity = 0.5;
-	sphere1Material.refractivity = 0.0;
+	sphere1Material.reflectance = 0.5;
+	sphere1Material.transmittance = 0.0;
 	sphere1Material.refractiveIndex = 1.0;
 
 	Sphere sphere1;
@@ -281,8 +273,8 @@ Scene Scene::createTestScene()
 	sphere2Material.diffuseness = 0.0;
 	sphere2Material.specularity = 0.5;
 	sphere2Material.shininess = 32.0;
-	sphere2Material.reflectivity = 0.0;
-	sphere2Material.refractivity = 1.0;
+	sphere2Material.reflectance = 0.0;
+	sphere2Material.transmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
 
 	Sphere sphere2;
@@ -298,7 +290,7 @@ Scene Scene::createTestScene()
 	// LIGHTS //
 
 	AmbientLight ambientLight1;
-	ambientLight1.color = Color::WHITE;
+	ambientLight1.color = Color(1.0, 1.0, 1.0);
 	ambientLight1.intensity = 0.1;
 
 	scene.lights.ambientLights.push_back(ambientLight1);
@@ -307,6 +299,96 @@ Scene Scene::createTestScene()
 	directionalLight1.color = Color(192, 191, 173);
 	directionalLight1.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
 	directionalLight1.intensity = 1.5;
+
+	scene.lights.directionalLights.push_back(directionalLight1);
+
+	return scene;
+}
+
+Scene Scene::createTestScene2()
+{
+	Scene scene;
+
+	scene.tracer.maxIterations = 3;
+	scene.tracer.airRefractiveIndex = 1.0;
+
+	scene.multisampler.type = MultisampleType::NONE;
+	scene.multisampler.multisamples = 4;
+
+	// CAMERA //
+
+	scene.camera.position = Vector3(0.0, 3.0, 6.0);
+	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
+	scene.camera.fov = 75.0;
+
+	// PLANE 1 //
+
+	CheckerTexture plane1Texture;
+	plane1Texture.id = 0;
+	plane1Texture.color1 = Color(0.0, 0.0, 0.4);
+	plane1Texture.color2 = Color(0.0, 0.0, 0.2);
+
+	Material plane1Material;
+	plane1Material.id = 0;
+	plane1Material.textureId = plane1Texture.id;
+	plane1Material.ambientness = 1.0;
+	plane1Material.diffuseness = 1.0;
+	plane1Material.specularity = 0.0;
+	plane1Material.shininess = 0.0;
+	plane1Material.reflectance = 0.0;
+	plane1Material.transmittance = 0.0;
+	plane1Material.refractiveIndex = 1.0;
+
+	Plane plane1;
+	plane1.materialId = plane1Material.id;
+	plane1.position = Vector3(0.0, -1.0, 0.0);
+	plane1.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	plane1.texcoordScale = Vector2(1.0, 1.0);
+
+	scene.textures.checkerTextures.push_back(plane1Texture);
+	scene.materials.push_back(plane1Material);
+	scene.primitives.planes.push_back(plane1);
+
+	// PLANE 2 //
+
+	ColorTexture plane2Texture;
+	plane2Texture.id = 1;
+	plane2Texture.color = Color(1.0, 1.0, 1.0);
+	plane2Texture.intensity = 1.0;
+
+	Material plane2Material;
+	plane2Material.id = 1;
+	plane2Material.textureId = plane2Texture.id;
+	plane2Material.ambientness = 0.0;
+	plane2Material.diffuseness = 0.0;
+	plane2Material.specularity = 0.0;
+	plane2Material.shininess = 16.0;
+	plane2Material.reflectance = 0.0;
+	plane2Material.transmittance = 1.0;
+	plane2Material.refractiveIndex = 1.3;
+
+	Plane plane2;
+	plane2.materialId = plane2Material.id;
+	plane2.position = Vector3(0.0, 0.0, 0.0);
+	plane2.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	plane2.texcoordScale = Vector2(1.0, 1.0);
+
+	scene.textures.colorTextures.push_back(plane2Texture);
+	scene.materials.push_back(plane2Material);
+	scene.primitives.planes.push_back(plane2);
+
+	// LIGHTS //
+
+	AmbientLight ambientLight1;
+	ambientLight1.color = Color(1.0, 1.0, 1.0);
+	ambientLight1.intensity = 0.1;
+
+	scene.lights.ambientLights.push_back(ambientLight1);
+
+	DirectionalLight directionalLight1;
+	directionalLight1.color = Color(192, 191, 173);
+	directionalLight1.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
+	directionalLight1.intensity = 1.0;
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

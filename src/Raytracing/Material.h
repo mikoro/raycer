@@ -16,8 +16,8 @@ namespace Raycer
 		double diffuseness = 1.0;
 		double specularity = 1.0;
 		double shininess = 1.0;
-		double reflectivity = 1.0;
-		double refractivity = 1.0;
+		double reflectance = 1.0;
+		double transmittance = 1.0;
 		double refractiveIndex = 1.0;
 	};
 }

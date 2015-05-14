@@ -163,8 +163,8 @@ namespace Raycer
 			cereal::make_nvp("diffuseness", b.diffuseness),
 			cereal::make_nvp("specularity", b.specularity),
 			cereal::make_nvp("shininess", b.shininess),
-			cereal::make_nvp("reflectivity", b.reflectivity),
-			cereal::make_nvp("refractivity", b.refractivity),
+			cereal::make_nvp("reflectance", b.reflectance),
+			cereal::make_nvp("transmittance", b.transmittance),
 			cereal::make_nvp("refractiveIndex", b.refractiveIndex));
 	}
 
