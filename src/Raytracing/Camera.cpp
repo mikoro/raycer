@@ -107,7 +107,7 @@ void Camera::update(double timeStep)
 
 void Camera::precalculate()
 {
-	forward = orientation.getDirectionVector().normalized();
+	forward = orientation.getDirectionVector();
 	right = forward.cross(Vector3::UP).normalized();
 	up = right.cross(forward).normalized();
 
@@ -121,7 +121,10 @@ Ray Camera::getRay(double x, double y) const
 	double dy = (y / imagePlaneHeight) - 0.5;
 
 	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
-	Vector3 rayDirection = (imagePlanePixelPosition - position).normalized();
 
-	return Ray(position, rayDirection, 0);
+	Ray ray;
+	ray.origin = position;
+	ray.direction = (imagePlanePixelPosition - position).normalized();
+
+	return ray;
 }

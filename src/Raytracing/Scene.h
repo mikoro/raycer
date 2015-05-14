@@ -48,6 +48,8 @@ namespace Raycer
 		struct Tracer
 		{
 			int maxIterations = 0;
+			double airRefractiveIndex = 1.0;
+			double rayOffset = 0.000001;
 		} tracer;
 
 		struct Multisampler

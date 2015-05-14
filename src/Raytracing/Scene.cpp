@@ -85,6 +85,7 @@ void Scene::saveToFile(const std::string& fileName) const
 	}
 	else if (StringUtils::endsWith(fileName, ".bin"))
 	{
+		// TODO: will not compile
 		//cereal::BinaryOutputArchive archive(file);
 		//archive(cereal::make_nvp("scene", *this));
 	}
@@ -190,7 +191,8 @@ Scene Scene::createTestScene()
 {
 	Scene scene;
 
-	scene.tracer.maxIterations = 1;
+	scene.tracer.maxIterations = 3;
+	scene.tracer.airRefractiveIndex = 1.0;
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 4;
@@ -198,162 +200,115 @@ Scene Scene::createTestScene()
 	scene.toneMapper.type = ToneMapType::GAMMA;
 	scene.toneMapper.gamma = 1.0 / 2.2;
 
-	scene.camera.position = Vector3(0.0, 6.0, 8.0);
-	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
-	scene.camera.fov = 75.0;
-
 	scene.fog.enabled = false;
 	scene.fog.distance = 40.0;
 	scene.fog.steepness = 8.0;
 	scene.fog.color = Color(1.0, 1.0, 1.0);
 
-	ColorTexture t0;
-	t0.id = 0;
-	t0.color = Color(0.5, 0.5, 0.5);
+	// CAMERA //
 
-	ColorTexture t1;
-	t1.id = 1;
-	t1.color = Color(0.5, 0.0, 0.0);
+	scene.camera.position = Vector3(0.0, 3.0, 6.0);
+	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
+	scene.camera.fov = 75.0;
 
-	ColorTexture t2;
-	t2.id = 2;
-	t2.color = Color(0.0, 0.5, 0.0);
+	// FLOOR //
 
-	ColorTexture t3;
-	t3.id = 3;
-	t3.color = Color(0.0, 0.0, 0.5);
+	CheckerTexture floorTexture;
+	floorTexture.id = 0;
+	floorTexture.color1 = Color(0.1, 0.1, 0.1);
+	floorTexture.color2 = Color(0.3, 0.3, 0.3);
 
-	scene.textures.colorTextures.push_back(t0);
-	scene.textures.colorTextures.push_back(t1);
-	scene.textures.colorTextures.push_back(t2);
-	scene.textures.colorTextures.push_back(t3);
+	Material floorMaterial;
+	floorMaterial.id = 0;
+	floorMaterial.textureId = floorTexture.id;
+	floorMaterial.ambientness = 1.0;
+	floorMaterial.diffuseness = 1.0;
+	floorMaterial.specularity = 1.0;
+	floorMaterial.shininess = 2.0;
+	floorMaterial.reflectivity = 1.0;
+	floorMaterial.refractivity = 0.0;
+	floorMaterial.refractiveIndex = 1.0;
 
-	CheckerTexture t4;
-	t4.id = 4;
+	Plane floorPlane;
+	floorPlane.materialId = floorMaterial.id;
+	floorPlane.position = Vector3(0.0, 0.0, 0.0);
+	floorPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	floorPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.checkerTextures.push_back(t4);
+	scene.textures.checkerTextures.push_back(floorTexture);
+	scene.materials.push_back(floorMaterial);
+	scene.primitives.planes.push_back(floorPlane);
 
-	ImageTexture t5;
-	t5.id = 5;
-	t5.imageFilePath = "data/images/grass.jpg";
+	// SPHERE 1 //
 
-	scene.textures.imageTextures.push_back(t5);
+	ColorTexture sphere1Texture;
+	sphere1Texture.id = 1;
+	sphere1Texture.color = Color(1.0, 0.0, 0.0);
+	sphere1Texture.intensity = 0.3;
 
-	WoodTexture t6;
-	t6.id = 6;
+	Material sphere1Material;
+	sphere1Material.id = 1;
+	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.ambientness = 1.0;
+	sphere1Material.diffuseness = 1.0;
+	sphere1Material.specularity = 1.0;
+	sphere1Material.shininess = 32.0;
+	sphere1Material.reflectivity = 0.5;
+	sphere1Material.refractivity = 0.0;
+	sphere1Material.refractiveIndex = 1.0;
 
-	scene.textures.woodTextures.push_back(t6);
-
-	MarbleTexture t7;
-	t7.id = 7;
-
-	scene.textures.marbleTextures.push_back(t7);
-
-	FireTexture t8;
-	t8.id = 8;
-
-	scene.textures.fireTextures.push_back(t8);
+	Sphere sphere1;
+	sphere1.materialId = sphere1Material.id;
+	sphere1.texcoordScale = Vector2(1.0, 1.0);
+	sphere1.position = Vector3(0.0, 1.0, 0.0);
+	sphere1.radius = 1.0;
 	
-	// p1
-	Material m0;
-	m0.id = 0;
-	m0.textureId = 4;
-	m0.diffuseness = 1.0;
-	m0.specularity = 0.0;
-	m0.shininess = 0.0;
-	m0.reflectivity = 0.0;
+	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
-	// s1
-	Material m1;
-	m1.id = 1;
-	m1.textureId = 6;
-	m1.diffuseness = 1.0;
-	m1.specularity = 0.0;
-	m1.shininess = 2.0;
-	m1.reflectivity = 0.0;
+	// SPHERE 2 //
 
-	// s2
-	Material m2;
-	m2.id = 2;
-	m2.textureId = 7;
-	m2.diffuseness = 1.0;
-	m2.specularity = 1.0;
-	m2.shininess = 64.0;
-	m2.reflectivity = 0.0;
+	ColorTexture sphere2Texture;
+	sphere2Texture.id = 2;
+	sphere2Texture.color = Color(1.0, 1.0, 1.0);
+	sphere2Texture.intensity = 1.0;
 
-	// s3
-	Material m3;
-	m3.id = 3;
-	m3.textureId = 8;
-	m3.diffuseness = 1.0;
-	m3.specularity = 0.0;
-	m3.shininess = 0.0;
-	m3.reflectivity = 0.0;
+	Material sphere2Material;
+	sphere2Material.id = 2;
+	sphere2Material.textureId = sphere2Texture.id;
+	sphere2Material.ambientness = 0.0;
+	sphere2Material.diffuseness = 0.0;
+	sphere2Material.specularity = 0.5;
+	sphere2Material.shininess = 32.0;
+	sphere2Material.reflectivity = 0.0;
+	sphere2Material.refractivity = 1.0;
+	sphere2Material.refractiveIndex = 1.5;
 
-	// tr1
-	Material m4;
-	m4.id = 4;
-	m4.textureId = 1;
-	m4.diffuseness = 1.0;
-	m4.specularity = 0.0;
-	m4.shininess = 0.0;
-	m4.reflectivity = 0.0;
+	Sphere sphere2;
+	sphere2.materialId = sphere2Material.id;
+	sphere2.texcoordScale = Vector2(1.0, 1.0);
+	sphere2.position = Vector3(-3.0, 1.0, 0.0);
+	sphere2.radius = 1.0;
 
-	scene.materials.push_back(m0);
-	scene.materials.push_back(m1);
-	scene.materials.push_back(m2);
-	scene.materials.push_back(m3);
-	scene.materials.push_back(m4);
+	scene.textures.colorTextures.push_back(sphere2Texture);
+	scene.materials.push_back(sphere2Material);
+	scene.primitives.spheres.push_back(sphere2);
 
-	Plane p1;
-	p1.materialId = 0;
-	p1.position = Vector3(0.0, 0.0, 0.0);
-	p1.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	p1.texcoordScale = Vector2(5.0, 5.0);
+	// LIGHTS //
 
-	scene.primitives.planes.push_back(p1);
+	AmbientLight ambientLight1;
+	ambientLight1.color = Color::WHITE;
+	ambientLight1.intensity = 0.1;
 
-	Sphere s1;
-	s1.materialId = 1;
-	s1.position = Vector3(0.0, 1.0, -5.0);
-	s1.radius = 1.0;
-	s1.texcoordScale = Vector2(0.05, 0.05);
+	scene.lights.ambientLights.push_back(ambientLight1);
 
-	Sphere s2;
-	s2.materialId = 2;
-	s2.position = Vector3(2.5, 1.0, -5.0);
-	s2.radius = 1.0;
+	DirectionalLight directionalLight1;
+	directionalLight1.color = Color(192, 191, 173);
+	directionalLight1.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
+	directionalLight1.intensity = 1.5;
 
-	Sphere s3;
-	s3.materialId = 3;
-	s3.position = Vector3(-2.5, 1.0, -5.0);
-	s3.radius = 1.0;
-
-	//scene.primitives.spheres.push_back(s1);
-	//scene.primitives.spheres.push_back(s2);
-	//scene.primitives.spheres.push_back(s3);
-
-	Mesh mh1;
-	mh1.materialId = 4;
-	mh1.position = Vector3(0.0, 2.0, 0.0);
-	mh1.scale = Vector3(1.0, 1.0, 1.0);
-	mh1.orientation = EulerAngle(0.0, 0.0, 0.0);
-	mh1.meshFilePath = "data/meshes/monkey1.obj";
-
-	scene.primitives.meshes.push_back(mh1);
-
-	AmbientLight l1;
-	l1.color = Color::WHITE;
-	l1.intensity = 0.1;
-
-	scene.lights.ambientLights.push_back(l1);
-
-	DirectionalLight l2;
-	l2.color = Color(192, 191, 173);
-	l2.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
-	l2.intensity = 1.0;
-
-	scene.lights.directionalLights.push_back(l2);
+	scene.lights.directionalLights.push_back(directionalLight1);
 
 	return scene;
 }

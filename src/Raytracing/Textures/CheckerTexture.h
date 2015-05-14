@@ -20,7 +20,7 @@ namespace Raycer
 		Color getColor(const Vector3& position, const Vector2& texcoord) const;
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
-		Color color1 = Color(0.3, 0.3, 0.3);
-		Color color2 = Color(0.1, 0.1, 0.1);
+		Color color1;
+		Color color2;
 	};
 }

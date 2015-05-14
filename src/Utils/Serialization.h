@@ -159,10 +159,13 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("textureId", b.textureId),
+			cereal::make_nvp("ambientness", b.ambientness),
 			cereal::make_nvp("diffuseness", b.diffuseness),
 			cereal::make_nvp("specularity", b.specularity),
 			cereal::make_nvp("shininess", b.shininess),
-			cereal::make_nvp("reflectivity", b.reflectivity));
+			cereal::make_nvp("reflectivity", b.reflectivity),
+			cereal::make_nvp("refractivity", b.refractivity),
+			cereal::make_nvp("refractiveIndex", b.refractiveIndex));
 	}
 
 	/* SCENE */
@@ -184,7 +187,9 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene::Tracer& b)
 	{
-		a(cereal::make_nvp("maxIterations", b.maxIterations));
+		a(cereal::make_nvp("maxIterations", b.maxIterations),
+			cereal::make_nvp("airRefractiveIndex", b.airRefractiveIndex),
+			cereal::make_nvp("rayOffset", b.rayOffset));
 	}
 
 	template<class Archive>

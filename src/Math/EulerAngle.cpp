@@ -59,7 +59,7 @@ Vector3 EulerAngle::getDirectionVector() const
 	result.y = sin(MathUtils::degToRad(pitch));
 	result.z = -cos(MathUtils::degToRad(yaw)) * cos(MathUtils::degToRad(pitch));
 
-	return result;
+	return result.normalized();
 }
 
 EulerAngle EulerAngle::lerp(const EulerAngle& e1, const EulerAngle& e2, double t)
