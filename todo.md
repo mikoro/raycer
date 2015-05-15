@@ -1,22 +1,24 @@
 lisää primitiivejä
- - laatikko
- - sylinteri
- - kolmio
- - suorakulmio
- - ympyrä
- - implisiittinen
+ - trumbore kolmio
+ - implisiittinen (torus)
+ - metapallo
  - CSG
+
+tekstuurit
+ - voronoi tekstuuri
 
 kamera
  - aperture & dof
  
 valot
- - directional valo
- - ambient valo
- - valojen muoto (suorakulmio, neliö)
- - soft shadows
+ - fresnel
+ - beer's law
+ - point ja spot light
  - vaimentuminen
- - suuntaavuus (eteen/taakse, light cone)
+ - soft shadows
 
 noiset
  - value noise (gaussian?)
+
+sampling
+ - nopeampi poisson disc

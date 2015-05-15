@@ -2,16 +2,24 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst
 
 SOURCES := $(call rwildcard, src/, *.cpp)
 OBJS := $(subst src/,build/,$(SOURCES:.cpp=.o))
-CFLAGS = -isystem /var/tmp/travis/include -isystem /u/78/moronkai/unix/usr/include -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast
-LDFLAGS = -L/var/tmp/travis/lib -L/u/78/moronkai/unix/usr/lib -Lplatform/linux/lib -lGL -lGLEW -lglfw3 -lfreetype-gl -lfreetype -lOpenCL -lboost_system -lm -lstdc++ -lXrandr -lXi -lXcursor -lXinerama
+CFLAGS = -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast
+LDFLAGS = -Lplatform/linux/lib -lGL -lGLEW -lglfw3 -lfreetype-gl -lfreetype -lOpenCL -lboost_system -lm -lstdc++ -lXrandr -lXi -lXcursor -lXinerama
 TARGET = raycer
 
+# travis-ci environment
 ifeq "$(TRAVIS)" "true"
-	CFLAGS += -DRUN_UNIT_TESTS
+	CFLAGS += -isystem /var/tmp/travis/include -DRUN_UNIT_TESTS
+	LDFLAGS += -L/var/tmp/travis/lib
 endif
 
+# gcc
 ifeq "$(findstring clang,$(CXX))" ""
 	CFLAGS += -fopenmp -flto
+endif
+
+# clang
+ifneq "$(findstring clang,$(CXX))" ""
+	CFLAGS += -D__extern_always_inline=inline
 endif
 
 default: raycer
@@ -29,4 +37,3 @@ build/%.o: src/%.cpp
 
 clean:
 	@rm -rf bin build
-
