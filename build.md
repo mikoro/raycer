@@ -1,13 +1,13 @@
 ## Windows
 
-- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.58.0/).
-- Adjust include paths to point to the boost libraries.
+- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.57.0/).
+- Adjust solution include paths to point to the boost libraries.
 - Compile with MSVC 12.0 (2013) or ICC 15.0 using VS 2013.
 - Install graphics drivers that include OpenCL DLLs.
 
 ### Boost
 
-If using ICC, the boost libraries need to be compiled separately. Probably a good idea to do it with MSVC too.
+If using ICC, the boost framework needs to be compiled separately. Probably a good idea to do it with MSVC too.
 
 Download the sources and run the commands from a corresponding developer console (MSVC or ICC):
 
@@ -18,12 +18,21 @@ Download the sources and run the commands from a corresponding developer console
 
 ## Linux
 
-- Install boost.
-- Install Freetype.
-- Install GLFW.
-- Install GLEW.
-- Install OpenCL headers, libraries and a suitable driver for the compute device (CPU/GPU/etc). E.g. for Intel CPUs: https://software.intel.com/en-us/articles/opencl-drivers
-- Compile using the Makefile.
+- Install boost framework
+- Install Freetype
+- Install GLFW
+- Install GLEW
+- Install OpenCL headers + something that provides the libraries (e.g. beignet, intel/nvidia drivers)
+
+Compile and run:
+
+    export CXX=<compiler>
+    make -j4
+    cd bin && ./raycer
+
+The included freetype-gl library file is compiled against certain Freetype library. It might be necessary to recompile the library and replace the file in *platform/linux/lib*.
+
+The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, try adding or removing the last number.
 
 ## Mac
 
@@ -36,7 +45,7 @@ TBD
 - GLFW 3.1.1
 - GLEW 1.12.0
 - freetype-gl (github master ?)
-- CATCH CATCH v1.1 build 1 (master branch)
+- CATCH v1.1 build 1 (master branch)
 - cereal 1.1.1
 - stb (github 947bdcd027)
 - tclap 1.2.1
