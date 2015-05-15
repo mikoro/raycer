@@ -197,7 +197,7 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, int density
 
 	Color closestColor;
 
-	if (closestColorIndex < voronoiColors.size())
+	if (closestColorIndex < (int)voronoiColors.size())
 		closestColor = voronoiColors[closestColorIndex];
 
 	return closestColor;
@@ -249,7 +249,7 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, int densi
 
 	Color closestColor;
 
-	if (closestColorIndex < voronoiColors.size())
+	if (closestColorIndex < (int)voronoiColors.size())
 		closestColor = voronoiColors[closestColorIndex];
 
 	return closestColor;
