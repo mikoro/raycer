@@ -1,7 +1,9 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef __APPLE__
 #include <mm_malloc.h>
+#endif
 
 #include "Rendering/Framebuffer.h"
 #include "App.h"

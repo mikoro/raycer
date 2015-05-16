@@ -155,19 +155,23 @@ void InteractiveRunner::initialize()
 	glfwInitialized = true;
 	startTime = glfwGetTime();
 
-	log.logInfo("Creating window (%sx%s, fullscreen: %s)", settings.window.width, settings.window.height, settings.window.fullscreen);
+	log.logInfo("Creating window and OpenGL context (%sx%s, fullscreen: %s)", settings.window.width, settings.window.height, settings.window.fullscreen);
 
-	glfwWindowHint(GLFW_VISIBLE, GL_FALSE);
-	glfwWindow = glfwCreateWindow(settings.window.width, settings.window.height, "Raycer", settings.window.fullscreen ? glfwGetPrimaryMonitor() : 0, 0);
+	glfwWindow = glfwCreateWindow(settings.window.width, settings.window.height, "Raycer", settings.window.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!glfwWindow)
 		throw std::runtime_error("Could not create the window");
 
 	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - settings.window.width / 2), (videoMode->height / 2 - settings.window.height / 2));
-	glfwShowWindow(glfwWindow);
 	glfwMakeContextCurrent(glfwWindow);
 
+	int major = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_VERSION_MAJOR);
+	int minor = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_VERSION_MINOR);
+	int revision = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_REVISION);
+	int profile = glfwGetWindowAttrib(glfwWindow, GLFW_OPENGL_PROFILE);
+	
+	log.logInfo("OpenGL context version: %d.%d.%d (%d)", major, minor, revision, profile);
 	log.logInfo("Initializing GLEW library");
 
 	GLenum result = glewInit();
@@ -182,7 +186,7 @@ void InteractiveRunner::initialize()
 
 	framebuffer.initialize();
 	framebuffer.enableSmoothing(settings.framebuffer.smoothing);
-	
+
 	if (settings.openCL.enabled)
 	{
 		clManager.initialize();
@@ -195,7 +199,6 @@ void InteractiveRunner::initialize()
 	windowResized(settings.window.width, settings.window.height);
 
 	runnerStates[RunnerStates::Raytracing] = std::unique_ptr<RaytracingState>(new RaytracingState());
-
 	changeState(RunnerStates::Raytracing);
 }
 
@@ -211,7 +214,7 @@ void InteractiveRunner::windowResized(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	
+
 	windowWidth = width;
 	windowHeight = height;
 
@@ -388,7 +391,7 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 		throw std::runtime_error("Runner state has not been set");
 
 	framebuffer.render();
-	
+
 	if (settings.window.showFps)
 		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
 
@@ -399,7 +402,7 @@ void InteractiveRunner::render(double timeStep, double interpolation)
 		pauseText.drawText((double)windowWidth / 2.0 - 200.0, (double)windowHeight / 2.0 - 40.0, Color::WHITE, "PAUSED");
 		pauseText.render();
 	}
-	
+
 	glfwSwapBuffers(glfwWindow);
 
 	if (keyWasPressed(GLFW_KEY_F12))
