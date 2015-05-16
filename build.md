@@ -18,11 +18,12 @@ Download the sources and run the commands from a corresponding developer console
 
 ## Linux
 
-- Install boost framework
-- Install Freetype
-- Install GLFW
+- Install boost
 - Install GLEW
+- Install GLFW
+- Install Freetype
 - Install OpenCL headers + something that provides the libraries (e.g. beignet, intel/nvidia drivers)
+- Optional: Compile freetype-gl
 
 Compile and run:
 
@@ -30,13 +31,26 @@ Compile and run:
     make -j4
     cd bin && ./raycer
 
-The included freetype-gl library file is compiled against certain Freetype library. It might be necessary to recompile the library and replace the file in *platform/linux/lib*.
+The included freetype-gl library file is compiled against certain Freetype library version. It might be necessary to recompile the library and replace the file in *platform/linux/lib*.
 
 The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, try adding or removing the last number.
 
 ## Mac
 
-TBD
+- Install Xcode + Command Line Tools
+- Install MacPorts
+- Install gcc49 (macports) and set active
+- Install cmake (macports)
+- Install boost (macports)
+- Install GLEW (macports)
+- Install GLFW (macports)
+- Install Freetype (macports)
+- Optional: Compile freetype-gl (gcc49)
+
+Compile:
+
+    export CXX=g++
+    make -j4 -f Makefile.mac
 
 ## Framework versions
 

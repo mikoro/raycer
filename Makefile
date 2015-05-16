@@ -14,7 +14,7 @@ endif
 
 # gcc
 ifeq "$(findstring clang,$(CXX))" ""
-	CFLAGS += -fopenmp -flto
+	CFLAGS += -flto
 endif
 
 # clang

@@ -1,24 +1,24 @@
-lisää primitiivejä
- - trumbore kolmio
- - implisiittinen (torus)
- - metapallo
- - CSG
+primitives
+ - trumbore ray-triangle
+ - torus
+ - metaball
+ - constructive solid geometry
 
-tekstuurit
- - voronoi tekstuuri
+textures
+ - voronoi texture
 
-kamera
+camera
  - aperture & dof
  
-valot
+lighting
  - fresnel
  - beer's law
- - point ja spot light
- - vaimentuminen
+ - point and spot light
+ - attenuation
  - soft shadows
 
-noiset
+noise
  - value noise (gaussian?)
 
 sampling
- - nopeampi poisson disc
+ - faster poisson disc
