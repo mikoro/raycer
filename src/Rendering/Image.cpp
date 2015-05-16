@@ -4,6 +4,7 @@
 #include <cassert>
 #include <algorithm>
 #include <vector>
+#include <mm_malloc.h>
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION

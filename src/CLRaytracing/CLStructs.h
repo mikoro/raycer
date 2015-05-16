@@ -3,7 +3,11 @@
 
 #pragma once
 
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
 #include <CL/opencl.h>
+#endif
 
 #ifdef _MSC_VER
 #define ALIGN(x) __declspec(align(x))

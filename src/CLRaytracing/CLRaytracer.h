@@ -4,7 +4,12 @@
 #pragma once
 
 #include <atomic>
+
+#ifdef __APPLE__
+#include <OpenCL/opencl.h>
+#else
 #include <CL/opencl.h>
+#endif
 
 #include "CLRaytracing/CLStructs.h"
 #include "CLRaytracing/CLScene.h"
