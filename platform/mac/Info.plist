@@ -15,7 +15,7 @@
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleExecutable</key>
-	<string>Raycer</string>
+	<string>raycer</string>
 	<key>CFBundleIconFile</key>
 	<string>raycer.icns</string>
 	<key>NSHumanReadableCopyright</key>
