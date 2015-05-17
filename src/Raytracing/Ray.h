@@ -15,6 +15,6 @@ namespace Raycer
 		Vector3 direction;
 		Intersection intersection;
 		Color color;
-		int iterationCount = 0;
+		int iterations = 0;
 	};
 }

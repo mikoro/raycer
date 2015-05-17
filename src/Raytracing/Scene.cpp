@@ -146,6 +146,9 @@ void Scene::initialize()
 	for (FireTexture& texture : textures.fireTextures)
 		texturesList.push_back(&texture);
 
+	for (AtmosphereTexture& texture : textures.atmosphereTextures)
+		texturesList.push_back(&texture);
+
 	for (Texture* texture : texturesList)
 	{
 		texture->initialize();
@@ -187,7 +190,7 @@ void Scene::validate()
 	}
 }
 
-Scene Scene::createTestScene1()
+Scene Scene::createTestScene()
 {
 	Scene scene;
 
@@ -202,46 +205,55 @@ Scene Scene::createTestScene1()
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
 
+	// FOG //
+
+	scene.fog.enabled = true;
+	scene.fog.color = Color(0.8, 0.8, 0.8);
+	scene.fog.distance = 100.0;
+	scene.fog.steepness = 4.0;
+	scene.fog.heightDispersion = true;
+	scene.fog.height = 10.0;
+	scene.fog.heightSteepness = 0.5;
+
+	// ATMOSPHERE //
+
+	AtmosphereTexture atmosphereTexture;
+	atmosphereTexture.id = 0;
+	atmosphereTexture.intensity = 1.0;
+	atmosphereTexture.sunColor = Color(192, 191, 173);
+	atmosphereTexture.sunOrientation = EulerAngle(45.0, -45.0, 0.0);
+
+	Material atmosphereMaterial;
+	atmosphereMaterial.id = 0;
+	atmosphereMaterial.textureId = atmosphereTexture.id;
+	atmosphereMaterial.isStatic = true;
+
+	Sphere atmosphereSphere;
+	atmosphereSphere.materialId = atmosphereMaterial.id;
+	atmosphereSphere.texcoordScale = Vector2(1.0, 1.0);
+	atmosphereSphere.position = Vector3(0.0, 0.0, 0.0);
+	atmosphereSphere.radius = 100.0;
+	atmosphereSphere.nonShadowing = true;
+
+	scene.textures.atmosphereTextures.push_back(atmosphereTexture);
+	scene.materials.push_back(atmosphereMaterial);
+	scene.primitives.spheres.push_back(atmosphereSphere);
+
 	// FLOOR //
 
-	/*
-	CheckerTexture floorTexture;
-	floorTexture.id = 0;
-	floorTexture.color1 = Color(0.1, 0.1, 0.1);
-	floorTexture.color2 = Color(0.3, 0.3, 0.3);
-	*/
-
-	/*
-	PerlinNoiseTexture floorTexture;
-	floorTexture.id = 0;
+	ImageTexture floorTexture;
+	floorTexture.id = 1;
+	floorTexture.imageFilePath = "data/images/dirt1.jpg";
 	floorTexture.intensity = 0.5;
-	floorTexture.seed = 1;
-	floorTexture.scale = Vector3(1.0, 1.0, 1.0);
-	floorTexture.baseColor = Color(1.0, 1.0, 1.0);
-	floorTexture.isFbm = false;
-	floorTexture.octaves = 4;
-	floorTexture.lacunarity = 2.0;
-	floorTexture.persistence = 0.5;
-	*/
-
-	CellNoiseTexture floorTexture;
-	floorTexture.id = 0;
-	floorTexture.intensity = 0.5;
-	floorTexture.seed = 1;
-	floorTexture.scale = Vector3(10.0, 10.0, 10.0);
-	floorTexture.baseColor = Color(1.0, 1.0, 1.0);
-	floorTexture.distanceType = CellNoiseDistanceType::EUCLIDEAN;
-	floorTexture.combineType = CellNoiseCombineType::D1_MINUS_D2;
-	floorTexture.density = 1;
 
 	Material floorMaterial;
-	floorMaterial.id = 0;
+	floorMaterial.id = 1;
 	floorMaterial.textureId = floorTexture.id;
 	floorMaterial.ambientness = 1.0;
 	floorMaterial.diffuseness = 1.0;
-	floorMaterial.specularity = 1.0;
-	floorMaterial.shininess = 2.0;
-	floorMaterial.reflectance = 1.0;
+	floorMaterial.specularity = 0.0;
+	floorMaterial.shininess = 1.0;
+	floorMaterial.reflectance = 0.0;
 	floorMaterial.transmittance = 0.0;
 	floorMaterial.refractiveIndex = 1.0;
 
@@ -251,19 +263,19 @@ Scene Scene::createTestScene1()
 	floorPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	floorPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.cellNoiseTextures.push_back(floorTexture);
+	scene.textures.imageTextures.push_back(floorTexture);
 	scene.materials.push_back(floorMaterial);
 	scene.primitives.planes.push_back(floorPlane);
 
 	// SPHERE 1 //
 
 	ColorTexture sphere1Texture;
-	sphere1Texture.id = 1;
+	sphere1Texture.id = 2;
 	sphere1Texture.color = Color(1.0, 0.0, 0.0);
 	sphere1Texture.intensity = 0.3;
 
 	Material sphere1Material;
-	sphere1Material.id = 1;
+	sphere1Material.id = 2;
 	sphere1Material.textureId = sphere1Texture.id;
 	sphere1Material.ambientness = 1.0;
 	sphere1Material.diffuseness = 1.0;
@@ -287,20 +299,20 @@ Scene Scene::createTestScene1()
 	// SPHERE 2 //
 
 	ColorTexture sphere2Texture;
-	sphere2Texture.id = 2;
+	sphere2Texture.id = 3;
 	sphere2Texture.color = Color(1.0, 1.0, 1.0);
 	sphere2Texture.intensity = 1.0;
 
 	Material sphere2Material;
-	sphere2Material.id = 2;
+	sphere2Material.id = 3;
 	sphere2Material.textureId = sphere2Texture.id;
 	sphere2Material.ambientness = 0.0;
 	sphere2Material.diffuseness = 0.0;
 	sphere2Material.specularity = 0.5;
-	sphere2Material.shininess = 32.0;
+	sphere2Material.shininess = 128.0;
 	sphere2Material.reflectance = 1.0;
 	sphere2Material.transmittance = 1.0;
-	sphere2Material.refractiveIndex = 1.5;
+	sphere2Material.refractiveIndex = 1.1;
 	sphere2Material.isFresnel = true;
 
 	Sphere sphere2;
@@ -323,99 +335,8 @@ Scene Scene::createTestScene1()
 
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(192, 191, 173);
-	directionalLight1.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
+	directionalLight1.direction = EulerAngle(45.0, -45.0, 0.0).getDirectionVector();
 	directionalLight1.intensity = 1.5;
-
-	scene.lights.directionalLights.push_back(directionalLight1);
-
-	return scene;
-}
-
-Scene Scene::createTestScene2()
-{
-	Scene scene;
-
-	scene.tracer.maxIterations = 3;
-
-	scene.multisampler.type = MultisampleType::NONE;
-	scene.multisampler.multisamples = 4;
-
-	// CAMERA //
-
-	scene.camera.position = Vector3(0.0, 3.0, 6.0);
-	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
-	scene.camera.fov = 75.0;
-
-	// PLANE 1 //
-
-	CheckerTexture plane1Texture;
-	plane1Texture.id = 0;
-	plane1Texture.color1 = Color(0.0, 0.0, 0.4);
-	plane1Texture.color2 = Color(0.0, 0.0, 0.2);
-
-	Material plane1Material;
-	plane1Material.id = 0;
-	plane1Material.textureId = plane1Texture.id;
-	plane1Material.ambientness = 1.0;
-	plane1Material.diffuseness = 1.0;
-	plane1Material.specularity = 0.0;
-	plane1Material.shininess = 0.0;
-	plane1Material.reflectance = 0.0;
-	plane1Material.transmittance = 0.0;
-	plane1Material.refractiveIndex = 1.0;
-	plane1Material.isFresnel = false;
-
-	Plane plane1;
-	plane1.materialId = plane1Material.id;
-	plane1.position = Vector3(0.0, -1.0, 0.0);
-	plane1.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	plane1.texcoordScale = Vector2(1.0, 1.0);
-
-	scene.textures.checkerTextures.push_back(plane1Texture);
-	scene.materials.push_back(plane1Material);
-	scene.primitives.planes.push_back(plane1);
-
-	// PLANE 2 //
-
-	ColorTexture plane2Texture;
-	plane2Texture.id = 1;
-	plane2Texture.color = Color(1.0, 1.0, 1.0);
-	plane2Texture.intensity = 1.0;
-
-	Material plane2Material;
-	plane2Material.id = 1;
-	plane2Material.textureId = plane2Texture.id;
-	plane2Material.ambientness = 0.0;
-	plane2Material.diffuseness = 0.0;
-	plane2Material.specularity = 0.0;
-	plane2Material.shininess = 16.0;
-	plane2Material.reflectance = 1.0;
-	plane2Material.transmittance = 1.0;
-	plane2Material.refractiveIndex = 1.5;
-	plane2Material.isFresnel = true;
-
-	Plane plane2;
-	plane2.materialId = plane2Material.id;
-	plane2.position = Vector3(0.0, 0.0, 0.0);
-	plane2.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	plane2.texcoordScale = Vector2(1.0, 1.0);
-
-	scene.textures.colorTextures.push_back(plane2Texture);
-	scene.materials.push_back(plane2Material);
-	scene.primitives.planes.push_back(plane2);
-
-	// LIGHTS //
-
-	AmbientLight ambientLight1;
-	ambientLight1.color = Color(1.0, 1.0, 1.0);
-	ambientLight1.intensity = 0.5;
-
-	scene.lights.ambientLights.push_back(ambientLight1);
-
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(192, 191, 173);
-	directionalLight1.direction = EulerAngle(45.0, -45.0, 0).getDirectionVector();
-	directionalLight1.intensity = 1.0;
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

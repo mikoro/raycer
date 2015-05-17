@@ -202,6 +202,9 @@
     <ClCompile Include="src\Tests\ObjReaderTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -378,6 +381,9 @@
     </ClInclude>
     <ClInclude Include="src\Utils\ObjReader.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Textures\AtmosphereTexture.h">
+      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

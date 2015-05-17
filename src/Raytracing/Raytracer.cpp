@@ -171,12 +171,17 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	Material* material = scene.materialsMap[ray.intersection.materialId];
 	Texture* texture = scene.texturesMap[material->textureId];
 
+	Color textureColor = texture->getColor(ray.intersection.position, ray.intersection.texcoord) * texture->intensity;
+
+	if (material->isStatic)
+	{
+		ray.color = textureColor;
+		return;
+	}
+
 	Vector3& D = ray.direction;
 	Vector3& N = ray.intersection.normal;
 	Vector3& P = ray.intersection.position;
-
-	Ray reflectedRay;
-	Ray refractedRay;
 
 	Color reflectionColor;
 	Color refractionColor;
@@ -200,14 +205,15 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	double transmittance = material->transmittance * tf;
 
 	// calculate and trace reflected ray
-	if (reflectance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	if (reflectance > 0.0 && ray.iterations < scene.tracer.maxIterations)
 	{
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
+		Ray reflectedRay;
 		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
 		reflectedRay.direction = R;
-		reflectedRay.iterationCount = ray.iterationCount + 1;
+		reflectedRay.iterations = ray.iterations + 1;
 
 		traceRay(scene, reflectedRay, rayCount, interrupted);
 
@@ -216,7 +222,7 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	}
 
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	if (transmittance > 0.0 && ray.iterations < scene.tracer.maxIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -227,9 +233,10 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
 			T.normalize();
 
+			Ray refractedRay;
 			refractedRay.origin = P + T * scene.tracer.rayStartOffset;
 			refractedRay.direction = T;
-			refractedRay.iterationCount = ray.iterationCount + 1;
+			refractedRay.iterations = ray.iterations + 1;
 
 			traceRay(scene, refractedRay, rayCount, interrupted);
 
@@ -239,7 +246,7 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	}
 
 	Color lightColor = calculateLighting(scene, ray, interrupted);
-	ray.color = (reflectionColor + refractionColor + lightColor) * texture->getColor(ray.intersection.position, ray.intersection.texcoord) * texture->intensity;
+	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
 }
 
 /*
@@ -273,14 +280,17 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, std::atomic<bool>& in
 	{
 		Vector3 L = -light.direction;
 
-		Ray lightRay;
-		lightRay.origin = P + L * scene.tracer.rayStartOffset;
-		lightRay.direction = L;
+		Ray shadowRay;
+		shadowRay.origin = P + L * scene.tracer.rayStartOffset;
+		shadowRay.direction = L;
 
 		for (const Primitive* primitive : scene.primitivesList)
-			primitive->intersect(lightRay);
+		{
+			if (!primitive->nonShadowing)
+				primitive->intersect(shadowRay);
+		}
 
-		if (lightRay.intersection.wasFound)
+		if (shadowRay.intersection.wasFound)
 			continue;
 
 		// diffuse amount

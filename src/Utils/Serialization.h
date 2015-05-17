@@ -35,6 +35,7 @@
 #include "Raytracing/Textures/MarbleTexture.h"
 #include "Raytracing/Textures/WoodTexture.h"
 #include "Raytracing/Textures/FireTexture.h"
+#include "Raytracing/Textures/AtmosphereTexture.h"
 
 namespace Raycer
 {
@@ -215,7 +216,8 @@ namespace Raycer
 			cereal::make_nvp("cellNoiseTextures", b.cellNoiseTextures),
 			cereal::make_nvp("marbleTextures", b.marbleTextures),
 			cereal::make_nvp("woodTextures", b.woodTextures),
-			cereal::make_nvp("fireTextures", b.fireTextures));
+			cereal::make_nvp("fireTextures", b.fireTextures),
+			cereal::make_nvp("atmosphereTextures", b.atmosphereTextures));
 	}
 
 	template<class Archive>
@@ -357,5 +359,12 @@ namespace Raycer
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("seed", b.seed));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, AtmosphereTexture& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("intensity", b.intensity));
 	}
 }

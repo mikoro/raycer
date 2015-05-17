@@ -14,9 +14,18 @@ Color Fog::calculate(const Scene& scene, const Pixel& pixel)
 {
 	(void)scene;
 
-	double t = pixel.distance / distance;
-	t = std::max(0.0, std::min(t, 1.0));
-	t = pow(t, steepness);
+	double t1 = pixel.distance / distance;
+	t1 = std::max(0.0, std::min(t1, 1.0));
+	t1 = pow(t1, steepness);
 
-	return Color::lerp(pixel.color, color, t);
+	if (heightDispersion && pixel.position.y > 0.0)
+	{
+		double t2 = pixel.position.y / height;
+		t2 = std::max(0.0, std::min(t2, 1.0));
+		t2 = pow(t2, heightSteepness);
+		t2 = 1.0 - t2;
+		t1 *= t2;
+	}
+
+	return Color::lerp(pixel.color, color, t1);
 }

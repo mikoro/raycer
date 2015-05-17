@@ -17,6 +17,7 @@
 #include "Raytracing/Textures/MarbleTexture.h"
 #include "Raytracing/Textures/WoodTexture.h"
 #include "Raytracing/Textures/FireTexture.h"
+#include "Raytracing/Textures/AtmosphereTexture.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Lights.h"
 #include "Raytracing/Primitives/Primitive.h"
@@ -43,8 +44,7 @@ namespace Raycer
 		void initialize();
 		void validate();
 
-		static Scene createTestScene1();
-		static Scene createTestScene2();
+		static Scene createTestScene();
 
 		struct Tracer
 		{
@@ -77,6 +77,7 @@ namespace Raycer
 			std::vector<MarbleTexture> marbleTextures;
 			std::vector<WoodTexture> woodTextures;
 			std::vector<FireTexture> fireTextures;
+			std::vector<AtmosphereTexture> atmosphereTextures;
 		} textures;
 
 		std::vector<Material> materials;

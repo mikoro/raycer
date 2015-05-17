@@ -42,7 +42,7 @@ int ConsoleRunner::run()
 
 	Scene scene;
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = Scene::createTestScene1();
+	scene = Scene::createTestScene();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();

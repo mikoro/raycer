@@ -36,7 +36,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
-    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -179,6 +179,7 @@
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
+    <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CheckerTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\ColorTexture.cpp" />
@@ -245,6 +246,7 @@
     <ClInclude Include="src\Raytracing\Raytracer.h" />
     <ClInclude Include="src\Raytracing\RaytracerState.h" />
     <ClInclude Include="src\Raytracing\Scene.h" />
+    <ClInclude Include="src\Raytracing\Textures\AtmosphereTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\CellNoiseTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\CheckerTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\ColorTexture.h" />
