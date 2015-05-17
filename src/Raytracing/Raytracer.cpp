@@ -7,7 +7,6 @@
 #include "Raytracing/RaytracerState.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
-#include "Raytracing/Pixel.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
 #include "Math/Vector3.h"
@@ -18,8 +17,8 @@ using namespace Raycer;
 Raytracer::Raytracer()
 {
 	std::random_device rd;
-	mt.seed(rd());
-	random = std::uniform_real_distribution<double>(0.0, 1.0);
+	gen.seed(rd());
+	realDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -40,12 +39,8 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		double x = (double)(pixelOffsetIndex % state.sceneWidth);
 		double y = (double)(pixelOffsetIndex / state.sceneWidth);
 
-		Pixel pixel = shootRays(scene, x, y, rayCount, interrupted);
-		
-		if (scene.fog.enabled)
-			pixel.color = scene.fog.calculate(scene, pixel);
-
-		image.setPixel(pixelIndex, pixel.color);
+		Color pixelColor = shootRays(scene, x, y, rayCount, interrupted);
+		image.setPixel(pixelIndex, pixelColor);
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)
@@ -62,10 +57,8 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted)
+Color Raytracer::shootRays(const Scene& scene, double x, double y, int& rayCount, const std::atomic<bool>& interrupted)
 {
-	Pixel pixel;
-
 	if (scene.multisampler.type == MultisampleType::NONE)
 	{
 		double rx = x + 0.5;
@@ -74,42 +67,35 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 		Ray ray = scene.camera.getRay(rx, ry);
 		traceRay(scene, ray, rayCount, interrupted);
 
-		if (ray.intersection.wasFound)
-		{
-			pixel.color = ray.color;
-			pixel.position = ray.intersection.position;
-			pixel.distance = ray.intersection.distance;
-		}
-		
-		return pixel;
+		return ray.color;
 	}
 	
-	int multisamples = scene.multisampler.multisamples;
-	int multisampleCount = 0;
+	Color pixelColor;
+	int pixelCount = 0;
 	
 	if (scene.multisampler.type == MultisampleType::UNIFORM || scene.multisampler.type == MultisampleType::REGULAR || scene.multisampler.type == MultisampleType::JITTER)
 	{
-		for (int i = 0; i < multisamples; ++i)
+		for (int i = 0; i < scene.multisampler.multisamples; ++i)
 		{
-			for (int j = 0; j < multisamples; ++j)
+			for (int j = 0; j < scene.multisampler.multisamples; ++j)
 			{
 				double rx = 0.0;
 				double ry = 0.0;
 
 				if (scene.multisampler.type == MultisampleType::UNIFORM)
 				{
-					rx = x + random(mt);
-					ry = y + random(mt);
+					rx = x + realDist(gen);
+					ry = y + realDist(gen);
 				}
 				else if (scene.multisampler.type == MultisampleType::REGULAR)
 				{
-					rx = x + ((double)j + 0.5) / (double)multisamples;
-					ry = y + ((double)i + 0.5) / (double)multisamples;
+					rx = x + ((double)j + 0.5) / (double)scene.multisampler.multisamples;
+					ry = y + ((double)i + 0.5) / (double)scene.multisampler.multisamples;
 				}
 				else if (scene.multisampler.type == MultisampleType::JITTER)
 				{
-					rx = x + ((double)j + random(mt)) / (double)multisamples;
-					ry = y + ((double)i + random(mt)) / (double)multisamples;
+					rx = x + ((double)j + realDist(gen)) / (double)scene.multisampler.multisamples;
+					ry = y + ((double)i + realDist(gen)) / (double)scene.multisampler.multisamples;
 				}
 
 				Ray ray = scene.camera.getRay(rx, ry);
@@ -117,10 +103,8 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 
 				if (ray.intersection.wasFound)
 				{
-					pixel.color += ray.color;
-					pixel.position += ray.intersection.position;
-					pixel.distance += ray.intersection.distance;
-					multisampleCount++;
+					pixelColor += ray.color;
+					++pixelCount;
 				}
 			}
 		}
@@ -129,11 +113,7 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 	{
 	}
 
-	pixel.color /= (double)multisampleCount;
-	pixel.position /= (double)multisampleCount;
-	pixel.distance /= (double)multisampleCount;
-
-	return pixel;
+	return pixelColor / (double)pixelCount;
 }
 
 /*
@@ -155,7 +135,7 @@ d = distance traveled inside
 
 */
 
-void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted)
+void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return;
@@ -168,30 +148,33 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	if (!ray.intersection.wasFound)
 		return;
 
-	Material* material = scene.materialsMap[ray.intersection.materialId];
-	Texture* texture = scene.texturesMap[material->textureId];
+	Material* material = scene.materialsMap.at(ray.intersection.materialId);
+	Texture* texture = scene.texturesMap.at(material->textureId);
 
 	Color textureColor = texture->getColor(ray.intersection.position, ray.intersection.texcoord) * texture->intensity;
-
-	if (material->isStatic)
-	{
-		ray.color = textureColor;
-		return;
-	}
+	Color reflectionColor;
+	Color refractionColor;
 
 	Vector3& D = ray.direction;
 	Vector3& N = ray.intersection.normal;
 	Vector3& P = ray.intersection.position;
 
-	Color reflectionColor;
-	Color refractionColor;
-
 	double c1 = -D.dot(N);
-	bool isFromOutside = (c1 >= 0.0);
-	double n1 = isFromOutside ? 1.0 : material->refractiveIndex;
-	double n2 = isFromOutside ? material->refractiveIndex : 1.0;
+	bool isOutside = (c1 >= 0.0);
+	double n1 = isOutside ? 1.0 : material->refractiveIndex;
+	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double rf = 1.0;
 	double tf = 1.0;
+
+	if (material->isStatic)
+	{
+		ray.color = textureColor;
+
+		if (scene.fog.enabled && isOutside)
+			ray.color = calculateFog(scene, ray);
+
+		return;
+	}
 
 	if (material->isFresnel)
 	{
@@ -245,8 +228,11 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 		}
 	}
 
-	Color lightColor = calculateLighting(scene, ray, interrupted);
+	Color lightColor = calculateLight(scene, ray);
 	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
+
+	if (scene.fog.enabled && isOutside)
+		ray.color = calculateFog(scene, ray);
 }
 
 /*
@@ -261,16 +247,14 @@ d2 = specular light relative amount, only when > 0 and d1 > 0
 
 */
 
-Color Raytracer::calculateLighting(Scene& scene, Ray& ray, std::atomic<bool>& interrupted)
+Color Raytracer::calculateLight(const Scene& scene, const Ray& ray)
 {
-	(void)interrupted;
-
-	Material* material = scene.materialsMap[ray.intersection.materialId];
+	Material* material = scene.materialsMap.at(ray.intersection.materialId);
 
 	Color lightColor;
 
-	Vector3& P = ray.intersection.position;
-	Vector3& N = ray.intersection.normal;
+	Vector3 P = ray.intersection.position;
+	Vector3 N = ray.intersection.normal;
 	Vector3 V = -ray.direction;
 
 	for (const AmbientLight& ambientLight : scene.lights.ambientLights)
@@ -316,4 +300,22 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, std::atomic<bool>& in
 	}
 
 	return lightColor;
+}
+
+Color Raytracer::calculateFog(const Scene& scene, const Ray& ray)
+{
+	double t1 = ray.intersection.distance / scene.fog.distance;
+	t1 = std::max(0.0, std::min(t1, 1.0));
+	t1 = pow(t1, scene.fog.steepness);
+
+	if (scene.fog.heightDispersion && ray.intersection.position.y > 0.0)
+	{
+		double t2 = ray.intersection.position.y / scene.fog.height;
+		t2 = std::max(0.0, std::min(t2, 1.0));
+		t2 = pow(t2, scene.fog.heightSteepness);
+		t2 = 1.0 - t2;
+		t1 *= t2;
+	}
+
+	return Color::lerp(ray.color, scene.fog.color, t1);
 }

@@ -15,7 +15,6 @@
 #include "Math/Vector3.h"
 
 #include "Raytracing/Camera.h"
-#include "Raytracing/Fog.h"
 #include "Raytracing/Lights.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Scene.h"
@@ -103,17 +102,6 @@ namespace Raycer
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("orientation", b.orientation),
 			cereal::make_nvp("fov", b.fov));
-	}
-
-	/* FOG */
-
-	template<class Archive>
-	void serialize(Archive& a, Fog& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("distance", b.distance),
-			cereal::make_nvp("steepness", b.steepness),
-			cereal::make_nvp("color", b.color));
 	}
 
 	/* LIGHTS */
@@ -204,6 +192,18 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("type", b.type),
 			cereal::make_nvp("gamma", b.gamma));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Fog& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("color", b.color),
+			cereal::make_nvp("distance", b.distance),
+			cereal::make_nvp("steepness", b.steepness),
+			cereal::make_nvp("heightDispersion", b.heightDispersion),
+			cereal::make_nvp("height", b.height),
+			cereal::make_nvp("heightSteepness", b.heightSteepness));
 	}
 
 	template<class Archive>

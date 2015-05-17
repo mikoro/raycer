@@ -7,7 +7,6 @@
 #include <map>
 
 #include "Raytracing/Camera.h"
-#include "Raytracing/Fog.h"
 #include "Raytracing/Textures/Texture.h"
 #include "Raytracing/Textures/ColorTexture.h"
 #include "Raytracing/Textures/CheckerTexture.h"
@@ -65,7 +64,17 @@ namespace Raycer
 		} toneMapper;
 
 		Camera camera;
-		Fog fog;
+
+		struct Fog
+		{
+			bool enabled = false;
+			Color color;
+			double distance = 0.0;
+			double steepness = 1.0;
+			bool heightDispersion = false;
+			double height = 0.0;
+			double heightSteepness = 1.0;
+		} fog;
 		
 		struct Textures
 		{

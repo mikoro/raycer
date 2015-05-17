@@ -197,7 +197,7 @@ Scene Scene::createTestScene()
 	scene.tracer.maxIterations = 3;
 
 	scene.multisampler.type = MultisampleType::NONE;
-	scene.multisampler.multisamples = 4;
+	scene.multisampler.multisamples = 8;
 
 	// CAMERA //
 
@@ -208,11 +208,11 @@ Scene Scene::createTestScene()
 	// FOG //
 
 	scene.fog.enabled = true;
-	scene.fog.color = Color(0.8, 0.8, 0.8);
+	scene.fog.color = Color(0.7, 0.7, 0.7);
 	scene.fog.distance = 100.0;
 	scene.fog.steepness = 4.0;
 	scene.fog.heightDispersion = true;
-	scene.fog.height = 10.0;
+	scene.fog.height = 20.0;
 	scene.fog.heightSteepness = 0.5;
 
 	// ATMOSPHERE //

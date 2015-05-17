@@ -121,9 +121,6 @@
     <ClCompile Include="src\InteractiveStates\RaytracingState.cpp">
       <Filter>InteractiveStates</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Fog.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\Image.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
@@ -304,9 +301,6 @@
     <ClInclude Include="src\InteractiveStates\RaytracingState.h">
       <Filter>InteractiveStates</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Fog.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
     </ClInclude>
@@ -315,9 +309,6 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\ToneMapper.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Pixel.h">
-      <Filter>Raytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\PoissonDisc.h">
       <Filter>Utils</Filter>

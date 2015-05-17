@@ -9,11 +9,10 @@
 namespace Raycer
 {
 	struct RaytracerState;
+	class Color;
 	class Scene;
 	struct Ray;
-	struct Pixel;
-	class Color;
-
+	
 	class Raytracer
 	{
 	public:
@@ -27,11 +26,12 @@ namespace Raycer
 		Raytracer(const Raytracer& raytracer);
 		Raytracer& operator=(const Raytracer& raytracer);
 
-		Pixel shootRays(Scene& scene, double x, double y, int& rayCount, std::atomic<bool>& interrupted);
-		void traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool>& interrupted);
-		Color calculateLighting(Scene& scene, Ray& ray, std::atomic<bool>& interrupted);
+		Color shootRays(const Scene& scene, double x, double y, int& rayCount, const std::atomic<bool>& interrupted);
+		void traceRay(const Scene& scene, Ray& ray, int& rayCount, const std::atomic<bool>& interrupted);
+		Color calculateLight(const Scene& scene, const Ray& ray);
+		Color calculateFog(const Scene& scene, const Ray& ray);
 
-		std::mt19937 mt;
-		std::uniform_real_distribution<double> random;
+		std::mt19937 gen;
+		std::uniform_real_distribution<double> realDist;
 	};
 }
