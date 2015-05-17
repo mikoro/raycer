@@ -74,15 +74,18 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 		Ray ray = scene.camera.getRay(rx, ry);
 		traceRay(scene, ray, rayCount, interrupted);
 
-		pixel.color = ray.color;
-		pixel.position = ray.intersection.position;
-		pixel.distance = ray.intersection.distance;
-
+		if (ray.intersection.wasFound)
+		{
+			pixel.color = ray.color;
+			pixel.position = ray.intersection.position;
+			pixel.distance = ray.intersection.distance;
+		}
+		
 		return pixel;
 	}
 	
 	int multisamples = scene.multisampler.multisamples;
-	double multisamples2 = multisamples * multisamples;
+	int multisampleCount = 0;
 	
 	if (scene.multisampler.type == MultisampleType::UNIFORM || scene.multisampler.type == MultisampleType::REGULAR || scene.multisampler.type == MultisampleType::JITTER)
 	{
@@ -112,9 +115,13 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 				Ray ray = scene.camera.getRay(rx, ry);
 				traceRay(scene, ray, rayCount, interrupted);
 
-				pixel.color += ray.color;
-				pixel.position += ray.intersection.position;
-				pixel.distance += ray.intersection.distance;
+				if (ray.intersection.wasFound)
+				{
+					pixel.color += ray.color;
+					pixel.position += ray.intersection.position;
+					pixel.distance += ray.intersection.distance;
+					multisampleCount++;
+				}
 			}
 		}
 	}
@@ -122,9 +129,9 @@ Pixel Raytracer::shootRays(Scene& scene, double x, double y, int& rayCount, std:
 	{
 	}
 
-	pixel.color /= multisamples2;
-	pixel.position /= multisamples2;
-	pixel.distance /= multisamples2;
+	pixel.color /= (double)multisampleCount;
+	pixel.position /= (double)multisampleCount;
+	pixel.distance /= (double)multisampleCount;
 
 	return pixel;
 }
@@ -141,6 +148,10 @@ n2 = to refractive index
 n = relative refractive index
 c1 = ray-surface cosine, > 0: ray comes from outside,  < 0: ray comes from inside
 c2 = < 0: total internal reflection, no transmitted ray
+rf = fresnel reflectance factor
+tf = fresnel transmittance factor
+rf0 = fresnel reflectance at normal incidence
+d = distance traveled inside
 
 */
 
@@ -160,60 +171,70 @@ void Raytracer::traceRay(Scene& scene, Ray& ray, int& rayCount, std::atomic<bool
 	Material* material = scene.materialsMap[ray.intersection.materialId];
 	Texture* texture = scene.texturesMap[material->textureId];
 
-	Color reflectionColor;
-	Color refractionColor;
-
 	Vector3& D = ray.direction;
 	Vector3& N = ray.intersection.normal;
 	Vector3& P = ray.intersection.position;
-	double c1 = -D.dot(N);
 
-	if (material->reflectance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	Ray reflectedRay;
+	Ray refractedRay;
+
+	Color reflectionColor;
+	Color refractionColor;
+
+	double c1 = -D.dot(N);
+	bool isFromOutside = (c1 >= 0.0);
+	double n1 = isFromOutside ? 1.0 : material->refractiveIndex;
+	double n2 = isFromOutside ? material->refractiveIndex : 1.0;
+	double rf = 1.0;
+	double tf = 1.0;
+
+	if (material->isFresnel)
+	{
+		double rf0 = (n2 - n1) / (n2 + n1);
+		rf0 = rf0 * rf0;
+		rf = rf0 + (1.0 - rf0) * pow(1.0 - fabs(c1), 5.0);
+		tf = 1.0 - rf;
+	}
+
+	double reflectance = material->reflectance * rf;
+	double transmittance = material->transmittance * tf;
+
+	// calculate and trace reflected ray
+	if (reflectance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
 	{
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
-		Ray reflectedRay;
-		reflectedRay.origin = P + R * scene.tracer.rayOffset;
+		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
 		reflectedRay.direction = R;
 		reflectedRay.iterationCount = ray.iterationCount + 1;
 
 		traceRay(scene, reflectedRay, rayCount, interrupted);
-		reflectionColor = reflectedRay.color * material->reflectance;
+
+		if (ray.intersection.wasFound)
+			reflectionColor = reflectedRay.color * reflectance;
 	}
 
-	if (material->transmittance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
+	// calculate and trace refracted ray
+	if (transmittance > 0.0 && ray.iterationCount < scene.tracer.maxIterations)
 	{
-		double n1, n2;
-
-		// ray comes from the outside
-		if (c1 >= 0.0)
-		{
-			n1 = scene.tracer.airRefractiveIndex;
-			n2 = material->refractiveIndex;
-		}
-		else // ray comes from the inside
-		{
-			n1 = material->refractiveIndex;
-			n2 = scene.tracer.airRefractiveIndex;
-		}
-
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
 
-		// no total internal reflection -> generate transmitted ray
+		// no total internal reflection
 		if (c2 > 0.0)
 		{
 			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
 			T.normalize();
 
-			Ray refractedRay;
-			refractedRay.origin = P + T * scene.tracer.rayOffset;
+			refractedRay.origin = P + T * scene.tracer.rayStartOffset;
 			refractedRay.direction = T;
 			refractedRay.iterationCount = ray.iterationCount + 1;
 
 			traceRay(scene, refractedRay, rayCount, interrupted);
-			refractionColor = refractedRay.color * material->transmittance;
+
+			if (ray.intersection.wasFound)
+				refractionColor = refractedRay.color * transmittance;
 		}
 	}
 
@@ -253,7 +274,7 @@ Color Raytracer::calculateLighting(Scene& scene, Ray& ray, std::atomic<bool>& in
 		Vector3 L = -light.direction;
 
 		Ray lightRay;
-		lightRay.origin = P + L * scene.tracer.rayOffset;
+		lightRay.origin = P + L * scene.tracer.rayStartOffset;
 		lightRay.direction = L;
 
 		for (const Primitive* primitive : scene.primitivesList)

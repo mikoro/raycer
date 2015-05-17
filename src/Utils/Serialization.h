@@ -188,8 +188,7 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Tracer& b)
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("airRefractiveIndex", b.airRefractiveIndex),
-			cereal::make_nvp("rayOffset", b.rayOffset));
+			cereal::make_nvp("rayStartOffset", b.rayStartOffset));
 	}
 
 	template<class Archive>

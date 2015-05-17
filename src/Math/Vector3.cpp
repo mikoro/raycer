@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cassert>
 
+#include "tinyformat/tinyformat.h"
+
 #include "Math/Vector3.h"
 #include "Math/MathUtils.h"
 
@@ -177,6 +179,11 @@ Vector3 Vector3::cross(const Vector3& v) const
 Vector3 Vector3::reflect(const Vector3& normal) const
 {
 	return *this - ((2.0 * this->dot(normal)) * normal);
+}
+
+std::string Vector3::toString() const
+{
+	return tfm::format("(%.2f, %.2f, %.2f)", x, y, z);
 }
 
 Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, double t)

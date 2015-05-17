@@ -4,6 +4,8 @@
 #include <cmath>
 #include <cassert>
 
+#include "tinyformat/tinyformat.h"
+
 #include "Math/Vector2.h"
 #include "Math/MathUtils.h"
 
@@ -160,6 +162,11 @@ double Vector2::dot(const Vector2& v) const
 Vector2 Vector2::reflect(const Vector2& normal) const
 {
 	return *this - ((2.0 * this->dot(normal)) * normal);
+}
+
+std::string Vector2::toString() const
+{
+	return tfm::format("(%.2f, %.2f)", x, y);
 }
 
 Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, double t)

@@ -192,7 +192,6 @@ Scene Scene::createTestScene1()
 	Scene scene;
 
 	scene.tracer.maxIterations = 3;
-	scene.tracer.airRefractiveIndex = 1.0;
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 4;
@@ -273,6 +272,7 @@ Scene Scene::createTestScene1()
 	sphere1Material.reflectance = 0.5;
 	sphere1Material.transmittance = 0.0;
 	sphere1Material.refractiveIndex = 1.0;
+	sphere1Material.isFresnel = false;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -298,9 +298,10 @@ Scene Scene::createTestScene1()
 	sphere2Material.diffuseness = 0.0;
 	sphere2Material.specularity = 0.5;
 	sphere2Material.shininess = 32.0;
-	sphere2Material.reflectance = 0.0;
+	sphere2Material.reflectance = 1.0;
 	sphere2Material.transmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
+	sphere2Material.isFresnel = true;
 
 	Sphere sphere2;
 	sphere2.materialId = sphere2Material.id;
@@ -335,7 +336,6 @@ Scene Scene::createTestScene2()
 	Scene scene;
 
 	scene.tracer.maxIterations = 3;
-	scene.tracer.airRefractiveIndex = 1.0;
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 4;
@@ -363,6 +363,7 @@ Scene Scene::createTestScene2()
 	plane1Material.reflectance = 0.0;
 	plane1Material.transmittance = 0.0;
 	plane1Material.refractiveIndex = 1.0;
+	plane1Material.isFresnel = false;
 
 	Plane plane1;
 	plane1.materialId = plane1Material.id;
@@ -388,9 +389,10 @@ Scene Scene::createTestScene2()
 	plane2Material.diffuseness = 0.0;
 	plane2Material.specularity = 0.0;
 	plane2Material.shininess = 16.0;
-	plane2Material.reflectance = 0.0;
+	plane2Material.reflectance = 1.0;
 	plane2Material.transmittance = 1.0;
-	plane2Material.refractiveIndex = 1.3;
+	plane2Material.refractiveIndex = 1.5;
+	plane2Material.isFresnel = true;
 
 	Plane plane2;
 	plane2.materialId = plane2Material.id;
@@ -406,7 +408,7 @@ Scene Scene::createTestScene2()
 
 	AmbientLight ambientLight1;
 	ambientLight1.color = Color(1.0, 1.0, 1.0);
-	ambientLight1.intensity = 0.1;
+	ambientLight1.intensity = 0.5;
 
 	scene.lights.ambientLights.push_back(ambientLight1);
 

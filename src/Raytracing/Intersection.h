@@ -13,7 +13,7 @@ namespace Raycer
 	struct Intersection
 	{
 		bool wasFound = false;
-		double distance = std::numeric_limits<double>::max() / 1024;
+		double distance = std::numeric_limits<double>::max();
 		Vector3 position;
 		Vector3 normal;
 		Vector2 texcoord;
