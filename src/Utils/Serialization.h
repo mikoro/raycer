@@ -35,6 +35,7 @@
 #include "Raytracing/Textures/WoodTexture.h"
 #include "Raytracing/Textures/FireTexture.h"
 #include "Raytracing/Textures/AtmosphereTexture.h"
+#include "Raytracing/Textures/VoronoiTexture.h"
 
 namespace Raycer
 {
@@ -217,7 +218,8 @@ namespace Raycer
 			cereal::make_nvp("marbleTextures", b.marbleTextures),
 			cereal::make_nvp("woodTextures", b.woodTextures),
 			cereal::make_nvp("fireTextures", b.fireTextures),
-			cereal::make_nvp("atmosphereTextures", b.atmosphereTextures));
+			cereal::make_nvp("atmosphereTextures", b.atmosphereTextures),
+			cereal::make_nvp("voronoiTextures", b.voronoiTextures));
 	}
 
 	template<class Archive>
@@ -365,6 +367,31 @@ namespace Raycer
 	void serialize(Archive& a, AtmosphereTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("topColor1", b.topColor1),
+			cereal::make_nvp("topColor2", b.topColor2),
+			cereal::make_nvp("middleColor", b.middleColor),
+			cereal::make_nvp("horizonColor", b.horizonColor),
+			cereal::make_nvp("cloudColor", b.cloudColor),
+			cereal::make_nvp("sunColor", b.sunColor),
+			cereal::make_nvp("sunOrientation", b.sunOrientation),
+			cereal::make_nvp("sunSize", b.sunSize),
+			cereal::make_nvp("hasClouds", b.hasClouds),
+			cereal::make_nvp("hasSun", b.hasSun));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, VoronoiTexture& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("density", b.density),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("distanceType", b.distanceType),
+			cereal::make_nvp("useRandomColors", b.useRandomColors),
+			cereal::make_nvp("randomColorCount", b.randomColorCount),
+			cereal::make_nvp("colors", b.colors));
 	}
 }

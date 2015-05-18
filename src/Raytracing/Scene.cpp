@@ -149,6 +149,9 @@ void Scene::initialize()
 	for (AtmosphereTexture& texture : textures.atmosphereTextures)
 		texturesList.push_back(&texture);
 
+	for (VoronoiTexture& texture : textures.voronoiTextures)
+		texturesList.push_back(&texture);
+
 	for (Texture* texture : texturesList)
 	{
 		texture->initialize();
@@ -251,8 +254,8 @@ Scene Scene::createTestScene()
 	groundMaterial.textureId = groundTexture.id;
 	groundMaterial.ambientness = 1.0;
 	groundMaterial.diffuseness = 1.0;
-	groundMaterial.specularity = 0.0;
-	groundMaterial.shininess = 1.0;
+	groundMaterial.specularity = 0.2;
+	groundMaterial.shininess = 2.0;
 	groundMaterial.reflectance = 0.0;
 	groundMaterial.transmittance = 0.0;
 	groundMaterial.refractiveIndex = 1.0;
@@ -269,10 +272,15 @@ Scene Scene::createTestScene()
 
 	// SPHERE 1 //
 
-	ColorTexture sphere1Texture;
+	VoronoiTexture sphere1Texture;
 	sphere1Texture.id = 2;
-	sphere1Texture.color = Color(1.0, 0.0, 0.0);
-	sphere1Texture.intensity = 0.3;
+	sphere1Texture.intensity = 0.5;
+	sphere1Texture.seed = 678675;
+	sphere1Texture.distanceType = CellNoiseDistanceType::CHEBYSHEV;
+	sphere1Texture.density = 1;
+	sphere1Texture.scale = Vector3(5.0, 5.0, 5.0);
+	sphere1Texture.useRandomColors = true;
+	sphere1Texture.randomColorCount = 1000;
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
@@ -281,10 +289,9 @@ Scene Scene::createTestScene()
 	sphere1Material.diffuseness = 1.0;
 	sphere1Material.specularity = 1.0;
 	sphere1Material.shininess = 32.0;
-	sphere1Material.reflectance = 0.5;
+	sphere1Material.reflectance = 0.0;
 	sphere1Material.transmittance = 0.0;
 	sphere1Material.refractiveIndex = 1.0;
-	sphere1Material.fresnel = false;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -292,7 +299,7 @@ Scene Scene::createTestScene()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.textures.voronoiTextures.push_back(sphere1Texture);
 	scene.materials.push_back(sphere1Material);
 	scene.primitives.spheres.push_back(sphere1);
 
@@ -315,7 +322,7 @@ Scene Scene::createTestScene()
 	sphere2Material.refractiveIndex = 1.5;
 	sphere2Material.fresnel = true;
 	sphere2Material.attenuate = true;
-	sphere2Material.attenuation = 0.8;
+	sphere2Material.attenuation = 0.6;
 	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.0);
 
 	Sphere sphere2;

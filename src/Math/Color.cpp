@@ -3,7 +3,6 @@
 
 #include <algorithm>
 #include <cassert>
-#include <random>
 
 #include "Math/Color.h"
 #include "Math/MathUtils.h"
@@ -247,8 +246,14 @@ Color Color::pow(const Color& color, double power)
 Color Color::random()
 {
 	std::random_device rd;
+	std::mt19937 gen(rd());
+
+	return random(gen);
+}
+
+Color Color::random(std::mt19937& gen)
+{
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
-	std::minstd_rand gen(rd());
 
 	Color c;
 

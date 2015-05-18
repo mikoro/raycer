@@ -17,6 +17,7 @@
 #include "Raytracing/Textures/WoodTexture.h"
 #include "Raytracing/Textures/FireTexture.h"
 #include "Raytracing/Textures/AtmosphereTexture.h"
+#include "Raytracing/Textures/VoronoiTexture.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Lights.h"
 #include "Raytracing/Primitives/Primitive.h"
@@ -87,6 +88,7 @@ namespace Raycer
 			std::vector<WoodTexture> woodTextures;
 			std::vector<FireTexture> fireTextures;
 			std::vector<AtmosphereTexture> atmosphereTextures;
+			std::vector<VoronoiTexture> voronoiTextures;
 		} textures;
 
 		std::vector<Material> materials;

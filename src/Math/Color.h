@@ -4,6 +4,7 @@
 #pragma once
 
 #include <cstdint>
+#include <random>
 
 namespace Raycer
 {
@@ -43,6 +44,7 @@ namespace Raycer
 		static Color alphaBlend(const Color& first, const Color& second);
 		static Color pow(const Color& color, double power);
 		static Color random();
+		static Color random(std::mt19937& gen);
 
 		static const Color RED;
 		static const Color GREEN;
