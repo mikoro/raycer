@@ -30,6 +30,7 @@
 #include "Raytracing/Textures/CheckerTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
 #include "Raytracing/Textures/PerlinNoiseTexture.h"
+#include "Raytracing/Textures/ValueNoiseTexture.h"
 #include "Raytracing/Textures/CellNoiseTexture.h"
 #include "Raytracing/Textures/MarbleTexture.h"
 #include "Raytracing/Textures/WoodTexture.h"
@@ -214,6 +215,7 @@ namespace Raycer
 			cereal::make_nvp("checkerTextures", b.checkerTextures),
 			cereal::make_nvp("imageTextures", b.imageTextures),
 			cereal::make_nvp("perlinNoiseTextures", b.perlinNoiseTextures),
+			cereal::make_nvp("valueNoiseTextures", b.valueNoiseTextures),
 			cereal::make_nvp("cellNoiseTextures", b.cellNoiseTextures),
 			cereal::make_nvp("marbleTextures", b.marbleTextures),
 			cereal::make_nvp("woodTextures", b.woodTextures),
@@ -306,6 +308,20 @@ namespace Raycer
 
 	template<class Archive>
 	void serialize(Archive& a, PerlinNoiseTexture& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("seed", b.seed),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("baseColor", b.baseColor),
+			cereal::make_nvp("isFbm", b.isFbm),
+			cereal::make_nvp("octaves", b.octaves),
+			cereal::make_nvp("lacunarity", b.lacunarity),
+			cereal::make_nvp("persistence", b.persistence));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, ValueNoiseTexture& b)
 	{
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("intensity", b.intensity),

@@ -134,6 +134,9 @@ void Scene::initialize()
 	for (PerlinNoiseTexture& texture : textures.perlinNoiseTextures)
 		texturesList.push_back(&texture);
 
+	for (ValueNoiseTexture& texture : textures.valueNoiseTextures)
+		texturesList.push_back(&texture);
+
 	for (CellNoiseTexture& texture : textures.cellNoiseTextures)
 		texturesList.push_back(&texture);
 

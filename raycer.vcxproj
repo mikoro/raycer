@@ -186,6 +186,7 @@
     <ClCompile Include="src\Raytracing\Textures\ImageTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\MarbleTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\PerlinNoiseTexture.cpp" />
+    <ClCompile Include="src\Raytracing\Textures\ValueNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\VoronoiTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
@@ -212,6 +213,7 @@
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
     <ClCompile Include="src\Utils\StringUtils.cpp" />
+    <ClCompile Include="src\Utils\ValueNoise.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
@@ -253,6 +255,7 @@
     <ClInclude Include="src\Raytracing\Textures\MarbleTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\PerlinNoiseTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\Texture.h" />
+    <ClInclude Include="src\Raytracing\Textures\ValueNoiseTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\VoronoiTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
@@ -273,6 +276,7 @@
     <ClInclude Include="src\Utils\Serialization.h" />
     <ClInclude Include="src\Utils\Settings.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />
+    <ClInclude Include="src\Utils\ValueNoise.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc" />

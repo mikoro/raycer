@@ -12,6 +12,7 @@
 #include "Raytracing/Textures/CheckerTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
 #include "Raytracing/Textures/PerlinNoiseTexture.h"
+#include "Raytracing/Textures/ValueNoiseTexture.h"
 #include "Raytracing/Textures/CellNoiseTexture.h"
 #include "Raytracing/Textures/MarbleTexture.h"
 #include "Raytracing/Textures/WoodTexture.h"
@@ -83,6 +84,7 @@ namespace Raycer
 			std::vector<CheckerTexture> checkerTextures;
 			std::vector<ImageTexture> imageTextures;
 			std::vector<PerlinNoiseTexture> perlinNoiseTextures;
+			std::vector<ValueNoiseTexture> valueNoiseTextures;
 			std::vector<CellNoiseTexture> cellNoiseTextures;
 			std::vector<MarbleTexture> marbleTextures;
 			std::vector<WoodTexture> woodTextures;

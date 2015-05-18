@@ -205,6 +205,12 @@
     <ClCompile Include="src\Raytracing\Textures\VoronoiTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\ValueNoise.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Textures\ValueNoiseTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -380,6 +386,12 @@
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Textures\VoronoiTexture.h">
+      <Filter>Raytracing\Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\ValueNoise.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Textures\ValueNoiseTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
