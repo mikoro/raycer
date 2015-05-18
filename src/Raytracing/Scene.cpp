@@ -292,9 +292,9 @@ Scene Scene::createTestScene()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	//scene.textures.colorTextures.push_back(sphere1Texture);
-	//scene.materials.push_back(sphere1Material);
-	//scene.primitives.spheres.push_back(sphere1);
+	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
 
@@ -314,6 +314,9 @@ Scene Scene::createTestScene()
 	sphere2Material.transmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
 	sphere2Material.fresnel = true;
+	sphere2Material.attenuate = true;
+	sphere2Material.attenuation = 0.8;
+	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.0);
 
 	Sphere sphere2;
 	sphere2.materialId = sphere2Material.id;
@@ -321,9 +324,9 @@ Scene Scene::createTestScene()
 	sphere2.position = Vector3(-3.0, 1.0, 0.0);
 	sphere2.radius = 1.0;
 
-	//scene.textures.colorTextures.push_back(sphere2Texture);
-	//scene.materials.push_back(sphere2Material);
-	//scene.primitives.spheres.push_back(sphere2);
+	scene.textures.colorTextures.push_back(sphere2Texture);
+	scene.materials.push_back(sphere2Material);
+	scene.primitives.spheres.push_back(sphere2);
 
 	// MESH 1 //
 
@@ -351,13 +354,13 @@ Scene Scene::createTestScene()
 	mesh1.materialId = mesh1Material.id;
 	mesh1.meshFilePath = "data/meshes/cube5.obj";
 	mesh1.texcoordScale = Vector2(1.0, 1.0);
-	mesh1.position = Vector3(0.0, 3.1, 0.0);
-	mesh1.scale = Vector3(2.0, 3.0, 0.5);
+	mesh1.position = Vector3(0.0, 2.1, 0.0);
+	mesh1.scale = Vector3(2.0, 2.0, 2.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	//scene.textures.colorTextures.push_back(mesh1Texture);
+	//scene.materials.push_back(mesh1Material);
+	//scene.primitives.meshes.push_back(mesh1);
 
 	// LIGHTS //
 

@@ -6,13 +6,12 @@ primitives
 
 textures
  - voronoi texture
+ - value noise texture
 
 camera
  - aperture & dof
  
 lighting
- - fresnel
- - beer's law
  - point and spot light
  - attenuation
  - soft shadows

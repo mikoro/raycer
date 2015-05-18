@@ -170,7 +170,7 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 	{
 		ray.color = textureColor;
 
-		if (scene.fog.enabled && isOutside)
+		if (scene.fog.enabled)
 			ray.color = calculateFog(scene, ray);
 
 		return;
