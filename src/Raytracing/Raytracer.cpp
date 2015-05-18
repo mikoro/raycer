@@ -69,10 +69,10 @@ Color Raytracer::shootRays(const Scene& scene, double x, double y, int& rayCount
 
 		return ray.color;
 	}
-	
+
 	Color pixelColor;
 	int pixelCount = 0;
-	
+
 	if (scene.multisampler.type == MultisampleType::UNIFORM || scene.multisampler.type == MultisampleType::REGULAR || scene.multisampler.type == MultisampleType::JITTER)
 	{
 		for (int i = 0; i < scene.multisampler.multisamples; ++i)
@@ -155,18 +155,18 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 	Color reflectionColor;
 	Color refractionColor;
 
-	Vector3& D = ray.direction;
-	Vector3& N = ray.intersection.normal;
-	Vector3& P = ray.intersection.position;
+	Vector3 D = ray.direction;
+	Vector3 N = ray.intersection.normal;
+	Vector3 P = ray.intersection.position;
 
-	double c1 = -D.dot(N);
+	double c1 = -(D.dot(N));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double rf = 1.0;
 	double tf = 1.0;
 
-	if (material->isStatic)
+	if (material->skipLighting)
 	{
 		ray.color = textureColor;
 
@@ -176,7 +176,7 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 		return;
 	}
 
-	if (material->isFresnel)
+	if (material->fresnel)
 	{
 		double rf0 = (n2 - n1) / (n2 + n1);
 		rf0 = rf0 * rf0;
@@ -184,25 +184,11 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 		tf = 1.0 - rf;
 	}
 
-	double reflectance = material->reflectance * rf;
+	if (!isOutside)
+		N = -N;
+
 	double transmittance = material->transmittance * tf;
-
-	// calculate and trace reflected ray
-	if (reflectance > 0.0 && ray.iterations < scene.tracer.maxIterations)
-	{
-		Vector3 R = D + 2.0 * c1 * N;
-		R.normalize();
-
-		Ray reflectedRay;
-		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
-		reflectedRay.direction = R;
-		reflectedRay.iterations = ray.iterations + 1;
-
-		traceRay(scene, reflectedRay, rayCount, interrupted);
-
-		if (ray.intersection.wasFound)
-			reflectionColor = reflectedRay.color * reflectance;
-	}
+	double reflectance = material->reflectance * rf;
 
 	// calculate and trace refracted ray
 	if (transmittance > 0.0 && ray.iterations < scene.tracer.maxIterations)
@@ -224,11 +210,48 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 			traceRay(scene, refractedRay, rayCount, interrupted);
 
 			if (ray.intersection.wasFound)
+			{
 				refractionColor = refractedRay.color * transmittance;
+
+				if (isOutside && material->attenuate)
+				{
+					double a = exp(-material->attenuation * refractedRay.intersection.distance);
+					refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
+				}
+			}
 		}
 	}
 
-	Color lightColor = calculateLight(scene, ray);
+	// calculate and trace reflected ray
+	if (reflectance > 0.0 && ray.iterations < scene.tracer.maxIterations)
+	{
+		Vector3 R = D + 2.0 * c1 * N;
+		R.normalize();
+
+		Ray reflectedRay;
+		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
+		reflectedRay.direction = R;
+		reflectedRay.iterations = ray.iterations + 1;
+
+		traceRay(scene, reflectedRay, rayCount, interrupted);
+
+		if (ray.intersection.wasFound)
+		{
+			reflectionColor = reflectedRay.color * reflectance;
+
+			if (!isOutside && material->attenuate)
+			{
+				double a = exp(-material->attenuation * reflectedRay.intersection.distance);
+				reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
+			}
+		}
+	}
+
+	Color lightColor;
+
+	if (isOutside)
+		lightColor = calculateLight(scene, ray);
+
 	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
 
 	if (scene.fog.enabled && isOutside)

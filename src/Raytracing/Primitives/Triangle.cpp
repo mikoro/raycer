@@ -81,7 +81,7 @@ bool Triangle::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = ip;
-	ray.intersection.normal = (denominator < 0.0) ? normal3 : -normal3;
+	ray.intersection.normal = normal3;
 	ray.intersection.texcoord = texcoord;
 
 	return true;

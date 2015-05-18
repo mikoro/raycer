@@ -194,7 +194,7 @@ Scene Scene::createTestScene()
 {
 	Scene scene;
 
-	scene.tracer.maxIterations = 3;
+	scene.tracer.maxIterations = 4;
 
 	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 8;
@@ -226,7 +226,7 @@ Scene Scene::createTestScene()
 	Material atmosphereMaterial;
 	atmosphereMaterial.id = 0;
 	atmosphereMaterial.textureId = atmosphereTexture.id;
-	atmosphereMaterial.isStatic = true;
+	atmosphereMaterial.skipLighting = true;
 
 	Sphere atmosphereSphere;
 	atmosphereSphere.materialId = atmosphereMaterial.id;
@@ -239,33 +239,33 @@ Scene Scene::createTestScene()
 	scene.materials.push_back(atmosphereMaterial);
 	scene.primitives.spheres.push_back(atmosphereSphere);
 
-	// FLOOR //
+	// GROUND //
 
-	ImageTexture floorTexture;
-	floorTexture.id = 1;
-	floorTexture.imageFilePath = "data/images/dirt1.jpg";
-	floorTexture.intensity = 0.5;
+	ImageTexture groundTexture;
+	groundTexture.id = 1;
+	groundTexture.imageFilePath = "data/images/dirt1.jpg";
+	groundTexture.intensity = 0.5;
 
-	Material floorMaterial;
-	floorMaterial.id = 1;
-	floorMaterial.textureId = floorTexture.id;
-	floorMaterial.ambientness = 1.0;
-	floorMaterial.diffuseness = 1.0;
-	floorMaterial.specularity = 0.0;
-	floorMaterial.shininess = 1.0;
-	floorMaterial.reflectance = 0.0;
-	floorMaterial.transmittance = 0.0;
-	floorMaterial.refractiveIndex = 1.0;
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.ambientness = 1.0;
+	groundMaterial.diffuseness = 1.0;
+	groundMaterial.specularity = 0.0;
+	groundMaterial.shininess = 1.0;
+	groundMaterial.reflectance = 0.0;
+	groundMaterial.transmittance = 0.0;
+	groundMaterial.refractiveIndex = 1.0;
 
-	Plane floorPlane;
-	floorPlane.materialId = floorMaterial.id;
-	floorPlane.position = Vector3(0.0, 0.0, 0.0);
-	floorPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	floorPlane.texcoordScale = Vector2(5.0, 5.0);
+	Plane groundPlane;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	groundPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.imageTextures.push_back(floorTexture);
-	scene.materials.push_back(floorMaterial);
-	scene.primitives.planes.push_back(floorPlane);
+	scene.textures.imageTextures.push_back(groundTexture);
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
 
 	// SPHERE 1 //
 
@@ -284,17 +284,17 @@ Scene Scene::createTestScene()
 	sphere1Material.reflectance = 0.5;
 	sphere1Material.transmittance = 0.0;
 	sphere1Material.refractiveIndex = 1.0;
-	sphere1Material.isFresnel = false;
+	sphere1Material.fresnel = false;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
 	sphere1.texcoordScale = Vector2(1.0, 1.0);
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
-	
-	scene.textures.colorTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+
+	//scene.textures.colorTextures.push_back(sphere1Texture);
+	//scene.materials.push_back(sphere1Material);
+	//scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
 
@@ -312,8 +312,8 @@ Scene Scene::createTestScene()
 	sphere2Material.shininess = 128.0;
 	sphere2Material.reflectance = 1.0;
 	sphere2Material.transmittance = 1.0;
-	sphere2Material.refractiveIndex = 1.1;
-	sphere2Material.isFresnel = true;
+	sphere2Material.refractiveIndex = 1.5;
+	sphere2Material.fresnel = true;
 
 	Sphere sphere2;
 	sphere2.materialId = sphere2Material.id;
@@ -321,9 +321,43 @@ Scene Scene::createTestScene()
 	sphere2.position = Vector3(-3.0, 1.0, 0.0);
 	sphere2.radius = 1.0;
 
-	scene.textures.colorTextures.push_back(sphere2Texture);
-	scene.materials.push_back(sphere2Material);
-	scene.primitives.spheres.push_back(sphere2);
+	//scene.textures.colorTextures.push_back(sphere2Texture);
+	//scene.materials.push_back(sphere2Material);
+	//scene.primitives.spheres.push_back(sphere2);
+
+	// MESH 1 //
+
+	ColorTexture mesh1Texture;
+	mesh1Texture.id = 4;
+	mesh1Texture.color = Color(1.0, 1.0, 1.0);
+	mesh1Texture.intensity = 1.0;
+
+	Material mesh1Material;
+	mesh1Material.id = 4;
+	mesh1Material.textureId = mesh1Texture.id;
+	mesh1Material.ambientness = 0.0;
+	mesh1Material.diffuseness = 0.0;
+	mesh1Material.specularity = 0.5;
+	mesh1Material.shininess = 128.0;
+	mesh1Material.reflectance = 1.0;
+	mesh1Material.transmittance = 1.0;
+	mesh1Material.refractiveIndex = 1.5;
+	mesh1Material.fresnel = true;
+	mesh1Material.attenuate = true;
+	mesh1Material.attenuation = 0.1;
+	mesh1Material.attenuationColor = Color(0.1, 0.0, 0.0);
+
+	Mesh mesh1;
+	mesh1.materialId = mesh1Material.id;
+	mesh1.meshFilePath = "data/meshes/cube5.obj";
+	mesh1.texcoordScale = Vector2(1.0, 1.0);
+	mesh1.position = Vector3(0.0, 3.1, 0.0);
+	mesh1.scale = Vector3(2.0, 3.0, 0.5);
+	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+
+	scene.textures.colorTextures.push_back(mesh1Texture);
+	scene.materials.push_back(mesh1Material);
+	scene.primitives.meshes.push_back(mesh1);
 
 	// LIGHTS //
 

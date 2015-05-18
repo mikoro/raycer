@@ -51,7 +51,7 @@ void Sphere::intersect(Ray& ray) const
 	ray.intersection.wasFound = true;
 	ray.intersection.distance = t;
 	ray.intersection.position = ip;
-	ray.intersection.normal = rayOriginIsOutside ? normal : -normal;
+	ray.intersection.normal = normal;
 	ray.intersection.materialId = materialId;
 
 	// spherical texture coordinate calculation
