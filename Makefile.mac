@@ -3,7 +3,7 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst
 SOURCES := $(call rwildcard, src/, *.cpp)
 OBJS := $(subst src/,build/,$(SOURCES:.cpp=.o))
 CFLAGS = -isystem /opt/local/include -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Ofast -fopenmp -Wno-deprecated-declarations
-LDFLAGS = -L/opt/local/lib -Lplatform/mac/lib -framework Cocoa -framework OpenGL -framework OpenCL -framework IOKit -framework CoreVideo -lGLEW -lglfw -lboost_system-mt -lfreetype -lfreetype-gl
+LDFLAGS = -L/opt/local/lib -Lplatform/mac/lib -framework Cocoa -framework OpenGL -framework OpenCL -framework IOKit -framework CoreVideo -lstdc++ -lGLEW -lglfw -lboost_system-mt -lfreetype -lfreetype-gl
 TARGET = raycer
 
 default: raycer
