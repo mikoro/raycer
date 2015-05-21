@@ -302,9 +302,9 @@ Scene Scene::createTestScene()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	scene.textures.voronoiTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	//scene.textures.voronoiTextures.push_back(sphere1Texture);
+	//scene.materials.push_back(sphere1Material);
+	//scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
 
@@ -342,30 +342,30 @@ Scene Scene::createTestScene()
 
 	ColorTexture mesh1Texture;
 	mesh1Texture.id = 4;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
+	mesh1Texture.color = Color(0.8, 0.8, 0.8);
 	mesh1Texture.intensity = 1.0;
 
 	Material mesh1Material;
 	mesh1Material.id = 4;
 	mesh1Material.textureId = mesh1Texture.id;
-	mesh1Material.ambientness = 0.0;
-	mesh1Material.diffuseness = 0.0;
-	mesh1Material.specularity = 0.5;
-	mesh1Material.shininess = 128.0;
-	mesh1Material.reflectance = 1.0;
-	mesh1Material.transmittance = 1.0;
+	mesh1Material.ambientness = 1.0;
+	mesh1Material.diffuseness = 1.0;
+	mesh1Material.specularity = 0.0;
+	mesh1Material.shininess = 2.0;
+	mesh1Material.reflectance = 0.0;
+	mesh1Material.transmittance = 0.0;
 	mesh1Material.refractiveIndex = 1.5;
-	mesh1Material.fresnel = true;
-	mesh1Material.attenuate = true;
+	mesh1Material.fresnel = false;
+	mesh1Material.attenuate = false;
 	mesh1Material.attenuation = 0.1;
-	mesh1Material.attenuationColor = Color(0.1, 0.0, 0.0);
+	mesh1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/cube5.obj";
+	mesh1.meshFilePath = "data/meshes/monkey2.obj";
 	mesh1.texcoordScale = Vector2(1.0, 1.0);
-	mesh1.position = Vector3(0.0, 2.1, 0.0);
-	mesh1.scale = Vector3(2.0, 2.0, 2.0);
+	mesh1.position = Vector3(0.0, 2.0, 0.0);
+	mesh1.scale = Vector3(1.0, 1.0, 1.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
 	//scene.textures.colorTextures.push_back(mesh1Texture);

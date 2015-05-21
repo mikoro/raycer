@@ -7,7 +7,7 @@
 
 #include <thread>
 
-#include <GL/glew.h>
+#include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
 
 #include "Runners/InteractiveRunner.h"
@@ -157,6 +157,10 @@ void InteractiveRunner::initialize()
 
 	log.logInfo("Creating window and OpenGL context (%sx%s, fullscreen: %s)", settings.window.width, settings.window.height, settings.window.fullscreen);
 
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_COMPAT_PROFILE);
+	//glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindow = glfwCreateWindow(settings.window.width, settings.window.height, "Raycer", settings.window.fullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!glfwWindow)
@@ -166,18 +170,14 @@ void InteractiveRunner::initialize()
 	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - settings.window.width / 2), (videoMode->height / 2 - settings.window.height / 2));
 	glfwMakeContextCurrent(glfwWindow);
 
-	int major = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_VERSION_MAJOR);
-	int minor = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_VERSION_MINOR);
-	int revision = glfwGetWindowAttrib(glfwWindow, GLFW_CONTEXT_REVISION);
-	int profile = glfwGetWindowAttrib(glfwWindow, GLFW_OPENGL_PROFILE);
-	
-	log.logInfo("OpenGL context version: %d.%d.%d (%d)", major, minor, revision, profile);
-	log.logInfo("Initializing GLEW library");
+	log.logInfo("Initializing GL3W library");
 
-	GLenum result = glewInit();
+	int result = gl3wInit();
 
-	if (result != GLEW_OK)
-		throw std::runtime_error(tfm::format("Could not initialize GLEW library: %s", glewGetErrorString(result)));
+	if (result == -1)
+		throw std::runtime_error("Could not initialize GL3W library");
+
+	log.logInfo("OpenGL Vendor: %s Renderer: %s Version: %s GLSL: %s", glGetString(GL_VENDOR), glGetString(GL_RENDERER), glGetString(GL_VERSION), glGetString(GL_SHADING_LANGUAGE_VERSION));
 
 	glfwSwapInterval(settings.window.vsync ? 1 : 0);
 

@@ -11,10 +11,7 @@
 #include <windows.h>
 #endif
 
-#include <GL/glew.h>
-#ifdef __linux
-#include <GL/glxew.h>
-#endif
+#include <GL/gl3w.h>
 
 #define CL_USE_DEPRECATED_OPENCL_1_1_APIS
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS

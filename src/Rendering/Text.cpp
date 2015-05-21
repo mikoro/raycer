@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include <GL/glew.h>
+#include <GL/gl3w.h>
 
 #define NOT_USING_FT_GL_NAMESPACE
 #include "freetype-gl/freetype-gl.h"

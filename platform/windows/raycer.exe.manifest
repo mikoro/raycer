@@ -49,12 +49,6 @@
   
   <dependency>
     <dependentAssembly>
-      <assemblyIdentity type="win32" name="glew.dll" version="9.9.9.9" processorArchitecture="amd64" />
-    </dependentAssembly>
-  </dependency>
-  
-  <dependency>
-    <dependentAssembly>
       <assemblyIdentity type="win32" name="freetype.dll" version="9.9.9.9" processorArchitecture="amd64" />
     </dependentAssembly>
   </dependency>

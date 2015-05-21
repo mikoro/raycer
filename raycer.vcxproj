@@ -91,7 +91,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:msvcrt.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -115,7 +115,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/NODEFAULTLIB:msvcrt.lib %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <PostBuildEvent>
@@ -149,7 +149,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;glew.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw.lib;opengl32.lib;freetype.lib;freetype-gl.lib;OpenCL.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>platform\windows\post-build.bat Release</Command>
@@ -160,6 +160,7 @@
     <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp" />
     <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
     <ClCompile Include="src\CLRaytracing\CLManager.cpp" />
+    <ClCompile Include="src\gl3w.c" />
     <ClCompile Include="src\InteractiveStates\RaytracingState.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />

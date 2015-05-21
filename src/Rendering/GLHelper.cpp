@@ -129,7 +129,6 @@ std::string GLHelper::getErrorMessage(int result)
 		case GL_STACK_OVERFLOW: return "GL_STACK_OVERFLOW";
 		case GL_STACK_UNDERFLOW: return "GL_STACK_UNDERFLOW";
 		case GL_OUT_OF_MEMORY: return "GL_OUT_OF_MEMORY​";
-		case GL_TABLE_TOO_LARGE: return "GL_TABLE_TOO_LARGE";
 		default: return "Unknown error";
 	}
 }
