@@ -3,7 +3,7 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst
 SOURCES := $(call rwildcard, src/, *.cpp)
 OBJS := $(subst src/,build/,$(SOURCES:.cpp=.o))
 CFLAGS = -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast -fopenmp
-LDFLAGS = -Lplatform/linux/lib -lstdc++ -ldl -lm -lpthread -lglfw3 -lGL -lOpenCL -lfreetype -lfreetype-gl -lboost_system -lXrandr -lXi -lXcursor -lXinerama
+LDFLAGS = -Lplatform/linux/lib -lstdc++ -ldl -lm -lpthread -lglfw3 -lGL -lOpenCL -lfreetype-gl -lfreetype -lboost_system -lXrandr -lXi -lXcursor -lXinerama
 TARGET = raycer
 
 # travis-ci environment
