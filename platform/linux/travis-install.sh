@@ -9,7 +9,6 @@ wget -O - http://llvm.org/apt/llvm-snapshot.gpg.key | sudo apt-key add -
 sudo apt-get update -qq
 
 sudo apt-get install -y gcc-4.9 g++-4.9 llvm-3.6 clang-3.6
-sudo apt-get install -y libglew-dev
 sudo apt-get install -y opencl-headers
 sudo apt-get install -y libboost1.55-all-dev
 

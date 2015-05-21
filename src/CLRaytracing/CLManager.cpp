@@ -22,6 +22,10 @@
 #include <CL/opencl.h>
 #endif
 
+#ifdef __linux
+#include <GL/glx.h>
+#endif
+
 #include "tinyformat/tinyformat.h"
 
 #include "CLRaytracing/CLManager.h"
