@@ -160,7 +160,6 @@
     <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp" />
     <ClCompile Include="src\CLRaytracing\CLScene.cpp" />
     <ClCompile Include="src\CLRaytracing\CLManager.cpp" />
-    <ClCompile Include="src\gl3w.c" />
     <ClCompile Include="src\InteractiveStates\RaytracingState.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
@@ -207,6 +206,7 @@
     <ClCompile Include="src\Tests\Vector3Test.cpp" />
     <ClCompile Include="src\Utils\CellNoise.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
+    <ClCompile Include="src\Utils\gl3w.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\Utils\ObjReader.cpp" />

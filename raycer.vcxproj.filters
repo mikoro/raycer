@@ -211,7 +211,9 @@
     <ClCompile Include="src\Raytracing\Textures\ValueNoiseTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="src\gl3w.c" />
+    <ClCompile Include="src\Utils\gl3w.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
