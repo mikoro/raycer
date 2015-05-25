@@ -22,6 +22,10 @@
 #include <windows.h>
 #endif
 
+#ifdef __APPLE__
+#include "CoreFoundation/CoreFoundation.h"
+#endif
+
 #define CATCH_CONFIG_RUNNER
 #include "catch/catch.hpp"
 
@@ -51,10 +55,46 @@ BOOL consoleCtrlHandler(DWORD fdwCtrlType)
 }
 #endif
 
+#ifdef __APPLE__
+void changeDirectory()
+{
+    CFBundleRef bundle = CFBundleGetMainBundle();
+	
+    if (!bundle)
+        return;
+
+    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(bundle);
+    CFStringRef last = CFURLCopyLastPathComponent(resourcesURL);
+	
+    if (CFStringCompare(CFSTR("Resources"), last, 0) != kCFCompareEqualTo)
+    {
+        CFRelease(last);
+        CFRelease(resourcesURL);
+        return;
+    }
+
+    CFRelease(last);
+	char resourcesPath[1024];
+	
+    if (!CFURLGetFileSystemRepresentation(resourcesURL, true, (UInt8*)resourcesPath, 1024))
+    {
+        CFRelease(resourcesURL);
+        return;
+    }
+
+    CFRelease(resourcesURL);
+    chdir(resourcesPath);
+}
+#endif
+
 int App::run(int argc, char** argv)
 {
 #ifdef _WIN32
 	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
+#endif
+
+#ifdef __APPLE__
+	changeDirectory();
 #endif
 
 	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
