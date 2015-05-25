@@ -19,7 +19,6 @@ Download the sources and run the commands from a corresponding developer console
 ## Linux
 
 - Install boost
-- Install GLEW
 - Install GLFW
 - Install Freetype
 - Install OpenCL headers + something that provides the libraries (e.g. beignet, intel/nvidia drivers)
@@ -40,9 +39,7 @@ The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, 
 - Install Xcode + Command Line Tools
 - Install MacPorts
 - Install gcc49 (macports) and set active
-- Install cmake (macports)
 - Install boost (macports)
-- Install GLEW (macports)
 - Install GLFW (macports)
 - Install Freetype (macports)
 - Optional: Compile freetype-gl (gcc49)
@@ -50,14 +47,13 @@ The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, 
 Compile:
 
     export CXX=g++
-    make -j4 -f Makefile.mac
+    make -j4
 
 ## Framework versions
 
 - boost 1.57.0
 - Freetype 2.5.5
 - GLFW 3.1.1
-- GLEW 1.12.0
 - freetype-gl (github master ?)
 - CATCH v1.1 build 1 (master branch)
 - cereal 1.1.1
