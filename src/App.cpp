@@ -56,34 +56,35 @@ BOOL consoleCtrlHandler(DWORD fdwCtrlType)
 #endif
 
 #ifdef __APPLE__
+// change directory to Resources when run as an app bundle
 void changeDirectory()
 {
-    CFBundleRef bundle = CFBundleGetMainBundle();
-	
-    if (!bundle)
-        return;
+	CFBundleRef bundle = CFBundleGetMainBundle();
 
-    CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(bundle);
-    CFStringRef last = CFURLCopyLastPathComponent(resourcesURL);
-	
-    if (CFStringCompare(CFSTR("Resources"), last, 0) != kCFCompareEqualTo)
-    {
-        CFRelease(last);
-        CFRelease(resourcesURL);
-        return;
-    }
+	if (!bundle)
+		return;
 
-    CFRelease(last);
+	CFURLRef resourcesURL = CFBundleCopyResourcesDirectoryURL(bundle);
+	CFStringRef last = CFURLCopyLastPathComponent(resourcesURL);
+
+	if (CFStringCompare(CFSTR("Resources"), last, 0) != kCFCompareEqualTo)
+	{
+		CFRelease(last);
+		CFRelease(resourcesURL);
+		return;
+	}
+
+	CFRelease(last);
 	char resourcesPath[1024];
-	
-    if (!CFURLGetFileSystemRepresentation(resourcesURL, true, (UInt8*)resourcesPath, 1024))
-    {
-        CFRelease(resourcesURL);
-        return;
-    }
 
-    CFRelease(resourcesURL);
-    chdir(resourcesPath);
+	if (!CFURLGetFileSystemRepresentation(resourcesURL, true, (UInt8*)resourcesPath, 1024))
+	{
+		CFRelease(resourcesURL);
+		return;
+	}
+
+	CFRelease(resourcesURL);
+	chdir(resourcesPath);
 }
 #endif
 
@@ -111,7 +112,7 @@ int App::run(int argc, char** argv)
 	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
 	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
 	TCLAP::SwitchArg autoViewSwitch("", "view", "Open the image automatically after completion", cmd, false);
-	
+
 	try
 	{
 		cmd.parse(argc, argv);
@@ -168,7 +169,7 @@ int App::run(int argc, char** argv)
 
 		if (widthArg.isSet())
 			settings.image.width = settings.window.width = widthArg.getValue();
-		
+
 		if (heightArg.isSet())
 			settings.image.height = settings.window.height = heightArg.getValue();
 

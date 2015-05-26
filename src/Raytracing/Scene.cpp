@@ -302,9 +302,9 @@ Scene Scene::createTestScene()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	//scene.textures.voronoiTextures.push_back(sphere1Texture);
-	//scene.materials.push_back(sphere1Material);
-	//scene.primitives.spheres.push_back(sphere1);
+	scene.textures.voronoiTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
 
