@@ -247,10 +247,17 @@ Scene Scene::createTestScene()
 
 	// GROUND //
 
+	/*
 	ImageTexture groundTexture;
 	groundTexture.id = 1;
 	groundTexture.imageFilePath = "data/images/dirt1.jpg";
 	groundTexture.intensity = 0.5;
+	*/
+
+	ColorTexture groundTexture;
+	groundTexture.id = 1;
+	groundTexture.color = Color(1.0, 1.0, 1.0);
+	groundTexture.intensity = 0.3;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
@@ -269,7 +276,7 @@ Scene Scene::createTestScene()
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	groundPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.imageTextures.push_back(groundTexture);
+	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 

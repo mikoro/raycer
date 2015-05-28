@@ -41,6 +41,7 @@ namespace Raycer
 		void applyGamma(double gamma);
 		void swapComponents();
 		void flip();
+		void fillTestPattern();
 
 		int getWidth() const;
 		int getHeight() const;

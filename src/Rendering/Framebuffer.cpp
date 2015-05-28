@@ -45,7 +45,7 @@ void Framebuffer::initialize()
 
 	programId = GLHelper::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
 
-	samplerUniformId = glGetUniformLocation(programId, "tex0");
+	samplerUniformId = glGetUniformLocation(programId, "texture0");
 	textureWidthUniformId = glGetUniformLocation(programId, "textureWidth");
 	textureHeightUniformId = glGetUniformLocation(programId, "textureHeight");
 	texelWidthUniformId = glGetUniformLocation(programId, "texelWidth");

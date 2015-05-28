@@ -2,13 +2,16 @@
 
 uniform sampler2D tex0;
 
-in vec2 tex_coord_var;
-in vec4 color_var;
+in Data
+{
+	vec2 texcoord;
+	vec4 color;
+} input;
 
-out vec4 color_final;
+out vec4 color;
 
 void main()
 {
-	float a = texture(tex0, tex_coord_var).r;
-	color_final = vec4(color_var.rgb, color_var.a * a);
+	float a = texture(tex0, input.texcoord).r;
+	color = vec4(input.color.rgb, input.color.a * a);
 }

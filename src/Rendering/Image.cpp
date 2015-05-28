@@ -276,6 +276,22 @@ void Image::flip()
 	std::swap(pixelData, tempImage.pixelData);
 }
 
+void Image::fillTestPattern()
+{
+	for (int y = 0; y < height; ++y)
+	{
+		for (int x = 0; x < width; ++x)
+		{
+			Color color = Color::BLACK;
+
+			if (x % 2 == 0 && y % 2 == 0)
+				color = Color::lerp(Color::RED, Color::BLUE, (double)x / (double)width);
+
+			pixelData[y * width + x] = color;
+		}
+	}
+}
+
 int Image::getWidth() const
 {
 	return width;

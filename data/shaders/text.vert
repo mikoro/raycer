@@ -6,12 +6,15 @@ in vec3 vertex;
 in vec2 tex_coord;
 in vec4 color;
 
-out vec2 tex_coord_var;
-out vec4 color_var;
+out Data
+{
+	vec2 texcoord;
+	vec4 color;
+} output;
 
 void main()
 {
 	gl_Position = mvp * vec4(vertex, 1.0f);
-	tex_coord_var = tex_coord;
-	color_var = color;
+	output.texcoord = tex_coord;
+	output.color = color;
 }
