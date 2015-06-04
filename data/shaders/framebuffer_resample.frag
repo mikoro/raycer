@@ -18,7 +18,7 @@ uniform float texelHeight;
 in Data
 {
 	vec2 texcoord;
-} input;
+} fsin;
 
 out vec3 color;
 
@@ -74,8 +74,8 @@ float lanczos(float x)
 void main()
 {
 	// coordinates on the sampled texture [0 .. width/height]
-	float tx = input.texcoord.x * textureWidth;
-	float ty = input.texcoord.y * textureHeight;
+	float tx = fsin.texcoord.x * textureWidth;
+	float ty = fsin.texcoord.y * textureHeight;
 	
 	// texel centered coordinates on the sampled texture [0 .. 1]
 	float ctx = (floor(tx) + 0.5f) / textureWidth;

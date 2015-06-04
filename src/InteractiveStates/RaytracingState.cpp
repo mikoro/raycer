@@ -29,7 +29,7 @@ void RaytracingState::initialize()
 	//scene.loadFromFile(settings.scene.fileName);
 	scene = Scene::createTestScene();
 	scene.initialize();
-	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	scene.camera.setImagePlaneSize(framebuffer.getImageWidth(), framebuffer.getImageHeight());
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();
@@ -81,8 +81,8 @@ void RaytracingState::render(double timeStep, double interpolation)
 
 	state.image = &framebuffer.image;
 	state.scene = &scene;
-	state.sceneWidth = framebuffer.getWidth();
-	state.sceneHeight = framebuffer.getHeight();
+	state.sceneWidth = framebuffer.getImageWidth();
+	state.sceneHeight = framebuffer.getImageHeight();
 	state.pixelOffset = 0;
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
 	state.pixelsProcessed = 0;

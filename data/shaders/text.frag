@@ -6,12 +6,12 @@ in Data
 {
 	vec2 texcoord;
 	vec4 color;
-} input;
+} fsin;
 
 out vec4 color;
 
 void main()
 {
-	float a = texture(tex0, input.texcoord).r;
-	color = vec4(input.color.rgb, input.color.a * a);
+	float a = texture(tex0, fsin.texcoord).r;
+	color = vec4(fsin.color.rgb, fsin.color.a * a);
 }

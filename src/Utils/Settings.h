@@ -69,8 +69,10 @@ namespace Raycer
 		{
 			double scale;
 			bool smoothing;
-			std::string vertexShader;
-			std::string fragmentShader;
+			std::string resampleVertexShader;
+			std::string resampleFragmentShader;
+			std::string filterVertexShader;
+			std::string filterFragmentShader;
 		} framebuffer;
 
 		struct Camera

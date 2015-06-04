@@ -47,8 +47,10 @@ void Settings::load(const std::string& fileName)
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
 	framebuffer.smoothing = iniReader.getValue<bool>("framebuffer", "smoothing");
-	framebuffer.vertexShader = iniReader.getValue("framebuffer", "vertexShader");
-	framebuffer.fragmentShader = iniReader.getValue("framebuffer", "fragmentShader");
+	framebuffer.resampleVertexShader = iniReader.getValue("framebuffer", "resampleVertexShader");
+	framebuffer.resampleFragmentShader = iniReader.getValue("framebuffer", "resampleFragmentShader");
+	framebuffer.filterVertexShader = iniReader.getValue("framebuffer", "filterVertexShader");
+	framebuffer.filterFragmentShader = iniReader.getValue("framebuffer", "filterFragmentShader");
 
 	camera.moveSpeed = iniReader.getValue<double>("camera", "moveSpeed");
 	camera.moveDrag = iniReader.getValue<double>("camera", "moveDrag");

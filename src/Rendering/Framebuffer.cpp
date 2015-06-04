@@ -33,23 +33,37 @@ void Framebuffer::initialize()
 
 	App::getLog().logInfo("Initializing framebuffer");
 
-	glGenTextures(1, &textureId);
+	glGenTextures(1, &imageTextureId);
+	glGenTextures(1, &framebufferTextureId);
+
 	GLHelper::checkError("Could not create OpenGL textures");
 
-	// prevent color sampling errors on the framebuffer edges, especially when using linear filtering
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glBindTexture(GL_TEXTURE_2D, imageTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 
-	programId = GLHelper::buildProgram(settings.framebuffer.vertexShader, settings.framebuffer.fragmentShader);
+	resampleProgramId = GLHelper::buildProgram(settings.framebuffer.resampleVertexShader, settings.framebuffer.resampleFragmentShader);
+	filterProgramId = GLHelper::buildProgram(settings.framebuffer.filterVertexShader, settings.framebuffer.filterFragmentShader);
 
-	samplerUniformId = glGetUniformLocation(programId, "texture0");
-	textureWidthUniformId = glGetUniformLocation(programId, "textureWidth");
-	textureHeightUniformId = glGetUniformLocation(programId, "textureHeight");
-	texelWidthUniformId = glGetUniformLocation(programId, "texelWidth");
-	texelHeightUniformId = glGetUniformLocation(programId, "texelHeight");
+	resampleTextureUniformId = glGetUniformLocation(resampleProgramId, "texture0");
+	resampleTextureWidthUniformId = glGetUniformLocation(resampleProgramId, "textureWidth");
+	resampleTextureHeightUniformId = glGetUniformLocation(resampleProgramId, "textureHeight");
+	resampleTexelWidthUniformId = glGetUniformLocation(resampleProgramId, "texelWidth");
+	resampleTexelHeightUniformId = glGetUniformLocation(resampleProgramId, "texelHeight");
+
+	filterTextureUniformId = glGetUniformLocation(filterProgramId, "texture0");
+	filterTextureWidthUniformId = glGetUniformLocation(filterProgramId, "textureWidth");
+	filterTextureHeightUniformId = glGetUniformLocation(filterProgramId, "textureHeight");
+	filterTexelWidthUniformId = glGetUniformLocation(filterProgramId, "texelWidth");
+	filterTexelHeightUniformId = glGetUniformLocation(filterProgramId, "texelHeight");
+
+	GLHelper::checkError("Could not get GLSL uniforms");
 
 	const GLfloat vertexData[] = {
 		-1.0f, -1.0f, 0.0f, 0.0f,
@@ -73,35 +87,61 @@ void Framebuffer::initialize()
 	glBindVertexArray(0);
 
 	GLHelper::checkError("Could not set OpenGL buffer parameters");
+
+	resizeWindow(settings.window.width, settings.window.height);
+
+	glGenFramebuffers(1, &framebufferId);
+	glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, framebufferTextureId, 0);
+
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		throw std::runtime_error("Could not initialize OpenGL framebuffer");
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	GLHelper::checkError("Could not set OpenGL framebuffer parameters");
 }
 
-void Framebuffer::resize(int width_, int height_)
+void Framebuffer::resizeImage(int imageWidth_, int imageHeight_)
 {
-	assert(width_ > 0 && height_ > 0);
+	assert(imageWidth_ > 0 && imageHeight_ > 0);
 
-	width = width_;
-	height = height_;
-	length = width * height;
+	imageWidth = imageWidth_;
+	imageHeight = imageHeight_;
 
-	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
+	App::getLog().logInfo("Resizing framebuffer to %sx%s", imageWidth, imageHeight);
 
-	image.setSize(width, height);
+	image.setSize(imageWidth, imageHeight);
 
 	if (floatPixelData != nullptr)
 		_mm_free(floatPixelData);
 
-	floatPixelData = (float*)_mm_malloc(length * sizeof(float) * 4, 64);
+	floatPixelData = (float*)_mm_malloc((imageWidth * imageHeight)* sizeof(float) * 4, 64);
 
 	if (floatPixelData == nullptr)
 		throw std::runtime_error("Could not allocate memory for the framebuffer");
 
 	// reserve the texture memory on the device
-	glBindTexture(GL_TEXTURE_2D, textureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
+	glBindTexture(GL_TEXTURE_2D, imageTextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)imageWidth, (GLsizei)imageHeight, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 	GLHelper::checkError("Could not reserve OpenGL texture memory");
 
 	clear();
+}
+
+void Framebuffer::resizeWindow(int windowWidth_, int windowHeight_)
+{
+	assert(windowWidth_ > 0 && windowHeight_ > 0);
+
+	windowWidth = windowWidth_;
+	windowHeight = windowHeight_;
+
+	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	glGenerateMipmap(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void Framebuffer::clear()
@@ -118,7 +158,8 @@ void Framebuffer::render() const
 {
 	Settings& settings = App::getSettings();
 
-	for (int i = 0; i < length; ++i)
+	// convert image data from Color to float array
+	for (int i = 0; i < (imageWidth * imageHeight); ++i)
 	{
 		int pixelIndex = i * 4;
 
@@ -128,21 +169,43 @@ void Framebuffer::render() const
 		floatPixelData[pixelIndex + 3] = (float)image.pixelData[i].a;
 	}
 
-	glUseProgram(programId);
-	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(samplerUniformId, 0);
-	glUniform1f(textureWidthUniformId, (float)width);
-	glUniform1f(textureHeightUniformId, (float)height);
-	glUniform1f(texelWidthUniformId, 1.0f / (float)width);
-	glUniform1f(texelHeightUniformId, 1.0f / (float)height);
+	/* Resampling pass */
 
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, imageTextureId);
+
+	glUseProgram(resampleProgramId);
+	glUniform1i(resampleTextureUniformId, 0);
+	glUniform1f(resampleTextureWidthUniformId, (float)imageWidth);
+	glUniform1f(resampleTextureHeightUniformId, (float)imageHeight);
+	glUniform1f(resampleTexelWidthUniformId, 1.0f / (float)imageWidth);
+	glUniform1f(resampleTexelHeightUniformId, 1.0f / (float)imageHeight);
 
 	if (!settings.openCL.enabled)
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)width, (GLsizei)height, GL_RGBA, GL_FLOAT, floatPixelData);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)imageWidth, (GLsizei)imageHeight, GL_RGBA, GL_FLOAT, floatPixelData);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
+
+	glBindVertexArray(vaoId);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
+
+	/* Filtering pass */
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
+
+	glUseProgram(filterProgramId);
+	glUniform1i(filterTextureUniformId, 0);
+	glUniform1f(filterTextureWidthUniformId, (float)imageWidth);
+	glUniform1f(filterTextureHeightUniformId, (float)imageHeight);
+	glUniform1f(filterTexelWidthUniformId, 1.0f / (float)imageWidth);
+	glUniform1f(filterTexelHeightUniformId, 1.0f / (float)imageHeight);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	glBindVertexArray(vaoId);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -156,7 +219,10 @@ void Framebuffer::render() const
 
 void Framebuffer::enableSmoothing(bool state)
 {
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	glBindTexture(GL_TEXTURE_2D, imageTextureId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, state ? GL_LINEAR : GL_NEAREST);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -164,17 +230,17 @@ void Framebuffer::enableSmoothing(bool state)
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 }
 
-int Framebuffer::getWidth() const
+int Framebuffer::getImageWidth() const
 {
-	return width;
+	return imageWidth;
 }
 
-int Framebuffer::getHeight() const
+int Framebuffer::getImageHeight() const
 {
-	return height;
+	return imageHeight;
 }
 
-GLuint Framebuffer::getTextureId() const
+GLuint Framebuffer::getImageTextureId() const
 {
-	return textureId;
+	return imageTextureId;
 }

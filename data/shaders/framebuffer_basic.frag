@@ -5,11 +5,11 @@ uniform sampler2D texture0;
 in Data
 {
 	vec2 texcoord;
-} input;
+} fsin;
 
 out vec3 color;
 
 void main()
 {
-	color = texture(texture0, input.texcoord).rgb;
+	color = texture(texture0, fsin.texcoord).rgb;
 }

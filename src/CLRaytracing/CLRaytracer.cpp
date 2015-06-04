@@ -103,7 +103,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 
 	if (settings.general.interactive)
 	{
-		pixelsPtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getTextureId(), &status);
+		pixelsPtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
 		CLManager::checkError(status, "Could not create image from OpenGL texture");
 	}
 	else

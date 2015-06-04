@@ -222,16 +222,19 @@ void InteractiveRunner::windowResized(int width, int height)
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	resizeFramebuffer((int)((double)windowWidth * settings.framebuffer.scale + 0.5), (int)((double)windowHeight * settings.framebuffer.scale + 0.5));
+	int framebufferImageWidth = (int)((double)windowWidth * settings.framebuffer.scale + 0.5);
+	int framebufferImageHeight = (int)((double)windowHeight * settings.framebuffer.scale + 0.5);
+	resizeFramebufferImage(framebufferImageWidth, framebufferImageHeight);
+	framebuffer.resizeWindow(windowWidth, windowHeight);
 
 	if (currentState != RunnerStates::None)
 	{
 		runnerStates[currentState]->windowResized(windowWidth, windowHeight);
-		runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
+		runnerStates[currentState]->framebufferResized(framebufferImageWidth, framebufferImageHeight);
 	}
 }
 
-void InteractiveRunner::resizeFramebuffer(int width, int height)
+void InteractiveRunner::resizeFramebufferImage(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -240,10 +243,10 @@ void InteractiveRunner::resizeFramebuffer(int width, int height)
 	if (settings.openCL.enabled)
 		clRaytracer.releasePixelBuffer();
 
-	framebuffer.resize(width, height);
+	framebuffer.resizeImage(width, height);
 
 	if (settings.openCL.enabled)
-		clRaytracer.resizePixelBuffer(framebuffer.getWidth(), framebuffer.getHeight());
+		clRaytracer.resizePixelBuffer(width, height);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
@@ -304,8 +307,8 @@ void InteractiveRunner::update(double timeStep)
 
 	mouseInfo.windowX = (int)(newMouseX + 0.5);
 	mouseInfo.windowY = (int)((double)windowHeight - newMouseY - 1.0 + 0.5);
-	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / (double)(windowWidth * framebuffer.getWidth()) + 0.5);
-	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / (double)(windowHeight * framebuffer.getHeight()) + 0.5);
+	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / (double)(windowWidth * framebuffer.getImageWidth()) + 0.5);
+	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / (double)(windowHeight * framebuffer.getImageHeight()) + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
@@ -338,8 +341,8 @@ void InteractiveRunner::update(double timeStep)
 		if (newWidth >= 2 && newHeight >= 2)
 		{
 			settings.framebuffer.scale = newScale;
-			resizeFramebuffer(newWidth, newHeight);
-			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
+			resizeFramebufferImage(newWidth, newHeight);
+			runnerStates[currentState]->framebufferResized(framebuffer.getImageWidth(), framebuffer.getImageHeight());
 		}
 	}
 
@@ -352,8 +355,8 @@ void InteractiveRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			resizeFramebuffer((int)((double)windowWidth * settings.framebuffer.scale + 0.5), (int)((double)windowHeight * settings.framebuffer.scale + 0.5));
-			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
+			resizeFramebufferImage((int)((double)windowWidth * settings.framebuffer.scale + 0.5), (int)((double)windowHeight * settings.framebuffer.scale + 0.5));
+			runnerStates[currentState]->framebufferResized(framebuffer.getImageWidth(), framebuffer.getImageHeight());
 		}
 	}
 
