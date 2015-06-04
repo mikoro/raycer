@@ -7,6 +7,8 @@ using a sample of 4x4 pixels and an interpolation function.
 Digital Image Processing: PIKS Inside
 4.3.2. Interpolation Functions
 13.5.1. Interpolation Methods
+
+Reconstruction Filters in Computer Graphics (Don P. Mitchell, Arun N. Netravali)
 */
 
 uniform sampler2D texture0;
@@ -22,7 +24,7 @@ in Data
 
 out vec3 color;
 
-#define INTERPOLATION_FUNCTION lanczos
+#define INTERPOLATION_FUNCTION cubic_bspline
 
 float square(float x)
 {
@@ -48,14 +50,30 @@ float bell(float x)
 		return 0.0f;
 }
 
-float bspline(float x)
+// cubic bspline
+//#define B 1.0f
+//#define C 0.0f
+
+// Catmull-Rom spline
+//#define B 0.0f
+//#define C 0.5f
+
+// good compromise
+#define B (1.0f / 3.0f)
+#define C (1.0f / 3.0f)
+
+// suppresse postaliasing patterns
+//#define B (3.0f / 2.0f)
+//#define C (-1.0f / 4.0f)
+
+float cubic_bspline(float x)
 {
 	x = abs(x);
 	
 	if (x < 1.0f)
-		return (2.0f / 3.0f) + 0.5f * (x * x * x) - (x * x);
+		return ((12.0f - 9.0f * B - 6.0f * C) * (x * x * x) + (-18.0f + 12.0f * B + 6.0f * C) * (x * x) + (6.0f - 2.0f * B)) * (1.0f / 6.0f);
 	else
-		return (1.0f / 6.0f) * pow(2.0f - x, 3.0f);
+		return ((-B - 6.0f * C) * (x * x * x) + (6.0f * B + 30.0f * C) * (x * x) + (-12.0f * B - 48.0f * C) * x + (8.0f * B + 24.0f * C)) * (1.0f / 6.0f);
 }
 
 #define PI 3.1415926f
