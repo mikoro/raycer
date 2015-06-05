@@ -39,21 +39,21 @@ const float kernel[9] = float[](
 );
 */
 
-/*
 // EMBOSS //
 const float kernel[9] = float[](
 	-2, -1,  0,
 	-1,  1,  1,
 	 0,  1,  2
 );
-*/
 
+/*
 // EDGE //
 const float kernel[9] = float[](
 	-1, -1, -1,
 	-1,  8, -1,
 	-1, -1, -1
 );
+*/
 
 void main()
 {

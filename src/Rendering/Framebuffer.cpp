@@ -200,10 +200,10 @@ void Framebuffer::render() const
 
 	glUseProgram(filterProgramId);
 	glUniform1i(filterTextureUniformId, 0);
-	glUniform1f(filterTextureWidthUniformId, (float)imageWidth);
-	glUniform1f(filterTextureHeightUniformId, (float)imageHeight);
-	glUniform1f(filterTexelWidthUniformId, 1.0f / (float)imageWidth);
-	glUniform1f(filterTexelHeightUniformId, 1.0f / (float)imageHeight);
+	glUniform1f(filterTextureWidthUniformId, (float)windowWidth);
+	glUniform1f(filterTextureHeightUniformId, (float)windowHeight);
+	glUniform1f(filterTexelWidthUniformId, 1.0f / (float)windowWidth);
+	glUniform1f(filterTexelHeightUniformId, 1.0f / (float)windowHeight);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
