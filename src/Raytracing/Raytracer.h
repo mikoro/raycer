@@ -28,8 +28,8 @@ namespace Raycer
 
 		Color shootRays(const Scene& scene, double x, double y, int& rayCount, const std::atomic<bool>& interrupted);
 		void traceRay(const Scene& scene, Ray& ray, int& rayCount, const std::atomic<bool>& interrupted);
-		Color calculateLight(const Scene& scene, const Ray& ray);
-		Color calculateFog(const Scene& scene, const Ray& ray);
+		Color calculateLightColor(const Scene& scene, const Ray& ray);
+		Color calculateFogColor(const Scene& scene, const Ray& ray);
 
 		std::mt19937 gen;
 		std::uniform_real_distribution<double> realDist;

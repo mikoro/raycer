@@ -213,7 +213,7 @@ Scene Scene::createTestScene()
 
 	// FOG //
 
-	scene.fog.enabled = true;
+	scene.fog.enabled = false;
 	scene.fog.color = Color(0.7, 0.7, 0.7);
 	scene.fog.distance = 100.0;
 	scene.fog.steepness = 4.0;
@@ -241,9 +241,9 @@ Scene Scene::createTestScene()
 	atmosphereSphere.radius = 100.0;
 	atmosphereSphere.nonShadowing = true;
 
-	scene.textures.atmosphereTextures.push_back(atmosphereTexture);
-	scene.materials.push_back(atmosphereMaterial);
-	scene.primitives.spheres.push_back(atmosphereSphere);
+	//scene.textures.atmosphereTextures.push_back(atmosphereTexture);
+	//scene.materials.push_back(atmosphereMaterial);
+	//scene.primitives.spheres.push_back(atmosphereSphere);
 
 	// GROUND //
 
@@ -383,7 +383,7 @@ Scene Scene::createTestScene()
 
 	AmbientLight ambientLight1;
 	ambientLight1.color = Color(1.0, 1.0, 1.0);
-	ambientLight1.intensity = 0.1;
+	ambientLight1.intensity = 0.01;
 
 	scene.lights.ambientLights.push_back(ambientLight1);
 
@@ -392,7 +392,28 @@ Scene Scene::createTestScene()
 	directionalLight1.direction = EulerAngle(45.0, -45.0, 0.0).getDirectionVector();
 	directionalLight1.intensity = 1.5;
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	//scene.lights.directionalLights.push_back(directionalLight1);
+
+	PointLight pointLight1;
+	pointLight1.color = Color(192, 191, 173);;
+	pointLight1.position = Vector3(0.0, 10.0, 0.0);
+	pointLight1.distance = 20.0;
+	pointLight1.attenuation = 1.0;
+	pointLight1.intensity = 1.5;
+
+	scene.lights.pointLights.push_back(pointLight1);
+
+	SpotLight spotLight1;
+	spotLight1.color = Color(192, 191, 173);;
+	spotLight1.position = Vector3(20.0, 10.0, 0.0);
+	spotLight1.direction = EulerAngle(90.0, -20.0, 0.0).getDirectionVector();
+	spotLight1.distance = 1000.0;
+	spotLight1.distanceAttenuation = 1.0;
+	spotLight1.sideAttenuation = 1.0;
+	spotLight1.angle = 15.0;
+	spotLight1.intensity = 1.5;
+
+	//scene.lights.spotLights.push_back(spotLight1);
 
 	return scene;
 }

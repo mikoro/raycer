@@ -28,14 +28,17 @@ namespace Raycer
 	struct PointLight : public Light
 	{
 		Vector3 position;
-		double radius = 0.0;
+		double distance = 1000.0;
+		double attenuation = 1.0;
 	};
 
 	struct SpotLight : public Light
 	{
 		Vector3 position;
 		Vector3 direction;
+		double distance = 1000.0;
+		double distanceAttenuation = 1.0;
+		double sideAttenuation = 1.0;
 		double angle = 45.0;
-		double radius = 0.0;
 	};
 }

@@ -129,7 +129,8 @@ namespace Raycer
 		a(cereal::make_nvp("color", b.color),
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("radius", b.radius));
+			cereal::make_nvp("distance", b.distance),
+			cereal::make_nvp("attenuation", b.attenuation));
 	}
 
 	template<class Archive>
@@ -139,8 +140,10 @@ namespace Raycer
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("position", b.position),
 			cereal::make_nvp("direction", b.direction),
-			cereal::make_nvp("angle", b.angle),
-			cereal::make_nvp("radius", b.radius));
+			cereal::make_nvp("distance", b.distance),
+			cereal::make_nvp("distanceAttenuation", b.distanceAttenuation),
+			cereal::make_nvp("sideAttenuation", b.sideAttenuation),
+			cereal::make_nvp("angle", b.angle));
 	}
 
 	/* MATERIAL */

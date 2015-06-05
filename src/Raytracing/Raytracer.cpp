@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <limits>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -171,7 +172,7 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 		ray.color = textureColor;
 
 		if (scene.fog.enabled)
-			ray.color = calculateFog(scene, ray);
+			ray.color = calculateFogColor(scene, ray);
 
 		return;
 	}
@@ -250,12 +251,12 @@ void Raytracer::traceRay(const Scene& scene, Ray& ray, int& rayCount, const std:
 	Color lightColor;
 
 	if (isOutside)
-		lightColor = calculateLight(scene, ray);
+		lightColor = calculateLightColor(scene, ray);
 
 	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
 
 	if (scene.fog.enabled && isOutside)
-		ray.color = calculateFog(scene, ray);
+		ray.color = calculateFogColor(scene, ray);
 }
 
 /*
@@ -270,23 +271,10 @@ d2 = specular light relative amount, only when > 0 and d1 > 0
 
 */
 
-Color Raytracer::calculateLight(const Scene& scene, const Ray& ray)
+namespace
 {
-	Material* material = scene.materialsMap.at(ray.intersection.materialId);
-
-	Color lightColor;
-
-	Vector3 P = ray.intersection.position;
-	Vector3 N = ray.intersection.normal;
-	Vector3 V = -ray.direction;
-
-	for (const AmbientLight& ambientLight : scene.lights.ambientLights)
-		lightColor += ambientLight.color * ambientLight.intensity * material->ambientness;
-
-	for (const DirectionalLight& light : scene.lights.directionalLights)
+	bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 	{
-		Vector3 L = -light.direction;
-
 		Ray shadowRay;
 		shadowRay.origin = P + L * scene.tracer.rayStartOffset;
 		shadowRay.direction = L;
@@ -297,35 +285,105 @@ Color Raytracer::calculateLight(const Scene& scene, const Ray& ray)
 				primitive->intersect(shadowRay);
 		}
 
-		if (shadowRay.intersection.wasFound)
-			continue;
+		return shadowRay.intersection.wasFound && shadowRay.intersection.distance < distanceToLight;
+	}
+
+	Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material)
+	{
+		Color phongColor;
 
 		// diffuse amount
 		double d1 = L.dot(N);
 
-		if (d1 <= 0.0)
+		if (d1 > 0.0)
+		{
+			phongColor = light->color * light->intensity * d1 * material->diffuseness;
+
+			if (material->specularity > 0.0)
+			{
+				// reflected light direction
+				Vector3 R = (2.0 * d1 * N) - L;
+				R.normalize();
+
+				// specular amount
+				double d2 = R.dot(V);
+
+				if (d2 > 0.0)
+					phongColor += light->color * light->intensity * pow(d2, material->shininess) * material->specularity;
+			}
+		}
+
+		return phongColor;
+	}
+}
+
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
+{
+	Material* material = scene.materialsMap.at(ray.intersection.materialId);
+
+	Color lightColor;
+
+	Vector3 P = ray.intersection.position;
+	Vector3 N = ray.intersection.normal;
+	Vector3 V = -ray.direction;
+
+
+	for (const AmbientLight& ambientLight : scene.lights.ambientLights)
+		lightColor += ambientLight.color * ambientLight.intensity * material->ambientness;
+
+	for (const DirectionalLight& light : scene.lights.directionalLights)
+	{
+		Vector3 L = -light.direction;
+
+		if (isInShadow(scene, P, L, std::numeric_limits<double>::max()))
 			continue;
 
-		lightColor += light.color * light.intensity * d1 * material->diffuseness;
+		lightColor += doPhongShading(N, L, V, &light, material);
+	}
 
-		if (material->specularity == 0.0)
+	for (const PointLight& light : scene.lights.pointLights)
+	{
+		Vector3 L = (light.position - P);
+		double distance = L.length();
+		L.normalize();
+
+		if (isInShadow(scene, P, L, distance))
 			continue;
 
-		// reflected light direction
-		Vector3 R = (2.0 * d1 * N) - L;
-		R.normalize();
+		Color pointLightColor = doPhongShading(N, L, V, &light, material);
+		double attenuation = std::min(1.0, distance / light.distance);
+		attenuation = 1.0 - pow(attenuation, light.attenuation);
 
-		// specular amount
-		double d2 = R.dot(V);
+		lightColor += pointLightColor * attenuation;
+	}
 
-		if (d2 > 0.0)
-			lightColor += light.color * light.intensity * pow(d2, material->shininess) * material->specularity;
+	for (const SpotLight& light : scene.lights.spotLights)
+	{
+		Vector3 L = (light.position - P);
+		double distance = L.length();
+		L.normalize();
+
+		if (isInShadow(scene, P, L, distance))
+			continue;
+
+		Color spotLightColor = doPhongShading(N, L, V, &light, material);
+
+		double distanceAttenuation = std::min(1.0, distance / light.distance);
+		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.distanceAttenuation);
+		double sideAttenuation = light.direction.dot(-L);
+
+		if (sideAttenuation > 0.0)
+		{
+			sideAttenuation = std::min(1.0, (1.0 - sideAttenuation) / (light.angle / 180.0));
+			sideAttenuation = 1.0 - pow(sideAttenuation, light.sideAttenuation);
+			lightColor += spotLightColor * distanceAttenuation * sideAttenuation;
+		}
 	}
 
 	return lightColor;
 }
 
-Color Raytracer::calculateFog(const Scene& scene, const Ray& ray)
+Color Raytracer::calculateFogColor(const Scene& scene, const Ray& ray)
 {
 	double t1 = ray.intersection.distance / scene.fog.distance;
 	t1 = std::max(0.0, std::min(t1, 1.0));

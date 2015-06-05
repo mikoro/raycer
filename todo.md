@@ -8,10 +8,5 @@ primitives
 camera
  - aperture & dof
 
-lighting
- - point and spot light
- - attenuation
- - soft shadows
-
 sampling
- - faster poisson disc
+ - correlated jitter
