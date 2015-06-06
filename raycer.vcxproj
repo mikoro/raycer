@@ -178,6 +178,7 @@
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
+    <ClCompile Include="src\Raytracing\Scenes.cpp" />
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CheckerTexture.cpp" />
