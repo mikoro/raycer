@@ -115,10 +115,10 @@ void Camera::precalculate()
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
-Ray Camera::getRay(double x, double y) const
+Ray Camera::getRay(const Vector2& pixel) const
 {
-	double dx = (x / imagePlaneWidth) - 0.5;
-	double dy = (y / imagePlaneHeight) - 0.5;
+	double dx = (pixel.x / imagePlaneWidth) - 0.5;
+	double dy = (pixel.y / imagePlaneHeight) - 0.5;
 
 	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 

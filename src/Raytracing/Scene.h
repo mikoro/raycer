@@ -28,7 +28,7 @@
 
 namespace Raycer
 {
-	enum class MultisampleType { NONE, UNIFORM, REGULAR, JITTER, POISSON };
+	enum class MultisampleType { NONE, RANDOM, REGULAR_GRID, JITTER, CORRELATED_MULTI_JITTER };
 	enum class ToneMapType { NONE, GAMMA, REINHARD };
 
 	class Scene

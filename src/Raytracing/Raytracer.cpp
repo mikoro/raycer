@@ -19,7 +19,6 @@ Raytracer::Raytracer()
 {
 	std::random_device rd;
 	gen.seed(rd());
-	realDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -39,8 +38,9 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		int pixelOffsetIndex = pixelIndex + state.pixelOffset;
 		double x = (double)(pixelOffsetIndex % state.sceneWidth);
 		double y = (double)(pixelOffsetIndex / state.sceneWidth);
+		Vector2 pixel = Vector2(x, y);
 
-		Color pixelColor = shootRays(scene, x, y, rayCount, interrupted);
+		Color pixelColor = shootRays(scene, pixel, rayCount, interrupted);
 		image.setPixel(pixelIndex, pixelColor);
 
 		// progress reporting to another thread
@@ -58,14 +58,12 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-Color Raytracer::shootRays(const Scene& scene, double x, double y, int& rayCount, const std::atomic<bool>& interrupted)
+Color Raytracer::shootRays(const Scene& scene, const Vector2& pixel, int& rayCount, const std::atomic<bool>& interrupted)
 {
 	if (scene.multisampler.type == MultisampleType::NONE)
 	{
-		double rx = x + 0.5;
-		double ry = y + 0.5;
-
-		Ray ray = scene.camera.getRay(rx, ry);
+		Vector2 sampledPixel = sampler.getCentroidSample(pixel);
+		Ray ray = scene.camera.getRay(sampledPixel);
 		traceRay(scene, ray, rayCount, interrupted);
 
 		return ray.color;
@@ -73,45 +71,33 @@ Color Raytracer::shootRays(const Scene& scene, double x, double y, int& rayCount
 
 	Color pixelColor;
 	int pixelCount = 0;
+	int permutation = intDist(gen);
+	int n = scene.multisampler.multisamples;
 
-	if (scene.multisampler.type == MultisampleType::UNIFORM || scene.multisampler.type == MultisampleType::REGULAR || scene.multisampler.type == MultisampleType::JITTER)
+	for (int y = 0; y < n; ++y)
 	{
-		for (int i = 0; i < scene.multisampler.multisamples; ++i)
+		for (int x = 0; x < n; ++x)
 		{
-			for (int j = 0; j < scene.multisampler.multisamples; ++j)
+			Vector2 sampledPixel;
+
+			if (scene.multisampler.type == MultisampleType::RANDOM)
+				sampledPixel = sampler.getRandomSample(pixel);
+			else if (scene.multisampler.type == MultisampleType::REGULAR_GRID)
+				sampledPixel = sampler.getRegularGridSample(pixel, x, y, n, n);
+			else if (scene.multisampler.type == MultisampleType::JITTER)
+				sampledPixel = sampler.getJitteredSample(pixel, x, y, n, n);
+			else if (scene.multisampler.type == MultisampleType::CORRELATED_MULTI_JITTER)
+				sampledPixel = sampler.getCmjSample(pixel, x, y, n, n, permutation);
+
+			Ray ray = scene.camera.getRay(sampledPixel);
+			traceRay(scene, ray, rayCount, interrupted);
+
+			if (ray.intersection.wasFound)
 			{
-				double rx = 0.0;
-				double ry = 0.0;
-
-				if (scene.multisampler.type == MultisampleType::UNIFORM)
-				{
-					rx = x + realDist(gen);
-					ry = y + realDist(gen);
-				}
-				else if (scene.multisampler.type == MultisampleType::REGULAR)
-				{
-					rx = x + ((double)j + 0.5) / (double)scene.multisampler.multisamples;
-					ry = y + ((double)i + 0.5) / (double)scene.multisampler.multisamples;
-				}
-				else if (scene.multisampler.type == MultisampleType::JITTER)
-				{
-					rx = x + ((double)j + realDist(gen)) / (double)scene.multisampler.multisamples;
-					ry = y + ((double)i + realDist(gen)) / (double)scene.multisampler.multisamples;
-				}
-
-				Ray ray = scene.camera.getRay(rx, ry);
-				traceRay(scene, ray, rayCount, interrupted);
-
-				if (ray.intersection.wasFound)
-				{
-					pixelColor += ray.color;
-					++pixelCount;
-				}
+				pixelColor += ray.color;
+				++pixelCount;
 			}
 		}
-	}
-	else if (scene.multisampler.type == MultisampleType::POISSON)
-	{
 	}
 
 	return pixelColor / (double)pixelCount;

@@ -6,6 +6,8 @@
 #include <atomic>
 #include <random>
 
+#include "Utils/Sampler.h"
+
 namespace Raycer
 {
 	struct RaytracerState;
@@ -26,12 +28,14 @@ namespace Raycer
 		Raytracer(const Raytracer& raytracer);
 		Raytracer& operator=(const Raytracer& raytracer);
 
-		Color shootRays(const Scene& scene, double x, double y, int& rayCount, const std::atomic<bool>& interrupted);
+		Color shootRays(const Scene& scene, const Vector2& pixel, int& rayCount, const std::atomic<bool>& interrupted);
 		void traceRay(const Scene& scene, Ray& ray, int& rayCount, const std::atomic<bool>& interrupted);
 		Color calculateLightColor(const Scene& scene, const Ray& ray);
 		Color calculateFogColor(const Scene& scene, const Ray& ray);
 
+		Sampler sampler;
+
 		std::mt19937 gen;
-		std::uniform_real_distribution<double> realDist;
+		std::uniform_int_distribution<int> intDist;
 	};
 }

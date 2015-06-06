@@ -202,8 +202,8 @@ Scene Scene::createTestScene()
 
 	scene.tracer.maxIterations = 4;
 
-	scene.multisampler.type = MultisampleType::NONE;
-	scene.multisampler.multisamples = 8;
+	scene.multisampler.type = MultisampleType::CORRELATED_MULTI_JITTER;
+	scene.multisampler.multisamples = 16;
 
 	// CAMERA //
 
@@ -254,10 +254,18 @@ Scene Scene::createTestScene()
 	groundTexture.intensity = 0.5;
 	*/
 
+	/*
 	ColorTexture groundTexture;
 	groundTexture.id = 1;
 	groundTexture.color = Color(1.0, 1.0, 1.0);
 	groundTexture.intensity = 0.3;
+	*/
+
+	CheckerTexture groundTexture;
+	groundTexture.id = 1;
+	groundTexture.color1 = Color(0.1, 0.1, 0.1);
+	groundTexture.color2 = Color(0.3, 0.3, 0.3);
+	groundTexture.intensity = 1.0;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
@@ -276,7 +284,7 @@ Scene Scene::createTestScene()
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	groundPlane.texcoordScale = Vector2(5.0, 5.0);
 
-	scene.textures.colorTextures.push_back(groundTexture);
+	scene.textures.checkerTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
@@ -309,9 +317,9 @@ Scene Scene::createTestScene()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	scene.textures.voronoiTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	//scene.textures.voronoiTextures.push_back(sphere1Texture);
+	//scene.materials.push_back(sphere1Material);
+	//scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
 
@@ -341,9 +349,9 @@ Scene Scene::createTestScene()
 	sphere2.position = Vector3(-3.0, 1.0, 0.0);
 	sphere2.radius = 1.0;
 
-	scene.textures.colorTextures.push_back(sphere2Texture);
-	scene.materials.push_back(sphere2Material);
-	scene.primitives.spheres.push_back(sphere2);
+	//scene.textures.colorTextures.push_back(sphere2Texture);
+	//scene.materials.push_back(sphere2Material);
+	//scene.primitives.spheres.push_back(sphere2);
 
 	// MESH 1 //
 
@@ -392,7 +400,7 @@ Scene Scene::createTestScene()
 	directionalLight1.direction = EulerAngle(45.0, -45.0, 0.0).getDirectionVector();
 	directionalLight1.intensity = 1.5;
 
-	//scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.directionalLights.push_back(directionalLight1);
 
 	PointLight pointLight1;
 	pointLight1.color = Color(192, 191, 173);;
@@ -401,7 +409,7 @@ Scene Scene::createTestScene()
 	pointLight1.attenuation = 1.0;
 	pointLight1.intensity = 1.5;
 
-	scene.lights.pointLights.push_back(pointLight1);
+	//scene.lights.pointLights.push_back(pointLight1);
 
 	SpotLight spotLight1;
 	spotLight1.color = Color(192, 191, 173);;

@@ -9,6 +9,7 @@
 namespace Raycer
 {
 	struct Ray;
+	class Vector2;
 
 	class Camera
 	{
@@ -19,7 +20,7 @@ namespace Raycer
 		void update(double timeStep);
 		void precalculate();
 
-		Ray getRay(double x, double y) const;
+		Ray getRay(const Vector2& pixel) const;
 
 		Vector3 position;
 		EulerAngle orientation;
