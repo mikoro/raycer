@@ -204,6 +204,7 @@
     <ClCompile Include="src\Tests\MathUtilsTest.cpp" />
     <ClCompile Include="src\Tests\Matrix4x4Test.cpp" />
     <ClCompile Include="src\Tests\ObjReaderTest.cpp" />
+    <ClCompile Include="src\Tests\PlyReaderTest.cpp" />
     <ClCompile Include="src\Tests\SamplerTest.cpp" />
     <ClCompile Include="src\Tests\Vector3Test.cpp" />
     <ClCompile Include="src\Utils\CellNoise.cpp" />
@@ -213,6 +214,7 @@
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\Utils\ObjReader.cpp" />
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
+    <ClCompile Include="src\Utils\PlyReader.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
     <ClCompile Include="src\Utils\Sampler.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
@@ -276,6 +278,7 @@
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\Utils\ObjReader.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
+    <ClInclude Include="src\Utils\PlyReader.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
     <ClInclude Include="src\Utils\Sampler.h" />
     <ClInclude Include="src\Utils\Serialization.h" />

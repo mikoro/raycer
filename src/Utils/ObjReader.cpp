@@ -18,14 +18,14 @@ std::vector<Triangle> ObjReader::readFile(const std::string& fileName)
 {
 	Log& log = App::getLog();
 
-	log.logInfo("Parsing obj file %s", fileName);
+	log.logInfo("Parsing OBJ file %s", fileName);
 
 	std::ifstream file(fileName);
 	std::string line;
 	std::string part;
 
 	if (!file.good())
-		throw std::runtime_error("Could not open the obj file");
+		throw std::runtime_error("Could not open the OBJ file");
 
 	std::vector<Vector3> vertices;
 	std::vector<Vector2> texcoords;

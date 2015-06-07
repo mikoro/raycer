@@ -223,6 +223,12 @@
     <ClCompile Include="src\Raytracing\Scenes.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\PlyReader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\PlyReaderTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -407,6 +413,9 @@
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\Sampler.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\PlyReader.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

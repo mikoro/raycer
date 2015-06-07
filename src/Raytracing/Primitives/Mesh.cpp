@@ -4,13 +4,20 @@
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Ray.h"
 #include "Utils/ObjReader.h"
+#include "Utils/PlyReader.h"
+#include "Utils/StringUtils.h"
 #include "Math/Matrix4x4.h"
 
 using namespace Raycer;
 
 void Mesh::initialize()
 {
-	triangles = ObjReader::readFile(meshFilePath);
+	if (StringUtils::endsWith(meshFilePath, "obj"))
+		triangles = ObjReader::readFile(meshFilePath);
+	else if (StringUtils::endsWith(meshFilePath, "ply"))
+		triangles = PlyReader::readFile(meshFilePath);
+	else
+		throw std::runtime_error("Unknown mesh file format");
 
 	Matrix4x4 rotationX = Matrix4x4::rotateX(orientation.pitch);
 	Matrix4x4 rotationY = Matrix4x4::rotateY(orientation.yaw);

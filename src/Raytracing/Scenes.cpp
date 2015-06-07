@@ -11,7 +11,7 @@ Scene Scene::createTestScene1()
 
 	scene.tracer.maxIterations = 4;
 
-	scene.multisampler.type = MultisampleType::CORRELATED_MULTI_JITTER;
+	scene.multisampler.type = MultisampleType::NONE;
 	scene.multisampler.multisamples = 6;
 
 	// CAMERA //
@@ -186,15 +186,15 @@ Scene Scene::createTestScene1()
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey2.obj";
+	mesh1.meshFilePath = "data/meshes/cube3.ply";
 	mesh1.texcoordScale = Vector2(1.0, 1.0);
 	mesh1.position = Vector3(0.0, 2.0, 0.0);
 	mesh1.scale = Vector3(1.0, 1.0, 1.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	//scene.textures.colorTextures.push_back(mesh1Texture);
-	//scene.materials.push_back(mesh1Material);
-	//scene.primitives.meshes.push_back(mesh1);
+	scene.textures.colorTextures.push_back(mesh1Texture);
+	scene.materials.push_back(mesh1Material);
+	scene.primitives.meshes.push_back(mesh1);
 
 	// LIGHTS //
 
