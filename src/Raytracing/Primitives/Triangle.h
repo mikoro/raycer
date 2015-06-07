@@ -16,6 +16,7 @@ namespace Raycer
 	public:
 
 		bool intersect(Ray& ray) const;
+		bool intersect2(Ray& ray) const;
 
 		Vector3 vertices[3];
 		Vector3 normals[3];

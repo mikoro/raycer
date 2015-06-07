@@ -166,8 +166,8 @@ Scene Scene::createTestScene1()
 
 	ColorTexture mesh1Texture;
 	mesh1Texture.id = 4;
-	mesh1Texture.color = Color(0.8, 0.8, 0.8);
-	mesh1Texture.intensity = 1.0;
+	mesh1Texture.color = Color(1.0, 1.0, 1.0);
+	mesh1Texture.intensity = 0.5;
 
 	Material mesh1Material;
 	mesh1Material.id = 4;
@@ -186,7 +186,7 @@ Scene Scene::createTestScene1()
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/cube3.ply";
+	mesh1.meshFilePath = "data/meshes/monkey2.obj";
 	mesh1.texcoordScale = Vector2(1.0, 1.0);
 	mesh1.position = Vector3(0.0, 2.0, 0.0);
 	mesh1.scale = Vector3(1.0, 1.0, 1.0);

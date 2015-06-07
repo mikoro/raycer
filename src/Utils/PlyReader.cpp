@@ -269,7 +269,7 @@ namespace
 					std::istringstream iss(line);
 					std::map<std::string, double> propertyValues;
 
-					for (int j = 0; j < element.properties.size(); ++j)
+					for (int j = 0; j < (int)element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
@@ -309,7 +309,7 @@ namespace
 					std::getline(inputStream, line);
 					std::istringstream iss(line);
 
-					for (int j = 0; j < element.properties.size(); ++j)
+					for (int j = 0; j < (int)element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
@@ -362,7 +362,7 @@ namespace
 				{
 					std::map<std::string, double> propertyValues;
 
-					for (int j = 0; j < element.properties.size(); ++j)
+					for (int j = 0; j < (int)element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
@@ -394,7 +394,7 @@ namespace
 			{
 				for (int i = 0; i < element.count; ++i)
 				{
-					for (int j = 0; j < element.properties.size(); ++j)
+					for (int j = 0; j < (int)element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
