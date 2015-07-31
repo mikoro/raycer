@@ -181,7 +181,7 @@ Image& ConsoleRunner::getResultImage()
 	return image;
 }
 
-void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)
+void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)
 {
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	double elapsedSeconds = (double)duration_cast<std::chrono::milliseconds>(elapsedTime).count() / 1000.0;
@@ -233,7 +233,7 @@ void ConsoleRunner::printProgress(const time_point<system_clock>& startTime, int
 	printf("          \r");
 }
 
-void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chrono::system_clock>& startTime)
+void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime)
 {
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	int totalElapsedSeconds = (int)duration_cast<std::chrono::seconds>(elapsedTime).count();

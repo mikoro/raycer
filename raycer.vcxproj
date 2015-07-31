@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="DebugTest|x64">
       <Configuration>DebugTest</Configuration>
@@ -23,19 +23,19 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v120</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -52,25 +52,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost\boost_1_57_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_58_0;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;C:\boost\boost_1_57_0-msvc\stage\lib;C:\boost\boost_1_57_0-intel\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_58_0\stage\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost\boost_1_57_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_58_0;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;C:\boost\boost_1_57_0-msvc\stage\lib;C:\boost\boost_1_57_0-intel\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_58_0\stage\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;C:\boost\boost_1_57_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_58_0;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;C:\boost\boost_1_57_0-msvc\stage\lib;C:\boost\boost_1_57_0-intel\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_58_0\stage\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>

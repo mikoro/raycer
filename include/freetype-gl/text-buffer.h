@@ -211,14 +211,44 @@ typedef struct glyph_vertex_t {
   text_buffer_t *
   text_buffer_new( size_t depth );
 
-  /**
-  * Deletes texture buffer and its associated shader and vertex buffer.
-  *
-  * @param  self  texture buffer to delete
-  *
-  */
-void
-text_buffer_delete( text_buffer_t * self );
+
+
+/**
+ * Creates a new empty text buffer using custom shaders.
+ *
+ * @param depth          Underlying atlas bit depth (1 or 3)
+ * @param vert_filename  Path to vertex shader
+ * @param frag_filename  Path to fragment shader
+ *
+ * @return  a new empty text buffer.
+ *
+ */
+  text_buffer_t *
+  text_buffer_new_with_shaders( size_t depth,
+                                const char * vert_filename,
+                                const char * frag_filename );
+
+/**
+ * Creates a new empty text buffer using custom shaders.
+ *
+ * @param depth          Underlying atlas bit depth (1 or 3)
+ * @param program        Shader program
+ *
+ * @return  a new empty text buffer.
+ *
+ */
+  text_buffer_t *
+  text_buffer_new_with_program( size_t depth,
+                                GLuint program );
+
+/**
+ * Deletes texture buffer and its associated shader and vertex buffer.
+ *
+ * @param  self  texture buffer to delete
+ *
+ */
+  void
+  text_buffer_delete( text_buffer_t * self );
 
 /**
  * Render a text buffer.
@@ -254,7 +284,7 @@ text_buffer_delete( text_buffer_t * self );
   void
   text_buffer_add_text( text_buffer_t * self,
                         vec2 * pen, markup_t * markup,
-                        wchar_t * text, size_t length );
+                        const wchar_t * text, size_t length );
 
  /**
   * Add a char to the text buffer

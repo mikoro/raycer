@@ -80,6 +80,13 @@ CREDITS:
 #ifndef INCLUDE_STB_IMAGE_WRITE_H
 #define INCLUDE_STB_IMAGE_WRITE_H
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable:4312)
+#pragma warning(disable:4456)
+#pragma warning(disable:4457)
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -706,6 +713,11 @@ int stbi_write_png(char const *filename, int x, int y, int comp, const void *dat
    STBIW_FREE(png);
    return 1;
 }
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
+
 #endif // STB_IMAGE_WRITE_IMPLEMENTATION
 
 /* Revision history

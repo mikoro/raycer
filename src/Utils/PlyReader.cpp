@@ -337,7 +337,7 @@ namespace
 							iss >> listLength;
 							double dummy;
 
-							for (int j = 0; j < listLength; ++j)
+							for (int k = 0; k < listLength; ++k)
 								iss >> dummy;
 						}
 						// ignore other properties
@@ -414,7 +414,7 @@ namespace
 						{
 							int listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
 
-							for (int j = 0; j < listLength; ++j)
+							for (int k = 0; k < listLength; ++k)
 								readBinaryValueAsInt(inputStream, property.listDataType);
 						}
 						// ignore other properties

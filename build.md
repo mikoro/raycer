@@ -1,8 +1,8 @@
 ## Windows
 
-- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.57.0/).
+- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.58.0/).
 - Adjust solution include paths to point to the boost libraries.
-- Compile with MSVC 12.0 (2013) or ICC 15.0 using VS 2013.
+- Compile with MSVC 14.0 (2015) or ICC 15.0 using VS 2015.
 - Install graphics drivers that include OpenCL DLLs.
 
 ### Boost
@@ -11,8 +11,10 @@ If using ICC, the boost framework needs to be compiled separately. Probably a go
 
 Download the sources and run the commands from a corresponding developer console (MSVC or ICC):
 
+(http://stackoverflow.com/questions/30760889/unknown-compiler-version-while-compiling-boost-with-msvc-14-0-vs-2015/30959156#30959156)
+
     bootstrap.bat
-    .\b2 toolset=msvc-12.0 address-model=64
+    .\b2 toolset=msvc-14.0 address-model=64
     or
     .\b2 toolset=intel-15.0-vc12 address-model=64
 
@@ -51,10 +53,10 @@ Compile:
 
 ## Framework versions
 
-- boost 1.57.0
+- boost 1.58.0
 - Freetype 2.5.5
 - GLFW 3.1.1
-- freetype-gl (github master ?)
+- freetype-gl (github f629c1d02101c1fa757f8b8d7fe91b4d1cf90cc0)
 - CATCH v1.1 build 1 (master branch)
 - cereal 1.1.1
 - stb (github 947bdcd027)

@@ -192,9 +192,9 @@ Scene Scene::createTestScene1()
 	mesh1.scale = Vector3(1.0, 1.0, 1.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	//scene.textures.colorTextures.push_back(mesh1Texture);
+	//scene.materials.push_back(mesh1Material);
+	//scene.primitives.meshes.push_back(mesh1);
 
 	// LIGHTS //
 

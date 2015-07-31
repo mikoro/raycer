@@ -46,9 +46,9 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 	points2D.push_back(firstPoint);
 	activePoints2D.push_back(firstPoint);
 
-	Cell2D& cell = getGridCell2D(firstPoint);
-	cell.point = firstPoint;
-	cell.hasPoint = true;
+	Cell2D& cell1 = getGridCell2D(firstPoint);
+	cell1.point = firstPoint;
+	cell1.hasPoint = true;
 
 	while (!activePoints2D.empty())
 	{
@@ -67,9 +67,9 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 			points2D.push_back(point);
 			activePoints2D.push_back(point);
 
-			Cell2D& cell = getGridCell2D(point);
-			cell.point = point;
-			cell.hasPoint = true;
+			Cell2D& cell2 = getGridCell2D(point);
+			cell2.point = point;
+			cell2.hasPoint = true;
 		}
 	}
 }
