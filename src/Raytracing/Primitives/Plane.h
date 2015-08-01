@@ -8,6 +8,8 @@
 
 namespace Raycer
 {
+	struct Ray;
+	
 	class Plane : public Primitive
 	{
 	public:

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/CellNoise.h"
 #include "Math/Vector3.h"

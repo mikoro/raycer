@@ -1,13 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <random>
 #include <algorithm>
 #include <array>
+#include <cmath>
 #include <limits>
+#include <random>
 
 #include "Utils/CellNoise.h"
-#include "Math/Vector2.h"
 #include "Math/Vector3.h"
 
 using namespace Raycer;

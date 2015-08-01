@@ -1,8 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <thread>
 #include <atomic>
+#include <cstdio>
+#include <iostream>
+#include <ratio>
+#include <thread>
+#include <type_traits>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -20,8 +24,8 @@
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
+#include "Raytracing/Camera.h"
 #include "CLRaytracing/CLRaytracer.h"
-#include "CLRaytracing/CLStructs.h"
 
 using namespace Raycer;
 using namespace std::chrono;

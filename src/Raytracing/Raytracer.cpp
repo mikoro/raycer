@@ -2,7 +2,9 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 #include <limits>
+#include <map>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -10,8 +12,14 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
+#include "Raytracing/Camera.h"
+#include "Raytracing/Lights.h"
+#include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/Textures/Texture.h"
+#include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
+#include "Rendering/Image.h"
 
 using namespace Raycer;
 

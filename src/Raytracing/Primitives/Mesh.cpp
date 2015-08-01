@@ -5,10 +5,12 @@
 
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
 #include "Utils/ObjReader.h"
 #include "Utils/PlyReader.h"
 #include "Utils/StringUtils.h"
 #include "Math/Matrix4x4.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 

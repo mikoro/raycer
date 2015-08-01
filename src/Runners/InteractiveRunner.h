@@ -6,9 +6,9 @@
 #include <map>
 #include <memory>
 
-#include "InteractiveStates/InteractiveState.h"
 #include "Rendering/Text.h"
 #include "Utils/FpsCounter.h"
+#include "InteractiveStates/InteractiveState.h"
 
 struct GLFWwindow;
 
@@ -25,7 +25,7 @@ namespace Raycer
 	};
 
 	enum class RunnerStates { None, Raytracing };
-
+	
 	class InteractiveRunner
 	{
 	public:

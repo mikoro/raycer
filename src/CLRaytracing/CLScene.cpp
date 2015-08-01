@@ -2,7 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include "CLRaytracing/CLScene.h"
-#include "Raytracing/Scene.h"
+//#include "Raytracing/Scene.h"
 
 using namespace Raycer;
 

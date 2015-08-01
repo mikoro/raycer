@@ -57,8 +57,8 @@ Compile:
 - Freetype 2.5.5
 - GLFW 3.1.1
 - freetype-gl (github f629c1d02101c1fa757f8b8d7fe91b4d1cf90cc0)
-- CATCH v1.1 build 1 (master branch)
-- cereal 1.1.1
+- CATCH v1.2.1
+- cereal 1.1.2
 - stb (github 947bdcd027)
 - tclap 1.2.1
 - tinyformat (github 3913307c28)

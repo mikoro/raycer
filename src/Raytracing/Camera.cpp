@@ -1,8 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
 #include <algorithm>
+#include <cmath>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -16,6 +16,7 @@
 #include "Utils/Settings.h"
 #include "Raytracing/Ray.h"
 #include "Math/MathUtils.h"
+#include "Math/Vector2.h"
 #include "Runners/InteractiveRunner.h"
 
 using namespace Raycer;

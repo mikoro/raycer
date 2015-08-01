@@ -4,7 +4,6 @@
 #pragma once
 
 #include "Raytracing/Textures/Texture.h"
-#include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 #include "Math/ColorGradient.h"
@@ -13,6 +12,8 @@
 
 namespace Raycer
 {
+	class Vector2;
+	
 	class AtmosphereTexture : public Texture
 	{
 	public:

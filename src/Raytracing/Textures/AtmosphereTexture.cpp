@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 
 #include "Raytracing/Textures/AtmosphereTexture.h"
 #include "Math/Vector2.h"

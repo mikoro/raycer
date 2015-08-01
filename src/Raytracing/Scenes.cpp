@@ -1,7 +1,25 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <string>
+#include <vector>
+
 #include "Raytracing/Scene.h"
+#include "Math/Color.h"
+#include "Math/EulerAngle.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
+#include "Raytracing/Camera.h"
+#include "Raytracing/Lights.h"
+#include "Raytracing/Material.h"
+#include "Raytracing/Primitives/Mesh.h"
+#include "Raytracing/Primitives/Plane.h"
+#include "Raytracing/Primitives/Sphere.h"
+#include "Raytracing/Textures/AtmosphereTexture.h"
+#include "Raytracing/Textures/CheckerTexture.h"
+#include "Raytracing/Textures/ColorTexture.h"
+#include "Raytracing/Textures/VoronoiTexture.h"
+#include "Utils/CellNoise.h"
 
 using namespace Raycer;
 

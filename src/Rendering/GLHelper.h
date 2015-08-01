@@ -5,7 +5,7 @@
 
 #include <string>
 
-#include <GL/gl3w.h>
+#include <GL/glcorearb.h>
 
 namespace Raycer
 {

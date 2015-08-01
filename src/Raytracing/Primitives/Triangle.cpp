@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <cmath>
+#include <limits>
 
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Ray.h"

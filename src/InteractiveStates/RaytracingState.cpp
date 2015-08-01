@@ -7,16 +7,21 @@
 
 #include <GL/gl3w.h>
 #include <GLFW/glfw3.h>
+#include <tinyformat/tinyformat.h>
 
 #include "InteractiveStates/RaytracingState.h"
 #include "App.h"
-#include "Utils/Log.h"
-#include "Utils/Settings.h"
-#include "Runners/InteractiveRunner.h"
-#include "Rendering/Framebuffer.h"
-#include "Rendering/ToneMapper.h"
-#include "Raytracing/Raytracer.h"
 #include "CLRaytracing/CLRaytracer.h"
+#include "Math/Color.h"
+#include "Math/EulerAngle.h"
+#include "Math/Vector3.h"
+#include "Raytracing/Camera.h"
+#include "Raytracing/Raytracer.h"
+#include "Rendering/Framebuffer.h"
+#include "Rendering/Text.h"
+#include "Rendering/ToneMapper.h"
+#include "Runners/InteractiveRunner.h"
+#include "Utils/Settings.h"
 
 using namespace Raycer;
 

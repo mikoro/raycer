@@ -1,11 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <limits>
 #include <cmath>
+#include <limits>
 
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 

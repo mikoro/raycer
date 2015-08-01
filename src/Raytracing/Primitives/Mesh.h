@@ -13,6 +13,8 @@
 
 namespace Raycer
 {
+	struct Ray;
+	
 	class Mesh : public Primitive
 	{
 	public:

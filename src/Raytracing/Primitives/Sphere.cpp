@@ -6,6 +6,7 @@
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 

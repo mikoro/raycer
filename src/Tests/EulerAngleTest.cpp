@@ -3,7 +3,6 @@
 
 #include "catch/catch.hpp"
 
-#include "Math/MathUtils.h"
 #include "Math/EulerAngle.h"
 #include "Math/Vector3.h"
 

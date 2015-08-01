@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <string>
+
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else

@@ -10,6 +10,12 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <cassert>
+#include <cstddef>
+#include <chrono>
+#include <exception>
+#include <new>
+#include <ratio>
 
 #include <boost/array.hpp>
 #include <boost/asio.hpp>
@@ -24,9 +30,10 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
+#include "Raytracing/Camera.h"
 #include "Runners/ConsoleRunner.h"
+#include "Math/Color.h"
 
 using namespace Raycer;
 using namespace boost::asio;

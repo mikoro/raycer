@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <vector>
+
 #include "catch/catch.hpp"
 
 #include "Utils/ObjReader.h"

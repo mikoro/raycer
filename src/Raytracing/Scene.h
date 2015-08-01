@@ -3,11 +3,11 @@
 
 #pragma once
 
-#include <vector>
 #include <map>
+#include <string>
+#include <vector>
 
 #include "Raytracing/Camera.h"
-#include "Raytracing/Textures/Texture.h"
 #include "Raytracing/Textures/ColorTexture.h"
 #include "Raytracing/Textures/CheckerTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
@@ -21,16 +21,19 @@
 #include "Raytracing/Textures/VoronoiTexture.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Lights.h"
-#include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Primitives/Mesh.h"
+#include "Math/Color.h"
 
 namespace Raycer
 {
 	enum class MultisampleType { NONE, RANDOM, REGULAR_GRID, JITTER, CORRELATED_MULTI_JITTER };
 	enum class ToneMapType { NONE, GAMMA, REINHARD };
-
+	
+	class Primitive;
+	class Texture;
+	
 	class Scene
 	{
 	public:

@@ -2,8 +2,9 @@
 // License: MIT, see the LICENSE file.
 
 #include <fstream>
-#include <sstream>
 #include <map>
+#include <cstdint>
+#include <stdexcept>
 
 #include "Utils/PlyReader.h"
 #include "App.h"

@@ -2,10 +2,10 @@
 // License: MIT, see the LICENSE file.
 
 #include <stdexcept>
+#include <cstddef>
 #include <fstream>
 #include <string>
 #include <vector>
-#include <memory>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -32,8 +32,6 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Rendering/Framebuffer.h"
-#include "Math/Color.h"
 
 using namespace Raycer;
 

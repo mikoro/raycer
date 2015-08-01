@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 
 #include "Math/Color.h"
 #include "Math/MathUtils.h"

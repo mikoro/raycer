@@ -1,12 +1,11 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifdef __APPLE__
-#include <mm_malloc.h>
-#endif
-
-#include <cassert>
 #include <algorithm>
+#include <cassert>
+#include <cstdint>
+#include <mm_malloc.h>
+#include <stdexcept>
 #include <vector>
 
 #define STB_IMAGE_IMPLEMENTATION
@@ -14,6 +13,8 @@
 #define STBI_FAILURE_USERMSG
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
+
+#include "tinyformat/tinyformat.h"
 
 #include "Rendering/Image.h"
 #include "App.h"

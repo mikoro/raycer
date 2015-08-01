@@ -8,7 +8,9 @@
 #include <queue>
 #include <mutex>
 
-#include <boost/asio.hpp>
+#include <boost/asio/handler_type.hpp>
+#include <boost/asio/ip/address_v4.hpp>
+#include <boost/asio/ip/tcp.hpp>
 
 #include "Raytracing/Scene.h"
 #include "Rendering/Image.h"

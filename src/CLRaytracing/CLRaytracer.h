@@ -11,12 +11,12 @@
 #include <CL/opencl.h>
 #endif
 
-#include "CLRaytracing/CLStructs.h"
 #include "CLRaytracing/CLScene.h"
 #include "Rendering/Image.h"
 
 namespace Raycer
 {
+	class Scene;
 	struct RaytracerState;
 
 	class CLRaytracer

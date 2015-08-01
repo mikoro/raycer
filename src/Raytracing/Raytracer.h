@@ -10,9 +10,10 @@
 
 namespace Raycer
 {
-	struct RaytracerState;
 	class Color;
 	class Scene;
+	class Vector2;
+	struct RaytracerState;
 	struct Ray;
 	
 	class Raytracer

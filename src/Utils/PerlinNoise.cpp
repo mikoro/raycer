@@ -1,9 +1,10 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <random>
-#include <numeric>
 #include <algorithm>
+#include <cmath>
+#include <numeric>
+#include <random>
 
 #include "Utils/PerlinNoise.h"
 

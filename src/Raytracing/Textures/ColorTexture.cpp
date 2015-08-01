@@ -2,8 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include "Raytracing/Textures/ColorTexture.h"
-#include "Math/Vector2.h"
-#include "Math/Vector3.h"
 #include "Math/Color.h"
 
 using namespace Raycer;

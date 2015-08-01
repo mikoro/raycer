@@ -1,6 +1,10 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <cstddef>
+#include <stdexcept>
+#include <vector>
+
 #include <GL/gl3w.h>
 
 #define CL_USE_DEPRECATED_OPENCL_1_1_APIS
@@ -12,14 +16,13 @@
 #endif
 
 #include "CLRaytracing/CLRaytracer.h"
-#include "Raytracing/Raytracer.h"
+#include "CLRaytracing/CLManager.h"
+#include "CLRaytracing/CLStructs.h"
 #include "Raytracing/RaytracerState.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "CLRaytracing/CLManager.h"
 #include "Rendering/Framebuffer.h"
-#include "Raytracing/Scene.h"
 #include "Rendering/Image.h"
 #include "Runners/InteractiveRunner.h"
 

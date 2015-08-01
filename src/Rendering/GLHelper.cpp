@@ -6,6 +6,10 @@
 #include <string>
 #include <vector>
 
+#include <GL/gl3w.h>
+
+#include "tinyformat/tinyformat.h"
+
 #include "Rendering/GLHelper.h"
 #include "App.h"
 #include "Utils/Log.h"
