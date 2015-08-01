@@ -1,10 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifndef _WIN32
+#include <mm_malloc.h>
+#endif
+
 #include <algorithm>
 #include <cassert>
 #include <cstdint>
-#include <mm_malloc.h>
 #include <stdexcept>
 #include <vector>
 

@@ -1,8 +1,11 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cassert>
+#ifndef _WIN32
 #include <mm_malloc.h>
+#endif
+
+#include <cassert>
 #include <stdexcept>
 
 #include <GL/gl3w.h>
