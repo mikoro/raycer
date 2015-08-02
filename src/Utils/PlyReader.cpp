@@ -142,7 +142,7 @@ namespace
 		std::getline(inputStream, line);
 		int elementIndex = -1;
 
-		if (line != "ply")
+		if (line.find("ply") != 0)
 			throw std::runtime_error("Not a PLY file");
 
 		while (std::getline(inputStream, line))
