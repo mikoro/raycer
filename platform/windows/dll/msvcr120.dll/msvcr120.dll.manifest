@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<assembly xmlns="urn:schemas-microsoft-com:asm.v1" manifestVersion="1.0">
+  <assemblyIdentity type="win32" name="msvcr120.dll" version="9.9.9.9" processorArchitecture="amd64" />
+  <file name="msvcr120.dll"/>
+</assembly>
