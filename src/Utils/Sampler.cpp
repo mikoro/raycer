@@ -5,6 +5,7 @@
 
 #include "Utils/Sampler.h"
 #include "Math/Vector2.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 
@@ -108,4 +109,21 @@ Vector2 Sampler::getCmjDiskSample(const Vector2& origin, int ix, int iy, int nx,
 	dy = dy / 2.0 + 0.5;
 
 	return origin + Vector2(dx, dy);
+}
+
+Vector3 Sampler::getHemisphericalSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation)
+{
+	Vector2 sample = getCmjSample(Vector2(), ix, iy, nx, ny, permutation);
+
+	double phi = 2.0 * M_PI * sample.x;
+	double cos_phi = cos(phi);
+	double sin_phi = sin(phi);
+	double cos_theta = pow(1.0 - sample.y, 1.0 / (distribution + 1.0));
+	double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+	double su = sin_theta * cos_phi;
+	double sv = sin_theta * sin_phi;
+	double sw = cos_theta;
+
+	return su * u + sv * v + sw * w;
 }
