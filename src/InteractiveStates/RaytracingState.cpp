@@ -22,6 +22,7 @@
 #include "Rendering/ToneMapper.h"
 #include "Runners/InteractiveRunner.h"
 #include "Utils/Settings.h"
+#include "TestScenes/TestScene.h"
 
 using namespace Raycer;
 
@@ -32,7 +33,7 @@ void RaytracingState::initialize()
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = Scene::createTestScene1();
+	scene = TestScene::createTestScene1();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getImageWidth(), framebuffer.getImageHeight());
 

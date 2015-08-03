@@ -48,9 +48,6 @@ namespace Raycer
 		void initialize();
 		void validate();
 
-		static Scene createTestScene1();
-		static Scene createTestScene2();
-
 		struct Tracer
 		{
 			int maxIterations = 0;

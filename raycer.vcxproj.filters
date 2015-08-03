@@ -37,6 +37,9 @@
     <Filter Include="Tests">
       <UniqueIdentifier>{092f7e45-4acb-4fe5-b817-f311ac78a8de}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestScenes">
+      <UniqueIdentifier>{339bccda-e760-443a-99ee-4be40776f51c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -220,14 +223,17 @@
     <ClCompile Include="src\Tests\SamplerTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Scenes.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
     <ClCompile Include="src\Utils\PlyReader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Tests\PlyReaderTest.cpp">
       <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene1.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene2.cpp">
+      <Filter>TestScenes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -417,6 +423,9 @@
     </ClInclude>
     <ClInclude Include="src\Utils\PlyReader.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TestScenes\TestScene.h">
+      <Filter>TestScenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

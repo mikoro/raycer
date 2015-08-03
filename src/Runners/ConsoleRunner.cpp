@@ -26,6 +26,7 @@
 #include "Raytracing/RaytracerState.h"
 #include "Raytracing/Camera.h"
 #include "CLRaytracing/CLRaytracer.h"
+#include "TestScenes/TestScene.h"
 
 using namespace Raycer;
 using namespace std::chrono;
@@ -46,7 +47,7 @@ int ConsoleRunner::run()
 
 	Scene scene;
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = Scene::createTestScene1();
+	scene = TestScene::createTestScene1();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();

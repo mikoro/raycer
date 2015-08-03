@@ -178,7 +178,6 @@
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
     <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
-    <ClCompile Include="src\Raytracing\Scenes.cpp" />
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CheckerTexture.cpp" />
@@ -198,6 +197,8 @@
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\InteractiveRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene1.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene2.cpp" />
     <ClCompile Include="src\Tests\ColorGradientTest.cpp" />
     <ClCompile Include="src\Tests\EulerAngleTest.cpp" />
     <ClCompile Include="src\Tests\ImageTest.cpp" />
@@ -272,6 +273,7 @@
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
     <ClInclude Include="src\Runners\InteractiveRunner.h" />
     <ClInclude Include="src\Runners\NetworkRunner.h" />
+    <ClInclude Include="src\TestScenes\TestScene.h" />
     <ClInclude Include="src\Utils\CellNoise.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
     <ClInclude Include="src\Utils\IniReader.h" />
