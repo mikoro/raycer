@@ -70,8 +70,7 @@ Color Raytracer::shootRays(const Scene& scene, const Vector2& pixel, int& rayCou
 {
 	if (scene.multisampler.type == MultisampleType::NONE)
 	{
-		Vector2 sampledPixel = sampler.getCentroidSample(pixel);
-		Ray ray = scene.camera.getRay(sampledPixel);
+		Ray ray = scene.camera.getRay(pixel + Vector2(0.5, 0.5));
 		traceRay(scene, ray, rayCount, interrupted);
 
 		return ray.color;
@@ -89,13 +88,13 @@ Color Raytracer::shootRays(const Scene& scene, const Vector2& pixel, int& rayCou
 			Vector2 sampledPixel;
 
 			if (scene.multisampler.type == MultisampleType::RANDOM)
-				sampledPixel = sampler.getRandomSample(pixel);
+				sampledPixel = pixel + sampler.getRandomSample();
 			else if (scene.multisampler.type == MultisampleType::REGULAR_GRID)
-				sampledPixel = sampler.getRegularGridSample(pixel, x, y, n, n);
+				sampledPixel = pixel + sampler.getRegularGridSample(x, y, n, n);
 			else if (scene.multisampler.type == MultisampleType::JITTER)
-				sampledPixel = sampler.getJitteredSample(pixel, x, y, n, n);
+				sampledPixel = pixel + sampler.getJitteredSample(x, y, n, n);
 			else if (scene.multisampler.type == MultisampleType::CORRELATED_MULTI_JITTER)
-				sampledPixel = sampler.getCmjSample(pixel, x, y, n, n, permutation);
+				sampledPixel = pixel + sampler.getCmjSample(x, y, n, n, permutation);
 
 			Ray ray = scene.camera.getRay(sampledPixel);
 			traceRay(scene, ray, rayCount, interrupted);

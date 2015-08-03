@@ -7,6 +7,7 @@
 
 /*
 
+Sample values are within 0.0 .. 1.0
 Arguments n* denotes the sample count in its direction.
 Arguments i* denotes current index of the sample, n* being the maximum.
 CMJ samples are generated pseudo-randomly, same permutation value will always return same values.
@@ -24,13 +25,12 @@ namespace Raycer
 
 		Sampler();
 
-		Vector2 getCentroidSample(const Vector2& origin);
-		Vector2 getRandomSample(const Vector2& origin);
-		Vector2 getRegularGridSample(const Vector2& origin, int ix, int iy, int nx, int ny);
-		Vector2 getJitteredSample(const Vector2& origin, int ix, int iy, int nx, int ny);
-		Vector2 getCmjSample(const Vector2& origin, int ix, int iy, int nx, int ny, int permutation);
-		Vector2 getCmjDiskSample(const Vector2& origin, int ix, int iy, int nx, int ny, int permutation);
-		Vector3 getHemisphericalSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation);
+		Vector2 getRandomSample();
+		Vector2 getRegularGridSample(int ix, int iy, int nx, int ny);
+		Vector2 getJitteredSample(int ix, int iy, int nx, int ny);
+		Vector2 getCmjSample(int ix, int iy, int nx, int ny, int permutation);
+		Vector2 getCmjDiskSample(int ix, int iy, int nx, int ny, int permutation);
+		Vector3 getCmjHemisphereSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation);
 
 	private:
 

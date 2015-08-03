@@ -16,30 +16,25 @@ Sampler::Sampler()
 	realDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-Vector2 Sampler::getCentroidSample(const Vector2& origin)
+Vector2 Sampler::getRandomSample()
 {
-	return origin + Vector2(0.5, 0.5);
+	return Vector2(realDist(gen), realDist(gen));
 }
 
-Vector2 Sampler::getRandomSample(const Vector2& origin)
-{
-	return origin + Vector2(realDist(gen), realDist(gen));
-}
-
-Vector2 Sampler::getRegularGridSample(const Vector2& origin, int ix, int iy, int nx, int ny)
+Vector2 Sampler::getRegularGridSample(int ix, int iy, int nx, int ny)
 {
 	double dx = ((double)ix + 0.5) / (double)nx;
 	double dy = ((double)iy + 0.5) / (double)ny;
 
-	return origin + Vector2(dx, dy);
+	return Vector2(dx, dy);
 }
 
-Vector2 Sampler::getJitteredSample(const Vector2& origin, int ix, int iy, int nx, int ny)
+Vector2 Sampler::getJitteredSample(int ix, int iy, int nx, int ny)
 {
 	double dx = ((double)ix + realDist(gen)) / (double)nx;
 	double dy = ((double)iy + realDist(gen)) / (double)ny;
 
-	return origin + Vector2(dx, dy);
+	return Vector2(dx, dy);
 }
 
 namespace
@@ -81,7 +76,7 @@ namespace
 	}
 }
 
-Vector2 Sampler::getCmjSample(const Vector2& origin, int ix, int iy, int nx, int ny, int permutation)
+Vector2 Sampler::getCmjSample(int ix, int iy, int nx, int ny, int permutation)
 {
 	int sx = permute(ix, nx, permutation * 0x68bc21eb);
 	int sy = permute(iy, ny, permutation * 0x02e5be93);
@@ -89,10 +84,10 @@ Vector2 Sampler::getCmjSample(const Vector2& origin, int ix, int iy, int nx, int
 	double dx = ((double)ix + ((double)sy + realDist(gen)) / (double)ny) / (double)nx;
 	double dy = ((double)iy + ((double)sx + realDist(gen)) / (double)nx) / (double)ny;
 
-	return origin + Vector2(dx, dy);
+	return Vector2(dx, dy);
 }
 
-Vector2 Sampler::getCmjDiskSample(const Vector2& origin, int ix, int iy, int nx, int ny, int permutation)
+Vector2 Sampler::getCmjDiskSample(int ix, int iy, int nx, int ny, int permutation)
 {
 	int sx = permute(ix, nx, permutation * 0x68bc21eb);
 	int sy = permute(iy, ny, permutation * 0x02e5be93);
@@ -108,12 +103,12 @@ Vector2 Sampler::getCmjDiskSample(const Vector2& origin, int ix, int iy, int nx,
 	dx = dx / 2.0 + 0.5;
 	dy = dy / 2.0 + 0.5;
 
-	return origin + Vector2(dx, dy);
+	return Vector2(dx, dy);
 }
 
-Vector3 Sampler::getHemisphericalSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 Sampler::getCmjHemisphereSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation)
 {
-	Vector2 sample = getCmjSample(Vector2(), ix, iy, nx, ny, permutation);
+	Vector2 sample = getCmjSample(ix, iy, nx, ny, permutation);
 
 	double phi = 2.0 * M_PI * sample.x;
 	double cos_phi = cos(phi);
