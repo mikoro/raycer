@@ -40,8 +40,6 @@ int ConsoleRunner::run()
 
 	pixelsPerSecondAverage.setAlpha(0.1);
 	pixelsPerSecondAverage.setAverage(1.0);
-	raysPerSecondAverage.setAlpha(0.1);
-	raysPerSecondAverage.setAverage(1.0);
 	remainingTimeAverage.setAlpha(0.1);
 	remainingTimeAverage.setAverage(0.0);
 
@@ -133,7 +131,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
 		if (!settings.openCL.enabled)
-			printProgress(startTime, state.pixelCount, state.pixelsProcessed, state.raysProcessed);
+			printProgress(startTime, state.pixelCount, state.pixelsProcessed);
 		else
 			printProgressOpenCL(startTime);
 	}
@@ -141,7 +139,7 @@ void ConsoleRunner::run(RaytracerState& state)
 	renderThread.join();
 
 	if (!settings.openCL.enabled)
-		printProgress(startTime, state.pixelCount, state.pixelsProcessed, state.raysProcessed);
+		printProgress(startTime, state.pixelCount, state.pixelsProcessed);
 	else
 		printProgressOpenCL(startTime);
 
@@ -157,21 +155,13 @@ void ConsoleRunner::run(RaytracerState& state)
 	int elapsedMilliseconds = totalElapsedMilliseconds - totalElapsedSeconds * 1000;
 
 	double totalPixelsPerSecond = 0.0;
-	double totalRaysPerSecond = 0.0;
 
 	if (totalElapsedMilliseconds > 0)
-	{
 		totalPixelsPerSecond = (double)state.pixelsProcessed / ((double)totalElapsedMilliseconds / 1000.0);
-		totalRaysPerSecond = (double)state.raysProcessed / ((double)totalElapsedMilliseconds / 1000.0);
-	}
 	
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
-
-	if (!settings.openCL.enabled)
-		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s, rays: %s, rays/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond), humanizeNumberDecimal(state.raysProcessed.load()), humanizeNumberDecimal(totalRaysPerSecond));
-	else
-		std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
-
+	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
+	
 	if (!interrupted && settings.openCL.enabled)
 		image = clRaytracer.getImage();
 }
@@ -186,7 +176,7 @@ Image& ConsoleRunner::getResultImage()
 	return image;
 }
 
-void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed)
+void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed)
 {
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	double elapsedSeconds = (double)duration_cast<std::chrono::milliseconds>(elapsedTime).count() / 1000.0;
@@ -215,10 +205,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	}
 
 	if (elapsedSeconds > 0.0)
-	{
 		pixelsPerSecondAverage.addMeasurement((double)pixelsProcessed / elapsedSeconds);
-		raysPerSecondAverage.addMeasurement((double)raysProcessed / elapsedSeconds);
-	}
 	
 	remainingTimeAverage.addMeasurement((double)duration_cast<std::chrono::seconds>(remainingTime).count());
 
@@ -233,8 +220,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	printf("] ");
 	printf("%d %% | ", percentage);
 	printf("Remaining time: %02d:%02d:%02d | ", remainingHours, remainingMinutes, remainingSeconds);
-	printf("Pixels/s: %s | ", humanizeNumberDecimal(pixelsPerSecondAverage.getAverage()).c_str());
-	printf("Rays/s: %s", humanizeNumberDecimal(raysPerSecondAverage.getAverage()).c_str());
+	printf("Pixels/s: %s", humanizeNumberDecimal(pixelsPerSecondAverage.getAverage()).c_str());
 	printf("          \r");
 }
 

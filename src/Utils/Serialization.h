@@ -230,7 +230,9 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene::Lights& b)
 	{
-		a(cereal::make_nvp("ambientLights", b.ambientLights),
+		a(cereal::make_nvp("ambientLights", b.ambientLight),
+			cereal::make_nvp("ambientLights", b.ambientOcclusion),
+			cereal::make_nvp("ambientLights", b.ambientOcclusionDistance),
 			cereal::make_nvp("directionalLights", b.directionalLights),
 			cereal::make_nvp("pointLights", b.pointLights),
 			cereal::make_nvp("spotLights", b.spotLights));

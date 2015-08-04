@@ -21,6 +21,5 @@ namespace Raycer
 		int pixelCount = 0;
 
 		std::atomic<int> pixelsProcessed;
-		std::atomic<int> raysProcessed;
 	};
 }

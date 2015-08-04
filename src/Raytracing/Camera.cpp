@@ -21,6 +21,10 @@
 
 using namespace Raycer;
 
+Camera::Camera()
+{
+}
+
 void Camera::initialize()
 {
 }

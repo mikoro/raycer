@@ -20,6 +20,10 @@
 
 using namespace Raycer;
 
+Scene::Scene()
+{
+}
+
 void Scene::loadFromFile(const std::string& fileName)
 {
 	App::getLog().logInfo("Loading scene from %s", fileName);

@@ -15,6 +15,8 @@ namespace Raycer
 	{
 	public:
 
+		Camera();
+
 		void initialize();
 		void setImagePlaneSize(int width, int height);
 		void update(double timeStep);

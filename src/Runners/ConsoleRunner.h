@@ -26,7 +26,7 @@ namespace Raycer
 
 	private:
 
-		void printProgress(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed, int raysProcessed);
+		void printProgress(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed);
 		void printProgressOpenCL(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime);
 		std::string humanizeNumberDecimal(double value);
 		std::string humanizeNumberBytes(double value);
@@ -36,7 +36,6 @@ namespace Raycer
 		Image image;
 
 		MovingAverage pixelsPerSecondAverage;
-		MovingAverage raysPerSecondAverage;
 		MovingAverage remainingTimeAverage;
 
 		int openCLProgressCounter1 = 0;

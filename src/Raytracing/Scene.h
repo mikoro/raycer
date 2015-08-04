@@ -38,6 +38,8 @@ namespace Raycer
 	{
 	public:
 
+		Scene();
+
 		void loadFromFile(const std::string& fileName);
 		void loadFromJsonString(const std::string& text);
 		void loadFromXmlString(const std::string& text);
@@ -98,7 +100,10 @@ namespace Raycer
 
 		struct Lights
 		{
-			std::vector<AmbientLight> ambientLights;
+			AmbientLight ambientLight;
+			bool ambientOcclusion = false;
+			double ambientOcclusionDistance = 1.0;
+
 			std::vector<DirectionalLight> directionalLights;
 			std::vector<PointLight> pointLights;
 			std::vector<SpotLight> spotLights;
