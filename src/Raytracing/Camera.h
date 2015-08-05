@@ -28,6 +28,11 @@ namespace Raycer
 		EulerAngle orientation;
 		double fov = 75.0;
 
+		bool depthOfField = false;
+		int samples = 3;
+		double apertureSize = 0.1;
+		double focalLenght = 10.0;
+
 		Vector3 forward;
 		Vector3 right;
 		Vector3 up;

@@ -103,7 +103,11 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("orientation", b.orientation),
-			cereal::make_nvp("fov", b.fov));
+			cereal::make_nvp("fov", b.fov),
+			cereal::make_nvp("depthOfField", b.depthOfField),
+			cereal::make_nvp("samples", b.samples),
+			cereal::make_nvp("apertureSize", b.apertureSize),
+			cereal::make_nvp("focalLenght", b.focalLenght));
 	}
 
 	/* LIGHTS */
@@ -230,9 +234,9 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene::Lights& b)
 	{
-		a(cereal::make_nvp("ambientLights", b.ambientLight),
-			cereal::make_nvp("ambientLights", b.ambientOcclusion),
-			cereal::make_nvp("ambientLights", b.ambientOcclusionDistance),
+		a(cereal::make_nvp("ambientLight", b.ambientLight),
+			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
+			cereal::make_nvp("ambientOcclusionDistance", b.ambientOcclusionDistance),
 			cereal::make_nvp("directionalLights", b.directionalLights),
 			cereal::make_nvp("pointLights", b.pointLights),
 			cereal::make_nvp("spotLights", b.spotLights));

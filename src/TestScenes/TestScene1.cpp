@@ -23,6 +23,10 @@ Scene TestScene::createTestScene1()
 	scene.camera.position = Vector3(0.0, 3.0, 6.0);
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
+	scene.camera.depthOfField = true;
+	scene.camera.samples = 3;
+	scene.camera.apertureSize = 0.1;
+	scene.camera.focalLenght = 6.0;
 
 	// FOG //
 

@@ -93,10 +93,41 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	Ray ray = scene.camera.getRay(sampledPixelCoordinate);
-	raytrace(scene, ray, interrupted);
+	Ray primaryRay = scene.camera.getRay(sampledPixelCoordinate);
 
-	return ray.color;
+	if (!scene.camera.depthOfField)
+	{
+		raytrace(scene, primaryRay, interrupted);
+		return primaryRay.color;
+	}
+
+	Color sampledPixelColor;
+	int permutation = intDist(gen);
+	int n = scene.camera.samples;
+	double apertureSize = scene.camera.apertureSize;
+	double focalLength = scene.camera.focalLenght;
+
+	Vector3 cameraOrigin = scene.camera.position;
+	Vector3 cameraRight = scene.camera.right;
+	Vector3 cameraUp = scene.camera.up;
+	Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
+
+	for (int y = 0; y < n; ++y)
+	{
+		for (int x = 0; x < n; ++x)
+		{
+			Ray sampleRay;
+			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
+			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
+			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
+			
+			raytrace(scene, sampleRay, interrupted);
+
+			sampledPixelColor += sampleRay.color;
+		}
+	}
+
+	return sampledPixelColor / (double)(n * n);
 }
 
 /*

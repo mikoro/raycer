@@ -7,7 +7,7 @@
 
 /*
 
-Sample values are within 0.0 .. 1.0
+Sample values are within 0.0 .. 1.0, expect disk samples that are -1.0 .. 1.0
 Arguments n* denotes the sample count in its direction.
 Arguments i* denotes current index of the sample, n* being the maximum.
 CMJ samples are generated pseudo-randomly, same permutation value will always return same values.

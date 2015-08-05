@@ -207,6 +207,7 @@
     <ClCompile Include="src\Tests\ObjReaderTest.cpp" />
     <ClCompile Include="src\Tests\PlyReaderTest.cpp" />
     <ClCompile Include="src\Tests\SamplerTest.cpp" />
+    <ClCompile Include="src\Tests\TestScenesTest.cpp" />
     <ClCompile Include="src\Tests\Vector3Test.cpp" />
     <ClCompile Include="src\Utils\CellNoise.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />

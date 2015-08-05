@@ -46,7 +46,8 @@ TEST_CASE("Sampler functionality", "[sampler]")
 			sample = sampler.getCmjSample(x, y, n, n, permutation) * size;
 			image5.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
-			sample = sampler.getCmjDiskSample(x, y, n, n, permutation) * size;
+			sample = sampler.getCmjDiskSample(x, y, n, n, permutation);
+			sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
 			image6.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
 			Vector3 hemiSample = sampler.getCmjHemisphereSample(Vector3::RIGHT, Vector3::UP, Vector3::FORWARD, 1.0, x, y, n, n, permutation);

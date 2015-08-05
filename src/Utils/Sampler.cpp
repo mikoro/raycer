@@ -100,8 +100,6 @@ Vector2 Sampler::getCmjDiskSample(int ix, int iy, int nx, int ny, int permutatio
 	double phi = 2.0 * M_PI * dy;
 	dx = r * cos(phi);
 	dy = r * sin(phi);
-	dx = dx / 2.0 + 0.5;
-	dy = dy / 2.0 + 0.5;
 
 	return Vector2(dx, dy);
 }
