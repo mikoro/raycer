@@ -23,7 +23,7 @@ Scene TestScene::createTestScene1()
 	scene.camera.position = Vector3(0.0, 3.0, 6.0);
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
 	scene.camera.fov = 75.0;
-	scene.camera.depthOfField = true;
+	scene.camera.depthOfField = false;
 	scene.camera.samples = 3;
 	scene.camera.apertureSize = 0.1;
 	scene.camera.focalLenght = 6.0;
@@ -97,14 +97,16 @@ Scene TestScene::createTestScene1()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
-	scene.lights.ambientOcclusion = true;
-	scene.lights.ambientOcclusionDistance = 1.0;
+	scene.lights.ambientLight.intensity = 0.1;
+	scene.lights.ambientLight.ambientOcclusion = true;
+	scene.lights.ambientLight.samples = 3;
+	scene.lights.ambientLight.distribution = 1.0;
+	scene.lights.ambientLight.distance = 1.0;
 
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(192, 191, 173);
 	directionalLight1.direction = EulerAngle(45.0, -45.0, 0.0).getDirectionVector();
-	directionalLight1.intensity = 1.5;
+	directionalLight1.intensity = 0.8;
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

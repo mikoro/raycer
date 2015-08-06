@@ -34,10 +34,9 @@ namespace Raycer
 		Color generatePixelSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted);
 		void raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
-		Color calculateLightColor(const Scene& scene, const Ray& ray);
+		double calculateAmbientOcclusion(const Scene& scene, const Ray& ray, const std::atomic<bool>& interrupted);
+		Color calculateLightColor(const Scene& scene, const Ray& ray, double ambientOcclusion);
 		Color calculateFogColor(const Scene& scene, const Ray& ray);
-		Color calculatePhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material);
-		bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight);
 
 		Sampler sampler;
 

@@ -23,6 +23,9 @@
 
 using namespace Raycer;
 
+Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material);
+bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight);
+
 Raytracer::Raytracer()
 {
 	std::random_device rd;
@@ -259,10 +262,15 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 		}
 	}
 
+	double ambientOcclusion = 1.0;
+
+	if (scene.lights.ambientLight.ambientOcclusion && isOutside)
+		ambientOcclusion = calculateAmbientOcclusion(scene, ray, interrupted);
+
 	Color lightColor;
 
 	if (isOutside)
-		lightColor = calculateLightColor(scene, ray);
+		lightColor = calculateLightColor(scene, ray, ambientOcclusion);
 
 	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
 
@@ -270,7 +278,42 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 		ray.color = calculateFogColor(scene, ray);
 }
 
-Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
+double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Ray& ray, const std::atomic<bool>& interrupted)
+{
+	Vector3 origin = ray.intersection.position;
+	Vector3 up = Vector3(0.001, 1.0, 0.001);
+	Vector3 w = ray.intersection.normal;
+	Vector3 v = w.cross(up).normalized();
+	Vector3 u = v.cross(w).normalized();
+
+	double ambientOcclusion = 0.0;
+	int permutation = intDist(gen);
+	int n = scene.lights.ambientLight.samples;
+	double distribution = scene.lights.ambientLight.distribution;
+	double distance = scene.lights.ambientLight.distance;
+
+	for (int y = 0; y < n && !interrupted; ++y)
+	{
+		for (int x = 0; x < n; ++x)
+		{
+			Vector3 sampleDirection = sampler.getCmjHemisphereSample(u, v, w, distribution, x, y, n, n, permutation);
+
+			Ray sampleRay;
+			sampleRay.origin = origin + sampleDirection * scene.tracer.rayStartOffset;
+			sampleRay.direction = sampleDirection;
+
+			for (const Primitive* primitive : scene.primitivesList)
+				primitive->intersect(sampleRay);
+
+			if (sampleRay.intersection.wasFound)
+				ambientOcclusion += (1.0 - std::min(sampleRay.intersection.distance / distance, 1.0));
+		}
+	}
+
+	return 1.0 - (ambientOcclusion / (double)(n * n));
+}
+
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, double ambientOcclusion)
 {
 	Material* material = scene.materialsMap.at(ray.intersection.materialId);
 
@@ -280,7 +323,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
 	Vector3 N = ray.intersection.normal;
 	Vector3 V = -ray.direction;
 
-	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * material->ambientness;
+	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * material->ambientness * ambientOcclusion;
 
 	for (const DirectionalLight& light : scene.lights.directionalLights)
 	{
@@ -289,7 +332,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
 		if (isInShadow(scene, P, L, std::numeric_limits<double>::max()))
 			continue;
 
-		lightColor += calculatePhongShading(N, L, V, &light, material);
+		lightColor += doPhongShading(N, L, V, &light, material);
 	}
 
 	for (const PointLight& light : scene.lights.pointLights)
@@ -301,7 +344,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
 		if (isInShadow(scene, P, L, distance))
 			continue;
 
-		Color pointLightColor = calculatePhongShading(N, L, V, &light, material);
+		Color pointLightColor = doPhongShading(N, L, V, &light, material);
 		double attenuation = std::min(1.0, distance / light.distance);
 		attenuation = 1.0 - pow(attenuation, light.attenuation);
 
@@ -317,7 +360,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray)
 		if (isInShadow(scene, P, L, distance))
 			continue;
 
-		Color spotLightColor = calculatePhongShading(N, L, V, &light, material);
+		Color spotLightColor = doPhongShading(N, L, V, &light, material);
 
 		double distanceAttenuation = std::min(1.0, distance / light.distance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.distanceAttenuation);
@@ -364,7 +407,7 @@ d2 = specular light relative amount, only when > 0 and d1 > 0
 
 */
 
-Color Raytracer::calculatePhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material)
+Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material)
 {
 	Color phongColor;
 
@@ -392,7 +435,7 @@ Color Raytracer::calculatePhongShading(const Vector3& N, const Vector3& L, const
 	return phongColor;
 }
 
-bool Raytracer::isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
+bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 {
 	Ray shadowRay;
 	shadowRay.origin = P + L * scene.tracer.rayStartOffset;

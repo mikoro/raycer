@@ -116,7 +116,11 @@ namespace Raycer
 	void serialize(Archive& a, AmbientLight& b)
 	{
 		a(cereal::make_nvp("color", b.color),
-			cereal::make_nvp("intensity", b.intensity));
+			cereal::make_nvp("intensity", b.intensity),
+			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
+			cereal::make_nvp("samples", b.samples),
+			cereal::make_nvp("distribution", b.distribution),
+			cereal::make_nvp("distance", b.distance));
 	}
 
 	template<class Archive>
@@ -235,8 +239,6 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Lights& b)
 	{
 		a(cereal::make_nvp("ambientLight", b.ambientLight),
-			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
-			cereal::make_nvp("ambientOcclusionDistance", b.ambientOcclusionDistance),
 			cereal::make_nvp("directionalLights", b.directionalLights),
 			cereal::make_nvp("pointLights", b.pointLights),
 			cereal::make_nvp("spotLights", b.spotLights));

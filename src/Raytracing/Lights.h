@@ -18,6 +18,10 @@ namespace Raycer
 
 	struct AmbientLight : public Light
 	{
+		bool ambientOcclusion = false;
+		int samples = 10;
+		double distribution = 1.0;
+		double distance = 1.0;
 	};
 
 	struct DirectionalLight : public Light

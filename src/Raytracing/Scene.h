@@ -101,9 +101,6 @@ namespace Raycer
 		struct Lights
 		{
 			AmbientLight ambientLight;
-			bool ambientOcclusion = false;
-			double ambientOcclusionDistance = 1.0;
-
 			std::vector<DirectionalLight> directionalLights;
 			std::vector<PointLight> pointLights;
 			std::vector<SpotLight> spotLights;
