@@ -62,4 +62,10 @@ TEST_CASE("Vector3 functionality", "[vector3]")
 
 	REQUIRE(v7 < v8);
 	REQUIRE(v8 > v7);
+
+	Vector3 v9 = v7.inversed();
+	v7.inverse();
+
+	REQUIRE(v7 == v9);
+	REQUIRE(v7 == Vector3(1.0, 1.0 / 2.0, 1.0 / 3.0));
 }

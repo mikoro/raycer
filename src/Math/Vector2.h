@@ -40,6 +40,8 @@ namespace Raycer
 		double lengthSquared() const;
 		void normalize();
 		Vector2 normalized() const;
+		void inverse();
+		Vector2 inversed() const;
 		bool isZero() const;
 		bool isNormal() const;
 		double dot(const Vector2& v) const;

@@ -160,6 +160,22 @@ Vector3 Vector3::normalized() const
 	return *this / length();
 }
 
+void Vector3::inverse()
+{
+	x = 1.0 / x;
+	y = 1.0 / y;
+	z = 1.0 / z;
+}
+
+Vector3 Vector3::inversed() const
+{
+	Vector3 inverse;
+	inverse.x = 1.0 / x;
+	inverse.y = 1.0 / y;
+	inverse.z = 1.0 / z;
+	return inverse;
+}
+
 bool Vector3::isZero() const
 {
 	return MathUtils::almostZero(x) && MathUtils::almostZero(y) && MathUtils::almostZero(z);

@@ -154,6 +154,20 @@ Vector2 Vector2::normalized() const
 	return *this / length();
 }
 
+void Vector2::inverse()
+{
+	x = 1.0 / x;
+	y = 1.0 / y;
+}
+
+Vector2 Vector2::inversed() const
+{
+	Vector2 inverse;
+	inverse.x = 1.0 / x;
+	inverse.y = 1.0 / y;
+	return inverse;
+}
+
 bool Vector2::isZero() const
 {
 	return MathUtils::almostZero(x) && MathUtils::almostZero(y);
