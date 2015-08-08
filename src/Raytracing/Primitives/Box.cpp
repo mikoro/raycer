@@ -15,35 +15,67 @@ void Box::initialize()
 {
 }
 
+// http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
+// http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 void Box::intersect(const Ray& ray, Intersection& intersection) const
 {
-	double t1 = (min.x - ray.origin.x) * ray.inverseDirection.x;
-	double t2 = (max.x - ray.origin.x) * ray.inverseDirection.x;
+	double tx0 = (min.x - ray.origin.x) * ray.inverseDirection.x;
+	double tx1 = (max.x - ray.origin.x) * ray.inverseDirection.x;
 
-	double tmin = std::min(t1, t2);
-	double tmax = std::max(t1, t2);
+	double tmin = std::min(tx0, tx1);
+	double tmax = std::max(tx0, tx1);
 
-	t1 = (min.y - ray.origin.y) * ray.inverseDirection.y;
-	t2 = (max.y - ray.origin.y) * ray.inverseDirection.y;
+	Vector3 minNormal = Vector3(1.0, 0.0, 0.0) * copysign(1.0, ray.direction.x);
+	Vector3 maxNormal = Vector3(1.0, 0.0, 0.0) * copysign(1.0, ray.direction.x);
 
-	tmin = std::max(tmin, std::min(t1, t2));
-	tmax = std::min(tmax, std::max(t1, t2));
+	double ty0 = (min.y - ray.origin.y) * ray.inverseDirection.y;
+	double ty1 = (max.y - ray.origin.y) * ray.inverseDirection.y;
+	double tymin = std::min(ty0, ty1);
+	double tymax = std::max(ty0, ty1);
 
-	t1 = (min.z - ray.origin.z) * ray.inverseDirection.z;
-	t2 = (max.z - ray.origin.z) * ray.inverseDirection.z;
+	if (tymin > tmin)
+	{
+		minNormal = Vector3(0.0, 1.0, 0.0) * copysign(1.0, ray.direction.y);
+		tmin = tymin;
+	}
 
-	tmin = std::max(tmin, std::min(t1, t2));
-	tmax = std::min(tmax, std::max(t1, t2));
+	if (tymax < tmax)
+	{
+		maxNormal = Vector3(0.0, 1.0, 0.0) * copysign(1.0, ray.direction.y);
+		tmax = tymax;
+	}
+
+	double tz0 = (min.z - ray.origin.z) * ray.inverseDirection.z;
+	double tz1 = (max.z - ray.origin.z) * ray.inverseDirection.z;
+	double tzmin = std::min(tz0, tz1);
+	double tzmax = std::max(tz0, tz1);
+
+	if (tzmin > tmin)
+	{
+		minNormal = Vector3(0.0, 0.0, 1.0) * copysign(1.0, ray.direction.z);
+		tmin = tzmin;
+	}
+
+	if (tzmax < tmax)
+	{
+		maxNormal = Vector3(0.0, 0.0, 1.0) * copysign(1.0, ray.direction.z);
+		tmax = tzmax;
+	}
 
 	if (tmax < std::max(tmin, 0.0))
 		return;
 
-	if (tmin > intersection.distance)
+	bool isInside = (tmin < 0.0);
+	double t = isInside ? tmax : tmin;
+
+	if (t > intersection.distance)
 		return;
 
 	intersection.wasFound = true;
-	intersection.distance = tmin;
-	intersection.position = ray.origin + (tmin * ray.direction);
-	intersection.normal = Vector3();
+	intersection.distance = t;
+	intersection.position = ray.origin + (t * ray.direction);
+	intersection.normal = isInside ? -maxNormal : -minNormal;
 	intersection.materialId = materialId;
+
+	// TODO: add texcoord mapping
 }
