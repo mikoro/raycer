@@ -86,6 +86,16 @@ namespace Raycer
 	{
 		return !(v == w);
 	}
+
+	bool operator>(const Vector3& v, const Vector3& w)
+	{
+		return v.x > w.x && v.y > w.y && v.z > w.z;
+	}
+
+	bool operator<(const Vector3& v, const Vector3& w)
+	{
+		return v.x < w.x && v.y < w.y && v.z < w.z;
+	}
 }
 
 Vector3& Vector3::operator+=(const Vector3& v)

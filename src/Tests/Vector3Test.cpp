@@ -56,4 +56,10 @@ TEST_CASE("Vector3 functionality", "[vector3]")
 	REQUIRE(Vector3(2.0, -2.0).reflect(Vector3(0.0, 1.0, 0.0)) == Vector3(2.0, 2.0, 0.0));
 	REQUIRE(Vector3(2.0, -2.0).reflect(Vector3(0.0, -1.0, 0.0)) == Vector3(2.0, 2.0, 0.0));
 	REQUIRE(Vector3::lerp(v4, v6, 0.5) == Vector3(0.5, 1.0, 1.5));
+
+	Vector3 v7(1.0, 2.0, 3.0);
+	Vector3 v8(2.0, 3.0, 4.0);
+
+	REQUIRE(v7 < v8);
+	REQUIRE(v8 > v7);
 }

@@ -26,6 +26,8 @@ namespace Raycer
 
 		friend bool operator==(const Vector2& v, const Vector2& w);
 		friend bool operator!=(const Vector2& v, const Vector2& w);
+		friend bool operator>(const Vector2& v, const Vector2& w);
+		friend bool operator<(const Vector2& v, const Vector2& w);
 
 		Vector2& operator+=(const Vector2& v);
 		Vector2& operator-=(const Vector2& v);
