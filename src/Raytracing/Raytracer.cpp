@@ -117,13 +117,13 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sample
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Ray sampleRay;
+			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
+			Vector3 rayOrigin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
+			Vector3 rayDirection = (focalPoint - rayOrigin).normalized();
+			
+			Ray sampleRay(rayOrigin, rayDirection);
 			Intersection sampleIntersection;
 
-			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
-			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
-			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
-			
 			sampledPixelColor += raytrace(scene, sampleRay, sampleIntersection, 0, interrupted);
 		}
 	}
@@ -218,11 +218,11 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
 			T.normalize();
 
-			Ray refractedRay;
-			Intersection refractedIntersection;
+			Vector3 rayOrigin = P + T * scene.tracer.rayStartOffset;
+			Vector3 rayDirection = T;
 
-			refractedRay.origin = P + T * scene.tracer.rayStartOffset;
-			refractedRay.direction = T;
+			Ray refractedRay(rayOrigin, rayDirection);
+			Intersection refractedIntersection;
 
 			Color color = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted);
 
@@ -245,11 +245,11 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
-		Ray reflectedRay;
-		Intersection reflectedIntersection;
+		Vector3 rayOrigin = P + R * scene.tracer.rayStartOffset;
+		Vector3 rayDirection = R;
 
-		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
-		reflectedRay.direction = R;
+		Ray reflectedRay(rayOrigin, rayDirection);
+		Intersection reflectedIntersection;
 
 		Color color = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted);
 
@@ -303,11 +303,11 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 		{
 			Vector3 sampleDirection = sampler.getCmjHemisphereSample(u, v, w, distribution, x, y, n, n, permutation);
 
-			Ray sampleRay;
-			Intersection sampleIntersection;
+			Vector3 rayOrigin = origin + sampleDirection * scene.tracer.rayStartOffset;
+			Vector3 rayDirection = sampleDirection;
 
-			sampleRay.origin = origin + sampleDirection * scene.tracer.rayStartOffset;
-			sampleRay.direction = sampleDirection;
+			Ray sampleRay(rayOrigin, rayDirection);
+			Intersection sampleIntersection;
 
 			for (const Primitive* primitive : scene.primitivesList)
 				primitive->intersect(sampleRay, sampleIntersection);
@@ -444,11 +444,11 @@ Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const
 
 bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 {
-	Ray shadowRay;
-	Intersection shadowIntersection;
+	Vector3 rayOrigin = P + L * scene.tracer.rayStartOffset;
+	Vector3 rayDirection = L;
 
-	shadowRay.origin = P + L * scene.tracer.rayStartOffset;
-	shadowRay.direction = L;
+	Ray shadowRay(rayOrigin, rayDirection);
+	Intersection shadowIntersection;
 
 	for (const Primitive* primitive : scene.primitivesList)
 	{

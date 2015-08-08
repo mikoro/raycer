@@ -9,7 +9,7 @@
 
 namespace Raycer
 {
-	struct Ray;
+	class Ray;
 
 	class Triangle : public Primitive
 	{
@@ -23,8 +23,5 @@ namespace Raycer
 		Vector2 texcoords[3];
 
 		Vector3 normal;
-
-	private:
-
 	};
 }

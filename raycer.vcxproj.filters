@@ -235,6 +235,12 @@
     <ClCompile Include="src\Tests\TestScenesTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Primitives\Box.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Ray.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -423,6 +429,9 @@
     </ClInclude>
     <ClInclude Include="src\TestScenes\TestScene.h">
       <Filter>TestScenes</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Primitives\Box.h">
+      <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

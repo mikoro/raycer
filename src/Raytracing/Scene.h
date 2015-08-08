@@ -23,6 +23,7 @@
 #include "Raytracing/Lights.h"
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Primitives/Sphere.h"
+#include "Raytracing/Primitives/Box.h"
 #include "Math/Color.h"
 
 namespace Raycer
@@ -109,6 +110,7 @@ namespace Raycer
 		{
 			std::vector<Plane> planes;
 			std::vector<Sphere> spheres;
+			std::vector<Box> boxes;
 		} primitives;
 		
 		std::vector<Texture*> texturesList;

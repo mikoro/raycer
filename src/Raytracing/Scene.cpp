@@ -178,6 +178,9 @@ void Scene::initialize()
 	for (Sphere& sphere : primitives.spheres)
 		primitivesList.push_back(&sphere);
 
+	for (Box& box : primitives.boxes)
+		primitivesList.push_back(&box);
+
 	for (Primitive* primitive : primitivesList)
 		primitive->initialize();
 

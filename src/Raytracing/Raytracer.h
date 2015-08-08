@@ -14,7 +14,7 @@ namespace Raycer
 	class Scene;
 	class Vector2;
 	struct RaytracerState;
-	struct Ray;
+	class Ray;
 	struct Intersection;
 	struct Light;
 	struct Material;

@@ -8,7 +8,7 @@
 
 namespace Raycer
 {
-	struct Ray;
+	class Ray;
 	class Vector2;
 
 	class Camera

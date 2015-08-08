@@ -94,6 +94,14 @@ Scene TestScene::createTestScene1()
 	scene.materials.push_back(sphere1Material);
 	scene.primitives.spheres.push_back(sphere1);
 
+	Box box1;
+	box1.materialId = sphere1Material.id;
+	box1.texcoordScale = Vector2(1.0, 1.0);
+	box1.min = Vector3(0.0, 0.0, 0.0);
+	box1.max = Vector3(1.0, 1.0, 1.0);
+
+	//scene.primitives.boxes.push_back(box1);
+
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);

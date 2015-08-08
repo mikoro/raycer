@@ -9,7 +9,7 @@
 
 namespace Raycer
 {
-	struct Ray;
+	class Ray;
 	struct Intersection;
 
 	class Primitive
