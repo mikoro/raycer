@@ -15,7 +15,7 @@ namespace Raycer
 	public:
 
 		void initialize();
-		void intersect(Ray& ray) const;
+		void intersect(const Ray& ray, Intersection& intersection) const;
 
 		Vector3 position;
 		Vector3 normal;

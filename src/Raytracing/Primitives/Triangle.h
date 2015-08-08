@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
 
@@ -10,17 +11,20 @@ namespace Raycer
 {
 	struct Ray;
 
-	class Triangle
+	class Triangle : public Primitive
 	{
 	public:
 
-		bool intersect(Ray& ray) const;
-		bool intersect2(Ray& ray) const;
+		void initialize();
+		void intersect(const Ray& ray, Intersection& intersection) const;
 
 		Vector3 vertices[3];
 		Vector3 normals[3];
 		Vector2 texcoords[3];
 
 		Vector3 normal;
+
+	private:
+
 	};
 }

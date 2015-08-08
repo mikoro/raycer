@@ -15,6 +15,7 @@ namespace Raycer
 	class Vector2;
 	struct RaytracerState;
 	struct Ray;
+	struct Intersection;
 	struct Light;
 	struct Material;
 	
@@ -33,10 +34,10 @@ namespace Raycer
 
 		Color generatePixelSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted);
-		void raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
-		double calculateAmbientOcclusion(const Scene& scene, const Ray& ray, const std::atomic<bool>& interrupted);
-		Color calculateLightColor(const Scene& scene, const Ray& ray, double ambientOcclusion);
-		Color calculateFogColor(const Scene& scene, const Ray& ray);
+		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
+		double calculateAmbientOcclusion(const Scene& scene, const Intersection& intersection);
+		Color calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion);
+		Color calculateFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
 
 		Sampler sampler;
 

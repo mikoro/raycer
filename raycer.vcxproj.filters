@@ -169,9 +169,6 @@
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp">
-      <Filter>Raytracing\Primitives</Filter>
-    </ClCompile>
     <ClCompile Include="src\Math\ColorGradient.cpp">
       <Filter>Math</Filter>
     </ClCompile>
@@ -384,9 +381,6 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Textures\WoodTexture.h">
       <Filter>Raytracing\Textures</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Primitives\Mesh.h">
-      <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\Plane.h">
       <Filter>Raytracing\Primitives</Filter>

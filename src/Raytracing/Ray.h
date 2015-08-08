@@ -4,8 +4,6 @@
 #pragma once
 
 #include "Math/Vector3.h"
-#include "Math/Color.h"
-#include "Raytracing/Intersection.h"
 
 namespace Raycer
 {
@@ -13,8 +11,5 @@ namespace Raycer
 	{
 		Vector3 origin;
 		Vector3 direction;
-		Intersection intersection;
-		Color color;
-		int iterations = 0;
 	};
 }

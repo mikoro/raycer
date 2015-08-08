@@ -10,6 +10,7 @@
 namespace Raycer
 {
 	struct Ray;
+	struct Intersection;
 
 	class Primitive
 	{
@@ -18,7 +19,7 @@ namespace Raycer
 		virtual ~Primitive() {}
 
 		virtual void initialize() = 0;
-		virtual void intersect(Ray& ray) const = 0;
+		virtual void intersect(const Ray& ray, Intersection& intersection) const = 0;
 
 		int materialId = 0;
 		Vector2 texcoordScale = Vector2(1.0, 1.0);

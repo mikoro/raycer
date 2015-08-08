@@ -1,8 +1,10 @@
 primitives
- - trumbore ray-triangle
+ - aabox intersection
+ - bvh
+ - shadow ray optimization
+ - watertight triangle intersection
  - instancing
  - ray inverse transformation
- - box
  - torus
  - metaball
  - constructive solid geometry
@@ -10,13 +12,6 @@ primitives
 environment
  - box environment map
  - sphere environment map
-
-camera
- - aperture & dof
-
-sampling
- - hemisphere sampling
- - precalculated sampling
 
 rendering
  - reinhard tonemap

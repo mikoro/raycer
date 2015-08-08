@@ -178,9 +178,6 @@ void Scene::initialize()
 	for (Sphere& sphere : primitives.spheres)
 		primitivesList.push_back(&sphere);
 
-	for (Mesh& mesh : primitives.meshes)
-		primitivesList.push_back(&mesh);
-
 	for (Primitive* primitive : primitivesList)
 		primitive->initialize();
 

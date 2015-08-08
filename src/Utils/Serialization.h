@@ -23,7 +23,6 @@
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Primitives/Triangle.h"
-#include "Raytracing/Primitives/Mesh.h"
 
 #include "Raytracing/Textures/Texture.h"
 #include "Raytracing/Textures/ColorTexture.h"
@@ -248,8 +247,7 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Primitives& b)
 	{
 		a(cereal::make_nvp("planes", b.planes),
-			cereal::make_nvp("spheres", b.spheres),
-			cereal::make_nvp("meshes", b.meshes));
+			cereal::make_nvp("spheres", b.spheres));
 	}
 
 	/* PRIMITIVES */
@@ -278,16 +276,6 @@ namespace Raycer
 		a(cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
 			cereal::make_nvp("texcoords", b.texcoords));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Mesh& b)
-	{
-		a(cereal::make_nvp("meshFilePath", b.meshFilePath),
-			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("orientation", b.orientation),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
 	}
 
 	/* TEXTURES */

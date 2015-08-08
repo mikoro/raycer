@@ -87,7 +87,7 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 			else if (scene.multisampler.type == MultisampleType::JITTER)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getJitteredSample(x, y, n, n);
 
-			sampledPixelColor += generateCameraSamples(scene, sampledPixelCoordinate, interrupted);;
+			sampledPixelColor += generateCameraSamples(scene, sampledPixelCoordinate, interrupted);
 		}
 	}
 
@@ -97,12 +97,10 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	Ray primaryRay = scene.camera.getRay(sampledPixelCoordinate);
+	Intersection primaryIntersection;
 
 	if (!scene.camera.depthOfField)
-	{
-		raytrace(scene, primaryRay, interrupted);
-		return primaryRay.color;
-	}
+		return raytrace(scene, primaryRay, primaryIntersection, 0, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = intDist(gen);
@@ -120,13 +118,13 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sample
 		for (int x = 0; x < n; ++x)
 		{
 			Ray sampleRay;
+			Intersection sampleIntersection;
+
 			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
 			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
 			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
 			
-			raytrace(scene, sampleRay, interrupted);
-
-			sampledPixelColor += sampleRay.color;
+			sampledPixelColor += raytrace(scene, sampleRay, sampleIntersection, 0, interrupted);
 		}
 	}
 
@@ -152,27 +150,37 @@ d = distance traveled inside
 
 */
 
-void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted)
+Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)
 {
+	Color finalColor;
+
 	if (interrupted)
-		return;
+		return finalColor;
 
 	for (const Primitive* primitive : scene.primitivesList)
-		primitive->intersect(ray);
+		primitive->intersect(ray, intersection);
 
-	if (!ray.intersection.wasFound)
-		return;
+	if (!intersection.wasFound)
+		return finalColor;
 
-	Material* material = scene.materialsMap.at(ray.intersection.materialId);
+	Material* material = scene.materialsMap.at(intersection.materialId);
 	Texture* texture = scene.texturesMap.at(material->textureId);
 
-	Color textureColor = texture->getColor(ray.intersection.position, ray.intersection.texcoord) * texture->intensity;
-	Color reflectionColor;
-	Color refractionColor;
+	Color textureColor = texture->getColor(intersection.position, intersection.texcoord) * texture->intensity;
+
+	if (material->skipLighting)
+	{
+		finalColor = textureColor;
+
+		if (scene.fog.enabled)
+			finalColor = calculateFogColor(scene, intersection, finalColor);
+
+		return finalColor;
+	}
 
 	Vector3 D = ray.direction;
-	Vector3 N = ray.intersection.normal;
-	Vector3 P = ray.intersection.position;
+	Vector3 N = intersection.normal;
+	Vector3 P = intersection.position;
 
 	double c1 = -(D.dot(N));
 	bool isOutside = (c1 >= 0.0);
@@ -180,16 +188,6 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double rf = 1.0;
 	double tf = 1.0;
-
-	if (material->skipLighting)
-	{
-		ray.color = textureColor;
-
-		if (scene.fog.enabled)
-			ray.color = calculateFogColor(scene, ray);
-
-		return;
-	}
 
 	if (material->fresnel)
 	{
@@ -205,8 +203,11 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 	double transmittance = material->transmittance * tf;
 	double reflectance = material->reflectance * rf;
 
+	Color refractionColor;
+	Color reflectionColor;
+
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && ray.iterations < scene.tracer.maxIterations)
+	if (transmittance > 0.0 && iteration < scene.tracer.maxIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -218,19 +219,20 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 			T.normalize();
 
 			Ray refractedRay;
+			Intersection refractedIntersection;
+
 			refractedRay.origin = P + T * scene.tracer.rayStartOffset;
 			refractedRay.direction = T;
-			refractedRay.iterations = ray.iterations + 1;
 
-			raytrace(scene, refractedRay, interrupted);
+			Color color = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted);
 
-			if (ray.intersection.wasFound)
+			if (refractedIntersection.wasFound)
 			{
-				refractionColor = refractedRay.color * transmittance;
+				refractionColor = color * transmittance;
 
 				if (isOutside && material->attenuate)
 				{
-					double a = exp(-material->attenuation * refractedRay.intersection.distance);
+					double a = exp(-material->attenuation * refractedIntersection.distance);
 					refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
 				}
 			}
@@ -238,25 +240,26 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 	}
 
 	// calculate and trace reflected ray
-	if (reflectance > 0.0 && ray.iterations < scene.tracer.maxIterations)
+	if (reflectance > 0.0 && iteration < scene.tracer.maxIterations)
 	{
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
 		Ray reflectedRay;
+		Intersection reflectedIntersection;
+
 		reflectedRay.origin = P + R * scene.tracer.rayStartOffset;
 		reflectedRay.direction = R;
-		reflectedRay.iterations = ray.iterations + 1;
 
-		raytrace(scene, reflectedRay, interrupted);
+		Color color = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted);
 
-		if (ray.intersection.wasFound)
+		if (reflectedIntersection.wasFound)
 		{
-			reflectionColor = reflectedRay.color * reflectance;
+			reflectionColor = color * reflectance;
 
 			if (!isOutside && material->attenuate)
 			{
-				double a = exp(-material->attenuation * reflectedRay.intersection.distance);
+				double a = exp(-material->attenuation * reflectedIntersection.distance);
 				reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
 			}
 		}
@@ -265,24 +268,26 @@ void Raytracer::raytrace(const Scene& scene, Ray& ray, const std::atomic<bool>& 
 	double ambientOcclusion = 1.0;
 
 	if (scene.lights.ambientLight.ambientOcclusion && isOutside)
-		ambientOcclusion = calculateAmbientOcclusion(scene, ray, interrupted);
+		ambientOcclusion = calculateAmbientOcclusion(scene, intersection);
 
 	Color lightColor;
 
 	if (isOutside)
-		lightColor = calculateLightColor(scene, ray, ambientOcclusion);
+		lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusion);
 
-	ray.color = (reflectionColor + refractionColor + lightColor) * textureColor;
+	finalColor = (reflectionColor + refractionColor + lightColor) * textureColor;
 
 	if (scene.fog.enabled && isOutside)
-		ray.color = calculateFogColor(scene, ray);
+		finalColor = calculateFogColor(scene, intersection, finalColor);
+
+	return finalColor;
 }
 
-double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Ray& ray, const std::atomic<bool>& interrupted)
+double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersection& intersection)
 {
-	Vector3 origin = ray.intersection.position;
+	Vector3 origin = intersection.position;
 	Vector3 up = Vector3(0.001, 1.0, 0.001);
-	Vector3 w = ray.intersection.normal;
+	Vector3 w = intersection.normal;
 	Vector3 v = w.cross(up).normalized();
 	Vector3 u = v.cross(w).normalized();
 
@@ -292,36 +297,38 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Ray& ray, 
 	double distribution = scene.lights.ambientLight.distribution;
 	double distance = scene.lights.ambientLight.distance;
 
-	for (int y = 0; y < n && !interrupted; ++y)
+	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
 			Vector3 sampleDirection = sampler.getCmjHemisphereSample(u, v, w, distribution, x, y, n, n, permutation);
 
 			Ray sampleRay;
+			Intersection sampleIntersection;
+
 			sampleRay.origin = origin + sampleDirection * scene.tracer.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 
 			for (const Primitive* primitive : scene.primitivesList)
-				primitive->intersect(sampleRay);
+				primitive->intersect(sampleRay, sampleIntersection);
 
-			if (sampleRay.intersection.wasFound)
-				ambientOcclusion += (1.0 - std::min(sampleRay.intersection.distance / distance, 1.0));
+			if (sampleIntersection.wasFound)
+				ambientOcclusion += (1.0 - std::min(sampleIntersection.distance / distance, 1.0));
 		}
 	}
 
 	return 1.0 - (ambientOcclusion / (double)(n * n));
 }
 
-Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, double ambientOcclusion)
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion)
 {
-	Material* material = scene.materialsMap.at(ray.intersection.materialId);
+	Material* material = scene.materialsMap.at(intersection.materialId);
 
 	Color lightColor;
 
-	Vector3 P = ray.intersection.position;
-	Vector3 N = ray.intersection.normal;
-	Vector3 V = -ray.direction;
+	Vector3 P = intersection.position;
+	Vector3 N = intersection.normal;
+	Vector3 V = -viewRay.direction;
 
 	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * material->ambientness * ambientOcclusion;
 
@@ -377,22 +384,22 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, double 
 	return lightColor;
 }
 
-Color Raytracer::calculateFogColor(const Scene& scene, const Ray& ray)
+Color Raytracer::calculateFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor)
 {
-	double t1 = ray.intersection.distance / scene.fog.distance;
+	double t1 = intersection.distance / scene.fog.distance;
 	t1 = std::max(0.0, std::min(t1, 1.0));
 	t1 = pow(t1, scene.fog.steepness);
 
-	if (scene.fog.heightDispersion && ray.intersection.position.y > 0.0)
+	if (scene.fog.heightDispersion && intersection.position.y > 0.0)
 	{
-		double t2 = ray.intersection.position.y / scene.fog.height;
+		double t2 = intersection.position.y / scene.fog.height;
 		t2 = std::max(0.0, std::min(t2, 1.0));
 		t2 = pow(t2, scene.fog.heightSteepness);
 		t2 = 1.0 - t2;
 		t1 *= t2;
 	}
 
-	return Color::lerp(ray.color, scene.fog.color, t1);
+	return Color::lerp(pixelColor, scene.fog.color, t1);
 }
 
 /*
@@ -438,14 +445,16 @@ Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const
 bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 {
 	Ray shadowRay;
+	Intersection shadowIntersection;
+
 	shadowRay.origin = P + L * scene.tracer.rayStartOffset;
 	shadowRay.direction = L;
 
 	for (const Primitive* primitive : scene.primitivesList)
 	{
 		if (!primitive->nonShadowing)
-			primitive->intersect(shadowRay);
+			primitive->intersect(shadowRay, shadowIntersection);
 	}
 
-	return shadowRay.intersection.wasFound && shadowRay.intersection.distance < distanceToLight;
+	return shadowIntersection.wasFound && shadowIntersection.distance < distanceToLight;
 }

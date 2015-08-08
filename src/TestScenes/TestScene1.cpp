@@ -98,7 +98,7 @@ Scene TestScene::createTestScene1()
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
-	scene.lights.ambientLight.ambientOcclusion = true;
+	scene.lights.ambientLight.ambientOcclusion = false;
 	scene.lights.ambientLight.samples = 3;
 	scene.lights.ambientLight.distribution = 1.0;
 	scene.lights.ambientLight.distance = 1.0;
