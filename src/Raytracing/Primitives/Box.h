@@ -22,6 +22,8 @@ namespace Raycer
 		void intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
+		static Box create(const Vector3& center, const Vector3& extent);
+
 		Vector3 min;
 		Vector3 max;
 	};

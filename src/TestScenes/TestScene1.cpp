@@ -1,42 +1,20 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <string>
-#include <vector>
-
 #include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
+// simple triangle, sphere and box on a plane
 Scene TestScene::createTestScene1()
 {
 	Scene scene;
 
-	scene.tracer.maxIterations = 4;
-
-	scene.multisampler.type = MultisampleType::NONE;
-	scene.multisampler.multisamples = 0;
-
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 3.0, 6.0);
-	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
-	scene.camera.fov = 75.0;
-	scene.camera.depthOfField = false;
-	scene.camera.samples = 3;
-	scene.camera.apertureSize = 0.1;
-	scene.camera.focalLenght = 6.0;
-
-	// FOG //
-
-	scene.fog.enabled = false;
-	scene.fog.color = Color(0.7, 0.7, 0.7);
-	scene.fog.distance = 100.0;
-	scene.fog.steepness = 4.0;
-	scene.fog.heightDispersion = true;
-	scene.fog.height = 20.0;
-	scene.fog.heightSteepness = 0.5;
+	scene.camera.position = Vector3(0.0, 5.0, 7.0);
+	scene.camera.orientation = EulerAngle(0.0, -30.0, 0.0);
 
 	// GROUND //
 
@@ -48,20 +26,12 @@ Scene TestScene::createTestScene1()
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.textureId = groundTexture.id;
-	groundMaterial.ambientness = 1.0;
-	groundMaterial.diffuseness = 1.0;
-	groundMaterial.specularity = 0.2;
-	groundMaterial.shininess = 2.0;
-	groundMaterial.reflectance = 0.0;
-	groundMaterial.transmittance = 0.0;
-	groundMaterial.refractiveIndex = 1.0;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	groundPlane.texcoordScale = Vector2(5.0, 5.0);
-
+	
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
@@ -70,54 +40,76 @@ Scene TestScene::createTestScene1()
 
 	ColorTexture sphere1Texture;
 	sphere1Texture.id = 2;
-	sphere1Texture.color = Color(1.0, 0.0, 0.0);
+	sphere1Texture.color = Color(0.0, 1.0, 0.0);
 	sphere1Texture.intensity = 0.5;
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
 	sphere1Material.textureId = sphere1Texture.id;
-	sphere1Material.ambientness = 1.0;
-	sphere1Material.diffuseness = 1.0;
-	sphere1Material.specularity = 1.0;
-	sphere1Material.shininess = 32.0;
-	sphere1Material.reflectance = 0.0;
-	sphere1Material.transmittance = 0.0;
-	sphere1Material.refractiveIndex = 1.0;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
-	sphere1.texcoordScale = Vector2(1.0, 1.0);
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
 	scene.textures.colorTextures.push_back(sphere1Texture);
 	scene.materials.push_back(sphere1Material);
-	//scene.primitives.spheres.push_back(sphere1);
+	scene.primitives.spheres.push_back(sphere1);
 
-	Box box1;
-	box1.materialId = sphere1Material.id;
-	box1.texcoordScale = Vector2(1.0, 1.0);
-	box1.min = Vector3(0.0, 0.0, 0.0);
-	box1.max = Vector3(1.0, 1.0, 1.0);
-	box1.nonShadowing = true;
+	// BOX 1 //
 
+	ColorTexture box1Texture;
+	box1Texture.id = 3;
+	box1Texture.color = Color(0.0, 0.0, 1.0);
+	box1Texture.intensity = 0.5;
+
+	Material box1Material;
+	box1Material.id = 3;
+	box1Material.textureId = box1Texture.id;
+
+	Box box1 = Box::create(Vector3(3.0, 1.0, 0.0), Vector3(1.0, 1.0, 1.0));
+	box1.materialId = box1Material.id;
+
+	scene.textures.colorTextures.push_back(box1Texture);
+	scene.materials.push_back(box1Material);
 	scene.primitives.boxes.push_back(box1);
+
+	// TRIANGLE 1 //
+
+	ColorTexture triangle1Texture;
+	triangle1Texture.id = 4;
+	triangle1Texture.color = Color(1.0, 0.0, 0.0);
+	triangle1Texture.intensity = 0.5;
+
+	Material triangle1Material;
+	triangle1Material.id = 4;
+	triangle1Material.textureId = triangle1Texture.id;
+
+	Triangle triangle1;
+	triangle1.materialId = triangle1Material.id;
+	triangle1.vertices[0] = Vector3(-4.0, 0.0, 0.0);
+	triangle1.vertices[1] = Vector3(-2.0, 0.0, 0.0);
+	triangle1.vertices[2] = Vector3(-3.0, 2.0, 0.0);
+	triangle1.normals[0] = triangle1.normals[1] = triangle1.normals[2] = Vector3::FORWARD;
+	triangle1.normal = Vector3::FORWARD;
+
+	scene.textures.colorTextures.push_back(triangle1Texture);
+	scene.materials.push_back(triangle1Material);
+	scene.primitives.triangles.push_back(triangle1);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.1;
-	scene.lights.ambientLight.ambientOcclusion = false;
-	scene.lights.ambientLight.samples = 3;
-	scene.lights.ambientLight.distribution = 1.0;
-	scene.lights.ambientLight.distance = 1.0;
+	scene.lights.ambientLight.intensity = 0.01;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(192, 191, 173);
-	directionalLight1.direction = EulerAngle(45.0, -45.0, 0.0).getDirectionVector();
-	directionalLight1.intensity = 0.8;
+	PointLight pointLight1;
+	pointLight1.color = Color(1.0, 1.0, 1.0);
+	pointLight1.intensity = 1.5;
+	pointLight1.position = Vector3(5.0, 5.0, 5.0);
+	pointLight1.distance = 20.0;
+	pointLight1.attenuation = 1.0;
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.pointLights.push_back(pointLight1);
 
 	return scene;
 }

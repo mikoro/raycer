@@ -26,9 +26,9 @@ namespace Raycer
 		AABB getAABB() const;
 
 		std::string meshFilePath;
-		Vector3 position;
-		Vector3 scale;
-		EulerAngle orientation;
+		Vector3 position = Vector3(0.0, 0.0, 0.0);
+		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		EulerAngle orientation = EulerAngle(0.0, 0.0, 0.0);
 
 		std::vector<Triangle> triangles;
 	};

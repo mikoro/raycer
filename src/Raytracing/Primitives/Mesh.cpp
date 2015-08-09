@@ -44,7 +44,6 @@ void Mesh::initialize()
 
 		triangle.materialId = materialId;
 		triangle.texcoordScale = texcoordScale;
-		triangle.nonShadowing = nonShadowing;
 	}
 }
 

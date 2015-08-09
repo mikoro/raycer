@@ -25,6 +25,5 @@ namespace Raycer
 
 		int materialId = 0;
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
-		bool nonShadowing = false;
 	};
 }

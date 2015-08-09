@@ -452,8 +452,10 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 
 	for (const Primitive* primitive : scene.primitivesList)
 	{
-		if (!primitive->nonShadowing)
-			primitive->intersect(shadowRay, shadowIntersection);
+		if (scene.materialsMap.at(primitive->materialId)->nonShadowing)
+			continue;
+
+		primitive->intersect(shadowRay, shadowIntersection);
 	}
 
 	return shadowIntersection.wasFound && shadowIntersection.distance < distanceToLight;

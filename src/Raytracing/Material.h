@@ -13,10 +13,12 @@ namespace Raycer
 		int textureId = 0;
 
 		bool skipLighting = false;
+		bool nonShadowing = false;
+
 		double ambientness = 1.0;
 		double diffuseness = 1.0;
-		double specularity = 1.0;
-		double shininess = 1.0;
+		double specularity = 0.0;
+		double shininess = 0.0;
 
 		bool fresnel = false;
 		double reflectance = 0.0;

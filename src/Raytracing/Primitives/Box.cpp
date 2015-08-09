@@ -95,3 +95,13 @@ AABB Box::getAABB() const
 {
 	return AABB(min, max);
 }
+
+Box Box::create(const Vector3& center, const Vector3& extent)
+{
+	Box box;
+
+	box.min = center - extent;
+	box.max = center + extent;
+
+	return box;
+}

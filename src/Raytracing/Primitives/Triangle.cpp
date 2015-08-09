@@ -65,6 +65,7 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord;
+	intersection.materialId = materialId;
 }
 
 AABB Triangle::getAABB() const

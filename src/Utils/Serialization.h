@@ -160,13 +160,19 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("textureId", b.textureId),
+			cereal::make_nvp("skipLighting", b.skipLighting),
+			cereal::make_nvp("nonShadowing", b.nonShadowing),
 			cereal::make_nvp("ambientness", b.ambientness),
 			cereal::make_nvp("diffuseness", b.diffuseness),
 			cereal::make_nvp("specularity", b.specularity),
 			cereal::make_nvp("shininess", b.shininess),
+			cereal::make_nvp("fresnel", b.fresnel),
 			cereal::make_nvp("reflectance", b.reflectance),
 			cereal::make_nvp("transmittance", b.transmittance),
-			cereal::make_nvp("refractiveIndex", b.refractiveIndex));
+			cereal::make_nvp("refractiveIndex", b.refractiveIndex),
+			cereal::make_nvp("attenuate", b.attenuate),
+			cereal::make_nvp("attenuation", b.attenuation),
+			cereal::make_nvp("attenuationColor", b.attenuationColor));
 	}
 
 	/* SCENE */
@@ -247,7 +253,10 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Primitives& b)
 	{
 		a(cereal::make_nvp("planes", b.planes),
-			cereal::make_nvp("spheres", b.spheres));
+			cereal::make_nvp("spheres", b.spheres),
+			cereal::make_nvp("spheres", b.boxes),
+			cereal::make_nvp("spheres", b.triangles),
+			cereal::make_nvp("spheres", b.meshes));
 	}
 
 	/* PRIMITIVES */
@@ -271,11 +280,34 @@ namespace Raycer
 	}
 
 	template<class Archive>
+	void serialize(Archive& a, Box& b)
+	{
+		a(cereal::make_nvp("min", b.min),
+			cereal::make_nvp("max", b.max),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
+	}
+
+	template<class Archive>
 	void serialize(Archive& a, Triangle& b)
 	{
 		a(cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
-			cereal::make_nvp("texcoords", b.texcoords));
+			cereal::make_nvp("texcoords", b.texcoords),
+			cereal::make_nvp("normal", b.normal),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Mesh& b)
+	{
+		a(cereal::make_nvp("meshFilePath", b.meshFilePath),
+			cereal::make_nvp("position", b.position),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("orientation", b.orientation),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale));
 	}
 
 	/* TEXTURES */

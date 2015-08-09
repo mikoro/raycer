@@ -24,7 +24,6 @@ namespace Raycer
 		Vector3 vertices[3];
 		Vector3 normals[3];
 		Vector2 texcoords[3];
-
 		Vector3 normal;
 	};
 }
