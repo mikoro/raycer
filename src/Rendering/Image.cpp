@@ -328,7 +328,7 @@ Color Image::getPixelNearest(double u, double v) const
 	return getPixel(x, y);
 }
 
-Color Image::getPixelLinear(double u, double v) const
+Color Image::getPixelBilinear(double u, double v) const
 {
 	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
 

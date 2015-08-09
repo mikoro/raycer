@@ -17,7 +17,7 @@ Color ImageTexture::getColor(const Vector3& position, const Vector2& texcoord) c
 {
 	(void)position;
 
-	return image.getPixelLinear(texcoord.x, texcoord.y);
+	return image.getPixelBilinear(texcoord.x, texcoord.y);
 }
 
 double ImageTexture::getValue(const Vector3& position, const Vector2& texcoord) const

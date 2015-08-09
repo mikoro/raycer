@@ -18,14 +18,14 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "CLRaytracing/CLManager.h"
+#include "OpenCL/CLManager.h"
 #include "Rendering/Image.h"
 #include "Rendering/ToneMapper.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
 #include "Raytracing/Camera.h"
-#include "CLRaytracing/CLRaytracer.h"
+#include "OpenCL/CLRaytracer.h"
 #include "TestScenes/TestScene.h"
 
 using namespace Raycer;

@@ -25,12 +25,6 @@
     <Filter Include="Raytracing\Primitives">
       <UniqueIdentifier>{27f5fe11-303d-4371-a98d-afd1d77015bf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="CLRaytracing">
-      <UniqueIdentifier>{08159d90-8e48-4e1d-98fe-53296966efc5}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="InteractiveStates">
-      <UniqueIdentifier>{230aa0b1-03c2-47c7-9bc9-3458032bb98a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Raytracing\Textures">
       <UniqueIdentifier>{9786b36f-6f8d-405f-a1c0-325c839b331d}</UniqueIdentifier>
     </Filter>
@@ -39,6 +33,12 @@
     </Filter>
     <Filter Include="TestScenes">
       <UniqueIdentifier>{339bccda-e760-443a-99ee-4be40776f51c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenCL">
+      <UniqueIdentifier>{354128de-2a9e-4922-9735-e198ab93b0cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Runners\WindowRunnerStates">
+      <UniqueIdentifier>{12134eda-1511-499f-88c4-6d8d51b7d7e1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -50,9 +50,6 @@
     </ClCompile>
     <ClCompile Include="src\Utils\Log.cpp">
       <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\Color.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Vector3.cpp">
       <Filter>Math</Filter>
@@ -73,9 +70,6 @@
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Runners\ConsoleRunner.cpp">
-      <Filter>Runners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Runners\InteractiveRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\Settings.cpp">
@@ -108,21 +102,6 @@
     </ClCompile>
     <ClCompile Include="src\Math\MovingAverage.cpp">
       <Filter>Math</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CLRaytracing\CLRaytracer.cpp">
-      <Filter>CLRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CLRaytracing\CLScene.cpp">
-      <Filter>CLRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\CLRaytracing\CLManager.cpp">
-      <Filter>CLRaytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\GLHelper.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\InteractiveStates\RaytracingState.cpp">
-      <Filter>InteractiveStates</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Image.cpp">
       <Filter>Rendering</Filter>
@@ -168,9 +147,6 @@
     </ClCompile>
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp">
       <Filter>Raytracing\Primitives</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Math\ColorGradient.cpp">
-      <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Tests\ColorGradientTest.cpp">
       <Filter>Tests</Filter>
@@ -241,6 +217,33 @@
     <ClCompile Include="src\Raytracing\Ray.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\ColorGradient.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\AABB.cpp">
+      <Filter>Raytracing</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenCL\CLManager.cpp">
+      <Filter>OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenCL\CLRaytracer.cpp">
+      <Filter>OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenCL\CLScene.cpp">
+      <Filter>OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Utils\GLHelper.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\WindowRunner.cpp">
+      <Filter>Runners</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp">
+      <Filter>Runners\WindowRunnerStates</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Math\Color.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -251,9 +254,6 @@
     </ClInclude>
     <ClInclude Include="src\Utils\Log.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Math\Color.h">
-      <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Vector3.h">
       <Filter>Math</Filter>
@@ -274,9 +274,6 @@
       <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
-      <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Runners\InteractiveRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\Settings.h">
@@ -318,27 +315,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\MovingAverage.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CLRaytracing\CLRaytracer.h">
-      <Filter>CLRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CLRaytracing\CLScene.h">
-      <Filter>CLRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CLRaytracing\CLStructs.h">
-      <Filter>CLRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\CLRaytracing\CLManager.h">
-      <Filter>CLRaytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\GLHelper.h">
-      <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InteractiveStates\InteractiveState.h">
-      <Filter>InteractiveStates</Filter>
-    </ClInclude>
-    <ClInclude Include="src\InteractiveStates\RaytracingState.h">
-      <Filter>InteractiveStates</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
@@ -400,9 +376,6 @@
     <ClInclude Include="src\Raytracing\Primitives\Triangle.h">
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
-    <ClInclude Include="src\Math\ColorGradient.h">
-      <Filter>Math</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\StringUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -433,6 +406,39 @@
     <ClInclude Include="src\Raytracing\Primitives\Box.h">
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
+    <ClInclude Include="src\Utils\ColorGradient.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\AABB.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCL\CLManager.h">
+      <Filter>OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCL\CLRaytracer.h">
+      <Filter>OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCL\CLScene.h">
+      <Filter>OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCL\CLStructs.h">
+      <Filter>OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\GLHelper.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\WindowRunner.h">
+      <Filter>Runners</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h">
+      <Filter>Runners\WindowRunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\WindowRunnerStates\WindowRunnerState.h">
+      <Filter>Runners\WindowRunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Color.h">
+      <Filter>Math</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -458,11 +464,11 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\CLRaytracing\raytrace.cl">
-      <Filter>CLRaytracing</Filter>
+    <None Include="src\OpenCL\raytrace.cl">
+      <Filter>OpenCL</Filter>
     </None>
-    <None Include="src\CLRaytracing\structs.cl">
-      <Filter>CLRaytracing</Filter>
+    <None Include="src\OpenCL\structs.cl">
+      <Filter>OpenCL</Filter>
     </None>
   </ItemGroup>
 </Project>

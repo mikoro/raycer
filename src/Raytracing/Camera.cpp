@@ -17,7 +17,7 @@
 #include "Raytracing/Ray.h"
 #include "Math/MathUtils.h"
 #include "Math/Vector2.h"
-#include "Runners/InteractiveRunner.h"
+#include "Runners/WindowRunner.h"
 
 using namespace Raycer;
 
@@ -38,7 +38,7 @@ void Camera::setImagePlaneSize(int width, int height)
 
 void Camera::update(double timeStep)
 {
-	InteractiveRunner& runner = App::getInteractiveRunner();
+	WindowRunner& windowRunner = App::getWindowRunner();
 	Settings& settings = App::getSettings();
 
 	double velocityLength = velocity.length();
@@ -54,9 +54,9 @@ void Camera::update(double timeStep)
 	else
 		angularAcceleration = Vector3(0.0, 0.0, 0.0);
 
-	MouseInfo mouseInfo = runner.getMouseInfo();
+	MouseInfo mouseInfo = windowRunner.getMouseInfo();
 
-	if (runner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
+	if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
 	{
 		angularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
 		angularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
@@ -64,37 +64,37 @@ void Camera::update(double timeStep)
 
 	double moveSpeed = settings.camera.moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || runner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
 		moveSpeed *= settings.camera.slowModifier;
 
-	if (runner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || runner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
 		moveSpeed *= settings.camera.fastModifier;
 
-	if (runner.keyIsDown(GLFW_KEY_LEFT_ALT) || runner.keyIsDown(GLFW_KEY_RIGHT_ALT))
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_ALT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_ALT))
 		moveSpeed *= settings.camera.veryFastModifier;
 
-	if (runner.keyIsDown(GLFW_KEY_W) || runner.keyIsDown(GLFW_KEY_UP))
+	if (windowRunner.keyIsDown(GLFW_KEY_W) || windowRunner.keyIsDown(GLFW_KEY_UP))
 		acceleration += forward * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_S) || runner.keyIsDown(GLFW_KEY_DOWN))
+	if (windowRunner.keyIsDown(GLFW_KEY_S) || windowRunner.keyIsDown(GLFW_KEY_DOWN))
 		acceleration -= forward * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_A) || runner.keyIsDown(GLFW_KEY_LEFT))
+	if (windowRunner.keyIsDown(GLFW_KEY_A) || windowRunner.keyIsDown(GLFW_KEY_LEFT))
 		acceleration -= right * moveSpeed;
 	
-	if (runner.keyIsDown(GLFW_KEY_D) || runner.keyIsDown(GLFW_KEY_RIGHT))
+	if (windowRunner.keyIsDown(GLFW_KEY_D) || windowRunner.keyIsDown(GLFW_KEY_RIGHT))
 		acceleration += right * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_Q))
+	if (windowRunner.keyIsDown(GLFW_KEY_Q))
 		acceleration -= up * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_E))
+	if (windowRunner.keyIsDown(GLFW_KEY_E))
 		acceleration += up * moveSpeed;
 
-	if (runner.keyIsDown(GLFW_KEY_PAGE_DOWN))
+	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
 		fov -= 50.0 * timeStep;
 
-	if (runner.keyIsDown(GLFW_KEY_PAGE_UP))
+	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_UP))
 		fov += 50.0 * timeStep;
 
 	fov = std::max(1.0, std::min(fov, 180.0));

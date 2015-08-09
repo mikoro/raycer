@@ -14,12 +14,12 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "CLRaytracing/CLManager.h"
-#include "Runners/InteractiveRunner.h"
+#include "OpenCL/CLManager.h"
+#include "Runners/WindowRunner.h"
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
 #include "Raytracing/Raytracer.h"
-#include "CLRaytracing/CLRaytracer.h"
+#include "OpenCL/CLRaytracer.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -129,7 +129,7 @@ int App::run(int argc, char** argv)
 	try
 	{
 		Settings& settings = getSettings();
-		InteractiveRunner& interactiveRunner = getInteractiveRunner();
+		WindowRunner& windowRunner = getWindowRunner();
 		ConsoleRunner& consoleRunner = getConsoleRunner();
 		NetworkRunner& networkRunner = getNetworkRunner();
 
@@ -183,7 +183,7 @@ int App::run(int argc, char** argv)
 			settings.image.autoView = true;
 
 		if (settings.general.interactive)
-			return interactiveRunner.run();
+			return windowRunner.run();
 		else
 		{
 			if (settings.network.isClient || settings.network.isServer)
@@ -223,10 +223,10 @@ CLManager& App::getCLManager()
 	return clManager;
 }
 
-InteractiveRunner& App::getInteractiveRunner()
+WindowRunner& App::getWindowRunner()
 {
-	static InteractiveRunner interactiveRunner;
-	return interactiveRunner;
+	static WindowRunner windowRunner;
+	return windowRunner;
 }
 
 ConsoleRunner& App::getConsoleRunner()

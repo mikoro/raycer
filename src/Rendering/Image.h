@@ -49,7 +49,7 @@ namespace Raycer
 
 		Color getPixel(int x, int y) const;
 		Color getPixelNearest(double u, double v) const;
-		Color getPixelLinear(double u, double v) const;
+		Color getPixelBilinear(double u, double v) const;
 
 		int width = 0;
 		int height = 0;

@@ -3,7 +3,7 @@
 
 #include "catch/catch.hpp"
 
-#include "Math/ColorGradient.h"
+#include "Utils/ColorGradient.h"
 #include "Rendering/Image.h"
 #include "Math/Color.h"
 

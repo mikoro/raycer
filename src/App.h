@@ -9,7 +9,7 @@ namespace Raycer
 	class Settings;
 	class Framebuffer;
 	class CLManager;
-	class InteractiveRunner;
+	class WindowRunner;
 	class ConsoleRunner;
 	class NetworkRunner;
 	class Raytracer;
@@ -25,7 +25,7 @@ namespace Raycer
 		static Settings& getSettings();
 		static Framebuffer& getFramebuffer();
 		static CLManager& getCLManager();
-		static InteractiveRunner& getInteractiveRunner();
+		static WindowRunner& getWindowRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();
 		static Raytracer& getRaytracer();

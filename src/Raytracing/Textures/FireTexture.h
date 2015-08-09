@@ -5,7 +5,7 @@
 
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/PerlinNoise.h"
-#include "Math/ColorGradient.h"
+#include "Utils/ColorGradient.h"
 
 namespace Raycer
 {

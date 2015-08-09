@@ -14,7 +14,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Rendering/GLHelper.h"
+#include "Utils/GLHelper.h"
 #include "Math/Color.h"
 
 using namespace Raycer;

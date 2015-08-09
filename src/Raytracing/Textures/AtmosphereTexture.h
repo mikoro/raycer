@@ -6,7 +6,7 @@
 #include "Raytracing/Textures/Texture.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
-#include "Math/ColorGradient.h"
+#include "Utils/ColorGradient.h"
 #include "Math/EulerAngle.h"
 #include "Utils/PerlinNoise.h"
 
