@@ -270,11 +270,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (scene.lights.ambientLight.ambientOcclusion && isOutside)
 		ambientOcclusion = calculateAmbientOcclusion(scene, intersection);
 
-	Color lightColor;
-
-	if (isOutside)
-		lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusion);
-
+	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusion);
 	finalColor = (reflectionColor + refractionColor + lightColor) * textureColor;
 
 	if (scene.fog.enabled && isOutside)
