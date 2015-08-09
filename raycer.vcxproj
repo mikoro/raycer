@@ -200,6 +200,7 @@
     <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp" />
     <ClCompile Include="src\TestScenes\TestScene1.cpp" />
     <ClCompile Include="src\TestScenes\TestScene2.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene3.cpp" />
     <ClCompile Include="src\Tests\ColorGradientTest.cpp" />
     <ClCompile Include="src\Tests\EulerAngleTest.cpp" />
     <ClCompile Include="src\Tests\ImageTest.cpp" />

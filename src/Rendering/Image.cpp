@@ -141,6 +141,7 @@ void Image::load(const std::string& fileName)
 		}
 			
 		stbi_image_free(data);
+		applyGamma(2.2);
 	}
 }
 

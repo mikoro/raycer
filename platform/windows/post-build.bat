@@ -17,5 +17,5 @@ if not exist bin\%1\settings.ini (
 )
 
 if not exist bin\%1\data\opencl (
-  xcopy /E /I /Y /Q src\CLRaytracing\*.cl bin\%1\data\opencl
+  xcopy /E /I /Y /Q src\OpenCL\*.cl bin\%1\data\opencl
 )

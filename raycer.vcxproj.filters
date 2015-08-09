@@ -247,6 +247,9 @@
     <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene3.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
