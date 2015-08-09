@@ -6,6 +6,7 @@
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/AABB.h"
 #include "Math/Vector2.h"
 
 using namespace Raycer;
@@ -61,4 +62,10 @@ void Sphere::intersect(const Ray& ray, Intersection& intersection) const
 	v /= texcoordScale.y;
 	intersection.texcoord.x = u - floor(u);
 	intersection.texcoord.y = v - floor(v);
+}
+
+AABB Sphere::getAABB() const
+{
+	Vector3 extend = Vector3(radius, radius, radius);
+	return AABB(position - extend, position + extend);
 }

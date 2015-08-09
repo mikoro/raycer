@@ -7,6 +7,7 @@
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/AABB.h"
 #include "Math/Vector2.h"
 
 using namespace Raycer;
@@ -49,4 +50,10 @@ void Plane::intersect(const Ray& ray, Intersection& intersection) const
 	double v = vAxis.dot(ip) / texcoordScale.y;
 	intersection.texcoord.x = fabs(u - floor(u));
 	intersection.texcoord.y = fabs(v - floor(v));
+}
+
+AABB Plane::getAABB() const
+{
+	// TODO: create bounds for the plane aabb
+	return AABB(Vector3(-100.0, -100.0, -100.0), Vector3(100.0, 100.0, 100.0));
 }

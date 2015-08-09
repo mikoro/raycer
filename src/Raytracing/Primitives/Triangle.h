@@ -10,6 +10,8 @@
 namespace Raycer
 {
 	class Ray;
+	struct Intersection;
+	class AABB;
 
 	class Triangle : public Primitive
 	{
@@ -17,6 +19,7 @@ namespace Raycer
 
 		void initialize();
 		void intersect(const Ray& ray, Intersection& intersection) const;
+		AABB getAABB() const;
 
 		Vector3 vertices[3];
 		Vector3 normals[3];

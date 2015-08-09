@@ -9,6 +9,8 @@
 namespace Raycer
 {
 	class Ray;
+	struct Intersection;
+	class AABB;
 	
 	class Sphere : public Primitive
 	{
@@ -16,6 +18,7 @@ namespace Raycer
 
 		void initialize();
 		void intersect(const Ray& ray, Intersection& intersection) const;
+		AABB getAABB() const;
 
 		Vector3 position;
 		double radius = 1.0;

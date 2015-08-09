@@ -9,13 +9,16 @@
 namespace Raycer
 {
 	class Ray;
-	
+	struct Intersection;
+	class AABB;
+
 	class Plane : public Primitive
 	{
 	public:
 
 		void initialize();
 		void intersect(const Ray& ray, Intersection& intersection) const;
+		AABB getAABB() const;
 
 		Vector3 position;
 		Vector3 normal;

@@ -1,12 +1,14 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <algorithm>
 #include <cmath>
 #include <limits>
 
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/AABB.h"
 
 using namespace Raycer;
 
@@ -63,4 +65,19 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord;
+}
+
+AABB Triangle::getAABB() const
+{
+	Vector3 min;
+	min.x = std::min(vertices[0].x, std::min(vertices[1].x, vertices[2].x));
+	min.y = std::min(vertices[0].y, std::min(vertices[1].y, vertices[2].y));
+	min.z = std::min(vertices[0].z, std::min(vertices[1].z, vertices[2].z));
+
+	Vector3 max;
+	max.x = std::max(vertices[0].x, std::max(vertices[1].x, vertices[2].x));
+	max.y = std::max(vertices[0].y, std::max(vertices[1].y, vertices[2].y));
+	max.z = std::max(vertices[0].z, std::max(vertices[1].z, vertices[2].z));
+
+	return AABB(min, max);
 }

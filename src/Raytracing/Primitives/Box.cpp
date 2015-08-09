@@ -8,8 +8,19 @@
 #include "Raytracing/Primitives/Box.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/AABB.h"
 
 using namespace Raycer;
+
+Box::Box()
+{
+}
+
+Box::Box(const AABB& aabb)
+{
+	min = aabb.min;
+	max = aabb.max;
+}
 
 void Box::initialize()
 {
@@ -78,4 +89,9 @@ void Box::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.materialId = materialId;
 
 	// TODO: add texcoord mapping
+}
+
+AABB Box::getAABB() const
+{
+	return AABB(min, max);
 }
