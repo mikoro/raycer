@@ -9,12 +9,18 @@
 
 using namespace Raycer;
 
+AABB::AABB()
+{
+}
+
 AABB::AABB(const Vector3& min_, const Vector3& max_)
 {
 	min = min_;
 	max = max_;
 
 	assert(min < max);
+
+	center = (min + max) * 0.5;
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/

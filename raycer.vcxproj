@@ -172,6 +172,7 @@
     <ClCompile Include="src\Raytracing\AABB.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Box.cpp" />
+    <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Plane.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Sphere.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
@@ -246,6 +247,7 @@
     <ClInclude Include="src\Raytracing\Lights.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
     <ClInclude Include="src\Raytracing\Primitives\Box.h" />
+    <ClInclude Include="src\Raytracing\Primitives\Mesh.h" />
     <ClInclude Include="src\Raytracing\Primitives\Plane.h" />
     <ClInclude Include="src\Raytracing\Primitives\Primitive.h" />
     <ClInclude Include="src\Raytracing\Primitives\Sphere.h" />

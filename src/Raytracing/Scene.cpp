@@ -181,6 +181,17 @@ void Scene::initialize()
 	for (Box& box : primitives.boxes)
 		primitivesList.push_back(&box);
 
+	for (Triangle& triangle : primitives.triangles)
+		primitivesList.push_back(&triangle);
+
+	for (Mesh& mesh : primitives.meshes)
+	{
+		mesh.initialize();
+
+		for (Triangle& triangle : mesh.triangles)
+			primitivesList.push_back(&triangle);
+	}
+
 	for (Primitive* primitive : primitivesList)
 		primitive->initialize();
 

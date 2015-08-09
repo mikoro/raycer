@@ -13,6 +13,7 @@ namespace Raycer
 	{
 	public:
 
+		AABB();
 		AABB(const Vector3& min, const Vector3& max);
 
 		bool intersects(const Ray& ray) const;
@@ -20,5 +21,6 @@ namespace Raycer
 
 		Vector3 min;
 		Vector3 max;
+		Vector3 center;
 	};
 }

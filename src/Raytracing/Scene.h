@@ -24,6 +24,8 @@
 #include "Raytracing/Primitives/Plane.h"
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Primitives/Box.h"
+#include "Raytracing/Primitives/Triangle.h"
+#include "Raytracing/Primitives/Mesh.h"
 #include "Math/Color.h"
 
 namespace Raycer
@@ -111,6 +113,8 @@ namespace Raycer
 			std::vector<Plane> planes;
 			std::vector<Sphere> spheres;
 			std::vector<Box> boxes;
+			std::vector<Triangle> triangles;
+			std::vector<Mesh> meshes;
 		} primitives;
 		
 		std::vector<Texture*> texturesList;
