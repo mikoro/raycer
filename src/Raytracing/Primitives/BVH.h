@@ -14,6 +14,18 @@ namespace Raycer
 	class Ray;
 	struct Intersection;
 
+	enum class BHVAxisSelection { LARGEST, RANDOM };
+	enum class BHVAxisSplit { MIDDLE, MEDIAN, RANDOM };
+
+	struct BVHInfo
+	{
+		int maxLeafSize = 5;
+		BHVAxisSelection axisSelection = BHVAxisSelection::LARGEST;
+		BHVAxisSplit axisSplit = BHVAxisSplit::MIDDLE;
+		bool useSAH = false;
+		int randomSAHSplits = 5;
+	};
+
 	class BVH : public Primitive
 	{
 	public:
@@ -22,11 +34,15 @@ namespace Raycer
 		void intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
-		static void construct(const std::vector<Primitive*>& primitives, BVH* node, int maxLeafSize = 5);
+		static void construct(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info);
 
 	private:
 
-		static void constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, int maxLeafSize, std::mt19937& gen);
+		static void constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
+		static void calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
+		static void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
+		static double calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives);
+		static double calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives);
 
 		AABB aabb;
 

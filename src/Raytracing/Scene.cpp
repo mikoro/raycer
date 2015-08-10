@@ -208,5 +208,13 @@ void Scene::initialize()
 	}
 
 	camera.initialize();
-	BVH::construct(primitivesList, &rootBHV, tracer.maxLeafSize);
+
+	BVHInfo info;
+	info.maxLeafSize = 5;
+	info.axisSelection = BHVAxisSelection::LARGEST;
+	info.axisSplit = BHVAxisSplit::MEDIAN;
+	info.useSAH = true;
+	info.randomSAHSplits = 0;
+
+	BVH::construct(primitivesList, &rootBHV, info);
 }

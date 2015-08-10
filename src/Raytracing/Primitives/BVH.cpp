@@ -2,13 +2,17 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cassert>
 #include <cmath>
 #include <limits>
+#include <stdexcept>
 
 #include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/PrimitiveList.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "App.h"
+#include "Utils/Log.h"
 
 using namespace Raycer;
 
@@ -30,25 +34,31 @@ AABB BVH::getAABB() const
 	return aabb;
 }
 
-void BVH::construct(const std::vector<Primitive*>& primitives, BVH* node, int maxLeafSize)
+void BVH::construct(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info)
 {
+	Log& log = App::getLog();
+
+	log.logInfo("Constructing the BVH (primitives: %d)", primitives.size());
+
 	std::random_device rd;
 	std::mt19937 gen(rd());
 
-	constructRecursive(primitives, node, maxLeafSize, gen);
+	constructRecursive(primitives, node, info, gen);
+
+	log.logInfo("BVH construction finished (time: %.3f s)", 999.0);
 }
 
-void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, int maxLeafSize, std::mt19937& gen)
+void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen)
 {
 	for (Primitive* primitive : primitives)
 		node->aabb.expand(primitive->getAABB());
 
 	node->aabb.update();
 
-	std::uniform_int_distribution<int> dist(0, 2);
-	//int axis = node->aabb.getLargestAxis();
-	int axis = dist(gen);
-	double divisionPoint = node->aabb.center.element(axis);
+	int axis;
+	double divisionPoint;
+
+	calculateSplit(axis, divisionPoint, primitives, node, info, gen);
 
 	std::vector<Primitive*> leftPrimitives;
 	std::vector<Primitive*> rightPrimitives;
@@ -61,19 +71,154 @@ void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* nod
 			rightPrimitives.push_back(primitive);
 	}
 
-	if (leftPrimitives.size() > maxLeafSize)
+	if (leftPrimitives.size() > (size_t)info.maxLeafSize)
 	{
 		node->left = new BVH();
-		constructRecursive(leftPrimitives, (BVH*)node->left, maxLeafSize, gen);
+		constructRecursive(leftPrimitives, (BVH*)node->left, info, gen);
 	}
 	else
 		node->left = new PrimitiveList(leftPrimitives);
 
-	if (rightPrimitives.size() > maxLeafSize)
+	if (rightPrimitives.size() > (size_t)info.maxLeafSize)
 	{
 		node->right = new BVH();
-		constructRecursive(rightPrimitives, (BVH*)node->right, maxLeafSize, gen);
+		constructRecursive(rightPrimitives, (BVH*)node->right, info, gen);
 	}
 	else
 		node->right = new PrimitiveList(rightPrimitives);
+}
+
+void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen)
+{
+	if (info.useSAH)
+	{
+		calculateSAHSplit(axis, divisionPoint, primitives, node, info, gen);
+		return;
+	}
+
+	if (info.axisSelection == BHVAxisSelection::LARGEST)
+		axis = node->aabb.getLargestAxis();
+	else if (info.axisSelection == BHVAxisSelection::RANDOM)
+	{
+		std::uniform_int_distribution<int> dist(0, 2);
+		axis = dist(gen);
+	}
+	else
+		throw std::runtime_error("Unknown BVH axis selection");
+
+	if (info.axisSplit == BHVAxisSplit::MIDDLE)
+		divisionPoint = node->aabb.center.element(axis);
+	else if (info.axisSplit == BHVAxisSplit::MEDIAN)
+		divisionPoint = calculateMedianPoint(axis, primitives);
+	else if (info.axisSplit == BHVAxisSplit::RANDOM)
+	{
+		std::uniform_real_distribution<double> dist(node->aabb.min.element(axis), node->aabb.max.element(axis));
+		divisionPoint = dist(gen);
+	}
+	else
+		throw std::runtime_error("Unknown BVH axis split");
+}
+
+void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen)
+{
+	double lowestScore = std::numeric_limits<double>::max();
+
+	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
+	{
+		double tempDivisionPoint = node->aabb.center.element(tempAxis);
+		double score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives);
+
+		if (score < lowestScore)
+		{
+			axis = tempAxis;
+			divisionPoint = tempDivisionPoint;
+			lowestScore = score;
+		}
+
+		tempDivisionPoint = calculateMedianPoint(tempAxis, primitives);
+		score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives);
+
+		if (score < lowestScore)
+		{
+			axis = tempAxis;
+			divisionPoint = tempDivisionPoint;
+			lowestScore = score;
+		}
+
+		for (int i = 0; i < info.randomSAHSplits; ++i)
+		{
+			std::uniform_real_distribution<double> dist(node->aabb.min.element(tempAxis), node->aabb.max.element(tempAxis));
+			tempDivisionPoint = dist(gen);
+			score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives);
+
+			if (score < lowestScore)
+			{
+				axis = tempAxis;
+				divisionPoint = tempDivisionPoint;
+				lowestScore = score;
+			}
+		}
+	}
+}
+
+double BVH::calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives)
+{
+	assert(primitives.size() > 0);
+
+	AABB leftAABB, rightAABB;
+	int leftCount = 0;
+	int rightCount = 0;
+
+	for (Primitive* primitive : primitives)
+	{
+		AABB primitiveAABB = primitive->getAABB();
+
+		if (primitiveAABB.center.element(axis) <= divisionPoint)
+		{
+			leftAABB.expand(primitiveAABB);
+			leftCount++;
+		}
+		else
+		{
+			rightAABB.expand(primitiveAABB);
+			rightCount++;
+		}
+	}
+
+	double score = 0.0;
+
+	if (leftCount > 0)
+	{
+		leftAABB.update();
+		score += leftAABB.surfaceArea * (double)leftCount;
+	}
+
+	if (rightCount > 0)
+	{
+		rightAABB.update();
+		score += rightAABB.surfaceArea * (double)rightCount;
+	}
+
+	return score;
+}
+
+double BVH::calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives)
+{
+	assert(primitives.size() >= 2);
+
+	std::vector<double> centerPoints;
+
+	for (Primitive* primitive : primitives)
+		centerPoints.push_back(primitive->getAABB().center.element(axis));
+
+	std::sort(centerPoints.begin(), centerPoints.end());
+	int size = (int)centerPoints.size();
+	double median = 0.0;
+
+	if (size % 2 == 0)
+		median = (centerPoints[size / 2 - 1] + centerPoints[size / 2]) / 2.0;
+	else
+		median = centerPoints[size / 2];
+
+	return median;
 }
