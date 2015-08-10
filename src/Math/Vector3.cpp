@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cassert>
+#include <stdexcept>
 
 #include "tinyformat/tinyformat.h"
 
@@ -210,6 +211,17 @@ Vector3 Vector3::reflect(const Vector3& normal) const
 std::string Vector3::toString() const
 {
 	return tfm::format("(%.2f, %.2f, %.2f)", x, y, z);
+}
+
+double Vector3::element(int number) const
+{
+	switch (number)
+	{
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
+		default: throw std::runtime_error("Invalid vector element number");
+	}
 }
 
 Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, double t)

@@ -26,6 +26,7 @@
 #include "Raytracing/Primitives/Box.h"
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Primitives/Mesh.h"
+#include "Raytracing/Primitives/BVH.h"
 #include "Math/Color.h"
 
 namespace Raycer
@@ -50,18 +51,18 @@ namespace Raycer
 		std::string saveToXmlString() const;
 
 		void initialize();
-		void validate();
 
 		struct Tracer
 		{
-			int maxIterations = 0;
+			int maxIterations = 3;
 			double rayStartOffset = 0.000001;
+			int maxLeafSize = 5;
 		} tracer;
 
 		struct Multisampler
 		{
 			MultisampleType type = MultisampleType::NONE;
-			int multisamples = 4;
+			int multisamples = 3;
 		} multisampler;
 		
 		struct ToneMapper
@@ -116,10 +117,9 @@ namespace Raycer
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 		} primitives;
-		
-		std::vector<Texture*> texturesList;
+
 		std::map<int, Texture*> texturesMap;
 		std::map<int, Material*> materialsMap;
-		std::vector<Primitive*> primitivesList;
+		BVH rootBHV;
 	};
 }

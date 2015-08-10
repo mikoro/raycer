@@ -193,6 +193,16 @@ std::string Vector2::toString() const
 	return tfm::format("(%.2f, %.2f)", x, y);
 }
 
+double Vector2::element(int number) const
+{
+	switch (number)
+	{
+		case 0: return x;
+		case 1: return y;
+		default: throw std::runtime_error("Invalid vector element number");
+	}
+}
+
 Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, double t)
 {
 	assert(t >= 0.0 && t <= 1.0);

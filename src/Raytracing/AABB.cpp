@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
+#include <limits>
 
 #include "Raytracing/AABB.h"
 #include "Raytracing/Ray.h"
@@ -11,6 +12,8 @@ using namespace Raycer;
 
 AABB::AABB()
 {
+	min.x = min.y = min.z = std::numeric_limits<double>::max();
+	max.x = max.y = max.z = std::numeric_limits<double>::lowest();
 }
 
 AABB::AABB(const Vector3& min_, const Vector3& max_)
@@ -18,9 +21,7 @@ AABB::AABB(const Vector3& min_, const Vector3& max_)
 	min = min_;
 	max = max_;
 
-	assert(min < max);
-
-	center = (min + max) * 0.5;
+	update();
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
@@ -59,4 +60,28 @@ void AABB::expand(const AABB& other)
 	max.x = std::max(max.x, other.max.x);
 	max.y = std::max(max.y, other.max.y);
 	max.z = std::max(max.z, other.max.z);
+
+	// update should be called manually after
+}
+
+void AABB::update()
+{
+	//assert(min < max);
+
+	center = (min + max) * 0.5;
+	extent = max - min;
+	surfaceArea = 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
+}
+
+int AABB::getLargestAxis() const
+{
+	int largest = 0;
+
+	if (extent.y > extent.x)
+		largest = 1;
+
+	if (extent.z > extent.x && extent.z > extent.y)
+		largest = 2;
+
+	return largest;
 }

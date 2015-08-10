@@ -3,8 +3,9 @@
 
 #pragma once
 
+#include <vector>
+
 #include "Raytracing/Primitives/Primitive.h"
-#include "Math/Vector3.h"
 
 namespace Raycer
 {
@@ -12,20 +13,17 @@ namespace Raycer
 	struct Intersection;
 	class AABB;
 
-	class Box : public Primitive
+	class PrimitiveList : public Primitive
 	{
 	public:
 
-		Box();
-		Box(const AABB& aabb);
+		PrimitiveList();
+		PrimitiveList(const std::vector<Primitive*>& primitives);
 
 		void initialize();
 		void intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
-		static Box create(const Vector3& center, const Vector3& extent);
-
-		Vector3 min;
-		Vector3 max;
+		std::vector<Primitive*> primitives;
 	};
 }

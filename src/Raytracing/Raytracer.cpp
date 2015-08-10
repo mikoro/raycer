@@ -157,8 +157,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (interrupted)
 		return finalColor;
 
-	for (const Primitive* primitive : scene.primitivesList)
-		primitive->intersect(ray, intersection);
+	scene.rootBHV.intersect(ray, intersection);
 
 	if (!intersection.wasFound)
 		return finalColor;
@@ -305,8 +304,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 			Ray sampleRay(rayOrigin, rayDirection);
 			Intersection sampleIntersection;
 
-			for (const Primitive* primitive : scene.primitivesList)
-				primitive->intersect(sampleRay, sampleIntersection);
+			scene.rootBHV.intersect(sampleRay, sampleIntersection);
 
 			if (sampleIntersection.wasFound)
 				ambientOcclusion += (1.0 - std::min(sampleIntersection.distance / distance, 1.0));
@@ -446,13 +444,7 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 	Ray shadowRay(rayOrigin, rayDirection);
 	Intersection shadowIntersection;
 
-	for (const Primitive* primitive : scene.primitivesList)
-	{
-		if (scene.materialsMap.at(primitive->materialId)->nonShadowing)
-			continue;
-
-		primitive->intersect(shadowRay, shadowIntersection);
-	}
+	scene.rootBHV.intersect(shadowRay, shadowIntersection);
 
 	return shadowIntersection.wasFound && shadowIntersection.distance < distanceToLight;
 }

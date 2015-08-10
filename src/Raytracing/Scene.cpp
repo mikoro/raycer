@@ -125,10 +125,8 @@ std::string Scene::saveToXmlString() const
 
 void Scene::initialize()
 {
-	texturesList.clear();
-	texturesMap.clear();
-	materialsMap.clear();
-	primitivesList.clear();
+	std::vector<Texture*> texturesList;
+	std::vector<Primitive*> primitivesList;
 
 	for (ColorTexture& texture : textures.colorTextures)
 		texturesList.push_back(&texture);
@@ -195,12 +193,7 @@ void Scene::initialize()
 	for (Primitive* primitive : primitivesList)
 		primitive->initialize();
 
-	camera.initialize();
-	validate();
-}
-
-void Scene::validate()
-{
+	// validation
 	for (Primitive* primitive : primitivesList)
 	{
 		if (materialsMap.count(primitive->materialId))
@@ -213,4 +206,7 @@ void Scene::validate()
 		else
 			throw std::runtime_error("A primitive has an invalid material id");
 	}
+
+	camera.initialize();
+	BVH::construct(primitivesList, &rootBHV, tracer.maxLeafSize);
 }

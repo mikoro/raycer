@@ -11,6 +11,8 @@ Scene TestScene::createTestScene2()
 {
 	Scene scene;
 
+	scene.tracer.maxLeafSize = 5;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 5.0, 7.0);
@@ -52,6 +54,7 @@ Scene TestScene::createTestScene2()
 	mesh1.meshFilePath = "data/meshes/monkey2.obj";
 	mesh1.position = Vector3(0.0, 2.0, 0.0);
 	mesh1.scale = Vector3(2.0, 2.0, 2.0);
+	mesh1.orientation = EulerAngle(20.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);

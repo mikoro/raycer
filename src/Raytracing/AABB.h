@@ -18,9 +18,14 @@ namespace Raycer
 
 		bool intersects(const Ray& ray) const;
 		void expand(const AABB& other);
+		void update();
+		int getLargestAxis() const;
 
 		Vector3 min;
 		Vector3 max;
 		Vector3 center;
+		Vector3 extent;
+
+		double surfaceArea = 0.0;
 	};
 }

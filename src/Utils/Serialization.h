@@ -195,7 +195,8 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Tracer& b)
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("rayStartOffset", b.rayStartOffset));
+			cereal::make_nvp("rayStartOffset", b.rayStartOffset),
+			cereal::make_nvp("maxLeafSize", b.maxLeafSize));
 	}
 
 	template<class Archive>
