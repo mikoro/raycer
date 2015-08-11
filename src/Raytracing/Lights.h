@@ -13,7 +13,7 @@ namespace Raycer
 	struct Light
 	{
 		Color color = Color::WHITE;
-		double intensity = 1.0;
+		double intensity = 0.0;
 	};
 
 	struct AmbientLight : public Light
@@ -21,7 +21,6 @@ namespace Raycer
 		bool ambientOcclusion = false;
 		int samples = 10;
 		double distribution = 1.0;
-		double distance = 1.0;
 	};
 
 	struct DirectionalLight : public Light

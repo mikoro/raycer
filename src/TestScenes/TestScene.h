@@ -14,5 +14,6 @@ namespace Raycer
 		static Scene createTestScene1();
 		static Scene createTestScene2();
 		static Scene createTestScene3();
+		static Scene createTestScene4();
 	};
 }

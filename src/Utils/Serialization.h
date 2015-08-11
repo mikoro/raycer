@@ -121,8 +121,7 @@ namespace Raycer
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
 			cereal::make_nvp("samples", b.samples),
-			cereal::make_nvp("distribution", b.distribution),
-			cereal::make_nvp("distance", b.distance));
+			cereal::make_nvp("distribution", b.distribution));
 	}
 
 	template<class Archive>
@@ -198,8 +197,7 @@ namespace Raycer
 	void serialize(Archive& a, Scene::Tracer& b)
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("rayStartOffset", b.rayStartOffset),
-			cereal::make_nvp("maxLeafSize", b.maxLeafSize));
+			cereal::make_nvp("rayStartOffset", b.rayStartOffset));
 	}
 
 	template<class Archive>

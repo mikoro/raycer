@@ -295,7 +295,6 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 	int permutation = intDist(gen);
 	int n = scene.lights.ambientLight.samples;
 	double distribution = scene.lights.ambientLight.distribution;
-	double distance = scene.lights.ambientLight.distance;
 
 	for (int y = 0; y < n; ++y)
 	{
@@ -313,7 +312,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 				primitive->intersect(sampleRay, sampleIntersection);
 
 			if (sampleIntersection.wasFound)
-				ambientOcclusion += (1.0 - std::min(sampleIntersection.distance / distance, 1.0));
+				ambientOcclusion += 1.0;
 		}
 	}
 

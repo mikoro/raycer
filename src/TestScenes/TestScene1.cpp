@@ -6,7 +6,7 @@
 
 using namespace Raycer;
 
-// simple triangle, sphere and box on a plane
+// simple triangle, sphere and box on a plane with one point light
 Scene TestScene::createTestScene1()
 {
 	Scene scene;

@@ -6,17 +6,15 @@
 
 using namespace Raycer;
 
-// monkey mesh on a plane
+// monkey mesh on a plane with two colored point lights
 Scene TestScene::createTestScene2()
 {
 	Scene scene;
 
-	scene.tracer.maxLeafSize = 5;
-
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 7.0);
-	scene.camera.orientation = EulerAngle(0.0, -30.0, 0.0);
+	scene.camera.position = Vector3(0.0, 5.0, 8.0);
+	scene.camera.orientation = EulerAngle(0.0, -26.0, 0.0);
 
 	// GROUND //
 
@@ -51,10 +49,10 @@ Scene TestScene::createTestScene2()
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey2.obj";
-	mesh1.position = Vector3(0.0, 2.0, 0.0);
+	mesh1.meshFilePath = "data/meshes/monkey1.obj";
+	mesh1.position = Vector3(0.01, 2.0, 0.0);
 	mesh1.scale = Vector3(2.0, 2.0, 2.0);
-	mesh1.orientation = EulerAngle(20.0, 0.0, 0.0);
+	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);
@@ -66,13 +64,21 @@ Scene TestScene::createTestScene2()
 	scene.lights.ambientLight.intensity = 0.1;
 
 	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
+	pointLight1.color = Color(1.0, 0.25, 0.25);
 	pointLight1.intensity = 1.5;
 	pointLight1.position = Vector3(5.0, 5.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 
+	PointLight pointLight2;
+	pointLight2.color = Color(0.25, 0.25, 1.0);
+	pointLight2.intensity = 1.5;
+	pointLight2.position = Vector3(-5.0, 5.0, 5.0);
+	pointLight2.distance = 20.0;
+	pointLight2.attenuation = 1.0;
+
 	scene.lights.pointLights.push_back(pointLight1);
+	scene.lights.pointLights.push_back(pointLight2);
 
 	return scene;
 }

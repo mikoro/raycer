@@ -45,7 +45,7 @@ int ConsoleRunner::run()
 
 	Scene scene;
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = TestScene::createTestScene1();
+	scene = TestScene::createTestScene3();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();
@@ -101,7 +101,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		clRaytracer.resizePixelBuffer(state.sceneWidth, state.sceneHeight);
 	}
 	
-	std::atomic<bool> finished;
+	std::atomic<bool> finished = false;
 
 	auto renderFunction = [&]()
 	{

@@ -20,6 +20,6 @@ namespace Raycer
 		int pixelOffset = 0;
 		int pixelCount = 0;
 
-		std::atomic<int> pixelsProcessed;
+		std::atomic<int> pixelsProcessed = 0;
 	};
 }

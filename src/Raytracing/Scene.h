@@ -56,7 +56,6 @@ namespace Raycer
 		{
 			int maxIterations = 3;
 			double rayStartOffset = 0.000001;
-			int maxLeafSize = 5;
 		} tracer;
 
 		struct Multisampler
