@@ -1,4 +1,5 @@
 tracer
+ - add jittering to depth of field
  - marching + heightfield
  - triangle intersection glitch (watertight?)
 

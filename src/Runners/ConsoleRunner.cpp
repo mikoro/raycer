@@ -45,10 +45,23 @@ int ConsoleRunner::run()
 
 	Scene scene;
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = TestScene::createTestScene3();
+	scene = TestScene::createTestScene5();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();
+
+	BVHInfo bvhInfo;
+	bvhInfo.maxLeafSize = 5;
+	bvhInfo.axisSelection = BVHAxisSelection::LARGEST;
+	bvhInfo.axisSplit = BVHAxisSplit::MEDIAN;
+	bvhInfo.useSAH = true;
+	bvhInfo.regularSAHSplits = 0;
+
+	BVH root;
+	BVH::construct(scene.primitives.all, &root, bvhInfo);
+
+	scene.primitives.all.clear();
+	scene.primitives.all.push_back(&root);
 
 	RaytracerState state;
 	state.image = &image;

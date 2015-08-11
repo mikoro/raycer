@@ -256,9 +256,9 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("planes", b.planes),
 			cereal::make_nvp("spheres", b.spheres),
-			cereal::make_nvp("spheres", b.boxes),
-			cereal::make_nvp("spheres", b.triangles),
-			cereal::make_nvp("spheres", b.meshes));
+			cereal::make_nvp("boxes", b.boxes),
+			cereal::make_nvp("triangles", b.triangles),
+			cereal::make_nvp("meshes", b.meshes));
 	}
 
 	/* PRIMITIVES */
