@@ -55,16 +55,19 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 		return;
 
 	double w = 1.0 - u - v;
-
-	// order has been swapped uvw -> wuv
 	Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
+
+	// triangle doesn't face the ray after interpolation
+	if (ray.direction.dot(interpolatedNormal) > 0.0)
+		return;
+
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
 
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
-	intersection.texcoord = interpolatedTexcoord;
+	intersection.texcoord = interpolatedTexcoord / texcoordScale;
 	intersection.materialId = materialId;
 }
 
