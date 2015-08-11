@@ -23,7 +23,7 @@ namespace Raycer
 		BHVAxisSelection axisSelection = BHVAxisSelection::LARGEST;
 		BHVAxisSplit axisSplit = BHVAxisSplit::MIDDLE;
 		bool useSAH = false;
-		int randomSAHSplits = 5;
+		int regularSAHSplits = 5;
 	};
 
 	class BVH : public Primitive
@@ -40,7 +40,7 @@ namespace Raycer
 
 		static void constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount);
 		static void calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
-		static void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
+		static void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info);
 		static double calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives);
 		static double calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives);
 

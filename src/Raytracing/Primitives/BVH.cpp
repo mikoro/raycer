@@ -117,7 +117,7 @@ void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Pri
 {
 	if (info.useSAH)
 	{
-		calculateSAHSplit(axis, divisionPoint, primitives, node, info, gen);
+		calculateSAHSplit(axis, divisionPoint, primitives, node, info);
 		return;
 	}
 
@@ -144,7 +144,7 @@ void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Pri
 		throw std::runtime_error("Unknown BVH axis split");
 }
 
-void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen)
+void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info)
 {
 	double lowestScore = std::numeric_limits<double>::max();
 
@@ -170,17 +170,22 @@ void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<
 			lowestScore = score;
 		}
 
-		for (int i = 0; i < info.randomSAHSplits; ++i)
+		if (info.regularSAHSplits > 0)
 		{
-			std::uniform_real_distribution<double> dist(node->aabb.min.element(tempAxis), node->aabb.max.element(tempAxis));
-			tempDivisionPoint = dist(gen);
-			score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives);
+			double step = node->aabb.extent.element(tempAxis) / (double)info.regularSAHSplits;
+			tempDivisionPoint = node->aabb.min.element(tempAxis);
 
-			if (score < lowestScore)
+			for (int i = 0; i < info.regularSAHSplits - 1; ++i)
 			{
-				axis = tempAxis;
-				divisionPoint = tempDivisionPoint;
-				lowestScore = score;
+				tempDivisionPoint += step;
+				score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives);
+
+				if (score < lowestScore)
+				{
+					axis = tempAxis;
+					divisionPoint = tempDivisionPoint;
+					lowestScore = score;
+				}
 			}
 		}
 	}
