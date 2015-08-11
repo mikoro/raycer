@@ -33,7 +33,7 @@ void DefaultState::initialize()
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	//scene.loadFromFile(settings.scene.fileName);
-	scene = TestScene::createTestScene4();
+	scene = TestScene::createTestScene2();
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getImageWidth(), framebuffer.getImageHeight());
 
