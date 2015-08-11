@@ -1,16 +1,21 @@
 tracer
- - marching
+ - marching + heightfield
+ - triangle intersection glitch (watertight?)
 
 lighting
  - bump mapping
+ - area lights
+ - soft shadows
  - global illumination
 
 primitives
- - bvh
  - torus
  - metaball
+ - instancing
  - constructive solid geometry
- - Elliptical Weighted Average texture filtering
 
 rendering
  - reinhard tonemap
+
+textures
+ - Elliptical Weighted Average texture filtering
