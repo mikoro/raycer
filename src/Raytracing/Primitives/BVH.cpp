@@ -40,16 +40,23 @@ void BVH::construct(const std::vector<Primitive*>& primitives, BVH* node, const 
 
 	log.logInfo("Constructing the BVH (primitives: %d)", primitives.size());
 
+	auto startTime = std::chrono::high_resolution_clock::now();
 	std::random_device rd;
 	std::mt19937 gen(rd());
+	int nodeCount = 0;
 
-	constructRecursive(primitives, node, info, gen);
+	constructRecursive(primitives, node, info, gen, nodeCount, 0, 0, 0);
 
-	log.logInfo("BVH construction finished (time: %.3f s)", 999.0);
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+
+	log.logInfo("BVH construction finished (time: %d ms, nodes: %d)", milliseconds, nodeCount);
 }
 
-void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen)
+void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount)
 {
+	nodeCount++;
+
 	for (Primitive* primitive : primitives)
 		node->aabb.expand(primitive->getAABB());
 
@@ -71,18 +78,36 @@ void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* nod
 			rightPrimitives.push_back(primitive);
 	}
 
-	if (leftPrimitives.size() > (size_t)info.maxLeafSize)
+	int leftSize = (int)leftPrimitives.size();
+	int rightSize = (int)rightPrimitives.size();
+	bool shouldTerminate = false;
+
+	if (leftSize == previousLeftSize && rightSize == previousRightSize)
+	{
+		if (++sameSizeCount >= 5)
+			shouldTerminate = true;
+	}
+	else
+		sameSizeCount = 0;
+
+	previousLeftSize = leftSize;
+	previousRightSize = rightSize;
+
+	if (shouldTerminate)
+		App::getLog().logWarning("One BVH node got stuck and was terminated early");
+
+	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
 		node->left = new BVH();
-		constructRecursive(leftPrimitives, (BVH*)node->left, info, gen);
+		constructRecursive(leftPrimitives, (BVH*)node->left, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
 	}
 	else
 		node->left = new PrimitiveList(leftPrimitives);
 
-	if (rightPrimitives.size() > (size_t)info.maxLeafSize)
+	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
 		node->right = new BVH();
-		constructRecursive(rightPrimitives, (BVH*)node->right, info, gen);
+		constructRecursive(rightPrimitives, (BVH*)node->right, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
 	}
 	else
 		node->right = new PrimitiveList(rightPrimitives);
