@@ -96,13 +96,17 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	Ray primaryRay = scene.camera.getRay(sampledPixelCoordinate);
+	bool shouldSkip = false;
+	Ray primaryRay = scene.camera.getRay(sampledPixelCoordinate, shouldSkip);
 	Intersection primaryIntersection;
+	Color sampledPixelColor;
+
+	if (shouldSkip)
+		return sampledPixelColor;
 
 	if (!scene.camera.depthOfField)
 		return raytrace(scene, primaryRay, primaryIntersection, 0, interrupted);
 
-	Color sampledPixelColor;
 	int permutation = intDist(gen);
 	int n = scene.camera.samples;
 	double apertureSize = scene.camera.apertureSize;

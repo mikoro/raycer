@@ -48,7 +48,7 @@ void Camera::update(double timeStep)
 		acceleration = settings.camera.moveDrag * (-velocity.normalized() * velocityLength);
 	else
 		acceleration = Vector3(0.0, 0.0, 0.0);
-	
+
 	if (angularVelocityLength > 0.0)
 		angularAcceleration = settings.camera.mouseDrag * (-angularVelocity.normalized() * angularVelocityLength);
 	else
@@ -81,7 +81,7 @@ void Camera::update(double timeStep)
 
 	if (windowRunner.keyIsDown(GLFW_KEY_A) || windowRunner.keyIsDown(GLFW_KEY_LEFT))
 		acceleration -= right * moveSpeed;
-	
+
 	if (windowRunner.keyIsDown(GLFW_KEY_D) || windowRunner.keyIsDown(GLFW_KEY_RIGHT))
 		acceleration += right * moveSpeed;
 
@@ -91,13 +91,39 @@ void Camera::update(double timeStep)
 	if (windowRunner.keyIsDown(GLFW_KEY_E))
 		acceleration += up * moveSpeed;
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_HOME))
+	{
+		if (projectionType == CameraProjectionType::PERSPECTIVE)
+			projectionType = CameraProjectionType::ORTHOGRAPHIC;
+		else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
+			projectionType = CameraProjectionType::FISHEYE;
+		else if (projectionType == CameraProjectionType::FISHEYE)
+			projectionType = CameraProjectionType::PERSPECTIVE;
+	}
+
 	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
-		fov -= 50.0 * timeStep;
+	{
+		if (projectionType == CameraProjectionType::PERSPECTIVE)
+			fov -= 50.0 * timeStep;
+		else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
+			orthoSize -= 10.0 * timeStep;
+		else if (projectionType == CameraProjectionType::FISHEYE)
+			fishEyeAngle -= 50.0 * timeStep;
+	}
 
 	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_UP))
-		fov += 50.0 * timeStep;
+	{
+		if (projectionType == CameraProjectionType::PERSPECTIVE)
+			fov += 50.0 * timeStep;
+		else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
+			orthoSize += 10.0 * timeStep;
+		else if (projectionType == CameraProjectionType::FISHEYE)
+			fishEyeAngle += 50.0 * timeStep;
+	}
 
 	fov = std::max(1.0, std::min(fov, 180.0));
+	orthoSize = std::max(0.0, orthoSize);
+	fishEyeAngle = std::max(1.0, std::min(fishEyeAngle, 360.0));
 
 	velocity += acceleration * timeStep;
 	position += velocity * timeStep;
@@ -120,15 +146,65 @@ void Camera::precalculate()
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
-Ray Camera::getRay(const Vector2& pixel) const
+Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
 {
-	double dx = (pixel.x / imagePlaneWidth) - 0.5;
-	double dy = (pixel.y / imagePlaneHeight) - 0.5;
+	Vector3 rayOrigin, rayDirection;
 
-	Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
+	switch (projectionType)
+	{
+		case Raycer::CameraProjectionType::PERSPECTIVE:
+		{
+			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
+			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
 
-	Vector3 rayOrigin = position;
-	Vector3 rayDirection = (imagePlanePixelPosition - position).normalized();
+			Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
+
+			rayOrigin = position;
+			rayDirection = (imagePlanePixelPosition - position).normalized();
+
+		} break;
+
+		case Raycer::CameraProjectionType::ORTHOGRAPHIC:
+		{
+			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
+			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
+
+			rayOrigin = position + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
+			rayDirection = forward;
+
+		} break;
+
+		// http://paulbourke.net/dome/fisheye/
+		case Raycer::CameraProjectionType::FISHEYE:
+		{
+			double dx = (pixelCoordinate.x / imagePlaneWidth) * 2.0 - 1.0;
+			double dy = (pixelCoordinate.y / imagePlaneHeight) * 2.0 - 1.0;
+
+			dx /= std::min(1.0, aspectRatio);
+			dy *= std::max(1.0, aspectRatio);
+
+			double r = sqrt(dx * dx + dy * dy);
+
+			if (r > 1.0)
+			{
+				shouldSkip = true;
+				break;
+			}
+
+			double phi = atan2(dy, dx);
+			double theta = r * (MathUtils::degToRad(fishEyeAngle) / 2.0);
+
+			double u = sin(theta) * cos(phi);
+			double v = sin(theta) * sin(phi);
+			double w = cos(theta);
+
+			rayOrigin = position;
+			rayDirection = u * right + v * up + w * forward;
+
+		} break;
+
+		default: break;
+	}
 
 	return Ray(rayOrigin, rayDirection);
 }

@@ -17,6 +17,7 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 
 	scenes.push_back(TestScene::createTestScene1());
 	scenes.push_back(TestScene::createTestScene2());
+	scenes.push_back(TestScene::createTestScene3());
 
 	int sceneCount = 0;
 

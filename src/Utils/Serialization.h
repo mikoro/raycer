@@ -102,7 +102,10 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("orientation", b.orientation),
+			cereal::make_nvp("projectionType", b.projectionType),
 			cereal::make_nvp("fov", b.fov),
+			cereal::make_nvp("orthoSize", b.orthoSize),
+			cereal::make_nvp("fishEyeAngle", b.fishEyeAngle),
 			cereal::make_nvp("depthOfField", b.depthOfField),
 			cereal::make_nvp("samples", b.samples),
 			cereal::make_nvp("apertureSize", b.apertureSize),
