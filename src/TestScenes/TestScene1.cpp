@@ -91,7 +91,6 @@ Scene TestScene::createTestScene1()
 	triangle1.vertices[1] = Vector3(-2.0, 0.0, 0.0);
 	triangle1.vertices[2] = Vector3(-3.0, 2.0, 0.0);
 	triangle1.normals[0] = triangle1.normals[1] = triangle1.normals[2] = Vector3::FORWARD;
-	triangle1.normal = Vector3::FORWARD;
 
 	scene.textures.colorTextures.push_back(triangle1Texture);
 	scene.materials.push_back(triangle1Material);

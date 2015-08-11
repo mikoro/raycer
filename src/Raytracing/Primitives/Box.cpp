@@ -85,7 +85,7 @@ void Box::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.position = ray.origin + (t * ray.direction);
-	intersection.normal = isInside ? -maxNormal : -minNormal;
+	intersection.normal = isInside ? maxNormal : -minNormal;
 	intersection.materialId = materialId;
 
 	// TODO: add texcoord mapping

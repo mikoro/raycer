@@ -42,7 +42,7 @@ void Plane::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.position = ip;
-	intersection.normal = (denominator < 0.0) ? normal : -normal;
+	intersection.normal = normal;
 	intersection.materialId = materialId;
 
 	// texture coordinate calculation

@@ -296,7 +296,6 @@ namespace Raycer
 		a(cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
 			cereal::make_nvp("texcoords", b.texcoords),
-			cereal::make_nvp("normal", b.normal),
 			cereal::make_nvp("materialId", b.materialId),
 			cereal::make_nvp("texcoordScale", b.texcoordScale));
 	}

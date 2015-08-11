@@ -182,16 +182,15 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		return finalColor;
 	}
 
-	Vector3 D = ray.direction;
-	Vector3 N = intersection.normal;
-	Vector3 P = intersection.position;
-
-	double c1 = -(D.dot(N));
+	double c1 = -(ray.direction.dot(intersection.normal));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double rf = 1.0;
 	double tf = 1.0;
+
+	if (!isOutside)
+		intersection.normal = -intersection.normal;
 
 	if (material->fresnel)
 	{
@@ -201,14 +200,15 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		tf = 1.0 - rf;
 	}
 
-	if (!isOutside)
-		N = -N;
-
 	double transmittance = material->transmittance * tf;
 	double reflectance = material->reflectance * rf;
 
 	Color refractionColor;
 	Color reflectionColor;
+
+	Vector3 D = ray.direction;
+	Vector3 N = intersection.normal;
+	Vector3 P = intersection.position;
 
 	// calculate and trace refracted ray
 	if (transmittance > 0.0 && iteration < scene.tracer.maxIterations)

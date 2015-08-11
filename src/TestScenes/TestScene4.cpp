@@ -108,7 +108,7 @@ Scene TestScene::createTestScene4()
 	box1Material.transmittance = 1.0;
 	box1Material.refractiveIndex = 1.5;
 	box1Material.fresnel = true;
-	box1Material.attenuate = true;
+	box1Material.attenuate = false;
 	box1Material.attenuation = 0.01;
 	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 

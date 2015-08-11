@@ -457,8 +457,6 @@ namespace
 				Vector3 v0tov2 = triangle.vertices[2] - triangle.vertices[0];
 				Vector3 normal = v0tov1.cross(v0tov2).normalized();
 
-				triangle.normal = normal;
-
 				if (header.hasNormals)
 				{
 					triangle.normals[0] = normals[face[0]];
