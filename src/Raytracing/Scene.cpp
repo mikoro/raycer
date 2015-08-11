@@ -126,7 +126,6 @@ std::string Scene::saveToXmlString() const
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
-	std::vector<Primitive*> primitivesList;
 
 	for (ColorTexture& texture : textures.colorTextures)
 		texturesList.push_back(&texture);
@@ -171,30 +170,30 @@ void Scene::initialize()
 		materialsMap[material.id] = &material;
 
 	for (Plane& plane : primitives.planes)
-		primitivesList.push_back(&plane);
+		primitives.all.push_back(&plane);
 
 	for (Sphere& sphere : primitives.spheres)
-		primitivesList.push_back(&sphere);
+		primitives.all.push_back(&sphere);
 
 	for (Box& box : primitives.boxes)
-		primitivesList.push_back(&box);
+		primitives.all.push_back(&box);
 
 	for (Triangle& triangle : primitives.triangles)
-		primitivesList.push_back(&triangle);
+		primitives.all.push_back(&triangle);
 
 	for (Mesh& mesh : primitives.meshes)
 	{
 		mesh.initialize();
 
 		for (Triangle& triangle : mesh.triangles)
-			primitivesList.push_back(&triangle);
+			primitives.all.push_back(&triangle);
 	}
 
-	for (Primitive* primitive : primitivesList)
+	for (Primitive* primitive : primitives.all)
 		primitive->initialize();
 
 	// validation
-	for (Primitive* primitive : primitivesList)
+	for (Primitive* primitive : primitives.all)
 	{
 		if (materialsMap.count(primitive->materialId))
 		{
@@ -208,13 +207,4 @@ void Scene::initialize()
 	}
 
 	camera.initialize();
-
-	BVHInfo info;
-	info.maxLeafSize = 5;
-	info.axisSelection = BHVAxisSelection::LARGEST;
-	info.axisSplit = BHVAxisSplit::MEDIAN;
-	info.useSAH = true;
-	info.regularSAHSplits = 0;
-
-	BVH::construct(primitivesList, &rootBHV, info);
 }

@@ -116,10 +116,11 @@ namespace Raycer
 			std::vector<Box> boxes;
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
+			std::vector<BVH> bvhs;
+			std::vector<Primitive*> all;
 		} primitives;
 
 		std::map<int, Texture*> texturesMap;
 		std::map<int, Material*> materialsMap;
-		BVH rootBHV;
 	};
 }

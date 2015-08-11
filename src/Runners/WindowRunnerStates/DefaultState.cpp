@@ -39,6 +39,18 @@ void DefaultState::initialize()
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();
+
+	BVHInfo bvhInfo;
+	bvhInfo.maxLeafSize = 5;
+	bvhInfo.axisSelection = BVHAxisSelection::LARGEST;
+	bvhInfo.axisSplit = BVHAxisSplit::MEDIAN;
+	bvhInfo.useSAH = true;
+	bvhInfo.regularSAHSplits = 0;
+
+	BVH::construct(scene.primitives.all, &root, bvhInfo);
+
+	scene.primitives.all.clear();
+	scene.primitives.all.push_back(&root);
 }
 
 void DefaultState::pause()
