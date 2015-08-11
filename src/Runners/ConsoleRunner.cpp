@@ -101,7 +101,8 @@ void ConsoleRunner::run(RaytracerState& state)
 		clRaytracer.resizePixelBuffer(state.sceneWidth, state.sceneHeight);
 	}
 	
-	std::atomic<bool> finished = false;
+	std::atomic<bool> finished;
+	finished = false;
 
 	auto renderFunction = [&]()
 	{

@@ -12,6 +12,9 @@ namespace Raycer
 
 	struct RaytracerState
 	{
+		RaytracerState() : pixelsProcessed(0)
+		{};
+
 		Image* image = nullptr;
 		Scene* scene = nullptr;
 
@@ -20,6 +23,6 @@ namespace Raycer
 		int pixelOffset = 0;
 		int pixelCount = 0;
 
-		std::atomic<int> pixelsProcessed = 0;
+		std::atomic<int> pixelsProcessed;
 	};
 }
