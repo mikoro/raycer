@@ -162,7 +162,7 @@ d = distance traveled inside
 
 Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)
 {
-	Color finalColor;
+	Color finalColor = scene.misc.backgroundColor;
 
 	if (interrupted)
 		return finalColor;

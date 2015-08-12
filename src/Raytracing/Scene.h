@@ -54,6 +54,28 @@ namespace Raycer
 
 		Camera camera;
 
+		struct Misc
+		{
+			Color backgroundColor = Color::BLACK;
+		} misc;
+
+		struct Fog
+		{
+			bool enabled = false;
+			Color color = Color::WHITE;
+			double distance = 100.0;
+			double steepness = 1.0;
+			bool heightDispersion = false;
+			double height = 100.0;
+			double heightSteepness = 1.0;
+		} fog;
+
+		struct Raytracing
+		{
+			int maxIterations = 3;
+			double startOffset = 0.000001;
+		} raytracing;
+
 		struct Multisampling
 		{
 			bool enabled = false;
@@ -68,12 +90,6 @@ namespace Raycer
 			double gamma = 1.0 / 2.2;
 		} toneMapping;
 
-		struct Raytracing
-		{
-			int maxIterations = 3;
-			double startOffset = 0.000001;
-		} raytracing;
-
 		struct RootBVH
 		{
 			bool enabled = true;
@@ -84,17 +100,6 @@ namespace Raycer
 			int regularSAHSplits = 0;
 		} rootBVH;
 
-		struct Fog
-		{
-			bool enabled = false;
-			Color color;
-			double distance = 0.0;
-			double steepness = 1.0;
-			bool heightDispersion = false;
-			double height = 0.0;
-			double heightSteepness = 1.0;
-		} fog;
-		
 		struct Textures
 		{
 			std::vector<ColorTexture> colorTextures;

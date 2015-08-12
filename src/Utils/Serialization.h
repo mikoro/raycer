@@ -183,11 +183,12 @@ namespace Raycer
 	void serialize(Archive& a, Scene& b)
 	{
 		a(cereal::make_nvp("camera", b.camera),
+			cereal::make_nvp("misc", b.misc),
+			cereal::make_nvp("fog", b.fog),
+			cereal::make_nvp("raytracing", b.raytracing),
 			cereal::make_nvp("multisampling", b.multisampling),
 			cereal::make_nvp("toneMapping", b.toneMapping),
-			cereal::make_nvp("raytracing", b.raytracing),
 			cereal::make_nvp("rootBVH", b.rootBVH),
-			cereal::make_nvp("fog", b.fog),
 			cereal::make_nvp("textures", b.textures),
 			cereal::make_nvp("materials", b.materials),
 			cereal::make_nvp("lights", b.lights),
@@ -199,6 +200,12 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
 			cereal::make_nvp("startOffset", b.startOffset));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Misc& b)
+	{
+		a(cereal::make_nvp("backgroundColor", b.backgroundColor));
 	}
 
 	template<class Archive>
