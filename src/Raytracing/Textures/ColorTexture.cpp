@@ -3,6 +3,8 @@
 
 #include "Raytracing/Textures/ColorTexture.h"
 #include "Math/Color.h"
+#include "Math/Vector2.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 

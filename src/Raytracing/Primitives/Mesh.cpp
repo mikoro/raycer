@@ -4,6 +4,8 @@
 #include <stdexcept>
 
 #include "Raytracing/Primitives/Mesh.h"
+#include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Utils/ObjReader.h"
 #include "Utils/PlyReader.h"
