@@ -39,18 +39,6 @@ void DefaultState::initialize()
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();
-
-	BVHInfo bvhInfo;
-	bvhInfo.maxLeafSize = 5;
-	bvhInfo.axisSelection = BVHAxisSelection::LARGEST;
-	bvhInfo.axisSplit = BVHAxisSplit::MEDIAN;
-	bvhInfo.useSAH = true;
-	bvhInfo.regularSAHSplits = 0;
-
-	BVH::construct(scene.primitives.all, &root, bvhInfo);
-
-	scene.primitives.all.clear();
-	scene.primitives.all.push_back(&root);
 }
 
 void DefaultState::pause()
@@ -110,12 +98,14 @@ void DefaultState::render(double timeStep, double interpolation)
 	else
 		clRaytracer.run(state, interrupted);
 
-	switch (scene.toneMapper.type)
+	if (scene.toneMapping.enabled)
 	{
-		case ToneMapType::NONE: break;
-		case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapper.gamma); break;
-		case ToneMapType::REINHARD: break;
-		default: break;
+		switch (state.scene->toneMapping.type)
+		{
+			case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapping.gamma); break;
+			case ToneMapType::REINHARD: break;
+			default: break;
+		}
 	}
 
 	if (settings.window.showCameraInfo)

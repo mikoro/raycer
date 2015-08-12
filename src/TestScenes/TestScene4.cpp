@@ -11,7 +11,7 @@ Scene TestScene::createTestScene4()
 {
 	Scene scene;
 
-	scene.tracer.maxIterations = 5;
+	scene.raytracing.maxIterations = 5;
 
 	// CAMERA //
 

@@ -31,8 +31,8 @@
 
 namespace Raycer
 {
-	enum class MultisampleType { NONE, RANDOM, REGULAR_GRID, JITTER, CORRELATED_MULTI_JITTER };
-	enum class ToneMapType { NONE, GAMMA, REINHARD };
+	enum class MultisampleType { CMJ, RANDOM, REGULAR, JITTER };
+	enum class ToneMapType { GAMMA, REINHARD };
 	
 	class Primitive;
 	class Texture;
@@ -52,25 +52,37 @@ namespace Raycer
 
 		void initialize();
 
-		struct Tracer
-		{
-			int maxIterations = 3;
-			double rayStartOffset = 0.000001;
-		} tracer;
+		Camera camera;
 
-		struct Multisampler
+		struct Multisampling
 		{
-			MultisampleType type = MultisampleType::NONE;
-			int multisamples = 3;
-		} multisampler;
+			bool enabled = false;
+			MultisampleType type = MultisampleType::CMJ;
+			int samples = 3;
+		} multisampling;
 		
-		struct ToneMapper
+		struct ToneMapping
 		{
+			bool enabled = true;
 			ToneMapType type = ToneMapType::GAMMA;
 			double gamma = 1.0 / 2.2;
-		} toneMapper;
+		} toneMapping;
 
-		Camera camera;
+		struct Raytracing
+		{
+			int maxIterations = 3;
+			double startOffset = 0.000001;
+		} raytracing;
+
+		struct RootBVH
+		{
+			bool enabled = true;
+			int maxLeafSize = 5;
+			BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
+			BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
+			bool useSAH = true;
+			int regularSAHSplits = 0;
+		} rootBVH;
 
 		struct Fog
 		{
@@ -115,8 +127,8 @@ namespace Raycer
 			std::vector<Box> boxes;
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
-			std::vector<BVH> bvhs;
 			std::vector<Primitive*> all;
+			BVH root;
 		} primitives;
 
 		std::map<int, Texture*> texturesMap;

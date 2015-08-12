@@ -50,19 +50,6 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.precalculate();
 
-	BVHInfo bvhInfo;
-	bvhInfo.maxLeafSize = 5;
-	bvhInfo.axisSelection = BVHAxisSelection::LARGEST;
-	bvhInfo.axisSplit = BVHAxisSplit::MEDIAN;
-	bvhInfo.useSAH = true;
-	bvhInfo.regularSAHSplits = 0;
-
-	BVH root;
-	BVH::construct(scene.primitives.all, &root, bvhInfo);
-
-	scene.primitives.all.clear();
-	scene.primitives.all.push_back(&root);
-
 	RaytracerState state;
 	state.image = &image;
 	state.scene = &scene;
@@ -124,14 +111,16 @@ void ConsoleRunner::run(RaytracerState& state)
 		else
 			clRaytracer.run(state, interrupted);
 
-		switch (state.scene->toneMapper.type)
+		if (state.scene->toneMapping.enabled)
 		{
-			case ToneMapType::NONE: break;
-			case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapper.gamma); break;
-			case ToneMapType::REINHARD: break;
-			default: break;
+			switch (state.scene->toneMapping.type)
+			{
+				case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapping.gamma); break;
+				case ToneMapType::REINHARD: break;
+				default: break;
+			}
 		}
-
+		
 		finished = true;
 	};
 

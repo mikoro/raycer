@@ -62,7 +62,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 
 Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	if (scene.multisampler.type == MultisampleType::NONE)
+	if (!scene.multisampling.enabled)
 	{
 		Vector2 sampledPixelCoordinate = pixelCoordinate + Vector2(0.5, 0.5);
 		return generateCameraSamples(scene, sampledPixelCoordinate, interrupted);
@@ -70,7 +70,7 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 
 	Color sampledPixelColor;
 	int permutation = intDist(gen);
-	int n = scene.multisampler.multisamples;
+	int n = scene.multisampling.samples;
 
 	for (int y = 0; y < n; ++y)
 	{
@@ -78,13 +78,13 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 		{
 			Vector2 sampledPixelCoordinate;
 
-			if (scene.multisampler.type == MultisampleType::CORRELATED_MULTI_JITTER)
+			if (scene.multisampling.type == MultisampleType::CMJ)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getCmjSample(x, y, n, n, permutation);
-			else if (scene.multisampler.type == MultisampleType::RANDOM)
+			else if (scene.multisampling.type == MultisampleType::RANDOM)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getRandomSample();
-			else if (scene.multisampler.type == MultisampleType::REGULAR_GRID)
+			else if (scene.multisampling.type == MultisampleType::REGULAR)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getRegularGridSample(x, y, n, n);
-			else if (scene.multisampler.type == MultisampleType::JITTER)
+			else if (scene.multisampling.type == MultisampleType::JITTER)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getJitteredSample(x, y, n, n);
 
 			sampledPixelColor += generateCameraSamples(scene, sampledPixelCoordinate, interrupted);
@@ -211,7 +211,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	Vector3 P = intersection.position;
 
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && iteration < scene.tracer.maxIterations)
+	if (transmittance > 0.0 && iteration < scene.raytracing.maxIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -222,7 +222,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
 			T.normalize();
 
-			Vector3 rayOrigin = P + T * scene.tracer.rayStartOffset;
+			Vector3 rayOrigin = P + T * scene.raytracing.startOffset;
 			Vector3 rayDirection = T;
 
 			Ray refractedRay(rayOrigin, rayDirection);
@@ -244,12 +244,12 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	}
 
 	// calculate and trace reflected ray
-	if (reflectance > 0.0 && iteration < scene.tracer.maxIterations)
+	if (reflectance > 0.0 && iteration < scene.raytracing.maxIterations)
 	{
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
-		Vector3 rayOrigin = P + R * scene.tracer.rayStartOffset;
+		Vector3 rayOrigin = P + R * scene.raytracing.startOffset;
 		Vector3 rayDirection = R;
 
 		Ray reflectedRay(rayOrigin, rayDirection);
@@ -302,7 +302,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 		{
 			Vector3 sampleDirection = sampler.getCmjHemisphereSample(u, v, w, distribution, x, y, n, n, permutation);
 
-			Vector3 rayOrigin = origin + sampleDirection * scene.tracer.rayStartOffset;
+			Vector3 rayOrigin = origin + sampleDirection * scene.raytracing.startOffset;
 			Vector3 rayDirection = sampleDirection;
 
 			Ray sampleRay(rayOrigin, rayDirection);
@@ -443,7 +443,7 @@ Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const
 
 bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 {
-	Vector3 rayOrigin = P + L * scene.tracer.rayStartOffset;
+	Vector3 rayOrigin = P + L * scene.raytracing.startOffset;
 	Vector3 rayDirection = L;
 
 	Ray shadowRay(rayOrigin, rayDirection);

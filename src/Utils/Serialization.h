@@ -182,10 +182,11 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene& b)
 	{
-		a(cereal::make_nvp("tracer", b.tracer),
-			cereal::make_nvp("multisampler", b.multisampler),
-			cereal::make_nvp("toneMapper", b.toneMapper),
-			cereal::make_nvp("camera", b.camera),
+		a(cereal::make_nvp("camera", b.camera),
+			cereal::make_nvp("multisampling", b.multisampling),
+			cereal::make_nvp("toneMapping", b.toneMapping),
+			cereal::make_nvp("raytracing", b.raytracing),
+			cereal::make_nvp("rootBVH", b.rootBVH),
 			cereal::make_nvp("fog", b.fog),
 			cereal::make_nvp("textures", b.textures),
 			cereal::make_nvp("materials", b.materials),
@@ -194,24 +195,37 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::Tracer& b)
+	void serialize(Archive& a, Scene::Raytracing& b)
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("rayStartOffset", b.rayStartOffset));
+			cereal::make_nvp("startOffset", b.startOffset));
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::Multisampler& b)
+	void serialize(Archive& a, Scene::Multisampling& b)
 	{
-		a(cereal::make_nvp("type", b.type),
-			cereal::make_nvp("multisamples", b.multisamples));
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("type", b.type),
+			cereal::make_nvp("samples", b.samples));
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::ToneMapper& b)
+	void serialize(Archive& a, Scene::ToneMapping& b)
 	{
-		a(cereal::make_nvp("type", b.type),
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("type", b.type),
 			cereal::make_nvp("gamma", b.gamma));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::RootBVH& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("maxLeafSize", b.maxLeafSize),
+			cereal::make_nvp("axisSelection", b.axisSelection),
+			cereal::make_nvp("axisSplit", b.axisSplit),
+			cereal::make_nvp("useSAH", b.useSAH),
+			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits));
 	}
 
 	template<class Archive>
