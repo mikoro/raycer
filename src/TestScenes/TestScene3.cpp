@@ -6,15 +6,15 @@
 
 using namespace Raycer;
 
-// ambient occlusion with four white spheres
+// ambient occlusion with four white spheres and a monkey
 Scene TestScene::createTestScene3()
 {
 	Scene scene;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 4.0, 3.5);
-	scene.camera.orientation = EulerAngle(0.0, -45.0, 0.0);
+	scene.camera.position = Vector3(2.3, 5.0, 6.0);
+	scene.camera.orientation = EulerAngle(0.0, -35.0, 0.0);
 
 	// GROUND //
 
@@ -62,6 +62,28 @@ Scene TestScene::createTestScene3()
 	scene.primitives.spheres.push_back(sphere1);
 	sphere1.position = Vector3(1.0, 1.0, -1.0);
 	scene.primitives.spheres.push_back(sphere1);
+
+	// MESH 1 //
+
+	ColorTexture mesh1Texture;
+	mesh1Texture.id = 3;
+	mesh1Texture.color = Color(1.0, 1.0, 1.0);
+	mesh1Texture.intensity = 1.0;
+
+	Material mesh1Material;
+	mesh1Material.id = 3;
+	mesh1Material.textureId = mesh1Texture.id;
+
+	Mesh mesh1;
+	mesh1.materialId = mesh1Material.id;
+	mesh1.meshFilePath = "data/meshes/monkey3.obj";
+	mesh1.position = Vector3(5.0, 1.0, 0.0);
+	mesh1.scale = Vector3(2.0, 2.0, 2.0);
+	mesh1.orientation = EulerAngle(0.0, -45.0, 0.0);
+
+	scene.textures.colorTextures.push_back(mesh1Texture);
+	scene.materials.push_back(mesh1Material);
+	scene.primitives.meshes.push_back(mesh1);
 
 	// LIGHTS //
 
