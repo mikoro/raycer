@@ -21,9 +21,9 @@ namespace Raycer
 	{
 		int maxLeafSize = 5;
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
-		BVHAxisSplit axisSplit = BVHAxisSplit::MIDDLE;
-		bool useSAH = false;
-		int regularSAHSplits = 5;
+		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
+		bool useSAH = true;
+		int regularSAHSplits = 0;
 	};
 
 	class BVH : public Primitive

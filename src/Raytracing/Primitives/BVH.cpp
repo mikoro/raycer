@@ -55,15 +55,23 @@ void BVH::construct(const std::vector<Primitive*>& primitives, BVH* node, const 
 
 void BVH::free(BVH* node)
 {
-	if (typeid(node->left) == typeid(BVH))
-		free((BVH*)node->left);
-	else
-		delete node->left;
+	if (node->left != nullptr)
+	{
+		if (typeid(node->left) == typeid(BVH))
+			free((BVH*)node->left);
 
-	if (typeid(node->right) == typeid(BVH))
-		free((BVH*)node->right);
-	else
+		delete node->left;
+		node->left = nullptr;
+	}
+
+	if (node->right != nullptr)
+	{
+		if (typeid(node->right) == typeid(BVH))
+			free((BVH*)node->right);
+
 		delete node->right;
+		node->right = nullptr;
+	}
 }
 
 void BVH::constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount)
