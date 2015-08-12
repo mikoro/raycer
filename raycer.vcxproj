@@ -52,25 +52,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;I:\boost;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;I:\boost\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;I:\boost;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;I:\boost\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;I:\boost;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;I:\boost\lib;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
