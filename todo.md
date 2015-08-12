@@ -1,6 +1,5 @@
 tracer
- - add jittering to depth of field
- - marching + heightfield
+ - marching + displacement map
  - triangle intersection glitch (watertight?)
 
 lighting

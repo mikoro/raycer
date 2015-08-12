@@ -101,7 +101,7 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sample
 	Intersection primaryIntersection;
 	Color sampledPixelColor;
 
-	if (shouldSkip)
+	if (shouldSkip && !scene.camera.depthOfField)
 		return sampledPixelColor;
 
 	if (!scene.camera.depthOfField)
@@ -115,12 +115,18 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sample
 	Vector3 cameraOrigin = scene.camera.position;
 	Vector3 cameraRight = scene.camera.right;
 	Vector3 cameraUp = scene.camera.up;
-	Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
-
+	
 	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
+			Vector2 jitter = sampler.getCmjSample(x, y, n, n, permutation) - Vector2(0.5, 0.5);
+			primaryRay = scene.camera.getRay(sampledPixelCoordinate + jitter, shouldSkip);
+
+			if (shouldSkip)
+				continue;
+
+			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
 			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
 			Vector3 rayOrigin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
 			Vector3 rayDirection = (focalPoint - rayOrigin).normalized();

@@ -6,7 +6,7 @@
 
 using namespace Raycer;
 
-// depth of field with a cube spiral
+// depth of field with a sphere spiral
 Scene TestScene::createTestScene5()
 {
 	Scene scene;
@@ -20,28 +20,30 @@ Scene TestScene::createTestScene5()
 	scene.camera.focalLenght = 30.0;
 	scene.camera.samples = 3;
 
-	// BOX 1 //
+	// SPHERES //
 
-	ColorTexture box1Texture;
-	box1Texture.id = 2;
-	box1Texture.color = Color(0.0, 1.0, 1.0);
-	box1Texture.intensity = 0.5;
+	ColorTexture sphereTexture;
+	sphereTexture.id = 2;
+	sphereTexture.color = Color(1.0, 1.0, 1.0);
+	sphereTexture.intensity = 0.5;
 
-	Material box1Material;
-	box1Material.id = 2;
-	box1Material.textureId = box1Texture.id;
+	Material sphereMaterial;
+	sphereMaterial.id = 2;
+	sphereMaterial.textureId = sphereTexture.id;
 
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
+	scene.textures.colorTextures.push_back(sphereTexture);
+	scene.materials.push_back(sphereMaterial);
 
 	double angle = -M_PI / 2.0;
 	double radius = 8.0;
 	
 	for (int i = 0; i < 50; ++i)
 	{
-		Box box1 = Box::create(Vector3(cos(angle) * radius, sin(angle) * radius, i * -2.0), Vector3(1.0, 1.0, 1.0));
-		box1.materialId = box1Material.id;
-		scene.primitives.boxes.push_back(box1);
+		Sphere sphere;
+		sphere.position = Vector3(cos(angle) * radius, sin(angle) * radius, i * -1.0);
+		sphere.radius = 1.0;
+		sphere.materialId = sphereMaterial.id;
+		scene.primitives.spheres.push_back(sphere);
 		angle += 0.5;
 	}
 
