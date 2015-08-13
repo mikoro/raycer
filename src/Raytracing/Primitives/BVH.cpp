@@ -7,8 +7,6 @@
 #include <limits>
 #include <stdexcept>
 
-#include "tinyformat/tinyformat.h"
-
 #include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/PrimitiveList.h"
 #include "Raytracing/Ray.h"
@@ -17,8 +15,6 @@
 #include "Utils/Log.h"
 
 using namespace Raycer;
-
-std::ofstream BVH::file = std::ofstream();
 
 void BVH::initialize()
 {
@@ -44,8 +40,6 @@ void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& i
 
 	log.logInfo("Building BVH (primitives: %d)", primitives.size());
 
-	file.open("bvh.txt");
-
 	auto startTime = std::chrono::high_resolution_clock::now();
 	std::random_device rd;
 	std::mt19937 gen(rd());
@@ -58,8 +52,6 @@ void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& i
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
-
-	file.close();
 }
 
 void BVH::free(BVH* node)
@@ -111,9 +103,6 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 	int leftSize = (int)leftPrimitives.size();
 	int rightSize = (int)rightPrimitives.size();
 	bool shouldTerminate = false;
-
-	//file << tfm::format("%d: %d %d | %d: %f\n", nodeCount, leftSize, rightSize, axis, splitPoint);
-	file << tfm::format("%d %d | %d: %f\n", leftSize, rightSize, axis, splitPoint);
 
 	if (leftSize == previousLeftSize && rightSize == previousRightSize)
 		shouldTerminate = true;

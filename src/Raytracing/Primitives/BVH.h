@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <fstream>
 #include <random>
 
 #include "Raytracing/Primitives/Primitive.h"
@@ -36,7 +35,7 @@ namespace Raycer
 		AABB getAABB() const;
 
 		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info);
-		void free(BVH* node);
+		static void free(BVH* node);
 
 	private:
 
@@ -50,7 +49,5 @@ namespace Raycer
 
 		Primitive* left = nullptr;
 		Primitive* right = nullptr;
-
-		static std::ofstream file;
 	};
 }

@@ -12,7 +12,7 @@ Scene TestScene::createTestScene2()
 	Scene scene;
 
 	scene.globalBVH.maxLeafSize = 5;
-	scene.globalBVH.useSAH = false;
+	scene.globalBVH.useSAH = true;
 	scene.globalBVH.regularSAHSplits = 0;
 	scene.globalBVH.axisSelection = BVHAxisSelection::LARGEST;
 	scene.globalBVH.axisSplit = BVHAxisSplit::MEDIAN;
@@ -40,7 +40,7 @@ Scene TestScene::createTestScene2()
 
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	//scene.primitives.planes.push_back(groundPlane);
+	scene.primitives.planes.push_back(groundPlane);
 
 	// MESH 1 //
 

@@ -4,11 +4,8 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
-#include <fstream>
 #include <limits>
 #include <stdexcept>
-
-#include "tinyformat/tinyformat.h"
 
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/BVH.h"
@@ -75,8 +72,6 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	Log& log = App::getLog();
 
 	log.logInfo("Building BVH (primitives: %d)", primitives.size());
-
-	std::ofstream file("flatbvh.txt");
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
@@ -160,9 +155,6 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 			}
 		}
 
-		//file << tfm::format("%d: %d %d | %d: %f\n", actualNodeCount, middle - buildEntry.start, buildEntry.end - middle, axis, splitPoint);
-		file << tfm::format("%d %d | %d: %f\n", middle - buildEntry.start, buildEntry.end - middle, axis, splitPoint);
-
 		// partition failed -> fallback
 		if (middle == buildEntry.start || middle == buildEntry.end)
 			middle = buildEntry.start + (buildEntry.end - buildEntry.start) / 2;
@@ -184,8 +176,6 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
-
-	file.close();
 }
 
 void FlatBVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator)

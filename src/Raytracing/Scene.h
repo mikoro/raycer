@@ -134,8 +134,7 @@ namespace Raycer
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 			std::vector<Primitive*> all;
-			//FlatBVH root;
-			BVH root;
+			FlatBVH root;
 		} primitives;
 
 		std::map<int, Texture*> texturesMap;
