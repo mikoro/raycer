@@ -16,7 +16,7 @@ namespace Raycer
 	struct Intersection;
 
 	enum class BVHAxisSelection { LARGEST, RANDOM };
-	enum class BVHAxisSplit { MIDDLE, MEDIAN };
+	enum class BVHAxisSplit { MIDDLE, MEDIAN, RANDOM };
 
 	struct BVHBuildInfo
 	{
@@ -54,11 +54,11 @@ namespace Raycer
 
 	private:
 
-		void calculateSplit(int& axis, double& splitPoint, const BVHBuildEntry& buildEntry, const BVHBuildInfo& buildInfo, std::mt19937& generator);
-		//void calculateSAHSplit(int& axis, double& splitPoint, const BVHBuildEntry& buildEntry, const BVHBuildInfo& buildInfo);
-		//double calculateMedianPoint(int axis, const BVHBuildEntry& buildEntry);
-		//double calculateSAHScore(int axis, double splitPoint, const BVHBuildEntry& buildEntry);
-
+		void calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry, std::mt19937& generator);
+		void calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry);
+		double calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const BVHBuildEntry& buildEntry);
+		double calculateMedianPoint(int axis, const BVHBuildEntry& buildEntry);
+		
 		std::vector<Primitive*> orderedPrimitives;
 		std::vector<BVHFlatNode> flatNodes;
 	};
