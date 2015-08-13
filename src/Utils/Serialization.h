@@ -188,7 +188,7 @@ namespace Raycer
 			cereal::make_nvp("raytracing", b.raytracing),
 			cereal::make_nvp("multisampling", b.multisampling),
 			cereal::make_nvp("toneMapping", b.toneMapping),
-			cereal::make_nvp("rootBVH", b.rootBVH),
+			cereal::make_nvp("globalBVH", b.globalBVH),
 			cereal::make_nvp("textures", b.textures),
 			cereal::make_nvp("materials", b.materials),
 			cereal::make_nvp("lights", b.lights),
@@ -225,14 +225,14 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::RootBVH& b)
+	void serialize(Archive& a, Scene::GlobalBVH& b)
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
 			cereal::make_nvp("maxLeafSize", b.maxLeafSize),
-			cereal::make_nvp("axisSelection", b.axisSelection),
-			cereal::make_nvp("axisSplit", b.axisSplit),
 			cereal::make_nvp("useSAH", b.useSAH),
-			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits));
+			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits),
+			cereal::make_nvp("axisSelection", b.axisSelection),
+			cereal::make_nvp("axisSplit", b.axisSplit));
 	}
 
 	template<class Archive>

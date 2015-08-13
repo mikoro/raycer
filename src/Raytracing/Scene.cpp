@@ -208,17 +208,17 @@ void Scene::initialize()
 
 	camera.initialize();
 
-	if (rootBVH.enabled)
+	if (globalBVH.enabled)
 	{
-		BVHInfo bvhInfo;
-		bvhInfo.maxLeafSize = rootBVH.maxLeafSize;
-		bvhInfo.axisSelection = rootBVH.axisSelection;
-		bvhInfo.axisSplit = rootBVH.axisSplit;
-		bvhInfo.useSAH = rootBVH.useSAH;
-		bvhInfo.regularSAHSplits = rootBVH.regularSAHSplits;
-
-		BVH::construct(primitives.all, &primitives.root, bvhInfo);
-
+		BVHBuildInfo buildInfo;
+		buildInfo.maxLeafSize = globalBVH.maxLeafSize;
+		buildInfo.useSAH = globalBVH.useSAH;
+		buildInfo.regularSAHSplits = globalBVH.regularSAHSplits;
+		buildInfo.axisSelection = globalBVH.axisSelection;
+		buildInfo.axisSplit = globalBVH.axisSplit;
+		
+		primitives.root.build(primitives.all, buildInfo);
+		
 		primitives.all.clear();
 		primitives.all.push_back(&primitives.root);
 	}

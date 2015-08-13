@@ -49,7 +49,7 @@ Scene TestScene::createTestScene2()
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey3.obj";
+	mesh1.meshFilePath = "data/meshes/monkey1.obj";
 	mesh1.position = Vector3(0.01, 2.0, 0.0);
 	mesh1.scale = Vector3(2.0, 2.0, 2.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);

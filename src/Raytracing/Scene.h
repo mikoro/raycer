@@ -90,15 +90,15 @@ namespace Raycer
 			double gamma = 1.0 / 2.2;
 		} toneMapping;
 
-		struct RootBVH
+		struct GlobalBVH
 		{
 			bool enabled = true;
 			int maxLeafSize = 5;
-			BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
-			BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 			bool useSAH = true;
 			int regularSAHSplits = 0;
-		} rootBVH;
+			BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
+			BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
+		} globalBVH;
 
 		struct Textures
 		{

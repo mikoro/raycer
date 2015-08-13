@@ -4,6 +4,7 @@
 #pragma once
 
 #include <random>
+#include <vector>
 
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
@@ -15,15 +16,30 @@ namespace Raycer
 	struct Intersection;
 
 	enum class BVHAxisSelection { LARGEST, RANDOM };
-	enum class BVHAxisSplit { MIDDLE, MEDIAN, RANDOM };
+	enum class BVHAxisSplit { MIDDLE, MEDIAN };
 
-	struct BVHInfo
+	struct BVHBuildInfo
 	{
 		int maxLeafSize = 5;
-		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
-		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 		bool useSAH = true;
 		int regularSAHSplits = 0;
+		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
+		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
+	};
+
+	struct BVHBuildEntry
+	{
+		int start;
+		int end;
+		int parent;
+	};
+
+	struct BVHFlatNode
+	{
+		AABB aabb;
+		int rightOffset;
+		int startOffset;
+		int primitiveCount;
 	};
 
 	class BVH : public Primitive
@@ -34,20 +50,16 @@ namespace Raycer
 		void intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
-		static void construct(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info);
-		static void free(BVH* node);
+		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
 
 	private:
 
-		static void constructRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount);
-		static void calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info, std::mt19937& gen);
-		static void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHInfo& info);
-		static double calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives, BVH* node);
-		static double calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives);
+		void calculateSplit(int& axis, double& splitPoint, const BVHBuildEntry& buildEntry, const BVHBuildInfo& buildInfo, std::mt19937& generator);
+		//void calculateSAHSplit(int& axis, double& splitPoint, const BVHBuildEntry& buildEntry, const BVHBuildInfo& buildInfo);
+		//double calculateMedianPoint(int axis, const BVHBuildEntry& buildEntry);
+		//double calculateSAHScore(int axis, double splitPoint, const BVHBuildEntry& buildEntry);
 
-		AABB aabb;
-
-		Primitive* left = nullptr;
-		Primitive* right = nullptr;
+		std::vector<Primitive*> orderedPrimitives;
+		std::vector<BVHFlatNode> flatNodes;
 	};
 }
