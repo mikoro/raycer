@@ -9,5 +9,10 @@ Ray::Ray(const Vector3& origin_, const Vector3& direction_)
 {
 	origin = origin_;
 	direction = direction_;
+
 	inverseDirection = direction.inversed();
+
+	sign[0] = (direction.x < 0.0);
+	sign[1] = (direction.y < 0.0);
+	sign[2] = (direction.z < 0.0);
 }

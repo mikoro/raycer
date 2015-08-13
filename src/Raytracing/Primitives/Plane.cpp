@@ -18,29 +18,35 @@ void Plane::initialize()
 	vAxis = uAxis.cross(normal).normalized();
 }
 
-void Plane::intersect(const Ray& ray, Intersection& intersection) const
+bool Plane::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	double denominator = ray.direction.dot(normal);
 
 	// ray and plane are parallel -> no intersection
 	if (fabs(denominator) < std::numeric_limits<double>::epsilon())
-		return;
+		return false;
 
 	double t = (position - ray.origin).dot(normal) / denominator;
 
-	// intersection is behind ray origin
-	if (t < 0.0)
-		return;
+	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+		return false;
 
 	// another intersection is closer
 	if (t > intersection.distance)
-		return;
+		return false;
+
+	intersection.wasFound = true;
+	intersection.distance = t;
+
+	if (ray.fastIntersection)
+		return true;
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
 
-	intersection.wasFound = true;
-	intersection.distance = t;
 	intersection.position = ip;
 	intersection.normal = normal;
 	intersection.materialId = materialId;
@@ -50,6 +56,8 @@ void Plane::intersect(const Ray& ray, Intersection& intersection) const
 	double v = vAxis.dot(ip) / texcoordScale.y;
 	intersection.texcoord.x = fabs(u - floor(u));
 	intersection.texcoord.y = fabs(v - floor(v));
+
+	return true;
 }
 
 AABB Plane::getAABB() const

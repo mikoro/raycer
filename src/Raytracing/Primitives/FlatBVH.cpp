@@ -21,10 +21,14 @@ void FlatBVH::initialize()
 {
 }
 
-void FlatBVH::intersect(const Ray& ray, Intersection& intersection) const
+bool FlatBVH::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	int stack[128];
 	int stackptr = 0;
+	bool wasFound = false;
 
 	// push to stack
 	stack[stackptr] = 0;
@@ -41,7 +45,15 @@ void FlatBVH::intersect(const Ray& ray, Intersection& intersection) const
 		if (flatNode.rightOffset == 0)
 		{
 			for (int i = 0; i < flatNode.primitiveCount; ++i)
-				orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersection);
+			{
+				if (orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersection))
+				{
+					if (ray.fastOcclusion)
+						return true;
+
+					wasFound = true;
+				}
+			}
 		}
 		else // travel down the tree
 		{
@@ -60,6 +72,8 @@ void FlatBVH::intersect(const Ray& ray, Intersection& intersection) const
 			}
 		}
 	}
+
+	return wasFound;
 }
 
 AABB FlatBVH::getAABB() const

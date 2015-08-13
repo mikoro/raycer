@@ -20,7 +20,7 @@ namespace Raycer
 		virtual ~Primitive() {}
 
 		virtual void initialize() = 0;
-		virtual void intersect(const Ray& ray, Intersection& intersection) const = 0;
+		virtual bool intersect(const Ray& ray, Intersection& intersection) const = 0;
 		virtual AABB getAABB() const = 0;
 
 		int materialId = 0;

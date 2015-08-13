@@ -22,10 +22,20 @@ void PrimitiveList::initialize()
 {
 }
 
-void PrimitiveList::intersect(const Ray& ray, Intersection& intersection) const
+bool PrimitiveList::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
+	bool wasFound = false;
+
 	for (const Primitive* primitive : primitives)
-		primitive->intersect(ray, intersection);
+	{
+		if (primitive->intersect(ray, intersection))
+			wasFound = true;
+	}
+
+	return wasFound;
 }
 
 AABB PrimitiveList::getAABB() const

@@ -18,8 +18,11 @@ void Triangle::initialize()
 
 // Möller-Trumbore algorithm
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
-void Triangle::intersect(const Ray& ray, Intersection& intersection) const
+bool Triangle::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	Vector3 v0v1 = vertices[1] - vertices[0];
 	Vector3 v0v2 = vertices[2] - vertices[0];
 
@@ -28,7 +31,7 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 
 	// ray and triangle are parallel -> no intersection
 	if (fabs(determinant) < std::numeric_limits<double>::epsilon())
-		return;
+		return false;
 
 	double invDeterminant = 1.0 / determinant;
 
@@ -36,54 +39,62 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 	double u = tvec.dot(pvec) * invDeterminant;
 
 	if (u < 0.0 || u > 1.0)
-		return;
+		return false;
 
 	Vector3 qvec = tvec.cross(v0v1);
 	double v = ray.direction.dot(qvec) * invDeterminant;
 
 	if (v < 0.0 || (u + v) > 1.0)
-		return;
+		return false;
 
 	double t = v0v2.dot(qvec) * invDeterminant;
 
-	// intersection is behind ray origin
-	if (t < 0.0)
-		return;
+	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+		return false;
 
 	// another intersection is closer
 	if (t > intersection.distance)
-		return;
+		return false;
+
+	intersection.wasFound = true;
+	intersection.distance = t;
+
+	if (ray.fastIntersection)
+		return true;
 
 	double w = 1.0 - u - v;
 	Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
 
-	intersection.wasFound = true;
-	intersection.distance = t;
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord / texcoordScale;
 	intersection.materialId = materialId;
+
+	return true;
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
-void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
+bool Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	double denominator = ray.direction.dot(normal);
 
 	// ray and triangle are parallel -> no intersection
 	if (fabs(denominator) < std::numeric_limits<double>::epsilon())
-		return;
+		return false;
 
 	double t = (vertices[0] - ray.origin).dot(normal) / denominator;
 
 	// intersection is behind ray origin
-	if (t < 0.0)
-		return;
+	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+		return false;
 
 	// another intersection is closer
 	if (t > intersection.distance)
-		return;
+		return false;
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
@@ -98,7 +109,7 @@ void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 	Vector3 c0 = v0v1.cross(v0ip);
 
 	if (normal2.dot(c0) < 0.0)
-		return;
+		return false;
 
 	// edge 1
 	Vector3 v1v2 = vertices[2] - vertices[1];
@@ -107,7 +118,7 @@ void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 	double u = normal2.dot(c1);
 
 	if (u < 0.0)
-		return;
+		return false;
 
 	// edge 2
 	Vector3 v2v0 = vertices[0] - vertices[2];
@@ -116,7 +127,13 @@ void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 	double v = normal2.dot(c2);
 
 	if (v < 0.0)
-		return;
+		return false;
+
+	intersection.wasFound = true;
+	intersection.distance = t;
+
+	if (ray.fastIntersection)
+		return true;
 
 	double denominator2 = normal2.dot(normal2);
 	u /= denominator2;
@@ -126,12 +143,12 @@ void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 	Vector3 interpolatedNormal = u * normals[0] + v * normals[1] + w * normals[2];
 	Vector2 interpolatedTexcoord = u * texcoords[0] + v * texcoords[1] + w * texcoords[2];
 
-	intersection.wasFound = true;
-	intersection.distance = t;
 	intersection.position = ip;
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord;
 	intersection.materialId = materialId;
+
+	return true;
 }
 
 AABB Triangle::getAABB() const

@@ -20,13 +20,33 @@ void BVH::initialize()
 {
 }
 
-void BVH::intersect(const Ray& ray, Intersection& intersection) const
+bool BVH::intersect(const Ray& ray, Intersection& intersection) const
 {
-	if (!aabb.intersects(ray))
-		return;
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
 
-	left->intersect(ray, intersection);
-	right->intersect(ray, intersection);
+	if (!aabb.intersects(ray))
+		return false;
+
+	bool wasFound = false;
+
+	if (left->intersect(ray, intersection))
+	{
+		if (ray.fastOcclusion)
+			return true;
+
+		wasFound = true;
+	}
+
+	if (right->intersect(ray, intersection))
+	{
+		if (ray.fastOcclusion)
+			return true;
+
+		wasFound = true;
+	}
+
+	return wasFound;
 }
 
 AABB BVH::getAABB() const

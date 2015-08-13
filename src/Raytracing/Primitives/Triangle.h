@@ -18,8 +18,8 @@ namespace Raycer
 	public:
 
 		void initialize();
-		void intersect(const Ray& ray, Intersection& intersection) const;
-		void intersect2(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect2(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
 		Vector3 vertices[3];

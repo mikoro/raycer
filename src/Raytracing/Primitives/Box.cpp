@@ -28,8 +28,11 @@ void Box::initialize()
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
-void Box::intersect(const Ray& ray, Intersection& intersection) const
+bool Box::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	double tx0 = (min.x - ray.origin.x) * ray.inverseDirection.x;
 	double tx1 = (max.x - ray.origin.x) * ray.inverseDirection.x;
 
@@ -74,21 +77,30 @@ void Box::intersect(const Ray& ray, Intersection& intersection) const
 	}
 
 	if (tmax < std::max(tmin, 0.0))
-		return;
+		return false;
 
 	bool isInside = (tmin < 0.0);
 	double t = isInside ? tmax : tmin;
 
+	if (t < ray.tmin || t > ray.tmax)
+		return false;
+
 	if (t > intersection.distance)
-		return;
+		return false;
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+
+	if (ray.fastIntersection)
+		return true;
+
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = isInside ? maxNormal : -minNormal;
 	intersection.materialId = materialId;
 
 	// TODO: add texcoord mapping
+
+	return true;
 }
 
 AABB Box::getAABB() const

@@ -49,10 +49,12 @@ void Mesh::initialize()
 	}
 }
 
-void Mesh::intersect(const Ray& ray, Intersection& intersection) const
+bool Mesh::intersect(const Ray& ray, Intersection& intersection) const
 {
-	(void)ray;
-	(void)intersection;
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
+	return false;
 }
 
 AABB Mesh::getAABB() const

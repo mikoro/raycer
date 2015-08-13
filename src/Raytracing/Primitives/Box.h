@@ -20,7 +20,7 @@ namespace Raycer
 		Box(const AABB& aabb);
 
 		void initialize();
-		void intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
 		static Box create(const Vector3& center, const Vector3& extent);

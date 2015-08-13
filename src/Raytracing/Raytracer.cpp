@@ -314,11 +314,17 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 			Ray sampleRay(rayOrigin, rayDirection);
 			Intersection sampleIntersection;
 
-			for (const Primitive* primitive : scene.primitives.all)
-				primitive->intersect(sampleRay, sampleIntersection);
+			sampleRay.fastIntersection = true;
+			sampleRay.fastOcclusion = true;
 
-			if (sampleIntersection.wasFound)
-				ambientOcclusion += 1.0;
+			for (const Primitive* primitive : scene.primitives.all)
+			{
+				if (primitive->intersect(sampleRay, sampleIntersection))
+				{
+					ambientOcclusion += 1.0;
+					break;
+				}
+			}	
 		}
 	}
 
@@ -455,8 +461,15 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 	Ray shadowRay(rayOrigin, rayDirection);
 	Intersection shadowIntersection;
 
-	for (const Primitive* primitive : scene.primitives.all)
-		primitive->intersect(shadowRay, shadowIntersection);
+	shadowRay.fastIntersection = true;
+	shadowRay.fastOcclusion = true;
+	shadowRay.tmax = distanceToLight;
 
-	return shadowIntersection.wasFound && shadowIntersection.distance < distanceToLight;
+	for (const Primitive* primitive : scene.primitives.all)
+	{
+		if (primitive->intersect(shadowRay, shadowIntersection))
+			return true;
+	}
+
+	return false;
 }

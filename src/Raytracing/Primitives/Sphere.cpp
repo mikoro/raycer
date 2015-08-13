@@ -17,8 +17,11 @@ void Sphere::initialize()
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-void Sphere::intersect(const Ray& ray, Intersection& intersection) const
+bool Sphere::intersect(const Ray& ray, Intersection& intersection) const
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	Vector3 rayOriginToSphere = position - ray.origin;
 	double rayOriginToSphereDistance2 = rayOriginToSphere.lengthSquared();
 
@@ -31,26 +34,33 @@ void Sphere::intersect(const Ray& ray, Intersection& intersection) const
 	{
 		// whole sphere is behind the ray origin
 		if (t1 < 0.0)
-			return;
+			return false;
 
 		// ray misses the sphere completely
 		if (sphereToRayDistance2 > radius2)
-			return;
+			return false;
 	}
 
 	double t2 = sqrt(radius2 - sphereToRayDistance2);
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 
+	if (t < ray.tmin || t > ray.tmax)
+		return false;
+
 	// there was another intersection closer to camera
 	if (t > intersection.distance)
-		return;
+		return false;
+
+	intersection.wasFound = true;
+	intersection.distance = t;
+
+	if (ray.fastIntersection)
+		return true;
 
 	// intersection position and normal
 	Vector3 ip = ray.origin + (t * ray.direction);
 	Vector3 normal = (ip - position).normalized();
 
-	intersection.wasFound = true;
-	intersection.distance = t;
 	intersection.position = ip;
 	intersection.normal = normal;
 	intersection.materialId = materialId;
@@ -62,6 +72,8 @@ void Sphere::intersect(const Ray& ray, Intersection& intersection) const
 	v /= texcoordScale.y;
 	intersection.texcoord.x = u - floor(u);
 	intersection.texcoord.y = v - floor(v);
+
+	return true;
 }
 
 AABB Sphere::getAABB() const

@@ -21,7 +21,7 @@ namespace Raycer
 		PrimitiveList(const std::vector<Primitive*>& primitives);
 
 		void initialize();
-		void intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
 		std::vector<Primitive*> primitives;
