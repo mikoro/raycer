@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <fstream>
 #include <random>
 
 #include "Raytracing/Primitives/Primitive.h"
@@ -39,15 +40,17 @@ namespace Raycer
 
 	private:
 
-		void buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount);
-		void calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen);
-		void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info);
-		double calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives, BVH* node);
+		void buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int& leafCount, int previousLeftSize, int previousRightSize);
+		void calculateSplit(int& axis, double& splitPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen);
+		void calculateSAHSplit(int& axis, double& splitPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info);
+		double calculateSAHScore(int axis, double splitPoint, const std::vector<Primitive*>& primitives, BVH* node);
 		double calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives);
 
 		AABB aabb;
 
 		Primitive* left = nullptr;
 		Primitive* right = nullptr;
+
+		static std::ofstream file;
 	};
 }

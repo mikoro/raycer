@@ -7,6 +7,8 @@
 #include <limits>
 #include <stdexcept>
 
+#include "tinyformat/tinyformat.h"
+
 #include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/PrimitiveList.h"
 #include "Raytracing/Ray.h"
@@ -15,6 +17,8 @@
 #include "Utils/Log.h"
 
 using namespace Raycer;
+
+std::ofstream BVH::file = std::ofstream();
 
 void BVH::initialize()
 {
@@ -38,19 +42,24 @@ void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& i
 {
 	Log& log = App::getLog();
 
-	log.logInfo("Constructing the BVH (primitives: %d)", primitives.size());
+	log.logInfo("Building BVH (primitives: %d)", primitives.size());
+
+	file.open("bvh.txt");
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	int nodeCount = 0;
+	int leafCount = 0;
 
-	buildRecursive(primitives, this, info, gen, nodeCount, 0, 0, 0);
+	buildRecursive(primitives, this, info, gen, nodeCount, leafCount, 0, 0);
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
-	log.logInfo("BVH construction finished (time: %d ms, nodes: %d)", milliseconds, nodeCount);
+	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
+
+	file.close();
 }
 
 void BVH::free(BVH* node)
@@ -74,7 +83,7 @@ void BVH::free(BVH* node)
 	}
 }
 
-void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount)
+void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int& leafCount, int previousLeftSize, int previousRightSize)
 {
 	nodeCount++;
 
@@ -84,16 +93,16 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 	node->aabb.update();
 
 	int axis;
-	double divisionPoint;
+	double splitPoint;
 
-	calculateSplit(axis, divisionPoint, primitives, node, info, gen);
+	calculateSplit(axis, splitPoint, primitives, node, info, gen);
 
 	std::vector<Primitive*> leftPrimitives;
 	std::vector<Primitive*> rightPrimitives;
 
 	for (Primitive* primitive : primitives)
 	{
-		if (primitive->getAABB().center.element(axis) <= divisionPoint)
+		if (primitive->getAABB().center.element(axis) <= splitPoint)
 			leftPrimitives.push_back(primitive);
 		else
 			rightPrimitives.push_back(primitive);
@@ -103,42 +112,43 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 	int rightSize = (int)rightPrimitives.size();
 	bool shouldTerminate = false;
 
+	//file << tfm::format("%d: %d %d | %d: %f\n", nodeCount, leftSize, rightSize, axis, splitPoint);
+	file << tfm::format("%d %d | %d: %f\n", leftSize, rightSize, axis, splitPoint);
+
 	if (leftSize == previousLeftSize && rightSize == previousRightSize)
-	{
-		if (++sameSizeCount >= 5)
-			shouldTerminate = true;
-	}
-	else
-		sameSizeCount = 0;
+		shouldTerminate = true;
 
 	previousLeftSize = leftSize;
 	previousRightSize = rightSize;
 
-	if (shouldTerminate)
-		App::getLog().logWarning("One BVH node got stuck and was terminated early");
-
 	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
 		node->left = new BVH();
-		buildRecursive(leftPrimitives, (BVH*)node->left, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
+		buildRecursive(leftPrimitives, (BVH*)node->left, info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
+	{
+		leafCount++;
 		node->left = new PrimitiveList(leftPrimitives);
+	}
 
 	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
 		node->right = new BVH();
-		buildRecursive(rightPrimitives, (BVH*)node->right, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
+		buildRecursive(rightPrimitives, (BVH*)node->right, info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
+	{
+		leafCount++;
 		node->right = new PrimitiveList(rightPrimitives);
+	}
 }
 
-void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen)
+void BVH::calculateSplit(int& axis, double& splitPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen)
 {
 	if (info.useSAH)
 	{
-		calculateSAHSplit(axis, divisionPoint, primitives, node, info);
+		calculateSAHSplit(axis, splitPoint, primitives, node, info);
 		return;
 	}
 
@@ -153,58 +163,58 @@ void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Pri
 		throw std::runtime_error("Unknown BVH axis selection");
 
 	if (info.axisSplit == BVHAxisSplit::MIDDLE)
-		divisionPoint = node->aabb.center.element(axis);
+		splitPoint = node->aabb.center.element(axis);
 	else if (info.axisSplit == BVHAxisSplit::MEDIAN)
-		divisionPoint = calculateMedianPoint(axis, primitives);
+		splitPoint = calculateMedianPoint(axis, primitives);
 	else if (info.axisSplit == BVHAxisSplit::RANDOM)
 	{
 		std::uniform_real_distribution<double> dist(node->aabb.min.element(axis), node->aabb.max.element(axis));
-		divisionPoint = dist(gen);
+		splitPoint = dist(gen);
 	}
 	else
 		throw std::runtime_error("Unknown BVH axis split");
 }
 
-void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info)
+void BVH::calculateSAHSplit(int& axis, double& splitPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info)
 {
 	double lowestScore = std::numeric_limits<double>::max();
 
 	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
 	{
-		double tempDivisionPoint = node->aabb.center.element(tempAxis);
-		double score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
+		double tempSplitPoint = node->aabb.center.element(tempAxis);
+		double score = calculateSAHScore(tempAxis, tempSplitPoint, primitives, node);
 
 		if (score < lowestScore)
 		{
 			axis = tempAxis;
-			divisionPoint = tempDivisionPoint;
+			splitPoint = tempSplitPoint;
 			lowestScore = score;
 		}
 
-		tempDivisionPoint = calculateMedianPoint(tempAxis, primitives);
-		score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
+		tempSplitPoint = calculateMedianPoint(tempAxis, primitives);
+		score = calculateSAHScore(tempAxis, tempSplitPoint, primitives, node);
 
 		if (score < lowestScore)
 		{
 			axis = tempAxis;
-			divisionPoint = tempDivisionPoint;
+			splitPoint = tempSplitPoint;
 			lowestScore = score;
 		}
 
 		if (info.regularSAHSplits > 0)
 		{
 			double step = node->aabb.extent.element(tempAxis) / (double)info.regularSAHSplits;
-			tempDivisionPoint = node->aabb.min.element(tempAxis);
+			tempSplitPoint = node->aabb.min.element(tempAxis);
 
 			for (int i = 0; i < info.regularSAHSplits - 1; ++i)
 			{
-				tempDivisionPoint += step;
-				score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
+				tempSplitPoint += step;
+				score = calculateSAHScore(tempAxis, tempSplitPoint, primitives, node);
 
 				if (score < lowestScore)
 				{
 					axis = tempAxis;
-					divisionPoint = tempDivisionPoint;
+					splitPoint = tempSplitPoint;
 					lowestScore = score;
 				}
 			}
@@ -212,7 +222,7 @@ void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<
 	}
 }
 
-double BVH::calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives, BVH* node)
+double BVH::calculateSAHScore(int axis, double splitPoint, const std::vector<Primitive*>& primitives, BVH* node)
 {
 	assert(primitives.size() > 0);
 
@@ -224,7 +234,7 @@ double BVH::calculateSAHScore(int axis, double divisionPoint, const std::vector<
 	{
 		AABB primitiveAABB = primitive->getAABB();
 
-		if (primitiveAABB.center.element(axis) <= divisionPoint)
+		if (primitiveAABB.center.element(axis) <= splitPoint)
 		{
 			leftAABB.expand(primitiveAABB);
 			leftCount++;
