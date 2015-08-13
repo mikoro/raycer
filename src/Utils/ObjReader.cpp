@@ -166,6 +166,8 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 		Vector3 v0tov2 = triangle.vertices[2] - triangle.vertices[0];
 		Vector3 normal = v0tov1.cross(v0tov2).normalized();
 
+		triangle.normal = normal;
+
 		if (hasNormals)
 		{
 			triangle.normals[0] = normals[normalIndices[0]];

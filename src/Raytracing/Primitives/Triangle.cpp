@@ -56,11 +56,6 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 
 	double w = 1.0 - u - v;
 	Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
-
-	// triangle doesn't face the ray after interpolation
-	if (ray.direction.dot(interpolatedNormal) > 0.0)
-		return;
-
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
 
 	intersection.wasFound = true;
@@ -68,6 +63,74 @@ void Triangle::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord / texcoordScale;
+	intersection.materialId = materialId;
+}
+
+// http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
+void Triangle::intersect2(const Ray& ray, Intersection& intersection) const
+{
+	double denominator = ray.direction.dot(normal);
+
+	// ray and triangle are parallel -> no intersection
+	if (fabs(denominator) < std::numeric_limits<double>::epsilon())
+		return;
+
+	double t = (vertices[0] - ray.origin).dot(normal) / denominator;
+
+	// intersection is behind ray origin
+	if (t < 0.0)
+		return;
+
+	// another intersection is closer
+	if (t > intersection.distance)
+		return;
+
+	// intersection position
+	Vector3 ip = ray.origin + (t * ray.direction);
+
+	// barycentric coordinates precalc
+	Vector3 v0v1 = vertices[1] - vertices[0];
+	Vector3 v0v2 = vertices[2] - vertices[0];
+	Vector3 normal2 = v0v1.cross(v0v2);
+
+	// edge 0
+	Vector3 v0ip = ip - vertices[0];
+	Vector3 c0 = v0v1.cross(v0ip);
+
+	if (normal2.dot(c0) < 0.0)
+		return;
+
+	// edge 1
+	Vector3 v1v2 = vertices[2] - vertices[1];
+	Vector3 v1ip = ip - vertices[1];
+	Vector3 c1 = v1v2.cross(v1ip);
+	double u = normal2.dot(c1);
+
+	if (u < 0.0)
+		return;
+
+	// edge 2
+	Vector3 v2v0 = vertices[0] - vertices[2];
+	Vector3 v2ip = ip - vertices[2];
+	Vector3 c2 = v2v0.cross(v2ip);
+	double v = normal2.dot(c2);
+
+	if (v < 0.0)
+		return;
+
+	double denominator2 = normal2.dot(normal2);
+	u /= denominator2;
+	v /= denominator2;
+	double w = 1.0 - u - v;
+
+	Vector3 interpolatedNormal = u * normals[0] + v * normals[1] + w * normals[2];
+	Vector2 interpolatedTexcoord = u * texcoords[0] + v * texcoords[1] + w * texcoords[2];
+
+	intersection.wasFound = true;
+	intersection.distance = t;
+	intersection.position = ip;
+	intersection.normal = interpolatedNormal;
+	intersection.texcoord = interpolatedTexcoord;
 	intersection.materialId = materialId;
 }
 

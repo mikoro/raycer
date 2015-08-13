@@ -42,6 +42,8 @@ void Mesh::initialize()
 		triangle.normals[1] = rotation * triangle.normals[1];
 		triangle.normals[2] = rotation * triangle.normals[2];
 
+		triangle.normal = rotation * triangle.normal;
+
 		triangle.materialId = materialId;
 		triangle.texcoordScale = texcoordScale;
 	}
