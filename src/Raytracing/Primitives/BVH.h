@@ -4,7 +4,6 @@
 #pragma once
 
 #include <random>
-#include <vector>
 
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
@@ -27,21 +26,6 @@ namespace Raycer
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 	};
 
-	struct BVHBuildEntry
-	{
-		int start;
-		int end;
-		int parent;
-	};
-
-	struct BVHFlatNode
-	{
-		AABB aabb;
-		int rightOffset;
-		int startOffset;
-		int primitiveCount;
-	};
-
 	class BVH : public Primitive
 	{
 	public:
@@ -50,16 +34,20 @@ namespace Raycer
 		void intersect(const Ray& ray, Intersection& intersection) const;
 		AABB getAABB() const;
 
-		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
+		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info);
+		void free(BVH* node);
 
 	private:
 
-		void calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry, std::mt19937& generator);
-		void calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry);
-		double calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const BVHBuildEntry& buildEntry);
-		double calculateMedianPoint(int axis, const BVHBuildEntry& buildEntry);
-		
-		std::vector<Primitive*> orderedPrimitives;
-		std::vector<BVHFlatNode> flatNodes;
+		void buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount);
+		void calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen);
+		void calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info);
+		double calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives, BVH* node);
+		double calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives);
+
+		AABB aabb;
+
+		Primitive* left = nullptr;
+		Primitive* right = nullptr;
 	};
 }

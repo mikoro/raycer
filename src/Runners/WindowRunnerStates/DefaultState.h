@@ -30,7 +30,7 @@ namespace Raycer
 
 		RaytracerState state;
 		Scene scene;
-		BVH root;
+		FlatBVH root;
 
 		std::atomic<bool> interrupted;
 	};

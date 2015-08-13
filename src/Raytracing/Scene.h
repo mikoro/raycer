@@ -27,6 +27,7 @@
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Primitives/BVH.h"
+#include "Raytracing/Primitives/FlatBVH.h"
 #include "Math/Color.h"
 
 namespace Raycer

@@ -22,224 +22,189 @@ void BVH::initialize()
 
 void BVH::intersect(const Ray& ray, Intersection& intersection) const
 {
-	int stack[128];
-	int stackptr = 0;
+	if (!aabb.intersects(ray))
+		return;
 
-	// push to stack
-	stack[stackptr] = 0;
-	stackptr++;
-
-	while (stackptr > 0)
-	{
-		// pop from stack
-		stackptr--;
-		int index = stack[stackptr];
-		BVHFlatNode flatNode = flatNodes[index];
-
-		// leaf node -> intersect with all its primitives
-		if (flatNode.rightOffset == 0)
-		{
-			for (int i = 0; i < flatNode.primitiveCount; ++i)
-				orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersection);
-		}
-		else // travel down the tree
-		{
-			// right child
-			if (flatNodes[index + flatNode.rightOffset].aabb.intersects(ray))
-			{
-				stack[stackptr] = index + flatNode.rightOffset;
-				stackptr++;
-			}
-
-			// left child
-			if (flatNodes[index + 1].aabb.intersects(ray))
-			{
-				stack[stackptr] = index + 1;
-				stackptr++;
-			}
-		}
-	}
+	left->intersect(ray, intersection);
+	right->intersect(ray, intersection);
 }
 
 AABB BVH::getAABB() const
 {
-	return flatNodes[0].aabb;
+	return aabb;
 }
 
-void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo)
+void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info)
 {
 	Log& log = App::getLog();
 
-	log.logInfo("Building BVH (primitives: %d)", primitives.size());
+	log.logInfo("Constructing the BVH (primitives: %d)", primitives.size());
 
 	auto startTime = std::chrono::high_resolution_clock::now();
-
 	std::random_device rd;
-	std::mt19937 generator(rd());
-
-	BVHBuildEntry stack[128];
-	orderedPrimitives = primitives;
-	flatNodes.clear();
-
-	int stackptr = 0;
+	std::mt19937 gen(rd());
 	int nodeCount = 0;
-	int leafCount = 0;
 
-	enum { ROOT = -4, UNVISITED = -3, VISITED_TWICE = -1 };
-
-	// push to stack
-	stack[stackptr].start = 0;
-	stack[stackptr].end = (int)orderedPrimitives.size();
-	stack[stackptr].parent = ROOT;
-	stackptr++;
-
-	while (stackptr > 0)
-	{
-		stackptr--;
-		nodeCount++;
-
-		// pop from stack
-		BVHFlatNode flatNode;
-		BVHBuildEntry buildEntry = stack[stackptr];
-		flatNode.rightOffset = UNVISITED;
-		flatNode.startOffset = buildEntry.start;
-		flatNode.primitiveCount = buildEntry.end - buildEntry.start;
-
-		for (int i = buildEntry.start; i < buildEntry.end; ++i)
-			flatNode.aabb.expand(orderedPrimitives[i]->getAABB());
-
-		flatNode.aabb.update();
-
-		// leaf node indicated by rightOffset = 0
-		if (flatNode.primitiveCount <= buildInfo.maxLeafSize)
-		{
-			flatNode.rightOffset = 0;
-			leafCount++;
-		}
-
-		flatNodes.push_back(flatNode);
-
-		// update the parent rightOffset when visiting its right child
-		if (buildEntry.parent != ROOT)
-		{
-			flatNodes[buildEntry.parent].rightOffset++;
-
-			if (flatNodes[buildEntry.parent].rightOffset == VISITED_TWICE)
-				flatNodes[buildEntry.parent].rightOffset = nodeCount - 1 - buildEntry.parent;
-		}
-
-		// leaf node -> no further subdivision
-		if (flatNode.rightOffset == 0)
-			continue;
-
-		int axis;
-		double splitPoint;
-
-		if (buildInfo.useSAH)
-			calculateSAHSplit(axis, splitPoint, flatNode.aabb, buildInfo, buildEntry);
-		else
-			calculateSplit(axis, splitPoint, flatNode.aabb, buildInfo, buildEntry, generator);
-
-		int middle = buildEntry.start;
-
-		// partition primitive range by the split point
-		for (int i = buildEntry.start; i < buildEntry.end; ++i)
-		{
-			if (orderedPrimitives[i]->getAABB().center.element(axis) < splitPoint)
-			{
-				std::swap(orderedPrimitives[i], orderedPrimitives[middle]);
-				middle++;
-			}
-		}
-
-		// partition failed -> fallback
-		if (middle == buildEntry.start || middle == buildEntry.end)
-			middle = buildEntry.start + (buildEntry.end - buildEntry.start) / 2;
-
-		// push right child
-		stack[stackptr].start = middle;
-		stack[stackptr].end = buildEntry.end;
-		stack[stackptr].parent = nodeCount - 1;
-		stackptr++;
-
-		// push left child
-		stack[stackptr].start = buildEntry.start;
-		stack[stackptr].end = middle;
-		stack[stackptr].parent = nodeCount - 1;
-		stackptr++;
-	}
+	buildRecursive(primitives, this, info, gen, nodeCount, 0, 0, 0);
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
-	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
+	log.logInfo("BVH construction finished (time: %d ms, nodes: %d)", milliseconds, nodeCount);
 }
 
-void BVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry, std::mt19937& generator)
+void BVH::free(BVH* node)
 {
-	if (buildInfo.axisSelection == BVHAxisSelection::LARGEST)
-		axis = nodeAABB.getLargestAxis();
-	else if (buildInfo.axisSelection == BVHAxisSelection::RANDOM)
+	if (node->left != nullptr)
+	{
+		if (typeid(node->left) == typeid(BVH))
+			free((BVH*)node->left);
+
+		delete node->left;
+		node->left = nullptr;
+	}
+
+	if (node->right != nullptr)
+	{
+		if (typeid(node->right) == typeid(BVH))
+			free((BVH*)node->right);
+
+		delete node->right;
+		node->right = nullptr;
+	}
+}
+
+void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int previousLeftSize, int previousRightSize, int sameSizeCount)
+{
+	nodeCount++;
+
+	for (Primitive* primitive : primitives)
+		node->aabb.expand(primitive->getAABB());
+
+	node->aabb.update();
+
+	int axis;
+	double divisionPoint;
+
+	calculateSplit(axis, divisionPoint, primitives, node, info, gen);
+
+	std::vector<Primitive*> leftPrimitives;
+	std::vector<Primitive*> rightPrimitives;
+
+	for (Primitive* primitive : primitives)
+	{
+		if (primitive->getAABB().center.element(axis) <= divisionPoint)
+			leftPrimitives.push_back(primitive);
+		else
+			rightPrimitives.push_back(primitive);
+	}
+
+	int leftSize = (int)leftPrimitives.size();
+	int rightSize = (int)rightPrimitives.size();
+	bool shouldTerminate = false;
+
+	if (leftSize == previousLeftSize && rightSize == previousRightSize)
+	{
+		if (++sameSizeCount >= 5)
+			shouldTerminate = true;
+	}
+	else
+		sameSizeCount = 0;
+
+	previousLeftSize = leftSize;
+	previousRightSize = rightSize;
+
+	if (shouldTerminate)
+		App::getLog().logWarning("One BVH node got stuck and was terminated early");
+
+	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
+	{
+		node->left = new BVH();
+		buildRecursive(leftPrimitives, (BVH*)node->left, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
+	}
+	else
+		node->left = new PrimitiveList(leftPrimitives);
+
+	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
+	{
+		node->right = new BVH();
+		buildRecursive(rightPrimitives, (BVH*)node->right, info, gen, nodeCount, previousLeftSize, previousRightSize, sameSizeCount);
+	}
+	else
+		node->right = new PrimitiveList(rightPrimitives);
+}
+
+void BVH::calculateSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen)
+{
+	if (info.useSAH)
+	{
+		calculateSAHSplit(axis, divisionPoint, primitives, node, info);
+		return;
+	}
+
+	if (info.axisSelection == BVHAxisSelection::LARGEST)
+		axis = node->aabb.getLargestAxis();
+	else if (info.axisSelection == BVHAxisSelection::RANDOM)
 	{
 		std::uniform_int_distribution<int> dist(0, 2);
-		axis = dist(generator);
+		axis = dist(gen);
 	}
 	else
 		throw std::runtime_error("Unknown BVH axis selection");
 
-	if (buildInfo.axisSplit == BVHAxisSplit::MIDDLE)
-		splitPoint = nodeAABB.center.element(axis);
-	else if (buildInfo.axisSplit == BVHAxisSplit::MEDIAN)
-		splitPoint = calculateMedianPoint(axis, buildEntry);
-	else if (buildInfo.axisSplit == BVHAxisSplit::RANDOM)
+	if (info.axisSplit == BVHAxisSplit::MIDDLE)
+		divisionPoint = node->aabb.center.element(axis);
+	else if (info.axisSplit == BVHAxisSplit::MEDIAN)
+		divisionPoint = calculateMedianPoint(axis, primitives);
+	else if (info.axisSplit == BVHAxisSplit::RANDOM)
 	{
-		std::uniform_real_distribution<double> dist(nodeAABB.min.element(axis), nodeAABB.max.element(axis));
-		splitPoint = dist(generator);
+		std::uniform_real_distribution<double> dist(node->aabb.min.element(axis), node->aabb.max.element(axis));
+		divisionPoint = dist(gen);
 	}
 	else
 		throw std::runtime_error("Unknown BVH axis split");
 }
 
-void BVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const BVHBuildEntry& buildEntry)
+void BVH::calculateSAHSplit(int& axis, double& divisionPoint, const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info)
 {
 	double lowestScore = std::numeric_limits<double>::max();
 
 	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
 	{
-		double tempSplitPoint = nodeAABB.center.element(tempAxis);
-		double score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
+		double tempDivisionPoint = node->aabb.center.element(tempAxis);
+		double score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
 
 		if (score < lowestScore)
 		{
 			axis = tempAxis;
-			splitPoint = tempSplitPoint;
+			divisionPoint = tempDivisionPoint;
 			lowestScore = score;
 		}
 
-		tempSplitPoint = calculateMedianPoint(tempAxis, buildEntry);
-		score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
+		tempDivisionPoint = calculateMedianPoint(tempAxis, primitives);
+		score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
 
 		if (score < lowestScore)
 		{
 			axis = tempAxis;
-			splitPoint = tempSplitPoint;
+			divisionPoint = tempDivisionPoint;
 			lowestScore = score;
 		}
 
-		if (buildInfo.regularSAHSplits > 0)
+		if (info.regularSAHSplits > 0)
 		{
-			double step = nodeAABB.extent.element(tempAxis) / (double)buildInfo.regularSAHSplits;
-			tempSplitPoint = nodeAABB.min.element(tempAxis);
+			double step = node->aabb.extent.element(tempAxis) / (double)info.regularSAHSplits;
+			tempDivisionPoint = node->aabb.min.element(tempAxis);
 
-			for (int i = 0; i < buildInfo.regularSAHSplits - 1; ++i)
+			for (int i = 0; i < info.regularSAHSplits - 1; ++i)
 			{
-				tempSplitPoint += step;
-				score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
+				tempDivisionPoint += step;
+				score = calculateSAHScore(tempAxis, tempDivisionPoint, primitives, node);
 
 				if (score < lowestScore)
 				{
 					axis = tempAxis;
-					splitPoint = tempSplitPoint;
+					divisionPoint = tempDivisionPoint;
 					lowestScore = score;
 				}
 			}
@@ -247,19 +212,19 @@ void BVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB,
 	}
 }
 
-double BVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const BVHBuildEntry& buildEntry)
+double BVH::calculateSAHScore(int axis, double divisionPoint, const std::vector<Primitive*>& primitives, BVH* node)
 {
-	assert(buildEntry.end - buildEntry.start > 0);
+	assert(primitives.size() > 0);
 
 	AABB leftAABB, rightAABB;
 	int leftCount = 0;
 	int rightCount = 0;
 
-	for (int i = buildEntry.start; i < buildEntry.end; ++i)
+	for (Primitive* primitive : primitives)
 	{
-		AABB primitiveAABB = orderedPrimitives[i]->getAABB();
+		AABB primitiveAABB = primitive->getAABB();
 
-		if (primitiveAABB.center.element(axis) <= splitPoint)
+		if (primitiveAABB.center.element(axis) <= divisionPoint)
 		{
 			leftAABB.expand(primitiveAABB);
 			leftCount++;
@@ -276,30 +241,30 @@ double BVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB,
 	if (leftCount > 0)
 	{
 		leftAABB.update();
-		score += (leftAABB.surfaceArea / nodeAABB.surfaceArea) * (double)leftCount;
+		score += (leftAABB.surfaceArea / node->aabb.surfaceArea) * (double)leftCount;
 	}
 
 	if (rightCount > 0)
 	{
 		rightAABB.update();
-		score += (rightAABB.surfaceArea / nodeAABB.surfaceArea) * (double)rightCount;
+		score += (rightAABB.surfaceArea / node->aabb.surfaceArea) * (double)rightCount;
 	}
 
 	return score;
 }
 
-double BVH::calculateMedianPoint(int axis, const BVHBuildEntry& buildEntry)
+double BVH::calculateMedianPoint(int axis, const std::vector<Primitive*>& primitives)
 {
+	assert(primitives.size() >= 2);
+
 	std::vector<double> centerPoints;
 
-	for (int i = buildEntry.start; i < buildEntry.end; ++i)
-		centerPoints.push_back(orderedPrimitives[i]->getAABB().center.element(axis));
+	for (Primitive* primitive : primitives)
+		centerPoints.push_back(primitive->getAABB().center.element(axis));
 
 	std::sort(centerPoints.begin(), centerPoints.end());
 	int size = (int)centerPoints.size();
 	double median = 0.0;
-
-	assert(size >= 2);
 
 	if (size % 2 == 0)
 		median = (centerPoints[size / 2 - 1] + centerPoints[size / 2]) / 2.0;

@@ -262,6 +262,9 @@
     <ClCompile Include="src\TestScenes\TestScene6.cpp">
       <Filter>TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Primitives\FlatBVH.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
     <ClCompile Include="src\Raytracing\Primitives\BVH.cpp">
       <Filter>Raytracing\Primitives</Filter>
     </ClCompile>
@@ -464,6 +467,9 @@
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\PrimitiveList.h">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Primitives\FlatBVH.h">
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\BVH.h">
