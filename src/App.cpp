@@ -109,6 +109,7 @@ int App::run(int argc, char** argv)
 	TCLAP::ValueArg<int> clDeviceTypeArg("", "cl-device-type", "OpenCL device type to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> clDeviceIdArg("", "cl-device", "OpenCL device to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<int> testSceneArg("", "test", "Select one of the test scenes", false, 0, "int", cmd);
+	TCLAP::SwitchArg nonTestSceneSwitch("", "non-test", "Force test scene mode off", cmd, false);
 	TCLAP::SwitchArg clientSwitch("", "client", "Enable network client mode", cmd, false);
 	TCLAP::SwitchArg serverSwitch("", "server", "Enable network server mode", cmd, false);
 	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
@@ -159,6 +160,9 @@ int App::run(int argc, char** argv)
 			settings.scene.enableTestScene = true;
 			settings.scene.testSceneNumber = testSceneArg.getValue();
 		}
+
+		if (nonTestSceneSwitch.isSet())
+			settings.scene.enableTestScene = false;
 
 		if (clientSwitch.isSet())
 		{

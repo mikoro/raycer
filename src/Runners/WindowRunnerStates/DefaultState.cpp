@@ -68,9 +68,9 @@ void DefaultState::update(double timeStep)
 	if (windowRunner.keyWasPressed(GLFW_KEY_F8))
 	{
 		windowRunner.pause();
-		scene.saveToFile("temp.json");
+		scene.saveToFile("scene.xml");
 #ifdef _WIN32
-		ShellExecuteA(NULL, "open", "raycer.exe", "-s temp.json --non-interactive --view", NULL, SW_SHOWNORMAL);
+		ShellExecuteA(NULL, "open", "raycer.exe", "-s scene.xml --non-interactive --non-test --view", NULL, SW_SHOWNORMAL);
 #endif
 	}
 }
