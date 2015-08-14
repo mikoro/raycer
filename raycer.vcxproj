@@ -207,6 +207,7 @@
     <ClCompile Include="src\TestScenes\TestScene4.cpp" />
     <ClCompile Include="src\TestScenes\TestScene5.cpp" />
     <ClCompile Include="src\TestScenes\TestScene6.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene7.cpp" />
     <ClCompile Include="src\Tests\ColorGradientTest.cpp" />
     <ClCompile Include="src\Tests\EulerAngleTest.cpp" />
     <ClCompile Include="src\Tests\ImageTest.cpp" />
