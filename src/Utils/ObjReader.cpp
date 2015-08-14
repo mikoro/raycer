@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <chrono>
 #include <fstream>
 #include <stdexcept>
 
@@ -18,7 +19,9 @@ std::vector<Triangle> ObjReader::readFile(const std::string& fileName)
 {
 	Log& log = App::getLog();
 
-	log.logInfo("Parsing OBJ file %s", fileName);
+	log.logInfo("Parsing OBJ file (%s)", fileName);
+
+	auto startTime = std::chrono::high_resolution_clock::now();
 
 	std::ifstream file(fileName);
 	std::string line;
@@ -82,6 +85,11 @@ std::vector<Triangle> ObjReader::readFile(const std::string& fileName)
 			continue;
 		}
 	}
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+
+	log.logInfo("OBJ file parsing finished (time: %d ms, triangles: %d)", milliseconds, triangles.size());
 
 	return triangles;
 }

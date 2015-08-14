@@ -1,9 +1,10 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <chrono>
+#include <cstdint>
 #include <fstream>
 #include <map>
-#include <cstdint>
 #include <stdexcept>
 
 #include "Utils/PlyReader.h"
@@ -480,7 +481,9 @@ std::vector<Triangle> PlyReader::readFile(const std::string& fileName)
 {
 	Log& log = App::getLog();
 
-	log.logInfo("Parsing PLY file %s", fileName);
+	log.logInfo("Parsing PLY file (%s)", fileName);
+
+	auto startTime = std::chrono::high_resolution_clock::now();
 
 	std::ifstream inputStream(fileName, std::ios::in | std::ios::binary);
 
@@ -501,5 +504,12 @@ std::vector<Triangle> PlyReader::readFile(const std::string& fileName)
 	else
 		readBinaryData(inputStream, header, vertices, texcoords, normals, faces);
 
-	return unpackAndTriangulate(header, vertices, texcoords, normals, faces);
+	std::vector<Triangle> triangles = unpackAndTriangulate(header, vertices, texcoords, normals, faces);
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+
+	log.logInfo("PLY file parsing finished (time: %d ms, triangles: %d)", milliseconds, triangles.size());
+
+	return triangles;
 }
