@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "Raytracing/Primitives/BVH.h"
+#include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/PrimitiveList.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"

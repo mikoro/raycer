@@ -5,6 +5,8 @@
 
 #include "cereal/cereal.hpp"
 
+#include "Raytracing/Scene.h"
+
 #include "Math/AxisAngle.h"
 #include "Math/Color.h"
 #include "Math/EulerAngle.h"
@@ -14,88 +16,27 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 
-#include "Raytracing/Camera.h"
-#include "Raytracing/Lights.h"
-#include "Raytracing/Material.h"
-#include "Raytracing/Scene.h"
-
-#include "Raytracing/Primitives/Primitive.h"
-#include "Raytracing/Primitives/Plane.h"
-#include "Raytracing/Primitives/Sphere.h"
-#include "Raytracing/Primitives/Triangle.h"
-
-#include "Raytracing/Textures/Texture.h"
-#include "Raytracing/Textures/ColorTexture.h"
-#include "Raytracing/Textures/CheckerTexture.h"
-#include "Raytracing/Textures/ImageTexture.h"
-#include "Raytracing/Textures/PerlinNoiseTexture.h"
-#include "Raytracing/Textures/ValueNoiseTexture.h"
-#include "Raytracing/Textures/CellNoiseTexture.h"
-#include "Raytracing/Textures/MarbleTexture.h"
-#include "Raytracing/Textures/WoodTexture.h"
-#include "Raytracing/Textures/FireTexture.h"
-#include "Raytracing/Textures/AtmosphereTexture.h"
-#include "Raytracing/Textures/VoronoiTexture.h"
-
 namespace Raycer
 {
-	/* MATH */
+	// ---------------------------------------------
+	// SCENE
+	// ---------------------------------------------
 
 	template<class Archive>
-	void serialize(Archive& a, AxisAngle& b)
+	void serialize(Archive& a, Scene& b)
 	{
-		a(cereal::make_nvp("axis", b.axis),
-			cereal::make_nvp("angle", b.angle));
+		a(cereal::make_nvp("camera", b.camera),
+			cereal::make_nvp("misc", b.misc),
+			cereal::make_nvp("fog", b.fog),
+			cereal::make_nvp("raytracing", b.raytracing),
+			cereal::make_nvp("multisampling", b.multisampling),
+			cereal::make_nvp("toneMapping", b.toneMapping),
+			cereal::make_nvp("rootBVH", b.rootBVH),
+			cereal::make_nvp("textures", b.textures),
+			cereal::make_nvp("materials", b.materials),
+			cereal::make_nvp("lights", b.lights),
+			cereal::make_nvp("primitives", b.primitives));
 	}
-
-	template<class Archive>
-	void serialize(Archive& a, Color& b)
-	{
-		a(cereal::make_nvp("r", b.r),
-			cereal::make_nvp("g", b.g),
-			cereal::make_nvp("b", b.b),
-			cereal::make_nvp("a", b.a));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, EulerAngle& b)
-	{
-		a(cereal::make_nvp("yaw", b.yaw),
-			cereal::make_nvp("pitch", b.pitch),
-			cereal::make_nvp("roll", b.roll));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Matrix4x4& b)
-	{
-		a(cereal::make_nvp("m", b.m));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Quaternion& b)
-	{
-		a(cereal::make_nvp("w", b.w),
-			cereal::make_nvp("x", b.x),
-			cereal::make_nvp("y", b.y),
-			cereal::make_nvp("z", b.z));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Vector2& b)
-	{
-		a(cereal::make_nvp("x", b.x),
-			cereal::make_nvp("y", b.y));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Vector3& b)
-	{
-		a(cereal::make_nvp("x", b.x),
-			cereal::make_nvp("y", b.y),
-			cereal::make_nvp("z", b.z));
-	}
-
-	/* CAMERA */
 
 	template<class Archive>
 	void serialize(Archive& a, Camera& b)
@@ -112,7 +53,92 @@ namespace Raycer
 			cereal::make_nvp("focalLenght", b.focalLenght));
 	}
 
-	/* LIGHTS */
+	template<class Archive>
+	void serialize(Archive& a, Scene::Misc& b)
+	{
+		a(cereal::make_nvp("backgroundColor", b.backgroundColor));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Fog& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("color", b.color),
+			cereal::make_nvp("distance", b.distance),
+			cereal::make_nvp("steepness", b.steepness),
+			cereal::make_nvp("heightDispersion", b.heightDispersion),
+			cereal::make_nvp("height", b.height),
+			cereal::make_nvp("heightSteepness", b.heightSteepness));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Raytracing& b)
+	{
+		a(cereal::make_nvp("maxIterations", b.maxIterations),
+			cereal::make_nvp("startOffset", b.startOffset));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Multisampling& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("type", b.type),
+			cereal::make_nvp("samples", b.samples));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::ToneMapping& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("type", b.type),
+			cereal::make_nvp("gamma", b.gamma));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::RootBVH& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("buildInfo", b.buildInfo));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Textures& b)
+	{
+		a(cereal::make_nvp("colorTextures", b.colorTextures),
+			cereal::make_nvp("checkerTextures", b.checkerTextures),
+			cereal::make_nvp("imageTextures", b.imageTextures),
+			cereal::make_nvp("perlinNoiseTextures", b.perlinNoiseTextures),
+			cereal::make_nvp("valueNoiseTextures", b.valueNoiseTextures),
+			cereal::make_nvp("cellNoiseTextures", b.cellNoiseTextures),
+			cereal::make_nvp("marbleTextures", b.marbleTextures),
+			cereal::make_nvp("woodTextures", b.woodTextures),
+			cereal::make_nvp("fireTextures", b.fireTextures),
+			cereal::make_nvp("atmosphereTextures", b.atmosphereTextures),
+			cereal::make_nvp("voronoiTextures", b.voronoiTextures));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Lights& b)
+	{
+		a(cereal::make_nvp("ambientLight", b.ambientLight),
+			cereal::make_nvp("directionalLights", b.directionalLights),
+			cereal::make_nvp("pointLights", b.pointLights),
+			cereal::make_nvp("spotLights", b.spotLights));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::Primitives& b)
+	{
+		a(cereal::make_nvp("planes", b.planes),
+			cereal::make_nvp("spheres", b.spheres),
+			cereal::make_nvp("boxes", b.boxes),
+			cereal::make_nvp("triangles", b.triangles),
+			cereal::make_nvp("meshes", b.meshes));
+	}
+
+	// ---------------------------------------------
+	// LIGHTS
+	// ---------------------------------------------
 
 	template<class Archive>
 	void serialize(Archive& a, AmbientLight& b)
@@ -155,134 +181,9 @@ namespace Raycer
 			cereal::make_nvp("angle", b.angle));
 	}
 
-	/* MATERIAL */
-
-	template<class Archive>
-	void serialize(Archive& a, Material& b)
-	{
-		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("textureId", b.textureId),
-			cereal::make_nvp("skipLighting", b.skipLighting),
-			cereal::make_nvp("nonShadowing", b.nonShadowing),
-			cereal::make_nvp("ambientness", b.ambientness),
-			cereal::make_nvp("diffuseness", b.diffuseness),
-			cereal::make_nvp("specularity", b.specularity),
-			cereal::make_nvp("shininess", b.shininess),
-			cereal::make_nvp("fresnel", b.fresnel),
-			cereal::make_nvp("reflectance", b.reflectance),
-			cereal::make_nvp("transmittance", b.transmittance),
-			cereal::make_nvp("refractiveIndex", b.refractiveIndex),
-			cereal::make_nvp("attenuate", b.attenuate),
-			cereal::make_nvp("attenuation", b.attenuation),
-			cereal::make_nvp("attenuationColor", b.attenuationColor));
-	}
-
-	/* SCENE */
-
-	template<class Archive>
-	void serialize(Archive& a, Scene& b)
-	{
-		a(cereal::make_nvp("camera", b.camera),
-			cereal::make_nvp("misc", b.misc),
-			cereal::make_nvp("fog", b.fog),
-			cereal::make_nvp("raytracing", b.raytracing),
-			cereal::make_nvp("multisampling", b.multisampling),
-			cereal::make_nvp("toneMapping", b.toneMapping),
-			cereal::make_nvp("globalBVH", b.globalBVH),
-			cereal::make_nvp("textures", b.textures),
-			cereal::make_nvp("materials", b.materials),
-			cereal::make_nvp("lights", b.lights),
-			cereal::make_nvp("primitives", b.primitives));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Raytracing& b)
-	{
-		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("startOffset", b.startOffset));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Misc& b)
-	{
-		a(cereal::make_nvp("backgroundColor", b.backgroundColor));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Multisampling& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("type", b.type),
-			cereal::make_nvp("samples", b.samples));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::ToneMapping& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("type", b.type),
-			cereal::make_nvp("gamma", b.gamma));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::GlobalBVH& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("maxLeafSize", b.maxLeafSize),
-			cereal::make_nvp("useSAH", b.useSAH),
-			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits),
-			cereal::make_nvp("axisSelection", b.axisSelection),
-			cereal::make_nvp("axisSplit", b.axisSplit));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Fog& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("color", b.color),
-			cereal::make_nvp("distance", b.distance),
-			cereal::make_nvp("steepness", b.steepness),
-			cereal::make_nvp("heightDispersion", b.heightDispersion),
-			cereal::make_nvp("height", b.height),
-			cereal::make_nvp("heightSteepness", b.heightSteepness));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Textures& b)
-	{
-		a(cereal::make_nvp("colorTextures", b.colorTextures),
-			cereal::make_nvp("checkerTextures", b.checkerTextures),
-			cereal::make_nvp("imageTextures", b.imageTextures),
-			cereal::make_nvp("perlinNoiseTextures", b.perlinNoiseTextures),
-			cereal::make_nvp("valueNoiseTextures", b.valueNoiseTextures),
-			cereal::make_nvp("cellNoiseTextures", b.cellNoiseTextures),
-			cereal::make_nvp("marbleTextures", b.marbleTextures),
-			cereal::make_nvp("woodTextures", b.woodTextures),
-			cereal::make_nvp("fireTextures", b.fireTextures),
-			cereal::make_nvp("atmosphereTextures", b.atmosphereTextures),
-			cereal::make_nvp("voronoiTextures", b.voronoiTextures));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Lights& b)
-	{
-		a(cereal::make_nvp("ambientLight", b.ambientLight),
-			cereal::make_nvp("directionalLights", b.directionalLights),
-			cereal::make_nvp("pointLights", b.pointLights),
-			cereal::make_nvp("spotLights", b.spotLights));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Primitives& b)
-	{
-		a(cereal::make_nvp("planes", b.planes),
-			cereal::make_nvp("spheres", b.spheres),
-			cereal::make_nvp("boxes", b.boxes),
-			cereal::make_nvp("triangles", b.triangles),
-			cereal::make_nvp("meshes", b.meshes));
-	}
-
-	/* PRIMITIVES */
+	// ---------------------------------------------
+	// PRIMITIVES
+	// ---------------------------------------------
 
 	template<class Archive>
 	void serialize(Archive& a, Plane& b)
@@ -329,10 +230,14 @@ namespace Raycer
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("orientation", b.orientation),
 			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("texcoordScale", b.texcoordScale),
+			cereal::make_nvp("enableBVH", b.enableBVH),
+			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
 	}
-
-	/* TEXTURES */
+	
+	// ---------------------------------------------
+	// TEXTURES
+	// ---------------------------------------------
 
 	template<class Archive>
 	void serialize(Archive& a, ColorTexture& b)
@@ -462,5 +367,101 @@ namespace Raycer
 			cereal::make_nvp("useRandomColors", b.useRandomColors),
 			cereal::make_nvp("randomColorCount", b.randomColorCount),
 			cereal::make_nvp("colors", b.colors));
+	}
+
+	// ---------------------------------------------
+	// MATH
+	// ---------------------------------------------
+
+	template<class Archive>
+	void serialize(Archive& a, AxisAngle& b)
+	{
+		a(cereal::make_nvp("axis", b.axis),
+			cereal::make_nvp("angle", b.angle));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Color& b)
+	{
+		a(cereal::make_nvp("r", b.r),
+			cereal::make_nvp("g", b.g),
+			cereal::make_nvp("b", b.b),
+			cereal::make_nvp("a", b.a));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, EulerAngle& b)
+	{
+		a(cereal::make_nvp("yaw", b.yaw),
+			cereal::make_nvp("pitch", b.pitch),
+			cereal::make_nvp("roll", b.roll));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Matrix4x4& b)
+	{
+		a(cereal::make_nvp("m", b.m));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Quaternion& b)
+	{
+		a(cereal::make_nvp("w", b.w),
+			cereal::make_nvp("x", b.x),
+			cereal::make_nvp("y", b.y),
+			cereal::make_nvp("z", b.z));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Vector2& b)
+	{
+		a(cereal::make_nvp("x", b.x),
+			cereal::make_nvp("y", b.y));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Vector3& b)
+	{
+		a(cereal::make_nvp("x", b.x),
+			cereal::make_nvp("y", b.y),
+			cereal::make_nvp("z", b.z));
+	}
+
+	// ---------------------------------------------
+	// MATERIAL
+	// ---------------------------------------------
+
+	template<class Archive>
+	void serialize(Archive& a, Material& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("textureId", b.textureId),
+			cereal::make_nvp("skipLighting", b.skipLighting),
+			cereal::make_nvp("nonShadowing", b.nonShadowing),
+			cereal::make_nvp("ambientness", b.ambientness),
+			cereal::make_nvp("diffuseness", b.diffuseness),
+			cereal::make_nvp("specularity", b.specularity),
+			cereal::make_nvp("shininess", b.shininess),
+			cereal::make_nvp("fresnel", b.fresnel),
+			cereal::make_nvp("reflectance", b.reflectance),
+			cereal::make_nvp("transmittance", b.transmittance),
+			cereal::make_nvp("refractiveIndex", b.refractiveIndex),
+			cereal::make_nvp("attenuate", b.attenuate),
+			cereal::make_nvp("attenuation", b.attenuation),
+			cereal::make_nvp("attenuationColor", b.attenuationColor));
+	}
+
+	// ---------------------------------------------
+	// BVHBUILDINFO
+	// ---------------------------------------------
+
+	template<class Archive>
+	void serialize(Archive& a, BVHBuildInfo& b)
+	{
+		a(cereal::make_nvp("maxLeafSize", b.maxLeafSize),
+			cereal::make_nvp("useSAH", b.useSAH),
+			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits),
+			cereal::make_nvp("axisSelection", b.axisSelection),
+			cereal::make_nvp("axisSplit", b.axisSplit));
 	}
 }

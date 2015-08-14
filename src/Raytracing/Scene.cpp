@@ -182,12 +182,7 @@ void Scene::initialize()
 		primitives.all.push_back(&triangle);
 
 	for (Mesh& mesh : primitives.meshes)
-	{
-		mesh.initialize();
-
-		for (Triangle& triangle : mesh.triangles)
-			primitives.all.push_back(&triangle);
-	}
+		primitives.all.push_back(&mesh);
 
 	for (Primitive* primitive : primitives.all)
 		primitive->initialize();
@@ -208,18 +203,10 @@ void Scene::initialize()
 
 	camera.initialize();
 
-	if (globalBVH.enabled)
+	if (rootBVH.enabled)
 	{
-		BVHBuildInfo buildInfo;
-		buildInfo.maxLeafSize = globalBVH.maxLeafSize;
-		buildInfo.useSAH = globalBVH.useSAH;
-		buildInfo.regularSAHSplits = globalBVH.regularSAHSplits;
-		buildInfo.axisSelection = globalBVH.axisSelection;
-		buildInfo.axisSplit = globalBVH.axisSplit;
-		
-		primitives.root.build(primitives.all, buildInfo);
-		
+		primitives.rootBVH.build(primitives.all, rootBVH.buildInfo);
 		primitives.all.clear();
-		primitives.all.push_back(&primitives.root);
+		primitives.all.push_back(&primitives.rootBVH);
 	}
 }

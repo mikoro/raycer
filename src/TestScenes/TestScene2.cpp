@@ -11,11 +11,12 @@ Scene TestScene::createTestScene2()
 {
 	Scene scene;
 
-	scene.globalBVH.maxLeafSize = 5;
-	scene.globalBVH.useSAH = true;
-	scene.globalBVH.regularSAHSplits = 0;
-	scene.globalBVH.axisSelection = BVHAxisSelection::LARGEST;
-	scene.globalBVH.axisSplit = BVHAxisSplit::MEDIAN;
+	scene.rootBVH.enabled = true;
+	scene.rootBVH.buildInfo.maxLeafSize = 5;
+	scene.rootBVH.buildInfo.useSAH = true;
+	scene.rootBVH.buildInfo.regularSAHSplits = 0;
+	scene.rootBVH.buildInfo.axisSelection = BVHAxisSelection::LARGEST;
+	scene.rootBVH.buildInfo.axisSplit = BVHAxisSplit::MEDIAN;
 
 	// CAMERA //
 

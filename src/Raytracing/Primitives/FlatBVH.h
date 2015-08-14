@@ -12,9 +12,17 @@
 
 namespace Raycer
 {
-	class Ray;
-	struct Intersection;
-	struct BVHBuildInfo;
+	enum class BVHAxisSelection { LARGEST, RANDOM };
+	enum class BVHAxisSplit { MIDDLE, MEDIAN, RANDOM };
+
+	struct BVHBuildInfo
+	{
+		int maxLeafSize = 5;
+		bool useSAH = true;
+		int regularSAHSplits = 0;
+		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
+		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
+	};
 
 	struct FlatBVHBuildEntry
 	{
@@ -30,6 +38,9 @@ namespace Raycer
 		int startOffset;
 		int primitiveCount;
 	};
+
+	class Ray;
+	struct Intersection;
 
 	class FlatBVH : public Primitive
 	{

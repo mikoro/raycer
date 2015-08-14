@@ -31,6 +31,8 @@ void Mesh::initialize()
 	Matrix4x4 translation = Matrix4x4::translate(position.x, position.y, position.z);
 	Matrix4x4 transformation = translation * scaling * rotation;
 
+	std::vector<Primitive*> primitives;
+
 	for (Triangle& triangle : triangles)
 	{
 		triangle.vertices[0] = transformation * triangle.vertices[0];
@@ -43,10 +45,19 @@ void Mesh::initialize()
 		triangle.normals[2] = rotation * triangle.normals[2];
 
 		triangle.normal = rotation * triangle.normal;
-
 		triangle.materialId = materialId;
 		triangle.texcoordScale = texcoordScale;
+
+		aabb.expand(triangle.getAABB());
+
+		if (enableBVH)
+			primitives.push_back(&triangle);
 	}
+
+	aabb.update();
+
+	if (enableBVH)
+		bvh.build(primitives, bvhBuildInfo);
 }
 
 bool Mesh::intersect(const Ray& ray, Intersection& intersection) const
@@ -54,10 +65,26 @@ bool Mesh::intersect(const Ray& ray, Intersection& intersection) const
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
-	return false;
+	if (enableBVH)
+		return bvh.intersect(ray, intersection);
+	else
+	{
+		bool wasFound = false;
+
+		for (const Triangle& triangle : triangles)
+		{
+			if (triangle.intersect(ray, intersection))
+				wasFound = true;
+		}
+
+		return wasFound;
+	}
 }
 
 AABB Mesh::getAABB() const
 {
-	return AABB();
+	if (enableBVH)
+		return bvh.getAABB();
+	else
+		return aabb;
 }

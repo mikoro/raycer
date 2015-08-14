@@ -26,7 +26,6 @@
 #include "Raytracing/Primitives/Box.h"
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Primitives/Mesh.h"
-#include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Math/Color.h"
 
@@ -91,15 +90,11 @@ namespace Raycer
 			double gamma = 1.0 / 2.2;
 		} toneMapping;
 
-		struct GlobalBVH
+		struct RootBVH
 		{
 			bool enabled = true;
-			int maxLeafSize = 5;
-			bool useSAH = true;
-			int regularSAHSplits = 0;
-			BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
-			BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
-		} globalBVH;
+			BVHBuildInfo buildInfo;
+		} rootBVH;
 
 		struct Textures
 		{
@@ -134,7 +129,7 @@ namespace Raycer
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 			std::vector<Primitive*> all;
-			FlatBVH root;
+			FlatBVH rootBVH;
 		} primitives;
 
 		std::map<int, Texture*> texturesMap;
