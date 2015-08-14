@@ -25,10 +25,10 @@ namespace Raycer
 
 		int seed = 1;
 		int density = 1;
-		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		Vector3 scale = Vector3(10.0, 10.0, 10.0);
 		CellNoiseDistanceType distanceType = CellNoiseDistanceType::EUCLIDEAN;
 		bool useRandomColors = true;
-		int randomColorCount = 100;
+		int randomColorCount = 1000;
 		std::vector<Color> colors;
 		
 	private:

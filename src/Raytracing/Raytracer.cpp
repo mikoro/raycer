@@ -487,7 +487,9 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 
 	for (const Primitive* primitive : scene.primitives.all)
 	{
-		if (primitive->intersect(shadowRay, shadowIntersection))
+		bool nonShadowing = scene.materialsMap.count(primitive->materialId) && scene.materialsMap.at(primitive->materialId)->nonShadowing;
+
+		if (!nonShadowing && primitive->intersect(shadowRay, shadowIntersection))
 			return true;
 	}
 

@@ -22,7 +22,7 @@ namespace Raycer
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
 		int seed = 1;
-		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		Vector3 scale = Vector3(10.0, 10.0, 10.0);
 		Color baseColor = Color(1.0, 1.0, 1.0);
 		CellNoiseDistanceType distanceType = CellNoiseDistanceType::EUCLIDEAN;
 		CellNoiseCombineType combineType = CellNoiseCombineType::D1;
