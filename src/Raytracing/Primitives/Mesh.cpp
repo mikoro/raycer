@@ -54,13 +54,11 @@ void Mesh::initialize()
 			primitives.push_back(&triangle);
 	}
 
-	aabb.update();
-
 	if (enableBVH)
 		bvh.build(primitives, bvhBuildInfo);
 }
 
-bool Mesh::intersect(const Ray& ray, Intersection& intersection) const
+bool Mesh::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -71,7 +69,7 @@ bool Mesh::intersect(const Ray& ray, Intersection& intersection) const
 	{
 		bool wasFound = false;
 
-		for (const Triangle& triangle : triangles)
+		for (Triangle& triangle : triangles)
 		{
 			if (triangle.intersect(ray, intersection))
 				wasFound = true;
@@ -87,4 +85,9 @@ AABB Mesh::getAABB() const
 		return bvh.getAABB();
 	else
 		return aabb;
+}
+
+Vector3* Mesh::getPosition()
+{
+	return &position;
 }

@@ -17,8 +17,9 @@ namespace Raycer
 	public:
 
 		void initialize();
-		bool intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
+		Vector3* getPosition();
 
 		Vector3 position;
 		double radius = 1.0;

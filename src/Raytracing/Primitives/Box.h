@@ -16,16 +16,12 @@ namespace Raycer
 	{
 	public:
 
-		Box();
-		Box(const AABB& aabb);
-
 		void initialize();
-		bool intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
+		Vector3* getPosition();
 
-		static Box create(const Vector3& center, const Vector3& extent);
-
-		Vector3 min;
-		Vector3 max;
+		Vector3 position;
+		Vector3 extent;
 	};
 }

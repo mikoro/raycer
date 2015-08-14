@@ -18,10 +18,36 @@ AABB::AABB()
 
 AABB::AABB(const Vector3& min_, const Vector3& max_)
 {
-	min = min_;
-	max = max_;
+	*this = createFromMinMax(min_, max_);
+}
 
-	update();
+AABB AABB::createFromMinMax(const Vector3& min, const Vector3& max)
+{
+	AABB aabb;
+
+	aabb.min = min;
+	aabb.max = max;
+
+	aabb.center = (min + max) * 0.5;
+	aabb.extent = max - min;
+	aabb.surfaceArea = 2.0 * (aabb.extent.x * aabb.extent.y + aabb.extent.z * aabb.extent.y + aabb.extent.x * aabb.extent.z);
+
+	return aabb;
+}
+
+AABB AABB::createFromCenterExtent(const Vector3& center, const Vector3& extent)
+{
+	AABB aabb;
+
+	aabb.center = center;
+	aabb.extent = extent;
+
+	aabb.min = center - extent;
+	aabb.max = center + extent;
+
+	aabb.surfaceArea = 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
+
+	return aabb;
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
@@ -60,13 +86,6 @@ void AABB::expand(const AABB& other)
 	max.x = std::max(max.x, other.max.x);
 	max.y = std::max(max.y, other.max.y);
 	max.z = std::max(max.z, other.max.z);
-
-	// update should be called manually after
-}
-
-void AABB::update()
-{
-	//assert(min < max);
 
 	center = (min + max) * 0.5;
 	extent = max - min;

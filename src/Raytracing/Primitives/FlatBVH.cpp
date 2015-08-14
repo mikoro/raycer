@@ -21,7 +21,7 @@ void FlatBVH::initialize()
 {
 }
 
-bool FlatBVH::intersect(const Ray& ray, Intersection& intersection) const
+bool FlatBVH::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -81,6 +81,11 @@ AABB FlatBVH::getAABB() const
 	return flatNodes[0].aabb;
 }
 
+Vector3* FlatBVH::getPosition()
+{
+	return nullptr;
+}
+
 void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo)
 {
 	Log& log = App::getLog();
@@ -123,8 +128,6 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 
 		for (int i = buildEntry.start; i < buildEntry.end; ++i)
 			flatNode.aabb.expand(orderedPrimitives[i]->getAABB());
-
-		flatNode.aabb.update();
 
 		// leaf node indicated by rightOffset = 0
 		if (flatNode.primitiveCount <= buildInfo.maxLeafSize)
@@ -291,16 +294,10 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	double score = 0.0;
 
 	if (leftCount > 0)
-	{
-		leftAABB.update();
 		score += (leftAABB.surfaceArea / nodeAABB.surfaceArea) * (double)leftCount;
-	}
 
 	if (rightCount > 0)
-	{
-		rightAABB.update();
 		score += (rightAABB.surfaceArea / nodeAABB.surfaceArea) * (double)rightCount;
-	}
 
 	return score;
 }

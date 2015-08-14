@@ -12,9 +12,11 @@
 #include <GLFW/glfw3.h>
 
 #include "Raytracing/Camera.h"
+#include "Raytracing/Ray.h"
+#include "Raytracing/Scene.h"
+#include "Raytracing/Intersection.h"
 #include "App.h"
 #include "Utils/Settings.h"
-#include "Raytracing/Ray.h"
 #include "Math/MathUtils.h"
 #include "Math/Vector2.h"
 #include "Runners/WindowRunner.h"
@@ -36,7 +38,7 @@ void Camera::setImagePlaneSize(int width, int height)
 	aspectRatio = (double)height / (double)width;
 }
 
-void Camera::update(double timeStep)
+void Camera::update(const Scene& scene, double timeStep)
 {
 	WindowRunner& windowRunner = App::getWindowRunner();
 	Settings& settings = App::getSettings();
@@ -60,6 +62,43 @@ void Camera::update(double timeStep)
 	{
 		angularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
 		angularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
+
+		if (!settings.camera.freeLook)
+			isMovingPrimitive = false;
+	}
+
+	if (windowRunner.mouseWasPressed(GLFW_MOUSE_BUTTON_RIGHT))
+	{
+		if (!isMovingPrimitive)
+		{
+			Vector2 pixelCoordinate;
+			pixelCoordinate.x = mouseInfo.framebufferX;
+			pixelCoordinate.y = mouseInfo.framebufferY;
+
+			Ray ray = getRay(pixelCoordinate);
+			Intersection intersection;
+
+			for (Primitive* primitive : scene.primitives.all)
+				primitive->intersect(ray, intersection);
+
+			if (intersection.wasFound)
+			{
+				isMovingPrimitive = true;
+				movingPrimitivePosition = intersection.primitive->getPosition();
+			}
+		}
+		else
+			isMovingPrimitive = false;
+	}
+
+	if (isMovingPrimitive && movingPrimitivePosition != nullptr)
+	{
+		if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
+			*movingPrimitivePosition += Vector3(forward.x, 0.0, forward.z).normalized() * (double)mouseInfo.deltaY / 100.0;
+		else
+			*movingPrimitivePosition += Vector3::UP * (double)mouseInfo.deltaY / 100.0;
+
+		*movingPrimitivePosition += right * (double)mouseInfo.deltaX / 100.0;
 	}
 
 	double moveSpeed = settings.camera.moveSpeed;

@@ -18,7 +18,7 @@ void Triangle::initialize()
 
 // Möller-Trumbore algorithm
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
-bool Triangle::intersect(const Ray& ray, Intersection& intersection) const
+bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -58,6 +58,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+	intersection.primitive = this;
 
 	if (ray.fastIntersection)
 		return true;
@@ -69,13 +70,12 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection) const
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord / texcoordScale;
-	intersection.materialId = materialId;
 
 	return true;
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
-bool Triangle::intersect2(const Ray& ray, Intersection& intersection) const
+bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -131,6 +131,7 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+	intersection.primitive = this;
 
 	if (ray.fastIntersection)
 		return true;
@@ -146,7 +147,6 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection) const
 	intersection.position = ip;
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord;
-	intersection.materialId = materialId;
 
 	return true;
 }
@@ -164,4 +164,9 @@ AABB Triangle::getAABB() const
 	max.z = std::max(vertices[0].z, std::max(vertices[1].z, vertices[2].z));
 
 	return AABB(min, max);
+}
+
+Vector3* Triangle::getPosition()
+{
+	return &vertices[0];
 }

@@ -12,26 +12,19 @@
 
 using namespace Raycer;
 
-Box::Box()
-{
-}
-
-Box::Box(const AABB& aabb)
-{
-	min = aabb.min;
-	max = aabb.max;
-}
-
 void Box::initialize()
 {
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
-bool Box::intersect(const Ray& ray, Intersection& intersection) const
+bool Box::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
+
+	Vector3 min = position - extent;
+	Vector3 max = position + extent;
 
 	double tx0 = (min.x - ray.origin.x) * ray.inverseDirection.x;
 	double tx1 = (max.x - ray.origin.x) * ray.inverseDirection.x;
@@ -90,14 +83,14 @@ bool Box::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+	intersection.primitive = this;
 
 	if (ray.fastIntersection)
 		return true;
 
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = isInside ? maxNormal : -minNormal;
-	intersection.materialId = materialId;
-
+	
 	// TODO: add texcoord mapping
 
 	return true;
@@ -105,15 +98,10 @@ bool Box::intersect(const Ray& ray, Intersection& intersection) const
 
 AABB Box::getAABB() const
 {
-	return AABB(min, max);
+	return AABB::createFromCenterExtent(position, extent);
 }
 
-Box Box::create(const Vector3& center, const Vector3& extent)
+Vector3* Box::getPosition()
 {
-	Box box;
-
-	box.min = center - extent;
-	box.max = center + extent;
-
-	return box;
+	return &position;
 }

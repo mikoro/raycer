@@ -23,8 +23,9 @@ namespace Raycer
 	public:
 
 		void initialize();
-		bool intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
+		Vector3* getPosition();
 
 		std::string meshFilePath;
 		Vector3 position = Vector3(0.0, 0.0, 0.0);

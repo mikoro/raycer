@@ -59,7 +59,7 @@ void DefaultState::update(double timeStep)
 {
 	WindowRunner& windowRunner = App::getWindowRunner();
 
-	scene.camera.update(timeStep);
+	scene.camera.update(scene, timeStep);
 	scene.camera.precalculate();
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))

@@ -10,6 +10,7 @@ namespace Raycer
 {
 	class Ray;
 	class Vector2;
+	class Scene;
 
 	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
 
@@ -21,7 +22,7 @@ namespace Raycer
 
 		void initialize();
 		void setImagePlaneSize(int width, int height);
-		void update(double timeStep);
+		void update(const Scene& scene, double timeStep);
 		void precalculate();
 
 		Ray getRay(const Vector2& pixelCoordinate) const;
@@ -54,5 +55,8 @@ namespace Raycer
 		Vector3 acceleration;
 		Vector3 angularVelocity;
 		Vector3 angularAcceleration;
+
+		bool isMovingPrimitive = false;
+		Vector3* movingPrimitivePosition = nullptr;
 	};
 }

@@ -47,8 +47,9 @@ namespace Raycer
 	public:
 
 		void initialize();
-		bool intersect(const Ray& ray, Intersection& intersection) const;
+		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
+		Vector3* getPosition();
 
 		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
 

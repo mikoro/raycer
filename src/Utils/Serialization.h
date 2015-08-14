@@ -206,8 +206,8 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Box& b)
 	{
-		a(cereal::make_nvp("min", b.min),
-			cereal::make_nvp("max", b.max),
+		a(cereal::make_nvp("position", b.position),
+			cereal::make_nvp("extent", b.extent),
 			cereal::make_nvp("materialId", b.materialId),
 			cereal::make_nvp("texcoordScale", b.texcoordScale));
 	}

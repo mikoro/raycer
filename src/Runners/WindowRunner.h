@@ -44,6 +44,7 @@ namespace Raycer
 		bool keyIsDown(int key);
 		bool mouseIsDown(int button);
 		bool keyWasPressed(int key);
+		bool mouseWasPressed(int button);
 
 		void changeState(WindowRunnerStates newState);
 
@@ -75,6 +76,7 @@ namespace Raycer
 		double startTime = 0.0;
 		MouseInfo mouseInfo;
 		std::map<int, bool> keyStates;
+		std::map<int, bool> mouseStates;
 		std::map<WindowRunnerStates, std::unique_ptr<WindowRunnerState>> runnerStates;
 		WindowRunnerStates currentState = WindowRunnerStates::None;
 		Text defaultText;

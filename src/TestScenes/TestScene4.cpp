@@ -111,7 +111,9 @@ Scene Scene::createTestScene4()
 	box1Material.attenuation = 0.01;
 	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 
-	Box box1 = Box::create(Vector3(0.0, 0.0, 0.0), Vector3(1.0, 5.0, 3.0));
+	Box box1;
+	box1.position = Vector3(0.0, 0.0, 0.0);
+	box1.extent = Vector3(1.0, 5.0, 3.0);
 	box1.materialId = box1Material.id;
 
 	scene.textures.colorTextures.push_back(box1Texture);

@@ -21,7 +21,7 @@ void BVH::initialize()
 {
 }
 
-bool BVH::intersect(const Ray& ray, Intersection& intersection) const
+bool BVH::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -53,6 +53,11 @@ bool BVH::intersect(const Ray& ray, Intersection& intersection) const
 AABB BVH::getAABB() const
 {
 	return aabb;
+}
+
+Vector3* BVH::getPosition()
+{
+	return nullptr;
 }
 
 void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info)
@@ -102,8 +107,6 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 
 	for (Primitive* primitive : primitives)
 		node->aabb.expand(primitive->getAABB());
-
-	node->aabb.update();
 
 	int axis;
 	double splitPoint;
@@ -259,16 +262,10 @@ double BVH::calculateSAHScore(int axis, double splitPoint, const std::vector<Pri
 	double score = 0.0;
 
 	if (leftCount > 0)
-	{
-		leftAABB.update();
 		score += (leftAABB.surfaceArea / node->aabb.surfaceArea) * (double)leftCount;
-	}
 
 	if (rightCount > 0)
-	{
-		rightAABB.update();
 		score += (rightAABB.surfaceArea / node->aabb.surfaceArea) * (double)rightCount;
-	}
 
 	return score;
 }

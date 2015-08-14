@@ -10,6 +10,8 @@
 
 namespace Raycer
 {
+	class Primitive;
+
 	struct Intersection
 	{
 		bool wasFound = false;
@@ -17,6 +19,6 @@ namespace Raycer
 		Vector3 position;
 		Vector3 normal;
 		Vector2 texcoord;
-		int materialId = 0;
+		Primitive* primitive = nullptr;
 	};
 }

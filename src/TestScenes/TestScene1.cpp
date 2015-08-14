@@ -12,6 +12,8 @@ Scene Scene::createTestScene1()
 {
 	Scene scene;
 
+	scene.rootBVH.enabled = false;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 5.0, 7.0);
@@ -68,7 +70,9 @@ Scene Scene::createTestScene1()
 	box1Material.id = 3;
 	box1Material.textureId = box1Texture.id;
 
-	Box box1 = Box::create(Vector3(3.0, 1.0, 0.0), Vector3(1.0, 1.0, 1.0));
+	Box box1;
+	box1.position = Vector3(3.0, 1.0, 0.0);
+	box1.extent = Vector3(1.0, 1.0, 1.0);
 	box1.materialId = box1Material.id;
 
 	scene.textures.colorTextures.push_back(box1Texture);

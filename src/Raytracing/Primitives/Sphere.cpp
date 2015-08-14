@@ -17,7 +17,7 @@ void Sphere::initialize()
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-bool Sphere::intersect(const Ray& ray, Intersection& intersection) const
+bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -53,6 +53,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+	intersection.primitive = this;
 
 	if (ray.fastIntersection)
 		return true;
@@ -63,7 +64,6 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.position = ip;
 	intersection.normal = normal;
-	intersection.materialId = materialId;
 
 	// spherical texture coordinate calculation
 	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
@@ -80,4 +80,9 @@ AABB Sphere::getAABB() const
 {
 	Vector3 extend = Vector3(radius, radius, radius);
 	return AABB(position - extend, position + extend);
+}
+
+Vector3* Sphere::getPosition()
+{
+	return &position;
 }

@@ -18,7 +18,7 @@ void Plane::initialize()
 	vAxis = uAxis.cross(normal).normalized();
 }
 
-bool Plane::intersect(const Ray& ray, Intersection& intersection) const
+bool Plane::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
@@ -40,6 +40,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.wasFound = true;
 	intersection.distance = t;
+	intersection.primitive = this;
 
 	if (ray.fastIntersection)
 		return true;
@@ -49,7 +50,6 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection) const
 
 	intersection.position = ip;
 	intersection.normal = normal;
-	intersection.materialId = materialId;
 
 	// texture coordinate calculation
 	double u = uAxis.dot(ip) / texcoordScale.x;
@@ -64,4 +64,9 @@ AABB Plane::getAABB() const
 {
 	// TODO: create bounds for the plane aabb
 	return AABB(Vector3(-1000.0, -1000.0, -1000.0), Vector3(1000.0, 1000.0, 1000.0));
+}
+
+Vector3* Plane::getPosition()
+{
+	return &position;
 }

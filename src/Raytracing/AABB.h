@@ -15,10 +15,12 @@ namespace Raycer
 
 		AABB();
 		AABB(const Vector3& min, const Vector3& max);
+		
+		static AABB createFromMinMax(const Vector3& min, const Vector3& max);
+		static AABB createFromCenterExtent(const Vector3& center, const Vector3& extent);
 
 		bool intersects(const Ray& ray) const;
 		void expand(const AABB& other);
-		void update();
 		int getLargestAxis() const;
 
 		Vector3 min;

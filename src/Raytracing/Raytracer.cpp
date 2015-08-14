@@ -185,13 +185,13 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (interrupted)
 		return finalColor;
 
-	for (const Primitive* primitive : scene.primitives.all)
+	for (Primitive* primitive : scene.primitives.all)
 		primitive->intersect(ray, intersection);
 
 	if (!intersection.wasFound)
 		return finalColor;
 
-	Material* material = scene.materialsMap.at(intersection.materialId);
+	Material* material = scene.materialsMap.at(intersection.primitive->materialId);
 	Texture* texture = scene.texturesMap.at(material->textureId);
 
 	Color textureColor = texture->getColor(intersection.position, intersection.texcoord) * texture->intensity;
@@ -337,7 +337,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 			sampleRay.fastOcclusion = true;
 			sampleRay.update();
 
-			for (const Primitive* primitive : scene.primitives.all)
+			for (Primitive* primitive : scene.primitives.all)
 			{
 				if (primitive->intersect(sampleRay, sampleIntersection))
 				{
@@ -353,7 +353,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 
 Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion)
 {
-	Material* material = scene.materialsMap.at(intersection.materialId);
+	Material* material = scene.materialsMap.at(intersection.primitive->materialId);
 
 	Color lightColor;
 
@@ -485,7 +485,7 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 	shadowRay.tmax = distanceToLight;
 	shadowRay.update();
 
-	for (const Primitive* primitive : scene.primitives.all)
+	for (Primitive* primitive : scene.primitives.all)
 	{
 		bool nonShadowing = scene.materialsMap.count(primitive->materialId) && scene.materialsMap.at(primitive->materialId)->nonShadowing;
 

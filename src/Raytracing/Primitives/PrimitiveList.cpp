@@ -22,14 +22,14 @@ void PrimitiveList::initialize()
 {
 }
 
-bool PrimitiveList::intersect(const Ray& ray, Intersection& intersection) const
+bool PrimitiveList::intersect(const Ray& ray, Intersection& intersection)
 {
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
 	bool wasFound = false;
 
-	for (const Primitive* primitive : primitives)
+	for (Primitive* primitive : primitives)
 	{
 		if (primitive->intersect(ray, intersection))
 			wasFound = true;
@@ -46,4 +46,9 @@ AABB PrimitiveList::getAABB() const
 		aabb.expand(primitive->getAABB());
 
 	return aabb;
+}
+
+Vector3* PrimitiveList::getPosition()
+{
+	return nullptr;
 }

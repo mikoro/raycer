@@ -135,6 +135,22 @@ bool WindowRunner::keyWasPressed(int key)
 	return false;
 }
 
+bool WindowRunner::mouseWasPressed(int button)
+{
+	if (mouseIsDown(button))
+	{
+		if (!mouseStates[button])
+		{
+			mouseStates[button] = true;
+			return true;
+		}
+	}
+	else
+		mouseStates[button] = false;
+
+	return false;
+}
+
 void WindowRunner::changeState(WindowRunnerStates newState)
 {
 	if (currentState != WindowRunnerStates::None)
@@ -314,8 +330,8 @@ void WindowRunner::update(double timeStep)
 
 	mouseInfo.windowX = (int)(newMouseX + 0.5);
 	mouseInfo.windowY = (int)((double)windowHeight - newMouseY - 1.0 + 0.5);
-	mouseInfo.framebufferX = (int)((double)mouseInfo.windowX / (double)(windowWidth * framebuffer.getImageWidth()) + 0.5);
-	mouseInfo.framebufferY = (int)((double)mouseInfo.windowY / (double)(windowHeight * framebuffer.getImageHeight()) + 0.5);
+	mouseInfo.framebufferX = (int)(((double)mouseInfo.windowX / (double)windowWidth) * (double)framebuffer.getImageWidth() + 0.5);
+	mouseInfo.framebufferY = (int)(((double)mouseInfo.windowY / (double)windowHeight) * (double)framebuffer.getImageHeight() + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
