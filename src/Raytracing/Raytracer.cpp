@@ -277,7 +277,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	double ambientOcclusion = 1.0;
 
-	if (scene.lights.ambientLight.ambientOcclusion && isOutside)
+	if (scene.lights.ambientLight.ambientOcclusion)
 		ambientOcclusion = calculateAmbientOcclusion(scene, intersection);
 
 	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusion);

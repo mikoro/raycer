@@ -19,7 +19,7 @@ namespace Raycer
 		Vector3 direction;
 
 		Vector3 inverseDirection;
-		bool sign[3];
+		bool dirIsNeg[3];
 
 		double tmin = 0.0;
 		double tmax = std::numeric_limits<double>::max();
