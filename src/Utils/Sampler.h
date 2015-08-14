@@ -26,8 +26,9 @@ namespace Raycer
 		Sampler();
 
 		Vector2 getRandomSample();
-		Vector2 getRegularGridSample(int ix, int iy, int nx, int ny);
+		Vector2 getRegularSample(int ix, int iy, int nx, int ny);
 		Vector2 getJitteredSample(int ix, int iy, int nx, int ny);
+		double getJitteredSample(int i, int n);
 		Vector2 getCmjSample(int ix, int iy, int nx, int ny, int permutation);
 		Vector2 getCmjDiskSample(int ix, int iy, int nx, int ny, int permutation);
 		Vector3 getCmjHemisphereSample(const Vector3& u, const Vector3& v, const Vector3& w, double distribution, int ix, int iy, int nx, int ny, int permutation);

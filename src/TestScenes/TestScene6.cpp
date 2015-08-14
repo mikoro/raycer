@@ -25,11 +25,10 @@ Scene TestScene::createTestScene6()
 
 	scene.camera.position = Vector3(0.0, 8.0, -2.0);
 	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
-	scene.camera.depthOfField = false;
+	scene.camera.dofSamples = 0;
 	scene.camera.apertureSize = 0.2;
 	scene.camera.focalLenght = 30.0;
-	scene.camera.samples = 3;
-
+	
 	// GROUND //
 
 	ColorTexture groundTexture;

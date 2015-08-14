@@ -15,11 +15,10 @@ Scene TestScene::createTestScene5()
 
 	scene.camera.position = Vector3(0.0, 0.0, 7.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-	scene.camera.depthOfField = true;
+	scene.camera.dofSamples = 3;
 	scene.camera.apertureSize = 0.5;
 	scene.camera.focalLenght = 30.0;
-	scene.camera.samples = 3;
-
+	
 	// SPHERES //
 
 	ColorTexture sphereTexture;

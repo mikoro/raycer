@@ -21,7 +21,7 @@ Vector2 Sampler::getRandomSample()
 	return Vector2(realDist(gen), realDist(gen));
 }
 
-Vector2 Sampler::getRegularGridSample(int ix, int iy, int nx, int ny)
+Vector2 Sampler::getRegularSample(int ix, int iy, int nx, int ny)
 {
 	double dx = ((double)ix + 0.5) / (double)nx;
 	double dy = ((double)iy + 0.5) / (double)ny;
@@ -35,6 +35,11 @@ Vector2 Sampler::getJitteredSample(int ix, int iy, int nx, int ny)
 	double dy = ((double)iy + realDist(gen)) / (double)ny;
 
 	return Vector2(dx, dy);
+}
+
+double Sampler::getJitteredSample(int i, int n)
+{
+	return ((double)i + realDist(gen)) / (double)n;
 }
 
 namespace
@@ -120,3 +125,4 @@ Vector3 Sampler::getCmjHemisphereSample(const Vector3& u, const Vector3& v, cons
 
 	return su * u + sv * v + sw * w;
 }
+

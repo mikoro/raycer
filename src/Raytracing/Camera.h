@@ -24,7 +24,7 @@ namespace Raycer
 		void update(double timeStep);
 		void precalculate();
 
-		Ray getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const;
+		Ray getRay(const Vector2& pixelCoordinate) const;
 
 		Vector3 position;
 		EulerAngle orientation;
@@ -33,11 +33,11 @@ namespace Raycer
 		double orthoSize = 10.0;
 		double fishEyeAngle = 180.0;
 
-		bool depthOfField = false;
-		int samples = 3;
+		int dofSamples = 0;
+		int timeSamples = 0;
 		double apertureSize = 0.1;
 		double focalLenght = 10.0;
-		
+
 		Vector3 forward;
 		Vector3 right;
 		Vector3 up;

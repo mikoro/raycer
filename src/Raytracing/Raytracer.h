@@ -32,8 +32,9 @@ namespace Raycer
 		Raytracer(const Raytracer& raytracer);
 		Raytracer& operator=(const Raytracer& raytracer);
 
-		Color generatePixelSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
-		Color generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted);
+		Color generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
+		Color generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
+		Color generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
 		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
 		double calculateAmbientOcclusion(const Scene& scene, const Intersection& intersection);
 		Color calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion);

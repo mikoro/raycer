@@ -106,8 +106,8 @@ namespace Raycer
 			cereal::make_nvp("fov", b.fov),
 			cereal::make_nvp("orthoSize", b.orthoSize),
 			cereal::make_nvp("fishEyeAngle", b.fishEyeAngle),
-			cereal::make_nvp("depthOfField", b.depthOfField),
-			cereal::make_nvp("samples", b.samples),
+			cereal::make_nvp("dofSamples", b.dofSamples),
+			cereal::make_nvp("timeSamples", b.timeSamples),
 			cereal::make_nvp("apertureSize", b.apertureSize),
 			cereal::make_nvp("focalLenght", b.focalLenght));
 	}

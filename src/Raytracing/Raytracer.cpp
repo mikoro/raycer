@@ -48,7 +48,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		double y = (double)(pixelOffsetIndex / state.sceneWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
-		Color pixelColor = generatePixelSamples(scene, pixelCoordinate, interrupted);
+		Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
 		image.setPixel(pixelIndex, pixelColor);
 
 		// progress reporting to another thread
@@ -60,12 +60,12 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
+Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (!scene.multisampling.enabled)
 	{
 		Vector2 sampledPixelCoordinate = pixelCoordinate + Vector2(0.5, 0.5);
-		return generateCameraSamples(scene, sampledPixelCoordinate, interrupted);
+		return generateDofSamples(scene, sampledPixelCoordinate, interrupted);
 	}
 
 	Color sampledPixelColor;
@@ -83,62 +83,80 @@ Color Raytracer::generatePixelSamples(const Scene& scene, const Vector2& pixelCo
 			else if (scene.multisampling.type == MultisampleType::RANDOM)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getRandomSample();
 			else if (scene.multisampling.type == MultisampleType::REGULAR)
-				sampledPixelCoordinate = pixelCoordinate + sampler.getRegularGridSample(x, y, n, n);
+				sampledPixelCoordinate = pixelCoordinate + sampler.getRegularSample(x, y, n, n);
 			else if (scene.multisampling.type == MultisampleType::JITTER)
 				sampledPixelCoordinate = pixelCoordinate + sampler.getJitteredSample(x, y, n, n);
 
-			sampledPixelColor += generateCameraSamples(scene, sampledPixelCoordinate, interrupted);
+			sampledPixelColor += generateDofSamples(scene, sampledPixelCoordinate, interrupted);
 		}
 	}
 
 	return sampledPixelColor / (double)(n * n);
 }
 
-Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& sampledPixelCoordinate, const std::atomic<bool>& interrupted)
+Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	bool shouldSkip = false;
-	Ray primaryRay = scene.camera.getRay(sampledPixelCoordinate, shouldSkip);
-	Intersection primaryIntersection;
+	Ray ray = scene.camera.getRay(pixelCoordinate);
+
+	if (ray.isInvalid && scene.camera.dofSamples == 0)
+		return Color::BLACK;
+
+	if (scene.camera.dofSamples == 0)
+		return generateTimeSamples(scene, ray, interrupted);
+
 	Color sampledPixelColor;
-
-	if (shouldSkip && !scene.camera.depthOfField)
-		return sampledPixelColor;
-
-	if (!scene.camera.depthOfField)
-		return raytrace(scene, primaryRay, primaryIntersection, 0, interrupted);
-
 	int permutation = intDist(gen);
-	int n = scene.camera.samples;
+	int n = scene.camera.dofSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalLength = scene.camera.focalLenght;
 
 	Vector3 cameraOrigin = scene.camera.position;
 	Vector3 cameraRight = scene.camera.right;
 	Vector3 cameraUp = scene.camera.up;
-	
+
 	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
 			Vector2 jitter = sampler.getCmjSample(x, y, n, n, permutation) - Vector2(0.5, 0.5);
-			primaryRay = scene.camera.getRay(sampledPixelCoordinate + jitter, shouldSkip);
+			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter);
 
-			if (shouldSkip)
+			if (primaryRay.isInvalid)
 				continue;
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
 			Vector2 diskCoordinate = sampler.getCmjDiskSample(x, y, n, n, permutation);
-			Vector3 rayOrigin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
-			Vector3 rayDirection = (focalPoint - rayOrigin).normalized();
-			
-			Ray sampleRay(rayOrigin, rayDirection);
-			Intersection sampleIntersection;
 
-			sampledPixelColor += raytrace(scene, sampleRay, sampleIntersection, 0, interrupted);
+			Ray sampleRay;
+			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
+			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
+			sampleRay.update();
+
+			sampledPixelColor += generateTimeSamples(scene, sampleRay, interrupted);
 		}
 	}
 
 	return sampledPixelColor / (double)(n * n);
+}
+
+Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted)
+{
+	Intersection intersection;
+
+	if (scene.camera.timeSamples == 0)
+		return raytrace(scene, ray, intersection, 0, interrupted);
+
+	Color sampledPixelColor;
+	int n = scene.camera.timeSamples;
+
+	for (int i = 0; i < n; ++i)
+	{
+		intersection = Intersection();
+		ray.time = sampler.getJitteredSample(i, n);
+		sampledPixelColor += raytrace(scene, ray, intersection, 0, interrupted);
+	}
+
+	return sampledPixelColor / (double)(n);
 }
 
 /*
@@ -228,11 +246,12 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
 			T.normalize();
 
-			Vector3 rayOrigin = P + T * scene.raytracing.startOffset;
-			Vector3 rayDirection = T;
-
-			Ray refractedRay(rayOrigin, rayDirection);
+			Ray refractedRay;
 			Intersection refractedIntersection;
+
+			refractedRay.origin = P + T * scene.raytracing.startOffset;
+			refractedRay.direction = T;
+			refractedRay.update();
 
 			Color color = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted);
 
@@ -255,11 +274,12 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		Vector3 R = D + 2.0 * c1 * N;
 		R.normalize();
 
-		Vector3 rayOrigin = P + R * scene.raytracing.startOffset;
-		Vector3 rayDirection = R;
-
-		Ray reflectedRay(rayOrigin, rayDirection);
+		Ray reflectedRay;
 		Intersection reflectedIntersection;
+
+		reflectedRay.origin = P + R * scene.raytracing.startOffset;
+		reflectedRay.direction = R;
+		reflectedRay.update();
 
 		Color color = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted);
 
@@ -308,14 +328,14 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 		{
 			Vector3 sampleDirection = sampler.getCmjHemisphereSample(u, v, w, distribution, x, y, n, n, permutation);
 
-			Vector3 rayOrigin = origin + sampleDirection * scene.raytracing.startOffset;
-			Vector3 rayDirection = sampleDirection;
-
-			Ray sampleRay(rayOrigin, rayDirection);
+			Ray sampleRay;
 			Intersection sampleIntersection;
 
+			sampleRay.origin = origin + sampleDirection * scene.raytracing.startOffset;
+			sampleRay.direction = sampleDirection;
 			sampleRay.fastIntersection = true;
 			sampleRay.fastOcclusion = true;
+			sampleRay.update();
 
 			for (const Primitive* primitive : scene.primitives.all)
 			{
@@ -324,7 +344,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 					ambientOcclusion += 1.0;
 					break;
 				}
-			}	
+			}
 		}
 	}
 
@@ -455,15 +475,15 @@ Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const
 
 bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
 {
-	Vector3 rayOrigin = P + L * scene.raytracing.startOffset;
-	Vector3 rayDirection = L;
-
-	Ray shadowRay(rayOrigin, rayDirection);
+	Ray shadowRay;
 	Intersection shadowIntersection;
 
+	shadowRay.origin = P + L * scene.raytracing.startOffset;
+	shadowRay.direction = L;
 	shadowRay.fastIntersection = true;
 	shadowRay.fastOcclusion = true;
 	shadowRay.tmax = distanceToLight;
+	shadowRay.update();
 
 	for (const Primitive* primitive : scene.primitives.all)
 	{

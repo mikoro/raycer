@@ -146,9 +146,9 @@ void Camera::precalculate()
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
-Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
+Ray Camera::getRay(const Vector2& pixelCoordinate) const
 {
-	Vector3 rayOrigin, rayDirection;
+	Ray ray;
 
 	switch (projectionType)
 	{
@@ -159,8 +159,8 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
 
 			Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 
-			rayOrigin = position;
-			rayDirection = (imagePlanePixelPosition - position).normalized();
+			ray.origin = position;
+			ray.direction = (imagePlanePixelPosition - position).normalized();
 
 		} break;
 
@@ -169,8 +169,8 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
 			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
 
-			rayOrigin = position + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
-			rayDirection = forward;
+			ray.origin = position + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
+			ray.direction = forward;
 
 		} break;
 
@@ -187,7 +187,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
 
 			if (r > 1.0)
 			{
-				shouldSkip = true;
+				ray.isInvalid = true;
 				break;
 			}
 
@@ -198,13 +198,14 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, bool& shouldSkip) const
 			double v = sin(theta) * sin(phi);
 			double w = cos(theta);
 
-			rayOrigin = position;
-			rayDirection = u * right + v * up + w * forward;
+			ray.origin = position;
+			ray.direction = u * right + v * up + w * forward;
 
 		} break;
 
 		default: break;
 	}
 
-	return Ray(rayOrigin, rayDirection);
+	ray.update();
+	return ray;
 }

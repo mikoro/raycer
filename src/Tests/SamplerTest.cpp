@@ -21,9 +21,10 @@ TEST_CASE("Sampler functionality", "[sampler]")
 	Image image4(100, 100);
 	Image image5(100, 100);
 	Image image6(100, 100);
+	Image image7(100, 100);
 	Sampler sampler;
 
-	int n = 64;
+	int n = 8;
 	Vector2 size = Vector2(99.0, 99.0);
 
 	int permutation = 3465566;
@@ -37,7 +38,7 @@ TEST_CASE("Sampler functionality", "[sampler]")
 			Vector2 sample = sampler.getRandomSample() * size;
 			image2.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
-			sample = sampler.getRegularGridSample(x, y, n, n) * size;
+			sample = sampler.getRegularSample(x, y, n, n) * size;
 			image3.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
 			sample = sampler.getJitteredSample(x, y, n, n) * size;
@@ -56,11 +57,18 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		}
 	}
 
+	for (int i = 0; i < n; ++i)
+	{
+		double sample = sampler.getJitteredSample(i, n) * size.x;
+		image7.setPixel((int)(sample + 0.5), (int)(size.y / 2.0 + 0.5), Color(255, 255, 255));
+	}
+
 	file.close();
 
 	image2.saveAs("sampler_random.png");
-	image3.saveAs("sampler_regular_grid.png");
+	image3.saveAs("sampler_regular.png");
 	image4.saveAs("sampler_jittered.png");
 	image5.saveAs("sampler_cmj.png");
 	image6.saveAs("sampler_cmj_disk.png");
+	image7.saveAs("sampler_jittered1D.png");
 }

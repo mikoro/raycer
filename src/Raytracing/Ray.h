@@ -13,7 +13,7 @@ namespace Raycer
 	{
 	public:
 
-		Ray(const Vector3& origin, const Vector3& direction);
+		void update();
 
 		Vector3 origin;
 		Vector3 direction;
@@ -27,5 +27,6 @@ namespace Raycer
 
 		bool fastIntersection = false;
 		bool fastOcclusion = false;
+		bool isInvalid = false;
 	};
 }

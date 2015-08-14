@@ -5,11 +5,8 @@
 
 using namespace Raycer;
 
-Ray::Ray(const Vector3& origin_, const Vector3& direction_)
+void Ray::update()
 {
-	origin = origin_;
-	direction = direction_;
-
 	inverseDirection = direction.inversed();
 
 	dirIsNeg[0] = (direction.x < 0.0);

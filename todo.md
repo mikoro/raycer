@@ -9,7 +9,6 @@ lighting
  - global illumination
 
 primitives
- - flatBVH
  - visualize BVH
  - cylinder
  - torus
