@@ -43,14 +43,24 @@ namespace Raycer
 
 		Scene();
 
-		void loadFromFile(const std::string& fileName);
-		void loadFromJsonString(const std::string& text);
-		void loadFromXmlString(const std::string& text);
+		static Scene createTestScene(int number);
+		static Scene loadFromFile(const std::string& fileName);
+		static Scene loadFromJsonString(const std::string& text);
+		static Scene loadFromXmlString(const std::string& text);
+
 		void saveToFile(const std::string& fileName) const;
 		std::string saveToJsonString() const;
 		std::string saveToXmlString() const;
 
 		void initialize();
+
+		static Scene createTestScene1();
+		static Scene createTestScene2();
+		static Scene createTestScene3();
+		static Scene createTestScene4();
+		static Scene createTestScene5();
+		static Scene createTestScene6();
+		static Scene createTestScene7();
 
 		Camera camera;
 

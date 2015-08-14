@@ -42,6 +42,8 @@ namespace Raycer
 		struct Scene
 		{
 			std::string fileName;
+			bool enableTestScene;
+			int testSceneNumber;
 		} scene;
 
 		struct Image

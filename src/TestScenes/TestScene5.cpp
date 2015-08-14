@@ -1,13 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // depth of field with a sphere spiral
-Scene TestScene::createTestScene5()
+Scene Scene::createTestScene5()
 {
 	Scene scene;
 

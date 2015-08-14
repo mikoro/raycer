@@ -1,13 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // monkey mesh on a plane with two colored point lights
-Scene TestScene::createTestScene2()
+Scene Scene::createTestScene2()
 {
 	Scene scene;
 

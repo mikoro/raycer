@@ -1,13 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // spherical environment texture map with "glass" primitives
-Scene TestScene::createTestScene4()
+Scene Scene::createTestScene4()
 {
 	Scene scene;
 

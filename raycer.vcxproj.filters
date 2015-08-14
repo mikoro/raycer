@@ -427,9 +427,6 @@
     <ClInclude Include="src\Utils\PlyReader.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="src\TestScenes\TestScene.h">
-      <Filter>TestScenes</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\Box.h">
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>

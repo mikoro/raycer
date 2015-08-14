@@ -24,7 +24,24 @@ Scene::Scene()
 {
 }
 
-void Scene::loadFromFile(const std::string& fileName)
+Scene Scene::createTestScene(int number)
+{
+	App::getLog().logInfo("Creating test scene number %d", number);
+
+	switch (number)
+	{
+		case 1: return createTestScene1(); break;
+		case 2: return createTestScene2(); break;
+		case 3: return createTestScene3(); break;
+		case 4: return createTestScene4(); break;
+		case 5: return createTestScene5(); break;
+		case 6: return createTestScene6(); break;
+		case 7: return createTestScene7(); break;
+		default: throw std::runtime_error("Unknown test scene number");
+	}
+}
+
+Scene Scene::loadFromFile(const std::string& fileName)
 {
 	App::getLog().logInfo("Loading scene from %s", fileName);
 
@@ -33,42 +50,52 @@ void Scene::loadFromFile(const std::string& fileName)
 	if (!file.good())
 		throw std::runtime_error("Could not open the scene file");
 
+	Scene scene;
+
 	if (StringUtils::endsWith(fileName, ".json"))
 	{
 		cereal::JSONInputArchive archive(file);
-		archive(*this);
+		archive(scene);
 	}
 	else if (StringUtils::endsWith(fileName, ".xml"))
 	{
 		cereal::XMLInputArchive archive(file);
-		archive(*this);
+		archive(scene);
 	}
 	else if (StringUtils::endsWith(fileName, ".bin"))
 	{
 		// TODO: will not compile
 		//cereal::BinaryInputArchive archive(file);
-		//archive(*this);
+		//archive(scene);
 	}
 	else
 		throw std::runtime_error("Unsupported scene file format");
+
+	return scene;
 }
 
-void Scene::loadFromJsonString(const std::string& text)
+Scene Scene::loadFromJsonString(const std::string& text)
 {
 	App::getLog().logInfo("Loading scene from JSON string");
 
+	Scene scene;
 	std::stringstream ss(text);
 	cereal::JSONInputArchive archive(ss);
-	archive(*this);
+	archive(scene);
+
+	return scene;
 }
 
-void Scene::loadFromXmlString(const std::string& text)
+Scene Scene::loadFromXmlString(const std::string& text)
 {
 	App::getLog().logInfo("Loading scene from XML string");
 
+	Scene scene;
 	std::stringstream ss(text);
 	cereal::XMLInputArchive archive(ss);
-	archive(*this);
+	archive(scene);
+
+	return scene;
 }
 
 

@@ -1,13 +1,14 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
+#include <stdexcept>
+
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // simple triangle, sphere and box on a plane with one point light
-Scene TestScene::createTestScene1()
+Scene Scene::createTestScene1()
 {
 	Scene scene;
 

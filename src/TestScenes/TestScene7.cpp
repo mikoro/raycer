@@ -1,13 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // different textured spheres, a plane and an atmosphere
-Scene TestScene::createTestScene7()
+Scene Scene::createTestScene7()
 {
 	Scene scene;
 

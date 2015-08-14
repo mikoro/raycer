@@ -1,13 +1,12 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // ambient occlusion with four white spheres and a monkey
-Scene TestScene::createTestScene3()
+Scene Scene::createTestScene3()
 {
 	Scene scene;
 

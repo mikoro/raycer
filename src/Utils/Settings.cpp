@@ -31,6 +31,8 @@ void Settings::load(const std::string& fileName)
 	network.broadcastPort = iniReader.getValue<int>("network", "broadcastPort");
 
 	scene.fileName = iniReader.getValue("scene", "fileName");
+	scene.enableTestScene = iniReader.getValue<bool>("scene", "enableTestScene");
+	scene.testSceneNumber = iniReader.getValue<int>("scene", "testSceneNumber");
 
 	image.width = iniReader.getValue<int>("image", "width");
 	image.height = iniReader.getValue<int>("image", "height");

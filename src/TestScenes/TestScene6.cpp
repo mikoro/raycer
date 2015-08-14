@@ -3,13 +3,12 @@
 
 #include <random>
 
-#include "TestScenes/TestScene.h"
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
 // lots of different sized specular spheres and fog
-Scene TestScene::createTestScene6()
+Scene Scene::createTestScene6()
 {
 	Scene scene;
 

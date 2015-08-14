@@ -288,7 +288,6 @@
     <ClInclude Include="src\Runners\NetworkRunner.h" />
     <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h" />
     <ClInclude Include="src\Runners\WindowRunnerStates\WindowRunnerState.h" />
-    <ClInclude Include="src\TestScenes\TestScene.h" />
     <ClInclude Include="src\Utils\CellNoise.h" />
     <ClInclude Include="src\Utils\ColorGradient.h" />
     <ClInclude Include="src\Utils\FpsCounter.h" />
