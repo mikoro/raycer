@@ -1,23 +1,23 @@
 tracer
  - marching + displacement map
- - triangle intersection glitch (watertight?)
+ - triangle edge intersection glitch
 
 lighting
  - bump mapping
- - area lights
- - soft shadows
+ - area lights / soft shadows
  - global illumination
 
 primitives
- - visualize BVH
+ - moving sphere
+ - instancing
  - cylinder
  - torus
  - metaball
- - instancing
  - constructive solid geometry
 
 rendering
  - reinhard tonemap
 
 textures
+ - image texture apply gamma switch
  - Elliptical Weighted Average texture filtering

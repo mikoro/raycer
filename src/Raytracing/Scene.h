@@ -61,6 +61,7 @@ namespace Raycer
 		static Scene createTestScene5();
 		static Scene createTestScene6();
 		static Scene createTestScene7();
+		static Scene createTestScene8();
 
 		Camera camera;
 
