@@ -197,6 +197,7 @@ namespace Raycer
 	void serialize(Archive& a, Sphere& b)
 	{
 		a(cereal::make_nvp("position", b.position),
+			cereal::make_nvp("displacement", b.displacement),
 			cereal::make_nvp("radius", b.radius),
 			cereal::make_nvp("materialId", b.materialId));
 	}

@@ -24,7 +24,7 @@
 using namespace Raycer;
 
 Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const Light* light, const Material* material);
-bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight);
+bool isInShadow(const Scene& scene, const Ray& ray, const Vector3& P, const Vector3& L, double distanceToLight);
 
 Raytracer::Raytracer()
 {
@@ -350,7 +350,7 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 	return 1.0 - (ambientOcclusion / (double)(n * n));
 }
 
-Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion)
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusion)
 {
 	Material* material = intersection.primitive->material;
 
@@ -358,7 +358,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, con
 
 	Vector3 P = intersection.position;
 	Vector3 N = intersection.normal;
-	Vector3 V = -viewRay.direction;
+	Vector3 V = -ray.direction;
 
 	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * material->ambientness * ambientOcclusion;
 
@@ -366,7 +366,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, con
 	{
 		Vector3 L = -light.direction;
 
-		if (isInShadow(scene, P, L, std::numeric_limits<double>::max()))
+		if (isInShadow(scene, ray, P, L, std::numeric_limits<double>::max()))
 			continue;
 
 		lightColor += doPhongShading(N, L, V, &light, material);
@@ -378,7 +378,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, con
 		double distance = L.length();
 		L.normalize();
 
-		if (isInShadow(scene, P, L, distance))
+		if (isInShadow(scene, ray, P, L, distance))
 			continue;
 
 		Color pointLightColor = doPhongShading(N, L, V, &light, material);
@@ -394,7 +394,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& viewRay, con
 		double distance = L.length();
 		L.normalize();
 
-		if (isInShadow(scene, P, L, distance))
+		if (isInShadow(scene, ray, P, L, distance))
 			continue;
 
 		Color spotLightColor = doPhongShading(N, L, V, &light, material);
@@ -472,7 +472,7 @@ Color doPhongShading(const Vector3& N, const Vector3& L, const Vector3& V, const
 	return phongColor;
 }
 
-bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double distanceToLight)
+bool isInShadow(const Scene& scene, const Ray& ray, const Vector3& P, const Vector3& L, double distanceToLight)
 {
 	Ray shadowRay;
 	Intersection shadowIntersection;
@@ -482,11 +482,14 @@ bool isInShadow(const Scene& scene, const Vector3& P, const Vector3& L, double d
 	shadowRay.fastIntersection = true;
 	shadowRay.fastOcclusion = true;
 	shadowRay.tmax = distanceToLight;
+	shadowRay.time = ray.time;
 	shadowRay.update();
 
 	for (Primitive* primitive : scene.primitives.all)
 	{
-		if (!primitive->material->nonShadowing && primitive->intersect(shadowRay, shadowIntersection))
+		bool nonShadowing = (primitive->material != nullptr) && primitive->material->nonShadowing;
+
+		if (!nonShadowing && primitive->intersect(shadowRay, shadowIntersection))
 			return true;
 	}
 

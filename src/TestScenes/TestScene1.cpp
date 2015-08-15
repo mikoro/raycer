@@ -12,8 +12,6 @@ Scene Scene::createTestScene1()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = false;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 5.0, 7.0);

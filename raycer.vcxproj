@@ -202,6 +202,7 @@
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
     <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp" />
     <ClCompile Include="src\TestScenes\TestScene1.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene10.cpp" />
     <ClCompile Include="src\TestScenes\TestScene3.cpp" />
     <ClCompile Include="src\TestScenes\TestScene2.cpp" />
     <ClCompile Include="src\TestScenes\TestScene4.cpp" />
@@ -209,6 +210,7 @@
     <ClCompile Include="src\TestScenes\TestScene6.cpp" />
     <ClCompile Include="src\TestScenes\TestScene7.cpp" />
     <ClCompile Include="src\TestScenes\TestScene8.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene9.cpp" />
     <ClCompile Include="src\Tests\ColorGradientTest.cpp" />
     <ClCompile Include="src\Tests\EulerAngleTest.cpp" />
     <ClCompile Include="src\Tests\ImageTest.cpp" />

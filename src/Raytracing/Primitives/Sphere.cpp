@@ -23,7 +23,8 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
-	Vector3 rayOriginToSphere = position - ray.origin;
+	Vector3 actualPosition = position + ray.time * displacement;
+	Vector3 rayOriginToSphere = actualPosition - ray.origin;
 	double rayOriginToSphereDistance2 = rayOriginToSphere.lengthSquared();
 
 	double t1 = rayOriginToSphere.dot(ray.direction);
@@ -61,7 +62,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 
 	// intersection position and normal
 	Vector3 ip = ray.origin + (t * ray.direction);
-	Vector3 normal = (ip - position).normalized();
+	Vector3 normal = (ip - actualPosition).normalized();
 
 	intersection.position = ip;
 	intersection.normal = normal;
@@ -79,8 +80,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 
 AABB Sphere::getAABB() const
 {
-	Vector3 extend = Vector3(radius, radius, radius);
-	return AABB(position - extend, position + extend);
+	return AABB::createFromCenterExtent(position, Vector3(radius, radius, radius));
 }
 
 Vector3* Sphere::getPosition()

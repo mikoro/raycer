@@ -22,6 +22,7 @@ namespace Raycer
 		Vector3* getPosition();
 
 		Vector3 position;
+		Vector3 displacement;
 		double radius = 1.0;
 
 	private:

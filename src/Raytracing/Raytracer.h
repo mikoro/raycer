@@ -37,7 +37,7 @@ namespace Raycer
 		Color generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
 		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
 		double calculateAmbientOcclusion(const Scene& scene, const Intersection& intersection);
-		Color calculateLightColor(const Scene& scene, const Ray& viewRay, const Intersection& intersection, double ambientOcclusion);
+		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusion);
 		Color calculateFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
 
 		Sampler sampler;

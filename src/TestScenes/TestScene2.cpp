@@ -1,90 +1,44 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <stdexcept>
+
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
-// monkey mesh on a plane with two colored point lights
+// checkerboard plane
 Scene Scene::createTestScene2()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
-	scene.rootBVH.buildInfo.maxLeafSize = 5;
-	scene.rootBVH.buildInfo.useSAH = true;
-	scene.rootBVH.buildInfo.regularSAHSplits = 0;
-	scene.rootBVH.buildInfo.axisSelection = BVHAxisSelection::LARGEST;
-	scene.rootBVH.buildInfo.axisSplit = BVHAxisSplit::MEDIAN;
-
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 8.0);
-	scene.camera.orientation = EulerAngle(0.0, -26.0, 0.0);
+	scene.camera.position = Vector3(0.0, 0.5, 0.0);
+	scene.camera.orientation = EulerAngle(0.0, -22.0, 0.0);
 
 	// GROUND //
 
-	ColorTexture groundTexture;
+	CheckerTexture groundTexture;
 	groundTexture.id = 1;
-	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.3;
+	groundTexture.color1 = Color(1.0, 1.0, 1.0);
+	groundTexture.color2 = Color(0.0, 0.0, 0.0);
+	groundTexture.intensity = 1.0;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.skipLighting = true;
+	groundMaterial.texcoordScale = Vector2(0.5, 0.5);
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-
-	scene.textures.colorTextures.push_back(groundTexture);
+	
+	scene.textures.checkerTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
-
-	// MESH 1 //
-
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 2;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 0.8;
-
-	Material mesh1Material;
-	mesh1Material.id = 2;
-	mesh1Material.textureId = mesh1Texture.id;
-
-	Mesh mesh1;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(6.0, 6.0, 6.0);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
-
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
-
-	// LIGHTS //
-
-	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.1;
-
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 0.25, 0.25);
-	pointLight1.intensity = 1.5;
-	pointLight1.position = Vector3(5.0, 5.0, 5.0);
-	pointLight1.distance = 20.0;
-	pointLight1.attenuation = 1.0;
-
-	PointLight pointLight2;
-	pointLight2.color = Color(0.25, 0.25, 1.0);
-	pointLight2.intensity = 1.5;
-	pointLight2.position = Vector3(-5.0, 5.0, 5.0);
-	pointLight2.distance = 20.0;
-	pointLight2.attenuation = 1.0;
-
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.pointLights.push_back(pointLight2);
 
 	return scene;
 }
