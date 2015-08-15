@@ -35,12 +35,12 @@ Scene Scene::createTestScene7()
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.texcoordScale = Vector2(10.0, 10.0);
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	groundPlane.texcoordScale = Vector2(10.0, 10.0);
 	
 	scene.textures.imageTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
@@ -100,12 +100,12 @@ Scene Scene::createTestScene7()
 	Material sphere3Material;
 	sphere3Material.id = 4;
 	sphere3Material.textureId = sphere3Texture.id;
+	sphere3Material.texcoordScale = Vector2(0.1, 0.1);
 
 	Sphere sphere3;
 	sphere3.materialId = sphere3Material.id;
 	sphere3.position = Vector3(0.0, 1.0, -3.0);
 	sphere3.radius = 1.0;
-	sphere3.texcoordScale = Vector2(0.1, 0.1);
 
 	scene.textures.checkerTextures.push_back(sphere3Texture);
 	scene.materials.push_back(sphere3Material);
@@ -121,13 +121,13 @@ Scene Scene::createTestScene7()
 	Material sphere4Material;
 	sphere4Material.id = 5;
 	sphere4Material.textureId = sphere4Texture.id;
+	sphere4Material.texcoordScale = Vector2(-1.0, -1.0);
 
 	Sphere sphere4;
 	sphere4.materialId = sphere4Material.id;
 	sphere4.position = Vector3(0.0, 1.0, -6.0);
 	sphere4.radius = 1.0;
-	sphere4.texcoordScale = Vector2(-1.0, -1.0);
-
+	
 	scene.textures.imageTextures.push_back(sphere4Texture);
 	scene.materials.push_back(sphere4Material);
 	scene.primitives.spheres.push_back(sphere4);
@@ -146,8 +146,7 @@ Scene Scene::createTestScene7()
 	sphere5.materialId = sphere5Material.id;
 	sphere5.position = Vector3(0.0, 1.0, -9.0);
 	sphere5.radius = 1.0;
-	sphere5.texcoordScale = Vector2(-1.0, -1.0);
-
+	
 	scene.textures.marbleTextures.push_back(sphere5Texture);
 	scene.materials.push_back(sphere5Material);
 	scene.primitives.spheres.push_back(sphere5);
@@ -166,7 +165,6 @@ Scene Scene::createTestScene7()
 	sphere6.materialId = sphere6Material.id;
 	sphere6.position = Vector3(0.0, 1.0, -12.0);
 	sphere6.radius = 1.0;
-	sphere6.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.woodTextures.push_back(sphere6Texture);
 	scene.materials.push_back(sphere6Material);
@@ -186,7 +184,6 @@ Scene Scene::createTestScene7()
 	sphere7.materialId = sphere7Material.id;
 	sphere7.position = Vector3(0.0, 1.0, -15.0);
 	sphere7.radius = 1.0;
-	sphere7.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.fireTextures.push_back(sphere7Texture);
 	scene.materials.push_back(sphere7Material);
@@ -206,7 +203,6 @@ Scene Scene::createTestScene7()
 	sphere8.materialId = sphere8Material.id;
 	sphere8.position = Vector3(-3.0, 1.0, 0.0);
 	sphere8.radius = 1.0;
-	sphere8.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.perlinNoiseTextures.push_back(sphere8Texture);
 	scene.materials.push_back(sphere8Material);
@@ -226,7 +222,6 @@ Scene Scene::createTestScene7()
 	sphere9.materialId = sphere9Material.id;
 	sphere9.position = Vector3(-3.0, 1.0, -3.0);
 	sphere9.radius = 1.0;
-	sphere9.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.cellNoiseTextures.push_back(sphere9Texture);
 	scene.materials.push_back(sphere9Material);
@@ -247,7 +242,6 @@ Scene Scene::createTestScene7()
 	sphere10.materialId = sphere10Material.id;
 	sphere10.position = Vector3(-3.0, 1.0, -6.0);
 	sphere10.radius = 1.0;
-	sphere10.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.cellNoiseTextures.push_back(sphere10Texture);
 	scene.materials.push_back(sphere10Material);
@@ -268,7 +262,6 @@ Scene Scene::createTestScene7()
 	sphere11.materialId = sphere11Material.id;
 	sphere11.position = Vector3(-3.0, 1.0, -9.0);
 	sphere11.radius = 1.0;
-	sphere11.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.cellNoiseTextures.push_back(sphere11Texture);
 	scene.materials.push_back(sphere11Material);
@@ -291,7 +284,6 @@ Scene Scene::createTestScene7()
 	sphere12.materialId = sphere12Material.id;
 	sphere12.position = Vector3(-3.0, 1.0, -12.0);
 	sphere12.radius = 1.0;
-	sphere12.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.voronoiTextures.push_back(sphere12Texture);
 	scene.materials.push_back(sphere12Material);
@@ -314,7 +306,6 @@ Scene Scene::createTestScene7()
 	sphere13.materialId = sphere13Material.id;
 	sphere13.position = Vector3(-3.0, 1.0, -15.0);
 	sphere13.radius = 1.0;
-	sphere13.texcoordScale = Vector2(-1.0, -1.0);
 
 	scene.textures.voronoiTextures.push_back(sphere13Texture);
 	scene.materials.push_back(sphere13Material);

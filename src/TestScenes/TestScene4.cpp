@@ -28,12 +28,12 @@ Scene Scene::createTestScene4()
 	sphere1Material.id = 1;
 	sphere1Material.textureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
+	sphere1Material.texcoordScale = Vector2(1.0, -1.0);
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
 	sphere1.position = Vector3(0.0, 0.0, 0.0);
 	sphere1.radius = 100.0;
-	sphere1.texcoordScale = Vector2(1.0, -1.0);
 
 	scene.textures.imageTextures.push_back(sphere1Texture);
 	scene.materials.push_back(sphere1Material);

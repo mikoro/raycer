@@ -7,6 +7,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
+#include "Raytracing/Material.h"
 #include "Math/Vector2.h"
 
 using namespace Raycer;
@@ -68,8 +69,8 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 	// spherical texture coordinate calculation
 	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
 	double v = 0.5 - asin(normal.y) / M_PI;
-	u /= texcoordScale.x;
-	v /= texcoordScale.y;
+	u /= material->texcoordScale.x;
+	v /= material->texcoordScale.y;
 	intersection.texcoord.x = u - floor(u);
 	intersection.texcoord.y = v - floor(v);
 

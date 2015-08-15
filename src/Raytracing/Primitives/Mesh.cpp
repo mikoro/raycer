@@ -46,7 +46,9 @@ void Mesh::initialize()
 
 		triangle.normal = rotation * triangle.normal;
 		triangle.materialId = materialId;
-		triangle.texcoordScale = texcoordScale;
+		triangle.material = material;
+
+		triangle.initialize();
 
 		aabb.expand(triangle.getAABB());
 

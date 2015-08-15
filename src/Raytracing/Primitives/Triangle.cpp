@@ -9,6 +9,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
+#include "Raytracing/Material.h"
 
 using namespace Raycer;
 
@@ -69,7 +70,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
-	intersection.texcoord = interpolatedTexcoord / texcoordScale;
+	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
 
 	return true;
 }
@@ -146,7 +147,7 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 
 	intersection.position = ip;
 	intersection.normal = interpolatedNormal;
-	intersection.texcoord = interpolatedTexcoord;
+	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
 
 	return true;
 }

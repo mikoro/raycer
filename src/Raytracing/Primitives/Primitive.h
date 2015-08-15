@@ -13,6 +13,7 @@ namespace Raycer
 	struct Intersection;
 	class AABB;
 	class Vector3;
+	struct Material;
 
 	class Primitive
 	{
@@ -26,6 +27,6 @@ namespace Raycer
 		virtual Vector3* getPosition() = 0;
 
 		int materialId = 0;
-		Vector2 texcoordScale = Vector2(1.0, 1.0);
+		Material* material = nullptr;
 	};
 }

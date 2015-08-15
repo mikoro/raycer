@@ -1,6 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <map>
 #include <sstream>
 #include <stdexcept>
 
@@ -9,6 +10,8 @@
 #include "cereal/archives/xml.hpp"
 #include "cereal/types/vector.hpp"
 //#include "cereal/archives/binary.hpp"
+
+#include "tinyformat/tinyformat.h"
 
 #include "Raytracing/Scene.h"
 #include "Raytracing/Primitives/Primitive.h"
@@ -154,6 +157,10 @@ std::string Scene::saveToXmlString() const
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
+	std::map<int, Texture*> texturesMap;
+	std::map<int, Material*> materialsMap;
+
+	// TEXTURES
 
 	for (ColorTexture& texture : textures.colorTextures)
 		texturesList.push_back(&texture);
@@ -188,14 +195,7 @@ void Scene::initialize()
 	for (VoronoiTexture& texture : textures.voronoiTextures)
 		texturesList.push_back(&texture);
 
-	for (Texture* texture : texturesList)
-	{
-		texture->initialize();
-		texturesMap[texture->id] = texture;
-	}
-
-	for (Material& material : materials)
-		materialsMap[material.id] = &material;
+	// PRIMITIVES
 
 	for (Plane& plane : primitives.planes)
 		primitives.all.push_back(&plane);
@@ -212,24 +212,37 @@ void Scene::initialize()
 	for (Mesh& mesh : primitives.meshes)
 		primitives.all.push_back(&mesh);
 
-	for (Primitive* primitive : primitives.all)
-		primitive->initialize();
+	// INITIALIZATION
 
-	// validation
+	for (Texture* texture : texturesList)
+	{
+		texture->initialize();
+		texturesMap[texture->id] = texture;
+	}
+
+	for (Material& material : materials)
+		materialsMap[material.id] = &material;
+
 	for (Primitive* primitive : primitives.all)
 	{
 		if (materialsMap.count(primitive->materialId))
 		{
-			Material* material = materialsMap[primitive->materialId];
+			primitive->material = materialsMap[primitive->materialId];
 
-			if (!texturesMap.count(material->textureId))
-				throw std::runtime_error("A material has an invalid texture id");
+			if (texturesMap.count(primitive->material->textureId))
+				primitive->material->texture = texturesMap[primitive->material->textureId];
+			else
+				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->textureId));
 		}
 		else
-			throw std::runtime_error("A primitive has an invalid material id");
+			throw std::runtime_error(tfm::format("A primitive has an invalid material id (%d)", primitive->materialId));
+
+		primitive->initialize();
 	}
 
 	camera.initialize();
+
+	// ROOT BVH
 
 	if (rootBVH.enabled)
 	{

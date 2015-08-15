@@ -4,13 +4,18 @@
 #pragma once
 
 #include "Math/Color.h"
+#include "Math/Vector2.h"
 
 namespace Raycer
 {
+	class Texture;
+
 	struct Material
 	{
 		int id = 0;
 		int textureId = 0;
+		Texture* texture = nullptr;
+		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
 		bool skipLighting = false;
 		bool nonShadowing = false;

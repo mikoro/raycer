@@ -190,8 +190,7 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("normal", b.normal),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("materialId", b.materialId));
 	}
 
 	template<class Archive>
@@ -199,8 +198,7 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("radius", b.radius),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("materialId", b.materialId));
 	}
 
 	template<class Archive>
@@ -208,8 +206,7 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("position", b.position),
 			cereal::make_nvp("extent", b.extent),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("materialId", b.materialId));
 	}
 
 	template<class Archive>
@@ -218,8 +215,7 @@ namespace Raycer
 		a(cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
 			cereal::make_nvp("texcoords", b.texcoords),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale));
+			cereal::make_nvp("materialId", b.materialId));
 	}
 
 	template<class Archive>
@@ -230,7 +226,6 @@ namespace Raycer
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("orientation", b.orientation),
 			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale),
 			cereal::make_nvp("enableBVH", b.enableBVH),
 			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
 	}
@@ -436,6 +431,7 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("textureId", b.textureId),
+			cereal::make_nvp("texcoordScale", b.texcoordScale),
 			cereal::make_nvp("skipLighting", b.skipLighting),
 			cereal::make_nvp("nonShadowing", b.nonShadowing),
 			cereal::make_nvp("ambientness", b.ambientness),

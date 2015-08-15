@@ -8,6 +8,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
+#include "Raytracing/Material.h"
 #include "Math/Vector2.h"
 
 using namespace Raycer;
@@ -52,8 +53,8 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 	intersection.normal = normal;
 
 	// texture coordinate calculation
-	double u = uAxis.dot(ip) / texcoordScale.x;
-	double v = vAxis.dot(ip) / texcoordScale.y;
+	double u = uAxis.dot(ip) / material->texcoordScale.x;
+	double v = vAxis.dot(ip) / material->texcoordScale.y;
 	intersection.texcoord.x = fabs(u - floor(u));
 	intersection.texcoord.y = fabs(v - floor(v));
 

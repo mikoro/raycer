@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <map>
 #include <string>
 #include <vector>
 
@@ -142,8 +141,5 @@ namespace Raycer
 			std::vector<Primitive*> all;
 			FlatBVH rootBVH;
 		} primitives;
-
-		std::map<int, Texture*> texturesMap;
-		std::map<int, Material*> materialsMap;
 	};
 }
