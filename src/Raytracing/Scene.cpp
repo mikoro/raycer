@@ -248,6 +248,32 @@ void Scene::initialize()
 
 	camera.initialize();
 
+	if (boundingBoxes.enabled)
+	{
+		boundingBoxes.texture.color = Color(1.0, 0.0, 0.0);
+		boundingBoxes.texture.intensity = 1.0;
+		boundingBoxes.material.texture = &boundingBoxes.texture;
+		boundingBoxes.material.ambientness = 0.0;
+		boundingBoxes.material.diffuseness = 0.0;
+		boundingBoxes.material.specularity = 0.0;
+		boundingBoxes.material.transmittance = 1.0;
+
+		for (Primitive* primitive : primitives.all)
+		{
+			AABB aabb = primitive->getAABB();
+
+			Box bbox;
+			bbox.material = &boundingBoxes.material;
+			bbox.position = aabb.center;
+			bbox.extent = aabb.extent;
+
+			primitives.boundingBoxes.push_back(bbox);
+		}
+
+		for (Box& box : primitives.boundingBoxes)
+			primitives.all.push_back(&box);
+	}
+
 	// ROOT BVH
 
 	if (rootBVH.enabled)

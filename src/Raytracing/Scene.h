@@ -110,6 +110,13 @@ namespace Raycer
 			BVHBuildInfo buildInfo;
 		} rootBVH;
 
+		struct BoundingBoxes
+		{
+			bool enabled = true;
+			ColorTexture texture;
+			Material material;
+		} boundingBoxes;
+
 		struct Textures
 		{
 			std::vector<ColorTexture> colorTextures;
@@ -140,6 +147,7 @@ namespace Raycer
 			std::vector<Plane> planes;
 			std::vector<Sphere> spheres;
 			std::vector<Box> boxes;
+			std::vector<Box> boundingBoxes;
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 			std::vector<Instance> instances;
