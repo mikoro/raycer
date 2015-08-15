@@ -174,6 +174,7 @@ Vector3 Vector3::inversed() const
 	inverse.x = 1.0 / x;
 	inverse.y = 1.0 / y;
 	inverse.z = 1.0 / z;
+
 	return inverse;
 }
 

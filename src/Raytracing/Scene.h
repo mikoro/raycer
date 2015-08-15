@@ -25,6 +25,7 @@
 #include "Raytracing/Primitives/Box.h"
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Primitives/Mesh.h"
+#include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Math/Color.h"
 
@@ -63,6 +64,7 @@ namespace Raycer
 		static Scene createTestScene8();
 		static Scene createTestScene9();
 		static Scene createTestScene10();
+		static Scene createTestScene11();
 
 		Camera camera;
 
@@ -140,6 +142,7 @@ namespace Raycer
 			std::vector<Box> boxes;
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
+			std::vector<Instance> instances;
 			std::vector<Primitive*> all;
 			FlatBVH rootBVH;
 		} primitives;

@@ -154,17 +154,7 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 
 AABB Triangle::getAABB() const
 {
-	Vector3 min;
-	min.x = std::min(vertices[0].x, std::min(vertices[1].x, vertices[2].x));
-	min.y = std::min(vertices[0].y, std::min(vertices[1].y, vertices[2].y));
-	min.z = std::min(vertices[0].z, std::min(vertices[1].z, vertices[2].z));
-
-	Vector3 max;
-	max.x = std::max(vertices[0].x, std::max(vertices[1].x, vertices[2].x));
-	max.y = std::max(vertices[0].y, std::max(vertices[1].y, vertices[2].y));
-	max.z = std::max(vertices[0].z, std::max(vertices[1].z, vertices[2].z));
-
-	return AABB(min, max);
+	return AABB::createFromVertices(vertices[0], vertices[1], vertices[2]);
 }
 
 Vector3* Triangle::getPosition()

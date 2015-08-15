@@ -7,6 +7,7 @@
 #include "Math/Matrix4x4.h"
 #include "Math/MathUtils.h"
 #include "Math/Vector3.h"
+#include "Math/EulerAngle.h"
 
 using namespace Raycer;
 
@@ -208,6 +209,27 @@ Matrix4x4 Matrix4x4::transposed() const
 	return r;
 }
 
+Vector3 Matrix4x4::transformPosition(const Vector3& v) const
+{
+	return (*this * v);
+}
+
+Vector3 Matrix4x4::transformDirection(const Vector3& v) const
+{
+	Vector3 result;
+
+	result.x = m[0][0] * v.x + m[1][0] * v.y + m[2][0] * v.z;
+	result.y = m[0][1] * v.x + m[1][1] * v.y + m[2][1] * v.z;
+	result.z = m[0][2] * v.x + m[1][2] * v.y + m[2][2] * v.z;
+
+	return result;
+}
+
+Matrix4x4 Matrix4x4::scale(const Vector3& s)
+{
+	return scale(s.x, s.y, s.z);
+}
+
 Matrix4x4 Matrix4x4::scale(double sx, double sy, double sz)
 {
 	Matrix4x4 result = IDENTITY;
@@ -219,6 +241,11 @@ Matrix4x4 Matrix4x4::scale(double sx, double sy, double sz)
 	return result;
 }
 
+Matrix4x4 Matrix4x4::translate(const Vector3& t)
+{
+	return translate(t.x, t.y, t.z);
+}
+
 Matrix4x4 Matrix4x4::translate(double tx, double ty, double tz)
 {
 	Matrix4x4 result = IDENTITY;
@@ -228,6 +255,16 @@ Matrix4x4 Matrix4x4::translate(double tx, double ty, double tz)
 	result.m[3][2] = tz;
 
 	return result;
+}
+
+Matrix4x4 Matrix4x4::rotateXYZ(double pitch, double yaw, double roll)
+{
+	return rotateX(pitch) * rotateY(yaw) * rotateZ(roll);
+}
+
+Matrix4x4 Matrix4x4::rotateZYX(double pitch, double yaw, double roll)
+{
+	return rotateZ(roll) * rotateY(yaw) * rotateX(pitch);
 }
 
 Matrix4x4 Matrix4x4::rotateX(double degrees)

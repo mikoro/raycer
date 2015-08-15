@@ -43,6 +43,7 @@ Scene Scene::createTestScene(int number)
 		case 8: return createTestScene8(); break;
 		case 9: return createTestScene9(); break;
 		case 10: return createTestScene10(); break;
+		case 11: return createTestScene11(); break;
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }
@@ -213,6 +214,9 @@ void Scene::initialize()
 
 	for (Mesh& mesh : primitives.meshes)
 		primitives.all.push_back(&mesh);
+
+	for (Instance& instance : primitives.instances)
+		primitives.all.push_back(&instance);
 
 	// INITIALIZATION
 

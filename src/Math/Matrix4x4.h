@@ -25,6 +25,7 @@ T = translation
 namespace Raycer
 {
 	class Vector3;
+	class EulerAngle;
 
 	class Matrix4x4
 	{
@@ -59,11 +60,20 @@ namespace Raycer
 		void transpose();
 		Matrix4x4 transposed() const;
 
+		Vector3 transformPosition(const Vector3& v) const;
+		Vector3 transformDirection(const Vector3& v) const;
+
 		static const Matrix4x4 IDENTITY;
 		static const Matrix4x4 ZERO;
 
+		static Matrix4x4 scale(const Vector3& s);
 		static Matrix4x4 scale(double sx, double sy, double sz);
+
+		static Matrix4x4 translate(const Vector3& t);
 		static Matrix4x4 translate(double tx, double ty, double tz);
+
+		static Matrix4x4 rotateXYZ(double pitch, double yaw, double roll);
+		static Matrix4x4 rotateZYX(double pitch, double yaw, double roll);
 		static Matrix4x4 rotateX(double degrees);
 		static Matrix4x4 rotateY(double degrees);
 		static Matrix4x4 rotateZ(double degrees);
