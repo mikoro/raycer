@@ -230,7 +230,7 @@ namespace Raycer
 			cereal::make_nvp("enableBVH", b.enableBVH),
 			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
 	}
-	
+
 	// ---------------------------------------------
 	// TEXTURES
 	// ---------------------------------------------
@@ -388,8 +388,8 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, EulerAngle& b)
 	{
-		a(cereal::make_nvp("yaw", b.yaw),
-			cereal::make_nvp("pitch", b.pitch),
+		a(cereal::make_nvp("pitch", b.pitch),
+			cereal::make_nvp("yaw", b.yaw),
 			cereal::make_nvp("roll", b.roll));
 	}
 

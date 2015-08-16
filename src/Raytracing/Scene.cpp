@@ -250,13 +250,13 @@ void Scene::initialize()
 
 	if (boundingBoxes.enabled)
 	{
-		boundingBoxes.texture.color = Color(1.0, 0.0, 0.0);
+		boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
 		boundingBoxes.texture.intensity = 1.0;
 		boundingBoxes.material.texture = &boundingBoxes.texture;
 		boundingBoxes.material.ambientness = 0.0;
-		boundingBoxes.material.diffuseness = 0.0;
-		boundingBoxes.material.specularity = 0.0;
+		boundingBoxes.material.diffuseness = 0.1;
 		boundingBoxes.material.transmittance = 1.0;
+		boundingBoxes.material.nonShadowing = true;
 
 		for (Primitive* primitive : primitives.all)
 		{

@@ -5,6 +5,7 @@
 
 #include "Math/Matrix4x4.h"
 #include "Math/Vector3.h"
+#include "Math/EulerAngle.h"
 
 using namespace Raycer;
 
@@ -132,4 +133,22 @@ TEST_CASE("Matrix4x4 functionality", "[matrix4x4]")
 		0.0, 0.0, -1.0, 0.0,
 		0.0, 1.0, 0.0, 0.0,
 		0.0, 0.0, 0.0, 1.0));
+
+	Vector3 scale = Vector3(2.0, 3.0, 4.0);
+	EulerAngle rotate = EulerAngle(10.0, 20.0, 30.0);
+	Vector3 translate = Vector3(50.0, 60.0, 70.0);
+
+	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
+	Matrix4x4 translation = Matrix4x4::translate(translate);
+
+	Matrix4x4 scalingInv = Matrix4x4::scale(scale.inversed());
+	Matrix4x4 rotationInv = Matrix4x4::rotateZYX(-rotate.pitch, -rotate.yaw, -rotate.roll);
+	Matrix4x4 translationInv = Matrix4x4::translate(-translate);
+
+	Matrix4x4 transformation = translation * rotation * scaling;
+	Matrix4x4 transformationInv = scalingInv * rotationInv * translationInv;
+	Matrix4x4 transformationInv2 = transformation.inverted();
+
+	REQUIRE(transformationInv == transformationInv2);
 }

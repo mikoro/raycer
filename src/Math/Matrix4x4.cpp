@@ -209,6 +209,146 @@ Matrix4x4 Matrix4x4::transposed() const
 	return r;
 }
 
+void Matrix4x4::invert()
+{
+	*this = inverted();
+}
+
+Matrix4x4 Matrix4x4::inverted() const
+{
+	double n[16], inv[16], out[16];
+
+	std::memcpy(n, m, sizeof(double) * 16);
+
+	inv[0] = n[5] * n[10] * n[15] -
+		n[5] * n[11] * n[14] -
+		n[9] * n[6] * n[15] +
+		n[9] * n[7] * n[14] +
+		n[13] * n[6] * n[11] -
+		n[13] * n[7] * n[10];
+
+	inv[4] = -n[4] * n[10] * n[15] +
+		n[4] * n[11] * n[14] +
+		n[8] * n[6] * n[15] -
+		n[8] * n[7] * n[14] -
+		n[12] * n[6] * n[11] +
+		n[12] * n[7] * n[10];
+
+	inv[8] = n[4] * n[9] * n[15] -
+		n[4] * n[11] * n[13] -
+		n[8] * n[5] * n[15] +
+		n[8] * n[7] * n[13] +
+		n[12] * n[5] * n[11] -
+		n[12] * n[7] * n[9];
+
+	inv[12] = -n[4] * n[9] * n[14] +
+		n[4] * n[10] * n[13] +
+		n[8] * n[5] * n[14] -
+		n[8] * n[6] * n[13] -
+		n[12] * n[5] * n[10] +
+		n[12] * n[6] * n[9];
+
+	inv[1] = -n[1] * n[10] * n[15] +
+		n[1] * n[11] * n[14] +
+		n[9] * n[2] * n[15] -
+		n[9] * n[3] * n[14] -
+		n[13] * n[2] * n[11] +
+		n[13] * n[3] * n[10];
+
+	inv[5] = n[0] * n[10] * n[15] -
+		n[0] * n[11] * n[14] -
+		n[8] * n[2] * n[15] +
+		n[8] * n[3] * n[14] +
+		n[12] * n[2] * n[11] -
+		n[12] * n[3] * n[10];
+
+	inv[9] = -n[0] * n[9] * n[15] +
+		n[0] * n[11] * n[13] +
+		n[8] * n[1] * n[15] -
+		n[8] * n[3] * n[13] -
+		n[12] * n[1] * n[11] +
+		n[12] * n[3] * n[9];
+
+	inv[13] = n[0] * n[9] * n[14] -
+		n[0] * n[10] * n[13] -
+		n[8] * n[1] * n[14] +
+		n[8] * n[2] * n[13] +
+		n[12] * n[1] * n[10] -
+		n[12] * n[2] * n[9];
+
+	inv[2] = n[1] * n[6] * n[15] -
+		n[1] * n[7] * n[14] -
+		n[5] * n[2] * n[15] +
+		n[5] * n[3] * n[14] +
+		n[13] * n[2] * n[7] -
+		n[13] * n[3] * n[6];
+
+	inv[6] = -n[0] * n[6] * n[15] +
+		n[0] * n[7] * n[14] +
+		n[4] * n[2] * n[15] -
+		n[4] * n[3] * n[14] -
+		n[12] * n[2] * n[7] +
+		n[12] * n[3] * n[6];
+
+	inv[10] = n[0] * n[5] * n[15] -
+		n[0] * n[7] * n[13] -
+		n[4] * n[1] * n[15] +
+		n[4] * n[3] * n[13] +
+		n[12] * n[1] * n[7] -
+		n[12] * n[3] * n[5];
+
+	inv[14] = -n[0] * n[5] * n[14] +
+		n[0] * n[6] * n[13] +
+		n[4] * n[1] * n[14] -
+		n[4] * n[2] * n[13] -
+		n[12] * n[1] * n[6] +
+		n[12] * n[2] * n[5];
+
+	inv[3] = -n[1] * n[6] * n[11] +
+		n[1] * n[7] * n[10] +
+		n[5] * n[2] * n[11] -
+		n[5] * n[3] * n[10] -
+		n[9] * n[2] * n[7] +
+		n[9] * n[3] * n[6];
+
+	inv[7] = n[0] * n[6] * n[11] -
+		n[0] * n[7] * n[10] -
+		n[4] * n[2] * n[11] +
+		n[4] * n[3] * n[10] +
+		n[8] * n[2] * n[7] -
+		n[8] * n[3] * n[6];
+
+	inv[11] = -n[0] * n[5] * n[11] +
+		n[0] * n[7] * n[9] +
+		n[4] * n[1] * n[11] -
+		n[4] * n[3] * n[9] -
+		n[8] * n[1] * n[7] +
+		n[8] * n[3] * n[5];
+
+	inv[15] = n[0] * n[5] * n[10] -
+		n[0] * n[6] * n[9] -
+		n[4] * n[1] * n[10] +
+		n[4] * n[2] * n[9] +
+		n[8] * n[1] * n[6] -
+		n[8] * n[2] * n[5];
+
+	Matrix4x4 result;
+
+	double det = n[0] * inv[0] + n[1] * inv[4] + n[2] * inv[8] + n[3] * inv[12];
+
+	if (det == 0)
+		return result;
+
+	det = 1.0 / det;
+
+	for (int i = 0; i < 16; i++)
+		out[i] = inv[i] * det;
+
+	std::memcpy(result.m, out, sizeof(double) * 16);
+
+	return result;
+}
+
 Vector3 Matrix4x4::transformPosition(const Vector3& v) const
 {
 	return (*this * v);
@@ -260,6 +400,11 @@ Matrix4x4 Matrix4x4::translate(double tx, double ty, double tz)
 Matrix4x4 Matrix4x4::rotateXYZ(double pitch, double yaw, double roll)
 {
 	return rotateX(pitch) * rotateY(yaw) * rotateZ(roll);
+}
+
+Matrix4x4 Matrix4x4::rotateZYX(double pitch, double yaw, double roll)
+{
+	return rotateZ(roll) * rotateY(yaw) * rotateX(pitch);
 }
 
 Matrix4x4 Matrix4x4::rotateX(double degrees)

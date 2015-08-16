@@ -27,12 +27,7 @@ void Mesh::initialize()
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation.pitch, orientation.yaw, orientation.roll);
 	Matrix4x4 translation = Matrix4x4::translate(position);
 	Matrix4x4 transformation = translation * rotation * scaling;
-
-	Matrix4x4 scalingInv = Matrix4x4::scale(scale.inversed());
-	Matrix4x4 rotationInv = Matrix4x4::rotateXYZ(-orientation.pitch, -orientation.yaw, -orientation.roll);
-	Matrix4x4 translationInv = Matrix4x4::translate(-position);
-	Matrix4x4 transformationInv = translationInv * rotationInv * scalingInv;
-	Matrix4x4 transformationInvT = transformationInv.transposed();
+	Matrix4x4 transformationInvT = transformation.inverted().transposed();
 
 	std::vector<Primitive*> primitives;
 

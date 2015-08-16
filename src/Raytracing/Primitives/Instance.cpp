@@ -15,28 +15,41 @@ void Instance::initialize()
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
 	Matrix4x4 translation = Matrix4x4::translate(translate);
-
-	Matrix4x4 scalingInv = Matrix4x4::scale(scale.inversed());
-	Matrix4x4 rotationInv = Matrix4x4::rotateXYZ(-rotate.pitch, -rotate.yaw, -rotate.roll);
-	Matrix4x4 translationInv = Matrix4x4::translate(-translate);
-	
 	transformation = translation * rotation * scaling;
-	transformationInv = scalingInv * rotationInv * translationInv;
+	transformationInv = transformation.inverted();
 	transformationInvT = transformationInv.transposed();
 }
 
 bool Instance::intersect(const Ray& ray, Intersection& intersection)
 {
+	if (ray.fastOcclusion && intersection.wasFound)
+		return true;
+
 	Ray instanceRay = ray;
+	Intersection instanceIntersection = intersection;
+
 	instanceRay.origin = transformationInv.transformPosition(ray.origin);
 	instanceRay.direction = transformationInv.transformDirection(ray.direction).normalized();
 	instanceRay.update();
 
-	if (primitive->intersect(instanceRay, intersection))
+	if (primitive->intersect(instanceRay, instanceIntersection))
 	{
-		intersection.position = transformation.transformPosition(intersection.position);
-		intersection.normal = transformationInvT.transformDirection(intersection.normal).normalized();
+		Vector3 position = transformation.transformPosition(instanceIntersection.position);
+		
+		double t = (position - ray.origin).length();
+
+		if (t < ray.tmin || t > ray.tmax)
+			return false;
+
+		if (t > intersection.distance)
+			return false;
+
+		intersection.wasFound = true;
+		intersection.distance = t;
 		intersection.primitive = this;
+		intersection.position = position;
+		intersection.normal = transformationInvT.transformDirection(instanceIntersection.normal).normalized();
+		intersection.texcoord = instanceIntersection.texcoord;
 
 		return true;
 	}
