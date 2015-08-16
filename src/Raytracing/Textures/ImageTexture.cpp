@@ -11,6 +11,9 @@ using namespace Raycer;
 void ImageTexture::initialize()
 {
 	image.load(imageFilePath);
+
+	if (applyGamma)
+		image.applyGamma(gamma);
 }
 
 Color ImageTexture::getColor(const Vector3& position, const Vector2& texcoord) const

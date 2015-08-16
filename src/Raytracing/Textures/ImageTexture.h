@@ -24,6 +24,8 @@ namespace Raycer
 		double getValue(const Vector3& position, const Vector2& texcoord) const;
 
 		std::string imageFilePath;
+		bool applyGamma = false;
+		double gamma = 2.2;
 
 	private:
 

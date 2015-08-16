@@ -146,6 +146,7 @@ namespace Raycer
 		a(cereal::make_nvp("color", b.color),
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
+			cereal::make_nvp("maxOcclusionDistance", b.maxOcclusionDistance),
 			cereal::make_nvp("samples", b.samples),
 			cereal::make_nvp("distribution", b.distribution));
 	}
@@ -257,7 +258,9 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("intensity", b.intensity),
-			cereal::make_nvp("imageFilePath", b.imageFilePath));
+			cereal::make_nvp("imageFilePath", b.imageFilePath),
+			cereal::make_nvp("applyGamma", b.applyGamma),
+			cereal::make_nvp("gamma", b.gamma));
 	}
 
 	template<class Archive>

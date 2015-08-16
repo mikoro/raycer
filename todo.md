@@ -8,8 +8,6 @@ lighting
  - global illumination
 
 primitives
- - moving sphere
- - instancing
  - cylinder
  - torus
  - metaball
@@ -19,5 +17,4 @@ rendering
  - reinhard tonemap
 
 textures
- - image texture apply gamma switch
  - Elliptical Weighted Average texture filtering
