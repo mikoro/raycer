@@ -229,10 +229,6 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	Color refractionColor;
 	Color reflectionColor;
 
-	Vector3 D = ray.direction;
-	Vector3 N = intersection.normal;
-	Vector3 P = intersection.position;
-
 	// calculate and trace refracted ray
 	if (transmittance > 0.0 && iteration < scene.raytracing.maxIterations)
 	{
@@ -242,27 +238,23 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		// no total internal reflection
 		if (c2 > 0.0)
 		{
-			Vector3 T = D * n + (c1 * n - sqrt(c2)) * N;
+			Vector3 T = ray.direction * n + (c1 * n - sqrt(c2)) * intersection.normal;
 			T.normalize();
 
 			Ray refractedRay;
 			Intersection refractedIntersection;
 
-			refractedRay.origin = P + T * scene.raytracing.startOffset;
+			refractedRay.origin = intersection.position + T * scene.raytracing.startOffset;
 			refractedRay.direction = T;
 			refractedRay.update();
 
-			Color color = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted);
+			refractionColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * transmittance;
 
-			if (refractedIntersection.wasFound)
+			// only attenuate if ray has traveled inside a primitive
+			if (isOutside && refractedIntersection.wasFound && material->attenuate)
 			{
-				refractionColor = color * transmittance;
-
-				if (isOutside && material->attenuate)
-				{
-					double a = exp(-material->attenuation * refractedIntersection.distance);
-					refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
-				}
+				double a = exp(-material->attenuation * refractedIntersection.distance);
+				refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
 			}
 		}
 	}
@@ -270,27 +262,23 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	// calculate and trace reflected ray
 	if (reflectance > 0.0 && iteration < scene.raytracing.maxIterations)
 	{
-		Vector3 R = D + 2.0 * c1 * N;
+		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
 		R.normalize();
 
 		Ray reflectedRay;
 		Intersection reflectedIntersection;
 
-		reflectedRay.origin = P + R * scene.raytracing.startOffset;
+		reflectedRay.origin = intersection.position + R * scene.raytracing.startOffset;
 		reflectedRay.direction = R;
 		reflectedRay.update();
 
-		Color color = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted);
+		reflectionColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * reflectance;
 
-		if (reflectedIntersection.wasFound)
+		// only attenuate if ray has traveled inside a primitive
+		if (!isOutside && reflectedIntersection.wasFound && material->attenuate)
 		{
-			reflectionColor = color * reflectance;
-
-			if (!isOutside && material->attenuate)
-			{
-				double a = exp(-material->attenuation * reflectedIntersection.distance);
-				reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
-			}
+			double a = exp(-material->attenuation * reflectedIntersection.distance);
+			reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
 		}
 	}
 
