@@ -22,6 +22,8 @@ namespace Raycer
 		int framebufferY = 0;
 		int deltaX = 0;
 		int deltaY = 0;
+		double scrollY = 0.0;
+		bool hasScrolled = false;
 	};
 
 	class WindowRunner
@@ -45,6 +47,7 @@ namespace Raycer
 		bool mouseIsDown(int button);
 		bool keyWasPressed(int key);
 		bool mouseWasPressed(int button);
+		double getMouseWheelScroll();
 
 		void changeState(WindowRunnerStates newState);
 

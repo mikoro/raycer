@@ -55,9 +55,11 @@ AABB BVH::getAABB() const
 	return aabb;
 }
 
-Vector3* BVH::getPosition()
+void BVH::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return nullptr;
+	(void)scale;
+	(void)rotate;
+	(void)translate;
 }
 
 void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info)

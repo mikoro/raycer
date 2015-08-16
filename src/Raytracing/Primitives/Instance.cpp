@@ -14,8 +14,9 @@ using namespace Raycer;
 void Instance::initialize()
 {
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
 	Matrix4x4 translation = Matrix4x4::translate(translate);
+
 	transformation = translation * rotation * scaling;
 	transformationInv = transformation.inverted();
 	transformationInvT = transformationInv.transposed();
@@ -66,7 +67,20 @@ AABB Instance::getAABB() const
 	return primitive->getAABB().transformed(scale, rotate, translate);
 }
 
-Vector3* Instance::getPosition()
+void Instance::transform(const Vector3& scale_, const EulerAngle& rotate_, const Vector3& translate_)
 {
-	return nullptr;
+	scale *= scale_;
+	rotate += rotate_;
+	translate += translate_;
+
+	Vector3 position = primitive->getAABB().center;
+
+	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
+	Matrix4x4 translation1 = Matrix4x4::translate(-position);
+	Matrix4x4 translation2 = Matrix4x4::translate(position + translate);
+
+	transformation = translation2 * rotation * scaling * translation1;
+	transformationInv = transformation.inverted();
+	transformationInvT = transformationInv.transposed();
 }

@@ -11,11 +11,7 @@ Scene Scene::createTestScene3()
 	Scene scene;
 
 	scene.rootBVH.enabled = true;
-	scene.rootBVH.buildInfo.maxLeafSize = 5;
-	scene.rootBVH.buildInfo.useSAH = true;
-	scene.rootBVH.buildInfo.regularSAHSplits = 0;
-	scene.rootBVH.buildInfo.axisSelection = BVHAxisSelection::LARGEST;
-	scene.rootBVH.buildInfo.axisSplit = BVHAxisSplit::MEDIAN;
+	//scene.boundingBoxes.enabled = true;
 
 	// CAMERA //
 
@@ -40,7 +36,7 @@ Scene Scene::createTestScene3()
 
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	scene.primitives.planes.push_back(groundPlane);
+	//scene.primitives.planes.push_back(groundPlane);
 
 	// MESH 1 //
 
@@ -56,13 +52,33 @@ Scene Scene::createTestScene3()
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
 	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
+	mesh1.position = Vector3(0.0, 100.0, 0.0);
 	mesh1.scale = Vector3(6.0, 6.0, 6.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);
 	scene.primitives.meshes.push_back(mesh1);
+
+	// INSTANCE 1 //
+
+	ColorTexture instance1Texture;
+	instance1Texture.id = 3;
+	instance1Texture.color = Color(1.0, 1.0, 1.0);
+	instance1Texture.intensity = 0.8;
+
+	Material instance1Material;
+	instance1Material.id = 3;
+	instance1Material.textureId = instance1Texture.id;
+
+	Instance instance1;
+	instance1.materialId = instance1Material.id;
+	instance1.primitive = &scene.primitives.meshes.back();
+	instance1.translate = Vector3(0.0, -100.0, 0.0);
+
+	scene.textures.colorTextures.push_back(instance1Texture);
+	scene.materials.push_back(instance1Material);
+	scene.primitives.instances.push_back(instance1);
 
 	// LIGHTS //
 

@@ -29,6 +29,38 @@ EulerAngle& EulerAngle::operator=(const EulerAngle& e)
 	return *this;
 }
 
+namespace Raycer
+{
+	EulerAngle operator+(const EulerAngle& e1, const EulerAngle& e2)
+	{
+		return EulerAngle(e1.pitch + e2.pitch, e1.yaw + e2.yaw, e1.roll + e2.roll);
+	}
+
+	EulerAngle operator-(const EulerAngle& e1, const EulerAngle& e2)
+	{
+		return EulerAngle(e1.pitch - e2.pitch, e1.yaw - e2.yaw, e1.roll - e2.roll);
+	}
+
+	EulerAngle operator-(const EulerAngle& e)
+	{
+		return EulerAngle(-e.pitch, -e.yaw, -e.roll);
+	}
+}
+
+EulerAngle& EulerAngle::operator+=(const EulerAngle& e)
+{
+	*this = *this + e;
+
+	return *this;
+}
+
+EulerAngle& EulerAngle::operator-=(const EulerAngle& e)
+{
+	*this = *this - e;
+
+	return *this;
+}
+
 void EulerAngle::clampPitch()
 {
 	if (pitch > 89.0)

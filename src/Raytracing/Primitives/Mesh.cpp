@@ -25,7 +25,7 @@ void Mesh::initialize()
 		throw std::runtime_error("Unknown mesh file format");
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation.pitch, orientation.yaw, orientation.roll);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation);
 	Matrix4x4 translation = Matrix4x4::translate(position);
 	Matrix4x4 transformation = translation * rotation * scaling;
 	Matrix4x4 transformationInvT = transformation.inverted().transposed();
@@ -90,7 +90,9 @@ AABB Mesh::getAABB() const
 		return aabb;
 }
 
-Vector3* Mesh::getPosition()
+void Mesh::transform(const Vector3& scale_, const EulerAngle& rotate_, const Vector3& translate_)
 {
-	return &position;
+	(void)scale_;
+	(void)rotate_;
+	(void)translate_;
 }

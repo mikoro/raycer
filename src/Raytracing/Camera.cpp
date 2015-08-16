@@ -84,21 +84,41 @@ void Camera::update(const Scene& scene, double timeStep)
 			if (intersection.wasFound)
 			{
 				isMovingPrimitive = true;
-				movingPrimitivePosition = intersection.primitive->getPosition();
+				movingPrimitive = intersection.primitive;
 			}
 		}
 		else
 			isMovingPrimitive = false;
 	}
 
-	if (isMovingPrimitive && movingPrimitivePosition != nullptr)
+	if (isMovingPrimitive && movingPrimitive != nullptr)
 	{
-		if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
-			*movingPrimitivePosition += Vector3(forward.x, 0.0, forward.z).normalized() * (double)mouseInfo.deltaY / 100.0;
-		else
-			*movingPrimitivePosition += Vector3::UP * (double)mouseInfo.deltaY / 100.0;
+		Vector3 scale(1.0, 1.0, 1.0);
+		EulerAngle rotate(0.0, 0.0, 0.0);
+		Vector3 translate(0.0, 0.0, 0.0);
 
-		*movingPrimitivePosition += right * (double)mouseInfo.deltaX / 100.0;
+		if (windowRunner.keyIsDown(GLFW_KEY_SPACE))
+		{
+			rotate.pitch -= (double)mouseInfo.deltaY / 5.0;
+
+			if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
+				rotate.roll -= (double)mouseInfo.deltaX / 5.0;
+			else
+				rotate.yaw += (double)mouseInfo.deltaX / 5.0;
+		}
+		else
+		{
+			if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
+				translate += Vector3(forward.x, 0.0, forward.z).normalized() * (double)mouseInfo.deltaY / 100.0;
+			else
+				translate += Vector3::UP * (double)mouseInfo.deltaY / 100.0;
+
+			translate += right * (double)mouseInfo.deltaX / 100.0;
+		}
+		
+		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.01);
+
+		movingPrimitive->transform(scale, rotate, translate);
 	}
 
 	double moveSpeed = settings.camera.moveSpeed;

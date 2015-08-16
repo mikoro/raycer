@@ -25,7 +25,7 @@ namespace Raycer
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
-		Vector3* getPosition();
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		std::string meshFilePath;
 		Vector3 position = Vector3(0.0, 0.0, 0.0);

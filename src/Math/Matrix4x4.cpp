@@ -397,6 +397,16 @@ Matrix4x4 Matrix4x4::translate(double tx, double ty, double tz)
 	return result;
 }
 
+Matrix4x4 Matrix4x4::rotateXYZ(const EulerAngle& e)
+{
+	return rotateXYZ(e.pitch, e.yaw, e.roll);
+}
+
+Matrix4x4 Matrix4x4::rotateZYX(const EulerAngle& e)
+{
+	return rotateZYX(e.pitch, e.yaw, e.roll);
+}
+
 Matrix4x4 Matrix4x4::rotateXYZ(double pitch, double yaw, double roll)
 {
 	return rotateX(pitch) * rotateY(yaw) * rotateZ(roll);

@@ -13,6 +13,7 @@ namespace Raycer
 	struct Intersection;
 	class AABB;
 	class Vector3;
+	class EulerAngle;
 	struct Material;
 
 	class Primitive
@@ -24,7 +25,7 @@ namespace Raycer
 		virtual void initialize() = 0;
 		virtual bool intersect(const Ray& ray, Intersection& intersection) = 0;
 		virtual AABB getAABB() const = 0;
-		virtual Vector3* getPosition() = 0;
+		virtual void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) = 0;
 
 		int materialId = 0;
 		Material* material = nullptr;

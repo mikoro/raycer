@@ -27,6 +27,13 @@ namespace Raycer
 		EulerAngle(const EulerAngle& e);
 		EulerAngle& operator=(const EulerAngle& e);
 
+		friend EulerAngle operator+(const EulerAngle& e1, const EulerAngle& e2);
+		friend EulerAngle operator-(const EulerAngle& e1, const EulerAngle& e2);
+		friend EulerAngle operator-(const EulerAngle& e);
+
+		EulerAngle& operator+=(const EulerAngle& e);
+		EulerAngle& operator-=(const EulerAngle& e);
+
 		void clampPitch();
 		void normalize();
 

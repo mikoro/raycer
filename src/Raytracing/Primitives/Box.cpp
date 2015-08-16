@@ -101,7 +101,10 @@ AABB Box::getAABB() const
 	return AABB::createFromCenterExtent(position, extent);
 }
 
-Vector3* Box::getPosition()
+void Box::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return &position;
+	(void)rotate;
+
+	position += translate;
+	extent *= scale;
 }

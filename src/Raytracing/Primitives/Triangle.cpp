@@ -10,6 +10,7 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
+#include "Math/Matrix4x4.h"
 
 using namespace Raycer;
 
@@ -157,7 +158,24 @@ AABB Triangle::getAABB() const
 	return AABB::createFromVertices(vertices[0], vertices[1], vertices[2]);
 }
 
-Vector3* Triangle::getPosition()
+void Triangle::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return &vertices[0];
+	Vector3 center = (vertices[0] + vertices[1] + vertices[2]) / 3.0;
+
+	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
+	Matrix4x4 translation1 = Matrix4x4::translate(-center);
+	Matrix4x4 translation2 = Matrix4x4::translate(translate + center);
+	Matrix4x4 transformation = translation2 * rotation * scaling * translation1;
+	Matrix4x4 transformationInvT = transformation.inverted().transposed();
+
+	vertices[0] = transformation.transformPosition(vertices[0]);
+	vertices[1] = transformation.transformPosition(vertices[1]);
+	vertices[2] = transformation.transformPosition(vertices[2]);
+
+	normals[0] = transformationInvT.transformDirection(normals[0]).normalized();
+	normals[1] = transformationInvT.transformDirection(normals[1]).normalized();
+	normals[2] = transformationInvT.transformDirection(normals[2]).normalized();
+
+	normal = transformationInvT.transformDirection(normal).normalized();
 }

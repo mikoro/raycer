@@ -42,13 +42,14 @@ AABB PrimitiveList::getAABB() const
 {
 	AABB aabb;
 
-	for (const Primitive* primitive : primitives)
+	for (Primitive* primitive : primitives)
 		aabb.expand(primitive->getAABB());
 
 	return aabb;
 }
 
-Vector3* PrimitiveList::getPosition()
+void PrimitiveList::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return nullptr;
+	for (Primitive* primitive : primitives)
+		primitive->transform(scale, rotate, translate);
 }

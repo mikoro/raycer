@@ -14,7 +14,6 @@ using namespace Raycer;
 
 void Sphere::initialize()
 {
-	radius2 = radius * radius;
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
@@ -32,6 +31,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 
 	double t1 = rayOriginToSphere.dot(ray.direction);
 	double sphereToRayDistance2 = rayOriginToSphereDistance2 - (t1 * t1);
+	double radius2 = radius * radius;
 
 	bool rayOriginIsOutside = (rayOriginToSphereDistance2 >= radius2);
 
@@ -83,7 +83,10 @@ AABB Sphere::getAABB() const
 	return AABB::createFromCenterExtent(position, Vector3(radius * 2.0, radius * 2.0, radius * 2.0));
 }
 
-Vector3* Sphere::getPosition()
+void Sphere::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return &position;
+	(void)rotate;
+
+	radius *= scale.x;
+	position += translate;
 }

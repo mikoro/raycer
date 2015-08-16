@@ -134,7 +134,7 @@ AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vec
 	newMax.x = newMax.y = newMax.z = std::numeric_limits<double>::lowest();
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
 	Matrix4x4 translation = Matrix4x4::translate(translate);
 	Matrix4x4 transformation = translation * rotation * scaling;
 

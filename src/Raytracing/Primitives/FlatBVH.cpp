@@ -81,9 +81,11 @@ AABB FlatBVH::getAABB() const
 	return flatNodes[0].aabb;
 }
 
-Vector3* FlatBVH::getPosition()
+void FlatBVH::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return nullptr;
+	(void)scale;
+	(void)rotate;
+	(void)translate;
 }
 
 void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo)

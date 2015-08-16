@@ -21,7 +21,7 @@ namespace Raycer
 		bool intersect(const Ray& ray, Intersection& intersection);
 		bool intersect2(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
-		Vector3* getPosition();
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		Vector3 vertices[3];
 		Vector3 normals[3];

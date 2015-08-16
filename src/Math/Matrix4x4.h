@@ -70,10 +70,10 @@ namespace Raycer
 
 		static Matrix4x4 scale(const Vector3& s);
 		static Matrix4x4 scale(double sx, double sy, double sz);
-
 		static Matrix4x4 translate(const Vector3& t);
 		static Matrix4x4 translate(double tx, double ty, double tz);
-
+		static Matrix4x4 rotateXYZ(const EulerAngle& e);
+		static Matrix4x4 rotateZYX(const EulerAngle& e);
 		static Matrix4x4 rotateXYZ(double pitch, double yaw, double roll);
 		static Matrix4x4 rotateZYX(double pitch, double yaw, double roll);
 		static Matrix4x4 rotateX(double degrees);

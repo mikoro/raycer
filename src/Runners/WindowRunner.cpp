@@ -37,6 +37,17 @@ namespace
 	{
 		App::getLog().logError("GLFW error (%s): %s", error, description);
 	}
+
+	MouseInfo* mouseInfoPtr = nullptr;
+
+	void glfwMouseWheelScroll(GLFWwindow* window, double xoffset, double yoffset)
+	{
+		(void)window;
+		(void)xoffset;
+
+		mouseInfoPtr->scrollY = yoffset;
+		mouseInfoPtr->hasScrolled = true;
+	}
 }
 
 WindowRunner::WindowRunner()
@@ -151,6 +162,17 @@ bool WindowRunner::mouseWasPressed(int button)
 	return false;
 }
 
+double WindowRunner::getMouseWheelScroll()
+{
+	if (mouseInfo.hasScrolled)
+	{
+		mouseInfo.hasScrolled = false;
+		return mouseInfo.scrollY;
+	}
+
+	return 0.0;
+}
+
 void WindowRunner::changeState(WindowRunnerStates newState)
 {
 	if (currentState != WindowRunnerStates::None)
@@ -167,6 +189,8 @@ void WindowRunner::initialize()
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 	CLManager& clManager = App::getCLManager();
+
+	mouseInfoPtr = &mouseInfo;
 
 	log.logInfo("Initializing GLFW library");
 
@@ -188,6 +212,8 @@ void WindowRunner::initialize()
 
 	if (!glfwWindow)
 		throw std::runtime_error("Could not create the window");
+
+	glfwSetScrollCallback(glfwWindow, ::glfwMouseWheelScroll);
 
 	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - settings.window.width / 2), (videoMode->height / 2 - settings.window.height / 2));

@@ -19,14 +19,10 @@ namespace Raycer
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection);
 		AABB getAABB() const;
-		Vector3* getPosition();
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		Vector3 position;
 		Vector3 displacement;
 		double radius = 1.0;
-
-	private:
-
-		double radius2;
 	};
 }

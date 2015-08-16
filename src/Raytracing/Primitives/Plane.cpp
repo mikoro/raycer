@@ -10,6 +10,7 @@
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
 #include "Math/Vector2.h"
+#include "Math/Matrix4x4.h"
 
 using namespace Raycer;
 
@@ -67,7 +68,12 @@ AABB Plane::getAABB() const
 	return AABB::createFromMinMax(Vector3(-1000.0, -1000.0, -1000.0), Vector3(1000.0, 1000.0, 1000.0));
 }
 
-Vector3* Plane::getPosition()
+void Plane::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	return &position;
+	(void)scale;
+	
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
+
+	position += translate;
+	normal = rotation.transformDirection(normal).normalized();
 }

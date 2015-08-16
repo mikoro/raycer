@@ -11,6 +11,7 @@ namespace Raycer
 	class Ray;
 	class Vector2;
 	class Scene;
+	class Primitive;
 
 	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
 
@@ -57,6 +58,6 @@ namespace Raycer
 		Vector3 angularAcceleration;
 
 		bool isMovingPrimitive = false;
-		Vector3* movingPrimitivePosition = nullptr;
+		Primitive* movingPrimitive = nullptr;
 	};
 }
