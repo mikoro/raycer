@@ -23,21 +23,18 @@ void Mesh::initialize()
 	else
 		throw std::runtime_error("Unknown mesh file format");
 
-	Matrix4x4 rotationX = Matrix4x4::rotateX(orientation.pitch);
-	Matrix4x4 rotationY = Matrix4x4::rotateY(orientation.yaw);
-	Matrix4x4 rotationZ = Matrix4x4::rotateZ(orientation.roll);
-	Matrix4x4 rotation = rotationX * rotationY * rotationZ;
-	Matrix4x4 scaling = Matrix4x4::scale(scale.x, scale.y, scale.z);
-	Matrix4x4 translation = Matrix4x4::translate(position.x, position.y, position.z);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation.pitch, orientation.yaw, orientation.roll);
+	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 translation = Matrix4x4::translate(position);
 	Matrix4x4 transformation = translation * scaling * rotation;
 
 	std::vector<Primitive*> primitives;
 
 	for (Triangle& triangle : triangles)
 	{
-		triangle.vertices[0] = transformation * triangle.vertices[0];
-		triangle.vertices[1] = transformation * triangle.vertices[1];
-		triangle.vertices[2] = transformation * triangle.vertices[2];
+		triangle.vertices[0] = transformation.transformPosition(triangle.vertices[0]);
+		triangle.vertices[1] = transformation.transformPosition(triangle.vertices[1]);
+		triangle.vertices[2] = transformation.transformPosition(triangle.vertices[2]);
 
 		// TODO: does not work with non-uniform scaling
 		triangle.normals[0] = rotation * triangle.normals[0];

@@ -70,7 +70,7 @@ Scene Scene::createTestScene1()
 
 	Box box1;
 	box1.position = Vector3(3.0, 1.0, 0.0);
-	box1.extent = Vector3(1.0, 1.0, 1.0);
+	box1.extent = Vector3(2.0, 2.0, 2.0);
 	box1.materialId = box1Material.id;
 
 	scene.textures.colorTextures.push_back(box1Texture);

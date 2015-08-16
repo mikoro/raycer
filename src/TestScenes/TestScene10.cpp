@@ -15,6 +15,8 @@ Scene Scene::createTestScene10()
 
 	scene.rootBVH.enabled = true;
 
+	scene.misc.backgroundColor = Color::WHITE;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 5.0, 7.0);

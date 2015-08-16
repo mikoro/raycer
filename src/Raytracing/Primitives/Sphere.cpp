@@ -80,7 +80,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 
 AABB Sphere::getAABB() const
 {
-	return AABB::createFromCenterExtent(position, Vector3(radius, radius, radius));
+	return AABB::createFromCenterExtent(position, Vector3(radius * 2.0, radius * 2.0, radius * 2.0));
 }
 
 Vector3* Sphere::getPosition()

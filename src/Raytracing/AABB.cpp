@@ -44,8 +44,8 @@ AABB AABB::createFromCenterExtent(const Vector3& center, const Vector3& extent)
 	aabb.center = center;
 	aabb.extent = extent;
 
-	aabb.min = center - extent;
-	aabb.max = center + extent;
+	aabb.min = center - extent / 2.0;
+	aabb.max = center + extent / 2.0;
 
 	aabb.surfaceArea = 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
 

@@ -23,8 +23,8 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
-	Vector3 min = position - extent;
-	Vector3 max = position + extent;
+	Vector3 min = position - extent / 2.0;
+	Vector3 max = position + extent / 2.0;
 
 	double tx0 = (min.x - ray.origin.x) * ray.inverseDirection.x;
 	double tx1 = (max.x - ray.origin.x) * ray.inverseDirection.x;
