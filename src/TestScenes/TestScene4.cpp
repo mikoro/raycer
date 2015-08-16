@@ -78,14 +78,41 @@ Scene Scene::createTestScene4()
 	Box box2;
 	box2.extent = Vector3(20.0, 10.0, 1.0);
 	box2.materialId = box2Material.id;
+	box2.position = Vector3(0.0, 100.0, 0.0);
 
 	scene.textures.colorTextures.push_back(box2Texture);
 	scene.materials.push_back(box2Material);
+	scene.primitives.boxes.push_back(box2);
 
-	box2.position = Vector3(0.0, 0.0, -5.0);
-	scene.primitives.boxes.push_back(box2);
-	box2.position = Vector3(0.0, 0.0, 5.0);
-	scene.primitives.boxes.push_back(box2);
+	// INSTANCE 1 //
+
+	ColorTexture instance1Texture;
+	instance1Texture.id = 5;
+	instance1Texture.color = Color(0.8, 0.8, 1.0);
+	instance1Texture.intensity = 0.8;
+
+	Material instance1Material;
+	instance1Material.id = 5;
+	instance1Material.textureId = instance1Texture.id;
+	instance1Material.ambientness = 0.0;
+	instance1Material.diffuseness = 0.1;
+	instance1Material.reflectance = 1.0;
+	instance1Material.nonShadowing = true;
+
+	Instance instance1;
+	instance1.materialId = instance1Material.id;
+	instance1.primitive = &scene.primitives.boxes.back();
+
+	scene.textures.colorTextures.push_back(instance1Texture);
+	scene.materials.push_back(instance1Material);
+
+	instance1.translate = Vector3(0.0, -100.0, -5.0);
+	instance1.rotate = EulerAngle(-1.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance1);
+
+	instance1.translate = Vector3(0.0, -100.0, 5.0);
+	instance1.rotate = EulerAngle(1.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance1);
 
 	// LIGHTS //
 

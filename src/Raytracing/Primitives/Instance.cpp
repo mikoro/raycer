@@ -13,11 +13,14 @@ using namespace Raycer;
 
 void Instance::initialize()
 {
+	Vector3 position = primitive->getAABB().center;
+
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
-	Matrix4x4 translation = Matrix4x4::translate(translate);
+	Matrix4x4 translation1 = Matrix4x4::translate(-position);
+	Matrix4x4 translation2 = Matrix4x4::translate(position + translate);
 
-	transformation = translation * rotation * scaling;
+	transformation = translation2 * rotation * scaling * translation1;
 	transformationInv = transformation.inverted();
 	transformationInvT = transformationInv.transposed();
 }
