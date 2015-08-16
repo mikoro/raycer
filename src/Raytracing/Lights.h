@@ -19,7 +19,8 @@ namespace Raycer
 	struct AmbientLight : public Light
 	{
 		bool ambientOcclusion = false;
-		int samples = 10;
+		double maxOcclusionDistance = 10.0;
+		int samples = 3;
 		double distribution = 1.0;
 	};
 

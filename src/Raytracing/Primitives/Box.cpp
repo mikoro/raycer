@@ -84,10 +84,6 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.primitive = this;
-
-	if (ray.fastIntersection)
-		return true;
-
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = isInside ? maxNormal : -minNormal;
 	

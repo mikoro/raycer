@@ -25,7 +25,6 @@ namespace Raycer
 		double tmax = std::numeric_limits<double>::max();
 		double time = 0.0;
 
-		bool fastIntersection = false;
 		bool fastOcclusion = false;
 		bool isInvalid = false;
 	};

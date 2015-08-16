@@ -61,9 +61,6 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 	intersection.distance = t;
 	intersection.primitive = this;
 
-	if (ray.fastIntersection)
-		return true;
-
 	double w = 1.0 - u - v;
 	Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
@@ -133,9 +130,6 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.primitive = this;
-
-	if (ray.fastIntersection)
-		return true;
 
 	double denominator2 = normal2.dot(normal2);
 	u /= denominator2;

@@ -57,9 +57,6 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 	intersection.distance = t;
 	intersection.primitive = this;
 
-	if (ray.fastIntersection)
-		return true;
-
 	// intersection position and normal
 	Vector3 ip = ray.origin + (t * ray.direction);
 	Vector3 normal = (ip - actualPosition).normalized();

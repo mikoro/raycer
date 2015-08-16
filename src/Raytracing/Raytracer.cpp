@@ -320,8 +320,8 @@ double Raytracer::calculateAmbientOcclusion(const Scene& scene, const Intersecti
 
 			sampleRay.origin = origin + sampleDirection * scene.raytracing.startOffset;
 			sampleRay.direction = sampleDirection;
-			sampleRay.fastIntersection = true;
 			sampleRay.fastOcclusion = true;
+			sampleRay.tmax = scene.lights.ambientLight.maxOcclusionDistance;
 			sampleRay.update();
 
 			for (Primitive* primitive : scene.primitives.all)
@@ -467,7 +467,6 @@ bool isInShadow(const Scene& scene, const Ray& ray, const Vector3& P, const Vect
 
 	shadowRay.origin = P + L * scene.raytracing.startOffset;
 	shadowRay.direction = L;
-	shadowRay.fastIntersection = true;
 	shadowRay.fastOcclusion = true;
 	shadowRay.tmax = distanceToLight;
 	shadowRay.time = ray.time;

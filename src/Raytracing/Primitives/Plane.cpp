@@ -43,9 +43,6 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 	intersection.distance = t;
 	intersection.primitive = this;
 
-	if (ray.fastIntersection)
-		return true;
-
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
 
