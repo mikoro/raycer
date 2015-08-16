@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// checkerboard plane
+// only a checkerboard plane
 Scene Scene::createTestScene2()
 {
 	Scene scene;

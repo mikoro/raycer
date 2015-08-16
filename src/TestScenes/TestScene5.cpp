@@ -5,12 +5,13 @@
 
 using namespace Raycer;
 
-// spherical environment texture map with "glass" primitives
+// spherical environment texture map with glass primitives
 Scene Scene::createTestScene5()
 {
 	Scene scene;
 
-	scene.raytracing.maxIterations = 5;
+	scene.rootBVH.enabled = true;
+	scene.raytracing.maxIterations = 8;
 
 	// CAMERA //
 
@@ -107,13 +108,13 @@ Scene Scene::createTestScene5()
 	box1Material.transmittance = 1.0;
 	box1Material.refractiveIndex = 1.5;
 	box1Material.fresnel = true;
-	box1Material.attenuate = false;
-	box1Material.attenuation = 0.01;
+	box1Material.attenuate = true;
+	box1Material.attenuation = 0.4;
 	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 
 	Box box1;
 	box1.position = Vector3(0.0, 0.0, 0.0);
-	box1.extent = Vector3(1.0, 5.0, 3.0);
+	box1.extent = Vector3(1.0, 10.0, 6.0);
 	box1.materialId = box1Material.id;
 
 	scene.textures.colorTextures.push_back(box1Texture);

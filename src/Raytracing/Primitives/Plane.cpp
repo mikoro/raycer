@@ -21,6 +21,9 @@ void Plane::initialize()
 
 bool Plane::intersect(const Ray& ray, Intersection& intersection)
 {
+	if (ray.isShadowRay && material->nonShadowing)
+		return false;
+
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 

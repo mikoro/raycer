@@ -212,9 +212,6 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	double rf = 1.0;
 	double tf = 1.0;
 
-	if (!isOutside)
-		intersection.normal = -intersection.normal;
-
 	if (material->fresnel)
 	{
 		double rf0 = (n2 - n1) / (n2 + n1);
@@ -238,7 +235,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		// no total internal reflection
 		if (c2 > 0.0)
 		{
-			Vector3 T = ray.direction * n + (c1 * n - sqrt(c2)) * intersection.normal;
+			Vector3 T = ray.direction * n + (fabs(c1) * n - sqrt(c2)) * intersection.normal;
 			T.normalize();
 
 			Ray refractedRay;
@@ -468,15 +465,14 @@ bool isInShadow(const Scene& scene, const Ray& ray, const Vector3& P, const Vect
 	shadowRay.origin = P + L * scene.raytracing.startOffset;
 	shadowRay.direction = L;
 	shadowRay.fastOcclusion = true;
+	shadowRay.isShadowRay = true;
 	shadowRay.tmax = distanceToLight;
 	shadowRay.time = ray.time;
 	shadowRay.update();
 
 	for (Primitive* primitive : scene.primitives.all)
 	{
-		bool nonShadowing = (primitive->material != nullptr) && primitive->material->nonShadowing;
-
-		if (!nonShadowing && primitive->intersect(shadowRay, shadowIntersection))
+		if (primitive->intersect(shadowRay, shadowIntersection))
 			return true;
 	}
 

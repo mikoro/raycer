@@ -7,6 +7,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
+#include "Raytracing/Material.h"
 #include "Utils/ObjReader.h"
 #include "Utils/PlyReader.h"
 #include "Utils/StringUtils.h"
@@ -59,6 +60,9 @@ void Mesh::initialize()
 
 bool Mesh::intersect(const Ray& ray, Intersection& intersection)
 {
+	if (ray.isShadowRay && material->nonShadowing)
+		return false;
+
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 

@@ -9,6 +9,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
+#include "Raytracing/Material.h"
 
 using namespace Raycer;
 
@@ -20,6 +21,9 @@ void Box::initialize()
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
 bool Box::intersect(const Ray& ray, Intersection& intersection)
 {
+	if (ray.isShadowRay && material->nonShadowing)
+		return false;
+
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 

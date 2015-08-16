@@ -286,6 +286,9 @@
     <ClCompile Include="src\TestScenes\TestScene11.cpp">
       <Filter>TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene12.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

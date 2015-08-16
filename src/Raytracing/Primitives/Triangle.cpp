@@ -21,6 +21,9 @@ void Triangle::initialize()
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
 bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 {
+	if (ray.isShadowRay && material->nonShadowing)
+		return false;
+
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
@@ -75,6 +78,9 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/ray-triangle-intersection-geometric-solution
 bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 {
+	if (ray.isShadowRay && material->nonShadowing)
+		return false;
+
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 

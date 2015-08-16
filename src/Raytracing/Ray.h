@@ -26,6 +26,7 @@ namespace Raycer
 		double time = 0.0;
 
 		bool fastOcclusion = false;
+		bool isShadowRay = false;
 		bool isInvalid = false;
 	};
 }

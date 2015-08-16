@@ -8,7 +8,7 @@
 
 using namespace Raycer;
 
-// instancing
+// instancing with a lot of monkeys
 Scene Scene::createTestScene10()
 {
 	Scene scene;
