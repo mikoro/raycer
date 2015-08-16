@@ -73,7 +73,6 @@ namespace Raycer
 		static Matrix4x4 translate(double tx, double ty, double tz);
 
 		static Matrix4x4 rotateXYZ(double pitch, double yaw, double roll);
-		static Matrix4x4 rotateZYX(double pitch, double yaw, double roll);
 		static Matrix4x4 rotateX(double degrees);
 		static Matrix4x4 rotateY(double degrees);
 		static Matrix4x4 rotateZ(double degrees);

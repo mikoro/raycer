@@ -23,8 +23,8 @@ namespace Raycer
 		AABB getAABB() const;
 		Vector3* getPosition();
 
-		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translate = Vector3(0.0, 0.0, 0.0);
 		
 		Primitive* primitive = nullptr;

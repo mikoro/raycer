@@ -22,7 +22,7 @@ Scene Scene::createTestScene9()
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 7.0, 5.0);
-	scene.camera.orientation = EulerAngle(0.0, -40.0, 0.0);
+	scene.camera.orientation = EulerAngle(-40.0, 0.0, 0.0);
 	scene.camera.timeSamples = 4;
 
 	// GROUND //

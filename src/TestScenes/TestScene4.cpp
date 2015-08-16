@@ -13,7 +13,7 @@ Scene Scene::createTestScene4()
 	// CAMERA //
 
 	scene.camera.position = Vector3(2.3, 5.0, 6.0);
-	scene.camera.orientation = EulerAngle(0.0, -35.0, 0.0);
+	scene.camera.orientation = EulerAngle(-35.0, 0.0, 0.0);
 
 	// GROUND //
 
@@ -78,7 +78,7 @@ Scene Scene::createTestScene4()
 	mesh1.meshFilePath = "data/meshes/monkey3.obj";
 	mesh1.position = Vector3(5.0, 0.0, 1.0);
 	mesh1.scale = Vector3(5.0, 5.0, 5.0);
-	mesh1.orientation = EulerAngle(0.0, -45.0, 0.0);
+	mesh1.orientation = EulerAngle(-45.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);

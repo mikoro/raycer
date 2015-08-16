@@ -23,10 +23,16 @@ void Mesh::initialize()
 	else
 		throw std::runtime_error("Unknown mesh file format");
 
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation.pitch, orientation.yaw, orientation.roll);
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation.pitch, orientation.yaw, orientation.roll);
 	Matrix4x4 translation = Matrix4x4::translate(position);
-	Matrix4x4 transformation = translation * scaling * rotation;
+	Matrix4x4 transformation = translation * rotation * scaling;
+
+	Matrix4x4 scalingInv = Matrix4x4::scale(scale.inversed());
+	Matrix4x4 rotationInv = Matrix4x4::rotateXYZ(-orientation.pitch, -orientation.yaw, -orientation.roll);
+	Matrix4x4 translationInv = Matrix4x4::translate(-position);
+	Matrix4x4 transformationInv = translationInv * rotationInv * scalingInv;
+	Matrix4x4 transformationInvT = transformationInv.transposed();
 
 	std::vector<Primitive*> primitives;
 
@@ -36,12 +42,11 @@ void Mesh::initialize()
 		triangle.vertices[1] = transformation.transformPosition(triangle.vertices[1]);
 		triangle.vertices[2] = transformation.transformPosition(triangle.vertices[2]);
 
-		// TODO: does not work with non-uniform scaling
-		triangle.normals[0] = rotation * triangle.normals[0];
-		triangle.normals[1] = rotation * triangle.normals[1];
-		triangle.normals[2] = rotation * triangle.normals[2];
+		triangle.normals[0] = transformationInvT.transformDirection(triangle.normals[0]).normalized();
+		triangle.normals[1] = transformationInvT.transformDirection(triangle.normals[1]).normalized();
+		triangle.normals[2] = transformationInvT.transformDirection(triangle.normals[2]).normalized();
 
-		triangle.normal = rotation * triangle.normal;
+		triangle.normal = transformationInvT.transformDirection(triangle.normal).normalized();
 		triangle.materialId = materialId;
 		triangle.material = material;
 

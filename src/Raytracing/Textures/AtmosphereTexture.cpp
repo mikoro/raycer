@@ -22,7 +22,7 @@ void AtmosphereTexture::initialize()
 
 	noise.seed(seed);
 
-	sunDirection = -sunOrientation.getDirectionVector();
+	sunDirection = -sunOrientation.getDirection();
 }
 
 Color AtmosphereTexture::getColor(const Vector3& position, const Vector2& texcoord) const

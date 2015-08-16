@@ -15,8 +15,7 @@ namespace Raycer
 	public:
 
 		AABB();
-		AABB(const Vector3& min, const Vector3& max);
-		
+
 		static AABB createFromMinMax(const Vector3& min, const Vector3& max);
 		static AABB createFromCenterExtent(const Vector3& center, const Vector3& extent);
 		static AABB createFromVertices(const Vector3& v0, const Vector3& v1, const Vector3& v2);
@@ -24,7 +23,7 @@ namespace Raycer
 		bool intersects(const Ray& ray) const;
 		void expand(const AABB& other);
 		int getLargestAxis() const;
-		AABB transformed(const EulerAngle& rotate, const Vector3& scale, const Vector3& translate) const;
+		AABB transformed(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) const;
 
 		Vector3 min;
 		Vector3 max;

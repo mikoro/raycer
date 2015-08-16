@@ -64,7 +64,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 AABB Plane::getAABB() const
 {
 	// TODO: create bounds for the plane aabb
-	return AABB(Vector3(-1000.0, -1000.0, -1000.0), Vector3(1000.0, 1000.0, 1000.0));
+	return AABB::createFromMinMax(Vector3(-1000.0, -1000.0, -1000.0), Vector3(1000.0, 1000.0, 1000.0));
 }
 
 Vector3* Plane::getPosition()

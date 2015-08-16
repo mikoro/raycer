@@ -177,7 +177,7 @@ void Camera::update(const Scene& scene, double timeStep)
 
 void Camera::precalculate()
 {
-	forward = orientation.getDirectionVector();
+	forward = orientation.getDirection();
 	right = forward.cross(Vector3::UP).normalized();
 	up = right.cross(forward).normalized();
 

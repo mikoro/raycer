@@ -112,7 +112,7 @@ namespace Raycer
 
 		struct BoundingBoxes
 		{
-			bool enabled = true;
+			bool enabled = false;
 			ColorTexture texture;
 			Material material;
 		} boundingBoxes;

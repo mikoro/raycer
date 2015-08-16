@@ -262,11 +262,6 @@ Matrix4x4 Matrix4x4::rotateXYZ(double pitch, double yaw, double roll)
 	return rotateX(pitch) * rotateY(yaw) * rotateZ(roll);
 }
 
-Matrix4x4 Matrix4x4::rotateZYX(double pitch, double yaw, double roll)
-{
-	return rotateZ(roll) * rotateY(yaw) * rotateX(pitch);
-}
-
 Matrix4x4 Matrix4x4::rotateX(double degrees)
 {
 	Matrix4x4 result = IDENTITY;

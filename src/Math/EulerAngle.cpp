@@ -9,21 +9,21 @@
 
 using namespace Raycer;
 
-EulerAngle::EulerAngle(double yaw_, double pitch_, double roll_) : yaw(yaw_), pitch(pitch_), roll(roll_)
+EulerAngle::EulerAngle(double pitch_, double yaw_, double roll_) : pitch(pitch_), yaw(yaw_), roll(roll_)
 {
 }
 
 EulerAngle::EulerAngle(const EulerAngle& e)
 {
-	yaw = e.yaw;
 	pitch = e.pitch;
+	yaw = e.yaw;
 	roll = e.roll;
 }
 
 EulerAngle& EulerAngle::operator=(const EulerAngle& e)
 {
-	yaw = e.yaw;
 	pitch = e.pitch;
+	yaw = e.yaw;
 	roll = e.roll;
 
 	return *this;
@@ -40,17 +40,17 @@ void EulerAngle::clampPitch()
 
 void EulerAngle::normalize()
 {
-	while (fabs(yaw) > 180.0)
-		yaw += (yaw > 0.0) ? -360.0 : 360.0;
-
 	while (fabs(pitch) > 180.0)
 		pitch += (pitch > 0.0) ? -360.0 : 360.0;
+
+	while (fabs(yaw) > 180.0)
+		yaw += (yaw > 0.0) ? -360.0 : 360.0;
 
 	while (fabs(roll) > 180.0)
 		roll += (roll > 0.0) ? -360.0 : 360.0;
 }
 
-Vector3 EulerAngle::getDirectionVector() const
+Vector3 EulerAngle::getDirection() const
 {
 	Vector3 result;
 
@@ -66,8 +66,8 @@ EulerAngle EulerAngle::lerp(const EulerAngle& e1, const EulerAngle& e2, double t
 	EulerAngle result;
 	double oneMinusT = 1.0 - t;
 
-	result.yaw = e1.yaw * oneMinusT + e2.yaw * t;
 	result.pitch = e1.pitch * oneMinusT + e2.pitch * t;
+	result.yaw = e1.yaw * oneMinusT + e2.yaw * t;
 	result.roll = e1.roll * oneMinusT + e2.roll * t;
 
 	return result;

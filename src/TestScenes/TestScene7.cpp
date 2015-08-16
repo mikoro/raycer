@@ -23,7 +23,7 @@ Scene Scene::createTestScene7()
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 8.0, -2.0);
-	scene.camera.orientation = EulerAngle(0.0, -20.0, 0.0);
+	scene.camera.orientation = EulerAngle(-20.0, 0.0, 0.0);
 	scene.camera.dofSamples = 0;
 	scene.camera.apertureSize = 0.2;
 	scene.camera.focalLenght = 30.0;
@@ -108,7 +108,7 @@ Scene Scene::createTestScene7()
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
 	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(30.0, -30.0, 0.0).getDirectionVector();
+	directionalLight1.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

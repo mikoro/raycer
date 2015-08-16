@@ -53,7 +53,7 @@ Scene Scene::createTestScene6()
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
 	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-60.0, -10.0, 0.0).getDirectionVector();
+	directionalLight1.direction = EulerAngle(-10.0, -60.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

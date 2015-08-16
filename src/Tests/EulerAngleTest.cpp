@@ -10,11 +10,11 @@ using namespace Raycer;
 
 TEST_CASE("EulerAngle functionality", "[eulerangle]")
 {
-	REQUIRE(EulerAngle(0.0, 0.0, 0.0).getDirectionVector() == Vector3(0.0, 0.0, -1.0));
-	REQUIRE(EulerAngle(90.0, 0.0, 0.0).getDirectionVector() == Vector3(-1.0, 0.0, 0.0));
-	REQUIRE(EulerAngle(-90.0, 0.0, 0.0).getDirectionVector() == Vector3(1.0, 0.0, 0.0));
-	REQUIRE(EulerAngle(180.0, 0.0, 0.0).getDirectionVector() == Vector3(0.0, 0.0, 1.0));
-	REQUIRE(EulerAngle(0.0, 90.0, 0.0).getDirectionVector() == Vector3(0.0, 1.0, 0.0));
-	REQUIRE(EulerAngle(0.0, -90.0, 0.0).getDirectionVector() == Vector3(0.0, -1.0, 0.0));
-	REQUIRE(EulerAngle(123.0, 90.0, 0.0).getDirectionVector() == Vector3(0.0, 1.0, 0.0));
+	REQUIRE(EulerAngle(0.0, 0.0, 0.0).getDirection() == Vector3(0.0, 0.0, -1.0));
+	REQUIRE(EulerAngle(0.0, 90.0, 0.0).getDirection() == Vector3(-1.0, 0.0, 0.0));
+	REQUIRE(EulerAngle(0.0, -90.0, 0.0).getDirection() == Vector3(1.0, 0.0, 0.0));
+	REQUIRE(EulerAngle(0.0, 180.0, 0.0).getDirection() == Vector3(0.0, 0.0, 1.0));
+	REQUIRE(EulerAngle(90.0, 0.0, 0.0).getDirection() == Vector3(0.0, 1.0, 0.0));
+	REQUIRE(EulerAngle(-90.0, 0.0, 0.0).getDirection() == Vector3(0.0, -1.0, 0.0));
+	REQUIRE(EulerAngle(90.0, 123.0, 0.0).getDirection() == Vector3(0.0, 1.0, 0.0));
 }

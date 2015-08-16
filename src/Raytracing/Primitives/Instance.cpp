@@ -12,16 +12,16 @@ using namespace Raycer;
 
 void Instance::initialize()
 {
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
 	Matrix4x4 translation = Matrix4x4::translate(translate);
 
-	Matrix4x4 rotationInv = Matrix4x4::rotateXYZ(-rotate.pitch, -rotate.yaw, -rotate.roll);
 	Matrix4x4 scalingInv = Matrix4x4::scale(scale.inversed());
+	Matrix4x4 rotationInv = Matrix4x4::rotateXYZ(-rotate.pitch, -rotate.yaw, -rotate.roll);
 	Matrix4x4 translationInv = Matrix4x4::translate(-translate);
 	
-	transformation = translation * scaling * rotation;
-	transformationInv = rotationInv * scalingInv * translationInv;
+	transformation = translation * rotation * scaling;
+	transformationInv = scalingInv * rotationInv * translationInv;
 	transformationInvT = transformationInv.transposed();
 }
 
@@ -46,7 +46,7 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection)
 
 AABB Instance::getAABB() const
 {
-	return primitive->getAABB().transformed(rotate, scale, translate);
+	return primitive->getAABB().transformed(scale, rotate, translate);
 }
 
 Vector3* Instance::getPosition()

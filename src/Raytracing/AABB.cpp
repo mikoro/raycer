@@ -18,11 +18,6 @@ AABB::AABB()
 	max.x = max.y = max.z = std::numeric_limits<double>::lowest();
 }
 
-AABB::AABB(const Vector3& min_, const Vector3& max_)
-{
-	*this = createFromMinMax(min_, max_);
-}
-
 AABB AABB::createFromMinMax(const Vector3& min, const Vector3& max)
 {
 	AABB aabb;
@@ -122,7 +117,7 @@ int AABB::getLargestAxis() const
 	return largest;
 }
 
-AABB AABB::transformed(const EulerAngle& rotate, const Vector3& scale, const Vector3& translate) const
+AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) const
 {
 	Vector3 corners[8], newMin, newMax;
 
@@ -138,10 +133,10 @@ AABB AABB::transformed(const EulerAngle& rotate, const Vector3& scale, const Vec
 	newMin.x = newMin.y = newMin.z = std::numeric_limits<double>::max();
 	newMax.x = newMax.y = newMax.z = std::numeric_limits<double>::lowest();
 
-	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
+	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate.pitch, rotate.yaw, rotate.roll);
 	Matrix4x4 translation = Matrix4x4::translate(translate);
-	Matrix4x4 transformation = translation * scaling * rotation;
+	Matrix4x4 transformation = translation * rotation * scaling;
 
 	for (int i = 0; i < 8; ++i)
 	{

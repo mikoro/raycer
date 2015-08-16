@@ -23,7 +23,7 @@ Scene Scene::createTestScene8()
 	// CAMERA //
 
 	scene.camera.position = Vector3(11.0, 6.5, -7.5);
-	scene.camera.orientation = EulerAngle(90.0, -20.0, 0.0);
+	scene.camera.orientation = EulerAngle(-20.0, 90.0, 0.0);
 
 	// GROUND //
 
@@ -51,7 +51,7 @@ Scene Scene::createTestScene8()
 	AtmosphereTexture sphere1Texture;
 	sphere1Texture.id = 2;
 	sphere1Texture.intensity = 0.5;
-	sphere1Texture.sunOrientation = EulerAngle(40.0, -40.0, 0.0);
+	sphere1Texture.sunOrientation = EulerAngle(-40.0, 40.0, 0.0);
 	sphere1Texture.sunSize = 100.0;
 
 	Material sphere1Material;
@@ -319,7 +319,7 @@ Scene Scene::createTestScene8()
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
 	directionalLight1.intensity = 1.5;
-	directionalLight1.direction = EulerAngle(40.0, -40.0, 0.0).getDirectionVector();
+	directionalLight1.direction = EulerAngle(-40.0, 40.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 
