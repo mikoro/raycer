@@ -44,107 +44,110 @@ Matrix4x4& Matrix4x4::operator=(const Matrix4x4& n)
 	return *this;
 }
 
-Matrix4x4 Raycer::operator+(const Matrix4x4& m, const Matrix4x4& n)
+namespace Raycer
 {
-	Matrix4x4 result;
+	Matrix4x4 operator+(const Matrix4x4& m, const Matrix4x4& n)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[c][r] + n.m[c][r];
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[c][r] + n.m[c][r];
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator-(const Matrix4x4& m, const Matrix4x4& n)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator-(const Matrix4x4& m, const Matrix4x4& n)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[c][r] - n.m[c][r];
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[c][r] - n.m[c][r];
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator*(const Matrix4x4& m, double s)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator*(const Matrix4x4& m, double s)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[c][r] * s;
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[c][r] * s;
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator*(double s, const Matrix4x4& m)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator*(double s, const Matrix4x4& m)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[c][r] * s;
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[c][r] * s;
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator*(const Matrix4x4& m, const Matrix4x4& n)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator*(const Matrix4x4& m, const Matrix4x4& n)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[0][r] * n.m[c][0] + m.m[1][r] * n.m[c][1] + m.m[2][r] * n.m[c][2] + m.m[3][r] * n.m[c][3];
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[0][r] * n.m[c][0] + m.m[1][r] * n.m[c][1] + m.m[2][r] * n.m[c][2] + m.m[3][r] * n.m[c][3];
 
-	return result;
-}
+		return result;
+	}
 
-Vector3 Raycer::operator*(const Matrix4x4& m, const Vector3& v)
-{
-	Vector3 result;
+	Vector3 operator*(const Matrix4x4& m, const Vector3& v)
+	{
+		Vector3 result;
 
-	result.x = m.m[0][0] * v.x + m.m[1][0] * v.y + m.m[2][0] * v.z + m.m[3][0];
-	result.y = m.m[0][1] * v.x + m.m[1][1] * v.y + m.m[2][1] * v.z + m.m[3][1];
-	result.z = m.m[0][2] * v.x + m.m[1][2] * v.y + m.m[2][2] * v.z + m.m[3][2];
+		result.x = m.m[0][0] * v.x + m.m[1][0] * v.y + m.m[2][0] * v.z + m.m[3][0];
+		result.y = m.m[0][1] * v.x + m.m[1][1] * v.y + m.m[2][1] * v.z + m.m[3][1];
+		result.z = m.m[0][2] * v.x + m.m[1][2] * v.y + m.m[2][2] * v.z + m.m[3][2];
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator/(const Matrix4x4& m, double s)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator/(const Matrix4x4& m, double s)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = m.m[c][r] / s;
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = m.m[c][r] / s;
 
-	return result;
-}
+		return result;
+	}
 
-Matrix4x4 Raycer::operator-(const Matrix4x4& m)
-{
-	Matrix4x4 result;
+	Matrix4x4 operator-(const Matrix4x4& m)
+	{
+		Matrix4x4 result;
 
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			result.m[c][r] = -m.m[c][r];
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				result.m[c][r] = -m.m[c][r];
 
-	return result;
-}
+		return result;
+	}
 
-bool Raycer::operator==(const Matrix4x4& m, const Matrix4x4& n)
-{
-	for (int c = 0; c < 4; ++c)
-		for (int r = 0; r < 4; ++r)
-			if (!MathUtils::almostSame(m.m[c][r], n.m[c][r]))
-				return false;
+	bool operator==(const Matrix4x4& m, const Matrix4x4& n)
+	{
+		for (int c = 0; c < 4; ++c)
+			for (int r = 0; r < 4; ++r)
+				if (!MathUtils::almostSame(m.m[c][r], n.m[c][r]))
+					return false;
 
-	return true;
-}
+		return true;
+	}
 
-bool Raycer::operator!=(const Matrix4x4& m, const Matrix4x4& n)
-{
-	return !(m == n);
+	bool operator!=(const Matrix4x4& m, const Matrix4x4& n)
+	{
+		return !(m == n);
+	}
 }
 
 Matrix4x4& Matrix4x4::operator+=(const Matrix4x4& n)
