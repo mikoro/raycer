@@ -191,11 +191,8 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (!intersection.wasFound)
 		return finalColor;
 
-	Color textureColor = Color(1.0, 1.0, 1.0);
 	Material* material = intersection.primitive->material;
-
-	if (material->texture != nullptr)
-		textureColor = material->texture->getColor(intersection.texcoord, intersection.position) * material->texture->intensity;
+	Color textureColor = material->texture->getColor(intersection.texcoord, intersection.position) * material->texture->intensity;
 
 	if (material->skipLighting)
 	{
@@ -280,6 +277,10 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
 		}
 	}
+
+	// invert normal if facing away
+	if (!isOutside)
+		intersection.normal = -intersection.normal;
 
 	double ambientOcclusion = 1.0;
 

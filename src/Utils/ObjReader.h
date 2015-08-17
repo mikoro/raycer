@@ -23,6 +23,7 @@ namespace Raycer
 	{
 		std::vector<Mesh> meshes;
 		std::vector<Material> materials;
+		std::vector<ColorTexture> colorTextures;
 		std::vector<ImageTexture> imageTextures;
 	};
 

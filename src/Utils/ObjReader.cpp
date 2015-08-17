@@ -243,6 +243,15 @@ void ObjReader::processMaterialFile(const std::string& mtlFileName, ObjReaderRes
 		{
 			if (hasMaterial)
 			{
+				if (!hasTexture)
+				{
+					ColorTexture colorTexture;
+					colorTexture.id = ++currentId;
+					colorTexture.color = Color(1.0, 1.0, 1.0);
+					material.textureId = colorTexture.id;
+					result.colorTextures.push_back(colorTexture);
+				}
+
 				result.materials.push_back(material);
 				hasTexture = false;
 				hasBumpMapTexture = false;
@@ -329,7 +338,18 @@ void ObjReader::processMaterialFile(const std::string& mtlFileName, ObjReaderRes
 	file.close();
 
 	if (hasMaterial)
+	{
+		if (!hasTexture)
+		{
+			ColorTexture colorTexture;
+			colorTexture.id = ++currentId;
+			colorTexture.color = Color(1.0, 1.0, 1.0);
+			material.textureId = colorTexture.id;
+			result.colorTextures.push_back(colorTexture);
+		}
+
 		result.materials.push_back(material);
+	}
 }
 
 void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<Triangle>& triangles)

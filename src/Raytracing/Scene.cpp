@@ -177,6 +177,9 @@ void Scene::initialize()
 		for (Material& material : result.materials)
 			materials.push_back(material);
 
+		for (ColorTexture& colorTexture : result.colorTextures)
+			textures.colorTextures.push_back(colorTexture);
+
 		for (ImageTexture& imageTexture : result.imageTextures)
 			textures.imageTextures.push_back(imageTexture);
 	}
@@ -250,7 +253,14 @@ void Scene::initialize()
 	for (Primitive* primitive : primitives.all)
 	{
 		if (materialsMap.count(primitive->materialId))
+		{
 			primitive->material = materialsMap[primitive->materialId];
+
+			if (texturesMap.count(primitive->material->textureId))
+				primitive->material->texture = texturesMap[primitive->material->textureId];
+			else
+				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->textureId));
+		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has an invalid material id (%d)", primitive->materialId));
 
