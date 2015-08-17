@@ -6,6 +6,8 @@
 #include <fstream>
 #include <stdexcept>
 
+#include <boost/filesystem.hpp>
+
 #include "tinyformat/tinyformat.h"
 
 #include "Utils/ObjReader.h"
@@ -16,6 +18,7 @@
 #include "Raytracing/Primitives/Triangle.h"
 
 using namespace Raycer;
+using namespace boost::filesystem;
 
 std::vector<Triangle> ObjReader::getTriangles(const std::string& objFileName)
 {
@@ -114,6 +117,7 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, int idStart
 	std::map<std::string, int> materialMap;
 	int currentId = idStartOffset;
 	bool hasMesh = false;
+	path objFileDirectory = boost::filesystem::absolute(objFileName).parent_path();
 
 	std::vector<Vector3> vertices;
 	std::vector<Vector2> texcoords;
@@ -131,7 +135,7 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, int idStart
 		if (part == "mtllib")
 		{
 			ss >> part;
-			processMaterialFile(part, result, materialMap, currentId);
+			processMaterialFile(objFileDirectory, part, result, materialMap, currentId);
 			continue;
 		}
 
@@ -214,13 +218,15 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, int idStart
 	return result;
 }
 
-void ObjReader::processMaterialFile(const std::string& mtlFileName, ObjReaderResult& result, std::map<std::string, int>& materialMap, int& currentId)
+void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std::string& mtlFileName, ObjReaderResult& result, std::map<std::string, int>& materialMap, int& currentId)
 {
 	(void)result;
 
 	App::getLog().logInfo("Parsing MTL file (%s)", mtlFileName);
 
-	std::ifstream file(mtlFileName);
+	path mtlFilePath = objFileDirectory;
+	mtlFilePath.append(mtlFileName);
+	std::ifstream file(mtlFilePath.string());
 
 	if (!file.good())
 		throw std::runtime_error("Could not open the MTL file");
@@ -314,7 +320,13 @@ void ObjReader::processMaterialFile(const std::string& mtlFileName, ObjReaderRes
 			imageTexture.id = ++currentId;
 			imageTexture.applyGamma = true;
 			material.textureId = imageTexture.id;
-			ss >> imageTexture.imageFilePath;
+
+			std::string imageFileName;
+			path imageFilePath = objFileDirectory;
+			ss >> imageFileName;
+			imageFilePath.append(imageFileName);
+			imageTexture.imageFilePath = imageFilePath.string();
+
 			hasTexture = true;
 			result.imageTextures.push_back(imageTexture);
 
@@ -323,14 +335,6 @@ void ObjReader::processMaterialFile(const std::string& mtlFileName, ObjReaderRes
 
 		if ((part == "map_bump" || part == "bump") && !hasBumpMapTexture)
 		{
-			ImageTexture imageTexture;
-			imageTexture.id = ++currentId;
-			imageTexture.applyGamma = true;
-			material.bumpMapTextureId = imageTexture.id;
-			ss >> imageTexture.imageFilePath;
-			hasBumpMapTexture = true;
-			result.imageTextures.push_back(imageTexture);
-
 			continue;
 		}
 	}

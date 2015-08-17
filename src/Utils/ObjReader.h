@@ -8,10 +8,14 @@
 #include <string>
 #include <vector>
 
+#include <boost/filesystem.hpp>
+
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Textures/ColorTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
+
+namespace bf = boost::filesystem;
 
 namespace Raycer
 {
@@ -36,7 +40,7 @@ namespace Raycer
 
 	private:
 
-		static void processMaterialFile(const std::string& mtlFileName, ObjReaderResult& result, std::map<std::string, int>& materialMap, int& currentId);
+		static void processMaterialFile(const bf::path& objFileDirectory, const std::string& mtlFileName, ObjReaderResult& result, std::map<std::string, int>& materialMap, int& currentId);
 		static void processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<Triangle>& triangles);
 	};
 }

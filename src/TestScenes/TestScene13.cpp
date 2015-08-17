@@ -5,57 +5,45 @@
 
 using namespace Raycer;
 
-// atrium scene
+// sponza1 scene
 Scene Scene::createTestScene13()
 {
 	Scene scene;
 
+	scene.rootBVH.enabled = true;
+
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 25.0, 0.0);
-	scene.camera.orientation = EulerAngle(0.0, 90.0, 0.0);
+	scene.camera.position = Vector3(15.0, 2.0, 0.0);
+	scene.camera.orientation = EulerAngle(1.0, 90.0, 0.0);
 	
-	// MESH 1 //
-
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 1;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 1.0;
-
-	Material mesh1Material;
-	mesh1Material.id = 1;
-	mesh1Material.textureId = mesh1Texture.id;
-
-	Mesh mesh1;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/sponza1.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(0.05, 0.05, 0.05);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
-
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	scene.objSceneFilePaths.push_back("data/meshes/sponza1/sponza.obj");
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
 
+	DirectionalLight directionalLight1;
+	directionalLight1.color = Color(1.0, 1.0, 1.0);
+	directionalLight1.intensity = 1.0;
+	directionalLight1.direction = EulerAngle(-60.0, 100.0, 0.0).getDirection();
+
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
 	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(28.0, 38.0, 0.0);
-	pointLight1.distance = 50.0;
+	pointLight1.position = Vector3(6.5, 8.0, 0.0);
+	pointLight1.distance = 10.0;
 	pointLight1.attenuation = 1.0;
 
 	PointLight pointLight2;
 	pointLight2.color = Color(1.0, 1.0, 1.0);
 	pointLight2.intensity = 1.0;
-	pointLight2.position = Vector3(-28.0, 38.0, 0.0);
-	pointLight2.distance = 50.0;
+	pointLight2.position = Vector3(-6.5, 8.0, 0.0);
+	pointLight2.distance = 10.0;
 	pointLight2.attenuation = 1.0;
 
+	//scene.lights.directionalLights.push_back(directionalLight1);
 	scene.lights.pointLights.push_back(pointLight1);
 	scene.lights.pointLights.push_back(pointLight2);
 

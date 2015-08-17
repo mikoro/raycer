@@ -114,7 +114,7 @@ void Image::load(const std::string& fileName)
 			{
 				int pixelIndex = y * width + x;
 				int dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
-				
+
 				pixelData[pixelIndex].r = data[dataIndex];
 				pixelData[pixelIndex].g = data[dataIndex + 1];
 				pixelData[pixelIndex].b = data[dataIndex + 2];
@@ -139,7 +139,7 @@ void Image::load(const std::string& fileName)
 			for (int x = 0; x < width; ++x)
 				pixelData[y * width + x] = Color::fromAbgrValue(data[(height - 1 - y) * width + x]); // flip vertically
 		}
-			
+
 		stbi_image_free(data);
 	}
 }
@@ -320,7 +320,11 @@ Color Image::getPixel(int x, int y) const
 
 Color Image::getPixelNearest(double u, double v) const
 {
-	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
+	// clamp values to 0.0 .. 1.0 with wrapping
+	if (u > 1.0) u = u - floor(u);
+	if (u < 0.0) u = u - floor(u);
+	if (v > 1.0) v = v - floor(v);
+	if (v < 0.0) v = v - floor(v);
 
 	int x = (int)(u * (double)(width - 1) + 0.5);
 	int y = (int)(v * (double)(height - 1) + 0.5);
@@ -330,7 +334,11 @@ Color Image::getPixelNearest(double u, double v) const
 
 Color Image::getPixelBilinear(double u, double v) const
 {
-	assert(u >= 0.0 && u <= 1.0 && v >= 0.0 && v <= 1.0);
+	// clamp values to 0.0 .. 1.0 with wrapping
+	if (u > 1.0) u = u - floor(u);
+	if (u < 0.0) u = u - floor(u);
+	if (v > 1.0) v = v - floor(v);
+	if (v < 0.0) v = v - floor(v);
 
 	double dx = u * (double)(width - 1) - 0.5;
 	double dy = v * (double)(height - 1) - 0.5;
@@ -348,5 +356,6 @@ Color Image::getPixelBilinear(double u, double v) const
 	Color c12 = getPixel(ix, iy + 1);
 	Color c22 = getPixel(ix + 1, iy + 1);
 
-	return (tx1 * c11 + tx2 * c21) * ty1 + (tx1 * c12 + tx2 * c22) * ty2; // bilinear interpolation
+	// bilinear interpolation
+	return (tx1 * c11 + tx2 * c21) * ty1 + (tx1 * c12 + tx2 * c22) * ty2;
 }
