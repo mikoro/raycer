@@ -19,24 +19,22 @@ namespace Raycer
 
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
-		bool hasBumpMap = false;
-		bool hasDisplacementMap = false;
+		Color ambientReflectance = Color(1.0, 1.0, 1.0);
+		Color diffuseReflectance = Color(1.0, 1.0, 1.0);
+		Color specularReflectance = Color(0.0, 0.0, 0.0);
+		double shininess = 0.0;
+
 		bool skipLighting = false;
 		bool nonShadowing = false;
 
-		double ambientness = 1.0;
-		double diffuseness = 1.0;
-		double specularity = 0.0;
-		double shininess = 0.0;
-
-		double reflectance = 0.0;
-		double transmittance = 0.0;
+		double rayReflectance = 0.0;
+		double rayTransmittance = 0.0;
 		double refractiveIndex = 1.0;
 		bool isFresnel = false;
 
-		bool attenuates = false;
+		bool enableAttenuation = false;
 		double attenuation = 1.0;
-		Color attenuationColor;
+		Color attenuationColor = Color(0.0, 0.0, 0.0);
 
 		Texture* texture = nullptr;
 		Texture* bumpMapTexture = nullptr;

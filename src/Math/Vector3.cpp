@@ -180,7 +180,7 @@ Vector3 Vector3::inversed() const
 
 bool Vector3::isZero() const
 {
-	return MathUtils::almostZero(x) && MathUtils::almostZero(y) && MathUtils::almostZero(z);
+	return (x == 0.0 && y == 0.0 && z == 0.0);
 }
 
 bool Vector3::isNormal() const

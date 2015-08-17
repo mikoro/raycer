@@ -50,11 +50,11 @@ Scene Scene::createTestScene5()
 	Material sphere2Material;
 	sphere2Material.id = 2;
 	sphere2Material.textureId = sphere2Texture.id;
-	sphere2Material.reflectance = 1.0;
-	sphere2Material.transmittance = 1.0;
+	sphere2Material.rayReflectance = 1.0;
+	sphere2Material.rayTransmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
 	sphere2Material.isFresnel = true;
-	sphere2Material.attenuates = false;
+	sphere2Material.enableAttenuation = false;
 	sphere2Material.attenuation = 0.1;
 	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.1);
 
@@ -77,11 +77,11 @@ Scene Scene::createTestScene5()
 	Material sphere3Material;
 	sphere3Material.id = 3;
 	sphere3Material.textureId = sphere3Texture.id;
-	sphere3Material.reflectance = 1.0;
-	sphere3Material.transmittance = 1.0;
+	sphere3Material.rayReflectance = 1.0;
+	sphere3Material.rayTransmittance = 1.0;
 	sphere3Material.refractiveIndex = 1.5;
 	sphere3Material.isFresnel = true;
-	sphere3Material.attenuates = false;
+	sphere3Material.enableAttenuation = false;
 	sphere3Material.attenuation = 0.1;
 	sphere3Material.attenuationColor = Color(0.1, 0.0, 0.0);
 
@@ -104,11 +104,11 @@ Scene Scene::createTestScene5()
 	Material box1Material;
 	box1Material.id = 4;
 	box1Material.textureId = box1Texture.id;
-	box1Material.reflectance = 1.0;
-	box1Material.transmittance = 1.0;
+	box1Material.rayReflectance = 1.0;
+	box1Material.rayTransmittance = 1.0;
 	box1Material.refractiveIndex = 1.5;
 	box1Material.isFresnel = true;
-	box1Material.attenuates = true;
+	box1Material.enableAttenuation = true;
 	box1Material.attenuation = 0.4;
 	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 

@@ -55,9 +55,9 @@ Scene Scene::createTestScene9()
 	Material sphere1Material;
 	sphere1Material.id = 2;
 	sphere1Material.textureId = sphere1Texture.id;
-	sphere1Material.specularity = 0.5;
+	sphere1Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere1Material.shininess = 16.0;
-	sphere1Material.reflectance = 0.5;
+	sphere1Material.rayReflectance = 0.5;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -79,9 +79,9 @@ Scene Scene::createTestScene9()
 	Material sphere2Material;
 	sphere2Material.id = 3;
 	sphere2Material.textureId = sphere2Texture.id;
-	sphere2Material.specularity = 0.5;
+	sphere2Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere2Material.shininess = 16.0;
-	sphere2Material.reflectance = 0.5;
+	sphere2Material.rayReflectance = 0.5;
 
 	Sphere sphere2;
 	sphere2.materialId = sphere2Material.id;
@@ -103,9 +103,9 @@ Scene Scene::createTestScene9()
 	Material sphere3Material;
 	sphere3Material.id = 4;
 	sphere3Material.textureId = sphere3Texture.id;
-	sphere3Material.specularity = 0.5;
+	sphere3Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere3Material.shininess = 16.0;
-	sphere3Material.reflectance = 0.5;
+	sphere3Material.rayReflectance = 0.5;
 
 	Sphere sphere3;
 	sphere3.materialId = sphere3Material.id;

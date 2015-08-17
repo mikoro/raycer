@@ -20,6 +20,7 @@
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
 #include "Utils/Serialization.h"
+#include "Utils/ObjReader.h"
 
 using namespace Raycer;
 
@@ -45,6 +46,7 @@ Scene Scene::createTestScene(int number)
 		case 10: return createTestScene10(); break;
 		case 11: return createTestScene11(); break;
 		case 12: return createTestScene12(); break;
+		case 13: return createTestScene13(); break;
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }
@@ -164,7 +166,22 @@ void Scene::initialize()
 	std::map<int, Texture*> texturesMap;
 	std::map<int, Material*> materialsMap;
 
-	// TEXTURES
+	// OBJ SCENES
+	for (const std::string& objSceneFilePath : objSceneFilePaths)
+	{
+		ObjReaderResult result = ObjReader::getMeshes(objSceneFilePath);
+
+		for (Mesh& mesh : result.meshes)
+			primitives.meshes.push_back(mesh);
+
+		for (Material& material : result.materials)
+			materials.push_back(material);
+
+		for (ImageTexture& imageTexture : result.imageTextures)
+			textures.imageTextures.push_back(imageTexture);
+	}
+
+	// TEXTURE POINTERS
 
 	for (ColorTexture& texture : textures.colorTextures)
 		texturesList.push_back(&texture);
@@ -199,7 +216,7 @@ void Scene::initialize()
 	for (VoronoiTexture& texture : textures.voronoiTextures)
 		texturesList.push_back(&texture);
 
-	// PRIMITIVES
+	// PRIMITIVE POINTERS
 
 	for (Plane& plane : primitives.planes)
 		primitives.all.push_back(&plane);
@@ -219,7 +236,7 @@ void Scene::initialize()
 	for (Instance& instance : primitives.instances)
 		primitives.all.push_back(&instance);
 
-	// INITIALIZATION
+	// INITIALIZATION AND VALIDATION
 
 	for (Texture* texture : texturesList)
 	{
@@ -233,30 +250,27 @@ void Scene::initialize()
 	for (Primitive* primitive : primitives.all)
 	{
 		if (materialsMap.count(primitive->materialId))
-		{
 			primitive->material = materialsMap[primitive->materialId];
-
-			if (texturesMap.count(primitive->material->textureId))
-				primitive->material->texture = texturesMap[primitive->material->textureId];
-			else
-				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->textureId));
-		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has an invalid material id (%d)", primitive->materialId));
 
 		primitive->initialize();
 	}
 
+	// CAMERA
+
 	camera.initialize();
+
+	// BOUNDING BOXES
 
 	if (boundingBoxes.enabled)
 	{
 		boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
 		boundingBoxes.texture.intensity = 1.0;
 		boundingBoxes.material.texture = &boundingBoxes.texture;
-		boundingBoxes.material.ambientness = 0.0;
-		boundingBoxes.material.diffuseness = 0.1;
-		boundingBoxes.material.transmittance = 1.0;
+		boundingBoxes.material.diffuseReflectance = Color(0.0, 0.0, 0.0);
+		boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+		boundingBoxes.material.rayTransmittance = 1.0;
 		boundingBoxes.material.nonShadowing = true;
 
 		for (Primitive* primitive : primitives.all)

@@ -66,6 +66,7 @@ namespace Raycer
 		static Scene createTestScene10();
 		static Scene createTestScene11();
 		static Scene createTestScene12();
+		static Scene createTestScene13();
 
 		Camera camera;
 
@@ -155,5 +156,7 @@ namespace Raycer
 			std::vector<Primitive*> all;
 			FlatBVH rootBVH;
 		} primitives;
+
+		std::vector<std::string> objSceneFilePaths;
 	};
 }

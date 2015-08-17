@@ -150,6 +150,11 @@ bool Color::isTransparent() const
 	return (a < 1.0);
 }
 
+bool Color::isZero() const
+{
+	return (r == 0.0 && g == 0.0 && b == 0.0); // ignore alpha
+}
+
 void Color::clamp()
 {
 	*this = clamped();
@@ -173,7 +178,7 @@ Color Color::fromRgbaValue(uint32_t rgba)
 	int g_ = (rgba >> 16) & 0xff;
 	int b_ = (rgba >> 8) & 0xff;
 	int a_ = rgba & 0xff;
-	
+
 	const double inv255 = 1.0 / 255.0;
 
 	Color c;

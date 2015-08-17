@@ -31,9 +31,9 @@ Scene Scene::createTestScene4()
 	Material box1Material;
 	box1Material.id = 3;
 	box1Material.textureId = box1Texture.id;
-	box1Material.ambientness = 0.0;
-	box1Material.diffuseness = 0.1;
-	box1Material.transmittance = 1.0;
+	box1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
+	box1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+	box1Material.rayTransmittance = 1.0;
 	box1Material.refractiveIndex = 1.0;
 	box1Material.nonShadowing = true;
 
@@ -70,9 +70,9 @@ Scene Scene::createTestScene4()
 	Material box2Material;
 	box2Material.id = 4;
 	box2Material.textureId = box2Texture.id;
-	box2Material.ambientness = 0.0;
-	box2Material.diffuseness = 0.1;
-	box2Material.reflectance = 1.0;
+	box2Material.ambientReflectance = Color(0.0, 0.0, 0.0);
+	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+	box2Material.rayReflectance = 1.0;
 	box2Material.nonShadowing = true;
 
 	Box box2;
@@ -94,9 +94,9 @@ Scene Scene::createTestScene4()
 	Material instance1Material;
 	instance1Material.id = 5;
 	instance1Material.textureId = instance1Texture.id;
-	instance1Material.ambientness = 0.0;
-	instance1Material.diffuseness = 0.1;
-	instance1Material.reflectance = 1.0;
+	instance1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
+	instance1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+	instance1Material.rayReflectance = 1.0;
 	instance1Material.nonShadowing = true;
 
 	Instance instance1;

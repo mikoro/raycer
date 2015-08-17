@@ -17,13 +17,16 @@ using namespace Raycer;
 
 void Mesh::initialize()
 {
-	if (StringUtils::endsWith(meshFilePath, "obj"))
-		triangles = ObjReader::readFile(meshFilePath);
-	else if (StringUtils::endsWith(meshFilePath, "ply"))
-		triangles = PlyReader::readFile(meshFilePath);
-	else
-		throw std::runtime_error("Unknown mesh file format");
-
+	if (meshFilePath.length() > 0)
+	{
+		if (StringUtils::endsWith(meshFilePath, "obj"))
+			triangles = ObjReader::getTriangles(meshFilePath);
+		else if (StringUtils::endsWith(meshFilePath, "ply"))
+			triangles = PlyReader::readFile(meshFilePath);
+		else
+			throw std::runtime_error("Unknown mesh file format");
+	}
+	
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(orientation);
 	Matrix4x4 translation = Matrix4x4::translate(position);

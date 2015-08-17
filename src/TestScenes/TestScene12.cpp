@@ -28,7 +28,7 @@ Scene Scene::createTestScene12()
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/sponza2.obj";
+	mesh1.meshFilePath = "data/meshes/sponza1.obj";
 	mesh1.position = Vector3(0.0, 0.0, 0.0);
 	mesh1.scale = Vector3(0.05, 0.05, 0.05);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
