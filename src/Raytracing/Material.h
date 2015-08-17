@@ -14,7 +14,13 @@ namespace Raycer
 	{
 		int id = 0;
 		int textureId = 0;
+		int bumpMapTextureId = 0;
+		int displacementMapTextureId = 0;
+
 		Texture* texture = nullptr;
+		Texture* bumpMapTexture = nullptr;
+		Texture* displacementMapTexture = nullptr;
+
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
 		bool skipLighting = false;
