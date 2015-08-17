@@ -20,6 +20,7 @@ namespace Raycer
 
 		Color getColor(const Vector2& texcoord, const Vector3& position) const;
 		double getValue(const Vector2& texcoord, const Vector3& position) const;
+		Vector2 get2DValue(const Vector2& texcoord, const Vector3& position) const;
 
 		int seed = 1;
 		Color marbleColor = Color(255, 252, 240);

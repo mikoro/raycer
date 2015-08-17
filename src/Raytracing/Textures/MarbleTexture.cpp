@@ -30,8 +30,16 @@ Color MarbleTexture::getColor(const Vector2& texcoord, const Vector3& position) 
 
 double MarbleTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
-	(void)position;
 	(void)texcoord;
+	(void)position;
 
-	return 1.0;
+	return 0.0;
+}
+
+Vector2 MarbleTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+{
+	(void)texcoord;
+	(void)position;
+
+	return Vector2(0.0, 0.0);
 }

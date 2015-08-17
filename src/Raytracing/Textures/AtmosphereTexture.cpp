@@ -56,8 +56,16 @@ Color AtmosphereTexture::getColor(const Vector2& texcoord, const Vector3& positi
 
 double AtmosphereTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
-	(void)position;
 	(void)texcoord;
+	(void)position;
 
-	return 1.0;
+	return 0.0;
+}
+
+Vector2 AtmosphereTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+{
+	(void)texcoord;
+	(void)position;
+
+	return Vector2(0.0, 0.0);
 }

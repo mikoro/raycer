@@ -26,3 +26,11 @@ double CellNoiseTexture::getValue(const Vector2& texcoord, const Vector3& positi
 
 	return cellNoise.getNoise(distanceType, combineType, density, position.x * scale.x, position.y * scale.y, position.z * scale.z);
 }
+
+Vector2 CellNoiseTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+{
+	(void)texcoord;
+	(void)position;
+
+	return Vector2(0.0, 0.0);
+}

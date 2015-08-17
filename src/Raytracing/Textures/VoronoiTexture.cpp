@@ -36,8 +36,16 @@ Color VoronoiTexture::getColor(const Vector2& texcoord, const Vector3& position)
 
 double VoronoiTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
-	(void)position;
 	(void)texcoord;
+	(void)position;
 
-	return 1.0;
+	return 0.0;
+}
+
+Vector2 VoronoiTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+{
+	(void)texcoord;
+	(void)position;
+
+	return Vector2(0.0, 0.0);
 }
