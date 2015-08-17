@@ -13,17 +13,16 @@ Scene Scene::createTestScene7()
 	Scene scene;
 
 	scene.misc.backgroundColor = Color::WHITE;
+	scene.raytracing.maxIterations = 4;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;
 	scene.fog.steepness = 2.0;
 
-	scene.raytracing.maxIterations = 3;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 8.0, -2.0);
-	scene.camera.orientation = EulerAngle(-20.0, 0.0, 0.0);
+	scene.camera.orientation = EulerAngle(-20.0, 180.0, 0.0);
 	scene.camera.dofSamples = 0;
 	scene.camera.apertureSize = 0.2;
 	scene.camera.focalLenght = 30.0;
@@ -83,7 +82,7 @@ Scene Scene::createTestScene7()
 			sphereMaterial.diffuseness = 0.5;
 			sphereMaterial.specularity = 0.5;
 			sphereMaterial.shininess = shininessDist(gen);
-			sphereMaterial.reflectance = 1.0;
+			sphereMaterial.reflectance = 0.2;
 
 			Sphere sphere;
 			sphere.radius = radiusDist(gen);
@@ -103,7 +102,7 @@ Scene Scene::createTestScene7()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
+	scene.lights.ambientLight.intensity = 0.0;
 	
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);

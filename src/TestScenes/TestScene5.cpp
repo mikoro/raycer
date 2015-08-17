@@ -53,8 +53,8 @@ Scene Scene::createTestScene5()
 	sphere2Material.reflectance = 1.0;
 	sphere2Material.transmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
-	sphere2Material.fresnel = true;
-	sphere2Material.attenuate = false;
+	sphere2Material.isFresnel = true;
+	sphere2Material.attenuates = false;
 	sphere2Material.attenuation = 0.1;
 	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.1);
 
@@ -80,8 +80,8 @@ Scene Scene::createTestScene5()
 	sphere3Material.reflectance = 1.0;
 	sphere3Material.transmittance = 1.0;
 	sphere3Material.refractiveIndex = 1.5;
-	sphere3Material.fresnel = true;
-	sphere3Material.attenuate = false;
+	sphere3Material.isFresnel = true;
+	sphere3Material.attenuates = false;
 	sphere3Material.attenuation = 0.1;
 	sphere3Material.attenuationColor = Color(0.1, 0.0, 0.0);
 
@@ -107,8 +107,8 @@ Scene Scene::createTestScene5()
 	box1Material.reflectance = 1.0;
 	box1Material.transmittance = 1.0;
 	box1Material.refractiveIndex = 1.5;
-	box1Material.fresnel = true;
-	box1Material.attenuate = true;
+	box1Material.isFresnel = true;
+	box1Material.attenuates = true;
 	box1Material.attenuation = 0.4;
 	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
 

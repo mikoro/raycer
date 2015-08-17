@@ -17,12 +17,10 @@ namespace Raycer
 		int bumpMapTextureId = 0;
 		int displacementMapTextureId = 0;
 
-		Texture* texture = nullptr;
-		Texture* bumpMapTexture = nullptr;
-		Texture* displacementMapTexture = nullptr;
-
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
+		bool hasBumpMap = false;
+		bool hasDisplacementMap = false;
 		bool skipLighting = false;
 		bool nonShadowing = false;
 
@@ -31,13 +29,17 @@ namespace Raycer
 		double specularity = 0.0;
 		double shininess = 0.0;
 
-		bool fresnel = false;
 		double reflectance = 0.0;
 		double transmittance = 0.0;
 		double refractiveIndex = 1.0;
+		bool isFresnel = false;
 
-		bool attenuate = false;
+		bool attenuates = false;
 		double attenuation = 1.0;
 		Color attenuationColor;
+
+		Texture* texture = nullptr;
+		Texture* bumpMapTexture = nullptr;
+		Texture* displacementMapTexture = nullptr;
 	};
 }

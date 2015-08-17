@@ -212,7 +212,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	double rf = 1.0;
 	double tf = 1.0;
 
-	if (material->fresnel)
+	if (material->isFresnel)
 	{
 		double rf0 = (n2 - n1) / (n2 + n1);
 		rf0 = rf0 * rf0;
@@ -248,7 +248,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			refractionColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * transmittance;
 
 			// only attenuate if ray has traveled inside a primitive
-			if (isOutside && refractedIntersection.wasFound && material->attenuate)
+			if (isOutside && refractedIntersection.wasFound && material->attenuates)
 			{
 				double a = exp(-material->attenuation * refractedIntersection.distance);
 				refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
@@ -272,7 +272,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		reflectionColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * reflectance;
 
 		// only attenuate if ray has traveled inside a primitive
-		if (!isOutside && reflectedIntersection.wasFound && material->attenuate)
+		if (!isOutside && reflectedIntersection.wasFound && material->attenuates)
 		{
 			double a = exp(-material->attenuation * reflectedIntersection.distance);
 			reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);

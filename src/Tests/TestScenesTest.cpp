@@ -20,9 +20,9 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 	scenes.push_back(Scene::createTestScene4());
 	scenes.push_back(Scene::createTestScene5());
 	scenes.push_back(Scene::createTestScene6());
-	//scenes.push_back(Scene::createTestScene7());
+	scenes.push_back(Scene::createTestScene7());
 	scenes.push_back(Scene::createTestScene8());
-	//scenes.push_back(Scene::createTestScene9());
+	scenes.push_back(Scene::createTestScene9());
 	scenes.push_back(Scene::createTestScene10());
 	scenes.push_back(Scene::createTestScene11());
 	scenes.push_back(Scene::createTestScene12());
@@ -32,6 +32,10 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 	for (const Scene& scene : scenes)
 	{
 		sceneCount++;
+
+		// skip large scenes
+		if (sceneCount == 7 || sceneCount == 10)
+			continue;
 
 		scene.saveToFile(tfm::format("scene%d.json", sceneCount));
 		scene.saveToFile(tfm::format("scene%d.xml", sceneCount));
