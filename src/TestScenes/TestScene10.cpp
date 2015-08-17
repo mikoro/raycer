@@ -1,98 +1,141 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <random>
 #include <stdexcept>
 
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
-// instancing with a lot of monkeys
+// motion blur with spheres
 Scene Scene::createTestScene10()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
-	scene.boundingBoxes.enabled = false;
+	scene.rootBVH.enabled = false;
+
+	scene.fog.enabled = true;
+	scene.fog.distance = 20.0;
+	scene.fog.steepness = 2.0;
+	scene.fog.color = Color(0.0, 0.0, 0.0);
 
 	// CAMERA //
+
+	scene.camera.position = Vector3(0.0, 7.0, 5.0);
+	scene.camera.orientation = EulerAngle(-40.0, 0.0, 0.0);
+	scene.camera.timeSamples = 4;
+
+	// GROUND //
+
+	ColorTexture groundTexture;
+	groundTexture.id = 1;
+	groundTexture.color = Color(0.0, 1.0, 0.2);
+	groundTexture.intensity = 0.25;
+
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.textureId = groundTexture.id;
+
+	Plane groundPlane;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	
-	scene.camera.position = Vector3(-35.0, 22.0, 210.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
+	scene.textures.colorTextures.push_back(groundTexture);
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
 
-	// MESH 1 //
+	// SPHERE 1 //
 
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 1;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 0.8;
+	ColorTexture sphere1Texture;
+	sphere1Texture.id = 2;
+	sphere1Texture.color = Color(1.0, 1.0, 1.0);
+	sphere1Texture.intensity = 0.5;
 
-	Material mesh1Material;
-	mesh1Material.id = 1;
-	mesh1Material.textureId = mesh1Texture.id;
+	Material sphere1Material;
+	sphere1Material.id = 2;
+	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.specularReflectance = Color(0.5, 0.5, 0.5);
+	sphere1Material.shininess = 16.0;
+	sphere1Material.rayReflectance = 0.5;
 
-	Mesh mesh1;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(6.0, 6.0, 6.0);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+	Sphere sphere1;
+	sphere1.materialId = sphere1Material.id;
+	sphere1.position = Vector3(0.0, 1.0, 1.0);
+	sphere1.displacement = Vector3(0.0, 0.0, -2.0);
+	sphere1.radius = 1.0;
 
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
-	// INSTANCES
+	// SPHERE 2 //
 
-	std::mt19937 gen(6785645);
-	std::uniform_real_distribution<double> scaleDist(1.0, 2.0);
-	std::uniform_real_distribution<double> rotationDist(0.0, 180.0);
-	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
+	ColorTexture sphere2Texture;
+	sphere2Texture.id = 3;
+	sphere2Texture.color = Color(1.0, 0.5, 0.0);
+	sphere2Texture.intensity = 0.5;
 
-	int count = 2;
+	Material sphere2Material;
+	sphere2Material.id = 3;
+	sphere2Material.textureId = sphere2Texture.id;
+	sphere2Material.specularReflectance = Color(0.5, 0.5, 0.5);
+	sphere2Material.shininess = 16.0;
+	sphere2Material.rayReflectance = 0.5;
 
-	for (int z = -200; z < 200; z += 20)
-	{
-		for (int y = -200; y < 200; y += 20)
-		{
-			for (int x = -200; x < 200; x += 20)
-			{
-				ColorTexture instance1Texture;
-				instance1Texture.id = count;
-				instance1Texture.color = Color::random(gen);
-				instance1Texture.intensity = 0.8;
+	Sphere sphere2;
+	sphere2.materialId = sphere2Material.id;
+	sphere2.position = Vector3(-1.0, 1.0, -2.0);
+	sphere2.displacement = Vector3(-1.0, 0.0, -1.0);
+	sphere2.radius = 1.0;
 
-				Material instance1Material;
-				instance1Material.id = count;
-				instance1Material.textureId = instance1Texture.id;
+	scene.textures.colorTextures.push_back(sphere2Texture);
+	scene.materials.push_back(sphere2Material);
+	scene.primitives.spheres.push_back(sphere2);
 
-				Instance instance1;
-				instance1.materialId = instance1Material.id;
-				instance1.primitive = &scene.primitives.meshes.back();
-				instance1.scale = Vector3(scaleDist(gen), scaleDist(gen), scaleDist(gen));
-				instance1.rotate = EulerAngle(rotationDist(gen), rotationDist(gen), rotationDist(gen));
-				instance1.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
+	// SPHERE 3 //
 
-				scene.textures.colorTextures.push_back(instance1Texture);
-				scene.materials.push_back(instance1Material);
-				scene.primitives.instances.push_back(instance1);
-				count++;
-			}
-		}
-	}
+	ColorTexture sphere3Texture;
+	sphere3Texture.id = 4;
+	sphere3Texture.color = Color(0.0, 0.5, 1.0);
+	sphere3Texture.intensity = 0.5;
+
+	Material sphere3Material;
+	sphere3Material.id = 4;
+	sphere3Material.textureId = sphere3Texture.id;
+	sphere3Material.specularReflectance = Color(0.5, 0.5, 0.5);
+	sphere3Material.shininess = 16.0;
+	sphere3Material.rayReflectance = 0.5;
+
+	Sphere sphere3;
+	sphere3.materialId = sphere3Material.id;
+	sphere3.position = Vector3(1.0, 1.0, -2.0);
+	sphere3.displacement = Vector3(1.0, 0.0, -1.0);
+	sphere3.radius = 1.0;
+
+	scene.textures.colorTextures.push_back(sphere3Texture);
+	scene.materials.push_back(sphere3Material);
+	scene.primitives.spheres.push_back(sphere3);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.1;
+	scene.lights.ambientLight.intensity = 0.01;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
+	PointLight pointLight1;
+	pointLight1.color = Color(1.0, 1.0, 1.0);
+	pointLight1.intensity = 0.5;
+	pointLight1.distance = 20.0;
+	pointLight1.attenuation = 1.0;
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	pointLight1.position = Vector3(5.0, 5.0, 5.0);
+	scene.lights.pointLights.push_back(pointLight1);
+	pointLight1.position = Vector3(-5.0, 5.0, 5.0);
+	scene.lights.pointLights.push_back(pointLight1);
+	pointLight1.position = Vector3(5.0, 5.0, -5.0);
+	scene.lights.pointLights.push_back(pointLight1);
+	pointLight1.position = Vector3(-5.0, 5.0, -5.0);
+	scene.lights.pointLights.push_back(pointLight1);
 
 	return scene;
 }

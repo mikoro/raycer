@@ -5,33 +5,80 @@
 
 using namespace Raycer;
 
-// atrium scene
+// ambient occlusion with four white spheres and a monkey
 Scene Scene::createTestScene12()
 {
 	Scene scene;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 25.0, 0.0);
-	scene.camera.orientation = EulerAngle(0.0, 90.0, 0.0);
+	scene.camera.position = Vector3(2.3, 5.0, 6.0);
+	scene.camera.orientation = EulerAngle(-35.0, 0.0, 0.0);
+
+	// GROUND //
+
+	ColorTexture groundTexture;
+	groundTexture.id = 1;
+	groundTexture.color = Color(1.0, 1.0, 1.0);
+	groundTexture.intensity = 0.5;
+
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.textureId = groundTexture.id;
+
+	Plane groundPlane;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 	
+	scene.textures.colorTextures.push_back(groundTexture);
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
+
+	// SPHERE 1 //
+
+	ColorTexture sphere1Texture;
+	sphere1Texture.id = 2;
+	sphere1Texture.color = Color(1.0, 1.0, 1.0);
+	sphere1Texture.intensity = 1.0;
+
+	Material sphere1Material;
+	sphere1Material.id = 2;
+	sphere1Material.textureId = sphere1Texture.id;
+
+	Sphere sphere1;
+	sphere1.materialId = sphere1Material.id;
+	sphere1.radius = 1.0;
+
+	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+
+	sphere1.position = Vector3(-1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere1);
+	sphere1.position = Vector3(1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere1);
+	sphere1.position = Vector3(-1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere1);
+	sphere1.position = Vector3(1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere1);
+
 	// MESH 1 //
 
 	ColorTexture mesh1Texture;
-	mesh1Texture.id = 1;
+	mesh1Texture.id = 3;
 	mesh1Texture.color = Color(1.0, 1.0, 1.0);
 	mesh1Texture.intensity = 1.0;
 
 	Material mesh1Material;
-	mesh1Material.id = 1;
+	mesh1Material.id = 3;
 	mesh1Material.textureId = mesh1Texture.id;
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/sponza1.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(0.05, 0.05, 0.05);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+	mesh1.meshFilePath = "data/meshes/monkey3.obj";
+	mesh1.position = Vector3(5.0, 0.0, 1.0);
+	mesh1.scale = Vector3(5.0, 5.0, 5.0);
+	mesh1.orientation = EulerAngle(-45.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);
@@ -40,24 +87,10 @@ Scene Scene::createTestScene12()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
-
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(28.0, 38.0, 0.0);
-	pointLight1.distance = 50.0;
-	pointLight1.attenuation = 1.0;
-
-	PointLight pointLight2;
-	pointLight2.color = Color(1.0, 1.0, 1.0);
-	pointLight2.intensity = 1.0;
-	pointLight2.position = Vector3(-28.0, 38.0, 0.0);
-	pointLight2.distance = 50.0;
-	pointLight2.attenuation = 1.0;
-
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.pointLights.push_back(pointLight2);
+	scene.lights.ambientLight.intensity = 0.4;
+	scene.lights.ambientLight.ambientOcclusion = true;
+	scene.lights.ambientLight.maxOcclusionDistance = 2.0;
+	scene.lights.ambientLight.samples = 3;
 
 	return scene;
 }

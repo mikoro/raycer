@@ -5,57 +5,121 @@
 
 using namespace Raycer;
 
-// depth of field with a sphere spiral
+// spherical environment texture map with glass primitives
 Scene Scene::createTestScene6()
 {
 	Scene scene;
 
+	scene.rootBVH.enabled = true;
+	scene.raytracing.maxIterations = 8;
+
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 0.0, 7.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-	scene.camera.dofSamples = 3;
-	scene.camera.apertureSize = 0.5;
-	scene.camera.focalLenght = 30.0;
-	
-	// SPHERES //
+	scene.camera.position = Vector3(7.0, 0.0, -12.2);
+	scene.camera.orientation = EulerAngle(0.0, 150.0, 0.0);
 
-	ColorTexture sphereTexture;
-	sphereTexture.id = 2;
-	sphereTexture.color = Color(1.0, 1.0, 1.0);
-	sphereTexture.intensity = 0.5;
+	// SPHERE 1 //
 
-	Material sphereMaterial;
-	sphereMaterial.id = 2;
-	sphereMaterial.textureId = sphereTexture.id;
+	ImageTexture sphere1Texture;
+	sphere1Texture.id = 1;
+	sphere1Texture.intensity = 1.0;
+	sphere1Texture.imageFilePath = "data/images/rooftop.hdr";
 
-	scene.textures.colorTextures.push_back(sphereTexture);
-	scene.materials.push_back(sphereMaterial);
+	Material sphere1Material;
+	sphere1Material.id = 1;
+	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.skipLighting = true;
+	sphere1Material.texcoordScale = Vector2(1.0, -1.0);
 
-	double angle = -M_PI / 2.0;
-	double radius = 8.0;
-	
-	for (int i = 0; i < 50; ++i)
-	{
-		Sphere sphere;
-		sphere.position = Vector3(cos(angle) * radius, sin(angle) * radius, i * -1.0);
-		sphere.radius = 1.0;
-		sphere.materialId = sphereMaterial.id;
-		scene.primitives.spheres.push_back(sphere);
-		angle += 0.5;
-	}
+	Sphere sphere1;
+	sphere1.materialId = sphere1Material.id;
+	sphere1.position = Vector3(0.0, 0.0, 0.0);
+	sphere1.radius = 100.0;
 
-	// LIGHTS //
+	scene.textures.imageTextures.push_back(sphere1Texture);
+	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
-	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.1;
-	
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, -60.0, 0.0).getDirection();
+	// SPHERE 2 //
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	ColorTexture sphere2Texture;
+	sphere2Texture.id = 2;
+	sphere2Texture.color = Color(1.0, 1.0, 1.0);
+	sphere2Texture.intensity = 1.0;
+
+	Material sphere2Material;
+	sphere2Material.id = 2;
+	sphere2Material.textureId = sphere2Texture.id;
+	sphere2Material.rayReflectance = 1.0;
+	sphere2Material.rayTransmittance = 1.0;
+	sphere2Material.refractiveIndex = 1.5;
+	sphere2Material.isFresnel = true;
+	sphere2Material.enableAttenuation = false;
+	sphere2Material.attenuation = 0.1;
+	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.1);
+
+	Sphere sphere2;
+	sphere2.materialId = sphere2Material.id;
+	sphere2.position = Vector3(4.0, -2.0, 0.0);
+	sphere2.radius = 2.0;
+
+	scene.textures.colorTextures.push_back(sphere2Texture);
+	scene.materials.push_back(sphere2Material);
+	scene.primitives.spheres.push_back(sphere2);
+
+	// SPHERE 3 //
+
+	ColorTexture sphere3Texture;
+	sphere3Texture.id = 3;
+	sphere3Texture.color = Color(1.0, 1.0, 1.0);
+	sphere3Texture.intensity = 1.0;
+
+	Material sphere3Material;
+	sphere3Material.id = 3;
+	sphere3Material.textureId = sphere3Texture.id;
+	sphere3Material.rayReflectance = 1.0;
+	sphere3Material.rayTransmittance = 1.0;
+	sphere3Material.refractiveIndex = 1.5;
+	sphere3Material.isFresnel = true;
+	sphere3Material.enableAttenuation = false;
+	sphere3Material.attenuation = 0.1;
+	sphere3Material.attenuationColor = Color(0.1, 0.0, 0.0);
+
+	Sphere sphere3;
+	sphere3.materialId = sphere3Material.id;
+	sphere3.position = Vector3(-4.0, 2.0, 0.0);
+	sphere3.radius = 2.0;
+
+	scene.textures.colorTextures.push_back(sphere3Texture);
+	scene.materials.push_back(sphere3Material);
+	scene.primitives.spheres.push_back(sphere3);
+
+	// BOX 1 //
+
+	ColorTexture box1Texture;
+	box1Texture.id = 4;
+	box1Texture.color = Color(1.0, 1.0, 1.0);
+	box1Texture.intensity = 1.0;
+
+	Material box1Material;
+	box1Material.id = 4;
+	box1Material.textureId = box1Texture.id;
+	box1Material.rayReflectance = 1.0;
+	box1Material.rayTransmittance = 1.0;
+	box1Material.refractiveIndex = 1.5;
+	box1Material.isFresnel = true;
+	box1Material.enableAttenuation = true;
+	box1Material.attenuation = 0.4;
+	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
+
+	Box box1;
+	box1.position = Vector3(0.0, 0.0, 0.0);
+	box1.extent = Vector3(1.0, 10.0, 6.0);
+	box1.materialId = box1Material.id;
+
+	scene.textures.colorTextures.push_back(box1Texture);
+	scene.materials.push_back(box1Material);
+	scene.primitives.boxes.push_back(box1);
 
 	return scene;
 }
