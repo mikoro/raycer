@@ -16,17 +16,18 @@ void ImageTexture::initialize()
 		image.applyGamma(gamma);
 }
 
-Color ImageTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color ImageTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 
 	return image.getPixelBilinear(texcoord.x, texcoord.y);
 }
 
-double ImageTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double ImageTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
-	(void)texcoord;
 
-	return 1.0;
+	Color color = image.getPixelBilinear(texcoord.x, texcoord.y);
+
+	return 0.2126 * pow(color.r, gamma) + 0.7152 * pow(color.g, gamma) + 0.0722 * pow(color.b, gamma);
 }

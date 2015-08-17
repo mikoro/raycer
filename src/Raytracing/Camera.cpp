@@ -211,7 +211,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 
 	switch (projectionType)
 	{
-		case Raycer::CameraProjectionType::PERSPECTIVE:
+		case CameraProjectionType::PERSPECTIVE:
 		{
 			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
@@ -223,7 +223,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 
 		} break;
 
-		case Raycer::CameraProjectionType::ORTHOGRAPHIC:
+		case CameraProjectionType::ORTHOGRAPHIC:
 		{
 			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
@@ -234,7 +234,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 		} break;
 
 		// http://paulbourke.net/dome/fisheye/
-		case Raycer::CameraProjectionType::FISHEYE:
+		case CameraProjectionType::FISHEYE:
 		{
 			double dx = (pixelCoordinate.x / imagePlaneWidth) * 2.0 - 1.0;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) * 2.0 - 1.0;

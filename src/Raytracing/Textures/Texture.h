@@ -15,8 +15,8 @@ namespace Raycer
 
 		virtual void initialize() = 0;
 
-		virtual Color getColor(const Vector3& position, const Vector2& texcoord) const = 0;
-		virtual double getValue(const Vector3& position, const Vector2& texcoord) const = 0;
+		virtual Color getColor(const Vector2& texcoord, const Vector3& position) const = 0;
+		virtual double getValue(const Vector2& texcoord, const Vector3& position) const = 0;
 
 		int id = 0;
 		double intensity = 1.0;

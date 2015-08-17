@@ -15,7 +15,7 @@ void MarbleTexture::initialize()
 	perlinNoise.seed(seed);
 }
 
-Color MarbleTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color MarbleTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)texcoord;
 
@@ -28,7 +28,7 @@ Color MarbleTexture::getColor(const Vector3& position, const Vector2& texcoord) 
 	return Color::alphaBlend(marbleColor, streakColor1);
 }
 
-double MarbleTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double MarbleTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

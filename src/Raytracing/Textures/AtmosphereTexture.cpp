@@ -25,11 +25,8 @@ void AtmosphereTexture::initialize()
 	sunDirection = -sunOrientation.getDirection();
 }
 
-Color AtmosphereTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color AtmosphereTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
-	(void)position;
-	(void)texcoord;
-
 	Color skyColor = gradient.getColor(texcoord.y);
 
 	if (hasClouds)
@@ -57,7 +54,7 @@ Color AtmosphereTexture::getColor(const Vector3& position, const Vector2& texcoo
 	return skyColor;
 }
 
-double AtmosphereTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double AtmosphereTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

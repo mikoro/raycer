@@ -13,14 +13,14 @@ void CellNoiseTexture::initialize()
 	cellNoise.seed(seed);
 }
 
-Color CellNoiseTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color CellNoiseTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
-	double n = getValue(position, texcoord);
+	double n = getValue(texcoord, position);
 
 	return baseColor * n;
 }
 
-double CellNoiseTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double CellNoiseTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)texcoord;
 

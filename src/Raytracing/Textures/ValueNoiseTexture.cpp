@@ -13,14 +13,14 @@ void ValueNoiseTexture::initialize()
 	valueNoise.seed(seed);
 }
 
-Color ValueNoiseTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color ValueNoiseTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
-	double n = getValue(position, texcoord);
+	double n = getValue(texcoord, position);
 
 	return baseColor * n;
 }
 
-double ValueNoiseTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double ValueNoiseTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)texcoord;
 

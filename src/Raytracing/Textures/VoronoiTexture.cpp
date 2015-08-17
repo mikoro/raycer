@@ -27,14 +27,14 @@ void VoronoiTexture::initialize()
 	cellNoise.setVoronoiColors(colors);
 }
 
-Color VoronoiTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color VoronoiTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)texcoord;
 
 	return cellNoise.getVoronoiColor(distanceType, density, position.x * scale.x, position.y * scale.y, position.z * scale.z);
 }
 
-double VoronoiTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double VoronoiTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

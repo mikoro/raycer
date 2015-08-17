@@ -193,7 +193,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	Material* material = intersection.primitive->material;
 
-	Color textureColor = material->texture->getColor(intersection.position, intersection.texcoord) * material->texture->intensity;
+	Color textureColor = material->texture->getColor(intersection.texcoord, intersection.position) * material->texture->intensity;
 
 	if (material->skipLighting)
 	{

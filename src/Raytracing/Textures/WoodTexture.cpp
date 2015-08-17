@@ -15,7 +15,7 @@ void WoodTexture::initialize()
 	perlinNoise.seed(seed);
 }
 
-Color WoodTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color WoodTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)texcoord;
 
@@ -37,7 +37,7 @@ Color WoodTexture::getColor(const Vector3& position, const Vector2& texcoord) co
 	return woodColor * (n1 * n2 * n3);
 }
 
-double WoodTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double WoodTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

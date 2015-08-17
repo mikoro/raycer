@@ -21,9 +21,8 @@ void FireTexture::initialize()
 	colorGradient.addSegment(Color(255, 255, 0), Color(255, 255, 255), 10);
 }
 
-Color FireTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color FireTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
-	(void)position;
 	(void)texcoord;
 
 	double n1 = perlinNoise.getFbmNoise(8, 2.0, 0.75, position.x * 4.0, position.y * 4.0, position.z * 4.0) / 3.0;
@@ -32,7 +31,7 @@ Color FireTexture::getColor(const Vector3& position, const Vector2& texcoord) co
 	return colorGradient.getColor(n1);
 }
 
-double FireTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double FireTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

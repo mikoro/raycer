@@ -12,7 +12,7 @@ void CheckerTexture::initialize()
 {
 }
 
-Color CheckerTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color CheckerTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 
@@ -22,7 +22,7 @@ Color CheckerTexture::getColor(const Vector3& position, const Vector2& texcoord)
 		return (texcoord.y < 0.5) ? color2 : color1;
 }
 
-double CheckerTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double CheckerTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;

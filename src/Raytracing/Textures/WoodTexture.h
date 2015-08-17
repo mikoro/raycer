@@ -18,8 +18,8 @@ namespace Raycer
 
 		void initialize();
 
-		Color getColor(const Vector3& position, const Vector2& texcoord) const;
-		double getValue(const Vector3& position, const Vector2& texcoord) const;
+		Color getColor(const Vector2& texcoord, const Vector3& position) const;
+		double getValue(const Vector2& texcoord, const Vector3& position) const;
 
 		int seed = 1;
 		Color woodColor = Color(110, 71, 11);

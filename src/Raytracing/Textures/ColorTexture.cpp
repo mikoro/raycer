@@ -12,7 +12,7 @@ void ColorTexture::initialize()
 {
 }
 
-Color ColorTexture::getColor(const Vector3& position, const Vector2& texcoord) const
+Color ColorTexture::getColor(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;
@@ -20,7 +20,7 @@ Color ColorTexture::getColor(const Vector3& position, const Vector2& texcoord) c
 	return color;
 }
 
-double ColorTexture::getValue(const Vector3& position, const Vector2& texcoord) const
+double ColorTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 	(void)texcoord;
