@@ -99,7 +99,7 @@ std::vector<Triangle> ObjReader::getTriangles(const std::string& objFileName)
 	return triangles;
 }
 
-ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, int idStartOffset)
+ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vector3& scale, int idStartOffset)
 {
 	Log& log = App::getLog();
 
@@ -147,6 +147,7 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, int idStart
 
 			hasMesh = true;
 			mesh = Mesh();
+			mesh.scale = scale;
 			continue;
 		}
 
@@ -335,6 +336,21 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 
 		if ((part == "map_bump" || part == "bump") && !hasBumpMapTexture)
 		{
+			ImageTexture imageTexture;
+			imageTexture.id = ++currentId;
+			imageTexture.applyGamma = false;
+			imageTexture.isBumpMap = true;
+			material.normalMapTextureId = imageTexture.id;
+
+			std::string imageFileName;
+			path imageFilePath = objFileDirectory;
+			ss >> imageFileName;
+			imageFilePath.append(imageFileName.begin(), imageFileName.end());
+			imageTexture.imageFilePath = imageFilePath.string();
+
+			hasBumpMapTexture = true;
+			result.imageTextures.push_back(imageTexture);
+
 			continue;
 		}
 	}

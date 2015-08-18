@@ -36,6 +36,12 @@ namespace Raycer
 	
 	class Primitive;
 	class Texture;
+
+	struct ObjScene
+	{
+		std::string filePath;
+		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+	};
 	
 	class Scene
 	{
@@ -159,6 +165,6 @@ namespace Raycer
 			FlatBVH rootBVH;
 		} primitives;
 
-		std::vector<std::string> objSceneFilePaths;
+		std::vector<ObjScene> objScenes;
 	};
 }

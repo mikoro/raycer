@@ -169,9 +169,9 @@ void Scene::initialize()
 	std::map<int, Material*> materialsMap;
 
 	// OBJ SCENES
-	for (const std::string& objSceneFilePath : objSceneFilePaths)
+	for (const ObjScene& objScene : objScenes)
 	{
-		ObjReaderResult result = ObjReader::getMeshes(objSceneFilePath);
+		ObjReaderResult result = ObjReader::getMeshes(objScene.filePath, objScene.scale, 1000000);
 
 		for (Mesh& mesh : result.meshes)
 			primitives.meshes.push_back(mesh);

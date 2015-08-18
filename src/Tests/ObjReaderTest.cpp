@@ -27,7 +27,7 @@ TEST_CASE("ObjReader functionality", "[objreader]")
 	triangles = ObjReader::getTriangles("data/meshes/cube5.obj");
 	REQUIRE(triangles.size() == 12);
 
-	ObjReaderResult result = ObjReader::getMeshes("data/meshes/cornellbox.obj");
+	ObjReaderResult result = ObjReader::getMeshes("data/meshes/cornellbox.obj", Vector3(1.0, 1.0, 1.0), 0);
 	REQUIRE(result.materials.size() == 8);
 	REQUIRE(result.meshes.size() == 8);
 }

@@ -19,7 +19,10 @@ Scene Scene::createTestScene4()
 
 	// OBJ SCENES
 
-	scene.objSceneFilePaths.push_back("data/meshes/cornellbox.obj");
+	ObjScene objScene;
+	objScene.filePath = "data/meshes/cornellbox.obj";
+	objScene.scale = Vector3(1.0, 1.0, 1.0);
+	scene.objScenes.push_back(objScene);
 
 	// LIGHTS //
 

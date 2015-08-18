@@ -36,7 +36,7 @@ namespace Raycer
 	public:
 
 		static std::vector<Triangle> getTriangles(const std::string& objFileName);
-		static ObjReaderResult getMeshes(const std::string& objFileName, int idStartOffset = 1000000);
+		static ObjReaderResult getMeshes(const std::string& objFileName, const Vector3& scale, int idStartOffset);
 
 	private:
 
