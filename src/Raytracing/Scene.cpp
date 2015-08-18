@@ -48,6 +48,7 @@ Scene Scene::createTestScene(int number)
 		case 12: return createTestScene12(); break;
 		case 13: return createTestScene13(); break;
 		case 14: return createTestScene14(); break;
+		case 15: return createTestScene15(); break;
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }
@@ -257,10 +258,13 @@ void Scene::initialize()
 		{
 			primitive->material = materialsMap[primitive->materialId];
 
-			if (texturesMap.count(primitive->material->textureId))
-				primitive->material->texture = texturesMap[primitive->material->textureId];
+			if (texturesMap.count(primitive->material->colorTextureId))
+				primitive->material->colorTexture = texturesMap[primitive->material->colorTextureId];
 			else
-				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->textureId));
+				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
+
+			if (texturesMap.count(primitive->material->normalMapTextureId))
+				primitive->material->normalMapTexture = texturesMap[primitive->material->normalMapTextureId];
 		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has an invalid material id (%d)", primitive->materialId));
@@ -278,7 +282,7 @@ void Scene::initialize()
 	{
 		boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
 		boundingBoxes.texture.intensity = 1.0;
-		boundingBoxes.material.texture = &boundingBoxes.texture;
+		boundingBoxes.material.colorTexture = &boundingBoxes.texture;
 		boundingBoxes.material.diffuseReflectance = Color(0.0, 0.0, 0.0);
 		boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.1);
 		boundingBoxes.material.rayTransmittance = 1.0;

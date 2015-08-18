@@ -39,10 +39,12 @@ double FireTexture::getValue(const Vector2& texcoord, const Vector3& position) c
 	return 0.0;
 }
 
-Vector2 FireTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+Vector3 FireTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
 {
 	(void)texcoord;
 	(void)position;
 
-	return Vector2(0.0, 0.0);
+	type = TextureNormalType::NORMAL;
+
+	return Vector3(0.0, 0.0, 0.0);
 }

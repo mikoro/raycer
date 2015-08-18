@@ -14,6 +14,38 @@ void ImageTexture::initialize()
 
 	if (applyGamma)
 		image.applyGamma(gamma);
+
+	if (isBumpMap)
+	{
+		bumpMapX = Image(image.width, image.height);
+		bumpMapY = Image(image.width, image.height);
+
+		for (int y = 0; y < image.height; ++y)
+		{
+			for (int x = 0; x < image.width; ++x)
+			{
+				Color current = image.getPixel(x, y);
+
+				if (x < image.width - 1)
+				{
+					Color right = image.getPixel(x + 1, y);
+					Color rightDiff = right - current;
+					bumpMapX.setPixel(x, y, rightDiff);
+				}
+				else
+					bumpMapX.setPixel(x, y, bumpMapX.getPixel(x - 1, y));
+
+				if (y < image.height - 1)
+				{
+					Color top = image.getPixel(x, y + 1);
+					Color topDiff = top - current;
+					bumpMapY.setPixel(x, y, topDiff);
+				}
+				else
+					bumpMapY.setPixel(x, y, bumpMapY.getPixel(x, y - 1));
+			}
+		}
+	}
 }
 
 Color ImageTexture::getColor(const Vector2& texcoord, const Vector3& position) const
@@ -32,9 +64,18 @@ double ImageTexture::getValue(const Vector2& texcoord, const Vector3& position) 
 	return 0.2126 * pow(color.r, gamma) + 0.7152 * pow(color.g, gamma) + 0.0722 * pow(color.b, gamma);
 }
 
-Vector2 ImageTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+Vector3 ImageTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
 {
-	double value = getValue(texcoord, position);
+	(void)position;
 
-	return Vector2(value, value);
+	Vector3 normal;
+	type = TextureNormalType::BUMP;
+
+	if (isBumpMap)
+	{
+		normal.x = -bumpMapX.getPixelBilinear(texcoord.x, texcoord.y).r;
+		normal.y = -bumpMapY.getPixelBilinear(texcoord.x, texcoord.y).r;
+	}
+	
+	return normal;
 }

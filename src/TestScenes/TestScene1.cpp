@@ -26,7 +26,7 @@ Scene Scene::createTestScene1()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.colorTextureId = groundTexture.id;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -46,7 +46,7 @@ Scene Scene::createTestScene1()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
-	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.colorTextureId = sphere1Texture.id;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -66,7 +66,7 @@ Scene Scene::createTestScene1()
 
 	Material box1Material;
 	box1Material.id = 3;
-	box1Material.textureId = box1Texture.id;
+	box1Material.colorTextureId = box1Texture.id;
 
 	Box box1;
 	box1.position = Vector3(3.0, 1.0, 0.0);
@@ -86,7 +86,7 @@ Scene Scene::createTestScene1()
 
 	Material triangle1Material;
 	triangle1Material.id = 4;
-	triangle1Material.textureId = triangle1Texture.id;
+	triangle1Material.colorTextureId = triangle1Texture.id;
 
 	Triangle triangle1;
 	triangle1.materialId = triangle1Material.id;

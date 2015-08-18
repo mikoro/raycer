@@ -30,7 +30,7 @@ Scene Scene::createTestScene11()
 
 	Material mesh1Material;
 	mesh1Material.id = 1;
-	mesh1Material.textureId = mesh1Texture.id;
+	mesh1Material.colorTextureId = mesh1Texture.id;
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;
@@ -65,7 +65,7 @@ Scene Scene::createTestScene11()
 
 				Material instance1Material;
 				instance1Material.id = count;
-				instance1Material.textureId = instance1Texture.id;
+				instance1Material.colorTextureId = instance1Texture.id;
 
 				Instance instance1;
 				instance1.materialId = instance1Material.id;

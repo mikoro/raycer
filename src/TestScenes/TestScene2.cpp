@@ -27,7 +27,7 @@ Scene Scene::createTestScene2()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.colorTextureId = groundTexture.id;
 	groundMaterial.skipLighting = true;
 	groundMaterial.texcoordScale = Vector2(0.5, 0.5);
 

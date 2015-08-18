@@ -13,8 +13,8 @@ namespace Raycer
 	struct Material
 	{
 		int id = 0;
-		int textureId = 0;
-		int bumpMapTextureId = 0;
+		int colorTextureId = 0;
+		int normalMapTextureId = 0;
 		int displacementMapTextureId = 0;
 
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
@@ -36,8 +36,8 @@ namespace Raycer
 		double attenuation = 1.0;
 		Color attenuationColor = Color(0.0, 0.0, 0.0);
 
-		Texture* texture = nullptr;
-		Texture* bumpMapTexture = nullptr;
+		Texture* colorTexture = nullptr;
+		Texture* normalMapTexture = nullptr;
 		Texture* displacementMapTexture = nullptr;
 	};
 }

@@ -28,10 +28,12 @@ double ColorTexture::getValue(const Vector2& texcoord, const Vector3& position) 
 	return 0.0;
 }
 
-Vector2 ColorTexture::get2DValue(const Vector2& texcoord, const Vector3& position) const
+Vector3 ColorTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
 {
 	(void)texcoord;
 	(void)position;
 
-	return Vector2(0.0, 0.0);
+	type = TextureNormalType::NORMAL;
+
+	return Vector3(0.0, 0.0, 0.0);
 }

@@ -34,7 +34,7 @@ Scene Scene::createTestScene10()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.colorTextureId = groundTexture.id;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -54,7 +54,7 @@ Scene Scene::createTestScene10()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
-	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.colorTextureId = sphere1Texture.id;
 	sphere1Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere1Material.shininess = 16.0;
 	sphere1Material.rayReflectance = 0.5;
@@ -78,7 +78,7 @@ Scene Scene::createTestScene10()
 
 	Material sphere2Material;
 	sphere2Material.id = 3;
-	sphere2Material.textureId = sphere2Texture.id;
+	sphere2Material.colorTextureId = sphere2Texture.id;
 	sphere2Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere2Material.shininess = 16.0;
 	sphere2Material.rayReflectance = 0.5;
@@ -102,7 +102,7 @@ Scene Scene::createTestScene10()
 
 	Material sphere3Material;
 	sphere3Material.id = 4;
-	sphere3Material.textureId = sphere3Texture.id;
+	sphere3Material.colorTextureId = sphere3Texture.id;
 	sphere3Material.specularReflectance = Color(0.5, 0.5, 0.5);
 	sphere3Material.shininess = 16.0;
 	sphere3Material.rayReflectance = 0.5;

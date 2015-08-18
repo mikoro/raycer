@@ -36,7 +36,7 @@ Scene Scene::createTestScene8()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.textureId = groundTexture.id;
+	groundMaterial.colorTextureId = groundTexture.id;
 	groundMaterial.specularReflectance = Color(0.5, 0.5, 0.5);
 	groundMaterial.shininess = 2.0;
 	groundMaterial.rayReflectance = 1.0;
@@ -78,7 +78,7 @@ Scene Scene::createTestScene8()
 
 			Material sphereMaterial;
 			sphereMaterial.id = index;
-			sphereMaterial.textureId = sphereTexture.id;
+			sphereMaterial.colorTextureId = sphereTexture.id;
 			sphereMaterial.diffuseReflectance = Color(0.5, 0.5, 0.5);
 			sphereMaterial.specularReflectance = Color(0.5, 0.5, 0.5);
 			sphereMaterial.shininess = shininessDist(gen);

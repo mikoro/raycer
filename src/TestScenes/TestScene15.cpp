@@ -5,8 +5,8 @@
 
 using namespace Raycer;
 
-// sponza1 scene
-Scene Scene::createTestScene14()
+// sponza2 scene
+Scene Scene::createTestScene15()
 {
 	Scene scene;
 
@@ -17,12 +17,12 @@ Scene Scene::createTestScene14()
 	scene.camera.position = Vector3(15.0, 2.0, 0.0);
 	scene.camera.orientation = EulerAngle(1.0, 90.0, 0.0);
 	
-	scene.objSceneFilePaths.push_back("data/meshes/sponza1/sponza.obj");
+	scene.objSceneFilePaths.push_back("data/meshes/sponza2/sponza.obj");
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
+	scene.lights.ambientLight.intensity = 0.5;
 
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
@@ -44,8 +44,8 @@ Scene Scene::createTestScene14()
 	pointLight2.attenuation = 1.0;
 
 	//scene.lights.directionalLights.push_back(directionalLight1);
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.pointLights.push_back(pointLight2);
+	//scene.lights.pointLights.push_back(pointLight1);
+	//scene.lights.pointLights.push_back(pointLight2);
 
 	return scene;
 }

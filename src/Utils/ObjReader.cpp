@@ -225,7 +225,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 	App::getLog().logInfo("Parsing MTL file (%s)", mtlFileName);
 
 	path mtlFilePath = objFileDirectory;
-	mtlFilePath.append(mtlFileName);
+	mtlFilePath.append(mtlFileName.begin(), mtlFileName.end());
 	std::ifstream file(mtlFilePath.string());
 
 	if (!file.good())
@@ -254,7 +254,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 					ColorTexture colorTexture;
 					colorTexture.id = ++currentId;
 					colorTexture.color = Color(1.0, 1.0, 1.0);
-					material.textureId = colorTexture.id;
+					material.colorTextureId = colorTexture.id;
 					result.colorTextures.push_back(colorTexture);
 				}
 
@@ -319,12 +319,12 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			ImageTexture imageTexture;
 			imageTexture.id = ++currentId;
 			imageTexture.applyGamma = true;
-			material.textureId = imageTexture.id;
+			material.colorTextureId = imageTexture.id;
 
 			std::string imageFileName;
 			path imageFilePath = objFileDirectory;
 			ss >> imageFileName;
-			imageFilePath.append(imageFileName);
+			imageFilePath.append(imageFileName.begin(), imageFileName.end());
 			imageTexture.imageFilePath = imageFilePath.string();
 
 			hasTexture = true;
@@ -348,7 +348,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			ColorTexture colorTexture;
 			colorTexture.id = ++currentId;
 			colorTexture.color = Color(1.0, 1.0, 1.0);
-			material.textureId = colorTexture.id;
+			material.colorTextureId = colorTexture.id;
 			result.colorTextures.push_back(colorTexture);
 		}
 

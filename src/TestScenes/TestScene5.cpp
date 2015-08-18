@@ -30,7 +30,7 @@ Scene Scene::createTestScene5()
 
 	Material box1Material;
 	box1Material.id = 3;
-	box1Material.textureId = box1Texture.id;
+	box1Material.colorTextureId = box1Texture.id;
 	box1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
 	box1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
 	box1Material.rayTransmittance = 1.0;
@@ -69,7 +69,7 @@ Scene Scene::createTestScene5()
 
 	Material box2Material;
 	box2Material.id = 4;
-	box2Material.textureId = box2Texture.id;
+	box2Material.colorTextureId = box2Texture.id;
 	box2Material.ambientReflectance = Color(0.0, 0.0, 0.0);
 	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
 	box2Material.rayReflectance = 1.0;
@@ -93,7 +93,7 @@ Scene Scene::createTestScene5()
 
 	Material instance1Material;
 	instance1Material.id = 5;
-	instance1Material.textureId = instance1Texture.id;
+	instance1Material.colorTextureId = instance1Texture.id;
 	instance1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
 	instance1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
 	instance1Material.rayReflectance = 1.0;

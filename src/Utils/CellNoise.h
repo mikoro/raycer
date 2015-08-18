@@ -47,11 +47,6 @@ namespace Raycer
 		double getDistance(CellNoiseDistanceType distanceType, const Vector3& v1, const Vector3& v2) const;
 		double getCombinedValue(CellNoiseCombineType combineType, double d1, double d2) const;
 
-		static double euclideanDistance(const Vector3& v1, const Vector3& v2);
-		static double euclideanDistanceSquared(const Vector3& v1, const Vector3& v2);
-		static double manhattanDistance(const Vector3& v1, const Vector3& v2);
-		static double chebyshevDistance(const Vector3& v1, const Vector3& v2);
-
 		int m_seed;
 		std::vector<Color> voronoiColors;
 	};

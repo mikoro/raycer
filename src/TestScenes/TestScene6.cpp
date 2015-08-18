@@ -27,7 +27,7 @@ Scene Scene::createTestScene6()
 
 	Material sphere1Material;
 	sphere1Material.id = 1;
-	sphere1Material.textureId = sphere1Texture.id;
+	sphere1Material.colorTextureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
 	sphere1Material.texcoordScale = Vector2(1.0, -1.0);
 
@@ -49,7 +49,7 @@ Scene Scene::createTestScene6()
 
 	Material sphere2Material;
 	sphere2Material.id = 2;
-	sphere2Material.textureId = sphere2Texture.id;
+	sphere2Material.colorTextureId = sphere2Texture.id;
 	sphere2Material.rayReflectance = 1.0;
 	sphere2Material.rayTransmittance = 1.0;
 	sphere2Material.refractiveIndex = 1.5;
@@ -76,7 +76,7 @@ Scene Scene::createTestScene6()
 
 	Material sphere3Material;
 	sphere3Material.id = 3;
-	sphere3Material.textureId = sphere3Texture.id;
+	sphere3Material.colorTextureId = sphere3Texture.id;
 	sphere3Material.rayReflectance = 1.0;
 	sphere3Material.rayTransmittance = 1.0;
 	sphere3Material.refractiveIndex = 1.5;
@@ -103,7 +103,7 @@ Scene Scene::createTestScene6()
 
 	Material box1Material;
 	box1Material.id = 4;
-	box1Material.textureId = box1Texture.id;
+	box1Material.colorTextureId = box1Texture.id;
 	box1Material.rayReflectance = 1.0;
 	box1Material.rayTransmittance = 1.0;
 	box1Material.refractiveIndex = 1.5;

@@ -9,6 +9,8 @@ namespace Raycer
 	class Vector2;
 	class Vector3;
 
+	enum class TextureNormalType { BUMP, GRADIENT, NORMAL };
+
 	class Texture
 	{
 	public:
@@ -17,7 +19,7 @@ namespace Raycer
 
 		virtual Color getColor(const Vector2& texcoord, const Vector3& position) const = 0;
 		virtual double getValue(const Vector2& texcoord, const Vector3& position) const = 0;
-		virtual Vector2 get2DValue(const Vector2& texcoord, const Vector3& position) const = 0;
+		virtual Vector3 getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const = 0;
 
 		int id = 0;
 		double intensity = 1.0;

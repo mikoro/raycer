@@ -192,7 +192,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		return finalColor;
 
 	Material* material = intersection.primitive->material;
-	Color textureColor = material->texture->getColor(intersection.texcoord, intersection.position) * material->texture->intensity;
+	Color textureColor = material->colorTexture->getColor(intersection.texcoord, intersection.position) * material->colorTexture->intensity;
 
 	if (material->skipLighting)
 	{
@@ -210,6 +210,31 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double rf = 1.0;
 	double tf = 1.0;
+
+	if (material->normalMapTexture != nullptr)
+	{
+		TextureNormalType normalType;
+		Vector3 textureNormal = material->normalMapTexture->getNormal(intersection.texcoord, intersection.position, normalType);
+
+		if (normalType == TextureNormalType::BUMP)
+		{
+			// TODO: vector basis should probably use rotated up vector so that bump values go to right directions
+			Vector3 N = intersection.normal;
+			Vector3 Pu = N.cross(Vector3::UP);
+			Vector3 Pv = Pu.cross(N);
+			textureNormal *= material->normalMapTexture->intensity;
+			Vector3 bumpNormal = N + textureNormal.y * (Pu.cross(N)) + textureNormal.x * (Pv.cross(N));
+			intersection.normal = bumpNormal.normalized();
+		}
+		else if (normalType == TextureNormalType::GRADIENT)
+		{
+			intersection.normal = (intersection.normal - (textureNormal * material->normalMapTexture->intensity)).normalized();
+		}
+		else if (normalType == TextureNormalType::NORMAL)
+		{
+			// TODO: implement normal mapping
+		}
+	}
 
 	if (material->isFresnel)
 	{

@@ -26,6 +26,9 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 	scenes.push_back(Scene::createTestScene10());
 	scenes.push_back(Scene::createTestScene11());
 	scenes.push_back(Scene::createTestScene12());
+	scenes.push_back(Scene::createTestScene13());
+	scenes.push_back(Scene::createTestScene14());
+	scenes.push_back(Scene::createTestScene15());
 
 	int sceneCount = 0;
 
@@ -34,7 +37,7 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 		sceneCount++;
 
 		// skip large scenes
-		if (sceneCount == 7 || sceneCount == 10)
+		if (sceneCount == 8 || sceneCount == 11)
 			continue;
 
 		scene.saveToFile(tfm::format("scene%d.json", sceneCount));
