@@ -6,8 +6,6 @@
 #include <atomic>
 #include <random>
 
-#include "Utils/Sampler.h"
-
 namespace Raycer
 {
 	class Color;
@@ -18,6 +16,7 @@ namespace Raycer
 	struct Intersection;
 	struct Light;
 	struct Material;
+	class Sampler;
 	
 	class Raytracer
 	{
@@ -25,6 +24,7 @@ namespace Raycer
 
 		Raytracer();
 
+		void initialize(const Scene& scene);
 		void run(RaytracerState& state, std::atomic<bool>& interrupted);
 
 	private:
@@ -40,9 +40,12 @@ namespace Raycer
 		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusion);
 		Color calculateFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
 
-		Sampler sampler;
+		Sampler* multiSampler = nullptr;
+		Sampler* dofSampler = nullptr;
+		Sampler* timeSampler = nullptr;
+		Sampler* ambientOcclusionSampler = nullptr;
 
-		std::mt19937 gen;
-		std::uniform_int_distribution<int> intDist;
+		std::mt19937 generator;
+		std::uniform_int_distribution<int> randomDist;
 	};
 }

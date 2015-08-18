@@ -40,6 +40,12 @@
     <Filter Include="Runners\WindowRunnerStates">
       <UniqueIdentifier>{12134eda-1511-499f-88c4-6d8d51b7d7e1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\Samplers">
+      <UniqueIdentifier>{e1bae11a-c5b9-4f16-bfd9-2c2201434dc4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Rendering\Filters">
+      <UniqueIdentifier>{06fe8c49-c24d-4444-b587-cbcf5f33a433}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -190,9 +196,6 @@
     <ClCompile Include="src\Utils\gl3w.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\Sampler.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tests\SamplerTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -297,6 +300,24 @@
     </ClCompile>
     <ClCompile Include="src\TestScenes\TestScene15.cpp">
       <Filter>TestScenes</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\RandomSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\Sampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\RegularSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\JitteredSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\CMJSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\ONB.cpp">
+      <Filter>Raytracing</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,9 +469,6 @@
     <ClInclude Include="src\Raytracing\Textures\ValueNoiseTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\Sampler.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Utils\PlyReader.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -504,6 +522,24 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\Instance.h">
       <Filter>Raytracing\Primitives</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\RandomSampler.h">
+      <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\Sampler.h">
+      <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\ONB.h">
+      <Filter>Raytracing</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\RegularSampler.h">
+      <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\JitteredSampler.h">
+      <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\CMJSampler.h">
+      <Filter>Rendering\Samplers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

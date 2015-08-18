@@ -15,6 +15,8 @@ namespace Raycer
 	{
 	public:
 
+		virtual ~Texture() {}
+
 		virtual void initialize() = 0;
 
 		virtual Color getColor(const Vector2& texcoord, const Vector3& position) const = 0;

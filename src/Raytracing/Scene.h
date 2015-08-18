@@ -27,11 +27,11 @@
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
+#include "Rendering/Samplers/Sampler.h"
 #include "Math/Color.h"
 
 namespace Raycer
 {
-	enum class MultisampleType { CMJ, RANDOM, REGULAR, JITTER };
 	enum class ToneMapType { GAMMA, REINHARD };
 	
 	class Primitive;
@@ -78,10 +78,18 @@ namespace Raycer
 
 		Camera camera;
 
-		struct Misc
+		struct Raytracing
 		{
+			int maxIterations = 3;
+			double rayStartOffset = 0.000001;
 			Color backgroundColor = Color::BLACK;
-		} misc;
+			SamplerType multiSamplerType = SamplerType::CMJ;
+			int multiSamples = 0;
+			SamplerType dofSamplerType = SamplerType::CMJ;
+			int dofSamples = 0;
+			SamplerType timeSamplerType = SamplerType::JITTERED;
+			int timeSamples = 0;
+		} raytracing;
 
 		struct Fog
 		{
@@ -94,19 +102,6 @@ namespace Raycer
 			double heightSteepness = 1.0;
 		} fog;
 
-		struct Raytracing
-		{
-			int maxIterations = 3;
-			double startOffset = 0.000001;
-		} raytracing;
-
-		struct Multisampling
-		{
-			bool enabled = false;
-			MultisampleType type = MultisampleType::CMJ;
-			int samples = 3;
-		} multisampling;
-		
 		struct ToneMapping
 		{
 			bool enabled = true;

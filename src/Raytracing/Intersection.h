@@ -7,6 +7,7 @@
 
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
+#include "Raytracing/ONB.h"
 
 namespace Raycer
 {
@@ -19,6 +20,7 @@ namespace Raycer
 		Vector3 position;
 		Vector3 normal;
 		Vector2 texcoord;
+		ONB onb;
 		Primitive* primitive = nullptr;
 	};
 }

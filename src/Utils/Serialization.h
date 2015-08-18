@@ -26,10 +26,8 @@ namespace Raycer
 	void serialize(Archive& a, Scene& b)
 	{
 		a(cereal::make_nvp("camera", b.camera),
-			cereal::make_nvp("misc", b.misc),
 			cereal::make_nvp("fog", b.fog),
 			cereal::make_nvp("raytracing", b.raytracing),
-			cereal::make_nvp("multisampling", b.multisampling),
 			cereal::make_nvp("toneMapping", b.toneMapping),
 			cereal::make_nvp("rootBVH", b.rootBVH),
 			cereal::make_nvp("textures", b.textures),
@@ -47,16 +45,15 @@ namespace Raycer
 			cereal::make_nvp("fov", b.fov),
 			cereal::make_nvp("orthoSize", b.orthoSize),
 			cereal::make_nvp("fishEyeAngle", b.fishEyeAngle),
-			cereal::make_nvp("dofSamples", b.dofSamples),
-			cereal::make_nvp("timeSamples", b.timeSamples),
 			cereal::make_nvp("apertureSize", b.apertureSize),
 			cereal::make_nvp("focalLenght", b.focalLenght));
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::Misc& b)
+	void serialize(Archive& a, Scene::Raytracing& b)
 	{
-		a(cereal::make_nvp("backgroundColor", b.backgroundColor));
+		a(cereal::make_nvp("maxIterations", b.maxIterations),
+			cereal::make_nvp("startOffset", b.rayStartOffset));
 	}
 
 	template<class Archive>
@@ -69,21 +66,6 @@ namespace Raycer
 			cereal::make_nvp("heightDispersion", b.heightDispersion),
 			cereal::make_nvp("height", b.height),
 			cereal::make_nvp("heightSteepness", b.heightSteepness));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Raytracing& b)
-	{
-		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("startOffset", b.startOffset));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::Multisampling& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("type", b.type),
-			cereal::make_nvp("samples", b.samples));
 	}
 
 	template<class Archive>
@@ -145,8 +127,8 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("color", b.color),
 			cereal::make_nvp("intensity", b.intensity),
-			cereal::make_nvp("ambientOcclusion", b.ambientOcclusion),
-			cereal::make_nvp("maxOcclusionDistance", b.maxOcclusionDistance),
+			cereal::make_nvp("ambientOcclusion", b.enableOcclusion),
+			cereal::make_nvp("maxOcclusionDistance", b.maxDistance),
 			cereal::make_nvp("samples", b.samples),
 			cereal::make_nvp("distribution", b.distribution));
 	}

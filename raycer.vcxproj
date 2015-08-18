@@ -171,6 +171,7 @@
     <ClCompile Include="src\OpenCL\CLScene.cpp" />
     <ClCompile Include="src\Raytracing\AABB.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
+    <ClCompile Include="src\Raytracing\ONB.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Box.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\BVH.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\FlatBVH.cpp" />
@@ -196,6 +197,11 @@
     <ClCompile Include="src\Raytracing\Textures\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Framebuffer.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\CMJSampler.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\JitteredSampler.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\RandomSampler.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\RegularSampler.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\Sampler.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp" />
     <ClCompile Include="src\Rendering\ToneMapper.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
@@ -238,7 +244,6 @@
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\PlyReader.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
-    <ClCompile Include="src\Utils\Sampler.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
     <ClCompile Include="src\Utils\StringUtils.cpp" />
     <ClCompile Include="src\Utils\ValueNoise.cpp" />
@@ -263,6 +268,7 @@
     <ClInclude Include="src\Raytracing\Intersection.h" />
     <ClInclude Include="src\Raytracing\Lights.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
+    <ClInclude Include="src\Raytracing\ONB.h" />
     <ClInclude Include="src\Raytracing\Primitives\Box.h" />
     <ClInclude Include="src\Raytracing\Primitives\BVH.h" />
     <ClInclude Include="src\Raytracing\Primitives\FlatBVH.h" />
@@ -291,6 +297,11 @@
     <ClInclude Include="src\Raytracing\Textures\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Framebuffer.h" />
     <ClInclude Include="src\Rendering\Image.h" />
+    <ClInclude Include="src\Rendering\Samplers\CMJSampler.h" />
+    <ClInclude Include="src\Rendering\Samplers\JitteredSampler.h" />
+    <ClInclude Include="src\Rendering\Samplers\RandomSampler.h" />
+    <ClInclude Include="src\Rendering\Samplers\RegularSampler.h" />
+    <ClInclude Include="src\Rendering\Samplers\Sampler.h" />
     <ClInclude Include="src\Rendering\Text.h" />
     <ClInclude Include="src\Rendering\ToneMapper.h" />
     <ClInclude Include="src\Runners\ConsoleRunner.h" />
@@ -308,7 +319,6 @@
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\PlyReader.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
-    <ClInclude Include="src\Utils\Sampler.h" />
     <ClInclude Include="src\Utils\Serialization.h" />
     <ClInclude Include="src\Utils\Settings.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />

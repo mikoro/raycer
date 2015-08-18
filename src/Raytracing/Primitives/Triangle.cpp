@@ -72,6 +72,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = interpolatedNormal;
 	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
+	intersection.onb = ONB::fromNormal(intersection.normal);
 
 	return true;
 }

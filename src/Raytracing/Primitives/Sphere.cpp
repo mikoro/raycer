@@ -66,6 +66,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 
 	intersection.position = ip;
 	intersection.normal = normal;
+	intersection.onb = ONB::fromNormal(intersection.normal);
 
 	// spherical texture coordinate calculation
 	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);

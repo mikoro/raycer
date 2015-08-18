@@ -14,6 +14,8 @@ Scene Scene::createTestScene10()
 
 	scene.rootBVH.enabled = false;
 
+	scene.raytracing.timeSamples = 4;
+
 	scene.fog.enabled = true;
 	scene.fog.distance = 20.0;
 	scene.fog.steepness = 2.0;
@@ -23,8 +25,7 @@ Scene Scene::createTestScene10()
 
 	scene.camera.position = Vector3(0.0, 7.0, 5.0);
 	scene.camera.orientation = EulerAngle(-40.0, 0.0, 0.0);
-	scene.camera.timeSamples = 4;
-
+	
 	// GROUND //
 
 	ColorTexture groundTexture;

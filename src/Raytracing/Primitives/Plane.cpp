@@ -52,6 +52,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 
 	intersection.position = ip;
 	intersection.normal = normal;
+	intersection.onb = ONB::fromNormal(intersection.normal);
 
 	// texture coordinate calculation
 	double u = uAxis.dot(ip) / material->texcoordScale.x;

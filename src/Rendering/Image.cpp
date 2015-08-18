@@ -200,6 +200,8 @@ void Image::setSize(int length_)
 
 void Image::setSize(int width_, int height_)
 {
+	assert(width_ >= 0 && height_ >= 0);
+
 	width = width_;
 	height = height_;
 	length = width * height;
@@ -224,14 +226,14 @@ void Image::setSize(int width_, int height_)
 
 void Image::setPixel(int x, int y, const Color& color)
 {
-	assert(x < width && y < height);
+	assert(x >= 0 && x < width && y >= 0 && y < height);
 
 	pixelData[y * width + x] = color;
 }
 
 void Image::setPixel(int index, const Color& color)
 {
-	assert(index < length);
+	assert(index >= 0 && index < length);
 
 	pixelData[index] = color;
 }

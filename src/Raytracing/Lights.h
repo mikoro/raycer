@@ -7,6 +7,7 @@
 
 #include "Math/Vector3.h"
 #include "Math/Color.h"
+#include "Rendering/Samplers/Sampler.h"
 
 namespace Raycer
 {
@@ -18,8 +19,9 @@ namespace Raycer
 
 	struct AmbientLight : public Light
 	{
-		bool ambientOcclusion = false;
-		double maxOcclusionDistance = 10.0;
+		bool enableOcclusion = false;
+		double maxDistance = 10.0;
+		SamplerType samplerType = SamplerType::CMJ;
 		int samples = 3;
 		double distribution = 1.0;
 	};

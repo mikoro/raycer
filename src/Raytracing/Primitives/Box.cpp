@@ -90,6 +90,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	intersection.primitive = this;
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = isInside ? maxNormal : -minNormal;
+	intersection.onb = ONB::fromNormal(intersection.normal);
 	
 	// TODO: add texcoord mapping
 

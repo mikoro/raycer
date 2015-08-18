@@ -13,7 +13,7 @@ Scene Scene::createTestScene5()
 	Scene scene;
 
 	scene.rootBVH.enabled = true;
-	scene.misc.backgroundColor = Color::WHITE;
+	scene.raytracing.backgroundColor = Color::WHITE;
 	scene.raytracing.maxIterations = 16;
 
 	// CAMERA //

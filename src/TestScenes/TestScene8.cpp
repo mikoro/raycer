@@ -12,8 +12,9 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.misc.backgroundColor = Color::WHITE;
+	scene.raytracing.backgroundColor = Color::WHITE;
 	scene.raytracing.maxIterations = 4;
+	scene.raytracing.dofSamples = 0;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;
@@ -23,7 +24,6 @@ Scene Scene::createTestScene8()
 
 	scene.camera.position = Vector3(0.0, 8.0, -2.0);
 	scene.camera.orientation = EulerAngle(-20.0, 180.0, 0.0);
-	scene.camera.dofSamples = 0;
 	scene.camera.apertureSize = 0.2;
 	scene.camera.focalLenght = 30.0;
 	

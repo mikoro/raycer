@@ -10,11 +10,12 @@ Scene Scene::createTestScene7()
 {
 	Scene scene;
 
+	scene.raytracing.dofSamples = 3;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 0.0, 7.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-	scene.camera.dofSamples = 3;
 	scene.camera.apertureSize = 0.5;
 	scene.camera.focalLenght = 30.0;
 	

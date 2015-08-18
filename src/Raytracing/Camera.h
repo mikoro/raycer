@@ -35,8 +35,6 @@ namespace Raycer
 		double orthoSize = 10.0;
 		double fishEyeAngle = 180.0;
 
-		int dofSamples = 0;
-		int timeSamples = 0;
 		double apertureSize = 0.1;
 		double focalLenght = 10.0;
 
