@@ -9,7 +9,7 @@ TARGET = raycer
 
 # linux
 ifneq "$(findstring linux,$(UNAME))" ""
-	LDFLAGS += -Lplatform/linux/lib -lstdc++ -ldl -lm -lpthread -lglfw -lGL -lOpenCL -lfreetype-gl -lfreetype -lboost_system -lXrandr -lXi -lXcursor -lXinerama
+	LDFLAGS += -Lplatform/linux/lib -lstdc++ -ldl -lm -lpthread -lglfw -lGL -lOpenCL -lfreetype-gl -lfreetype -lboost_system -lboost_filesystem -lXrandr -lXi -lXcursor -lXinerama
 endif
 
 # mac
