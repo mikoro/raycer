@@ -28,6 +28,7 @@
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Rendering/Samplers/Sampler.h"
+#include "Rendering/Filters/Filter.h"
 #include "Math/Color.h"
 
 namespace Raycer
@@ -83,12 +84,13 @@ namespace Raycer
 			int maxIterations = 3;
 			double rayStartOffset = 0.000001;
 			Color backgroundColor = Color::BLACK;
-			SamplerType multiSamplerType = SamplerType::CMJ;
 			int multiSamples = 0;
-			SamplerType dofSamplerType = SamplerType::CMJ;
+			SamplerType multiSamplerType = SamplerType::CMJ;
+			FilterType multiSamplerFilterType = FilterType::BOX;
 			int dofSamples = 0;
-			SamplerType timeSamplerType = SamplerType::JITTERED;
+			SamplerType dofSamplerType = SamplerType::CMJ;
 			int timeSamples = 0;
+			SamplerType timeSamplerType = SamplerType::JITTERED;
 		} raytracing;
 
 		struct Fog

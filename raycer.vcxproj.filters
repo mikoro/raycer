@@ -319,6 +319,30 @@
     <ClCompile Include="src\Raytracing\ONB.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\FilterTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\TentFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\BellFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\CubicBSplineFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\GaussianFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\LanczosSincFilter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\Filter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -540,6 +564,27 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Samplers\CMJSampler.h">
       <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\Filter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\BoxFilter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\TentFilter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\BellFilter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\CubicBSplineFilter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\GaussianFilter.h">
+      <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Filters\LanczosSincFilter.h">
+      <Filter>Rendering\Filters</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

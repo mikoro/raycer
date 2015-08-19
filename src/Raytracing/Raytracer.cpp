@@ -39,41 +39,11 @@ Raytracer::Raytracer()
 
 void Raytracer::initialize(const Scene& scene)
 {
-	switch (scene.raytracing.multiSamplerType)
-	{
-		case SamplerType::RANDOM: multiSampler = new RandomSampler(); break;
-		case SamplerType::REGULAR: multiSampler = new RegularSampler(); break;
-		case SamplerType::JITTERED: multiSampler = new JitteredSampler(); break;
-		case SamplerType::CMJ: multiSampler = new CMJSampler(); break;
-		default: throw std::runtime_error("Invalid multi sampler type");
-	}
-
-	switch (scene.raytracing.dofSamplerType)
-	{
-		case SamplerType::RANDOM: dofSampler = new RandomSampler(); break;
-		case SamplerType::REGULAR: dofSampler = new RegularSampler(); break;
-		case SamplerType::JITTERED: dofSampler = new JitteredSampler(); break;
-		case SamplerType::CMJ: dofSampler = new CMJSampler(); break;
-		default: throw std::runtime_error("Invalid dof sampler type");
-	}
-
-	switch (scene.raytracing.timeSamplerType)
-	{
-		case SamplerType::RANDOM: timeSampler = new RandomSampler(); break;
-		case SamplerType::REGULAR: timeSampler = new RegularSampler(); break;
-		case SamplerType::JITTERED: timeSampler = new JitteredSampler(); break;
-		case SamplerType::CMJ: timeSampler = new CMJSampler(); break;
-		default: throw std::runtime_error("Invalid time sampler type");
-	}
-
-	switch (scene.lights.ambientLight.samplerType)
-	{
-		case SamplerType::RANDOM: ambientOcclusionSampler = new RandomSampler(); break;
-		case SamplerType::REGULAR: ambientOcclusionSampler = new RegularSampler(); break;
-		case SamplerType::JITTERED: ambientOcclusionSampler = new JitteredSampler(); break;
-		case SamplerType::CMJ: ambientOcclusionSampler = new CMJSampler(); break;
-		default: throw std::runtime_error("Invalid ambient occlusion sampler type");
-	}
+	multiSampler = Sampler::getSampler(scene.raytracing.multiSamplerType);
+	dofSampler = Sampler::getSampler(scene.raytracing.dofSamplerType);
+	timeSampler = Sampler::getSampler(scene.raytracing.timeSamplerType);
+	ambientOcclusionSampler = Sampler::getSampler(scene.lights.ambientLight.samplerType);
+	multiSamplerFilter = Filter::getFilter(scene.raytracing.multiSamplerFilterType);
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -107,25 +77,25 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (scene.raytracing.multiSamples == 0)
-	{
-		Vector2 sampledPixelCoordinate = pixelCoordinate + Vector2(0.5, 0.5);
-		return generateDofSamples(scene, sampledPixelCoordinate, interrupted);
-	}
+		return generateDofSamples(scene, pixelCoordinate + Vector2(0.5, 0.5), interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
 	int n = scene.raytracing.multiSamples;
+	double filterWeightSum = 0.0;
 
 	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 sampledPixelCoordinate = pixelCoordinate + multiSampler->getSample2D(x, y, n, n, permutation);
-			sampledPixelColor += generateDofSamples(scene, sampledPixelCoordinate, interrupted);
+			Vector2 offset = multiSampler->getSample2D(x, y, n, n, permutation);
+			double filterWeight = multiSamplerFilter->getWeight((offset - Vector2(0.5, 0.5)) * 2.0);
+			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + offset, interrupted) * filterWeight;
+			filterWeightSum += filterWeight;
 		}
 	}
 
-	return sampledPixelColor / (double)(n * n);
+	return sampledPixelColor / filterWeightSum;
 }
 
 Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)

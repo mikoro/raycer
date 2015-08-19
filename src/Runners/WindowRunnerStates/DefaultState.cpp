@@ -29,6 +29,7 @@ void DefaultState::initialize()
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	Raytracer& raytracer = App::getRaytracer();
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	if (settings.scene.enableTestScene)
@@ -38,6 +39,7 @@ void DefaultState::initialize()
 	
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getImageWidth(), framebuffer.getImageHeight());
+	raytracer.initialize(scene);
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();

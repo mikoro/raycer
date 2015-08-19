@@ -24,5 +24,7 @@ namespace Raycer
 
 		static Vector2 mapToDisk(const Vector2& point);
 		static Vector3 mapToHemisphere(const ONB& onb, double distribution, const Vector2& point);
+
+		static Sampler* getSampler(SamplerType type);
 	};
 }

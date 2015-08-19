@@ -2,6 +2,10 @@
 // License: MIT, see the LICENSE file.
 
 #include "Rendering/Samplers/Sampler.h"
+#include "Rendering/Samplers/RandomSampler.h"
+#include "Rendering/Samplers/RegularSampler.h"
+#include "Rendering/Samplers/JitteredSampler.h"
+#include "Rendering/Samplers/CMJSampler.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Raytracing/ONB.h"
@@ -13,11 +17,11 @@ Vector2 Sampler::mapToDisk(const Vector2& point)
 	Vector2 result;
 
 	// square to disk polar mapping
-	double r = sqrt(point.x);
-	double phi = 2.0 * M_PI * point.y;
+	double theta = 2.0 * M_PI * point.x;
+	double r = sqrt(point.y);
 
-	result.x = r * cos(phi);
-	result.y = r * sin(phi);
+	result.x = r * cos(theta);
+	result.y = r * sin(theta);
 
 	return result;
 }
@@ -36,4 +40,16 @@ Vector3 Sampler::mapToHemisphere(const ONB& onb, double distribution, const Vect
 	double w = cos_theta;
 
 	return u * onb.u + v * onb.v + w * onb.w;
+}
+
+Sampler* Sampler::getSampler(SamplerType type)
+{
+	switch (type)
+	{
+		case SamplerType::RANDOM: return new RandomSampler(); break;
+		case SamplerType::REGULAR: return new RegularSampler(); break;
+		case SamplerType::JITTERED: return new JitteredSampler(); break;
+		case SamplerType::CMJ: return new CMJSampler(); break;
+		default: throw std::runtime_error("Invalid sampler type");
+	}
 }

@@ -17,7 +17,8 @@ namespace Raycer
 	struct Light;
 	struct Material;
 	class Sampler;
-	
+	class Filter;
+
 	class Raytracer
 	{
 	public:
@@ -44,6 +45,8 @@ namespace Raycer
 		Sampler* dofSampler = nullptr;
 		Sampler* timeSampler = nullptr;
 		Sampler* ambientOcclusionSampler = nullptr;
+
+		Filter* multiSamplerFilter = nullptr;
 
 		std::mt19937 generator;
 		std::uniform_int_distribution<int> randomDist;

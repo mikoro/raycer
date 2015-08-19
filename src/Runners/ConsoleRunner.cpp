@@ -90,6 +90,8 @@ void ConsoleRunner::run(RaytracerState& state)
 
 	interrupted = false;
 
+	raytracer.initialize(*state.scene);
+
 	if (settings.openCL.enabled && !openCLInitialized)
 	{
 		clManager.initialize();
