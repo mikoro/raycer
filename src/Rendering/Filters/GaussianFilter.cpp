@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Math/Vector2.h"

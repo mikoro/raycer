@@ -159,7 +159,7 @@ namespace Raycer
 			cereal::make_nvp("position", b.position),
 			cereal::make_nvp("direction", b.direction),
 			cereal::make_nvp("distance", b.distance),
-			cereal::make_nvp("distanceAttenuation", b.distanceAttenuation),
+			cereal::make_nvp("attenuation", b.attenuation),
 			cereal::make_nvp("sideAttenuation", b.sideAttenuation),
 			cereal::make_nvp("angle", b.angle));
 	}

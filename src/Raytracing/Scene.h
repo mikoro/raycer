@@ -76,6 +76,7 @@ namespace Raycer
 		static Scene createTestScene13();
 		static Scene createTestScene14();
 		static Scene createTestScene15();
+		static Scene createTestScene16();
 
 		Camera camera;
 
@@ -85,11 +86,11 @@ namespace Raycer
 			double rayStartOffset = 0.000001;
 			Color backgroundColor = Color::BLACK;
 			int multiSamples = 0;
+			int dofSamples = 0;
+			int timeSamples = 0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::BOX;
-			int dofSamples = 0;
 			SamplerType dofSamplerType = SamplerType::CMJ;
-			int timeSamples = 0;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 		} raytracing;
 

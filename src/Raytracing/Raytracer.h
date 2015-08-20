@@ -4,7 +4,11 @@
 #pragma once
 
 #include <atomic>
+#include <map>
 #include <random>
+
+#include "Rendering/Samplers/Sampler.h"
+#include "Rendering/Filters/Filter.h"
 
 namespace Raycer
 {
@@ -14,10 +18,10 @@ namespace Raycer
 	struct RaytracerState;
 	class Ray;
 	struct Intersection;
-	struct Light;
 	struct Material;
-	class Sampler;
-	class Filter;
+	struct Light;
+	struct DirectionalLight;
+	struct PointLight;
 
 	class Raytracer
 	{
@@ -25,7 +29,6 @@ namespace Raycer
 
 		Raytracer();
 
-		void initialize(const Scene& scene);
 		void run(RaytracerState& state, std::atomic<bool>& interrupted);
 
 	private:
@@ -36,17 +39,19 @@ namespace Raycer
 		Color generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
+
 		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
-		double calculateAmbientOcclusion(const Scene& scene, const Intersection& intersection);
-		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusion);
+
+		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount);
+		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Material* material);
 		Color calculateFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
 
-		Sampler* multiSampler = nullptr;
-		Sampler* dofSampler = nullptr;
-		Sampler* timeSampler = nullptr;
-		Sampler* ambientOcclusionSampler = nullptr;
+		double calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection);
+		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light);
+		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light);
 
-		Filter* multiSamplerFilter = nullptr;
+		std::map<SamplerType, Sampler*> samplers;
+		std::map<FilterType, Filter*> filters;
 
 		std::mt19937 generator;
 		std::uniform_int_distribution<int> randomDist;

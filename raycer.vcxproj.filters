@@ -343,6 +343,9 @@
     <ClCompile Include="src\Rendering\Filters\Filter.cpp">
       <Filter>Rendering\Filters</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene16.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

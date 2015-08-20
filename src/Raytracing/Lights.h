@@ -36,14 +36,15 @@ namespace Raycer
 		Vector3 position;
 		double distance = 1000.0;
 		double attenuation = 1.0;
+		bool softShadows = false;
+		double radius = 1.0;
+		SamplerType samplerType = SamplerType::CMJ;
+		int samples = 3;
 	};
 
-	struct SpotLight : public Light
+	struct SpotLight : public PointLight
 	{
-		Vector3 position;
 		Vector3 direction;
-		double distance = 1000.0;
-		double distanceAttenuation = 1.0;
 		double sideAttenuation = 1.0;
 		double angle = 45.0;
 	};

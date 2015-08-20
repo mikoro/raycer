@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 
 #include "Rendering/Filters/CubicBSplineFilter.h"
 #include "Math/Vector2.h"

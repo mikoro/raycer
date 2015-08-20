@@ -1,11 +1,10 @@
 tracer
- - marching + displacement map
+ - raymarching + height map + volumetric fog
  - triangle edge intersection glitch
 
 lighting
- - bump mapping
- - area lights / soft shadows
- - global illumination
+ - tangent space for bump mapping
+ - path tracing
 
 primitives
  - cylinder
