@@ -8,7 +8,7 @@ using namespace Raycer;
 
 double BoxFilter::getWeight(double x)
 {
-	if (abs(x) <= 1.0)
+	if (std::abs(x) <= 1.0)
 		return 1.0;
 	else
 		return 0.0;
