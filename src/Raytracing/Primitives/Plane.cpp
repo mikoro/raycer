@@ -31,7 +31,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 	double denominator = ray.direction.dot(normal);
 
 	// ray and plane are parallel -> no intersection
-	if (fabs(denominator) < std::numeric_limits<double>::epsilon())
+	if (std::abs(denominator) < std::numeric_limits<double>::epsilon())
 		return false;
 
 	double t = (position - ray.origin).dot(normal) / denominator;
@@ -57,8 +57,8 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 	// texture coordinate calculation
 	double u = uAxis.dot(ip) / material->texcoordScale.x;
 	double v = vAxis.dot(ip) / material->texcoordScale.y;
-	intersection.texcoord.x = fabs(u - floor(u));
-	intersection.texcoord.y = fabs(v - floor(v));
+	intersection.texcoord.x = std::abs(u - floor(u));
+	intersection.texcoord.y = std::abs(v - floor(v));
 
 	return true;
 }

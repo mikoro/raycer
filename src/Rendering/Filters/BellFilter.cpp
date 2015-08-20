@@ -10,7 +10,7 @@ using namespace Raycer;
 
 double BellFilter::getWeight(double x)
 {
-	x = abs(x) * 1.5;
+	x = std::abs(x) * 1.5;
 
 	if (x < 0.5)
 		return 0.75 - (x * x);

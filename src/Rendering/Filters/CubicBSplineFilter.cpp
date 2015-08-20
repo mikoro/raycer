@@ -16,7 +16,7 @@ CubicBSplineFilter::CubicBSplineFilter(double B_, double C_)
 
 double CubicBSplineFilter::getWeight(double x)
 {
-	x = abs(x) * 2.0;
+	x = std::abs(x) * 2.0;
 
 	if (x < 1.0)
 		return ((12.0 - 9.0 * B - 6.0 * C) * (x * x * x) + (-18.0 + 12.0 * B + 6.0 * C) * (x * x) + (6.0 - 2.0 * B)) * (1.0 / 6.0);

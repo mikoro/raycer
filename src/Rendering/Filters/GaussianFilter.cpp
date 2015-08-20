@@ -15,7 +15,7 @@ GaussianFilter::GaussianFilter(double alpha_)
 
 double GaussianFilter::getWeight(double x)
 {
-	x = abs(x);
+	x = std::abs(x);
 
 	return std::max(0.0, exp(-alpha * x * x) - exp(-alpha));
 }

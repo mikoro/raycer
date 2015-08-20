@@ -84,7 +84,7 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 		d2 = distances[1];
 
 	double d = getCombinedValue(combineType, d1, d2);
-	return fabs(d);
+	return std::abs(d);
 }
 
 double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, int density, double x, double y) const
@@ -137,7 +137,7 @@ double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombin
 		d2 = distances[1];
 
 	double d = getCombinedValue(combineType, d1, d2) / 2.7;
-	return fabs(d);
+	return std::abs(d);
 }
 
 void CellNoise::setVoronoiColors(const std::vector<Color>& colors)

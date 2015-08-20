@@ -23,7 +23,7 @@ LanczosSincFilter::LanczosSincFilter(double size_)
 
 double LanczosSincFilter::getWeight(double x)
 {
-	x = abs(x) * size;
+	x = std::abs(x) * size;
 
 	if (x == 0.0)
 		return 1.0;

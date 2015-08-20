@@ -10,7 +10,7 @@ using namespace Raycer;
 
 double TentFilter::getWeight(double x)
 {
-	return std::max(0.0, 1.0 - abs(x));
+	return std::max(0.0, 1.0 - std::abs(x));
 }
 
 double TentFilter::getWeight(double x, double y)

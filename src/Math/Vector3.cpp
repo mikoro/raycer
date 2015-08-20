@@ -234,5 +234,5 @@ Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, double t)
 
 Vector3 Vector3::abs(const Vector3& v)
 {
-	return Vector3(fabs(v.x), fabs(v.y), fabs(v.z));
+	return Vector3(std::abs(v.x), std::abs(v.y), std::abs(v.z));
 }

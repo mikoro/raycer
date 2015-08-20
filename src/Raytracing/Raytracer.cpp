@@ -244,7 +244,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	{
 		double rf0 = (n2 - n1) / (n2 + n1);
 		rf0 = rf0 * rf0;
-		rf = rf0 + (1.0 - rf0) * pow(1.0 - fabs(c1), 5.0);
+		rf = rf0 + (1.0 - rf0) * pow(1.0 - std::abs(c1), 5.0);
 		tf = 1.0 - rf;
 	}
 
@@ -263,7 +263,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		// no total internal reflection
 		if (c2 > 0.0)
 		{
-			Vector3 T = ray.direction * n + (fabs(c1) * n - sqrt(c2)) * intersection.normal;
+			Vector3 T = ray.direction * n + (std::abs(c1) * n - sqrt(c2)) * intersection.normal;
 			T.normalize();
 
 			Ray refractedRay;

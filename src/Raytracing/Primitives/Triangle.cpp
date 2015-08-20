@@ -35,7 +35,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 	double determinant = v0v1.dot(pvec);
 
 	// ray and triangle are parallel -> no intersection
-	if (fabs(determinant) < std::numeric_limits<double>::epsilon())
+	if (std::abs(determinant) < std::numeric_limits<double>::epsilon())
 		return false;
 
 	double invDeterminant = 1.0 / determinant;
@@ -89,7 +89,7 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 	double denominator = ray.direction.dot(normal);
 
 	// ray and triangle are parallel -> no intersection
-	if (fabs(denominator) < std::numeric_limits<double>::epsilon())
+	if (std::abs(denominator) < std::numeric_limits<double>::epsilon())
 		return false;
 
 	double t = (vertices[0] - ray.origin).dot(normal) / denominator;

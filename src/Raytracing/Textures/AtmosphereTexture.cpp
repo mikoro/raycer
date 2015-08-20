@@ -32,7 +32,7 @@ Color AtmosphereTexture::getColor(const Vector2& texcoord, const Vector3& positi
 	if (hasClouds)
 	{
 		// fade out clouds near horizon
-		double h = fabs(0.5 - texcoord.y) * 8.0;
+		double h = std::abs(0.5 - texcoord.y) * 8.0;
 		h = std::min(1.0, h);
 
 		double n = noise.getFbmNoise(8, 4.0, 0.25, position.x / 50.0, position.y / 50.0, position.z / 50.0);

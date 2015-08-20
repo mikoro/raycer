@@ -72,13 +72,13 @@ void EulerAngle::clampPitch()
 
 void EulerAngle::normalize()
 {
-	while (fabs(pitch) > 180.0)
+	while (std::abs(pitch) > 180.0)
 		pitch += (pitch > 0.0) ? -360.0 : 360.0;
 
-	while (fabs(yaw) > 180.0)
+	while (std::abs(yaw) > 180.0)
 		yaw += (yaw > 0.0) ? -360.0 : 360.0;
 
-	while (fabs(roll) > 180.0)
+	while (std::abs(roll) > 180.0)
 		roll += (roll > 0.0) ? -360.0 : 360.0;
 }
 

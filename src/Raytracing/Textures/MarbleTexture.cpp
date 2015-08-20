@@ -19,7 +19,7 @@ Color MarbleTexture::getColor(const Vector2& texcoord, const Vector3& position) 
 {
 	(void)texcoord;
 
-	double n1 = fabs(cos(position.x * density + perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * swirliness));
+	double n1 = std::abs(cos(position.x * density + perlinNoise.getFbmNoise(8, 2.0, 0.5, position.x * 2.0, position.y * 2.0, position.z * 2.0) * swirliness));
 	n1 = (1.0 - n1) / transparency;
 
 	Color streakColor1(streakColor);
