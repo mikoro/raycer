@@ -12,6 +12,10 @@ Scene Scene::createTestScene9()
 
 	scene.rootBVH.enabled = false;
 
+	scene.raytracing.multiSamplerType = SamplerType::CMJ;
+	scene.raytracing.multiSamplerFilterType = FilterType::LANCZOS_SINC;
+	scene.raytracing.multiSamples = 6;
+
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;
 	scene.fog.steepness = 2.0;

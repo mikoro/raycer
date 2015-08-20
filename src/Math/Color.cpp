@@ -123,7 +123,7 @@ Color& Color::operator/=(double s)
 
 uint32_t Color::getRgbaValue() const
 {
-	assert(r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
+	assert(isClamped());
 
 	int r_ = (int)(r * 255.0 + 0.5);
 	int g_ = (int)(g * 255.0 + 0.5);
@@ -135,7 +135,7 @@ uint32_t Color::getRgbaValue() const
 
 uint32_t Color::getAbgrValue() const
 {
-	assert(r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
+	assert(isClamped());
 
 	int r_ = (int)(r * 255.0 + 0.5);
 	int g_ = (int)(g * 255.0 + 0.5);
@@ -153,6 +153,11 @@ bool Color::isTransparent() const
 bool Color::isZero() const
 {
 	return (r == 0.0 && g == 0.0 && b == 0.0); // ignore alpha
+}
+
+bool Color::isClamped() const
+{
+	return r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0;
 }
 
 void Color::clamp()

@@ -36,6 +36,7 @@ namespace Raycer
 		uint32_t getAbgrValue() const;
 		bool isTransparent() const;
 		bool isZero() const;
+		bool isClamped() const;
 		void clamp();
 		Color clamped() const;
 
