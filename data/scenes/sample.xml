@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cereal>
 	<scene>
+		<raytracer>
+			<maxIterations>3</maxIterations>
+			<rayStartOffset>9.9999999999999995e-07</rayStartOffset>
+			<backgroundColor>
+				<r>0</r>
+				<g>0</g>
+				<b>0</b>
+				<a>1</a>
+			</backgroundColor>
+			<offLensColor>
+				<r>0</r>
+				<g>0</g>
+				<b>0</b>
+				<a>1</a>
+			</offLensColor>
+			<multiSamples>0</multiSamples>
+			<dofSamples>0</dofSamples>
+			<timeSamples>0</timeSamples>
+			<multiSamplerType>3</multiSamplerType>
+			<multiSamplerFilterType>3</multiSamplerFilterType>
+			<dofSamplerType>3</dofSamplerType>
+			<timeSamplerType>2</timeSamplerType>
+		</raytracer>
 		<camera>
 			<position>
 				<x>0</x>
@@ -8,27 +31,17 @@
 				<z>7</z>
 			</position>
 			<orientation>
-				<yaw>0</yaw>
 				<pitch>-30</pitch>
+				<yaw>0</yaw>
 				<roll>0</roll>
 			</orientation>
 			<projectionType>0</projectionType>
 			<fov>75</fov>
 			<orthoSize>10</orthoSize>
 			<fishEyeAngle>180</fishEyeAngle>
-			<dofSamples>0</dofSamples>
-			<timeSamples>0</timeSamples>
 			<apertureSize>0.10000000000000001</apertureSize>
 			<focalLenght>10</focalLenght>
 		</camera>
-		<misc>
-			<backgroundColor>
-				<r>0</r>
-				<g>0</g>
-				<b>0</b>
-				<a>1</a>
-			</backgroundColor>
-		</misc>
 		<fog>
 			<enabled>false</enabled>
 			<color>
@@ -43,20 +56,11 @@
 			<height>100</height>
 			<heightSteepness>1</heightSteepness>
 		</fog>
-		<raytracing>
-			<maxIterations>3</maxIterations>
-			<startOffset>9.9999999999999995e-07</startOffset>
-		</raytracing>
-		<multisampling>
-			<enabled>false</enabled>
-			<type>0</type>
-			<samples>3</samples>
-		</multisampling>
-		<toneMapping>
+		<toneMapper>
 			<enabled>true</enabled>
 			<type>0</type>
 			<gamma>0.45454545454545453</gamma>
-		</toneMapping>
+		</toneMapper>
 		<rootBVH>
 			<enabled>true</enabled>
 			<buildInfo>
@@ -67,6 +71,62 @@
 				<axisSplit>1</axisSplit>
 			</buildInfo>
 		</rootBVH>
+		<boundingBoxes>
+			<enabled>false</enabled>
+			<texture>
+				<id>0</id>
+				<intensity>1</intensity>
+				<color>
+					<r>0.80000000000000004</r>
+					<g>0.80000000000000004</g>
+					<b>1</b>
+					<a>1</a>
+				</color>
+			</texture>
+			<material>
+				<id>0</id>
+				<colorTextureId>0</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>0.10000000000000001</r>
+					<g>0.10000000000000001</g>
+					<b>0.10000000000000001</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
+				<skipLighting>false</skipLighting>
+				<nonShadowing>true</nonShadowing>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>1</rayTransmittance>
+				<refractiveIndex>1</refractiveIndex>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
+				<attenuation>1</attenuation>
+				<attenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</attenuationColor>
+			</material>
+		</boundingBoxes>
 		<textures>
 			<colorTextures size="dynamic">
 				<value0>
@@ -124,18 +184,39 @@
 		<materials size="dynamic">
 			<value0>
 				<id>1</id>
-				<textureId>1</textureId>
+				<colorTextureId>1</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<ambientness>1</ambientness>
-				<diffuseness>1</diffuseness>
-				<specularity>0</specularity>
-				<shininess>0</shininess>
-				<fresnel>false</fresnel>
-				<reflectance>0</reflectance>
-				<transmittance>0</transmittance>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
 				<refractiveIndex>1</refractiveIndex>
-				<attenuate>false</attenuate>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
 				<attenuation>1</attenuation>
 				<attenuationColor>
 					<r>0</r>
@@ -146,18 +227,39 @@
 			</value0>
 			<value1>
 				<id>2</id>
-				<textureId>2</textureId>
+				<colorTextureId>2</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<ambientness>1</ambientness>
-				<diffuseness>1</diffuseness>
-				<specularity>0</specularity>
-				<shininess>0</shininess>
-				<fresnel>false</fresnel>
-				<reflectance>0</reflectance>
-				<transmittance>0</transmittance>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
 				<refractiveIndex>1</refractiveIndex>
-				<attenuate>false</attenuate>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
 				<attenuation>1</attenuation>
 				<attenuationColor>
 					<r>0</r>
@@ -168,18 +270,39 @@
 			</value1>
 			<value2>
 				<id>3</id>
-				<textureId>3</textureId>
+				<colorTextureId>3</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<ambientness>1</ambientness>
-				<diffuseness>1</diffuseness>
-				<specularity>0</specularity>
-				<shininess>0</shininess>
-				<fresnel>false</fresnel>
-				<reflectance>0</reflectance>
-				<transmittance>0</transmittance>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
 				<refractiveIndex>1</refractiveIndex>
-				<attenuate>false</attenuate>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
 				<attenuation>1</attenuation>
 				<attenuationColor>
 					<r>0</r>
@@ -190,18 +313,39 @@
 			</value2>
 			<value3>
 				<id>4</id>
-				<textureId>4</textureId>
+				<colorTextureId>4</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<ambientness>1</ambientness>
-				<diffuseness>1</diffuseness>
-				<specularity>0</specularity>
-				<shininess>0</shininess>
-				<fresnel>false</fresnel>
-				<reflectance>0</reflectance>
-				<transmittance>0</transmittance>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
 				<refractiveIndex>1</refractiveIndex>
-				<attenuate>false</attenuate>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
 				<attenuation>1</attenuation>
 				<attenuationColor>
 					<r>0</r>
@@ -220,8 +364,10 @@
 					<a>1</a>
 				</color>
 				<intensity>0.01</intensity>
-				<ambientOcclusion>false</ambientOcclusion>
-				<samples>10</samples>
+				<enableOcclusion>false</enableOcclusion>
+				<maxDistance>10</maxDistance>
+				<samplerType>3</samplerType>
+				<samples>3</samples>
 				<distribution>1</distribution>
 			</ambientLight>
 			<directionalLights size="dynamic"/>
@@ -241,6 +387,10 @@
 					</position>
 					<distance>20</distance>
 					<attenuation>1</attenuation>
+					<softShadows>false</softShadows>
+					<radius>1</radius>
+					<samplerType>3</samplerType>
+					<samples>3</samples>
 				</value0>
 			</pointLights>
 			<spotLights size="dynamic"/>
@@ -259,10 +409,6 @@
 						<z>0</z>
 					</normal>
 					<materialId>1</materialId>
-					<texcoordScale>
-						<x>1</x>
-						<y>1</y>
-					</texcoordScale>
 				</value0>
 			</planes>
 			<spheres size="dynamic">
@@ -272,31 +418,28 @@
 						<y>1</y>
 						<z>0</z>
 					</position>
+					<displacement>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</displacement>
 					<radius>1</radius>
 					<materialId>2</materialId>
-					<texcoordScale>
-						<x>1</x>
-						<y>1</y>
-					</texcoordScale>
 				</value0>
 			</spheres>
 			<boxes size="dynamic">
 				<value0>
-					<min>
-						<x>2</x>
-						<y>0</y>
-						<z>-1</z>
-					</min>
-					<max>
-						<x>4</x>
-						<y>2</y>
-						<z>1</z>
-					</max>
-					<materialId>3</materialId>
-					<texcoordScale>
-						<x>1</x>
+					<position>
+						<x>3</x>
 						<y>1</y>
-					</texcoordScale>
+						<z>0</z>
+					</position>
+					<extent>
+						<x>2</x>
+						<y>2</y>
+						<z>2</z>
+					</extent>
+					<materialId>3</materialId>
 				</value0>
 			</boxes>
 			<triangles size="dynamic">
@@ -350,14 +493,11 @@
 						</value2>
 					</texcoords>
 					<materialId>4</materialId>
-					<texcoordScale>
-						<x>1</x>
-						<y>1</y>
-					</texcoordScale>
 				</value0>
 			</triangles>
 			<meshes size="dynamic"/>
 		</primitives>
+		<objScenes size="dynamic"/>
 	</scene>
 </cereal>
 

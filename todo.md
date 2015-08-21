@@ -1,13 +1,13 @@
 tracer
  - raymarching + height map + volumetric fog
  - triangle edge intersection glitch
+ - opencl tracer
 
 lighting
  - tangent space for bump mapping
  - path tracing
 
 primitives
- - aabb transformation when source primitive is already translated
  - cylinder
  - torus
  - metaball
