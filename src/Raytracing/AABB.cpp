@@ -135,8 +135,9 @@ AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vec
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
-	Matrix4x4 translation = Matrix4x4::translate(translate);
-	Matrix4x4 transformation = translation * rotation * scaling;
+	Matrix4x4 translation1 = Matrix4x4::translate(-center);
+	Matrix4x4 translation2 = Matrix4x4::translate(center + translate);
+	Matrix4x4 transformation = translation2 * rotation * scaling * translation1;
 
 	for (int i = 0; i < 8; ++i)
 	{

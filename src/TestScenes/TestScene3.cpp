@@ -10,8 +10,9 @@ Scene Scene::createTestScene3()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
-	//scene.boundingBoxes.enabled = true;
+	scene.rootBVH.enabled = false;
+	scene.rootBVH.buildInfo.maxLeafSize = 1;
+	scene.boundingBoxes.enabled = false;
 
 	// CAMERA //
 
@@ -36,7 +37,7 @@ Scene Scene::createTestScene3()
 
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	//scene.primitives.planes.push_back(groundPlane);
+	scene.primitives.planes.push_back(groundPlane);
 
 	// MESH 1 //
 
@@ -75,6 +76,7 @@ Scene Scene::createTestScene3()
 	instance1.materialId = instance1Material.id;
 	instance1.primitive = &scene.primitives.meshes.back();
 	instance1.translate = Vector3(0.0, -100.0, 0.0);
+	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(instance1Texture);
 	scene.materials.push_back(instance1Material);
