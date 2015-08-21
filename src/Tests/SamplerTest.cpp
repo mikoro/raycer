@@ -46,7 +46,7 @@ TEST_CASE("Sampler functionality", "[sampler]")
 
 		for (int x = 0; x < n; ++x)
 		{
-			double sx = sampler.second->getSample1D(x, n, permutation) * size.x;
+			double sx = sampler.second->getSample(x, n, permutation) * size.x;
 			image1.setPixel((int)(sx + 0.5), (int)(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
@@ -54,14 +54,14 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		{
 			for (int x = 0; x < n; ++x)
 			{
-				Vector2 sample = sampler.second->getSample2D(x, y, n, n, permutation) * size;
+				Vector2 sample = sampler.second->getSquareSample(x, y, n, n, permutation) * size;
 				image2.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
-				sample = sampler.second->getSampleDisk(x, y, n, n, permutation);
+				sample = sampler.second->getDiskSample(x, y, n, n, permutation);
 				sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
 				image3.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
 
-				Vector3 hemiSample = sampler.second->getSampleHemisphere(ONB::UP, 1.0, x, y, n, n, permutation);
+				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n, permutation);
 				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);
 			}
 		}

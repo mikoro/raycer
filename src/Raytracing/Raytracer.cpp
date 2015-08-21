@@ -97,7 +97,7 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
+			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
 			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;
@@ -132,14 +132,14 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 jitter = (sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
+			Vector2 jitter = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
 			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter);
 
 			if (primaryRay.isInvalid)
 				continue;
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
-			Vector2 diskCoordinate = sampler->getSampleDisk(x, y, n, n, permutation);
+			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n, permutation);
 
 			Ray sampleRay;
 			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
@@ -167,7 +167,7 @@ Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::at
 	for (int i = 0; i < n; ++i)
 	{
 		intersection = Intersection();
-		ray.time = sampler->getSample1D(i, n);
+		ray.time = sampler->getSample(i, n);
 		sampledPixelColor += raytrace(scene, ray, intersection, 0, interrupted);
 	}
 
@@ -422,7 +422,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector3 sampleDirection = sampler->getSampleHemisphere(intersection.onb, distribution, x, y, n, n, permutation);
+			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
@@ -509,7 +509,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getSampleDisk(x, y, n, n, permutation) * light.radius;
+			Vector2 jitter = sampler->getDiskSample(x, y, n, n, permutation) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

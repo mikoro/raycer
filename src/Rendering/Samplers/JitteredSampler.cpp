@@ -14,7 +14,7 @@ JitteredSampler::JitteredSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double JitteredSampler::getSample1D(int i, int n, int permutation)
+double JitteredSampler::getSample(int i, int n, int permutation)
 {
 	(void)permutation;
 
@@ -22,7 +22,7 @@ double JitteredSampler::getSample1D(int i, int n, int permutation)
 	return x;
 }
 
-Vector2 JitteredSampler::getSample2D(int ix, int iy, int nx, int ny, int permutation)
+Vector2 JitteredSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
 {
 	(void)permutation;
 
@@ -34,12 +34,12 @@ Vector2 JitteredSampler::getSample2D(int ix, int iy, int nx, int ny, int permuta
 	return result;
 }
 
-Vector2 JitteredSampler::getSampleDisk(int ix, int iy, int nx, int ny, int permutation)
+Vector2 JitteredSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToDisk(getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 JitteredSampler::getSampleHemisphere(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 JitteredSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToHemisphere(onb, distribution, getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

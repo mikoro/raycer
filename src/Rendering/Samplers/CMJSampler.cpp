@@ -52,7 +52,7 @@ CMJSampler::CMJSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample1D(int i, int n, int permutation)
+double CMJSampler::getSample(int i, int n, int permutation)
 {
 	(void)i;
 	(void)n;
@@ -61,7 +61,7 @@ double CMJSampler::getSample1D(int i, int n, int permutation)
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSample2D(int ix, int iy, int nx, int ny, int permutation)
+Vector2 CMJSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
 {
 	Vector2 result;
 
@@ -74,12 +74,12 @@ Vector2 CMJSampler::getSample2D(int ix, int iy, int nx, int ny, int permutation)
 	return result;
 }
 
-Vector2 CMJSampler::getSampleDisk(int ix, int iy, int nx, int ny, int permutation)
+Vector2 CMJSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToDisk(getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 CMJSampler::getSampleHemisphere(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 CMJSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToHemisphere(onb, distribution, getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

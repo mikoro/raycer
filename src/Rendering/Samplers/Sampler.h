@@ -17,10 +17,10 @@ namespace Raycer
 
 		virtual ~Sampler() {}
 
-		virtual double getSample1D(int i, int n, int permutation = 0) = 0;
-		virtual Vector2 getSample2D(int ix, int iy, int nx, int ny, int permutation = 0) = 0;
-		virtual Vector2 getSampleDisk(int ix, int iy, int nx, int ny, int permutation = 0) = 0;
-		virtual Vector3 getSampleHemisphere(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0) = 0;
+		virtual double getSample(int i, int n, int permutation = 0) = 0;
+		virtual Vector2 getSquareSample(int ix, int iy, int nx, int ny, int permutation = 0) = 0;
+		virtual Vector2 getDiskSample(int ix, int iy, int nx, int ny, int permutation = 0) = 0;
+		virtual Vector3 getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0) = 0;
 
 		static Vector2 mapToDisk(const Vector2& point);
 		static Vector3 mapToHemisphere(const ONB& onb, double distribution, const Vector2& point);

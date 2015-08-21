@@ -15,10 +15,10 @@ namespace Raycer
 
 		RandomSampler();
 
-		double getSample1D(int i, int n, int permutation = 0);
-		Vector2 getSample2D(int ix, int iy, int nx, int ny, int permutation = 0);
-		Vector2 getSampleDisk(int ix, int iy, int nx, int ny, int permutation = 0);
-		Vector3 getSampleHemisphere(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0);
+		double getSample(int i, int n, int permutation = 0);
+		Vector2 getSquareSample(int ix, int iy, int nx, int ny, int permutation = 0);
+		Vector2 getDiskSample(int ix, int iy, int nx, int ny, int permutation = 0);
+		Vector3 getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0);
 
 	private:
 

@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-double RegularSampler::getSample1D(int i, int n, int permutation)
+double RegularSampler::getSample(int i, int n, int permutation)
 {
 	(void)permutation;
 
@@ -15,7 +15,7 @@ double RegularSampler::getSample1D(int i, int n, int permutation)
 	return x;
 }
 
-Vector2 RegularSampler::getSample2D(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RegularSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
 {
 	(void)permutation;
 
@@ -27,12 +27,12 @@ Vector2 RegularSampler::getSample2D(int ix, int iy, int nx, int ny, int permutat
 	return result;
 }
 
-Vector2 RegularSampler::getSampleDisk(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RegularSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToDisk(getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 RegularSampler::getSampleHemisphere(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
 {
-	return Sampler::mapToHemisphere(onb, distribution, getSample2D(ix, iy, nx, ny, permutation));
+	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }
