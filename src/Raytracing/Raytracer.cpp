@@ -97,7 +97,7 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
+			Vector2 sampleOffset = sampler->getDiskSample(x, y, n, n, permutation) * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
 			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;
