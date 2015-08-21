@@ -11,11 +11,12 @@ namespace Raycer
 	{
 	public:
 
-		GaussianFilter(double alpha = 4.0);
+		GaussianFilter(double width = 2.0, double alpha = 2.0);
 
 		double getWeight(double x);
 		double getWeight(double x, double y);
 		double getWeight(const Vector2& point);
+		double getWidth();
 
 	private:
 

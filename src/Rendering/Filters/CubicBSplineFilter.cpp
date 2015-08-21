@@ -9,15 +9,16 @@
 
 using namespace Raycer;
 
-CubicBSplineFilter::CubicBSplineFilter(double B_, double C_)
+CubicBSplineFilter::CubicBSplineFilter(double width_, double B_, double C_)
 {
+	width = width_;
 	B = B_;
 	C = C_;
 }
 
 double CubicBSplineFilter::getWeight(double x)
 {
-	x = std::abs(x) * 2.0;
+	x = std::abs(x) / (width / 2.0);
 
 	if (x < 1.0)
 		return ((12.0 - 9.0 * B - 6.0 * C) * (x * x * x) + (-18.0 + 12.0 * B + 6.0 * C) * (x * x) + (6.0 - 2.0 * B)) * (1.0 / 6.0);
@@ -35,4 +36,9 @@ double CubicBSplineFilter::getWeight(double x, double y)
 double CubicBSplineFilter::getWeight(const Vector2& point)
 {
 	return getWeight(point.x) * getWeight(point.y);
+}
+
+double CubicBSplineFilter::getWidth()
+{
+	return width;
 }

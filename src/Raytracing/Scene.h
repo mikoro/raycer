@@ -88,6 +88,7 @@ namespace Raycer
 			int multiSamples = 0;
 			int dofSamples = 0;
 			int timeSamples = 0;
+			double multiSamplerFilterWidth = 1.0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::BOX;
 			SamplerType dofSamplerType = SamplerType::CMJ;

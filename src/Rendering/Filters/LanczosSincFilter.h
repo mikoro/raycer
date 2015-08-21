@@ -11,14 +11,11 @@ namespace Raycer
 	{
 	public:
 
-		LanczosSincFilter(double size = 2.0);
+		LanczosSincFilter(double width = 2.0);
 
 		double getWeight(double x);
 		double getWeight(double x, double y);
 		double getWeight(const Vector2& point);
-
-	private:
-
-		double size;
+		double getWidth();
 	};
 }

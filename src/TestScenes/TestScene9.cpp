@@ -13,7 +13,7 @@ Scene Scene::createTestScene9()
 	scene.rootBVH.enabled = false;
 
 	scene.raytracing.multiSamplerType = SamplerType::CMJ;
-	scene.raytracing.multiSamplerFilterType = FilterType::LANCZOS_SINC;
+	scene.raytracing.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
 	scene.raytracing.multiSamples = 6;
 
 	scene.fog.enabled = true;

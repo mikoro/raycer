@@ -17,22 +17,22 @@ namespace
 	}
 }
 
-LanczosSincFilter::LanczosSincFilter(double size_)
+LanczosSincFilter::LanczosSincFilter(double width_)
 {
-	size = size_;
+	width = width_;
 }
 
 double LanczosSincFilter::getWeight(double x)
 {
-	x = std::abs(x) * size;
+	x = std::abs(x);
 
 	if (x == 0.0)
 		return 1.0;
 
-	if (x > size)
+	if (x > width)
 		return 0.0;
 
-	return sinc(x) * sinc(x / size);
+	return sinc(x) * sinc(x / width);
 }
 
 double LanczosSincFilter::getWeight(double x, double y)
@@ -43,4 +43,9 @@ double LanczosSincFilter::getWeight(double x, double y)
 double LanczosSincFilter::getWeight(const Vector2& point)
 {
 	return getWeight(point.x) * getWeight(point.y);
+}
+
+double LanczosSincFilter::getWidth()
+{
+	return width;
 }

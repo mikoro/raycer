@@ -9,8 +9,9 @@
 
 using namespace Raycer;
 
-GaussianFilter::GaussianFilter(double alpha_)
+GaussianFilter::GaussianFilter(double width_, double alpha_)
 {
+	width = width_;
 	alpha = alpha_;
 }
 
@@ -18,7 +19,7 @@ double GaussianFilter::getWeight(double x)
 {
 	x = std::abs(x);
 
-	return std::max(0.0, exp(-alpha * x * x) - exp(-alpha));
+	return std::max(0.0, exp(-alpha * x * x) - exp(-alpha * width * width));
 }
 
 double GaussianFilter::getWeight(double x, double y)
@@ -29,4 +30,9 @@ double GaussianFilter::getWeight(double x, double y)
 double GaussianFilter::getWeight(const Vector2& point)
 {
 	return getWeight(point.x) * getWeight(point.y);
+}
+
+double GaussianFilter::getWidth()
+{
+	return width;
 }

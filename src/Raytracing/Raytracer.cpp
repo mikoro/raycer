@@ -83,22 +83,23 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (scene.raytracing.multiSamples == 0)
-		return generateDofSamples(scene, pixelCoordinate + Vector2(0.5, 0.5), interrupted);
+		return generateDofSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
 	int n = scene.raytracing.multiSamples;
-	double filterWeightSum = 0.0;
 	Sampler* sampler = samplers[scene.raytracing.multiSamplerType];
 	Filter* filter = filters[scene.raytracing.multiSamplerFilterType];
+	double filterWeightSum = 0.0;
+	double filterWidth = filter->getWidth();
 
 	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 offset = sampler->getSample2D(x, y, n, n, permutation);
-			double filterWeight = filter->getWeight((offset - Vector2(0.5, 0.5)) * 2.0);
-			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + offset, interrupted) * filterWeight;
+			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
+			double filterWeight = filter->getWeight(sampleOffset);
+			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;
 		}
 	}
@@ -131,7 +132,7 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5);
+			Vector2 jitter = (sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
 			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter);
 
 			if (primaryRay.isInvalid)

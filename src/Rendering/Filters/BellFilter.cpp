@@ -9,9 +9,14 @@
 
 using namespace Raycer;
 
+BellFilter::BellFilter(double width_)
+{
+	width = width_;
+}
+
 double BellFilter::getWeight(double x)
 {
-	x = std::abs(x) * 1.5;
+	x = std::abs(x) / (width / 1.5);
 
 	if (x < 0.5)
 		return 0.75 - (x * x);
@@ -29,4 +34,9 @@ double BellFilter::getWeight(double x, double y)
 double BellFilter::getWeight(const Vector2& point)
 {
 	return getWeight(point.x) * getWeight(point.y);
+}
+
+double BellFilter::getWidth()
+{
+	return width;
 }

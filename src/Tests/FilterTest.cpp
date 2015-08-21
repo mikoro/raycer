@@ -40,7 +40,7 @@ TEST_CASE("Filter functionality", "[filter]")
 		std::ofstream file1(tfm::format("filter_%s_1D.txt", filter.first));
 		std::ofstream file2(tfm::format("filter_%s_2D.txt", filter.first));
 
-		double extent = 6.0;
+		double extent = 8.0;
 		int steps = 1000;
 		double stepSize = extent / steps;
 

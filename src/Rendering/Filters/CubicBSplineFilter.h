@@ -11,11 +11,12 @@ namespace Raycer
 	{
 	public:
 
-		CubicBSplineFilter(double B = 1.0 / 3.0, double C = 1.0 / 3.0);
+		CubicBSplineFilter(double width = 2.0, double B = 1.0 / 3.0, double C = 1.0 / 3.0);
 
 		double getWeight(double x);
 		double getWeight(double x, double y);
 		double getWeight(const Vector2& point);
+		double getWidth();
 
 	private:
 

@@ -3,13 +3,6 @@
 
 #pragma once
 
-/*
-
-All inputs are in -1.0 .. 1.0, outside values will return 0.0
-Outputs are in 0.0 .. 1.0
-
-*/
-
 namespace Raycer
 {
 	class Vector2;
@@ -25,7 +18,10 @@ namespace Raycer
 		virtual double getWeight(double x) = 0;
 		virtual double getWeight(double x, double y) = 0;
 		virtual double getWeight(const Vector2& point) = 0;
+		virtual double getWidth() = 0;
 
 		static Filter* getFilter(FilterType type);
+
+		double width = 1.0;
 	};
 }
