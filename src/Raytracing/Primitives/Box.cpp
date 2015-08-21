@@ -79,7 +79,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	bool isInside = (tmin < 0.0);
 	double t = isInside ? tmax : tmin;
 
-	if (t < ray.tmin || t > ray.tmax)
+	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
 	if (t > intersection.distance)

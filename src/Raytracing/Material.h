@@ -15,7 +15,7 @@ namespace Raycer
 		int id = 0;
 		int colorTextureId = 0;
 		int normalMapTextureId = 0;
-		int displacementMapTextureId = 0;
+		int heightMapTextureId = 0;
 
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
@@ -38,6 +38,6 @@ namespace Raycer
 
 		Texture* colorTexture = nullptr;
 		Texture* normalMapTexture = nullptr;
-		Texture* displacementMapTexture = nullptr;
+		Texture* heightMapTexture = nullptr;
 	};
 }

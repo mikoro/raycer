@@ -25,6 +25,14 @@ namespace Raycer
 		int getLargestAxis() const;
 		AABB transformed(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) const;
 
+		Vector3 getMin() const;
+		Vector3 getMax() const;
+		Vector3 getCenter() const;
+		Vector3 getExtent() const;
+		double getSurfaceArea() const;
+
+	private:
+
 		Vector3 min;
 		Vector3 max;
 		Vector3 center;

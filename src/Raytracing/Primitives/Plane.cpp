@@ -36,7 +36,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 
 	double t = (position - ray.origin).dot(normal) / denominator;
 
-	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+	if (t < 0.0 || t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
 	// another intersection is closer

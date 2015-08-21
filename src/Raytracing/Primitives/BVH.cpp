@@ -120,7 +120,7 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 
 	for (Primitive* primitive : primitives)
 	{
-		if (primitive->getAABB().center.element(axis) <= splitPoint)
+		if (primitive->getAABB().getCenter().element(axis) <= splitPoint)
 			leftPrimitives.push_back(primitive);
 		else
 			rightPrimitives.push_back(primitive);
@@ -178,12 +178,12 @@ void BVH::calculateSplit(int& axis, double& splitPoint, const std::vector<Primit
 		throw std::runtime_error("Unknown BVH axis selection");
 
 	if (info.axisSplit == BVHAxisSplit::MIDDLE)
-		splitPoint = node->aabb.center.element(axis);
+		splitPoint = node->aabb.getCenter().element(axis);
 	else if (info.axisSplit == BVHAxisSplit::MEDIAN)
 		splitPoint = calculateMedianPoint(axis, primitives);
 	else if (info.axisSplit == BVHAxisSplit::RANDOM)
 	{
-		std::uniform_real_distribution<double> dist(node->aabb.min.element(axis), node->aabb.max.element(axis));
+		std::uniform_real_distribution<double> dist(node->aabb.getMin().element(axis), node->aabb.getMax().element(axis));
 		splitPoint = dist(gen);
 	}
 	else
@@ -196,7 +196,7 @@ void BVH::calculateSAHSplit(int& axis, double& splitPoint, const std::vector<Pri
 
 	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
 	{
-		double tempSplitPoint = node->aabb.center.element(tempAxis);
+		double tempSplitPoint = node->aabb.getCenter().element(tempAxis);
 		double score = calculateSAHScore(tempAxis, tempSplitPoint, primitives, node);
 
 		if (score < lowestScore)
@@ -218,8 +218,8 @@ void BVH::calculateSAHSplit(int& axis, double& splitPoint, const std::vector<Pri
 
 		if (info.regularSAHSplits > 0)
 		{
-			double step = node->aabb.extent.element(tempAxis) / (double)info.regularSAHSplits;
-			tempSplitPoint = node->aabb.min.element(tempAxis);
+			double step = node->aabb.getExtent().element(tempAxis) / (double)info.regularSAHSplits;
+			tempSplitPoint = node->aabb.getMin().element(tempAxis);
 
 			for (int i = 0; i < info.regularSAHSplits - 1; ++i)
 			{
@@ -249,7 +249,7 @@ double BVH::calculateSAHScore(int axis, double splitPoint, const std::vector<Pri
 	{
 		AABB primitiveAABB = primitive->getAABB();
 
-		if (primitiveAABB.center.element(axis) <= splitPoint)
+		if (primitiveAABB.getCenter().element(axis) <= splitPoint)
 		{
 			leftAABB.expand(primitiveAABB);
 			leftCount++;
@@ -264,10 +264,10 @@ double BVH::calculateSAHScore(int axis, double splitPoint, const std::vector<Pri
 	double score = 0.0;
 
 	if (leftCount > 0)
-		score += (leftAABB.surfaceArea / node->aabb.surfaceArea) * (double)leftCount;
+		score += (leftAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * (double)leftCount;
 
 	if (rightCount > 0)
-		score += (rightAABB.surfaceArea / node->aabb.surfaceArea) * (double)rightCount;
+		score += (rightAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * (double)rightCount;
 
 	return score;
 }
@@ -279,7 +279,7 @@ double BVH::calculateMedianPoint(int axis, const std::vector<Primitive*>& primit
 	std::vector<double> centerPoints;
 
 	for (Primitive* primitive : primitives)
-		centerPoints.push_back(primitive->getAABB().center.element(axis));
+		centerPoints.push_back(primitive->getAABB().getCenter().element(axis));
 
 	std::sort(centerPoints.begin(), centerPoints.end());
 	int size = (int)centerPoints.size();

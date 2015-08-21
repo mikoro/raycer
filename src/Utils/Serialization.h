@@ -25,15 +25,17 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene& b)
 	{
-		a(cereal::make_nvp("camera", b.camera),
+		a(cereal::make_nvp("raytracer", b.raytracer),
+			cereal::make_nvp("camera", b.camera),
 			cereal::make_nvp("fog", b.fog),
-			cereal::make_nvp("raytracing", b.raytracing),
-			cereal::make_nvp("toneMapping", b.toneMapping),
+			cereal::make_nvp("toneMapper", b.toneMapper),
 			cereal::make_nvp("rootBVH", b.rootBVH),
+			cereal::make_nvp("boundingBoxes", b.boundingBoxes),
 			cereal::make_nvp("textures", b.textures),
 			cereal::make_nvp("materials", b.materials),
 			cereal::make_nvp("lights", b.lights),
-			cereal::make_nvp("primitives", b.primitives));
+			cereal::make_nvp("primitives", b.primitives),
+			cereal::make_nvp("objScenes", b.objScenes));
 	}
 
 	template<class Archive>
@@ -50,10 +52,19 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::Raytracing& b)
+	void serialize(Archive& a, Scene::Raytracer& b)
 	{
 		a(cereal::make_nvp("maxIterations", b.maxIterations),
-			cereal::make_nvp("startOffset", b.rayStartOffset));
+			cereal::make_nvp("rayStartOffset", b.rayStartOffset),
+			cereal::make_nvp("backgroundColor", b.backgroundColor),
+			cereal::make_nvp("offLensColor", b.offLensColor),
+			cereal::make_nvp("multiSamples", b.multiSamples),
+			cereal::make_nvp("dofSamples", b.dofSamples),
+			cereal::make_nvp("timeSamples", b.timeSamples),
+			cereal::make_nvp("multiSamplerType", b.multiSamplerType),
+			cereal::make_nvp("multiSamplerFilterType", b.multiSamplerFilterType),
+			cereal::make_nvp("dofSamplerType", b.dofSamplerType),
+			cereal::make_nvp("timeSamplerType", b.timeSamplerType));
 	}
 
 	template<class Archive>
@@ -69,7 +80,7 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::ToneMapping& b)
+	void serialize(Archive& a, Scene::ToneMapper& b)
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
 			cereal::make_nvp("type", b.type),
@@ -81,6 +92,14 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
 			cereal::make_nvp("buildInfo", b.buildInfo));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::BoundingBoxes& b)
+	{
+		a(cereal::make_nvp("enabled", b.enabled),
+			cereal::make_nvp("texture", b.texture),
+			cereal::make_nvp("material", b.material));
 	}
 
 	template<class Archive>
@@ -127,8 +146,9 @@ namespace Raycer
 	{
 		a(cereal::make_nvp("color", b.color),
 			cereal::make_nvp("intensity", b.intensity),
-			cereal::make_nvp("ambientOcclusion", b.enableOcclusion),
-			cereal::make_nvp("maxOcclusionDistance", b.maxDistance),
+			cereal::make_nvp("enableOcclusion", b.enableOcclusion),
+			cereal::make_nvp("maxDistance", b.maxDistance),
+			cereal::make_nvp("samplerType", b.samplerType),
 			cereal::make_nvp("samples", b.samples),
 			cereal::make_nvp("distribution", b.distribution));
 	}
@@ -148,7 +168,11 @@ namespace Raycer
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("position", b.position),
 			cereal::make_nvp("distance", b.distance),
-			cereal::make_nvp("attenuation", b.attenuation));
+			cereal::make_nvp("attenuation", b.attenuation),
+			cereal::make_nvp("softShadows", b.softShadows),
+			cereal::make_nvp("radius", b.radius),
+			cereal::make_nvp("samplerType", b.samplerType),
+			cereal::make_nvp("samples", b.samples));
 	}
 
 	template<class Archive>
@@ -161,7 +185,11 @@ namespace Raycer
 			cereal::make_nvp("distance", b.distance),
 			cereal::make_nvp("attenuation", b.attenuation),
 			cereal::make_nvp("sideAttenuation", b.sideAttenuation),
-			cereal::make_nvp("angle", b.angle));
+			cereal::make_nvp("angle", b.angle),
+			cereal::make_nvp("softShadows", b.softShadows),
+			cereal::make_nvp("radius", b.radius),
+			cereal::make_nvp("samplerType", b.samplerType),
+			cereal::make_nvp("samples", b.samples));
 	}
 
 	// ---------------------------------------------
@@ -418,7 +446,7 @@ namespace Raycer
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("colorTextureId", b.colorTextureId),
 			cereal::make_nvp("normalMapTextureId", b.normalMapTextureId),
-			cereal::make_nvp("displacementMapTextureId", b.displacementMapTextureId),
+			cereal::make_nvp("heightMapTextureId", b.heightMapTextureId),
 			cereal::make_nvp("texcoordScale", b.texcoordScale),
 			cereal::make_nvp("ambientReflectance", b.ambientReflectance),
 			cereal::make_nvp("diffuseReflectance", b.diffuseReflectance),
@@ -447,5 +475,16 @@ namespace Raycer
 			cereal::make_nvp("regularSAHSplits", b.regularSAHSplits),
 			cereal::make_nvp("axisSelection", b.axisSelection),
 			cereal::make_nvp("axisSplit", b.axisSplit));
+	}
+
+	// ---------------------------------------------
+	// OBJ SCENE
+	// ---------------------------------------------
+
+	template<class Archive>
+	void serialize(Archive& a, ObjScene& b)
+	{
+		a(cereal::make_nvp("filePath", b.filePath),
+			cereal::make_nvp("scale", b.scale));
 	}
 }

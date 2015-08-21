@@ -34,7 +34,6 @@ namespace Raycer
 		double fov = 75.0;
 		double orthoSize = 10.0;
 		double fishEyeAngle = 180.0;
-
 		double apertureSize = 0.1;
 		double focalLenght = 10.0;
 
@@ -43,12 +42,12 @@ namespace Raycer
 		Vector3 up;
 		Vector3 imagePlaneCenter;
 
+	private:
+
 		double aspectRatio = 1.0;
 		double imagePlaneDistance = 1.0;
 		double imagePlaneWidth = 0.0;
 		double imagePlaneHeight = 0.0;
-
-	private:
 
 		Vector3 velocity;
 		Vector3 acceleration;

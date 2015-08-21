@@ -54,7 +54,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 
 	double t = v0v2.dot(qvec) * invDeterminant;
 
-	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+	if (t < 0.0 || t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
 	// another intersection is closer
@@ -95,7 +95,7 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 	double t = (vertices[0] - ray.origin).dot(normal) / denominator;
 
 	// intersection is behind ray origin
-	if (t < 0.0 || t < ray.tmin || t > ray.tmax)
+	if (t < 0.0 || t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
 	// another intersection is closer

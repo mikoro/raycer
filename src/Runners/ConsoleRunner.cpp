@@ -114,11 +114,11 @@ void ConsoleRunner::run(RaytracerState& state)
 		else
 			clRaytracer.run(state, interrupted);
 
-		if (state.scene->toneMapping.enabled)
+		if (state.scene->toneMapper.enabled)
 		{
-			switch (state.scene->toneMapping.type)
+			switch (state.scene->toneMapper.type)
 			{
-				case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapping.gamma); break;
+				case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapper.gamma); break;
 				case ToneMapType::REINHARD: break;
 				default: break;
 			}

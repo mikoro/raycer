@@ -153,3 +153,28 @@ AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vec
 
 	return AABB::createFromMinMax(newMin, newMax);
 }
+
+Vector3 AABB::getMin() const
+{
+	return min;
+}
+
+Vector3 AABB::getMax() const
+{
+	return max;
+}
+
+Vector3 AABB::getCenter() const
+{
+	return center;
+}
+
+Vector3 AABB::getExtent() const
+{
+	return extent;
+}
+
+double AABB::getSurfaceArea() const
+{
+	return surfaceArea;
+}

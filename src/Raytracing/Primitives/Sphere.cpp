@@ -49,7 +49,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection)
 	double t2 = sqrt(radius2 - sphereToRayDistance2);
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 
-	if (t < ray.tmin || t > ray.tmax)
+	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
 	// there was another intersection closer to camera

@@ -14,7 +14,7 @@ Scene Scene::createTestScene10()
 
 	scene.rootBVH.enabled = false;
 
-	scene.raytracing.timeSamples = 4;
+	scene.raytracer.timeSamples = 4;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 20.0;

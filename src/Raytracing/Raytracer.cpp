@@ -82,14 +82,14 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 
 Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	if (scene.raytracing.multiSamples == 0)
+	if (scene.raytracer.multiSamples == 0)
 		return generateDofSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
-	int n = scene.raytracing.multiSamples;
-	Sampler* sampler = samplers[scene.raytracing.multiSamplerType];
-	Filter* filter = filters[scene.raytracing.multiSamplerFilterType];
+	int n = scene.raytracer.multiSamples;
+	Sampler* sampler = samplers[scene.raytracer.multiSamplerType];
+	Filter* filter = filters[scene.raytracer.multiSamplerFilterType];
 	double filterWeightSum = 0.0;
 	double filterWidth = filter->getWidth();
 
@@ -111,18 +111,18 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 {
 	Ray ray = scene.camera.getRay(pixelCoordinate);
 
-	if (ray.isInvalid && scene.raytracing.dofSamples == 0)
-		return Color::BLACK;
+	if (ray.isInvalid && scene.raytracer.dofSamples == 0)
+		return scene.raytracer.offLensColor;
 
-	if (scene.raytracing.dofSamples == 0)
+	if (scene.raytracer.dofSamples == 0)
 		return generateTimeSamples(scene, ray, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
-	int n = scene.raytracing.dofSamples;
+	int n = scene.raytracer.dofSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalLength = scene.camera.focalLenght;
-	Sampler* sampler = samplers[scene.raytracing.dofSamplerType];
+	Sampler* sampler = samplers[scene.raytracer.dofSamplerType];
 
 	Vector3 cameraOrigin = scene.camera.position;
 	Vector3 cameraRight = scene.camera.right;
@@ -136,7 +136,10 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter);
 
 			if (primaryRay.isInvalid)
+			{
+				sampledPixelColor += scene.raytracer.offLensColor;
 				continue;
+			}
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
 			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n, permutation);
@@ -157,12 +160,12 @@ Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::at
 {
 	Intersection intersection;
 
-	if (scene.raytracing.timeSamples == 0)
+	if (scene.raytracer.timeSamples == 0)
 		return raytrace(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
-	int n = scene.raytracing.timeSamples;
-	Sampler* sampler = samplers[scene.raytracing.timeSamplerType];
+	int n = scene.raytracer.timeSamples;
+	Sampler* sampler = samplers[scene.raytracer.timeSamplerType];
 
 	for (int i = 0; i < n; ++i)
 	{
@@ -176,7 +179,7 @@ Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::at
 
 Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)
 {
-	Color finalColor = scene.raytracing.backgroundColor;
+	Color finalColor = scene.raytracer.backgroundColor;
 
 	if (interrupted)
 		return finalColor;
@@ -247,7 +250,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	Color reflectionColor;
 
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && iteration < scene.raytracing.maxIterations)
+	if (transmittance > 0.0 && iteration < scene.raytracer.maxIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -261,7 +264,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			Ray refractedRay;
 			Intersection refractedIntersection;
 
-			refractedRay.origin = intersection.position + T * scene.raytracing.rayStartOffset;
+			refractedRay.origin = intersection.position + T * scene.raytracer.rayStartOffset;
 			refractedRay.direction = T;
 			refractedRay.update();
 
@@ -277,7 +280,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	}
 
 	// calculate and trace reflected ray
-	if (reflectance > 0.0 && iteration < scene.raytracing.maxIterations)
+	if (reflectance > 0.0 && iteration < scene.raytracer.maxIterations)
 	{
 		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
 		R.normalize();
@@ -285,7 +288,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		Ray reflectedRay;
 		Intersection reflectedIntersection;
 
-		reflectedRay.origin = intersection.position + R * scene.raytracing.rayStartOffset;
+		reflectedRay.origin = intersection.position + R * scene.raytracer.rayStartOffset;
 		reflectedRay.direction = R;
 		reflectedRay.update();
 
@@ -427,10 +430,10 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			Ray sampleRay;
 			Intersection sampleIntersection;
 
-			sampleRay.origin = intersection.position + sampleDirection * scene.raytracing.rayStartOffset;
+			sampleRay.origin = intersection.position + sampleDirection * scene.raytracer.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
-			sampleRay.tmax = scene.lights.ambientLight.maxDistance;
+			sampleRay.maxDistance = scene.lights.ambientLight.maxDistance;
 			sampleRay.update();
 
 			for (Primitive* primitive : scene.primitives.all)
@@ -454,11 +457,11 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	Ray shadowRay;
 	Intersection shadowIntersection;
 
-	shadowRay.origin = intersection.position + directionToLight * scene.raytracing.rayStartOffset;
+	shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
 	shadowRay.direction = directionToLight;
 	shadowRay.fastOcclusion = true;
 	shadowRay.isShadowRay = true;
-	shadowRay.tmax = std::numeric_limits<double>::max();
+	shadowRay.maxDistance = std::numeric_limits<double>::max();
 	shadowRay.time = ray.time;
 	shadowRay.update();
 
@@ -480,11 +483,11 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 		Ray shadowRay;
 		Intersection shadowIntersection;
 
-		shadowRay.origin = intersection.position + directionToLight * scene.raytracing.rayStartOffset;
+		shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
 		shadowRay.direction = directionToLight;
 		shadowRay.fastOcclusion = true;
 		shadowRay.isShadowRay = true;
-		shadowRay.tmax = (light.position - intersection.position).length();
+		shadowRay.maxDistance = (light.position - intersection.position).length();
 		shadowRay.time = ray.time;
 		shadowRay.update();
 
@@ -516,11 +519,11 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 			Ray shadowRay;
 			Intersection shadowIntersection;
 
-			shadowRay.origin = intersection.position + newDirectionToLight * scene.raytracing.rayStartOffset;
+			shadowRay.origin = intersection.position + newDirectionToLight * scene.raytracer.rayStartOffset;
 			shadowRay.direction = newDirectionToLight;
 			shadowRay.fastOcclusion = true;
 			shadowRay.isShadowRay = true;
-			shadowRay.tmax = (newLightPosition - intersection.position).length();
+			shadowRay.maxDistance = (newLightPosition - intersection.position).length();
 			shadowRay.time = ray.time;
 			shadowRay.update();
 

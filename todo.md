@@ -7,6 +7,7 @@ lighting
  - path tracing
 
 primitives
+ - aabb transformation when source primitive is already translated
  - cylinder
  - torus
  - metaball

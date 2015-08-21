@@ -163,8 +163,10 @@ void Vector2::inverse()
 Vector2 Vector2::inversed() const
 {
 	Vector2 inverse;
+
 	inverse.x = 1.0 / x;
 	inverse.y = 1.0 / y;
+
 	return inverse;
 }
 

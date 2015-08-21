@@ -13,7 +13,7 @@ using namespace Raycer;
 
 void Instance::initialize()
 {
-	Vector3 position = primitive->getAABB().center;
+	Vector3 position = primitive->getAABB().getCenter();
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
@@ -46,7 +46,7 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection)
 		
 		double t = (position - ray.origin).length();
 
-		if (t < ray.tmin || t > ray.tmax)
+		if (t < ray.minDistance || t > ray.maxDistance)
 			return false;
 
 		if (t > intersection.distance)
@@ -77,7 +77,7 @@ void Instance::transform(const Vector3& scale_, const EulerAngle& rotate_, const
 	rotate += rotate_;
 	translate += translate_;
 
-	Vector3 position = primitive->getAABB().center;
+	Vector3 position = primitive->getAABB().getCenter();
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);

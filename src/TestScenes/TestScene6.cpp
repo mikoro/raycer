@@ -11,7 +11,7 @@ Scene Scene::createTestScene6()
 	Scene scene;
 
 	scene.rootBVH.enabled = true;
-	scene.raytracing.maxIterations = 8;
+	scene.raytracer.maxIterations = 8;
 
 	// CAMERA //
 

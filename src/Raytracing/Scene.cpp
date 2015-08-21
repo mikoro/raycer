@@ -26,6 +26,12 @@ using namespace Raycer;
 
 Scene::Scene()
 {
+	boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
+	boundingBoxes.texture.intensity = 1.0;
+	boundingBoxes.material.ambientReflectance = Color(0.0, 0.0, 0.0);
+	boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+	boundingBoxes.material.rayTransmittance = 1.0;
+	boundingBoxes.material.nonShadowing = true;
 }
 
 Scene Scene::createTestScene(int number)
@@ -281,13 +287,7 @@ void Scene::initialize()
 
 	if (boundingBoxes.enabled)
 	{
-		boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
-		boundingBoxes.texture.intensity = 1.0;
 		boundingBoxes.material.colorTexture = &boundingBoxes.texture;
-		boundingBoxes.material.diffuseReflectance = Color(0.0, 0.0, 0.0);
-		boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.1);
-		boundingBoxes.material.rayTransmittance = 1.0;
-		boundingBoxes.material.nonShadowing = true;
 
 		for (Primitive* primitive : primitives.all)
 		{
@@ -295,8 +295,8 @@ void Scene::initialize()
 
 			Box bbox;
 			bbox.material = &boundingBoxes.material;
-			bbox.position = aabb.center;
-			bbox.extent = aabb.extent;
+			bbox.position = aabb.getCenter();
+			bbox.extent = aabb.getExtent();
 
 			primitives.boundingBoxes.push_back(bbox);
 		}
@@ -309,8 +309,8 @@ void Scene::initialize()
 
 	if (rootBVH.enabled)
 	{
-		primitives.rootBVH.build(primitives.all, rootBVH.buildInfo);
+		rootBVH.bvh.build(primitives.all, rootBVH.buildInfo);
 		primitives.all.clear();
-		primitives.all.push_back(&primitives.rootBVH);
+		primitives.all.push_back(&rootBVH.bvh);
 	}
 }

@@ -100,11 +100,11 @@ void DefaultState::render(double timeStep, double interpolation)
 	else
 		clRaytracer.run(state, interrupted);
 
-	if (scene.toneMapping.enabled)
+	if (scene.toneMapper.enabled)
 	{
-		switch (state.scene->toneMapping.type)
+		switch (state.scene->toneMapper.type)
 		{
-			case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapping.gamma); break;
+			case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapper.gamma); break;
 			case ToneMapType::REINHARD: break;
 			default: break;
 		}

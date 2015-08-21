@@ -167,7 +167,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		// partition primitive range by the split point
 		for (int i = buildEntry.start; i < buildEntry.end; ++i)
 		{
-			if (orderedPrimitives[i]->getAABB().center.element(axis) <= splitPoint)
+			if (orderedPrimitives[i]->getAABB().getCenter().element(axis) <= splitPoint)
 			{
 				std::swap(orderedPrimitives[i], orderedPrimitives[middle]);
 				middle++;
@@ -210,12 +210,12 @@ void FlatBVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB
 		throw std::runtime_error("Unknown BVH axis selection");
 
 	if (buildInfo.axisSplit == BVHAxisSplit::MIDDLE)
-		splitPoint = nodeAABB.center.element(axis);
+		splitPoint = nodeAABB.getCenter().element(axis);
 	else if (buildInfo.axisSplit == BVHAxisSplit::MEDIAN)
 		splitPoint = calculateMedianPoint(axis, buildEntry);
 	else if (buildInfo.axisSplit == BVHAxisSplit::RANDOM)
 	{
-		std::uniform_real_distribution<double> dist(nodeAABB.min.element(axis), nodeAABB.max.element(axis));
+		std::uniform_real_distribution<double> dist(nodeAABB.getMin().element(axis), nodeAABB.getMax().element(axis));
 		splitPoint = dist(generator);
 	}
 	else
@@ -228,7 +228,7 @@ void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeA
 
 	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
 	{
-		double tempSplitPoint = nodeAABB.center.element(tempAxis);
+		double tempSplitPoint = nodeAABB.getCenter().element(tempAxis);
 		double score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
 
 		if (score < lowestScore)
@@ -250,8 +250,8 @@ void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeA
 
 		if (buildInfo.regularSAHSplits > 0)
 		{
-			double step = nodeAABB.extent.element(tempAxis) / (double)buildInfo.regularSAHSplits;
-			tempSplitPoint = nodeAABB.min.element(tempAxis);
+			double step = nodeAABB.getExtent().element(tempAxis) / (double)buildInfo.regularSAHSplits;
+			tempSplitPoint = nodeAABB.getMin().element(tempAxis);
 
 			for (int i = 0; i < buildInfo.regularSAHSplits - 1; ++i)
 			{
@@ -281,7 +281,7 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	{
 		AABB primitiveAABB = orderedPrimitives[i]->getAABB();
 
-		if (primitiveAABB.center.element(axis) <= splitPoint)
+		if (primitiveAABB.getCenter().element(axis) <= splitPoint)
 		{
 			leftAABB.expand(primitiveAABB);
 			leftCount++;
@@ -296,10 +296,10 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	double score = 0.0;
 
 	if (leftCount > 0)
-		score += (leftAABB.surfaceArea / nodeAABB.surfaceArea) * (double)leftCount;
+		score += (leftAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * (double)leftCount;
 
 	if (rightCount > 0)
-		score += (rightAABB.surfaceArea / nodeAABB.surfaceArea) * (double)rightCount;
+		score += (rightAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * (double)rightCount;
 
 	return score;
 }
@@ -309,7 +309,7 @@ double FlatBVH::calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEnt
 	std::vector<double> centerPoints;
 
 	for (int i = buildEntry.start; i < buildEntry.end; ++i)
-		centerPoints.push_back(orderedPrimitives[i]->getAABB().center.element(axis));
+		centerPoints.push_back(orderedPrimitives[i]->getAABB().getCenter().element(axis));
 
 	std::sort(centerPoints.begin(), centerPoints.end());
 	int size = (int)centerPoints.size();

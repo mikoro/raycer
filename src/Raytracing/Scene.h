@@ -34,7 +34,7 @@
 namespace Raycer
 {
 	enum class ToneMapType { GAMMA, REINHARD };
-	
+
 	class Primitive;
 	class Texture;
 
@@ -43,7 +43,7 @@ namespace Raycer
 		std::string filePath;
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 	};
-	
+
 	class Scene
 	{
 	public:
@@ -78,22 +78,22 @@ namespace Raycer
 		static Scene createTestScene15();
 		static Scene createTestScene16();
 
-		Camera camera;
-
-		struct Raytracing
+		struct Raytracer
 		{
 			int maxIterations = 3;
 			double rayStartOffset = 0.000001;
-			Color backgroundColor = Color::BLACK;
+			Color backgroundColor = Color(0.0, 0.0, 0.0);
+			Color offLensColor = Color(0.0, 0.0, 0.0);
 			int multiSamples = 0;
 			int dofSamples = 0;
 			int timeSamples = 0;
-			double multiSamplerFilterWidth = 1.0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
-			FilterType multiSamplerFilterType = FilterType::BOX;
+			FilterType multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
 			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
-		} raytracing;
+		} raytracer;
+
+		Camera camera;
 
 		struct Fog
 		{
@@ -106,17 +106,18 @@ namespace Raycer
 			double heightSteepness = 1.0;
 		} fog;
 
-		struct ToneMapping
+		struct ToneMapper
 		{
 			bool enabled = true;
 			ToneMapType type = ToneMapType::GAMMA;
 			double gamma = 1.0 / 2.2;
-		} toneMapping;
+		} toneMapper;
 
 		struct RootBVH
 		{
 			bool enabled = true;
 			BVHBuildInfo buildInfo;
+			FlatBVH bvh;
 		} rootBVH;
 
 		struct BoundingBoxes
@@ -161,7 +162,6 @@ namespace Raycer
 			std::vector<Mesh> meshes;
 			std::vector<Instance> instances;
 			std::vector<Primitive*> all;
-			FlatBVH rootBVH;
 		} primitives;
 
 		std::vector<ObjScene> objScenes;

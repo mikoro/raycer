@@ -10,7 +10,7 @@ Scene Scene::createTestScene7()
 {
 	Scene scene;
 
-	scene.raytracing.dofSamples = 3;
+	scene.raytracer.dofSamples = 3;
 
 	// CAMERA //
 

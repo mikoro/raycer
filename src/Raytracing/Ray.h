@@ -21,8 +21,8 @@ namespace Raycer
 		Vector3 inverseDirection;
 		bool dirIsNeg[3];
 
-		double tmin = 0.0;
-		double tmax = std::numeric_limits<double>::max();
+		double minDistance = 0.0;
+		double maxDistance = std::numeric_limits<double>::max();
 		double time = 0.0;
 
 		bool fastOcclusion = false;

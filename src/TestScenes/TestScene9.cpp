@@ -12,9 +12,9 @@ Scene Scene::createTestScene9()
 
 	scene.rootBVH.enabled = false;
 
-	scene.raytracing.multiSamplerType = SamplerType::CMJ;
-	scene.raytracing.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
-	scene.raytracing.multiSamples = 6;
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 6;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;
