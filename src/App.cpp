@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <iostream>
+#include <omp.h>
 #include <string>
 
 #include "tclap/CmdLine.h"
@@ -192,6 +193,8 @@ int App::run(int argc, char** argv)
 
 		if (autoViewSwitch.isSet())
 			settings.image.autoView = true;
+
+		omp_set_num_threads(settings.general.maxThreadCount);
 
 		if (settings.general.interactive)
 			return windowRunner.run();

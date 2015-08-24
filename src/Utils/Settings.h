@@ -16,6 +16,7 @@ namespace Raycer
 		struct General
 		{
 			bool interactive;
+			int maxThreadCount;
 			bool checkGLErrors;
 			bool checkCLErrors;
 		} general;
