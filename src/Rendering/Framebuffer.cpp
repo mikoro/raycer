@@ -140,19 +140,6 @@ void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
 	
-	std::vector<Color>& imagePixelData = image.getPixelData();
-
-	// convert image data from Color to float array
-	for (int i = 0; i < (int)imagePixelData.size(); ++i)
-	{
-		int pixelIndex = i * 4;
-
-		floatPixelData[pixelIndex] = (float)imagePixelData[i].r;
-		floatPixelData[pixelIndex + 1] = (float)imagePixelData[i].g;
-		floatPixelData[pixelIndex + 2] = (float)imagePixelData[i].b;
-		floatPixelData[pixelIndex + 3] = (float)imagePixelData[i].a;
-	}
-
 	int imageWidth = image.getWidth();
 	int imageHeight = image.getHeight();
 
@@ -170,6 +157,19 @@ void Framebuffer::render()
 
 	if (!settings.openCL.enabled)
 	{
+		std::vector<Color>& imagePixelData = image.getPixelData();
+
+		// convert image data from Color to float array
+		for (int i = 0; i < (int)imagePixelData.size(); ++i)
+		{
+			int pixelIndex = i * 4;
+
+			floatPixelData[pixelIndex] = (float)imagePixelData[i].r;
+			floatPixelData[pixelIndex + 1] = (float)imagePixelData[i].g;
+			floatPixelData[pixelIndex + 2] = (float)imagePixelData[i].b;
+			floatPixelData[pixelIndex + 3] = (float)imagePixelData[i].a;
+		}
+
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)imageWidth, (GLsizei)imageHeight, GL_RGBA, GL_FLOAT, &floatPixelData[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}

@@ -100,7 +100,7 @@ void DefaultState::render(double timeStep, double interpolation)
 	else
 		clRaytracer.run(state, interrupted);
 
-	if (scene.toneMapper.enabled)
+	if (scene.toneMapper.enabled && !settings.openCL.enabled)
 	{
 		switch (state.scene->toneMapper.type)
 		{

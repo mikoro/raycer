@@ -431,8 +431,7 @@ void WindowRunner::render(double timeStep, double interpolation)
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//framebuffer.clear(); // not needed if every pixel is written every time
-
+	
 	if (currentState != WindowRunnerStates::None)
 	{
 		if (!isPaused)
