@@ -20,8 +20,6 @@ namespace Raycer
 		virtual double getWeight(const Vector2& point) = 0;
 		virtual double getWidth() = 0;
 
-		static Filter* getFilter(FilterType type);
-
 		double width = 1.0;
 	};
 }

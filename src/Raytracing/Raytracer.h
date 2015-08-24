@@ -5,6 +5,7 @@
 
 #include <atomic>
 #include <map>
+#include <memory>
 #include <random>
 
 #include "Rendering/Samplers/Sampler.h"
@@ -50,8 +51,8 @@ namespace Raycer
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light);
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light);
 
-		std::map<SamplerType, Sampler*> samplers;
-		std::map<FilterType, Filter*> filters;
+		std::map<SamplerType, std::shared_ptr<Sampler>> samplers;
+		std::map<FilterType, std::shared_ptr<Filter>> filters;
 
 		std::mt19937 generator;
 		std::uniform_int_distribution<int> randomDist;

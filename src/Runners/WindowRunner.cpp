@@ -248,7 +248,7 @@ void WindowRunner::initialize()
 
 	windowResized(settings.window.width, settings.window.height);
 
-	runnerStates[WindowRunnerStates::Default] = std::unique_ptr<DefaultState>(new DefaultState());
+	runnerStates[WindowRunnerStates::Default] = std::make_shared<DefaultState>();
 	changeState(WindowRunnerStates::Default);
 }
 

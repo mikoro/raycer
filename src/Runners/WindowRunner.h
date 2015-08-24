@@ -80,7 +80,7 @@ namespace Raycer
 		MouseInfo mouseInfo;
 		std::map<int, bool> keyStates;
 		std::map<int, bool> mouseStates;
-		std::map<WindowRunnerStates, std::unique_ptr<WindowRunnerState>> runnerStates;
+		std::map<WindowRunnerStates, std::shared_ptr<WindowRunnerState>> runnerStates;
 		WindowRunnerStates currentState = WindowRunnerStates::None;
 		Text defaultText;
 		Text pauseText;

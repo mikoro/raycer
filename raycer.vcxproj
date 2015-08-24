@@ -198,7 +198,6 @@
     <ClCompile Include="src\Rendering\Filters\BellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\CubicBSplineFilter.cpp" />
-    <ClCompile Include="src\Rendering\Filters\Filter.cpp" />
     <ClCompile Include="src\Rendering\Filters\GaussianFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\LanczosSincFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\TentFilter.cpp" />

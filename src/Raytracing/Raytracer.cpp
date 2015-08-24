@@ -39,17 +39,17 @@ Raytracer::Raytracer()
 	std::random_device rd;
 	generator.seed(rd());
 
-	samplers[SamplerType::RANDOM] = new RandomSampler();
-	samplers[SamplerType::REGULAR] = new RegularSampler();
-	samplers[SamplerType::JITTERED] = new JitteredSampler();
-	samplers[SamplerType::CMJ] = new CMJSampler();
+	samplers[SamplerType::RANDOM] = std::make_shared<RandomSampler>();
+	samplers[SamplerType::REGULAR] = std::make_shared<RegularSampler>();
+	samplers[SamplerType::JITTERED] = std::make_shared<JitteredSampler>();
+	samplers[SamplerType::CMJ] = std::make_shared<CMJSampler>();
 
-	filters[FilterType::BOX] = new BoxFilter();
-	filters[FilterType::TENT] = new TentFilter();
-	filters[FilterType::BELL] = new BellFilter();
-	filters[FilterType::CUBIC_BSPLINE] = new CubicBSplineFilter();
-	filters[FilterType::GAUSSIAN] = new GaussianFilter();
-	filters[FilterType::LANCZOS_SINC] = new LanczosSincFilter();
+	filters[FilterType::BOX] = std::make_shared<BoxFilter>();
+	filters[FilterType::TENT] = std::make_shared<TentFilter>();
+	filters[FilterType::BELL] = std::make_shared<BellFilter>();
+	filters[FilterType::CUBIC_BSPLINE] = std::make_shared<CubicBSplineFilter>();
+	filters[FilterType::GAUSSIAN] = std::make_shared<GaussianFilter>();
+	filters[FilterType::LANCZOS_SINC] = std::make_shared<LanczosSincFilter>();
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -88,8 +88,8 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
 	int n = scene.raytracer.multiSamples;
-	Sampler* sampler = samplers[scene.raytracer.multiSamplerType];
-	Filter* filter = filters[scene.raytracer.multiSamplerFilterType];
+	Sampler* sampler = samplers[scene.raytracer.multiSamplerType].get();
+	Filter* filter = filters[scene.raytracer.multiSamplerFilterType].get();
 	double filterWeightSum = 0.0;
 	double filterWidth = filter->getWidth();
 
@@ -122,7 +122,7 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 	int n = scene.raytracer.dofSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalLength = scene.camera.focalLenght;
-	Sampler* sampler = samplers[scene.raytracer.dofSamplerType];
+	Sampler* sampler = samplers[scene.raytracer.dofSamplerType].get();
 
 	Vector3 cameraOrigin = scene.camera.position;
 	Vector3 cameraRight = scene.camera.right;
@@ -165,7 +165,7 @@ Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::at
 
 	Color sampledPixelColor;
 	int n = scene.raytracer.timeSamples;
-	Sampler* sampler = samplers[scene.raytracer.timeSamplerType];
+	Sampler* sampler = samplers[scene.raytracer.timeSamplerType].get();
 
 	for (int i = 0; i < n; ++i)
 	{
@@ -419,7 +419,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 	int permutation = randomDist(generator);
 	int n = scene.lights.ambientLight.samples;
 	double distribution = scene.lights.ambientLight.distribution;
-	Sampler* sampler = samplers[scene.lights.ambientLight.samplerType];
+	Sampler* sampler = samplers[scene.lights.ambientLight.samplerType].get();
 
 	for (int y = 0; y < n; ++y)
 	{
@@ -506,7 +506,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	double shadowAmount = 0.0;
 	int permutation = randomDist(generator);
 	int n = light.samples;
-	Sampler* sampler = samplers[light.samplerType];
+	Sampler* sampler = samplers[light.samplerType].get();
 
 	for (int y = 0; y < n; ++y)
 	{

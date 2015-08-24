@@ -476,7 +476,7 @@ namespace
 	{
 		int pixelOffset = 0;
 		int pixelCount = 0;
-		char* pixelData = nullptr;
+		std::vector<char> pixelData;
 	};
 }
 
@@ -545,9 +545,9 @@ void NetworkRunner::receiveResults()
 			ImagePart imagePart;
 			imagePart.pixelOffset = pixelOffset;
 			imagePart.pixelCount = pixelCount;
-			imagePart.pixelData = new char[dataSize];
+			imagePart.pixelData.resize(dataSize);
 
-			memcpy(imagePart.pixelData, dataStartPtr, dataSize);
+			memcpy(&imagePart.pixelData[0], dataStartPtr, dataSize);
 			imageParts.push_back(imagePart);
 
 			std::cout << tfm::format("Image part %d of %d received!\n", imageParts.size(), imagePartCount);
@@ -587,19 +587,13 @@ void NetworkRunner::receiveResults()
 			return;
 
 		for (ImagePart& part : imageParts)
-			memcpy((char*)&resultImage.getPixelData()[0] + part.pixelOffset * sizeof(Color), part.pixelData, part.pixelCount * sizeof(Color));
+			memcpy((char*)&resultImage.getPixelData()[0] + part.pixelOffset * sizeof(Color), &part.pixelData[0], part.pixelCount * sizeof(Color));
 
 		resultImage.save(settings.image.fileName);
 	}
 	catch (const std::exception& ex)
 	{
 		App::getLog().logError("Could not receive results: %s", ex.what());
-	}
-
-	for (ImagePart& part : imageParts)
-	{
-		if (part.pixelData != nullptr)
-			delete[] part.pixelData;
 	}
 }
 

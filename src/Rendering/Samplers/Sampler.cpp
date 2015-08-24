@@ -4,10 +4,6 @@
 #include <stdexcept>
 
 #include "Rendering/Samplers/Sampler.h"
-#include "Rendering/Samplers/RandomSampler.h"
-#include "Rendering/Samplers/RegularSampler.h"
-#include "Rendering/Samplers/JitteredSampler.h"
-#include "Rendering/Samplers/CMJSampler.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Raytracing/ONB.h"
@@ -42,16 +38,4 @@ Vector3 Sampler::mapToHemisphere(const ONB& onb, double distribution, const Vect
 	double w = cos_theta;
 
 	return u * onb.u + v * onb.v + w * onb.w;
-}
-
-Sampler* Sampler::getSampler(SamplerType type)
-{
-	switch (type)
-	{
-		case SamplerType::RANDOM: return new RandomSampler(); break;
-		case SamplerType::REGULAR: return new RegularSampler(); break;
-		case SamplerType::JITTERED: return new JitteredSampler(); break;
-		case SamplerType::CMJ: return new CMJSampler(); break;
-		default: throw std::runtime_error("Invalid sampler type");
-	}
 }
