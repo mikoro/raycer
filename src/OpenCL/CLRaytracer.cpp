@@ -92,7 +92,7 @@ void CLRaytracer::initialize()
 	CLManager::checkError(status, "Could not create spheres buffer");
 }
 
-void CLRaytracer::resizePixelBuffer(int width, int height)
+void CLRaytracer::resizePixelsBuffer(int width, int height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -101,7 +101,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 	bufferWidth = width;
 	bufferHeight = height;
 
-	releasePixelBuffer();
+	releasePixelsBuffer();
 	cl_int status = 0;
 
 	if (settings.general.interactive)
@@ -120,7 +120,7 @@ void CLRaytracer::resizePixelBuffer(int width, int height)
 	}
 }
 
-void CLRaytracer::releasePixelBuffer()
+void CLRaytracer::releasePixelsBuffer()
 {
 	if (pixelsPtr != nullptr)
 	{

@@ -1,10 +1,6 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifndef _WIN32
-#include <mm_malloc.h>
-#endif
-
 #include <cassert>
 #include <stdexcept>
 
@@ -21,15 +17,6 @@ using namespace Raycer;
 
 Framebuffer::Framebuffer()
 {
-}
-
-Framebuffer::~Framebuffer()
-{
-	if (floatPixelData != nullptr)
-	{
-		_mm_free(floatPixelData);
-		floatPixelData = nullptr;
-	}
 }
 
 void Framebuffer::initialize()
@@ -93,7 +80,7 @@ void Framebuffer::initialize()
 
 	GLHelper::checkError("Could not set OpenGL buffer parameters");
 
-	resizeWindow(settings.window.width, settings.window.height);
+	setWindowSize(settings.window.width, settings.window.height);
 
 	glGenFramebuffers(1, &framebufferId);
 	glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
@@ -107,28 +94,18 @@ void Framebuffer::initialize()
 	GLHelper::checkError("Could not set OpenGL framebuffer parameters");
 }
 
-void Framebuffer::resizeImage(int imageWidth_, int imageHeight_)
+void Framebuffer::resize(int width, int height)
 {
-	assert(imageWidth_ > 0 && imageHeight_ > 0);
+	assert(width > 0 && height > 0);
 
-	imageWidth = imageWidth_;
-	imageHeight = imageHeight_;
+	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
-	App::getLog().logInfo("Resizing framebuffer to %sx%s", imageWidth, imageHeight);
-
-	image.setSize(imageWidth, imageHeight);
-
-	if (floatPixelData != nullptr)
-		_mm_free(floatPixelData);
-
-	floatPixelData = (float*)_mm_malloc((imageWidth * imageHeight)* sizeof(float) * 4, 64);
-
-	if (floatPixelData == nullptr)
-		throw std::runtime_error("Could not allocate memory for the framebuffer");
+	image.setSize(width, height);
+	floatPixelData.resize(width * height * sizeof(float) * 4);
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)imageWidth, (GLsizei)imageHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	GLHelper::checkError("Could not reserve OpenGL texture memory");
@@ -136,12 +113,12 @@ void Framebuffer::resizeImage(int imageWidth_, int imageHeight_)
 	clear();
 }
 
-void Framebuffer::resizeWindow(int windowWidth_, int windowHeight_)
+void Framebuffer::setWindowSize(int width, int height)
 {
-	assert(windowWidth_ > 0 && windowHeight_ > 0);
+	assert(width > 0 && height > 0);
 
-	windowWidth = windowWidth_;
-	windowHeight = windowHeight_;
+	windowWidth = width;
+	windowHeight = height;
 
 	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, 0);
@@ -159,12 +136,12 @@ void Framebuffer::clear(const Color& color)
 	image.clear(color);
 }
 
-void Framebuffer::render() const
+void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
-
+	
 	// convert image data from Color to float array
-	for (int i = 0; i < (imageWidth * imageHeight); ++i)
+	for (int i = 0; i < image.getLength(); ++i)
 	{
 		int pixelIndex = i * 4;
 
@@ -173,6 +150,9 @@ void Framebuffer::render() const
 		floatPixelData[pixelIndex + 2] = (float)image.pixelData[i].b;
 		floatPixelData[pixelIndex + 3] = (float)image.pixelData[i].a;
 	}
+
+	int imageWidth = image.getWidth();
+	int imageHeight = image.getHeight();
 
 	/* Resampling pass */
 
@@ -188,7 +168,7 @@ void Framebuffer::render() const
 
 	if (!settings.openCL.enabled)
 	{
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)imageWidth, (GLsizei)imageHeight, GL_RGBA, GL_FLOAT, floatPixelData);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)imageWidth, (GLsizei)imageHeight, GL_RGBA, GL_FLOAT, &floatPixelData[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
 
@@ -235,14 +215,19 @@ void Framebuffer::enableSmoothing(bool state)
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 }
 
-int Framebuffer::getImageWidth() const
+int Framebuffer::getWidth() const
 {
-	return imageWidth;
+	return image.getWidth();
 }
 
-int Framebuffer::getImageHeight() const
+int Framebuffer::getHeight() const
 {
-	return imageHeight;
+	return image.getHeight();
+}
+
+Image& Framebuffer::getImage()
+{
+	return image;
 }
 
 GLuint Framebuffer::getImageTextureId() const

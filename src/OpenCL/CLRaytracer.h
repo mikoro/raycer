@@ -27,8 +27,8 @@ namespace Raycer
 		~CLRaytracer();
 
 		void initialize();
-		void resizePixelBuffer(int width, int height);
-		void releasePixelBuffer();
+		void resizePixelsBuffer(int width, int height);
+		void releasePixelsBuffer();
 		void run(RaytracerState& state, std::atomic<bool>& interrupted);
 		Image& getImage();
 		void printStructSizes();

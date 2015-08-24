@@ -60,7 +60,7 @@ namespace Raycer
 		void shutdown();
 
 		void windowResized(int width, int height);
-		void resizeFramebufferImage(int width, int height);
+		void resizeFramebuffer(int width, int height);
 
 		void mainLoop();
 		void update(double timeStep);

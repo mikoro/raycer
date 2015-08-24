@@ -37,7 +37,7 @@ void DefaultState::initialize()
 		scene = Scene::loadFromFile(settings.scene.fileName);
 	
 	scene.initialize();
-	scene.camera.setImagePlaneSize(framebuffer.getImageWidth(), framebuffer.getImageHeight());
+	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();
@@ -87,10 +87,10 @@ void DefaultState::render(double timeStep, double interpolation)
 	WindowRunner& runner = App::getWindowRunner();
 	Text& text = runner.getDefaultText();
 
-	state.image = &framebuffer.image;
+	state.image = &framebuffer.getImage();
 	state.scene = &scene;
-	state.sceneWidth = framebuffer.getImageWidth();
-	state.sceneHeight = framebuffer.getImageHeight();
+	state.sceneWidth = framebuffer.getWidth();
+	state.sceneHeight = framebuffer.getHeight();
 	state.pixelOffset = 0;
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
 	state.pixelsProcessed = 0;
@@ -104,7 +104,7 @@ void DefaultState::render(double timeStep, double interpolation)
 	{
 		switch (state.scene->toneMapper.type)
 		{
-			case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.image, scene.toneMapper.gamma); break;
+			case ToneMapType::GAMMA: ToneMapper::gamma(framebuffer.getImage(), scene.toneMapper.gamma); break;
 			case ToneMapType::REINHARD: break;
 			default: break;
 		}

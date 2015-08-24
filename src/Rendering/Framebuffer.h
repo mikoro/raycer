@@ -4,6 +4,7 @@
 #pragma once
 
 #include <GL/glcorearb.h>
+#include <vector>
 
 #include "Rendering/Image.h"
 
@@ -16,33 +17,27 @@ namespace Raycer
 	public:
 
 		Framebuffer();
-		~Framebuffer();
 
 		void initialize();
-		void resizeImage(int imageWidth, int imageHeight);
-		void resizeWindow(int windowWidth, int windowHeight);
+		void resize(int width, int height);
+		void setWindowSize(int width, int height);
 		void clear();
 		void clear(const Color& color);
-		void render() const;
+		void render();
 		void enableSmoothing(bool state);
 
-		int getImageWidth() const;
-		int getImageHeight() const;
+		int getWidth() const;
+		int getHeight() const;
+		Image& getImage();
 		GLuint getImageTextureId() const;
 		
-		Image image;
-
 	private:
 
-		Framebuffer(const Framebuffer& framebuffer);
-		Framebuffer& operator=(const Framebuffer& framebuffer);
+		Image image;
+		std::vector<float> floatPixelData;
 
-		int imageWidth = 0;
-		int imageHeight = 0;
 		int windowWidth = 0;
 		int windowHeight = 0;
-
-		float* floatPixelData = nullptr;
 
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;

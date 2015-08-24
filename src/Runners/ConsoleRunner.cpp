@@ -101,7 +101,7 @@ void ConsoleRunner::run(RaytracerState& state)
 	if (settings.openCL.enabled)
 	{
 		clRaytracer.initialize();
-		clRaytracer.resizePixelBuffer(state.sceneWidth, state.sceneHeight);
+		clRaytracer.resizePixelsBuffer(state.sceneWidth, state.sceneHeight);
 	}
 	
 	std::atomic<bool> finished;
