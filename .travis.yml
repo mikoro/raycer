@@ -5,10 +5,10 @@ matrix:
   include:
     - compiler: gcc
       env: BUILD=gcc
-    - compiler: clang
-      env: BUILD=clang
-    - compiler: clang
-      env: BUILD=analyze
+#    - compiler: clang
+#      env: BUILD=clang
+#    - compiler: clang
+#      env: BUILD=analyze
 
 install:
   - sh platform/linux/travis-install.sh
