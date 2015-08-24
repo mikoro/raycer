@@ -169,14 +169,14 @@ void CLRaytracer::uploadSceneData()
 	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
 	CLManager::checkError(status, "Could not write camera buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, lightsPtr, CL_FALSE, 0, sizeof(OpenCL::Light) * clScene.lights.size(), &clScene.lights[0], 0, NULL, NULL);
-	CLManager::checkError(status, "Could not write lights buffer");
+	//status = clEnqueueWriteBuffer(clManager.commandQueue, lightsPtr, CL_FALSE, 0, sizeof(OpenCL::Light) * clScene.lights.size(), &clScene.lights[0], 0, NULL, NULL);
+	//CLManager::checkError(status, "Could not write lights buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, planesPtr, CL_FALSE, 0, sizeof(OpenCL::Plane) * clScene.planes.size(), &clScene.planes[0], 0, NULL, NULL);
-	CLManager::checkError(status, "Could not write planes buffer");
+	//status = clEnqueueWriteBuffer(clManager.commandQueue, planesPtr, CL_FALSE, 0, sizeof(OpenCL::Plane) * clScene.planes.size(), &clScene.planes[0], 0, NULL, NULL);
+	//CLManager::checkError(status, "Could not write planes buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, spheresPtr, CL_FALSE, 0, sizeof(OpenCL::Sphere) * clScene.spheres.size(), &clScene.spheres[0], 0, NULL, NULL);
-	CLManager::checkError(status, "Could not write spheres buffer");
+	//status = clEnqueueWriteBuffer(clManager.commandQueue, spheresPtr, CL_FALSE, 0, sizeof(OpenCL::Sphere) * clScene.spheres.size(), &clScene.spheres[0], 0, NULL, NULL);
+	//CLManager::checkError(status, "Could not write spheres buffer");
 }
 
 void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <memory>
 #include <random>
 
 #include "Raytracing/Primitives/Primitive.h"
@@ -25,7 +26,6 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& info);
-		static void free(BVH* node);
 
 	private:
 
@@ -37,7 +37,7 @@ namespace Raycer
 
 		AABB aabb;
 
-		Primitive* left = nullptr;
-		Primitive* right = nullptr;
+		std::shared_ptr<Primitive> left;
+		std::shared_ptr<Primitive> right;
 	};
 }

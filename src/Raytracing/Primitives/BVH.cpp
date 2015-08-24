@@ -82,27 +82,6 @@ void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& i
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
 }
 
-void BVH::free(BVH* node)
-{
-	if (node->left != nullptr)
-	{
-		if (typeid(node->left) == typeid(BVH))
-			free((BVH*)node->left);
-
-		delete node->left;
-		node->left = nullptr;
-	}
-
-	if (node->right != nullptr)
-	{
-		if (typeid(node->right) == typeid(BVH))
-			free((BVH*)node->right);
-
-		delete node->right;
-		node->right = nullptr;
-	}
-}
-
 void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, const BVHBuildInfo& info, std::mt19937& gen, int& nodeCount, int& leafCount, int previousLeftSize, int previousRightSize)
 {
 	nodeCount++;
@@ -138,24 +117,24 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 
 	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->left = new BVH();
-		buildRecursive(leftPrimitives, (BVH*)node->left, info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
+		node->left = std::make_shared<BVH>();
+		buildRecursive(leftPrimitives, (BVH*)node->left.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->left = new PrimitiveList(leftPrimitives);
+		node->left = std::shared_ptr<PrimitiveList>(new PrimitiveList(leftPrimitives));
 	}
 
 	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->right = new BVH();
-		buildRecursive(rightPrimitives, (BVH*)node->right, info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
+		node->right = std::make_shared<BVH>();
+		buildRecursive(rightPrimitives, (BVH*)node->right.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->right = new PrimitiveList(rightPrimitives);
+		node->right = std::shared_ptr<PrimitiveList>(new PrimitiveList(rightPrimitives));
 	}
 }
 

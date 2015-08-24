@@ -77,12 +77,11 @@ CLManager::~CLManager()
 		commandQueue = nullptr;
 	}
 
-	// this seems to hang for 5 seconds at shutdown
-	/*if (context != nullptr)
+	if (context != nullptr)
 	{
 		clReleaseContext(context);
 		context = nullptr;
-	}*/
+	}
 }
 
 void CLManager::initialize()
@@ -101,10 +100,9 @@ void CLManager::initialize()
 	if (settings.openCL.platformId > (int)platformCount - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
-	cl_platform_id* platformIds = new cl_platform_id[platformCount];
-	checkError(clGetPlatformIDs(platformCount, platformIds, NULL), "Could not get platforms");
+	std::vector<cl_platform_id> platformIds(platformCount);
+	checkError(clGetPlatformIDs(platformCount, &platformIds[0], NULL), "Could not get platforms");
 	platformId = platformIds[settings.openCL.platformId];
-	delete[] platformIds;
 
 	size_t length = 0;
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, NULL, &length);
@@ -127,10 +125,9 @@ void CLManager::initialize()
 	if (settings.openCL.deviceId > (int)deviceCount - 1)
 		throw std::runtime_error("Invalid device id");
 
-	cl_device_id* deviceIds = new cl_device_id[deviceCount];
-	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, deviceIds, NULL), "Could not get devices");
+	std::vector<cl_device_id> deviceIds(deviceCount);
+	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, &deviceIds[0], NULL), "Could not get devices");
 	deviceId = deviceIds[settings.openCL.deviceId];
-	delete[] deviceIds;
 
 	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, NULL, &length);
 	std::vector<char> deviceName(length);
@@ -227,19 +224,19 @@ void CLManager::loadKernels()
 	checkError(status, "Could not build program");
 
 #if 1 && defined(_DEBUG)
-	log.logInfo("Writing OpenCL binary to raytrace.bin");
+	log.logInfo("Writing OpenCL binary to opencl.bin");
 
-	size_t binarySize = 0;
-	clGetProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &binarySize, NULL);
+	size_t binaryDataSize = 0;
+	clGetProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &binaryDataSize, NULL);
 
-	if (binarySize > 0)
+	if (binaryDataSize > 0)
 	{
-		unsigned char* binary = new unsigned char[binarySize];
-		clGetProgramInfo(program, CL_PROGRAM_BINARIES, binarySize, &binary, NULL);
-		std::ofstream binaryFile("raytrace.bin", std::ios::binary);
-		binaryFile.write((const char*)binary, binarySize);
+		std::vector<unsigned char> binaryData(binaryDataSize);
+		unsigned char* binaryPtr = &binaryData[0];
+		clGetProgramInfo(program, CL_PROGRAM_BINARIES, binaryDataSize, &binaryPtr, NULL);
+		std::ofstream binaryFile("opencl.bin", std::ios::binary);
+		binaryFile.write((const char*)&binaryData[0], binaryDataSize);
 		binaryFile.close();
-		delete[] binary;
 	}
 #endif
 
