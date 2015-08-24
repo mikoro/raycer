@@ -61,13 +61,13 @@ int ConsoleRunner::run()
 	state.pixelOffset = 0;
 	state.pixelCount = state.sceneWidth * state.sceneHeight;
 
-	image.setSize(state.sceneWidth, state.sceneHeight);
+	image.resize(state.sceneWidth, state.sceneHeight);
 
 	run(state);
 
 	if (!interrupted)
 	{
-		image.saveAs(settings.image.fileName);
+		image.save(settings.image.fileName);
 
 		if (settings.image.autoView)
 		{

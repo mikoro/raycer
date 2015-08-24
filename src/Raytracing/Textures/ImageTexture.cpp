@@ -17,16 +17,16 @@ void ImageTexture::initialize()
 
 	if (isBumpMap)
 	{
-		bumpMapX = Image(image.width, image.height);
-		bumpMapY = Image(image.width, image.height);
+		bumpMapX = Image(image.getWidth(), image.getHeight());
+		bumpMapY = Image(image.getWidth(), image.getHeight());
 
-		for (int y = 0; y < image.height; ++y)
+		for (int y = 0; y < image.getHeight(); ++y)
 		{
-			for (int x = 0; x < image.width; ++x)
+			for (int x = 0; x < image.getWidth(); ++x)
 			{
 				Color current = image.getPixel(x, y);
 
-				if (x < image.width - 1)
+				if (x < image.getWidth() - 1)
 				{
 					Color right = image.getPixel(x + 1, y);
 					Color rightDiff = right - current;
@@ -35,7 +35,7 @@ void ImageTexture::initialize()
 				else
 					bumpMapX.setPixel(x, y, bumpMapX.getPixel(x - 1, y));
 
-				if (y < image.height - 1)
+				if (y < image.getHeight() - 1)
 				{
 					Color top = image.getPixel(x, y + 1);
 					Color topDiff = top - current;

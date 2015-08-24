@@ -100,7 +100,7 @@ void Framebuffer::resize(int width, int height)
 
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
-	image.setSize(width, height);
+	image.resize(width, height);
 	floatPixelData.resize(width * height * sizeof(float) * 4);
 
 	// reserve the texture memory on the device
@@ -140,15 +140,17 @@ void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
 	
+	std::vector<Color>& imagePixelData = image.getPixelData();
+
 	// convert image data from Color to float array
-	for (int i = 0; i < image.getLength(); ++i)
+	for (int i = 0; i < (int)imagePixelData.size(); ++i)
 	{
 		int pixelIndex = i * 4;
 
-		floatPixelData[pixelIndex] = (float)image.pixelData[i].r;
-		floatPixelData[pixelIndex + 1] = (float)image.pixelData[i].g;
-		floatPixelData[pixelIndex + 2] = (float)image.pixelData[i].b;
-		floatPixelData[pixelIndex + 3] = (float)image.pixelData[i].a;
+		floatPixelData[pixelIndex] = (float)imagePixelData[i].r;
+		floatPixelData[pixelIndex + 1] = (float)imagePixelData[i].g;
+		floatPixelData[pixelIndex + 2] = (float)imagePixelData[i].b;
+		floatPixelData[pixelIndex + 3] = (float)imagePixelData[i].a;
 	}
 
 	int imageWidth = image.getWidth();

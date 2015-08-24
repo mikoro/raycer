@@ -9,12 +9,12 @@ using namespace Raycer;
 
 void ToneMapper::gamma(Image& image, double gamma)
 {
-	int length = image.getLength();
+	std::vector<Color>& pixelData = image.getPixelData();
 
 	#pragma omp parallel for
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 	{
-		image.pixelData[i] = Color::pow(image.pixelData[i], gamma).clamped();
-		image.pixelData[i].a = 1.0;
+		pixelData[i] = Color::pow(pixelData[i], gamma).clamped();
+		pixelData[i].a = 1.0;
 	}
 }

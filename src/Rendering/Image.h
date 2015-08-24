@@ -4,6 +4,9 @@
 #pragma once
 
 #include <string>
+#include <vector>
+
+#include "Math/Color.h"
 
 /*
 
@@ -13,8 +16,6 @@ Origin (0, 0) is at the bottom left corner.
 
 namespace Raycer
 {
-	class Color;
-
 	class Image
 	{
 	public:
@@ -23,17 +24,13 @@ namespace Raycer
 		Image(int length);
 		Image(int width, int height);
 		Image(int width, int height, float* rgbaData);
-		Image(const Image& other);
 		Image(const std::string& fileName);
-		~Image();
-
-		Image& operator=(const Image& other);
 
 		void load(int width, int height, float* rgbaData);
 		void load(const std::string& fileName);
-		void saveAs(const std::string& fileName) const;
-		void setSize(int length);
-		void setSize(int width, int height);
+		void save(const std::string& fileName) const;
+		void resize(int length);
+		void resize(int width, int height);
 		void setPixel(int x, int y, const Color& color);
 		void setPixel(int index, const Color& color);
 		void clear();
@@ -45,16 +42,18 @@ namespace Raycer
 
 		int getWidth() const;
 		int getHeight() const;
-		int getLength() const;
 
 		Color getPixel(int x, int y) const;
 		Color getPixelNearest(double u, double v) const;
 		Color getPixelBilinear(double u, double v) const;
 
+		std::vector<Color>& getPixelData();
+
+	private:
+
 		int width = 0;
 		int height = 0;
-		int length = 0;
 
-		Color* pixelData = nullptr;
+		std::vector<Color> pixelData;
 	};
 }

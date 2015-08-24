@@ -433,7 +433,7 @@ void NetworkRunner::handleJobs()
 			job.scene.initialize();
 			job.scene.camera.setImagePlaneSize(state.sceneWidth, state.sceneHeight);
 			job.scene.camera.precalculate();
-			job.image.setSize(state.pixelCount);
+			job.image.resize(state.pixelCount);
 
 			App::getConsoleRunner().run(state);
 
@@ -449,7 +449,7 @@ void NetworkRunner::handleJobs()
 					ip::tcp::socket socket(io);
 					socket.connect(job.clientEndpoint);
 					boost::asio::write(socket, boost::asio::buffer(message));
-					boost::asio::write(socket, boost::asio::buffer(job.image.pixelData, job.image.getLength() * sizeof(Color)));
+					boost::asio::write(socket, boost::asio::buffer(job.image.getPixelData(), job.image.getPixelData().size() * sizeof(Color)));
 					socket.close();
 
 					break;
@@ -490,7 +490,7 @@ void NetworkRunner::receiveResults()
 
 	try
 	{
-		resultImage.setSize(settings.image.width, settings.image.height);
+		resultImage.resize(settings.image.width, settings.image.height);
 
 		io_service io;
 		ip::tcp::socket socket(io);
@@ -587,9 +587,9 @@ void NetworkRunner::receiveResults()
 			return;
 
 		for (ImagePart& part : imageParts)
-			memcpy((char*)resultImage.pixelData + part.pixelOffset * sizeof(Color), part.pixelData, part.pixelCount * sizeof(Color));
+			memcpy((char*)&resultImage.getPixelData()[0] + part.pixelOffset * sizeof(Color), part.pixelData, part.pixelCount * sizeof(Color));
 
-		resultImage.saveAs(settings.image.fileName);
+		resultImage.save(settings.image.fileName);
 	}
 	catch (const std::exception& ex)
 	{

@@ -1,12 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifndef _WIN32
-#include <mm_malloc.h>
-#endif
-
 #include <algorithm>
-#include <cassert>
 #include <cstdint>
 #include <stdexcept>
 #include <vector>
@@ -34,12 +29,12 @@ Image::Image()
 
 Image::Image(int length_)
 {
-	setSize(length_);
+	resize(length_);
 }
 
 Image::Image(int width_, int height_)
 {
-	setSize(width_, height_);
+	resize(width_, height_);
 }
 
 Image::Image(int width_, int height_, float* rgbaData)
@@ -47,43 +42,16 @@ Image::Image(int width_, int height_, float* rgbaData)
 	load(width_, height_, rgbaData);
 }
 
-Image::Image(const Image& other)
-{
-	setSize(other.width, other.height);
-
-	for (int i = 0; i < length; ++i)
-		pixelData[i] = other.pixelData[i];
-}
-
 Image::Image(const std::string& fileName)
 {
 	load(fileName);
 }
 
-Image::~Image()
-{
-	if (pixelData != nullptr)
-	{
-		_mm_free(pixelData);
-		pixelData = nullptr;
-	}
-}
-
-Image& Image::operator=(const Image& other)
-{
-	setSize(other.width, other.height);
-
-	for (int i = 0; i < length; ++i)
-		pixelData[i] = other.pixelData[i];
-
-	return *this;
-}
-
 void Image::load(int width_, int height_, float* rgbaData)
 {
-	setSize(width_, height_);
+	resize(width_, height_);
 
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 	{
 		int dataIndex = i * 4;
 
@@ -101,12 +69,12 @@ void Image::load(const std::string& fileName)
 	if (stbi_is_hdr(fileName.c_str()))
 	{
 		int newWidth, newHeight, components;
-		float* data = stbi_loadf(fileName.c_str(), &newWidth, &newHeight, &components, 3); // RGB
+		float* loadData = stbi_loadf(fileName.c_str(), &newWidth, &newHeight, &components, 3); // RGB
 
-		if (data == nullptr)
+		if (loadData == nullptr)
 			throw std::runtime_error(tfm::format("Could not load HDR image file: %s", stbi_failure_reason()));
 
-		setSize(newWidth, newHeight);
+		resize(newWidth, newHeight);
 
 		for (int y = 0; y < height; ++y)
 		{
@@ -115,36 +83,36 @@ void Image::load(const std::string& fileName)
 				int pixelIndex = y * width + x;
 				int dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
 
-				pixelData[pixelIndex].r = data[dataIndex];
-				pixelData[pixelIndex].g = data[dataIndex + 1];
-				pixelData[pixelIndex].b = data[dataIndex + 2];
+				pixelData[pixelIndex].r = loadData[dataIndex];
+				pixelData[pixelIndex].g = loadData[dataIndex + 1];
+				pixelData[pixelIndex].b = loadData[dataIndex + 2];
 				pixelData[pixelIndex].a = 1.0;
 			}
 		}
 
-		stbi_image_free(data);
+		stbi_image_free(loadData);
 	}
 	else
 	{
 		int newWidth, newHeight, components;
-		uint32_t* data = (uint32_t*)stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4); // RGBA
+		uint32_t* loadData = (uint32_t*)stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4); // RGBA
 
-		if (data == nullptr)
+		if (loadData == nullptr)
 			throw std::runtime_error(tfm::format("Could not load image file: %s", stbi_failure_reason()));
 
-		setSize(newWidth, newHeight);
+		resize(newWidth, newHeight);
 
 		for (int y = 0; y < height; ++y)
 		{
 			for (int x = 0; x < width; ++x)
-				pixelData[y * width + x] = Color::fromAbgrValue(data[(height - 1 - y) * width + x]); // flip vertically
+				pixelData[y * width + x] = Color::fromAbgrValue(loadData[(height - 1 - y) * width + x]); // flip vertically
 		}
 
-		stbi_image_free(data);
+		stbi_image_free(loadData);
 	}
 }
 
-void Image::saveAs(const std::string& fileName) const
+void Image::save(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
 
@@ -152,24 +120,24 @@ void Image::saveAs(const std::string& fileName) const
 
 	if (StringUtils::endsWith(fileName, ".png") || StringUtils::endsWith(fileName, ".bmp") || StringUtils::endsWith(fileName, ".tga"))
 	{
-		std::vector<uint32_t> data(length);
+		std::vector<uint32_t> saveData(pixelData.size());
 
 		for (int y = 0; y < height; ++y)
 		{
 			for (int x = 0; x < width; ++x)
-				data[(height - 1 - y) * width + x] = pixelData[y * width + x].getAbgrValue(); // flip vertically
+				saveData[(height - 1 - y) * width + x] = pixelData[y * width + x].getAbgrValue(); // flip vertically
 		}
 
 		if (StringUtils::endsWith(fileName, ".png"))
-			result = stbi_write_png(fileName.c_str(), width, height, 4, &data[0], width * sizeof(uint32_t));
+			result = stbi_write_png(fileName.c_str(), width, height, 4, &saveData[0], width * sizeof(uint32_t));
 		else if (StringUtils::endsWith(fileName, ".bmp"))
-			result = stbi_write_bmp(fileName.c_str(), width, height, 4, &data[0]);
+			result = stbi_write_bmp(fileName.c_str(), width, height, 4, &saveData[0]);
 		else if (StringUtils::endsWith(fileName, ".tga"))
-			result = stbi_write_tga(fileName.c_str(), width, height, 4, &data[0]);
+			result = stbi_write_tga(fileName.c_str(), width, height, 4, &saveData[0]);
 	}
 	else if (StringUtils::endsWith(fileName, ".hdr"))
 	{
-		std::vector<float> data(length * 3);
+		std::vector<float> saveData(pixelData.size() * 3);
 
 		for (int y = 0; y < height; ++y)
 		{
@@ -178,13 +146,13 @@ void Image::saveAs(const std::string& fileName) const
 				int dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
 				int pixelIndex = y * width + x;
 
-				data[dataIndex] = (float)pixelData[pixelIndex].r;
-				data[dataIndex + 1] = (float)pixelData[pixelIndex].g;
-				data[dataIndex + 2] = (float)pixelData[pixelIndex].b;
+				saveData[dataIndex] = (float)pixelData[pixelIndex].r;
+				saveData[dataIndex + 1] = (float)pixelData[pixelIndex].g;
+				saveData[dataIndex + 2] = (float)pixelData[pixelIndex].b;
 			}
 		}
 
-		result = stbi_write_hdr(fileName.c_str(), width, height, 3, &data[0]);
+		result = stbi_write_hdr(fileName.c_str(), width, height, 3, &saveData[0]);
 	}
 	else
 		throw std::runtime_error("Could not save the image (non-supported format)");
@@ -193,72 +161,51 @@ void Image::saveAs(const std::string& fileName) const
 		throw std::runtime_error(tfm::format("Could not save the image: %s", stbi_failure_reason()));
 }
 
-void Image::setSize(int length_)
+void Image::resize(int length_)
 {
-	setSize(length_, 1);
+	resize(length_, 1);
 }
 
-void Image::setSize(int width_, int height_)
+void Image::resize(int width_, int height_)
 {
-	assert(width_ >= 0 && height_ >= 0);
-
 	width = width_;
 	height = height_;
-	length = width * height;
 
-	if (pixelData != nullptr)
-	{
-		_mm_free(pixelData);
-		pixelData = nullptr;
-	}
-
-	// allow zero length images
-	if (length == 0)
-		return;
-
-	pixelData = (Color*)_mm_malloc(length * sizeof(Color), 64);
-
-	if (pixelData == nullptr)
-		throw std::runtime_error("Could not allocate memory for the image");
-
+	pixelData.resize(width * height);
 	clear();
 }
 
 void Image::setPixel(int x, int y, const Color& color)
 {
-	assert(x >= 0 && x < width && y >= 0 && y < height);
-
 	pixelData[y * width + x] = color;
 }
 
 void Image::setPixel(int index, const Color& color)
 {
-	assert(index >= 0 && index < length);
-
 	pixelData[index] = color;
 }
 
 void Image::clear()
 {
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 		pixelData[i] = Color(0.0, 0.0, 0.0, 1.0);
 }
 
 void Image::clear(const Color& color)
 {
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 		pixelData[i] = color;
 }
 
 void Image::applyGamma(double gamma)
 {
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 		pixelData[i] = Color::pow(pixelData[i], gamma);
 }
 
 void Image::swapComponents()
 {
-	for (int i = 0; i < length; ++i)
+	for (int i = 0; i < (int)pixelData.size(); ++i)
 	{
 		Color color = pixelData[i];
 
@@ -279,7 +226,7 @@ void Image::flip()
 			tempImage.pixelData[(height - 1 - y) * width + x] = pixelData[y * width + x];
 	}
 
-	std::swap(pixelData, tempImage.pixelData);
+	*this = tempImage;
 }
 
 void Image::fillTestPattern()
@@ -308,15 +255,8 @@ int Image::getHeight() const
 	return height;
 }
 
-int Image::getLength() const
-{
-	return length;
-}
-
 Color Image::getPixel(int x, int y) const
 {
-	assert(x >= 0 && x < width && y >= 0 && y < height);
-
 	return pixelData[y * width + x];
 }
 
@@ -360,4 +300,9 @@ Color Image::getPixelBilinear(double u, double v) const
 
 	// bilinear interpolation
 	return (tx1 * c11 + tx2 * c21) * ty1 + (tx1 * c12 + tx2 * c22) * ty2;
+}
+
+std::vector<Color>& Image::getPixelData()
+{
+	return pixelData;
 }

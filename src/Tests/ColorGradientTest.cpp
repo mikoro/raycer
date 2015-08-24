@@ -35,5 +35,5 @@ TEST_CASE("ColorGradient functionality", "[colorgradient]")
 			image.setPixel(x, y, color);
 	}
 
-	image.saveAs("gradient.png");
+	image.save("gradient.png");
 }

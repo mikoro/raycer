@@ -470,5 +470,5 @@ void WindowRunner::takeScreenshot() const
 	GLHelper::checkError("Could not read pixels from renderbuffer");
 
 	Image image(windowWidth, windowHeight, &data[0]);
-	image.saveAs("screenshot.png");
+	image.save("screenshot.png");
 }

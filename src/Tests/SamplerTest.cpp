@@ -66,9 +66,9 @@ TEST_CASE("Sampler functionality", "[sampler]")
 			}
 		}
 		
-		image1.saveAs(tfm::format("sampler_%s_1D.png", sampler.first));
-		image2.saveAs(tfm::format("sampler_%s_2D.png", sampler.first));
-		image3.saveAs(tfm::format("sampler_%s_disk.png", sampler.first));
+		image1.save(tfm::format("sampler_%s_1D.png", sampler.first));
+		image2.save(tfm::format("sampler_%s_2D.png", sampler.first));
+		image3.save(tfm::format("sampler_%s_disk.png", sampler.first));
 		file.close();
 	}
 }
