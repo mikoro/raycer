@@ -14,7 +14,7 @@ Scene Scene::createTestScene9()
 
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
 	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
-	scene.raytracer.multiSamples = 6;
+	scene.raytracer.multiSamples = 5;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;

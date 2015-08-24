@@ -12,9 +12,12 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+
 	scene.raytracer.backgroundColor = Color::WHITE;
 	scene.raytracer.maxIterations = 4;
-	scene.raytracer.dofSamples = 0;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;

@@ -13,6 +13,10 @@ Scene Scene::createTestScene6()
 	scene.rootBVH.enabled = true;
 	scene.raytracer.maxIterations = 8;
 
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(7.0, 0.0, -12.2);

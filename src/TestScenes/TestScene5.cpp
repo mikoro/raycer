@@ -16,6 +16,10 @@ Scene Scene::createTestScene5()
 	scene.raytracer.backgroundColor = Color::WHITE;
 	scene.raytracer.maxIterations = 16;
 
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(13.0, 5.0, 5.3);

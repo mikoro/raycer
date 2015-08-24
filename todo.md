@@ -1,4 +1,5 @@
 tracer
+ - openmp thread limit
  - raymarching + height map + volumetric fog
  - triangle edge intersection glitch
  - opencl tracer

@@ -14,7 +14,10 @@ Scene Scene::createTestScene10()
 
 	scene.rootBVH.enabled = false;
 
-	scene.raytracer.timeSamples = 4;
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+	scene.raytracer.timeSamples = 10;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 20.0;

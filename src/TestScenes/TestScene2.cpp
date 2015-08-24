@@ -13,8 +13,8 @@ Scene Scene::createTestScene2()
 	Scene scene;
 
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::BOX;
-	scene.raytracer.multiSamples = 3;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
 
 	// CAMERA //
 

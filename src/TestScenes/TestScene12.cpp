@@ -10,6 +10,10 @@ Scene Scene::createTestScene12()
 {
 	Scene scene;
 
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(2.3, 5.0, 6.0);
@@ -25,11 +29,12 @@ Scene Scene::createTestScene12()
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
-	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	groundPlane.normal = Vector3(0.001, 1.0, 0.001).normalized();
 	
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
@@ -90,7 +95,7 @@ Scene Scene::createTestScene12()
 	scene.lights.ambientLight.intensity = 0.4;
 	scene.lights.ambientLight.enableOcclusion = true;
 	scene.lights.ambientLight.maxDistance = 2.0;
-	scene.lights.ambientLight.samples = 3;
+	scene.lights.ambientLight.samples = 10;
 
 	return scene;
 }

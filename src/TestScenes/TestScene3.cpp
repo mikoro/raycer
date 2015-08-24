@@ -14,6 +14,10 @@ Scene Scene::createTestScene3()
 	scene.rootBVH.buildInfo.maxLeafSize = 1;
 	scene.boundingBoxes.enabled = false;
 
+	scene.raytracer.multiSamplerType = SamplerType::CMJ;
+	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamples = 5;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 5.0, 8.0);
