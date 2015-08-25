@@ -25,6 +25,7 @@ namespace Raycer
 		void setImagePlaneSize(int width, int height);
 		void update(const Scene& scene, double timeStep);
 		void precalculate();
+		bool hasMoved() const;
 
 		Ray getRay(const Vector2& pixelCoordinate) const;
 
@@ -55,6 +56,8 @@ namespace Raycer
 		Vector3 angularVelocity;
 		Vector3 smoothAngularVelocity;
 		Vector3 smoothAngularAcceleration;
+
+		bool cameraHasMoved = false;
 
 		bool isMovingPrimitive = false;
 		Primitive* movingPrimitive = nullptr;

@@ -211,6 +211,8 @@ void Camera::update(const Scene& scene, double timeStep)
 		velocity += up * moveSpeed;
 	}
 
+	cameraHasMoved = false;
+
 	if (settings.camera.smoothMovement)
 	{
 		smoothVelocity += smoothAcceleration * timeStep;
@@ -219,12 +221,18 @@ void Camera::update(const Scene& scene, double timeStep)
 		smoothAngularVelocity += smoothAngularAcceleration * timeStep;
 		orientation.yaw += smoothAngularVelocity.y * timeStep;
 		orientation.pitch += smoothAngularVelocity.x * timeStep;
+
+		if (!smoothVelocity.isZero() || !smoothAngularVelocity.isZero())
+			cameraHasMoved = true;
 	}
 	else
 	{
 		position += velocity * timeStep;
 		orientation.yaw += angularVelocity.y * timeStep;
 		orientation.pitch += angularVelocity.x * timeStep;
+
+		if (!velocity.isZero() || !angularVelocity.isZero())
+			cameraHasMoved = true;
 	}
 	
 	orientation.clampPitch();
@@ -239,6 +247,11 @@ void Camera::precalculate()
 
 	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
 	imagePlaneCenter = position + (forward * imagePlaneDistance);
+}
+
+bool Camera::hasMoved() const
+{
+	return cameraHasMoved;
 }
 
 Ray Camera::getRay(const Vector2& pixelCoordinate) const
