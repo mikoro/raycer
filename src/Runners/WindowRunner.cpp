@@ -235,7 +235,7 @@ void WindowRunner::initialize()
 		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	framebuffer.initialize();
-	framebuffer.enableSmoothing(settings.framebuffer.smoothing);
+	framebuffer.enableSmoothing(settings.framebuffer.enableSmoothing);
 
 	if (settings.openCL.enabled)
 	{
@@ -378,8 +378,8 @@ void WindowRunner::update(double timeStep)
 
 	if (keyWasPressed(GLFW_KEY_F9))
 	{
-		settings.framebuffer.smoothing = !settings.framebuffer.smoothing;
-		framebuffer.enableSmoothing(settings.framebuffer.smoothing);
+		settings.framebuffer.enableSmoothing = !settings.framebuffer.enableSmoothing;
+		framebuffer.enableSmoothing(settings.framebuffer.enableSmoothing);
 	}
 
 	if (keyWasPressed(GLFW_KEY_F10))

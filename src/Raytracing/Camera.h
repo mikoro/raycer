@@ -50,9 +50,11 @@ namespace Raycer
 		double imagePlaneHeight = 0.0;
 
 		Vector3 velocity;
-		Vector3 acceleration;
+		Vector3 smoothVelocity;
+		Vector3 smoothAcceleration;
 		Vector3 angularVelocity;
-		Vector3 angularAcceleration;
+		Vector3 smoothAngularVelocity;
+		Vector3 smoothAngularAcceleration;
 
 		bool isMovingPrimitive = false;
 		Primitive* movingPrimitive = nullptr;

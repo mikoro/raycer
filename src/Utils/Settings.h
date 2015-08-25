@@ -71,7 +71,7 @@ namespace Raycer
 		struct Framebuffer
 		{
 			double scale;
-			bool smoothing;
+			bool enableSmoothing;
 			std::string resampleVertexShader;
 			std::string resampleFragmentShader;
 			std::string filterVertexShader;

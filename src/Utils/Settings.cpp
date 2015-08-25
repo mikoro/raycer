@@ -51,7 +51,7 @@ void Settings::load(const std::string& fileName)
 	window.defaultFontSize = iniReader.getValue<int>("window", "defaultFontSize");
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
-	framebuffer.smoothing = iniReader.getValue<bool>("framebuffer", "smoothing");
+	framebuffer.enableSmoothing = iniReader.getValue<bool>("framebuffer", "enableSmoothing");
 	framebuffer.resampleVertexShader = iniReader.getValue("framebuffer", "resampleVertexShader");
 	framebuffer.resampleFragmentShader = iniReader.getValue("framebuffer", "resampleFragmentShader");
 	framebuffer.filterVertexShader = iniReader.getValue("framebuffer", "filterVertexShader");

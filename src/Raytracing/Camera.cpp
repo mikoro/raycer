@@ -42,30 +42,9 @@ void Camera::update(const Scene& scene, double timeStep)
 {
 	WindowRunner& windowRunner = App::getWindowRunner();
 	Settings& settings = App::getSettings();
-
-	double velocityLength = velocity.length();
-	double angularVelocityLength = angularVelocity.length();
-
-	if (velocityLength > 0.0)
-		acceleration = settings.camera.moveDrag * (-velocity.normalized() * velocityLength);
-	else
-		acceleration = Vector3(0.0, 0.0, 0.0);
-
-	if (angularVelocityLength > 0.0)
-		angularAcceleration = settings.camera.mouseDrag * (-angularVelocity.normalized() * angularVelocityLength);
-	else
-		angularAcceleration = Vector3(0.0, 0.0, 0.0);
-
 	MouseInfo mouseInfo = windowRunner.getMouseInfo();
 
-	if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
-	{
-		angularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
-		angularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
-
-		if (!settings.camera.freeLook)
-			isMovingPrimitive = false;
-	}
+	// PRIMITIVE SELECTION AND MOVEMENT //
 
 	if (windowRunner.mouseWasPressed(GLFW_MOUSE_BUTTON_RIGHT))
 	{
@@ -115,40 +94,12 @@ void Camera::update(const Scene& scene, double timeStep)
 
 			translate += right * (double)mouseInfo.deltaX / 100.0;
 		}
-		
-		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.01);
 
+		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.01);
 		movingPrimitive->transform(scale, rotate, translate);
 	}
 
-	double moveSpeed = settings.camera.moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
-		moveSpeed *= settings.camera.slowModifier;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
-		moveSpeed *= settings.camera.fastModifier;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_ALT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_ALT))
-		moveSpeed *= settings.camera.veryFastModifier;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_W) || windowRunner.keyIsDown(GLFW_KEY_UP))
-		acceleration += forward * moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_S) || windowRunner.keyIsDown(GLFW_KEY_DOWN))
-		acceleration -= forward * moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_A) || windowRunner.keyIsDown(GLFW_KEY_LEFT))
-		acceleration -= right * moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_D) || windowRunner.keyIsDown(GLFW_KEY_RIGHT))
-		acceleration += right * moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_Q))
-		acceleration -= up * moveSpeed;
-
-	if (windowRunner.keyIsDown(GLFW_KEY_E))
-		acceleration += up * moveSpeed;
+	// LENS STUFF //
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_HOME))
 	{
@@ -184,13 +135,98 @@ void Camera::update(const Scene& scene, double timeStep)
 	orthoSize = std::max(0.0, orthoSize);
 	fishEyeAngle = std::max(1.0, std::min(fishEyeAngle, 360.0));
 
-	velocity += acceleration * timeStep;
-	position += velocity * timeStep;
+	// CAMERA MOVEMENT //
 
-	angularVelocity += angularAcceleration * timeStep;
-	orientation.yaw += angularVelocity.y * timeStep;
-	orientation.pitch += angularVelocity.x * timeStep;
+	double smoothVelocityLength = smoothVelocity.length();
+	double smoothAngularVelocityLength = smoothAngularVelocity.length();
 
+	if (smoothVelocityLength > 0.0)
+		smoothAcceleration = settings.camera.moveDrag * (-smoothVelocity.normalized() * smoothVelocityLength);
+	else
+		smoothAcceleration = Vector3(0.0, 0.0, 0.0);
+
+	if (smoothAngularVelocityLength > 0.0)
+		smoothAngularAcceleration = settings.camera.mouseDrag * (-smoothAngularVelocity.normalized() * smoothAngularVelocityLength);
+	else
+		smoothAngularAcceleration = Vector3(0.0, 0.0, 0.0);
+
+	velocity = Vector3(0.0, 0.0, 0.0);
+	angularVelocity = Vector3(0.0, 0.0, 0.0);
+
+	if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
+	{
+		smoothAngularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
+		smoothAngularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
+		angularVelocity.y = -(double)mouseInfo.deltaX * settings.camera.mouseSpeed;
+		angularVelocity.x = (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
+
+		if (!settings.camera.freeLook)
+			isMovingPrimitive = false;
+	}
+
+	double moveSpeed = settings.camera.moveSpeed;
+
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
+		moveSpeed *= settings.camera.slowModifier;
+
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_SHIFT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_SHIFT))
+		moveSpeed *= settings.camera.fastModifier;
+
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_ALT) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_ALT))
+		moveSpeed *= settings.camera.veryFastModifier;
+
+	if (windowRunner.keyIsDown(GLFW_KEY_W) || windowRunner.keyIsDown(GLFW_KEY_UP))
+	{
+		smoothAcceleration += forward * moveSpeed;
+		velocity += forward * moveSpeed;
+	}
+
+	if (windowRunner.keyIsDown(GLFW_KEY_S) || windowRunner.keyIsDown(GLFW_KEY_DOWN))
+	{
+		smoothAcceleration -= forward * moveSpeed;
+		velocity -= forward * moveSpeed;
+	}
+
+	if (windowRunner.keyIsDown(GLFW_KEY_A) || windowRunner.keyIsDown(GLFW_KEY_LEFT))
+	{
+		smoothAcceleration -= right * moveSpeed;
+		velocity -= right * moveSpeed;
+	}
+
+	if (windowRunner.keyIsDown(GLFW_KEY_D) || windowRunner.keyIsDown(GLFW_KEY_RIGHT))
+	{
+		smoothAcceleration += right * moveSpeed;
+		velocity += right * moveSpeed;
+	}
+
+	if (windowRunner.keyIsDown(GLFW_KEY_Q))
+	{
+		smoothAcceleration -= up * moveSpeed;
+		velocity -= up * moveSpeed;
+	}
+
+	if (windowRunner.keyIsDown(GLFW_KEY_E))
+	{
+		smoothAcceleration += up * moveSpeed;
+		velocity += up * moveSpeed;
+	}
+
+	if (settings.camera.smoothMovement)
+	{
+		smoothVelocity += smoothAcceleration * timeStep;
+		position += smoothVelocity * timeStep;
+
+		smoothAngularVelocity += smoothAngularAcceleration * timeStep;
+		orientation.yaw += smoothAngularVelocity.y * timeStep;
+		orientation.pitch += smoothAngularVelocity.x * timeStep;
+	}
+	else
+	{
+		position += velocity * timeStep;
+		orientation.yaw += angularVelocity.y * timeStep;
+		orientation.pitch += angularVelocity.x * timeStep;
+	}
+	
 	orientation.clampPitch();
 	orientation.normalize();
 }
