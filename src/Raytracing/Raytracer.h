@@ -10,6 +10,7 @@
 
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
+#include "Rendering/ToneMappers/ToneMapper.h"
 
 namespace Raycer
 {
@@ -53,6 +54,7 @@ namespace Raycer
 
 		std::map<SamplerType, std::shared_ptr<Sampler>> samplers;
 		std::map<FilterType, std::shared_ptr<Filter>> filters;
+		std::map<ToneMapperType, std::shared_ptr<ToneMapper>> toneMappers;
 
 		std::mt19937 generator;
 		std::uniform_int_distribution<int> randomDist;

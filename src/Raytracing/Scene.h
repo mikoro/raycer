@@ -29,12 +29,11 @@
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
+#include "Rendering/ToneMappers/ToneMapper.h"
 #include "Math/Color.h"
 
 namespace Raycer
 {
-	enum class ToneMapType { GAMMA, REINHARD };
-
 	class Primitive;
 	class Texture;
 
@@ -91,6 +90,7 @@ namespace Raycer
 			FilterType multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
 			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
+			ToneMapperType toneMapperType = ToneMapperType::LINEAR;
 		} raytracer;
 
 		Camera camera;
@@ -105,13 +105,6 @@ namespace Raycer
 			double height = 100.0;
 			double heightSteepness = 1.0;
 		} fog;
-
-		struct ToneMapper
-		{
-			bool enabled = true;
-			ToneMapType type = ToneMapType::GAMMA;
-			double gamma = 1.0 / 2.2;
-		} toneMapper;
 
 		struct RootBVH
 		{

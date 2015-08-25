@@ -46,6 +46,9 @@
     <Filter Include="Rendering\Filters">
       <UniqueIdentifier>{06fe8c49-c24d-4444-b587-cbcf5f33a433}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Rendering\ToneMappers">
+      <UniqueIdentifier>{9d2d8593-f27e-452b-a1da-c9524e81779c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -110,9 +113,6 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Rendering\Image.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Rendering\ToneMapper.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\Utils\PoissonDisc.cpp">
@@ -343,6 +343,12 @@
     <ClCompile Include="src\TestScenes\TestScene16.cpp">
       <Filter>TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\ToneMappers\LinearToneMapper.cpp">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\ToneMappers\ReinhardToneMapper.cpp">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -420,9 +426,6 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\RaytracerState.h">
       <Filter>Raytracing</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\ToneMapper.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\PoissonDisc.h">
       <Filter>Utils</Filter>
@@ -585,6 +588,15 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Filters\LanczosSincFilter.h">
       <Filter>Rendering\Filters</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMappers\LinearToneMapper.h">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMappers\ReinhardToneMapper.h">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMappers\ToneMapper.h">
+      <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

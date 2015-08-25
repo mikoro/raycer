@@ -34,6 +34,7 @@ namespace Raycer
 
 		uint32_t getRgbaValue() const;
 		uint32_t getAbgrValue() const;
+		double getLuminance() const;
 		bool isTransparent() const;
 		bool isZero() const;
 		bool isClamped() const;

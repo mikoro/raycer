@@ -59,9 +59,7 @@ double ImageTexture::getValue(const Vector2& texcoord, const Vector3& position) 
 {
 	(void)position;
 
-	Color color = image.getPixelBilinear(texcoord.x, texcoord.y);
-
-	return 0.2126 * pow(color.r, gamma) + 0.7152 * pow(color.g, gamma) + 0.0722 * pow(color.b, gamma);
+	return image.getPixelBilinear(texcoord.x, texcoord.y).getLuminance();
 }
 
 Vector3 ImageTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const

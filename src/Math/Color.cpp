@@ -145,6 +145,11 @@ uint32_t Color::getAbgrValue() const
 	return (a_ << 24 | b_ << 16 | g_ << 8 | r_);
 }
 
+double Color::getLuminance() const
+{
+	return 0.2126 * r + 0.7152 * g + 0.0722 * b; // expects linear space
+}
+
 bool Color::isTransparent() const
 {
 	return (a < 1.0);

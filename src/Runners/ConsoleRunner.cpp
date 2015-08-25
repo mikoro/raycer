@@ -20,7 +20,6 @@
 #include "Utils/Settings.h"
 #include "OpenCL/CLManager.h"
 #include "Rendering/Image.h"
-#include "Rendering/ToneMapper.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -114,16 +113,6 @@ void ConsoleRunner::run(RaytracerState& state)
 		else
 			clRaytracer.run(state, interrupted);
 
-		if (state.scene->toneMapper.enabled)
-		{
-			switch (state.scene->toneMapper.type)
-			{
-				case ToneMapType::GAMMA: ToneMapper::gamma(*state.image, state.scene->toneMapper.gamma); break;
-				case ToneMapType::REINHARD: break;
-				default: break;
-			}
-		}
-		
 		finished = true;
 	};
 

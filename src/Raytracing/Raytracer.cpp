@@ -31,6 +31,8 @@
 #include "Rendering/Filters/CubicBSplineFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
+#include "Rendering/ToneMappers/LinearToneMapper.h"
+#include "Rendering/ToneMappers/ReinhardToneMapper.h"
 
 using namespace Raycer;
 
@@ -50,6 +52,9 @@ Raytracer::Raytracer()
 	filters[FilterType::CUBIC_BSPLINE] = std::make_shared<CubicBSplineFilter>();
 	filters[FilterType::GAUSSIAN] = std::make_shared<GaussianFilter>();
 	filters[FilterType::LANCZOS_SINC] = std::make_shared<LanczosSincFilter>();
+
+	toneMappers[ToneMapperType::LINEAR] = std::make_shared<LinearToneMapper>();
+	toneMappers[ToneMapperType::REINHARD] = std::make_shared<ReinhardToneMapper>();
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -78,6 +83,12 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 
 	if (!interrupted)
 		state.pixelsProcessed = state.pixelCount;
+
+	if (scene.raytracer.toneMapperType != ToneMapperType::NONE)
+	{
+		ToneMapper* toneMapper = toneMappers[scene.raytracer.toneMapperType].get();
+		toneMapper->apply(image);
+	}
 }
 
 Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
@@ -97,7 +108,7 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 	{
 		for (int x = 0; x < n; ++x)
 		{
-			Vector2 sampleOffset = sampler->getDiskSample(x, y, n, n, permutation) * filterWidth;
+			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
 			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;

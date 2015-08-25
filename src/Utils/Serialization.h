@@ -28,7 +28,6 @@ namespace Raycer
 		a(cereal::make_nvp("raytracer", b.raytracer),
 			cereal::make_nvp("camera", b.camera),
 			cereal::make_nvp("fog", b.fog),
-			cereal::make_nvp("toneMapper", b.toneMapper),
 			cereal::make_nvp("rootBVH", b.rootBVH),
 			cereal::make_nvp("boundingBoxes", b.boundingBoxes),
 			cereal::make_nvp("textures", b.textures),
@@ -77,14 +76,6 @@ namespace Raycer
 			cereal::make_nvp("heightDispersion", b.heightDispersion),
 			cereal::make_nvp("height", b.height),
 			cereal::make_nvp("heightSteepness", b.heightSteepness));
-	}
-
-	template<class Archive>
-	void serialize(Archive& a, Scene::ToneMapper& b)
-	{
-		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("type", b.type),
-			cereal::make_nvp("gamma", b.gamma));
 	}
 
 	template<class Archive>

@@ -15,6 +15,7 @@ Scene Scene::createTestScene1()
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
 	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
 	scene.raytracer.multiSamples = 0;
+	scene.raytracer.toneMapperType = ToneMapperType::REINHARD;
 
 	// CAMERA //
 
