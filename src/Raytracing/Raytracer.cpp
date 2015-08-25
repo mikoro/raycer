@@ -28,7 +28,7 @@
 #include "Rendering/Filters/BoxFilter.h"
 #include "Rendering/Filters/TentFilter.h"
 #include "Rendering/Filters/BellFilter.h"
-#include "Rendering/Filters/CubicBSplineFilter.h"
+#include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
 #include "Rendering/ToneMappers/LinearToneMapper.h"
@@ -49,7 +49,7 @@ Raytracer::Raytracer()
 	filters[FilterType::BOX] = std::make_shared<BoxFilter>();
 	filters[FilterType::TENT] = std::make_shared<TentFilter>();
 	filters[FilterType::BELL] = std::make_shared<BellFilter>();
-	filters[FilterType::CUBIC_BSPLINE] = std::make_shared<CubicBSplineFilter>();
+	filters[FilterType::MITCHELL] = std::make_shared<MitchellFilter>();
 	filters[FilterType::GAUSSIAN] = std::make_shared<GaussianFilter>();
 	filters[FilterType::LANCZOS_SINC] = std::make_shared<LanczosSincFilter>();
 

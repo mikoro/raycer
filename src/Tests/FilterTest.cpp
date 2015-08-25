@@ -11,7 +11,7 @@
 #include "Rendering/Filters/BoxFilter.h"
 #include "Rendering/Filters/TentFilter.h"
 #include "Rendering/Filters/BellFilter.h"
-#include "Rendering/Filters/CubicBSplineFilter.h"
+#include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
 #include "Math/Vector2.h"
@@ -23,7 +23,7 @@ TEST_CASE("Filter functionality", "[filter]")
 	BoxFilter boxFilter;
 	TentFilter tentFilter;
 	BellFilter bellFilter;
-	CubicBSplineFilter cubicFilter;
+	MitchellFilter mitchellFilter;
 	GaussianFilter gaussianFilter;
 	LanczosSincFilter lanczosFilter;
 
@@ -31,7 +31,7 @@ TEST_CASE("Filter functionality", "[filter]")
 	filters["box"] = &boxFilter;
 	filters["tent"] = &tentFilter;
 	filters["bell"] = &bellFilter;
-	filters["cubic"] = &cubicFilter;
+	filters["mitchell"] = &mitchellFilter;
 	filters["gaussian"] = &gaussianFilter;
 	filters["lanczos"] = &lanczosFilter;
 

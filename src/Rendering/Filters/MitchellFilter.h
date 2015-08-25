@@ -7,11 +7,11 @@
 
 namespace Raycer
 {
-	class CubicBSplineFilter : public Filter
+	class MitchellFilter : public Filter
 	{
 	public:
 
-		CubicBSplineFilter(double width = 2.0, double B = 1.0 / 3.0, double C = 1.0 / 3.0);
+		MitchellFilter(double width = 2.0, double B = 1.0 / 3.0, double C = 1.0 / 3.0);
 
 		double getWeight(double x);
 		double getWeight(double x, double y);

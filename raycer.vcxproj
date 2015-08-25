@@ -197,7 +197,7 @@
     <ClCompile Include="src\Raytracing\Textures\WoodTexture.cpp" />
     <ClCompile Include="src\Rendering\Filters\BellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp" />
-    <ClCompile Include="src\Rendering\Filters\CubicBSplineFilter.cpp" />
+    <ClCompile Include="src\Rendering\Filters\MitchellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\GaussianFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\LanczosSincFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\TentFilter.cpp" />
@@ -306,7 +306,7 @@
     <ClInclude Include="src\Raytracing\Textures\WoodTexture.h" />
     <ClInclude Include="src\Rendering\Filters\BellFilter.h" />
     <ClInclude Include="src\Rendering\Filters\BoxFilter.h" />
-    <ClInclude Include="src\Rendering\Filters\CubicBSplineFilter.h" />
+    <ClInclude Include="src\Rendering\Filters\MitchellFilter.h" />
     <ClInclude Include="src\Rendering\Filters\Filter.h" />
     <ClInclude Include="src\Rendering\Filters\GaussianFilter.h" />
     <ClInclude Include="src\Rendering\Filters\LanczosSincFilter.h" />

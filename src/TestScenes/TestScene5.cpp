@@ -17,7 +17,7 @@ Scene Scene::createTestScene5()
 	scene.raytracer.maxRayIterations = 16;
 
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
 	scene.raytracer.multiSamples = 5;
 
 	// CAMERA //

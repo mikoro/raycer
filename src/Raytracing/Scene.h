@@ -87,7 +87,7 @@ namespace Raycer
 			int dofSamples = 0;
 			int timeSamples = 0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
-			FilterType multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 		} raytracer;

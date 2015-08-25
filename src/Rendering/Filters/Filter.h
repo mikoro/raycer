@@ -7,7 +7,7 @@ namespace Raycer
 {
 	class Vector2;
 
-	enum class FilterType { BOX, TENT, BELL, CUBIC_BSPLINE, GAUSSIAN, LANCZOS_SINC };
+	enum class FilterType { BOX, TENT, BELL, MITCHELL, GAUSSIAN, LANCZOS_SINC };
 
 	class Filter
 	{

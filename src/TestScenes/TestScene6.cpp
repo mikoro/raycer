@@ -14,7 +14,7 @@ Scene Scene::createTestScene6()
 	scene.raytracer.maxRayIterations = 8;
 
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
+	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
 	scene.raytracer.multiSamples = 0;
 	scene.toneMapper.type = ToneMapperType::REINHARD;
 

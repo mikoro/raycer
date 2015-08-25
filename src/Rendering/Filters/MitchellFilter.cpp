@@ -4,19 +4,19 @@
 #include <algorithm>
 #include <cmath>
 
-#include "Rendering/Filters/CubicBSplineFilter.h"
+#include "Rendering/Filters/MitchellFilter.h"
 #include "Math/Vector2.h"
 
 using namespace Raycer;
 
-CubicBSplineFilter::CubicBSplineFilter(double width_, double B_, double C_)
+MitchellFilter::MitchellFilter(double width_, double B_, double C_)
 {
 	width = width_;
 	B = B_;
 	C = C_;
 }
 
-double CubicBSplineFilter::getWeight(double x)
+double MitchellFilter::getWeight(double x)
 {
 	x = std::abs(x) / (width / 2.0);
 
@@ -28,17 +28,17 @@ double CubicBSplineFilter::getWeight(double x)
 		return 0.0;
 }
 
-double CubicBSplineFilter::getWeight(double x, double y)
+double MitchellFilter::getWeight(double x, double y)
 {
 	return getWeight(x) * getWeight(y);
 }
 
-double CubicBSplineFilter::getWeight(const Vector2& point)
+double MitchellFilter::getWeight(const Vector2& point)
 {
 	return getWeight(point.x) * getWeight(point.y);
 }
 
-double CubicBSplineFilter::getWidth()
+double MitchellFilter::getWidth()
 {
 	return width;
 }
