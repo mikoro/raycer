@@ -30,7 +30,7 @@ void DefaultState::initialize()
 	Framebuffer& framebuffer = App::getFramebuffer();
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
-	if (settings.scene.enableTestScene)
+	if (settings.scene.enableTestScenes)
 		scene = Scene::createTestScene(settings.scene.testSceneNumber);
 	else
 		scene = Scene::loadFromFile(settings.scene.fileName);

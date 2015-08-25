@@ -5,9 +5,10 @@
 
 namespace Raycer
 {
+	class Scene;
 	class Image;
 
-	enum class ToneMapperType { LINEAR, REINHARD };
+	enum class ToneMapperType { NONE, LINEAR, REINHARD };
 
 	class ToneMapper
 	{
@@ -15,12 +16,6 @@ namespace Raycer
 
 		virtual ~ToneMapper() {}
 
-		virtual void apply(Image& image) = 0;
-
-	protected:
-
-		bool applyGamma;
-		double gamma;
-		bool shouldClamp;
+		virtual void apply(const Scene& scene, Image& image) = 0;
 	};
 }

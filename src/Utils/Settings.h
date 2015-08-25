@@ -43,7 +43,7 @@ namespace Raycer
 		struct Scene
 		{
 			std::string fileName;
-			bool enableTestScene;
+			bool enableTestScenes;
 			int testSceneNumber;
 		} scene;
 
@@ -59,8 +59,8 @@ namespace Raycer
 		{
 			int width;
 			int height;
-			bool fullscreen;
-			bool vsync;
+			bool enableFullscreen;
+			bool enableVsync;
 			bool hideCursor;
 			bool showFps;
 			bool showCameraInfo;
@@ -80,6 +80,8 @@ namespace Raycer
 
 		struct Camera
 		{
+			bool freeLook;
+			bool smoothMovement;
 			double moveSpeed;
 			double moveDrag;
 			double mouseSpeed;
@@ -87,7 +89,6 @@ namespace Raycer
 			double slowModifier;
 			double fastModifier;
 			double veryFastModifier;
-			bool freeLook;
 		} camera;
 	};
 }

@@ -17,7 +17,7 @@ Scene Scene::createTestScene8()
 	scene.raytracer.multiSamples = 5;
 
 	scene.raytracer.backgroundColor = Color::WHITE;
-	scene.raytracer.maxIterations = 4;
+	scene.raytracer.maxRayIterations = 4;
 
 	scene.fog.enabled = true;
 	scene.fog.distance = 200.0;

@@ -7,19 +7,13 @@
 
 namespace Raycer
 {
+	class Scene;
 	class Image;
 
 	class ReinhardToneMapper : public ToneMapper
 	{
 	public:
 
-		ReinhardToneMapper(bool applyGamma = true, double gamma = 2.2, bool shouldClamp = false, double key = 0.18, double maxLuminance = 1.0);
-
-		void apply(Image& image);
-
-	private:
-
-		double key;
-		double maxLuminance;
+		void apply(const Scene& scene, Image& image);
 	};
 }

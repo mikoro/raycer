@@ -158,12 +158,12 @@ int App::run(int argc, char** argv)
 
 		if (testSceneArg.isSet())
 		{
-			settings.scene.enableTestScene = true;
+			settings.scene.enableTestScenes = true;
 			settings.scene.testSceneNumber = testSceneArg.getValue();
 		}
 
 		if (nonTestSceneSwitch.isSet())
-			settings.scene.enableTestScene = false;
+			settings.scene.enableTestScenes = false;
 
 		if (clientSwitch.isSet())
 		{

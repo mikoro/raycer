@@ -7,18 +7,13 @@
 
 namespace Raycer
 {
+	class Scene;
 	class Image;
 
 	class LinearToneMapper : public ToneMapper
 	{
 	public:
 
-		LinearToneMapper(bool applyGamma = true, double gamma = 2.2, bool shouldClamp = true, double exposure = 0.0);
-
-		void apply(Image& image);
-
-	private:
-
-		double exposure;
+		void apply(const Scene& scene, Image& image);
 	};
 }

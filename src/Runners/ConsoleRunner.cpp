@@ -43,7 +43,7 @@ int ConsoleRunner::run()
 
 	Scene scene;
 	
-	if (settings.scene.enableTestScene)
+	if (settings.scene.enableTestScenes)
 		scene = Scene::createTestScene(settings.scene.testSceneNumber);
 	else
 		scene = Scene::loadFromFile(settings.scene.fileName);

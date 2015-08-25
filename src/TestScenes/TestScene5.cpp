@@ -14,7 +14,7 @@ Scene Scene::createTestScene5()
 
 	scene.rootBVH.enabled = true;
 	scene.raytracer.backgroundColor = Color::WHITE;
-	scene.raytracer.maxIterations = 16;
+	scene.raytracer.maxRayIterations = 16;
 
 	scene.raytracer.multiSamplerType = SamplerType::CMJ;
 	scene.raytracer.multiSamplerFilterType = FilterType::CUBIC_BSPLINE;

@@ -32,7 +32,7 @@ void Settings::load(const std::string& fileName)
 	network.broadcastPort = iniReader.getValue<int>("network", "broadcastPort");
 
 	scene.fileName = iniReader.getValue("scene", "fileName");
-	scene.enableTestScene = iniReader.getValue<bool>("scene", "enableTestScene");
+	scene.enableTestScenes = iniReader.getValue<bool>("scene", "enableTestScenes");
 	scene.testSceneNumber = iniReader.getValue<int>("scene", "testSceneNumber");
 
 	image.width = iniReader.getValue<int>("image", "width");
@@ -42,8 +42,8 @@ void Settings::load(const std::string& fileName)
 
 	window.width = iniReader.getValue<int>("window", "width");
 	window.height = iniReader.getValue<int>("window", "height");
-	window.fullscreen = iniReader.getValue<bool>("window", "fullscreen");
-	window.vsync = iniReader.getValue<bool>("window", "vsync");
+	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
+	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showFps = iniReader.getValue<bool>("window", "showFps");
 	window.showCameraInfo = iniReader.getValue<bool>("window", "showCameraInfo");
@@ -57,6 +57,8 @@ void Settings::load(const std::string& fileName)
 	framebuffer.filterVertexShader = iniReader.getValue("framebuffer", "filterVertexShader");
 	framebuffer.filterFragmentShader = iniReader.getValue("framebuffer", "filterFragmentShader");
 
+	camera.freeLook = iniReader.getValue<bool>("camera", "freeLook");
+	camera.smoothMovement = iniReader.getValue<bool>("camera", "smoothMovement");
 	camera.moveSpeed = iniReader.getValue<double>("camera", "moveSpeed");
 	camera.moveDrag = iniReader.getValue<double>("camera", "moveDrag");
 	camera.mouseSpeed = iniReader.getValue<double>("camera", "mouseSpeed");
@@ -64,5 +66,4 @@ void Settings::load(const std::string& fileName)
 	camera.slowModifier = iniReader.getValue<double>("camera", "slowModifier");
 	camera.fastModifier = iniReader.getValue<double>("camera", "fastModifier");
 	camera.veryFastModifier = iniReader.getValue<double>("camera", "veryFastModifier");
-	camera.freeLook = iniReader.getValue<bool>("camera", "freeLook");
 }

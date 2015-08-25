@@ -79,7 +79,7 @@ namespace Raycer
 
 		struct Raytracer
 		{
-			int maxIterations = 3;
+			int maxRayIterations = 3;
 			double rayStartOffset = 0.000001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
@@ -90,8 +90,18 @@ namespace Raycer
 			FilterType multiSamplerFilterType = FilterType::CUBIC_BSPLINE;
 			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
-			ToneMapperType toneMapperType = ToneMapperType::LINEAR;
 		} raytracer;
+
+		struct ToneMapper
+		{
+			ToneMapperType type = ToneMapperType::LINEAR;
+			bool applyGamma = true;
+			bool shouldClamp = true;
+			double gamma = 2.2;
+			double exposure = 0.0;
+			double key = 0.18;
+			double maxLuminance = 1.0;
+		} toneMapper;
 
 		Camera camera;
 

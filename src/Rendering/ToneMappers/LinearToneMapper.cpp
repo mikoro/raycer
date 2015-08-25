@@ -2,34 +2,27 @@
 // License: MIT, see the LICENSE file.
 
 #include "Rendering/ToneMappers/LinearToneMapper.h"
+#include "Raytracing/Scene.h"
 #include "Rendering/Image.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
 
-LinearToneMapper::LinearToneMapper(bool applyGamma_, double gamma_, bool shouldClamp_, double exposure_)
-{
-	applyGamma = applyGamma_;
-	gamma = gamma_;
-	shouldClamp = shouldClamp_;
-	exposure = exposure_;
-}
-
-void LinearToneMapper::apply(Image& image)
+void LinearToneMapper::apply(const Scene& scene, Image& image)
 {
 	std::vector<Color>& pixelData = image.getPixelData();
-	double invGamma = 1.0 / gamma;
+	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
 	for (int i = 0; i < (int)pixelData.size(); ++i)
 	{
-		pixelData[i] *= pow(2.0, exposure);
+		pixelData[i] *= pow(2.0, scene.toneMapper.exposure);
 		pixelData[i].a = 1.0;
 
-		if (applyGamma)
+		if (scene.toneMapper.applyGamma)
 			pixelData[i] = Color::pow(pixelData[i], invGamma);
 
-		if (shouldClamp)
+		if (scene.toneMapper.shouldClamp)
 			pixelData[i].clamp();
 	}
 }

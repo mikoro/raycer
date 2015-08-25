@@ -4,21 +4,13 @@
 #include <cmath>
 
 #include "Rendering/ToneMappers/ReinhardToneMapper.h"
+#include "Raytracing/Scene.h"
 #include "Rendering/Image.h"
 #include "Math/Color.h"
 
 using namespace Raycer;
 
-ReinhardToneMapper::ReinhardToneMapper(bool applyGamma_, double gamma_, bool shouldClamp_, double key_, double maxLuminance_)
-{
-	applyGamma = applyGamma_;
-	gamma = gamma_;
-	shouldClamp = shouldClamp_;
-	key = key_;
-	maxLuminance = maxLuminance_;
-}
-
-void ReinhardToneMapper::apply(Image& image)
+void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 {
 	std::vector<Color>& pixelData = image.getPixelData();
 
@@ -31,9 +23,9 @@ void ReinhardToneMapper::apply(Image& image)
 		logSum += log(epsilon + pixelData[i].getLuminance());
 
 	double logAvgLuminance = exp(logSum / (double)pixelCount);
-	double scale = key / logAvgLuminance;
-	double maxLuminance2 = maxLuminance * maxLuminance;
-	double invGamma = 1.0 / gamma;
+	double scale = scene.toneMapper.key / logAvgLuminance;
+	double maxLuminance2 = scene.toneMapper.maxLuminance * scene.toneMapper.maxLuminance;
+	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
 	for (int i = 0; i < pixelCount; ++i)
@@ -46,10 +38,10 @@ void ReinhardToneMapper::apply(Image& image)
 		pixelData[i] *= colorScale;
 		pixelData[i].a = 1.0;
 
-		if (applyGamma)
+		if (scene.toneMapper.applyGamma)
 			pixelData[i] = Color::pow(pixelData[i], invGamma);
 		
-		if (shouldClamp)
+		if (scene.toneMapper.shouldClamp)
 			pixelData[i].clamp();
 	}
 }

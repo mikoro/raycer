@@ -26,6 +26,7 @@ namespace Raycer
 	void serialize(Archive& a, Scene& b)
 	{
 		a(cereal::make_nvp("raytracer", b.raytracer),
+			cereal::make_nvp("toneMapper", b.toneMapper),
 			cereal::make_nvp("camera", b.camera),
 			cereal::make_nvp("fog", b.fog),
 			cereal::make_nvp("rootBVH", b.rootBVH),
@@ -53,7 +54,7 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene::Raytracer& b)
 	{
-		a(cereal::make_nvp("maxIterations", b.maxIterations),
+		a(cereal::make_nvp("maxRayIterations", b.maxRayIterations),
 			cereal::make_nvp("rayStartOffset", b.rayStartOffset),
 			cereal::make_nvp("backgroundColor", b.backgroundColor),
 			cereal::make_nvp("offLensColor", b.offLensColor),
@@ -64,6 +65,18 @@ namespace Raycer
 			cereal::make_nvp("multiSamplerFilterType", b.multiSamplerFilterType),
 			cereal::make_nvp("dofSamplerType", b.dofSamplerType),
 			cereal::make_nvp("timeSamplerType", b.timeSamplerType));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Scene::ToneMapper& b)
+	{
+		a(cereal::make_nvp("type", b.type),
+			cereal::make_nvp("applyGamma", b.applyGamma),
+			cereal::make_nvp("shouldClamp", b.shouldClamp),
+			cereal::make_nvp("gamma", b.gamma),
+			cereal::make_nvp("exposure", b.exposure),
+			cereal::make_nvp("key", b.key),
+			cereal::make_nvp("maxLuminance", b.maxLuminance));
 	}
 
 	template<class Archive>

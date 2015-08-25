@@ -84,10 +84,10 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	if (!interrupted)
 		state.pixelsProcessed = state.pixelCount;
 
-	if (scene.raytracer.toneMapperType != ToneMapperType::NONE)
+	if (scene.toneMapper.type != ToneMapperType::NONE)
 	{
-		ToneMapper* toneMapper = toneMappers[scene.raytracer.toneMapperType].get();
-		toneMapper->apply(image);
+		ToneMapper* toneMapper = toneMappers[scene.toneMapper.type].get();
+		toneMapper->apply(scene, image);
 	}
 }
 
@@ -261,7 +261,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	Color reflectionColor;
 
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && iteration < scene.raytracer.maxIterations)
+	if (transmittance > 0.0 && iteration < scene.raytracer.maxRayIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -291,7 +291,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	}
 
 	// calculate and trace reflected ray
-	if (reflectance > 0.0 && iteration < scene.raytracer.maxIterations)
+	if (reflectance > 0.0 && iteration < scene.raytracer.maxRayIterations)
 	{
 		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
 		R.normalize();
