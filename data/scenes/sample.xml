@@ -1,8 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cereal>
 	<scene>
+		<camera>
+			<position>
+				<x>0</x>
+				<y>5</y>
+				<z>7</z>
+			</position>
+			<orientation>
+				<pitch>-30</pitch>
+				<yaw>0</yaw>
+				<roll>0</roll>
+			</orientation>
+			<projectionType>0</projectionType>
+			<fov>75</fov>
+			<orthoSize>10</orthoSize>
+			<fishEyeAngle>180</fishEyeAngle>
+			<apertureSize>0.10000000000000001</apertureSize>
+			<focalLenght>10</focalLenght>
+		</camera>
 		<raytracer>
-			<maxIterations>3</maxIterations>
+			<maxRayIterations>3</maxRayIterations>
 			<rayStartOffset>9.9999999999999995e-07</rayStartOffset>
 			<backgroundColor>
 				<r>0</r>
@@ -24,25 +42,16 @@
 			<dofSamplerType>3</dofSamplerType>
 			<timeSamplerType>2</timeSamplerType>
 		</raytracer>
-		<camera>
-			<position>
-				<x>0</x>
-				<y>5</y>
-				<z>7</z>
-			</position>
-			<orientation>
-				<pitch>-30</pitch>
-				<yaw>0</yaw>
-				<roll>0</roll>
-			</orientation>
-			<projectionType>0</projectionType>
-			<fov>75</fov>
-			<orthoSize>10</orthoSize>
-			<fishEyeAngle>180</fishEyeAngle>
-			<apertureSize>0.10000000000000001</apertureSize>
-			<focalLenght>10</focalLenght>
-		</camera>
-		<fog>
+		<toneMapper>
+			<type>1</type>
+			<applyGamma>true</applyGamma>
+			<shouldClamp>true</shouldClamp>
+			<gamma>2.2000000000000002</gamma>
+			<exposure>0</exposure>
+			<key>0.17999999999999999</key>
+			<maxLuminance>1</maxLuminance>
+		</toneMapper>
+		<simpleFog>
 			<enabled>false</enabled>
 			<color>
 				<r>1</r>
@@ -55,14 +64,9 @@
 			<heightDispersion>false</heightDispersion>
 			<height>100</height>
 			<heightSteepness>1</heightSteepness>
-		</fog>
-		<toneMapper>
-			<enabled>true</enabled>
-			<type>0</type>
-			<gamma>0.45454545454545453</gamma>
-		</toneMapper>
+		</simpleFog>
 		<rootBVH>
-			<enabled>true</enabled>
+			<enabled>false</enabled>
 			<buildInfo>
 				<maxLeafSize>5</maxLeafSize>
 				<useSAH>true</useSAH>
@@ -398,6 +402,8 @@
 		<primitives>
 			<planes size="dynamic">
 				<value0>
+					<id>0</id>
+					<materialId>1</materialId>
 					<position>
 						<x>0</x>
 						<y>0</y>
@@ -408,11 +414,12 @@
 						<y>1</y>
 						<z>0</z>
 					</normal>
-					<materialId>1</materialId>
 				</value0>
 			</planes>
 			<spheres size="dynamic">
 				<value0>
+					<id>0</id>
+					<materialId>2</materialId>
 					<position>
 						<x>0</x>
 						<y>1</y>
@@ -424,11 +431,12 @@
 						<z>0</z>
 					</displacement>
 					<radius>1</radius>
-					<materialId>2</materialId>
 				</value0>
 			</spheres>
 			<boxes size="dynamic">
 				<value0>
+					<id>0</id>
+					<materialId>3</materialId>
 					<position>
 						<x>3</x>
 						<y>1</y>
@@ -439,11 +447,12 @@
 						<y>2</y>
 						<z>2</z>
 					</extent>
-					<materialId>3</materialId>
 				</value0>
 			</boxes>
 			<triangles size="dynamic">
 				<value0>
+					<id>0</id>
+					<materialId>4</materialId>
 					<vertices>
 						<value0>
 							<x>-4</x>
@@ -492,10 +501,25 @@
 							<y>0</y>
 						</value2>
 					</texcoords>
-					<materialId>4</materialId>
+					<normal>
+						<x>0</x>
+						<y>0</y>
+						<z>1</z>
+					</normal>
+					<tangent>
+						<x>-nan(ind)</x>
+						<y>-nan(ind)</y>
+						<z>-nan(ind)</z>
+					</tangent>
+					<bitangent>
+						<x>-nan(ind)</x>
+						<y>-nan(ind)</y>
+						<z>-nan(ind)</z>
+					</bitangent>
 				</value0>
 			</triangles>
 			<meshes size="dynamic"/>
+			<instances size="dynamic"/>
 		</primitives>
 		<objScenes size="dynamic"/>
 	</scene>

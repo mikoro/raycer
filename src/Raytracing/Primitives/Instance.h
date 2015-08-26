@@ -23,6 +23,7 @@ namespace Raycer
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
+		int primitiveId = 0;
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translate = Vector3(0.0, 0.0, 0.0);

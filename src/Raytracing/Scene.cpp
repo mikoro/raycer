@@ -172,10 +172,12 @@ std::string Scene::saveToXmlString() const
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
-	std::map<int, Texture*> texturesMap;
+	std::map<int, Primitive*> primitivesMap;
 	std::map<int, Material*> materialsMap;
+	std::map<int, Texture*> texturesMap;
 
 	// OBJ SCENES
+
 	for (const ObjScene& objScene : objScenes)
 	{
 		ObjReaderResult result = ObjReader::getMeshes(objScene.filePath, objScene.scale, 1000000);
@@ -192,6 +194,8 @@ void Scene::initialize()
 		for (ImageTexture& imageTexture : result.imageTextures)
 			textures.imageTextures.push_back(imageTexture);
 	}
+
+	objScenes.clear();
 
 	// TEXTURE POINTERS
 
@@ -248,16 +252,46 @@ void Scene::initialize()
 	for (Instance& instance : primitives.instances)
 		primitives.all.push_back(&instance);
 
-	// INITIALIZATION AND VALIDATION
+	// POINTER MAP GENERATION AND VALIDATION
+
+	for (Primitive* primitive : primitives.all)
+	{
+		if (primitive->id != 0)
+		{
+			if (primitivesMap.count(primitive->id))
+				throw std::runtime_error(tfm::format("A duplicate primitive id (%d) was found", primitive->id));
+
+			primitivesMap[primitive->id] = primitive;
+		}
+			
+	}
+
+	for (Material& material : materials)
+	{
+		if (materialsMap.count(material.id))
+			throw std::runtime_error(tfm::format("A duplicate material id (%d) was found", material.id));
+
+		materialsMap[material.id] = &material;
+	}
 
 	for (Texture* texture : texturesList)
 	{
+		if (texturesMap.count(texture->id))
+			throw std::runtime_error(tfm::format("A duplicate texture id (%d) was found", texture->id));
+
 		texture->initialize();
 		texturesMap[texture->id] = texture;
 	}
 
-	for (Material& material : materials)
-		materialsMap[material.id] = &material;
+	// INITIALIZATION AND VALIDATION
+
+	for (Instance& instance : primitives.instances)
+	{
+		if (primitivesMap.count(instance.primitiveId))
+			instance.primitive = primitivesMap[instance.primitiveId];
+		else
+			throw std::runtime_error(tfm::format("An instance has a non-existent primitive id (%d)", instance.primitiveId));
+	}
 
 	for (Primitive* primitive : primitives.all)
 	{
@@ -268,13 +302,13 @@ void Scene::initialize()
 			if (texturesMap.count(primitive->material->colorTextureId))
 				primitive->material->colorTexture = texturesMap[primitive->material->colorTextureId];
 			else
-				throw std::runtime_error(tfm::format("A material (%d) has an invalid texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
+				throw std::runtime_error(tfm::format("A material (%d) has a non-existent texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
 
 			if (texturesMap.count(primitive->material->normalMapTextureId))
 				primitive->material->normalMapTexture = texturesMap[primitive->material->normalMapTextureId];
 		}
 		else
-			throw std::runtime_error(tfm::format("A primitive has an invalid material id (%d)", primitive->materialId));
+			throw std::runtime_error(tfm::format("A primitive has a non-existent material id (%d)", primitive->materialId));
 
 		primitive->initialize();
 	}

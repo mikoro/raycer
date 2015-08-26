@@ -77,6 +77,8 @@ namespace Raycer
 		static Scene createTestScene15();
 		static Scene createTestScene16();
 
+		Camera camera;
+
 		struct Raytracer
 		{
 			int maxRayIterations = 3;
@@ -102,8 +104,6 @@ namespace Raycer
 			double key = 0.18;
 			double maxLuminance = 1.0;
 		} toneMapper;
-
-		Camera camera;
 
 		struct SimpleFog
 		{

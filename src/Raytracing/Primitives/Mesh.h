@@ -34,8 +34,11 @@ namespace Raycer
 		bool enableBVH = true;
 		BVHBuildInfo bvhBuildInfo;
 
-		AABB aabb;
 		std::vector<Triangle> triangles;
+
+	private:
+
+		AABB aabb;
 		FlatBVH bvh;
 	};
 }

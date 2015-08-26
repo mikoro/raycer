@@ -78,8 +78,9 @@ Scene Scene::createTestScene5()
 	box2Material.nonShadowing = true;
 
 	Box box2;
-	box2.extent = Vector3(20.0, 10.0, 1.0);
+	box2.id = 1;
 	box2.materialId = box2Material.id;
+	box2.extent = Vector3(20.0, 10.0, 1.0);
 	box2.position = Vector3(0.0, 100.0, 0.0);
 
 	scene.textures.colorTextures.push_back(box2Texture);
@@ -103,7 +104,7 @@ Scene Scene::createTestScene5()
 
 	Instance instance1;
 	instance1.materialId = instance1Material.id;
-	instance1.primitive = &scene.primitives.boxes.back();
+	instance1.primitiveId = box2.id;
 
 	scene.textures.colorTextures.push_back(instance1Texture);
 	scene.materials.push_back(instance1Material);

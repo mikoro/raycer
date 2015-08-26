@@ -26,6 +26,7 @@ Scene Scene::createTestScene6()
 	sphere1Texture.id = 1;
 	sphere1Texture.intensity = 1.0;
 	sphere1Texture.imageFilePath = "data/images/rooftop.hdr";
+	sphere1Texture.applyGamma = false;
 
 	Material sphere1Material;
 	sphere1Material.id = 1;

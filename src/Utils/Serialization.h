@@ -25,9 +25,9 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Scene& b)
 	{
-		a(cereal::make_nvp("raytracer", b.raytracer),
+		a(cereal::make_nvp("camera", b.camera),
+			cereal::make_nvp("raytracer", b.raytracer),
 			cereal::make_nvp("toneMapper", b.toneMapper),
-			cereal::make_nvp("camera", b.camera),
 			cereal::make_nvp("simpleFog", b.simpleFog),
 			cereal::make_nvp("rootBVH", b.rootBVH),
 			cereal::make_nvp("boundingBoxes", b.boundingBoxes),
@@ -138,7 +138,8 @@ namespace Raycer
 			cereal::make_nvp("spheres", b.spheres),
 			cereal::make_nvp("boxes", b.boxes),
 			cereal::make_nvp("triangles", b.triangles),
-			cereal::make_nvp("meshes", b.meshes));
+			cereal::make_nvp("meshes", b.meshes),
+			cereal::make_nvp("instances", b.instances));
 	}
 
 	// ---------------------------------------------
@@ -203,47 +204,67 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, Plane& b)
 	{
-		a(cereal::make_nvp("position", b.position),
-			cereal::make_nvp("normal", b.normal),
-			cereal::make_nvp("materialId", b.materialId));
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("position", b.position),
+			cereal::make_nvp("normal", b.normal));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, Sphere& b)
 	{
-		a(cereal::make_nvp("position", b.position),
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("position", b.position),
 			cereal::make_nvp("displacement", b.displacement),
-			cereal::make_nvp("radius", b.radius),
-			cereal::make_nvp("materialId", b.materialId));
+			cereal::make_nvp("radius", b.radius));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, Box& b)
 	{
-		a(cereal::make_nvp("position", b.position),
-			cereal::make_nvp("extent", b.extent),
-			cereal::make_nvp("materialId", b.materialId));
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("position", b.position),
+			cereal::make_nvp("extent", b.extent));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, Triangle& b)
 	{
-		a(cereal::make_nvp("vertices", b.vertices),
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("vertices", b.vertices),
 			cereal::make_nvp("normals", b.normals),
 			cereal::make_nvp("texcoords", b.texcoords),
-			cereal::make_nvp("materialId", b.materialId));
+			cereal::make_nvp("normal", b.normal),
+			cereal::make_nvp("tangent", b.tangent),
+			cereal::make_nvp("bitangent", b.bitangent));
 	}
 
 	template<class Archive>
 	void serialize(Archive& a, Mesh& b)
 	{
-		a(cereal::make_nvp("meshFilePath", b.meshFilePath),
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("meshFilePath", b.meshFilePath),
 			cereal::make_nvp("position", b.position),
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("orientation", b.orientation),
-			cereal::make_nvp("materialId", b.materialId),
 			cereal::make_nvp("enableBVH", b.enableBVH),
-			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
+			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo),
+			cereal::make_nvp("triangles", b.triangles));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Instance& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("primitiveId", b.primitiveId),
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("rotate", b.rotate),
+			cereal::make_nvp("translate", b.translate));
 	}
 
 	// ---------------------------------------------
@@ -274,7 +295,8 @@ namespace Raycer
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("imageFilePath", b.imageFilePath),
 			cereal::make_nvp("applyGamma", b.applyGamma),
-			cereal::make_nvp("gamma", b.gamma));
+			cereal::make_nvp("gamma", b.gamma),
+			cereal::make_nvp("isBumpMap", b.isBumpMap));
 	}
 
 	template<class Archive>
