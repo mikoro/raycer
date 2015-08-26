@@ -28,7 +28,7 @@ namespace Raycer
 		a(cereal::make_nvp("raytracer", b.raytracer),
 			cereal::make_nvp("toneMapper", b.toneMapper),
 			cereal::make_nvp("camera", b.camera),
-			cereal::make_nvp("fog", b.fog),
+			cereal::make_nvp("simpleFog", b.simpleFog),
 			cereal::make_nvp("rootBVH", b.rootBVH),
 			cereal::make_nvp("boundingBoxes", b.boundingBoxes),
 			cereal::make_nvp("textures", b.textures),
@@ -80,7 +80,7 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Scene::Fog& b)
+	void serialize(Archive& a, Scene::SimpleFog& b)
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
 			cereal::make_nvp("color", b.color),

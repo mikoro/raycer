@@ -10,11 +10,9 @@ Scene Scene::createTestScene14()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
+	scene.raytracer.multiSamples = 0;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.rootBVH.enabled = true;
 
 	// CAMERA //
 

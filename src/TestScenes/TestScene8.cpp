@@ -7,21 +7,20 @@
 
 using namespace Raycer;
 
-// lots of different sized specular spheres and fog
+// lots of different sized specular spheres and simple fog
 Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
-
 	scene.raytracer.backgroundColor = Color::WHITE;
 	scene.raytracer.maxRayIterations = 4;
+	scene.raytracer.multiSamples = 0;
 
-	scene.fog.enabled = true;
-	scene.fog.distance = 200.0;
-	scene.fog.steepness = 2.0;
+	scene.rootBVH.enabled = true;
+
+	scene.simpleFog.enabled = true;
+	scene.simpleFog.distance = 200.0;
+	scene.simpleFog.steepness = 2.0;
 
 	// CAMERA //
 

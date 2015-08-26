@@ -12,17 +12,13 @@ Scene Scene::createTestScene10()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = false;
+	scene.raytracer.multiSamples = 0;
+	scene.raytracer.timeSamples = 3;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
-	scene.raytracer.timeSamples = 10;
-
-	scene.fog.enabled = true;
-	scene.fog.distance = 20.0;
-	scene.fog.steepness = 2.0;
-	scene.fog.color = Color(0.0, 0.0, 0.0);
+	scene.simpleFog.enabled = true;
+	scene.simpleFog.distance = 20.0;
+	scene.simpleFog.steepness = 2.0;
+	scene.simpleFog.color = Color(0.0, 0.0, 0.0);
 
 	// CAMERA //
 

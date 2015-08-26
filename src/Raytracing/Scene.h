@@ -105,7 +105,7 @@ namespace Raycer
 
 		Camera camera;
 
-		struct Fog
+		struct SimpleFog
 		{
 			bool enabled = false;
 			Color color = Color::WHITE;
@@ -114,11 +114,11 @@ namespace Raycer
 			bool heightDispersion = false;
 			double height = 100.0;
 			double heightSteepness = 1.0;
-		} fog;
+		} simpleFog;
 
 		struct RootBVH
 		{
-			bool enabled = true;
+			bool enabled = false;
 			BVHBuildInfo buildInfo;
 			FlatBVH bvh;
 		} rootBVH;

@@ -10,9 +10,7 @@ Scene Scene::createTestScene12()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.raytracer.multiSamples = 0;
 
 	// CAMERA //
 
@@ -95,7 +93,7 @@ Scene Scene::createTestScene12()
 	scene.lights.ambientLight.intensity = 0.4;
 	scene.lights.ambientLight.enableOcclusion = true;
 	scene.lights.ambientLight.maxDistance = 2.0;
-	scene.lights.ambientLight.samples = 10;
+	scene.lights.ambientLight.samples = 3;
 
 	return scene;
 }

@@ -10,12 +10,9 @@ Scene Scene::createTestScene6()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
 	scene.raytracer.maxRayIterations = 8;
-
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
 	scene.raytracer.multiSamples = 0;
+
 	scene.toneMapper.type = ToneMapperType::REINHARD;
 
 	// CAMERA //

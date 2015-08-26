@@ -12,9 +12,7 @@ Scene Scene::createTestScene16()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.raytracer.multiSamples = 0;
 
 	// CAMERA //
 
@@ -77,7 +75,7 @@ Scene Scene::createTestScene16()
 	pointLight1.distance = 100.0;
 	pointLight1.attenuation = 1.0;
 	pointLight1.softShadows = true;
-	pointLight1.samples = 10;
+	pointLight1.samples = 3;
 	pointLight1.radius = 0.5;
 
 	scene.lights.pointLights.push_back(pointLight1);

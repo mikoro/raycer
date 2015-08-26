@@ -12,24 +12,22 @@ Scene Scene::createTestScene5()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = true;
 	scene.raytracer.backgroundColor = Color::WHITE;
 	scene.raytracer.maxRayIterations = 16;
+	scene.raytracer.multiSamples = 0;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.rootBVH.enabled = true;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(13.0, 5.0, 5.3);
-	scene.camera.orientation = EulerAngle(-18.0, 50.0, 0.0);
+	scene.camera.position = Vector3(9.49, 4.44, 3.94);
+	scene.camera.orientation = EulerAngle(-19.78, 31.71, 0.0);
 
 	// BOX 1 //
 
 	ColorTexture box1Texture;
 	box1Texture.id = 3;
-	box1Texture.color = Color(1.0, 0.8, 0.8);
+	box1Texture.color = Color(1.0, 0.5, 0.5);
 	box1Texture.intensity = 1.0;
 
 	Material box1Material;
@@ -111,11 +109,11 @@ Scene Scene::createTestScene5()
 	scene.materials.push_back(instance1Material);
 
 	instance1.translate = Vector3(0.0, -100.0, -5.0);
-	instance1.rotate = EulerAngle(-1.0, 0.0, 0.0);
+	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 	scene.primitives.instances.push_back(instance1);
 
 	instance1.translate = Vector3(0.0, -100.0, 5.0);
-	instance1.rotate = EulerAngle(1.0, 0.0, 0.0);
+	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 	scene.primitives.instances.push_back(instance1);
 
 	// LIGHTS //

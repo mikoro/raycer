@@ -10,13 +10,7 @@ Scene Scene::createTestScene3()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = false;
-	scene.rootBVH.buildInfo.maxLeafSize = 1;
-	scene.boundingBoxes.enabled = false;
-
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.raytracer.multiSamples = 0;
 
 	// CAMERA //
 

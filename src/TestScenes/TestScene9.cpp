@@ -10,19 +10,17 @@ Scene Scene::createTestScene9()
 {
 	Scene scene;
 
-	scene.rootBVH.enabled = false;
+	scene.raytracer.multiSamples = 0;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
+	scene.rootBVH.enabled = true;
 
-	scene.fog.enabled = true;
-	scene.fog.distance = 200.0;
-	scene.fog.steepness = 2.0;
-	scene.fog.heightDispersion = true;
-	scene.fog.height = 50.0;
-	scene.fog.heightSteepness = 0.5;
-	scene.fog.color = Color(0.8, 0.8, 0.8);
+	scene.simpleFog.enabled = true;
+	scene.simpleFog.distance = 200.0;
+	scene.simpleFog.steepness = 2.0;
+	scene.simpleFog.heightDispersion = true;
+	scene.simpleFog.height = 50.0;
+	scene.simpleFog.heightSteepness = 0.5;
+	scene.simpleFog.color = Color(0.8, 0.8, 0.8);
 
 	// CAMERA //
 

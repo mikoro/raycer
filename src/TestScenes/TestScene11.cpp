@@ -13,16 +13,13 @@ Scene Scene::createTestScene11()
 {
 	Scene scene;
 
+	scene.raytracer.multiSamples = 0;
+
 	scene.rootBVH.enabled = true;
-	scene.boundingBoxes.enabled = false;
-
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 5;
-
+	
 	// CAMERA //
 	
-	scene.camera.position = Vector3(-35.0, 22.0, 210.0);
+	scene.camera.position = Vector3(0.0, 0.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 
 	// MESH 1 //
@@ -49,9 +46,9 @@ Scene Scene::createTestScene11()
 
 	// INSTANCES
 
-	std::mt19937 gen(6785645);
-	std::uniform_real_distribution<double> scaleDist(1.0, 2.0);
-	std::uniform_real_distribution<double> rotationDist(0.0, 180.0);
+	std::mt19937 gen(1230927546);
+	std::uniform_real_distribution<double> scaleDist(0.5, 2.0);
+	std::uniform_real_distribution<double> rotationDist(-45.0, 45.0);
 	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
 
 	int count = 2;
@@ -71,11 +68,13 @@ Scene Scene::createTestScene11()
 				instance1Material.id = count;
 				instance1Material.colorTextureId = instance1Texture.id;
 
+				double scale = scaleDist(gen);
+
 				Instance instance1;
 				instance1.materialId = instance1Material.id;
 				instance1.primitive = &scene.primitives.meshes.back();
-				instance1.scale = Vector3(scaleDist(gen), scaleDist(gen), scaleDist(gen));
-				instance1.rotate = EulerAngle(rotationDist(gen), rotationDist(gen), rotationDist(gen));
+				instance1.scale = Vector3(scale, scale, scale);
+				instance1.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
 				instance1.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
 
 				scene.textures.colorTextures.push_back(instance1Texture);
@@ -93,9 +92,12 @@ Scene Scene::createTestScene11()
 
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
+	directionalLight1.intensity = 0.8;
 
+	directionalLight1.direction = EulerAngle(0.0, 45.0, 0.0).getDirection();
+	scene.lights.directionalLights.push_back(directionalLight1);
+
+	directionalLight1.direction = EulerAngle(0.0, -45.0, 0.0).getDirection();
 	scene.lights.directionalLights.push_back(directionalLight1);
 
 	return scene;
