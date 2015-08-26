@@ -45,7 +45,6 @@ void Mesh::initialize()
 		triangle.normals[1] = transformationInvT.transformDirection(triangle.normals[1]).normalized();
 		triangle.normals[2] = transformationInvT.transformDirection(triangle.normals[2]).normalized();
 
-		triangle.normal = transformationInvT.transformDirection(triangle.normal).normalized();
 		triangle.materialId = materialId;
 		triangle.material = material;
 

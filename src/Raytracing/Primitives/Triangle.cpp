@@ -16,6 +16,19 @@ using namespace Raycer;
 
 void Triangle::initialize()
 {
+	Vector3 v0tov1 = vertices[1] - vertices[0];
+	Vector3 v0tov2 = vertices[2] - vertices[0];
+	Vector2 t0tot1 = texcoords[1] - texcoords[0];
+	Vector2 t0tot2 = texcoords[2] - texcoords[0];
+
+	normal = v0tov1.cross(v0tov2).normalized();
+
+	double r = 1.0 / (t0tot1.x * t0tot2.y - t0tot1.y * t0tot2.x);
+	tangent = (v0tov1 * t0tot2.y - v0tov2 * t0tot1.y) * r;
+	bitangent = (v0tov2 * t0tot1.x - v0tov1 * t0tot2.x) * r;
+
+	tangent.normalize();
+	bitangent.normalize();
 }
 
 // Möller-Trumbore algorithm
@@ -66,13 +79,13 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection)
 	intersection.primitive = this;
 
 	double w = 1.0 - u - v;
-	Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
+	//Vector3 interpolatedNormal = w * normals[0] + u * normals[1] + v * normals[2];
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
 
 	intersection.position = ray.origin + (t * ray.direction);
-	intersection.normal = interpolatedNormal;
+	intersection.normal = normal;
 	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
-	intersection.onb = ONB::fromNormal(intersection.normal);
+	intersection.onb = ONB(tangent, bitangent, normal);
 
 	return true;
 }
@@ -144,12 +157,13 @@ bool Triangle::intersect2(const Ray& ray, Intersection& intersection)
 	v /= denominator2;
 	double w = 1.0 - u - v;
 
-	Vector3 interpolatedNormal = u * normals[0] + v * normals[1] + w * normals[2];
+	//Vector3 interpolatedNormal = u * normals[0] + v * normals[1] + w * normals[2];
 	Vector2 interpolatedTexcoord = u * texcoords[0] + v * texcoords[1] + w * texcoords[2];
 
 	intersection.position = ip;
-	intersection.normal = interpolatedNormal;
+	intersection.normal = normal;
 	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
+	intersection.onb = ONB(tangent, bitangent, normal);
 
 	return true;
 }
@@ -179,4 +193,6 @@ void Triangle::transform(const Vector3& scale, const EulerAngle& rotate, const V
 	normals[2] = transformationInvT.transformDirection(normals[2]).normalized();
 
 	normal = transformationInvT.transformDirection(normal).normalized();
+	tangent = transformationInvT.transformDirection(tangent).normalized();
+	bitangent = transformationInvT.transformDirection(bitangent).normalized();
 }

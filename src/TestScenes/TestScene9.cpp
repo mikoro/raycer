@@ -33,7 +33,6 @@ Scene Scene::createTestScene9()
 	groundTexture.id = 1;
 	groundTexture.imageFilePath = "data/images/grass.jpg";
 	groundTexture.intensity = 0.5;
-	groundTexture.applyGamma = true;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
@@ -120,7 +119,6 @@ Scene Scene::createTestScene9()
 	sphere4Texture.id = 5;
 	sphere4Texture.imageFilePath = "data/images/poolball.jpg";
 	sphere4Texture.intensity = 0.5;
-	sphere4Texture.applyGamma = true;
 
 	Material sphere4Material;
 	sphere4Material.id = 5;

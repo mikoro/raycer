@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// bump mapping with a sphere and plane
+// bump mapping with a sphere and squares
 Scene Scene::createTestScene13()
 {
 	Scene scene;
@@ -16,38 +16,8 @@ Scene Scene::createTestScene13()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 5.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-
-	// GROUND //
-
-	ColorTexture groundTexture1;
-	groundTexture1.id = 1;
-	groundTexture1.color = Color(1.0, 1.0, 1.0);
-	groundTexture1.intensity = 0.5;
-
-	ImageTexture groundTexture2;
-	groundTexture2.id = 2;
-	groundTexture2.imageFilePath = "data/images/bumpmap.png";
-	groundTexture2.applyGamma = false;
-	groundTexture2.isBumpMap = true;
-	groundTexture2.intensity = 10.0;
-
-	Material groundMaterial;
-	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture1.id;
-	groundMaterial.normalMapTextureId = groundTexture2.id;
-	groundMaterial.texcoordScale = Vector2(10.0, 10.0);
-
-	Plane groundPlane;
-	groundPlane.materialId = groundMaterial.id;
-	groundPlane.position = Vector3(0.0, 0.0, 0.0);
-	groundPlane.normal = Vector3(0.01, 1.0, 0.01).normalized();
-	
-	scene.textures.colorTextures.push_back(groundTexture1);
-	scene.textures.imageTextures.push_back(groundTexture2);
-	scene.materials.push_back(groundMaterial);
-	scene.primitives.planes.push_back(groundPlane);
+	scene.camera.position = Vector3(-0.18, 1.65, 3.59);
+	scene.camera.orientation = EulerAngle(-9.22, 17.56, 0.0);
 
 	// SPHERE 1 //
 
@@ -82,6 +52,75 @@ Scene Scene::createTestScene13()
 	scene.materials.push_back(sphere1Material);
 	scene.primitives.spheres.push_back(sphere1);
 
+	// MESH 1 //
+
+	ColorTexture mesh1Texture1;
+	mesh1Texture1.id = 5;
+	mesh1Texture1.color = Color(1.0, 1.0, 1.0);
+	mesh1Texture1.intensity = 0.5;
+
+	ImageTexture mesh1Texture2;
+	mesh1Texture2.id = 6;
+	mesh1Texture2.imageFilePath = "data/images/bumpmap.png";
+	mesh1Texture2.isBumpMap = true;
+	mesh1Texture2.intensity = 2.0;
+
+	Material mesh1Material;
+	mesh1Material.id = 3;
+	mesh1Material.colorTextureId = mesh1Texture1.id;
+	mesh1Material.normalMapTextureId = mesh1Texture2.id;
+	mesh1Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
+	mesh1Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	mesh1Material.shininess = 64.0;
+	mesh1Material.texcoordScale = Vector2(0.1, 0.1);
+
+	Mesh mesh1;
+	mesh1.materialId = mesh1Material.id;
+	mesh1.meshFilePath = "data/meshes/square.obj";
+	mesh1.position = Vector3(-10.0, 0.0, 10.0);
+	mesh1.scale = Vector3(20.0, 20.0, 20.0);
+	mesh1.orientation = EulerAngle(-90.0, 0.0, 0.0);
+
+	scene.textures.colorTextures.push_back(mesh1Texture1);
+	scene.textures.imageTextures.push_back(mesh1Texture2);
+	scene.materials.push_back(mesh1Material);
+	scene.primitives.meshes.push_back(mesh1);
+
+	// MESH 2 //
+
+	ImageTexture mesh2Texture1;
+	mesh2Texture1.id = 7;
+	mesh2Texture1.imageFilePath = "data/images/stonewall.jpg";
+	mesh2Texture1.intensity = 1.0;
+
+	ImageTexture mesh2Texture2;
+	mesh2Texture2.id = 8;
+	mesh2Texture2.imageFilePath = "data/images/stonewall_bumpmap.jpg";
+	mesh2Texture2.isBumpMap = true;
+	mesh2Texture2.intensity = 1.0;
+
+	Material mesh2Material;
+	mesh2Material.id = 4;
+	mesh2Material.colorTextureId = mesh2Texture1.id;
+	mesh2Material.normalMapTextureId = mesh2Texture2.id;
+	mesh2Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
+	mesh2Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	mesh2Material.shininess = 64.0;
+	mesh2Material.nonShadowing = true;
+	mesh2Material.texcoordScale = Vector2(0.25, 0.5);
+
+	Mesh mesh2;
+	mesh2.materialId = mesh2Material.id;
+	mesh2.meshFilePath = "data/meshes/square.obj";
+	mesh2.position = Vector3(-10.0, 0.0, -2.5);
+	mesh2.scale = Vector3(20.0, 10.0, 5.0);
+	mesh2.orientation = EulerAngle(0.0, 0.0, 0.0);
+
+	scene.textures.imageTextures.push_back(mesh2Texture1);
+	scene.textures.imageTextures.push_back(mesh2Texture2);
+	scene.materials.push_back(mesh2Material);
+	scene.primitives.meshes.push_back(mesh2);
+
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
@@ -93,9 +132,9 @@ Scene Scene::createTestScene13()
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 
-	pointLight1.position = Vector3(5.0, 5.0, 5.0);
-	scene.lights.pointLights.push_back(pointLight1);
 	pointLight1.position = Vector3(-5.0, 5.0, 5.0);
+	scene.lights.pointLights.push_back(pointLight1);
+	pointLight1.position = Vector3(-5.0, 5.0, -5.0);
 	scene.lights.pointLights.push_back(pointLight1);
 
 	return scene;

@@ -224,21 +224,19 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (material->normalMapTexture != nullptr)
 	{
 		TextureNormalType normalType;
-		Vector3 textureNormal = material->normalMapTexture->getNormal(intersection.texcoord, intersection.position, normalType);
+		Vector3 normalData = material->normalMapTexture->getNormal(intersection.texcoord, intersection.position, normalType);
 
 		if (normalType == TextureNormalType::BUMP)
 		{
-			// TODO: vector basis should probably use rotated up vector so that bump values go to right directions
-			Vector3 N = intersection.normal;
-			Vector3 Pu = N.cross(Vector3::UP);
-			Vector3 Pv = Pu.cross(N);
-			textureNormal *= material->normalMapTexture->intensity;
-			Vector3 bumpNormal = N + textureNormal.y * (Pu.cross(N)) + textureNormal.x * (Pv.cross(N));
-			intersection.normal = bumpNormal.normalized();
+			normalData *= material->normalMapTexture->intensity;
+			ONB& onb = intersection.onb;
+			Vector3 bumpedNormal = onb.w + normalData.x * (onb.u.cross(onb.w)) + normalData.y * (onb.v.cross(onb.w));
+			intersection.normal = bumpedNormal.normalized();
 		}
 		else if (normalType == TextureNormalType::GRADIENT)
 		{
-			intersection.normal = (intersection.normal - (textureNormal * material->normalMapTexture->intensity)).normalized();
+			Vector3 gradedNormal = (intersection.normal - (normalData * material->normalMapTexture->intensity));
+			intersection.normal = gradedNormal.normalized();
 		}
 		else if (normalType == TextureNormalType::NORMAL)
 		{

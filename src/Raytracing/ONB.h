@@ -7,6 +7,8 @@
 
 namespace Raycer
 {
+	class Matrix4x4;
+
 	class ONB
 	{
 	public:
@@ -14,12 +16,14 @@ namespace Raycer
 		ONB();
 		ONB(const Vector3& u, const Vector3& v, const Vector3& w);
 
-		Vector3 u = Vector3(0.0, 0.0, 0.0);
-		Vector3 v = Vector3(0.0, 0.0, 0.0);
-		Vector3 w = Vector3(0.0, 0.0, 0.0);
+		ONB transformed(const Matrix4x4& tranformation) const;
 
 		static ONB fromNormal(const Vector3& normal);
 
 		static const ONB UP;
+
+		Vector3 u = Vector3(0.0, 0.0, 0.0);
+		Vector3 v = Vector3(0.0, 0.0, 0.0);
+		Vector3 w = Vector3(0.0, 0.0, 0.0);
 	};
 }

@@ -71,8 +71,9 @@ Vector3 ImageTexture::getNormal(const Vector2& texcoord, const Vector3& position
 
 	if (isBumpMap)
 	{
-		normal.x = -bumpMapX.getPixelBilinear(texcoord.x, texcoord.y).r;
-		normal.y = -bumpMapY.getPixelBilinear(texcoord.x, texcoord.y).r;
+		// weird suffle is needed to make this look right
+		normal.y = -bumpMapX.getPixelBilinear(texcoord.x, texcoord.y).r;
+		normal.x = bumpMapY.getPixelBilinear(texcoord.x, texcoord.y).r;
 	}
 	
 	return normal;

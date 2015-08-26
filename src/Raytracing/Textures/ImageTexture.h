@@ -25,7 +25,7 @@ namespace Raycer
 		Vector3 getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const;
 
 		std::string imageFilePath;
-		bool applyGamma = false;
+		bool applyGamma = true;
 		double gamma = 2.2;
 		bool isBumpMap = false;
 

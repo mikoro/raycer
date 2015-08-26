@@ -319,7 +319,6 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 		{
 			ImageTexture imageTexture;
 			imageTexture.id = ++currentId;
-			imageTexture.applyGamma = true;
 			material.colorTextureId = imageTexture.id;
 
 			std::string imageFileName;
@@ -338,7 +337,6 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 		{
 			ImageTexture imageTexture;
 			imageTexture.id = ++currentId;
-			imageTexture.applyGamma = false;
 			imageTexture.isBumpMap = true;
 			material.normalMapTextureId = imageTexture.id;
 
@@ -384,8 +382,8 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 	// determine what indices are available from the slash count
 	int slashCount = (int)std::count(part.begin(), part.end(), '/');
 	bool doubleSlash = (part.find("//") != std::string::npos);
-	bool hasTexcoord = (slashCount > 0 && !doubleSlash);
-	bool hasNormal = (slashCount > 1);
+	bool hasTexcoords = (slashCount > 0 && !doubleSlash);
+	bool hasNormals = (slashCount > 1);
 
 	do
 	{
@@ -406,7 +404,7 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 
 		vertexIndices.push_back(vertexIndex);
 
-		if (hasTexcoord)
+		if (hasTexcoords)
 		{
 			int texcoordIndex;
 			ssp >> texcoordIndex;
@@ -422,7 +420,7 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 			texcoordIndices.push_back(texcoordIndex);
 		}
 
-		if (hasNormal)
+		if (hasNormals)
 		{
 			int normalIndex;
 			ssp >> normalIndex;
@@ -452,28 +450,23 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 		triangle.vertices[1] = vertices[vertexIndices[i - 1]];
 		triangle.vertices[2] = vertices[vertexIndices[i]];
 
-		if (hasTexcoord)
+		if (hasTexcoords)
 		{
 			triangle.texcoords[0] = texcoords[texcoordIndices[0]];
 			triangle.texcoords[1] = texcoords[texcoordIndices[i - 1]];
 			triangle.texcoords[2] = texcoords[texcoordIndices[i]];
 		}
 
-		// calculate triangle normal CCW
-		Vector3 v0tov1 = triangle.vertices[1] - triangle.vertices[0];
-		Vector3 v0tov2 = triangle.vertices[2] - triangle.vertices[0];
-		Vector3 normal = v0tov1.cross(v0tov2).normalized();
+		triangle.initialize();
 
-		triangle.normal = normal;
-
-		if (hasNormal)
+		if (hasNormals)
 		{
 			triangle.normals[0] = normals[normalIndices[0]];
 			triangle.normals[1] = normals[normalIndices[i - 1]];
 			triangle.normals[2] = normals[normalIndices[i]];
 		}
 		else
-			triangle.normals[0] = triangle.normals[1] = triangle.normals[2] = normal;
+			triangle.normals[0] = triangle.normals[1] = triangle.normals[2] = triangle.normal;
 
 		triangles.push_back(triangle);
 	}
