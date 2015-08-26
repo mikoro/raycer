@@ -1,23 +1,16 @@
 TARGET = raycer
 TEMPLATE = app
 DESTDIR = bin
-CONFIG += c++11 warn_off debug
 OBJECTS_DIR = build
+CONFIG += c++11 warn_off debug
 QMAKE_LIBDIR += platform/linux/lib
-LIBS += -lGL -lGLEW -lglfw -lfreetype -lfreetype-gl -lOpenCL -lboost_system
+LIBS += -lstdc++ -ldl -lm -lpthread -lglfw -lGL -lOpenCL -lfreetype-gl -lfreetype -lboost_system -lboost_filesystem -lXrandr -lXi -lXcursor -lXinerama -fopenmp
 QMAKE_POST_LINK += platform/linux/post-build.sh
 
 INCLUDEPATH += include \
 			   src
 
 HEADERS += src/App.h \
-           src/CLRaytracing/CLManager.h \
-           src/CLRaytracing/CLRaytracer.h \
-           src/CLRaytracing/CLScene.h \
-           src/CLRaytracing/CLStructs.h \
-           src/InteractiveStates/CLRaytracingState.h \
-           src/InteractiveStates/InteractiveState.h \
-           src/InteractiveStates/RaytracingState.h \
            src/Math/AxisAngle.h \
            src/Math/Color.h \
            src/Math/EulerAngle.h \
@@ -25,49 +18,83 @@ HEADERS += src/App.h \
            src/Math/Matrix4x4.h \
            src/Math/MovingAverage.h \
            src/Math/Quaternion.h \
-           src/Math/Triangle.h \
            src/Math/Vector2.h \
            src/Math/Vector3.h \
+           src/OpenCL/CLManager.h \
+           src/OpenCL/CLRaytracer.h \
+           src/OpenCL/CLScene.h \
+           src/OpenCL/CLStructs.h \
+           src/Raytracing/AABB.h \
            src/Raytracing/Camera.h \
-           src/Raytracing/CheckerTexture.h \
-           src/Raytracing/ColorTexture.h \
-           src/Raytracing/Fog.h \
-           src/Raytracing/ImageTexture.h \
            src/Raytracing/Intersection.h \
-           src/Raytracing/Light.h \
-           src/Raytracing/MarbleTexture.h \
+           src/Raytracing/Lights.h \
            src/Raytracing/Material.h \
-           src/Raytracing/Mesh.h \
-           src/Raytracing/Plane.h \
-           src/Raytracing/Primitive.h \
+           src/Raytracing/ONB.h \
            src/Raytracing/Ray.h \
            src/Raytracing/Raytracer.h \
+           src/Raytracing/RaytracerState.h \
            src/Raytracing/Scene.h \
-           src/Raytracing/Sphere.h \
-           src/Raytracing/Texture.h \
-           src/Raytracing/ToneMapper.h \
-           src/Raytracing/WoodTexture.h \
            src/Rendering/Framebuffer.h \
-           src/Rendering/GLHelper.h \
-           src/Rendering/RenderTarget.h \
+           src/Rendering/Image.h \
            src/Rendering/Text.h \
            src/Runners/ConsoleRunner.h \
-           src/Runners/InteractiveRunner.h \
            src/Runners/NetworkRunner.h \
-           src/Utils/Errors.h \
+           src/Runners/WindowRunner.h \
+           src/Utils/CellNoise.h \
+           src/Utils/ColorGradient.h \
            src/Utils/FpsCounter.h \
-           src/Utils/Image.h \
+           src/Utils/GLHelper.h \
            src/Utils/IniReader.h \
            src/Utils/Log.h \
+           src/Utils/ObjReader.h \
            src/Utils/PerlinNoise.h \
-           src/Utils/Settings.h
+           src/Utils/PlyReader.h \
+           src/Utils/PoissonDisc.h \
+           src/Utils/Serialization.h \
+           src/Utils/Settings.h \
+           src/Utils/StringUtils.h \
+           src/Utils/ValueNoise.h \
+           src/Raytracing/Primitives/Box.h \
+           src/Raytracing/Primitives/BVH.h \
+           src/Raytracing/Primitives/FlatBVH.h \
+           src/Raytracing/Primitives/Instance.h \
+           src/Raytracing/Primitives/Mesh.h \
+           src/Raytracing/Primitives/Plane.h \
+           src/Raytracing/Primitives/Primitive.h \
+           src/Raytracing/Primitives/PrimitiveList.h \
+           src/Raytracing/Primitives/Sphere.h \
+           src/Raytracing/Primitives/Triangle.h \
+           src/Raytracing/Textures/AtmosphereTexture.h \
+           src/Raytracing/Textures/CellNoiseTexture.h \
+           src/Raytracing/Textures/CheckerTexture.h \
+           src/Raytracing/Textures/ColorTexture.h \
+           src/Raytracing/Textures/FireTexture.h \
+           src/Raytracing/Textures/ImageTexture.h \
+           src/Raytracing/Textures/MarbleTexture.h \
+           src/Raytracing/Textures/PerlinNoiseTexture.h \
+           src/Raytracing/Textures/Texture.h \
+           src/Raytracing/Textures/ValueNoiseTexture.h \
+           src/Raytracing/Textures/VoronoiTexture.h \
+           src/Raytracing/Textures/WoodTexture.h \
+           src/Rendering/Filters/BellFilter.h \
+           src/Rendering/Filters/BoxFilter.h \
+           src/Rendering/Filters/Filter.h \
+           src/Rendering/Filters/GaussianFilter.h \
+           src/Rendering/Filters/LanczosSincFilter.h \
+           src/Rendering/Filters/MitchellFilter.h \
+           src/Rendering/Filters/TentFilter.h \
+           src/Rendering/Samplers/CMJSampler.h \
+           src/Rendering/Samplers/JitteredSampler.h \
+           src/Rendering/Samplers/RandomSampler.h \
+           src/Rendering/Samplers/RegularSampler.h \
+           src/Rendering/Samplers/Sampler.h \
+           src/Rendering/ToneMappers/LinearToneMapper.h \
+           src/Rendering/ToneMappers/ReinhardToneMapper.h \
+           src/Rendering/ToneMappers/ToneMapper.h \
+           src/Runners/WindowRunnerStates/DefaultState.h \
+           src/Runners/WindowRunnerStates/WindowRunnerState.h \
            
 SOURCES += src/App.cpp \
-           src/CLRaytracing/CLManager.cpp \
-           src/CLRaytracing/CLRaytracer.cpp \
-           src/CLRaytracing/CLScene.cpp \
-           src/InteractiveStates/CLRaytracingState.cpp \
-           src/InteractiveStates/RaytracingState.cpp \
            src/Math/AxisAngle.cpp \
            src/Math/Color.cpp \
            src/Math/EulerAngle.cpp \
@@ -77,30 +104,93 @@ SOURCES += src/App.cpp \
            src/Math/Quaternion.cpp \
            src/Math/Vector2.cpp \
            src/Math/Vector3.cpp \
+           src/OpenCL/CLManager.cpp \
+           src/OpenCL/CLRaytracer.cpp \
+           src/OpenCL/CLScene.cpp \
+           src/Raytracing/AABB.cpp \
            src/Raytracing/Camera.cpp \
-           src/Raytracing/CheckerTexture.cpp \
-           src/Raytracing/ColorTexture.cpp \
-           src/Raytracing/Fog.cpp \
-           src/Raytracing/ImageTexture.cpp \
-           src/Raytracing/MarbleTexture.cpp \
-           src/Raytracing/Mesh.cpp \
-           src/Raytracing/Plane.cpp \
+           src/Raytracing/ONB.cpp \
            src/Raytracing/Ray.cpp \
            src/Raytracing/Raytracer.cpp \
            src/Raytracing/Scene.cpp \
-           src/Raytracing/Sphere.cpp \
-           src/Raytracing/ToneMapper.cpp \
-           src/Raytracing/WoodTexture.cpp \
            src/Rendering/Framebuffer.cpp \
-           src/Rendering/GLHelper.cpp \
+           src/Rendering/Image.cpp \
            src/Rendering/Text.cpp \
            src/Runners/ConsoleRunner.cpp \
-           src/Runners/InteractiveRunner.cpp \
            src/Runners/NetworkRunner.cpp \
-           src/Utils/Errors.cpp \
+           src/Runners/WindowRunner.cpp \
+           src/Tests/ColorGradientTest.cpp \
+           src/Tests/EulerAngleTest.cpp \
+           src/Tests/FilterTest.cpp \
+           src/Tests/ImageTest.cpp \
+           src/Tests/MathUtilsTest.cpp \
+           src/Tests/Matrix4x4Test.cpp \
+           src/Tests/ObjReaderTest.cpp \
+           src/Tests/PlyReaderTest.cpp \
+           src/Tests/SamplerTest.cpp \
+           src/Tests/TestScenesTest.cpp \
+           src/Tests/Vector3Test.cpp \
+           src/TestScenes/TestScene1.cpp \
+           src/TestScenes/TestScene10.cpp \
+           src/TestScenes/TestScene11.cpp \
+           src/TestScenes/TestScene12.cpp \
+           src/TestScenes/TestScene13.cpp \
+           src/TestScenes/TestScene14.cpp \
+           src/TestScenes/TestScene15.cpp \
+           src/TestScenes/TestScene16.cpp \
+           src/TestScenes/TestScene2.cpp \
+           src/TestScenes/TestScene3.cpp \
+           src/TestScenes/TestScene4.cpp \
+           src/TestScenes/TestScene5.cpp \
+           src/TestScenes/TestScene6.cpp \
+           src/TestScenes/TestScene7.cpp \
+           src/TestScenes/TestScene8.cpp \
+           src/TestScenes/TestScene9.cpp \
+           src/Utils/CellNoise.cpp \
+           src/Utils/ColorGradient.cpp \
            src/Utils/FpsCounter.cpp \
-           src/Utils/Image.cpp \
+           src/Utils/gl3w.cpp \
+           src/Utils/GLHelper.cpp \
            src/Utils/IniReader.cpp \
            src/Utils/Log.cpp \
+           src/Utils/ObjReader.cpp \
            src/Utils/PerlinNoise.cpp \
-           src/Utils/Settings.cpp
+           src/Utils/PlyReader.cpp \
+           src/Utils/PoissonDisc.cpp \
+           src/Utils/Settings.cpp \
+           src/Utils/StringUtils.cpp \
+           src/Utils/ValueNoise.cpp \
+           src/Raytracing/Primitives/Box.cpp \
+           src/Raytracing/Primitives/BVH.cpp \
+           src/Raytracing/Primitives/FlatBVH.cpp \
+           src/Raytracing/Primitives/Instance.cpp \
+           src/Raytracing/Primitives/Mesh.cpp \
+           src/Raytracing/Primitives/Plane.cpp \
+           src/Raytracing/Primitives/PrimitiveList.cpp \
+           src/Raytracing/Primitives/Sphere.cpp \
+           src/Raytracing/Primitives/Triangle.cpp \
+           src/Raytracing/Textures/AtmosphereTexture.cpp \
+           src/Raytracing/Textures/CellNoiseTexture.cpp \
+           src/Raytracing/Textures/CheckerTexture.cpp \
+           src/Raytracing/Textures/ColorTexture.cpp \
+           src/Raytracing/Textures/FireTexture.cpp \
+           src/Raytracing/Textures/ImageTexture.cpp \
+           src/Raytracing/Textures/MarbleTexture.cpp \
+           src/Raytracing/Textures/PerlinNoiseTexture.cpp \
+           src/Raytracing/Textures/ValueNoiseTexture.cpp \
+           src/Raytracing/Textures/VoronoiTexture.cpp \
+           src/Raytracing/Textures/WoodTexture.cpp \
+           src/Rendering/Filters/BellFilter.cpp \
+           src/Rendering/Filters/BoxFilter.cpp \
+           src/Rendering/Filters/GaussianFilter.cpp \
+           src/Rendering/Filters/LanczosSincFilter.cpp \
+           src/Rendering/Filters/MitchellFilter.cpp \
+           src/Rendering/Filters/TentFilter.cpp \
+           src/Rendering/Samplers/CMJSampler.cpp \
+           src/Rendering/Samplers/JitteredSampler.cpp \
+           src/Rendering/Samplers/RandomSampler.cpp \
+           src/Rendering/Samplers/RegularSampler.cpp \
+           src/Rendering/Samplers/Sampler.cpp \
+           src/Rendering/ToneMappers/LinearToneMapper.cpp \
+           src/Rendering/ToneMappers/ReinhardToneMapper.cpp \
+           src/Runners/WindowRunnerStates/DefaultState.cpp
