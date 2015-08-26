@@ -509,7 +509,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 		return 0.0;
 	}
 
-	Vector3 lightRight = directionToLight.cross(Vector3::UP).normalized();
+	Vector3 lightRight = directionToLight.cross(Vector3::ALMOST_UP).normalized();
 	Vector3 lightUp = lightRight.cross(directionToLight).normalized();
 
 	double shadowAmount = 0.0;

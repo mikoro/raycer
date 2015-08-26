@@ -15,6 +15,7 @@ using namespace Raycer;
 const Vector3 Vector3::RIGHT = Vector3(1.0, 0.0, 0.0);
 const Vector3 Vector3::UP = Vector3(0.0, 1.0, 0.0);
 const Vector3 Vector3::FORWARD = Vector3(0.0, 0.0, 1.0);
+const Vector3 Vector3::ALMOST_UP = Vector3(0.0001, 1.0, 0.0001);
 
 Vector3::Vector3(double x_, double y_, double z_) : x(x_), y(y_), z(z_)
 {

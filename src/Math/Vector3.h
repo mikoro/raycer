@@ -56,6 +56,7 @@ namespace Raycer
 		static const Vector3 RIGHT;   // [1 0 0]
 		static const Vector3 UP;      // [0 1 0]
 		static const Vector3 FORWARD; // [0 0 1]
+		static const Vector3 ALMOST_UP;
 
 		double x;
 		double y;

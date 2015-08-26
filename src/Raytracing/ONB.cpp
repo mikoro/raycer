@@ -32,10 +32,8 @@ ONB ONB::transformed(const Matrix4x4& tranformation) const
 
 ONB ONB::fromNormal(const Vector3& normal)
 {
-	Vector3 up = Vector3(0.0001, 1.0, 0.0001);
-
 	Vector3 w = normal;
-	Vector3 v = w.cross(up).normalized();
+	Vector3 v = w.cross(Vector3::ALMOST_UP).normalized();
 	Vector3 u = v.cross(w).normalized();
 
 	return ONB(u, v, w);

@@ -248,7 +248,7 @@ void Camera::update(const Scene& scene, double timeStep)
 void Camera::precalculate()
 {
 	forward = orientation.getDirection();
-	right = forward.cross(Vector3::UP).normalized();
+	right = forward.cross(Vector3::ALMOST_UP).normalized();
 	up = right.cross(forward).normalized();
 
 	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));

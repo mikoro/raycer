@@ -23,12 +23,21 @@ void Triangle::initialize()
 
 	normal = v0tov1.cross(v0tov2).normalized();
 
-	double r = 1.0 / (t0tot1.x * t0tot2.y - t0tot1.y * t0tot2.x);
-	tangent = (v0tov1 * t0tot2.y - v0tov2 * t0tot1.y) * r;
-	bitangent = (v0tov2 * t0tot1.x - v0tov1 * t0tot2.x) * r;
+	// tangent space aligned to texcoords
+	if (!t0tot1.isZero() && !t0tot2.isZero())
+	{
+		double r = 1.0 / (t0tot1.x * t0tot2.y - t0tot1.y * t0tot2.x);
+		tangent = (v0tov1 * t0tot2.y - v0tov2 * t0tot1.y) * r;
+		bitangent = (v0tov2 * t0tot1.x - v0tov1 * t0tot2.x) * r;
 
-	tangent.normalize();
-	bitangent.normalize();
+		tangent.normalize();
+		bitangent.normalize();
+	}
+	else
+	{
+		tangent = normal.cross(Vector3::ALMOST_UP).normalized();
+		bitangent = tangent.cross(normal).normalized();
+	}
 }
 
 // Möller-Trumbore algorithm
