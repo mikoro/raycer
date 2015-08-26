@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <random>
-#include <stdexcept>
 
 #include "Raytracing/Scene.h"
 
@@ -16,9 +15,9 @@ Scene Scene::createTestScene11()
 	scene.raytracer.multiSamples = 0;
 
 	scene.rootBVH.enabled = true;
-	
+
 	// CAMERA //
-	
+
 	scene.camera.position = Vector3(0.0, 0.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 

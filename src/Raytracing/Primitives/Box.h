@@ -11,6 +11,7 @@ namespace Raycer
 	class Ray;
 	struct Intersection;
 	class AABB;
+	class EulerAngle;
 
 	class Box : public Primitive
 	{

@@ -8,7 +8,6 @@
 
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
-#include "Math/Vector3.h"
 
 namespace Raycer
 {
@@ -41,6 +40,8 @@ namespace Raycer
 
 	class Ray;
 	struct Intersection;
+	class Vector3;
+	class EulerAngle;
 
 	class FlatBVH : public Primitive
 	{
@@ -59,7 +60,7 @@ namespace Raycer
 		void calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
 		double calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
 		double calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry);
-		
+
 		std::vector<Primitive*> orderedPrimitives;
 		std::vector<FlatBVHNode> flatNodes;
 	};

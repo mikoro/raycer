@@ -2,6 +2,8 @@
 // License: MIT, see the LICENSE file.
 
 #include <cmath>
+#include <limits>
+#include <vector>
 
 #include "Rendering/ToneMappers/ReinhardToneMapper.h"
 #include "Raytracing/Scene.h"
@@ -40,7 +42,7 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 
 		if (scene.toneMapper.applyGamma)
 			pixelData[i] = Color::pow(pixelData[i], invGamma);
-		
+
 		if (scene.toneMapper.shouldClamp)
 			pixelData[i].clamp();
 	}

@@ -9,6 +9,7 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
+#include "Raytracing/ONB.h"
 #include "Math/Vector2.h"
 #include "Math/Matrix4x4.h"
 
@@ -72,7 +73,7 @@ AABB Plane::getAABB() const
 void Plane::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
 	(void)scale;
-	
+
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(rotate);
 
 	position += translate;

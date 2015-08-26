@@ -3,6 +3,9 @@
 
 #include <fstream>
 #include <map>
+#include <random>
+#include <string>
+#include <utility>
 
 #include "catch/catch.hpp"
 #include "tinyformat/tinyformat.h"
@@ -65,7 +68,7 @@ TEST_CASE("Sampler functionality", "[sampler]")
 				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);
 			}
 		}
-		
+
 		image1.save(tfm::format("sampler_%s_1D.png", sampler.first));
 		image2.save(tfm::format("sampler_%s_2D.png", sampler.first));
 		image3.save(tfm::format("sampler_%s_disk.png", sampler.first));

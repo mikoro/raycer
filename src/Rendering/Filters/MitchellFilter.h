@@ -7,6 +7,8 @@
 
 namespace Raycer
 {
+	class Vector2;
+
 	class MitchellFilter : public Filter
 	{
 	public:

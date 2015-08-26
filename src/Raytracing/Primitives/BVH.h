@@ -5,16 +5,18 @@
 
 #include <memory>
 #include <random>
+#include <vector>
 
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
-#include "Math/Vector3.h"
 
 namespace Raycer
 {
 	class Ray;
 	struct Intersection;
 	struct BVHBuildInfo;
+	class Vector3;
+	class EulerAngle;
 
 	class BVH : public Primitive
 	{

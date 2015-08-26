@@ -12,6 +12,7 @@ namespace Raycer
 	class Ray;
 	struct Intersection;
 	class AABB;
+	class EulerAngle;
 
 	class Triangle : public Primitive
 	{

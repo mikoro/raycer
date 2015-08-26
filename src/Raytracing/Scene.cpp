@@ -16,6 +16,7 @@
 #include "Raytracing/Scene.h"
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/Textures/Texture.h"
+#include "Raytracing/AABB.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
@@ -263,7 +264,7 @@ void Scene::initialize()
 
 			primitivesMap[primitive->id] = primitive;
 		}
-			
+
 	}
 
 	for (Material& material : materials)

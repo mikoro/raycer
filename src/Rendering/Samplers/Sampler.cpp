@@ -2,7 +2,6 @@
 // License: MIT, see the LICENSE file.
 
 #include <cmath>
-#include <stdexcept>
 
 #include "Rendering/Samplers/Sampler.h"
 #include "Math/Vector2.h"

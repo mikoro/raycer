@@ -7,6 +7,7 @@
 
 #include "Utils/ObjReader.h"
 #include "Raytracing/Primitives/Triangle.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 

@@ -2,13 +2,11 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
-#include <cassert>
 #include <limits>
 
 #include "Raytracing/AABB.h"
 #include "Raytracing/Ray.h"
 #include "Math/Matrix4x4.h"
-#include "Math/EulerAngle.h"
 
 using namespace Raycer;
 

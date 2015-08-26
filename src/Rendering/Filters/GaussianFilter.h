@@ -7,6 +7,8 @@
 
 namespace Raycer
 {
+	class Vector2;
+
 	class GaussianFilter : public Filter
 	{
 	public:

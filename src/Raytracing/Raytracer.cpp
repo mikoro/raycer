@@ -5,7 +5,6 @@
 #include <cmath>
 #include <limits>
 #include <map>
-#include <stdexcept>
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -13,6 +12,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
+#include "Raytracing/ONB.h"
 #include "Raytracing/Camera.h"
 #include "Raytracing/Lights.h"
 #include "Raytracing/Primitives/Primitive.h"

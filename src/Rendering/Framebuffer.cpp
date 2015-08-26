@@ -11,7 +11,6 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Utils/GLHelper.h"
-#include "Math/Color.h"
 
 using namespace Raycer;
 
@@ -139,7 +138,7 @@ void Framebuffer::clear(const Color& color)
 void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
-	
+
 	int imageWidth = image.getWidth();
 	int imageHeight = image.getHeight();
 

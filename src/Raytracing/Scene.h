@@ -31,11 +31,11 @@
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
 #include "Math/Color.h"
+#include "Math/Vector3.h"
 
 namespace Raycer
 {
 	class Primitive;
-	class Texture;
 
 	struct ObjScene
 	{

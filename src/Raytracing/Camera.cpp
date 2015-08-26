@@ -15,6 +15,7 @@
 #include "Raytracing/Ray.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/Primitives/Primitive.h"
 #include "App.h"
 #include "Utils/Settings.h"
 #include "Math/MathUtils.h"
@@ -240,7 +241,7 @@ void Camera::update(const Scene& scene, double timeStep)
 		if (!velocity.isZero() || !angularVelocity.isZero())
 			cameraHasMoved = true;
 	}
-	
+
 	orientation.clampPitch();
 	orientation.normalize();
 }

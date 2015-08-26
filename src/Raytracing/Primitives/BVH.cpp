@@ -3,7 +3,7 @@
 
 #include <algorithm>
 #include <cassert>
-#include <cmath>
+#include <chrono>
 #include <limits>
 #include <stdexcept>
 
@@ -14,6 +14,7 @@
 #include "Raytracing/Intersection.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Math/Vector3.h"
 
 using namespace Raycer;
 

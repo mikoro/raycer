@@ -1,13 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
-
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
+#include "Raytracing/ONB.h"
+#include "Math/Vector2.h"
 
 using namespace Raycer;
 
@@ -43,7 +43,7 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection)
 	if (primitive->intersect(instanceRay, instanceIntersection))
 	{
 		Vector3 position = transformation.transformPosition(instanceIntersection.position);
-		
+
 		double t = (position - ray.origin).length();
 
 		if (t < ray.minDistance || t > ray.maxDistance)

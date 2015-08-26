@@ -15,6 +15,7 @@
 #include "Utils/Log.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
+#include "Math/Color.h"
 #include "Raytracing/Primitives/Triangle.h"
 
 using namespace Raycer;
@@ -238,7 +239,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 	bool hasBumpMapTexture = false;
 
 	std::string line;
-	
+
 	while (std::getline(file, line))
 	{
 		std::istringstream ss(line);
@@ -393,7 +394,7 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 
 		int vertexIndex;
 		ssp >> vertexIndex;
-		
+
 		if (vertexIndex < 0)
 			vertexIndex = (int)vertices.size() + vertexIndex;
 		else
@@ -408,7 +409,7 @@ void ObjReader::processFace(std::istringstream& ss, std::vector<Vector3>& vertic
 		{
 			int texcoordIndex;
 			ssp >> texcoordIndex;
-			
+
 			if (texcoordIndex < 0)
 				texcoordIndex = (int)texcoords.size() + texcoordIndex;
 			else

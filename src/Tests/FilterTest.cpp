@@ -3,6 +3,8 @@
 
 #include <fstream>
 #include <map>
+#include <string>
+#include <utility>
 
 #include "catch/catch.hpp"
 #include "tinyformat/tinyformat.h"
@@ -14,7 +16,6 @@
 #include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
@@ -62,7 +63,7 @@ TEST_CASE("Filter functionality", "[filter]")
 				file2 << tfm::format("%f %f %f\n", x, y, filter.second->getWeight(x, y));
 			}
 		}
-		
+
 		file1.close();
 		file2.close();
 	}

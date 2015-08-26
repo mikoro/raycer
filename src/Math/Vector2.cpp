@@ -3,6 +3,7 @@
 
 #include <cmath>
 #include <cassert>
+#include <stdexcept>
 
 #include "tinyformat/tinyformat.h"
 

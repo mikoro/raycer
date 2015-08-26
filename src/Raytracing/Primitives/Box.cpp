@@ -3,13 +3,13 @@
 
 #include <algorithm>
 #include <cmath>
-#include <limits>
 
 #include "Raytracing/Primitives/Box.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
+#include "Raytracing/ONB.h"
 
 using namespace Raycer;
 
@@ -91,7 +91,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	intersection.position = ray.origin + (t * ray.direction);
 	intersection.normal = isInside ? maxNormal : -minNormal;
 	intersection.onb = ONB::fromNormal(intersection.normal);
-	
+
 	// TODO: add texcoord mapping
 
 	return true;

@@ -1,8 +1,6 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <stdexcept>
-
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
@@ -34,7 +32,7 @@ Scene Scene::createTestScene16()
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	
+
 	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
@@ -62,7 +60,7 @@ Scene Scene::createTestScene16()
 	box1.position = Vector3(-5.0, 0.5, -2.5);
 	box1.extent = Vector3(2.0, 1.0, 5.0);
 	scene.primitives.boxes.push_back(box1);
-	
+
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
