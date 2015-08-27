@@ -63,8 +63,8 @@ namespace Raycer
 		struct ToneMapper
 		{
 			cl_int ALIGN(4) type;
-			cl_bool ALIGN(4) applyGamma;
-			cl_bool ALIGN(4) shouldClamp;
+			cl_int ALIGN(4) applyGamma;
+			cl_int ALIGN(4) shouldClamp;
 			cl_float ALIGN(4) gamma;
 			cl_float ALIGN(4) exposure;
 			cl_float ALIGN(4) key;
@@ -74,10 +74,10 @@ namespace Raycer
 		struct SimpleFog
 		{
 			cl_float4 ALIGN(16) color;
-			cl_bool ALIGN(4) enabled;
+			cl_int ALIGN(4) enabled;
 			cl_float ALIGN(4) distance;
 			cl_float ALIGN(4) steepness;
-			cl_bool ALIGN(4) heightDispersion;
+			cl_int ALIGN(4) heightDispersion;
 			cl_float ALIGN(4) height;
 			cl_float ALIGN(4) heightSteepness;
 		};
@@ -91,13 +91,13 @@ namespace Raycer
 			cl_float2 ALIGN(8) texcoordScale;
 			cl_int ALIGN(4) id;
 			cl_float ALIGN(4) shininess;
-			cl_bool ALIGN(4) skipLighting;
-			cl_bool ALIGN(4) nonShadowing;
+			cl_int ALIGN(4) skipLighting;
+			cl_int ALIGN(4) nonShadowing;
 			cl_float ALIGN(4) rayReflectance;
 			cl_float ALIGN(4) rayTransmittance;
 			cl_float ALIGN(4) refractiveIndex;
-			cl_bool ALIGN(4) isFresnel;
-			cl_bool ALIGN(4) enableAttenuation;
+			cl_int ALIGN(4) isFresnel;
+			cl_int ALIGN(4) enableAttenuation;
 			cl_float ALIGN(4) attenuation;
 		};
 
@@ -105,7 +105,7 @@ namespace Raycer
 		{
 			cl_float4 ALIGN(16) color;
 			cl_float ALIGN(4) intensity;
-			cl_bool ALIGN(4) enableOcclusion;
+			cl_int ALIGN(4) enableOcclusion;
 			cl_float ALIGN(4) maxDistance;
 			cl_int ALIGN(4) samplerType;
 			cl_int ALIGN(4) samples;
@@ -126,7 +126,7 @@ namespace Raycer
 			cl_float ALIGN(4) intensity;
 			cl_float ALIGN(4) distance;
 			cl_float ALIGN(4) attenuation;
-			cl_bool ALIGN(4) softShadows;
+			cl_int ALIGN(4) softShadows;
 			cl_float ALIGN(4) radius;
 			cl_int ALIGN(4) samplerType;
 			cl_int ALIGN(4) samples;
@@ -142,7 +142,7 @@ namespace Raycer
 			cl_float ALIGN(4) attenuation;
 			cl_float ALIGN(4) sideAttenuation;
 			cl_float ALIGN(4) angle;
-			cl_bool ALIGN(4) softShadows;
+			cl_int ALIGN(4) softShadows;
 			cl_float ALIGN(4) radius;
 			cl_int ALIGN(4) samplerType;
 			cl_int ALIGN(4) samples;

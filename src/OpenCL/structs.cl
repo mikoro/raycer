@@ -42,8 +42,8 @@ typedef struct Raytracer
 typedef struct ToneMapper
 {
 	int type;
-	bool applyGamma;
-	bool shouldClamp;
+	int applyGamma;
+	int shouldClamp;
 	float gamma;
 	float exposure;
 	float key;
@@ -53,10 +53,10 @@ typedef struct ToneMapper
 typedef struct SimpleFog
 {
 	float4 color;
-	bool enabled;
+	int enabled;
 	float distance;
 	float steepness;
-	bool heightDispersion;
+	int heightDispersion;
 	float height;
 	float heightSteepness;
 } SimpleFog;
@@ -70,13 +70,13 @@ typedef struct Material
 	float2 texcoordScale;
 	int id;
 	float shininess;
-	bool skipLighting;
-	bool nonShadowing;
+	int skipLighting;
+	int nonShadowing;
 	float rayReflectance;
 	float rayTransmittance;
 	float refractiveIndex;
-	bool isFresnel;
-	bool enableAttenuation;
+	int isFresnel;
+	int enableAttenuation;
 	float attenuation;
 } Material;
 
@@ -84,7 +84,7 @@ typedef struct AmbientLight
 {
 	float4 color;
 	float intensity;
-	bool enableOcclusion;
+	int enableOcclusion;
 	float maxDistance;
 	int samplerType;
 	int samples;
@@ -105,7 +105,7 @@ typedef struct PointLight
 	float intensity;
 	float distance;
 	float attenuation;
-	bool softShadows;
+	int softShadows;
 	float radius;
 	int samplerType;
 	int samples;
@@ -121,7 +121,7 @@ typedef struct SpotLight
 	float attenuation;
 	float sideAttenuation;
 	float angle;
-	bool softShadows;
+	int softShadows;
 	float radius;
 	int samplerType;
 	int samples;

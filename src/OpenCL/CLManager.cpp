@@ -29,6 +29,7 @@
 #include "tinyformat/tinyformat.h"
 
 #include "OpenCL/CLManager.h"
+#include "OpenCL/CLStructs.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -49,6 +50,12 @@ namespace
 
 CLManager::~CLManager()
 {
+	if (sizesKernel != nullptr)
+	{
+		clReleaseKernel(sizesKernel);
+		sizesKernel = nullptr;
+	}
+
 	if (mainKernel != nullptr)
 	{
 		clReleaseKernel(mainKernel);
@@ -177,6 +184,7 @@ void CLManager::loadKernels()
 
 	std::vector<std::string> filePaths;
 	filePaths.push_back("data/opencl/structs.cl");
+	filePaths.push_back("data/opencl/sizes.cl");
 	filePaths.push_back("data/opencl/main.cl");
 
 	std::stringstream sourceStringSs;
@@ -232,6 +240,9 @@ void CLManager::loadKernels()
 
 	mainKernel = clCreateKernel(program, "main", &status);
 	checkError(status, "Could not create main kernel");
+
+	sizesKernel = clCreateKernel(program, "printSizes", &status);
+	checkError(status, "Could not create print sizes kernel");
 }
 
 void CLManager::checkError(int result, const std::string& message)
@@ -313,4 +324,26 @@ std::string CLManager::getErrorMessage(int result)
 		case -1005: return "CL_D3D10_RESOURCE_NOT_ACQUIRED_KHR";
 		default: return "Unknown error";
 	}
+}
+
+void CLManager::writeStructSizes(const std::string& fileName)
+{
+	std::ofstream file(fileName);
+
+	file << tfm::format("State: %d\n", sizeof(OpenCL::State));
+	file << tfm::format("Camera: %d\n", sizeof(OpenCL::Camera));
+	file << tfm::format("Raytracer: %d\n", sizeof(OpenCL::Raytracer));
+	file << tfm::format("ToneMapper: %d\n", sizeof(OpenCL::ToneMapper));
+	file << tfm::format("SimpleFog: %d\n", sizeof(OpenCL::SimpleFog));
+	file << tfm::format("Material: %d\n", sizeof(OpenCL::Material));
+	file << tfm::format("AmbientLight: %d\n", sizeof(OpenCL::AmbientLight));
+	file << tfm::format("DirectionalLight: %d\n", sizeof(OpenCL::DirectionalLight));
+	file << tfm::format("PointLight: %d\n", sizeof(OpenCL::PointLight));
+	file << tfm::format("SpotLight: %d\n", sizeof(OpenCL::SpotLight));
+	file << tfm::format("Plane: %d\n", sizeof(OpenCL::Plane));
+	file << tfm::format("Sphere: %d\n", sizeof(OpenCL::Sphere));
+	file << tfm::format("Box: %d\n", sizeof(OpenCL::Box));
+	file << tfm::format("Triangle: %d\n", sizeof(OpenCL::Triangle));
+
+	file.close();
 }
