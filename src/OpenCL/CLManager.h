@@ -17,7 +17,6 @@ namespace Raycer
 	{
 	public:
 
-		CLManager();
 		~CLManager();
 
 		void initialize();
@@ -31,12 +30,6 @@ namespace Raycer
 		cl_context context = nullptr;
 		cl_command_queue commandQueue = nullptr;
 		cl_program program = nullptr;
-		cl_kernel raytraceKernel = nullptr;
-		cl_kernel printStructSizesKernel = nullptr;
-
-	private:
-
-		CLManager(const CLManager& clManager);
-		CLManager& operator=(const CLManager& clManager);
+		cl_kernel mainKernel = nullptr;
 	};
 }

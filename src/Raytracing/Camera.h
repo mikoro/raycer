@@ -19,6 +19,8 @@ namespace Raycer
 	{
 	public:
 
+		friend class CLScene;
+
 		Camera();
 
 		void initialize();

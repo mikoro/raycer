@@ -291,12 +291,12 @@ void WindowRunner::resizeFramebuffer(int width, int height)
 	CLRaytracer& clRaytracer = App::getCLRaytracer();
 
 	if (settings.openCL.enabled)
-		clRaytracer.releasePixelsBuffer();
+		clRaytracer.releaseImageBuffer();
 
 	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		clRaytracer.resizePixelsBuffer(width, height);
+		clRaytracer.resizeImageBuffer(width, height);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

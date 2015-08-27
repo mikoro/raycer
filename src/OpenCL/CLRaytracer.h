@@ -23,40 +23,40 @@ namespace Raycer
 	{
 	public:
 
-		CLRaytracer();
 		~CLRaytracer();
 
 		void initialize();
-		void resizePixelsBuffer(int width, int height);
-		void releasePixelsBuffer();
+		void resizeImageBuffer(int width, int height);
+		void releaseImageBuffer();
 		void run(RaytracerState& state, std::atomic<bool>& interrupted);
-		Image& getImage();
-		void printStructSizes();
+		Image downloadImage();
 
 	private:
 
-		void convertSceneData(const Scene& scene);
-		void uploadSceneData();
-
-		CLRaytracer(const CLRaytracer& clRaytracer);
-		CLRaytracer& operator=(const CLRaytracer& clRaytracer);
-
-		cl_mem pixelsPtr = nullptr;
-		cl_mem infoPtr = nullptr;
-		cl_mem cameraPtr = nullptr;
-		cl_mem lightsPtr = nullptr;
-		cl_mem planesPtr = nullptr;
-		cl_mem spheresPtr = nullptr;
-
-		const int MAX_LIGHTS = 100;
-		const int MAX_PLANES = 100;
-		const int MAX_SPHERES = 100;
+		void readScene(const Scene& scene);
+		void createBuffers();
+		void uploadData();
 
 		CLScene clScene;
+		bool buffersCreated = false;
 
-		int bufferWidth = 0;
-		int bufferHeight = 0;
+		int imageBufferWidth = 0;
+		int imageBufferHeight = 0;
 
-		Image image;
+		cl_mem imagePtr = nullptr;
+		cl_mem statePtr = nullptr;
+		cl_mem cameraPtr = nullptr;
+		cl_mem raytracerPtr = nullptr;
+		cl_mem toneMapperPtr = nullptr;
+		cl_mem simpleFogPtr = nullptr;
+		cl_mem materialsPtr = nullptr;
+		cl_mem ambientLightPtr = nullptr;
+		cl_mem directionalLightsPtr = nullptr;
+		cl_mem pointLightsPtr = nullptr;
+		cl_mem spotLightsPtr = nullptr;
+		cl_mem planesPtr = nullptr;
+		cl_mem spheresPtr = nullptr;
+		cl_mem boxesPtr = nullptr;
+		cl_mem trianglesPtr = nullptr;
 	};
 }

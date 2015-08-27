@@ -10,17 +10,32 @@
 namespace Raycer
 {
 	class Scene;
+	class Vector3;
+	class Color;
 
 	class CLScene
 	{
 	public:
 
-		void convertSceneData(const Scene& scene);
+		void readScene(const Scene& scene);
 
 		OpenCL::State state;
 		OpenCL::Camera camera;
-		std::vector<OpenCL::Light> lights;
+		OpenCL::Raytracer raytracer;
+		OpenCL::ToneMapper toneMapper;
+		OpenCL::SimpleFog simpleFog;
+		std::vector<OpenCL::Material> materials;
+		OpenCL::AmbientLight ambientLight;
+		std::vector<OpenCL::DirectionalLight> directionalLights;
+		std::vector<OpenCL::PointLight> pointLights;
+		std::vector<OpenCL::SpotLight> spotLights;
 		std::vector<OpenCL::Plane> planes;
 		std::vector<OpenCL::Sphere> spheres;
+		std::vector<OpenCL::Box> boxes;
+		std::vector<OpenCL::Triangle> triangles;
+
+	private:
+
+		int findMaterialIndex(int materialId);
 	};
 }

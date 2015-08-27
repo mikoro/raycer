@@ -47,22 +47,12 @@ namespace
 	}
 }
 
-CLManager::CLManager()
-{
-}
-
 CLManager::~CLManager()
 {
-	if (printStructSizesKernel != nullptr)
+	if (mainKernel != nullptr)
 	{
-		clReleaseKernel(printStructSizesKernel);
-		printStructSizesKernel = nullptr;
-	}
-
-	if (raytraceKernel != nullptr)
-	{
-		clReleaseKernel(raytraceKernel);
-		raytraceKernel = nullptr;
+		clReleaseKernel(mainKernel);
+		mainKernel = nullptr;
 	}
 
 	if (program != nullptr)
@@ -187,7 +177,7 @@ void CLManager::loadKernels()
 
 	std::vector<std::string> filePaths;
 	filePaths.push_back("data/opencl/structs.cl");
-	filePaths.push_back("data/opencl/raytrace.cl");
+	filePaths.push_back("data/opencl/main.cl");
 
 	std::stringstream sourceStringSs;
 
@@ -240,11 +230,8 @@ void CLManager::loadKernels()
 	}
 #endif
 
-	raytraceKernel = clCreateKernel(program, "raytrace", &status);
-	checkError(status, "Could not create kernel");
-
-	printStructSizesKernel = clCreateKernel(program, "printStructSizes", &status);
-	checkError(status, "Could not create kernel");
+	mainKernel = clCreateKernel(program, "main", &status);
+	checkError(status, "Could not create main kernel");
 }
 
 void CLManager::checkError(int result, const std::string& message)

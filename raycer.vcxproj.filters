@@ -623,10 +623,10 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="src\OpenCL\raytrace.cl">
+    <None Include="src\OpenCL\structs.cl">
       <Filter>OpenCL</Filter>
     </None>
-    <None Include="src\OpenCL\structs.cl">
+    <None Include="src\OpenCL\main.cl">
       <Filter>OpenCL</Filter>
     </None>
   </ItemGroup>
