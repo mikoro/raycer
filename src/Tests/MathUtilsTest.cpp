@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include <cmath>
 #include <limits>
 
@@ -36,3 +38,5 @@ TEST_CASE("MathUtils functionality", "[mathutils]")
 	REQUIRE(MathUtils::almostSame(MathUtils::degToRad(90.0), M_PI / 2.0));
 	REQUIRE(MathUtils::almostSame(MathUtils::degToRad(180.0), M_PI));
 }
+
+#endif

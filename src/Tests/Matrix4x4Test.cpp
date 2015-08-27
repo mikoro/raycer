@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include "catch/catch.hpp"
 
 #include "Math/Matrix4x4.h"
@@ -152,3 +154,5 @@ TEST_CASE("Matrix4x4 functionality", "[matrix4x4]")
 
 	REQUIRE(transformationInv == transformationInv2);
 }
+
+#endif

@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include <vector>
 
 #include "catch/catch.hpp"
@@ -21,3 +23,5 @@ TEST_CASE("PlyReader functionality", "[plyreader]")
 	triangles = PlyReader::readFile("data/meshes/cube3.ply");
 	REQUIRE(triangles.size() == 12);
 }
+
+#endif

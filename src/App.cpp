@@ -30,8 +30,10 @@
 #include "CoreFoundation/CoreFoundation.h"
 #endif
 
+#ifdef RUN_UNIT_TESTS
 #define CATCH_CONFIG_RUNNER
 #include "catch/catch.hpp"
+#endif
 
 using namespace Raycer;
 

@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include "catch/catch.hpp"
 
 #include "Math/Vector3.h"
@@ -72,3 +74,5 @@ TEST_CASE("Vector3 functionality", "[vector3]")
 	REQUIRE(v8.element(1) == 3.0);
 	REQUIRE(v8.element(2) == 4.0);
 }
+
+#endif

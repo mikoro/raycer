@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include "catch/catch.hpp"
 
 #include "Rendering/Image.h"
@@ -40,3 +42,5 @@ TEST_CASE("Image functionality", "[image]")
 	image.load("image1.hdr");
 	image.save("image2.hdr");
 }
+
+#endif

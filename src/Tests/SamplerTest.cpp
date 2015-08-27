@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include <fstream>
 #include <map>
 #include <random>
@@ -75,3 +77,5 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		file.close();
 	}
 }
+
+#endif

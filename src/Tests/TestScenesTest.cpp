@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include <vector>
 
 #include "catch/catch.hpp"
@@ -45,3 +47,5 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 		scene.saveToFile(tfm::format("scene%d.bin", sceneCount));
 	}
 }
+
+#endif

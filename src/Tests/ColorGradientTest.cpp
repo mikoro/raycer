@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include "catch/catch.hpp"
 
 #include "Utils/ColorGradient.h"
@@ -37,3 +39,5 @@ TEST_CASE("ColorGradient functionality", "[colorgradient]")
 
 	image.save("gradient.png");
 }
+
+#endif

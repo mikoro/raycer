@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#ifdef RUN_UNIT_TESTS
+
 #include <fstream>
 #include <map>
 #include <string>
@@ -68,3 +70,5 @@ TEST_CASE("Filter functionality", "[filter]")
 		file2.close();
 	}
 }
+
+#endif
