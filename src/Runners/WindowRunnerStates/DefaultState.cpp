@@ -61,7 +61,6 @@ void DefaultState::shutdown()
 
 void DefaultState::update(double timeStep)
 {
-	Log& log = App::getLog();
 	WindowRunner& windowRunner = App::getWindowRunner();
 
 	scene.camera.update(scene, timeStep);
@@ -82,10 +81,10 @@ void DefaultState::update(double timeStep)
 
 		if (pid == 0)
 		{
-			char* arg[] = {"raycer", "-s scene.xml", "--non-interactive", "--non-test", "--view", NULL};
+			char* arg[] = { "raycer", "-s scene.xml", "--non-interactive", "--non-test", "--view", (char*)0 };
 
 			if (execvp(arg[0], arg) == -1)
-				log.logWarning("Could not launch external rendering (%d) (try adding raycer to PATH)", errno);
+				App::getLog().logWarning("Could not launch external rendering (%d) (try adding raycer to PATH)", errno);
 		}
 #endif
 	}

@@ -82,9 +82,9 @@ int ConsoleRunner::run()
 			if (pid == 0)
 			{
 #ifdef __linux
-				char* arg[] = {"xdg-open", (char*)settings.image.fileName.c_str(), NULL};
+				char* arg[] = { "xdg-open", (char*)settings.image.fileName.c_str(), (char*)0 };
 #elif __APPLE__
-				char* arg[] = {"open", (char*)settings.image.fileName.c_str(), NULL};
+				char* arg[] = { "open", (char*)settings.image.fileName.c_str(), (char*)0 };
 #endif
 				if (execvp(arg[0], arg) == -1)
 					log.logWarning("Could not open the image (%d)", errno);
@@ -263,7 +263,7 @@ void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chron
 
 std::string ConsoleRunner::humanizeNumberDecimal(double value)
 {
-	const char* prefixes[] = {"", "k", "M", "G", "T", "P", "E", "Z", "Y"};
+	const char* prefixes[] = { "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
 
 	for (int i = 0; i < 9; ++i)
 	{
