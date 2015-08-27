@@ -4,12 +4,14 @@
 #include <atomic>
 #include <cstdio>
 #include <iostream>
-#include <ratio>
 #include <thread>
-#include <type_traits>
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <errno.h>
 #endif
 
 #include "tinyformat/tinyformat.h"
@@ -42,7 +44,7 @@ int ConsoleRunner::run()
 	remainingTimeAverage.setAverage(0.0);
 
 	Scene scene;
-	
+
 	if (settings.scene.enableTestScenes)
 		scene = Scene::createTestScene(settings.scene.testSceneNumber);
 	else
@@ -71,8 +73,22 @@ int ConsoleRunner::run()
 		if (settings.image.autoView)
 		{
 			log.logInfo("Opening the image in an external viewer");
+
 #ifdef _WIN32
 			ShellExecuteA(NULL, "open", settings.image.fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+#else
+			int pid = fork();
+
+			if (pid == 0)
+			{
+#ifdef __linux
+				char* arg[] = {"xdg-open", (char*)settings.image.fileName.c_str(), NULL};
+#elif __APPLE__
+				char* arg[] = {"open", (char*)settings.image.fileName.c_str(), NULL};
+#endif
+				if (execvp(arg[0], arg) == -1)
+					log.logWarning("Could not open the image (%d)", errno);
+			}
 #endif
 		}
 	}
@@ -102,7 +118,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		clRaytracer.initialize();
 		clRaytracer.resizePixelsBuffer(state.sceneWidth, state.sceneHeight);
 	}
-	
+
 	std::atomic<bool> finished;
 	finished = false;
 
@@ -153,10 +169,10 @@ void ConsoleRunner::run(RaytracerState& state)
 
 	if (totalElapsedMilliseconds > 0)
 		totalPixelsPerSecond = (double)state.pixelsProcessed / ((double)totalElapsedMilliseconds / 1000.0);
-	
+
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
 	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
-	
+
 	if (!interrupted && settings.openCL.enabled)
 		image = clRaytracer.getImage();
 }
@@ -201,7 +217,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 
 	if (elapsedSeconds > 0.0)
 		pixelsPerSecondAverage.addMeasurement((double)pixelsProcessed / elapsedSeconds);
-	
+
 	remainingTimeAverage.addMeasurement((double)duration_cast<std::chrono::seconds>(remainingTime).count());
 
 	if (pixelsProcessed == totalPixelCount)

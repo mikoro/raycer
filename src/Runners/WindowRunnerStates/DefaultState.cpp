@@ -3,6 +3,10 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <errno.h>
 #endif
 
 #include <GL/gl3w.h>
@@ -11,6 +15,7 @@
 
 #include "Runners/WindowRunnerStates/DefaultState.h"
 #include "App.h"
+#include "Utils/Log.h"
 #include "OpenCL/CLRaytracer.h"
 #include "Math/Color.h"
 #include "Math/EulerAngle.h"
@@ -34,7 +39,7 @@ void DefaultState::initialize()
 		scene = Scene::createTestScene(settings.scene.testSceneNumber);
 	else
 		scene = Scene::loadFromFile(settings.scene.fileName);
-	
+
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 
@@ -56,20 +61,32 @@ void DefaultState::shutdown()
 
 void DefaultState::update(double timeStep)
 {
+	Log& log = App::getLog();
 	WindowRunner& windowRunner = App::getWindowRunner();
 
 	scene.camera.update(scene, timeStep);
 	scene.camera.precalculate();
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
-		scene.saveToFile("scene.json");
+		scene.saveToFile("scene.xml");
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F8))
 	{
 		windowRunner.pause();
 		scene.saveToFile("scene.xml");
+
 #ifdef _WIN32
 		ShellExecuteA(NULL, "open", "raycer.exe", "-s scene.xml --non-interactive --non-test --view", NULL, SW_SHOWNORMAL);
+#else
+		int pid = fork();
+
+		if (pid == 0)
+		{
+			char* arg[] = {"raycer", "-s scene.xml", "--non-interactive", "--non-test", "--view", NULL};
+
+			if (execvp(arg[0], arg) == -1)
+				log.logWarning("Could not launch external rendering (%d) (try adding raycer to PATH)", errno);
+		}
 #endif
 	}
 }
