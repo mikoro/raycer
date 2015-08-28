@@ -24,9 +24,6 @@ namespace Raycer
 
 		Vector3 position;
 		Vector3 normal;
-
-	private:
-
 		Vector3 uAxis;
 		Vector3 vAxis;
 	};

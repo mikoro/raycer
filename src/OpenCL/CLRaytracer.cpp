@@ -146,7 +146,6 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 14, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
 
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
-	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
 	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue main kernel");
 

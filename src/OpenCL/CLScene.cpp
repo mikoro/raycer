@@ -70,24 +70,24 @@ void CLScene::readScene(const Scene& scene)
 	raytracer.timeSamples = (cl_int)scene.raytracer.timeSamples;
 
 	toneMapper.type = (cl_int)scene.toneMapper.type;
-	toneMapper.applyGamma = (cl_bool)scene.toneMapper.applyGamma;
-	toneMapper.shouldClamp = (cl_bool)scene.toneMapper.shouldClamp;
+	toneMapper.applyGamma = (cl_int)scene.toneMapper.applyGamma;
+	toneMapper.shouldClamp = (cl_int)scene.toneMapper.shouldClamp;
 	toneMapper.gamma = (cl_float)scene.toneMapper.gamma;
 	toneMapper.exposure = (cl_float)scene.toneMapper.exposure;
 	toneMapper.key = (cl_float)scene.toneMapper.key;
 	toneMapper.maxLuminance = (cl_float)scene.toneMapper.maxLuminance;
 
 	readColor(simpleFog.color, scene.simpleFog.color);
-	simpleFog.enabled = (cl_bool)scene.simpleFog.enabled;
+	simpleFog.enabled = (cl_int)scene.simpleFog.enabled;
 	simpleFog.distance = (cl_float)scene.simpleFog.distance;
 	simpleFog.steepness = (cl_float)scene.simpleFog.steepness;
-	simpleFog.heightDispersion = (cl_bool)scene.simpleFog.heightDispersion;
+	simpleFog.heightDispersion = (cl_int)scene.simpleFog.heightDispersion;
 	simpleFog.height = (cl_float)scene.simpleFog.height;
 	simpleFog.heightSteepness = (cl_float)scene.simpleFog.heightSteepness;
 
 	readColor(ambientLight.color, scene.lights.ambientLight.color);
 	ambientLight.intensity = (cl_float)scene.lights.ambientLight.intensity;
-	ambientLight.enableOcclusion = (cl_bool)scene.lights.ambientLight.enableOcclusion;
+	ambientLight.enableOcclusion = (cl_int)scene.lights.ambientLight.enableOcclusion;
 	ambientLight.maxDistance = (cl_float)scene.lights.ambientLight.maxDistance;
 	ambientLight.samplerType = (cl_int)scene.lights.ambientLight.samplerType;
 	ambientLight.samples = (cl_int)scene.lights.ambientLight.samples;
@@ -106,6 +106,7 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Material clMaterial;
 
+		readColor(clMaterial.color, Color::RED);
 		readColor(clMaterial.ambientReflectance, material.ambientReflectance);
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
@@ -113,13 +114,15 @@ void CLScene::readScene(const Scene& scene)
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
 		clMaterial.id = (cl_int)material.id;
 		clMaterial.shininess = (cl_float)material.shininess;
-		clMaterial.skipLighting = (cl_bool)material.skipLighting;
-		clMaterial.nonShadowing = (cl_bool)material.nonShadowing;
+		clMaterial.skipLighting = (cl_int)material.skipLighting;
+		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
+		clMaterial.hasTexture = (cl_int)0;
+		clMaterial.textureIndex = (cl_int)0;
 		clMaterial.rayReflectance = (cl_float)material.rayReflectance;
 		clMaterial.rayTransmittance = (cl_float)material.rayTransmittance;
 		clMaterial.refractiveIndex = (cl_float)material.refractiveIndex;
-		clMaterial.isFresnel = (cl_bool)material.isFresnel;
-		clMaterial.enableAttenuation = (cl_bool)material.enableAttenuation;
+		clMaterial.isFresnel = (cl_int)material.isFresnel;
+		clMaterial.enableAttenuation = (cl_int)material.enableAttenuation;
 		clMaterial.attenuation = (cl_float)material.attenuation;
 
 		materials.push_back(clMaterial);
@@ -145,7 +148,7 @@ void CLScene::readScene(const Scene& scene)
 		clLight.intensity = (cl_float)light.intensity;
 		clLight.distance = (cl_float)light.distance;
 		clLight.attenuation = (cl_float)light.attenuation;
-		clLight.softShadows = (cl_bool)light.softShadows;
+		clLight.softShadows = (cl_int)light.softShadows;
 		clLight.radius = (cl_float)light.radius;
 		clLight.samplerType = (cl_int)light.samplerType;
 		clLight.samples = (cl_int)light.samples;
@@ -165,7 +168,7 @@ void CLScene::readScene(const Scene& scene)
 		clLight.attenuation = (cl_float)light.attenuation;
 		clLight.sideAttenuation = (cl_float)light.sideAttenuation;
 		clLight.angle = (cl_float)light.angle;
-		clLight.softShadows = (cl_bool)light.softShadows;
+		clLight.softShadows = (cl_int)light.softShadows;
 		clLight.radius = (cl_float)light.radius;
 		clLight.samplerType = (cl_int)light.samplerType;
 		clLight.samples = (cl_int)light.samples;
@@ -179,6 +182,8 @@ void CLScene::readScene(const Scene& scene)
 
 		readVector3(clPlane.position, plane.position);
 		readVector3(clPlane.normal, plane.normal);
+		readVector3(clPlane.uAxis, plane.uAxis);
+		readVector3(clPlane.vAxis, plane.vAxis);
 		clPlane.materialIndex = (cl_int)findMaterialIndex(plane.materialId);
 
 		planes.push_back(clPlane);

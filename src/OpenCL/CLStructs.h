@@ -84,6 +84,7 @@ namespace Raycer
 
 		struct Material
 		{
+			cl_float4 ALIGN(16) color;
 			cl_float4 ALIGN(16) ambientReflectance;
 			cl_float4 ALIGN(16) diffuseReflectance;
 			cl_float4 ALIGN(16) specularReflectance;
@@ -93,6 +94,8 @@ namespace Raycer
 			cl_float ALIGN(4) shininess;
 			cl_int ALIGN(4) skipLighting;
 			cl_int ALIGN(4) nonShadowing;
+			cl_int ALIGN(4) hasTexture;
+			cl_int ALIGN(4) textureIndex;
 			cl_float ALIGN(4) rayReflectance;
 			cl_float ALIGN(4) rayTransmittance;
 			cl_float ALIGN(4) refractiveIndex;
@@ -152,6 +155,8 @@ namespace Raycer
 		{
 			cl_float4 ALIGN(16) position;
 			cl_float4 ALIGN(16) normal;
+			cl_float4 ALIGN(16) uAxis;
+			cl_float4 ALIGN(16) vAxis;
 			cl_int ALIGN(4) materialIndex;
 		};
 

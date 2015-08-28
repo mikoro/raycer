@@ -1,22 +1,3 @@
-#include "structs.clh"
-
-Ray constructRay(float4 origin, float4 direction)
-{
-	Ray ray;
-
-	ray.origin = origin;
-	ray.direction = direction;
-	ray.inverseDirection = (float4)(1.0, 1.0, 1.0, 1.0) / direction;
-	ray.minDistance = 0.0;
-	ray.maxDistance = FLT_MAX;
-	ray.time = 0.0;
-	ray.fastOcclusion = false;
-	ray.isShadowRay = false;
-	ray.isInvalid = false;
-
-	return ray;
-}
-
 kernel void raytrace(write_only image2d_t image,
 	constant State* state,
 	constant Camera* camera,
@@ -33,10 +14,21 @@ kernel void raytrace(write_only image2d_t image,
 	constant Box* boxes,
 	constant Triangle* triangles)
 {
-	float x = (float)get_global_id(0);
-	float y = (float)get_global_id(1);
-	float k = fabs(cos(x + state->time)) * fabs(cos(y + state->time));
-	float4 color = (float4)(fabs(cos(state->time)) * k, fabs(cos(state->time + 0.5f)) * k, fabs(cos(state->time + 1.0f)) * k, 1.0f);
+	int x = get_global_id(0);
+	int y = get_global_id(1);
 
-	write_imagef(image, (int2)(x, y), color);
+	Ray ray = getCameraRay(camera, x, y);
+	Intersection intersection = constructIntersection();
+	float4 finalColor = raytracer->backgroundColor;
+
+	for (int i = 0; i < state->planeCount; ++i)
+		intersectPlane(&planes[i], &ray, &intersection, materials);
+
+	if (intersection.wasFound)
+	{
+		constant Material* material = &materials[intersection.materialIndex];
+		finalColor = material->color;
+	}
+
+	write_imagef(image, (int2)(x, y), finalColor);
 }

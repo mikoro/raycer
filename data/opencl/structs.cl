@@ -1,6 +1,3 @@
-#ifndef HEADER_SOURCES
-#define HEADER_SOURCES
-
 typedef struct State
 {
 	float time;
@@ -66,6 +63,7 @@ typedef struct SimpleFog
 
 typedef struct Material
 {
+	float4 color;
 	float4 ambientReflectance;
 	float4 diffuseReflectance;
 	float4 specularReflectance;
@@ -75,6 +73,8 @@ typedef struct Material
 	float shininess;
 	int skipLighting;
 	int nonShadowing;
+	int hasTexture;
+	int textureIndex;
 	float rayReflectance;
 	float rayTransmittance;
 	float refractiveIndex;
@@ -134,6 +134,8 @@ typedef struct Plane
 {
 	float4 position;
 	float4 normal;
+	float4 uAxis;
+	float4 vAxis;
 	int materialIndex;
 } Plane;
 
@@ -163,6 +165,13 @@ typedef struct Triangle
 	int materialIndex;
 } Triangle;
 
+typedef struct ONB
+{
+	float4 u;
+	float4 v;
+	float4 w;
+} ONB;
+
 typedef struct Ray
 {
 	float4 origin;
@@ -176,4 +185,12 @@ typedef struct Ray
 	bool isInvalid;
 } Ray;
 
-#endif
+typedef struct Intersection
+{
+	bool wasFound;
+	float distance;
+	float4 position;
+	ONB onb;
+	float2 texcoord;
+	int materialIndex;
+} Intersection;

@@ -1,5 +1,3 @@
-#include "structs.clh"
-
 kernel void printSizes()
 {
 	printf("\nState: %d\n", sizeof(State));
