@@ -7,6 +7,8 @@
 
 #include <GL/gl3w.h>
 
+#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
+#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
 #else
@@ -75,7 +77,9 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 	// use OpenGL texture as an image
 	if (settings.general.interactive)
 	{
-		imagePtr = clCreateFromGLTexture(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
+		// 1.2 version of the function
+		//imagePtr = clCreateFromGLTexture(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
+		imagePtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
 		CLManager::checkError(status, "Could not create image from OpenGL texture");
 	}
 	else // create own image
@@ -84,6 +88,7 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 		imageFormat.image_channel_data_type = CL_FLOAT;
 		imageFormat.image_channel_order = CL_RGBA;
 
+		/*
 		cl_image_desc imageDesc;
 		imageDesc.image_type = CL_MEM_OBJECT_IMAGE2D;
 		imageDesc.image_width = imageBufferWidth;
@@ -95,8 +100,11 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 		imageDesc.num_mip_levels = 0;
 		imageDesc.num_samples = 0;
 		imageDesc.buffer = NULL;
+		*/
 
-		imagePtr = clCreateImage(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, &imageDesc, NULL, &status);
+		// 1.2 version of the function
+		//imagePtr = clCreateImage(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, &imageDesc, NULL, &status);
+		imagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, NULL, &status);
 		CLManager::checkError(status, "Could not create image");
 	}
 }
