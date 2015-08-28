@@ -352,8 +352,6 @@
     <None Include="data\shaders\framebuffer_bicubic.vert" />
     <None Include="data\shaders\text.frag" />
     <None Include="data\shaders\text.vert" />
-    <None Include="src\OpenCL\main.cl" />
-    <None Include="src\OpenCL\structs.cl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

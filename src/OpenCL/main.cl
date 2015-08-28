@@ -1,3 +1,33 @@
+typedef struct Ray
+{
+	float4 origin;
+	float4 direction;
+	float4 inverseDirection;
+	float minDistance;
+	float maxDistance;
+	float time;
+	bool fastOcclusion;
+	bool isShadowRay;
+	bool isInvalid;
+} Ray;
+
+Ray constructRay(float4 origin, float4 direction)
+{
+	Ray ray;
+
+	ray.origin = origin;
+	ray.direction = direction;
+	ray.inverseDirection = (float4)(1.0, 1.0, 1.0, 1.0) / direction;
+	ray.minDistance = 0.0;
+	ray.maxDistance = FLT_MAX;
+	ray.time = 0.0;
+	ray.fastOcclusion = false;
+	ray.isShadowRay = false;
+	ray.isInvalid = false;
+
+	return ray;
+}
+
 kernel void main(write_only image2d_t image,
 	constant State* state,
 	constant Camera* camera,
