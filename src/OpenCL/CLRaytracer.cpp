@@ -129,26 +129,26 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &imagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object acquire");
 	}
 
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 0, sizeof(cl_mem), &imagePtr), "Could not set kernel argument (image)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 1, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 2, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 3, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 4, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 5, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 6, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 10, sizeof(cl_mem), &spotLightsPtr), "Could not set kernel argument (spot lights)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 11, sizeof(cl_mem), &planesPtr), "Could not set kernel argument (planes)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 12, sizeof(cl_mem), &spheresPtr), "Could not set kernel argument (spheres)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 13, sizeof(cl_mem), &boxesPtr), "Could not set kernel argument (boxes)");
-	CLManager::checkError(clSetKernelArg(clManager.mainKernel, 14, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 0, sizeof(cl_mem), &imagePtr), "Could not set kernel argument (image)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 1, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 2, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 3, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 4, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 5, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 6, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 10, sizeof(cl_mem), &spotLightsPtr), "Could not set kernel argument (spot lights)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 11, sizeof(cl_mem), &planesPtr), "Could not set kernel argument (planes)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 12, sizeof(cl_mem), &spheresPtr), "Could not set kernel argument (spheres)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 13, sizeof(cl_mem), &boxesPtr), "Could not set kernel argument (boxes)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 14, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
 
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 	//const size_t localSizes[] = { 8, 8 }; // global_work_size needs to be evenly divisible by work-group size
 
-	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.mainKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue main kernel");
+	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue main kernel");
 
 	if (settings.general.interactive)
 		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &imagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object release");

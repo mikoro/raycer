@@ -1,15 +1,4 @@
-typedef struct Ray
-{
-	float4 origin;
-	float4 direction;
-	float4 inverseDirection;
-	float minDistance;
-	float maxDistance;
-	float time;
-	bool fastOcclusion;
-	bool isShadowRay;
-	bool isInvalid;
-} Ray;
+#include "structs.clh"
 
 Ray constructRay(float4 origin, float4 direction)
 {
@@ -28,7 +17,7 @@ Ray constructRay(float4 origin, float4 direction)
 	return ray;
 }
 
-kernel void main(write_only image2d_t image,
+kernel void raytrace(write_only image2d_t image,
 	constant State* state,
 	constant Camera* camera,
 	constant Raytracer* raytracer,

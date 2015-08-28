@@ -31,7 +31,7 @@ namespace Raycer
 		cl_context context = nullptr;
 		cl_command_queue commandQueue = nullptr;
 		cl_program program = nullptr;
-		cl_kernel mainKernel = nullptr;
-		cl_kernel sizesKernel = nullptr;
+		cl_kernel raytraceKernel = nullptr;
+		cl_kernel printSizesKernel = nullptr;
 	};
 }

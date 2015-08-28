@@ -1,4 +1,6 @@
-__kernel void printSizes()
+#include "structs.clh"
+
+kernel void printSizes()
 {
 	printf("\nState: %d\n", sizeof(State));
 	printf("Camera: %d\n", sizeof(Camera));

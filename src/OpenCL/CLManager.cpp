@@ -9,6 +9,8 @@
 
 #ifdef _WIN32
 #include <windows.h>
+#else
+#include <stdlib.h>
 #endif
 
 #include <GL/gl3w.h>
@@ -25,6 +27,8 @@
 #include <GL/glx.h>
 #endif
 
+#include <boost/filesystem.hpp>
+
 #include "tinyformat/tinyformat.h"
 
 #include "OpenCL/CLManager.h"
@@ -34,6 +38,7 @@
 #include "Utils/Settings.h"
 
 using namespace Raycer;
+using namespace boost::filesystem;
 
 namespace
 {
@@ -49,16 +54,16 @@ namespace
 
 CLManager::~CLManager()
 {
-	if (sizesKernel != nullptr)
+	if (printSizesKernel != nullptr)
 	{
-		clReleaseKernel(sizesKernel);
-		sizesKernel = nullptr;
+		clReleaseKernel(printSizesKernel);
+		printSizesKernel = nullptr;
 	}
 
-	if (mainKernel != nullptr)
+	if (raytraceKernel != nullptr)
 	{
-		clReleaseKernel(mainKernel);
-		mainKernel = nullptr;
+		clReleaseKernel(raytraceKernel);
+		raytraceKernel = nullptr;
 	}
 
 	if (program != nullptr)
@@ -87,6 +92,12 @@ void CLManager::initialize()
 
 	log.logInfo("Initializing OpenCL");
 
+#ifdef _WIN32
+	_putenv_s("CUDA_CACHE_DISABLE", "1");
+#else
+	setenv("CUDA_CACHE_DISABLE", "1", 1);
+#endif
+
 	cl_uint platformCount = 0;
 	checkError(clGetPlatformIDs(0, NULL, &platformCount), "Could not get platform count");
 
@@ -110,7 +121,7 @@ void CLManager::initialize()
 	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, &platformVersion[0], NULL);
 
 	log.logInfo("OpenCL platform: %s", &platformName[0]);
-	log.logInfo("OpenCL version: %s", &platformVersion[0]);
+	log.logInfo("OpenCL platform version: %s", &platformVersion[0]);
 
 	cl_uint deviceCount = 0;
 	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, NULL, &deviceCount), "Could not get device count");
@@ -129,7 +140,12 @@ void CLManager::initialize()
 	std::vector<char> deviceName(length);
 	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, &deviceName[0], NULL);
 
+	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, 0, NULL, &length);
+	std::vector<char> deviceVersion(length);
+	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, length, &deviceVersion[0], NULL);
+
 	log.logInfo("OpenCL device: %s", &deviceName[0]);
+	log.logInfo("OpenCL device version: %s", &deviceVersion[0]);
 
 	cl_int status = 0;
 
@@ -141,7 +157,7 @@ void CLManager::initialize()
 		std::string extensionsStr(&extensions[0]);
 
 		if (extensionsStr.find("_gl_sharing") == std::string::npos)
-			throw std::runtime_error("OpenCL-OpenGL interoperation is not supported");
+			throw std::runtime_error("OpenCL-OpenGL interoperation is not supported (try non-interactive mode)");
 
 		cl_context_properties properties[] =
 		{
@@ -182,9 +198,7 @@ void CLManager::loadKernels()
 	log.logInfo("Building OpenCL programs");
 
 	std::vector<std::string> filePaths;
-	filePaths.push_back("data/opencl/structs.cl");
-	filePaths.push_back("data/opencl/sizes.cl");
-	filePaths.push_back("data/opencl/main.cl");
+	filePaths.push_back("data/opencl/all.cl");
 
 	std::stringstream sourceStringSs;
 
@@ -201,14 +215,15 @@ void CLManager::loadKernels()
 
 	std::string sourceString = sourceStringSs.str();
 	const char* sourceStringPtr = sourceString.c_str();
-	
+
 	cl_int status = 0;
 	size_t length = 0;
 
 	program = clCreateProgramWithSource(context, 1, &sourceStringPtr, NULL, &status);
 	checkError(status, "Could not read program source file");
 
-	status = clBuildProgram(program, 1, &deviceId, settings.openCL.options.c_str(), NULL, NULL);
+	std::string optionsString = tfm::format("%s -I%s/data/opencl", settings.openCL.options, boost::filesystem::current_path().string());
+	status = clBuildProgram(program, 1, &deviceId, optionsString.c_str(), NULL, NULL);
 
 	if (status == CL_BUILD_PROGRAM_FAILURE)
 	{
@@ -237,11 +252,11 @@ void CLManager::loadKernels()
 	}
 #endif
 
-	mainKernel = clCreateKernel(program, "main", &status);
-	checkError(status, "Could not create main kernel");
+	raytraceKernel = clCreateKernel(program, "raytrace", &status);
+	checkError(status, "Could not create raytrace kernel");
 
-	sizesKernel = clCreateKernel(program, "printSizes", &status);
-	checkError(status, "Could not create print sizes kernel");
+	printSizesKernel = clCreateKernel(program, "printSizes", &status);
+	checkError(status, "Could not create printSizes kernel");
 }
 
 void CLManager::checkError(int result, const std::string& message)
