@@ -22,9 +22,9 @@ void BVH::initialize()
 {
 }
 
-bool BVH::intersect(const Ray& ray, Intersection& intersection)
+bool BVH::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	if (!aabb.intersects(ray))
@@ -32,7 +32,7 @@ bool BVH::intersect(const Ray& ray, Intersection& intersection)
 
 	bool wasFound = false;
 
-	if (left->intersect(ray, intersection))
+	if (left->intersect(ray, intersections))
 	{
 		if (ray.fastOcclusion)
 			return true;
@@ -40,7 +40,7 @@ bool BVH::intersect(const Ray& ray, Intersection& intersection)
 		wasFound = true;
 	}
 
-	if (right->intersect(ray, intersection))
+	if (right->intersect(ray, intersections))
 	{
 		if (ray.fastOcclusion)
 			return true;

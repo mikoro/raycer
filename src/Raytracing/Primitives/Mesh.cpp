@@ -60,23 +60,23 @@ void Mesh::initialize()
 		bvh.build(primitives, bvhBuildInfo);
 }
 
-bool Mesh::intersect(const Ray& ray, Intersection& intersection)
+bool Mesh::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	if (enableBVH)
-		return bvh.intersect(ray, intersection);
+		return bvh.intersect(ray, intersections);
 	else
 	{
 		bool wasFound = false;
 
 		for (Triangle& triangle : triangles)
 		{
-			if (triangle.intersect(ray, intersection))
+			if (triangle.intersect(ray, intersections))
 				wasFound = true;
 		}
 

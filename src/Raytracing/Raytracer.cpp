@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <limits>
 #include <map>
@@ -169,10 +170,10 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 
 Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted)
 {
-	Intersection intersection;
+	std::array<Intersection, 2> intersections;
 
 	if (scene.raytracer.timeSamples == 0)
-		return raytrace(scene, ray, intersection, 0, interrupted);
+		return raytrace(scene, ray, intersections, 0, interrupted);
 
 	Color sampledPixelColor;
 	int n = scene.raytracer.timeSamples;
@@ -180,15 +181,15 @@ Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::at
 
 	for (int i = 0; i < n; ++i)
 	{
-		intersection = Intersection();
+		intersections[0] = Intersection();
 		ray.time = sampler->getSample(i, n);
-		sampledPixelColor += raytrace(scene, ray, intersection, 0, interrupted);
+		sampledPixelColor += raytrace(scene, ray, intersections, 0, interrupted);
 	}
 
 	return sampledPixelColor / (double)(n);
 }
 
-Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)
+Color Raytracer::raytrace(const Scene& scene, const Ray& ray, std::array<Intersection, 2>& intersections, int iteration, const std::atomic<bool>& interrupted)
 {
 	Color finalColor = scene.raytracer.backgroundColor;
 
@@ -196,25 +197,25 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		return finalColor;
 
 	for (Primitive* primitive : scene.primitives.all)
-		primitive->intersect(ray, intersection);
+		primitive->intersect(ray, intersections);
 
-	if (!intersection.wasFound)
+	if (!intersections[0].wasFound)
 		return finalColor;
 
-	Material* material = intersection.primitive->material;
-	Color textureColor = material->colorTexture->getColor(intersection.texcoord, intersection.position) * material->colorTexture->intensity;
+	Material* material = intersections[0].primitive->material;
+	Color textureColor = material->colorTexture->getColor(intersections[0].texcoord, intersections[0].position) * material->colorTexture->intensity;
 
 	if (material->skipLighting)
 	{
 		finalColor = textureColor;
 
 		if (scene.simpleFog.enabled)
-			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
+			finalColor = calculateSimpleFogColor(scene, intersections[0], finalColor);
 
 		return finalColor;
 	}
 
-	double c1 = -(ray.direction.dot(intersection.normal));
+	double c1 = -(ray.direction.dot(intersections[0].normal));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
@@ -224,19 +225,19 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (material->normalMapTexture != nullptr)
 	{
 		TextureNormalType normalType;
-		Vector3 normalData = material->normalMapTexture->getNormal(intersection.texcoord, intersection.position, normalType);
+		Vector3 normalData = material->normalMapTexture->getNormal(intersections[0].texcoord, intersections[0].position, normalType);
 
 		if (normalType == TextureNormalType::BUMP)
 		{
 			normalData *= material->normalMapTexture->intensity;
-			ONB& onb = intersection.onb;
+			ONB& onb = intersections[0].onb;
 			Vector3 bumpedNormal = onb.w + normalData.x * (onb.u.cross(onb.w)) + normalData.y * (onb.v.cross(onb.w));
-			intersection.normal = bumpedNormal.normalized();
+			intersections[0].normal = bumpedNormal.normalized();
 		}
 		else if (normalType == TextureNormalType::GRADIENT)
 		{
-			Vector3 gradedNormal = (intersection.normal - (normalData * material->normalMapTexture->intensity));
-			intersection.normal = gradedNormal.normalized();
+			Vector3 gradedNormal = (intersections[0].normal - (normalData * material->normalMapTexture->intensity));
+			intersections[0].normal = gradedNormal.normalized();
 		}
 		else if (normalType == TextureNormalType::NORMAL)
 		{
@@ -267,22 +268,22 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		// no total internal reflection
 		if (c2 > 0.0)
 		{
-			Vector3 T = ray.direction * n + (std::abs(c1) * n - sqrt(c2)) * intersection.normal;
+			Vector3 T = ray.direction * n + (std::abs(c1) * n - sqrt(c2)) * intersections[0].normal;
 			T.normalize();
 
 			Ray refractedRay;
-			Intersection refractedIntersection;
+			std::array<Intersection, 2> refractedIntersections;
 
-			refractedRay.origin = intersection.position + T * scene.raytracer.rayStartOffset;
+			refractedRay.origin = intersections[0].position + T * scene.raytracer.rayStartOffset;
 			refractedRay.direction = T;
 			refractedRay.update();
 
-			refractionColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * transmittance;
+			refractionColor = raytrace(scene, refractedRay, refractedIntersections, iteration + 1, interrupted) * transmittance;
 
 			// only attenuate if ray has traveled inside a primitive
-			if (isOutside && refractedIntersection.wasFound && material->enableAttenuation)
+			if (isOutside && refractedIntersections[0].wasFound && material->enableAttenuation)
 			{
-				double a = exp(-material->attenuation * refractedIntersection.distance);
+				double a = exp(-material->attenuation * refractedIntersections[0].distance);
 				refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
 			}
 		}
@@ -291,40 +292,40 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	// calculate and trace reflected ray
 	if (reflectance > 0.0 && iteration < scene.raytracer.maxRayIterations)
 	{
-		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
+		Vector3 R = ray.direction + 2.0 * c1 * intersections[0].normal;
 		R.normalize();
 
 		Ray reflectedRay;
-		Intersection reflectedIntersection;
+		std::array<Intersection, 2> reflectedIntersections;
 
-		reflectedRay.origin = intersection.position + R * scene.raytracer.rayStartOffset;
+		reflectedRay.origin = intersections[0].position + R * scene.raytracer.rayStartOffset;
 		reflectedRay.direction = R;
 		reflectedRay.update();
 
-		reflectionColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * reflectance;
+		reflectionColor = raytrace(scene, reflectedRay, reflectedIntersections, iteration + 1, interrupted) * reflectance;
 
 		// only attenuate if ray has traveled inside a primitive
-		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
+		if (!isOutside && reflectedIntersections[0].wasFound && material->enableAttenuation)
 		{
-			double a = exp(-material->attenuation * reflectedIntersection.distance);
+			double a = exp(-material->attenuation * reflectedIntersections[0].distance);
 			reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
 		}
 	}
 
 	// invert normal if facing away
 	if (!isOutside)
-		intersection.normal = -intersection.normal;
+		intersections[0].normal = -intersections[0].normal;
 
 	double ambientOcclusionAmount = 1.0;
 
 	if (scene.lights.ambientLight.enableOcclusion)
-		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
+		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersections[0]);
 
-	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
+	Color lightColor = calculateLightColor(scene, ray, intersections[0], ambientOcclusionAmount);
 	finalColor = (reflectionColor + refractionColor + lightColor) * textureColor;
 
 	if (scene.simpleFog.enabled && isOutside)
-		finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
+		finalColor = calculateSimpleFogColor(scene, intersections[0], finalColor);
 
 	return finalColor;
 }
@@ -437,7 +438,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
 
 			Ray sampleRay;
-			Intersection sampleIntersection;
+			std::array<Intersection, 2> sampleIntersections;
 
 			sampleRay.origin = intersection.position + sampleDirection * scene.raytracer.rayStartOffset;
 			sampleRay.direction = sampleDirection;
@@ -447,7 +448,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 
 			for (Primitive* primitive : scene.primitives.all)
 			{
-				if (primitive->intersect(sampleRay, sampleIntersection))
+				if (primitive->intersect(sampleRay, sampleIntersections))
 				{
 					ambientOcclusion += 1.0;
 					break;
@@ -464,7 +465,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	Vector3 directionToLight = -light.direction;
 
 	Ray shadowRay;
-	Intersection shadowIntersection;
+	std::array<Intersection, 2> shadowIntersections;
 
 	shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
 	shadowRay.direction = directionToLight;
@@ -476,7 +477,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 
 	for (Primitive* primitive : scene.primitives.all)
 	{
-		if (primitive->intersect(shadowRay, shadowIntersection))
+		if (primitive->intersect(shadowRay, shadowIntersections))
 			return 1.0;
 	}
 
@@ -490,7 +491,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	if (!light.softShadows)
 	{
 		Ray shadowRay;
-		Intersection shadowIntersection;
+		std::array<Intersection, 2> shadowIntersections;
 
 		shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
 		shadowRay.direction = directionToLight;
@@ -502,7 +503,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 
 		for (Primitive* primitive : scene.primitives.all)
 		{
-			if (primitive->intersect(shadowRay, shadowIntersection))
+			if (primitive->intersect(shadowRay, shadowIntersections))
 				return 1.0;
 		}
 
@@ -526,7 +527,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 
 			Ray shadowRay;
-			Intersection shadowIntersection;
+			std::array<Intersection, 2> shadowIntersections;
 
 			shadowRay.origin = intersection.position + newDirectionToLight * scene.raytracer.rayStartOffset;
 			shadowRay.direction = newDirectionToLight;
@@ -538,7 +539,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 
 			for (Primitive* primitive : scene.primitives.all)
 			{
-				if (primitive->intersect(shadowRay, shadowIntersection))
+				if (primitive->intersect(shadowRay, shadowIntersections))
 				{
 					shadowAmount += 1.0;
 					break;

@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <array>
 #include <atomic>
 #include <map>
 #include <memory>
@@ -43,7 +44,7 @@ namespace Raycer
 		Color generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted);
 
-		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
+		Color raytrace(const Scene& scene, const Ray& ray, std::array<Intersection, 2>& intersections, int iteration, const std::atomic<bool>& interrupted);
 
 		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount);
 		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Material* material);

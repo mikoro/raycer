@@ -19,7 +19,7 @@ namespace Raycer
 	public:
 
 		void initialize();
-		bool intersect(const Ray& ray, Intersection& intersection);
+		bool intersect(const Ray& ray, std::array<Intersection, 2>& intersections);
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 

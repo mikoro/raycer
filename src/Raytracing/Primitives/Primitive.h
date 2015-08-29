@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <array>
 #include <vector>
 
 #include "Math/Vector2.h"
@@ -23,7 +24,7 @@ namespace Raycer
 		virtual ~Primitive() {}
 
 		virtual void initialize() = 0;
-		virtual bool intersect(const Ray& ray, Intersection& intersection) = 0;
+		virtual bool intersect(const Ray& ray, std::array<Intersection, 2>& intersections) = 0;
 		virtual AABB getAABB() const = 0;
 		virtual void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) = 0;
 

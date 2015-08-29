@@ -20,9 +20,9 @@ void FlatBVH::initialize()
 {
 }
 
-bool FlatBVH::intersect(const Ray& ray, Intersection& intersection)
+bool FlatBVH::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	int stack[128];
@@ -45,7 +45,7 @@ bool FlatBVH::intersect(const Ray& ray, Intersection& intersection)
 		{
 			for (int i = 0; i < flatNode.primitiveCount; ++i)
 			{
-				if (orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersection))
+				if (orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersections))
 				{
 					if (ray.fastOcclusion)
 						return true;

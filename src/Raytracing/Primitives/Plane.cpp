@@ -21,12 +21,12 @@ void Plane::initialize()
 	vAxis = uAxis.cross(normal).normalized();
 }
 
-bool Plane::intersect(const Ray& ray, Intersection& intersection)
+bool Plane::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	double denominator = ray.direction.dot(normal);
@@ -41,24 +41,25 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 		return false;
 
 	// another intersection is closer
-	if (t > intersection.distance)
+	if (t > intersections[0].distance)
 		return false;
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
 
-	intersection.wasFound = true;
-	intersection.distance = t;
-	intersection.primitive = this;
-	intersection.position = ip;
-	intersection.normal = normal;
-	intersection.onb = ONB::fromNormal(normal);
+	intersections[0].wasFound = true;
+	intersections[0].distance = t;
+	intersections[0].primitive = this;
+	intersections[0].position = ip;
+	intersections[0].normal = normal;
+	intersections[0].onb = ONB::fromNormal(normal);
 
 	// texture coordinate calculation
 	double u = uAxis.dot(ip) / material->texcoordScale.x;
 	double v = vAxis.dot(ip) / material->texcoordScale.y;
-	intersection.texcoord.x = std::abs(u - floor(u));
-	intersection.texcoord.y = std::abs(v - floor(v));
+
+	intersections[0].texcoord.x = std::abs(u - floor(u));
+	intersections[0].texcoord.y = std::abs(v - floor(v));
 
 	return true;
 }

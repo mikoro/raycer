@@ -25,40 +25,42 @@ void Instance::initialize()
 	transformationInvT = transformationInv.transposed();
 }
 
-bool Instance::intersect(const Ray& ray, Intersection& intersection)
+bool Instance::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	Ray instanceRay = ray;
-	Intersection instanceIntersection = intersection;
+	std::array<Intersection, 2> instanceIntersections;
+	instanceIntersections[0] = intersections[0];
+	instanceIntersections[1] = intersections[1];
 
 	instanceRay.origin = transformationInv.transformPosition(ray.origin);
 	instanceRay.direction = transformationInv.transformDirection(ray.direction).normalized();
 	instanceRay.update();
 
-	if (primitive->intersect(instanceRay, instanceIntersection))
+	if (primitive->intersect(instanceRay, instanceIntersections))
 	{
-		Vector3 position = transformation.transformPosition(instanceIntersection.position);
+		Vector3 position = transformation.transformPosition(instanceIntersections[0].position);
 
 		double t = (position - ray.origin).length();
 
 		if (t < ray.minDistance || t > ray.maxDistance)
 			return false;
 
-		if (t > intersection.distance)
+		if (t > intersections[0].distance)
 			return false;
 
-		intersection.wasFound = true;
-		intersection.distance = t;
-		intersection.primitive = this;
-		intersection.position = position;
-		intersection.normal = transformationInvT.transformDirection(instanceIntersection.normal).normalized();
-		intersection.onb = instanceIntersection.onb.transformed(transformationInvT);
-		intersection.texcoord = instanceIntersection.texcoord;
+		intersections[0].wasFound = true;
+		intersections[0].distance = t;
+		intersections[0].primitive = this;
+		intersections[0].position = position;
+		intersections[0].normal = transformationInvT.transformDirection(instanceIntersections[0].normal).normalized();
+		intersections[0].onb = instanceIntersections[0].onb.transformed(transformationInvT);
+		intersections[0].texcoord = instanceIntersections[0].texcoord;
 
 		return true;
 	}

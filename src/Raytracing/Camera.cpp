@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 
 #ifdef _WIN32
@@ -56,15 +57,15 @@ void Camera::update(const Scene& scene, double timeStep)
 			pixelCoordinate.y = mouseInfo.framebufferY;
 
 			Ray ray = getRay(pixelCoordinate);
-			Intersection intersection;
+			std::array<Intersection, 2> intersections;
 
 			for (Primitive* primitive : scene.primitives.all)
-				primitive->intersect(ray, intersection);
+				primitive->intersect(ray, intersections);
 
-			if (intersection.wasFound)
+			if (intersections[0].wasFound)
 			{
 				isMovingPrimitive = true;
-				movingPrimitive = intersection.primitive;
+				movingPrimitive = intersections[0].primitive;
 			}
 		}
 		else

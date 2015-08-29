@@ -19,12 +19,12 @@ void Box::initialize()
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
-bool Box::intersect(const Ray& ray, Intersection& intersection)
+bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersection.wasFound)
+	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
 	Vector3 min = position - extent / 2.0;
@@ -82,15 +82,15 @@ bool Box::intersect(const Ray& ray, Intersection& intersection)
 	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
-	if (t > intersection.distance)
+	if (t > intersections[0].distance)
 		return false;
 
-	intersection.wasFound = true;
-	intersection.distance = t;
-	intersection.primitive = this;
-	intersection.position = ray.origin + (t * ray.direction);
-	intersection.normal = isInside ? maxNormal : -minNormal;
-	intersection.onb = ONB::fromNormal(intersection.normal);
+	intersections[0].wasFound = true;
+	intersections[0].distance = t;
+	intersections[0].primitive = this;
+	intersections[0].position = ray.origin + (t * ray.direction);
+	intersections[0].normal = isInside ? maxNormal : -minNormal;
+	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
 
 	// TODO: add texcoord mapping
 
