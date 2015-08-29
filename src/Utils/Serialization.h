@@ -285,7 +285,9 @@ namespace Raycer
 		a(cereal::make_nvp("id", b.id),
 			cereal::make_nvp("intensity", b.intensity),
 			cereal::make_nvp("color1", b.color1),
-			cereal::make_nvp("color2", b.color2));
+			cereal::make_nvp("color2", b.color2),
+			cereal::make_nvp("stripeMode", b.stripeMode),
+			cereal::make_nvp("stripeWidth", b.stripeWidth));
 	}
 
 	template<class Archive>

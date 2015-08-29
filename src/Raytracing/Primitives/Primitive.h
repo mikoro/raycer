@@ -31,5 +31,6 @@ namespace Raycer
 		int id = 0;
 		int materialId = 0;
 		Material* material = nullptr;
+		bool invisible = false;
 	};
 }

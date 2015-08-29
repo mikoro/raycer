@@ -92,7 +92,18 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	intersections[0].normal = isInside ? maxNormal : -minNormal;
 	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
 
-	// TODO: add texcoord mapping
+	// another intersection for CSG
+	if (!isInside)
+	{
+		t = tmax;
+
+		intersections[1].wasFound = true;
+		intersections[1].distance = t;
+		intersections[1].primitive = this;
+		intersections[1].position = ray.origin + (t * ray.direction);
+		intersections[1].normal = maxNormal;
+		intersections[1].onb = ONB::fromNormal(intersections[1].normal);
+	}
 
 	return true;
 }

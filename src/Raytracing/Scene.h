@@ -27,6 +27,7 @@
 #include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
+#include "Raytracing/Primitives/CSG.h"
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
@@ -76,6 +77,7 @@ namespace Raycer
 		static Scene createTestScene14();
 		static Scene createTestScene15();
 		static Scene createTestScene16();
+		static Scene createTestScene17();
 
 		Camera camera;
 
@@ -164,7 +166,9 @@ namespace Raycer
 			std::vector<Triangle> triangles;
 			std::vector<Mesh> meshes;
 			std::vector<Instance> instances;
+			std::vector<CSG> csgs;
 			std::vector<Primitive*> all;
+			std::vector<Primitive*> invisible;
 		} primitives;
 
 		std::vector<ObjScene> objScenes;

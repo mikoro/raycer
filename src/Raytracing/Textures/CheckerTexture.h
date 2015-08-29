@@ -23,5 +23,7 @@ namespace Raycer
 
 		Color color1;
 		Color color2;
+		bool stripeMode = false;
+		double stripeWidth = 0.05;
 	};
 }

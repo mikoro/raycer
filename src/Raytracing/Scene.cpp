@@ -57,6 +57,7 @@ Scene Scene::createTestScene(int number)
 		case 14: return createTestScene14(); break;
 		case 15: return createTestScene15(); break;
 		case 16: return createTestScene16(); break;
+		case 17: return createTestScene17(); break;
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }
@@ -235,27 +236,38 @@ void Scene::initialize()
 
 	// PRIMITIVE POINTERS
 
+	auto sortPrimitive = [&](Primitive* primitive)
+	{
+		if (primitive->invisible)
+			primitives.invisible.push_back(primitive);
+		else
+			primitives.all.push_back(primitive);
+	};
+
 	for (Plane& plane : primitives.planes)
-		primitives.all.push_back(&plane);
+		sortPrimitive(&plane);
 
 	for (Sphere& sphere : primitives.spheres)
-		primitives.all.push_back(&sphere);
+		sortPrimitive(&sphere);
 
 	for (Box& box : primitives.boxes)
-		primitives.all.push_back(&box);
+		sortPrimitive(&box);
 
 	for (Triangle& triangle : primitives.triangles)
-		primitives.all.push_back(&triangle);
+		sortPrimitive(&triangle);
 
 	for (Mesh& mesh : primitives.meshes)
-		primitives.all.push_back(&mesh);
+		sortPrimitive(&mesh);
 
 	for (Instance& instance : primitives.instances)
-		primitives.all.push_back(&instance);
+		sortPrimitive(&instance);
+
+	for (CSG& csg : primitives.csgs)
+		sortPrimitive(&csg);
 
 	// POINTER MAP GENERATION AND VALIDATION
 
-	for (Primitive* primitive : primitives.all)
+	auto mapPrimitive = [&](Primitive* primitive)
 	{
 		if (primitive->id != 0)
 		{
@@ -264,8 +276,13 @@ void Scene::initialize()
 
 			primitivesMap[primitive->id] = primitive;
 		}
+	};
 
-	}
+	for (Primitive* primitive : primitives.all)
+		mapPrimitive(primitive);
+
+	for (Primitive* primitive : primitives.invisible)
+		mapPrimitive(primitive);
 
 	for (Material& material : materials)
 	{
@@ -294,7 +311,20 @@ void Scene::initialize()
 			throw std::runtime_error(tfm::format("An instance has a non-existent primitive id (%d)", instance.primitiveId));
 	}
 
-	for (Primitive* primitive : primitives.all)
+	for (CSG& csg : primitives.csgs)
+	{
+		if (primitivesMap.count(csg.leftPrimitiveId))
+			csg.leftPrimitive = primitivesMap[csg.leftPrimitiveId];
+		else
+			throw std::runtime_error(tfm::format("A CSG has a non-existent left primitive id (%d)", csg.leftPrimitiveId));
+
+		if (primitivesMap.count(csg.rightPrimitiveId))
+			csg.rightPrimitive = primitivesMap[csg.rightPrimitiveId];
+		else
+			throw std::runtime_error(tfm::format("A CSG has a non-existent right primitive id (%d)", csg.rightPrimitiveId));
+	}
+
+	auto initPrimitive = [&](Primitive* primitive)
 	{
 		if (materialsMap.count(primitive->materialId))
 		{
@@ -303,16 +333,26 @@ void Scene::initialize()
 			if (texturesMap.count(primitive->material->colorTextureId))
 				primitive->material->colorTexture = texturesMap[primitive->material->colorTextureId];
 			else
-				throw std::runtime_error(tfm::format("A material (%d) has a non-existent texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
+				throw std::runtime_error(tfm::format("A material (%d) has a non-existent color texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
 
+			// normal and height maps can be null
 			if (texturesMap.count(primitive->material->normalMapTextureId))
 				primitive->material->normalMapTexture = texturesMap[primitive->material->normalMapTextureId];
+
+			if (texturesMap.count(primitive->material->heightMapTextureId))
+				primitive->material->heightMapTexture = texturesMap[primitive->material->heightMapTextureId];
 		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has a non-existent material id (%d)", primitive->materialId));
 
 		primitive->initialize();
-	}
+	};
+
+	for (Primitive* primitive : primitives.all)
+		initPrimitive(primitive);
+
+	for (Primitive* primitive : primitives.invisible)
+		initPrimitive(primitive);
 
 	// CAMERA
 

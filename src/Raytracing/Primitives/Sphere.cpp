@@ -78,6 +78,31 @@ bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersection
 	intersections[0].texcoord.x = u - floor(u);
 	intersections[0].texcoord.y = v - floor(v);
 
+	// another intersection for CSG
+	if (rayOriginIsOutside)
+	{
+		t = t1 + t2;
+
+		ip = ray.origin + (t * ray.direction);
+		normal = (ip - actualPosition).normalized();
+
+		intersections[1].wasFound = true;
+		intersections[1].distance = t;
+		intersections[1].primitive = this;
+		intersections[1].position = ip;
+		intersections[1].normal = normal;
+		intersections[1].onb = ONB::fromNormal(normal);
+
+		u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
+		v = 0.5 - asin(normal.y) / M_PI;
+
+		u /= material->texcoordScale.x;
+		v /= material->texcoordScale.y;
+
+		intersections[1].texcoord.x = u - floor(u);
+		intersections[1].texcoord.y = v - floor(v);
+	}
+
 	return true;
 }
 

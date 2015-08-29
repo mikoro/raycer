@@ -16,10 +16,20 @@ Color CheckerTexture::getColor(const Vector2& texcoord, const Vector3& position)
 {
 	(void)position;
 
-	if (texcoord.x < 0.5)
-		return (texcoord.y < 0.5) ? color1 : color2;
+	if (stripeMode)
+	{
+		if (texcoord.x < stripeWidth || texcoord.y < stripeWidth || texcoord.x > (1.0 - stripeWidth) || texcoord.y > (1.0 - stripeWidth))
+			return color1;
+		else
+			return color2;
+	}
 	else
-		return (texcoord.y < 0.5) ? color2 : color1;
+	{
+		if (texcoord.x < 0.5)
+			return (texcoord.y < 0.5) ? color1 : color2;
+		else
+			return (texcoord.y < 0.5) ? color2 : color1;
+	}
 }
 
 double CheckerTexture::getValue(const Vector2& texcoord, const Vector3& position) const
