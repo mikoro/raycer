@@ -24,10 +24,19 @@ kernel void raytrace(write_only image2d_t image,
 	for (int i = 0; i < state->planeCount; ++i)
 		intersectPlane(&planes[i], &ray, &intersection, materials);
 
+	for (int i = 0; i < state->sphereCount; ++i)
+		intersectSphere(&spheres[i], &ray, &intersection, materials);
+
+	for (int i = 0; i < state->boxCount; ++i)
+		intersectBox(&boxes[i], &ray, &intersection, materials);
+
+	for (int i = 0; i < state->triangleCount; ++i)
+		intersectTriangle(&triangles[i], &ray, &intersection, materials);
+
 	if (intersection.wasFound)
 	{
 		constant Material* material = &materials[intersection.materialIndex];
-		finalColor = material->color;
+		finalColor = material->color * material->colorIntensity;
 	}
 
 	write_imagef(image, (int2)(x, y), finalColor);

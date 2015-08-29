@@ -69,7 +69,7 @@ typedef struct Material
 	float4 specularReflectance;
 	float4 attenuationColor;
 	float2 texcoordScale;
-	int id;
+	float colorIntensity;
 	float shininess;
 	int skipLighting;
 	int nonShadowing;
@@ -81,6 +81,7 @@ typedef struct Material
 	int isFresnel;
 	int enableAttenuation;
 	float attenuation;
+	int id;
 } Material;
 
 typedef struct AmbientLight
@@ -158,10 +159,10 @@ typedef struct Triangle
 {
 	float4 vertices[3];
 	float4 normals[3];
-	float4 texcoords[3];
 	float4 normal;
 	float4 tangent;
 	float4 bitangent;
+	float2 texcoords[3];
 	int materialIndex;
 } Triangle;
 

@@ -26,6 +26,17 @@ ONB constructONB()
 	return onb;
 }
 
+ONB constructONBFromValues(float4 u, float4 v, float4 w)
+{
+	ONB onb;
+
+	onb.u = u;
+	onb.v = v;
+	onb.w = w;
+
+	return onb;
+}
+
 ONB constructONBFromNormal(float4 normal)
 {
 	ONB onb;

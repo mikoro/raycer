@@ -90,7 +90,7 @@ namespace Raycer
 			cl_float4 ALIGN(16) specularReflectance;
 			cl_float4 ALIGN(16) attenuationColor;
 			cl_float2 ALIGN(8) texcoordScale;
-			cl_int ALIGN(4) id;
+			cl_float ALIGN(4) colorIntensity;
 			cl_float ALIGN(4) shininess;
 			cl_int ALIGN(4) skipLighting;
 			cl_int ALIGN(4) nonShadowing;
@@ -102,6 +102,7 @@ namespace Raycer
 			cl_int ALIGN(4) isFresnel;
 			cl_int ALIGN(4) enableAttenuation;
 			cl_float ALIGN(4) attenuation;
+			cl_int ALIGN(4) id;
 		};
 
 		struct AmbientLight
@@ -179,10 +180,10 @@ namespace Raycer
 		{
 			cl_float4 ALIGN(16) vertices[3];
 			cl_float4 ALIGN(16) normals[3];
-			cl_float4 ALIGN(16) texcoords[3];
 			cl_float4 ALIGN(16) normal;
 			cl_float4 ALIGN(16) tangent;
 			cl_float4 ALIGN(16) bitangent;
+			cl_float2 ALIGN(8) texcoords[3];
 			cl_int ALIGN(4) materialIndex;
 		};
 	}

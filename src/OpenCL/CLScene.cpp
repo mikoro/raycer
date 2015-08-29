@@ -19,14 +19,6 @@ namespace
 		destination.s[1] = (cl_float)source.y;
 	}
 
-	void readVector2as3(cl_float4& destination, const Vector2& source)
-	{
-		destination.s[0] = (cl_float)source.x;
-		destination.s[1] = (cl_float)source.y;
-		destination.s[2] = 0.0f;
-		destination.s[3] = 0.0f;
-	}
-
 	void readVector3(cl_float4& destination, const Vector3& source)
 	{
 		destination.s[0] = (cl_float)source.x;
@@ -106,13 +98,19 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Material clMaterial;
 
-		readColor(clMaterial.color, Color::RED);
+		ColorTexture* colorTexture = dynamic_cast<ColorTexture*>(material.colorTexture);
+
+		if (colorTexture != nullptr)
+			readColor(clMaterial.color, colorTexture->color);
+		else
+			readColor(clMaterial.color, Color::WHITE);
+
 		readColor(clMaterial.ambientReflectance, material.ambientReflectance);
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
 		readColor(clMaterial.attenuationColor, material.attenuationColor);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
-		clMaterial.id = (cl_int)material.id;
+		clMaterial.colorIntensity = (cl_float)material.colorTexture->intensity;
 		clMaterial.shininess = (cl_float)material.shininess;
 		clMaterial.skipLighting = (cl_int)material.skipLighting;
 		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
@@ -124,6 +122,7 @@ void CLScene::readScene(const Scene& scene)
 		clMaterial.isFresnel = (cl_int)material.isFresnel;
 		clMaterial.enableAttenuation = (cl_int)material.enableAttenuation;
 		clMaterial.attenuation = (cl_float)material.attenuation;
+		clMaterial.id = (cl_int)material.id;
 
 		materials.push_back(clMaterial);
 	}
@@ -222,9 +221,9 @@ void CLScene::readScene(const Scene& scene)
 		readVector3(clTriangle.normals[0], triangle.normals[0]);
 		readVector3(clTriangle.normals[1], triangle.normals[1]);
 		readVector3(clTriangle.normals[2], triangle.normals[2]);
-		readVector2as3(clTriangle.texcoords[0], triangle.texcoords[0]);
-		readVector2as3(clTriangle.texcoords[1], triangle.texcoords[1]);
-		readVector2as3(clTriangle.texcoords[2], triangle.texcoords[2]);
+		readVector2(clTriangle.texcoords[0], triangle.texcoords[0]);
+		readVector2(clTriangle.texcoords[1], triangle.texcoords[1]);
+		readVector2(clTriangle.texcoords[2], triangle.texcoords[2]);
 		readVector3(clTriangle.normal, triangle.normal);
 		readVector3(clTriangle.tangent, triangle.tangent);
 		readVector3(clTriangle.bitangent, triangle.bitangent);
