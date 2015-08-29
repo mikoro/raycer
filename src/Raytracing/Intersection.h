@@ -19,8 +19,8 @@ namespace Raycer
 		double distance = std::numeric_limits<double>::max();
 		Vector3 position;
 		Vector3 normal;
-		Vector2 texcoord;
 		ONB onb;
+		Vector2 texcoord;
 		Primitive* primitive = nullptr;
 	};
 }

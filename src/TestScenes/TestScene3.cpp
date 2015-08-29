@@ -47,6 +47,7 @@ Scene Scene::createTestScene3()
 	Material mesh1Material;
 	mesh1Material.id = 2;
 	mesh1Material.colorTextureId = mesh1Texture.id;
+	mesh1Material.normalInterpolation = true;
 
 	Mesh mesh1;
 	mesh1.id = 1;

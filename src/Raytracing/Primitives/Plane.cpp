@@ -44,16 +44,15 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection)
 	if (t > intersection.distance)
 		return false;
 
-	intersection.wasFound = true;
-	intersection.distance = t;
-	intersection.primitive = this;
-
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);
 
+	intersection.wasFound = true;
+	intersection.distance = t;
+	intersection.primitive = this;
 	intersection.position = ip;
 	intersection.normal = normal;
-	intersection.onb = ONB::fromNormal(intersection.normal);
+	intersection.onb = ONB::fromNormal(normal);
 
 	// texture coordinate calculation
 	double u = uAxis.dot(ip) / material->texcoordScale.x;

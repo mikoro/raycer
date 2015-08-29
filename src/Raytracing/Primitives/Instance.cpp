@@ -57,8 +57,8 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection)
 		intersection.primitive = this;
 		intersection.position = position;
 		intersection.normal = transformationInvT.transformDirection(instanceIntersection.normal).normalized();
-		intersection.texcoord = instanceIntersection.texcoord;
 		intersection.onb = instanceIntersection.onb.transformed(transformationInvT);
+		intersection.texcoord = instanceIntersection.texcoord;
 
 		return true;
 	}
