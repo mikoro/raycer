@@ -64,7 +64,9 @@ namespace Raycer
 			cereal::make_nvp("multiSamplerType", b.multiSamplerType),
 			cereal::make_nvp("multiSamplerFilterType", b.multiSamplerFilterType),
 			cereal::make_nvp("dofSamplerType", b.dofSamplerType),
-			cereal::make_nvp("timeSamplerType", b.timeSamplerType));
+			cereal::make_nvp("timeSamplerType", b.timeSamplerType),
+			cereal::make_nvp("visualizeDepth", b.visualizeDepth),
+			cereal::make_nvp("visualizeDepthMaxDistance", b.visualizeDepthMaxDistance));
 	}
 
 	template<class Archive>

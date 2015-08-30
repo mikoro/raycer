@@ -95,6 +95,8 @@ namespace Raycer
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
+			bool visualizeDepth = false;
+			double visualizeDepthMaxDistance = 20.0;
 		} raytracer;
 
 		struct ToneMapper

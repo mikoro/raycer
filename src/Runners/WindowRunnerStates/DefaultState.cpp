@@ -66,6 +66,9 @@ void DefaultState::update(double timeStep)
 	scene.camera.update(scene, timeStep);
 	scene.camera.precalculate();
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
+		scene.raytracer.visualizeDepth = !scene.raytracer.visualizeDepth;
+
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
 		scene.saveToFile("scene.xml");
 
