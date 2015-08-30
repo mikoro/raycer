@@ -164,6 +164,7 @@
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\MovingAverage.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
+    <ClCompile Include="src\Math\Solver.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\OpenCL\CLManager.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="src\Raytracing\Primitives\Box.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\BVH.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\CSG.cpp" />
+    <ClCompile Include="src\Raytracing\Primitives\Cylinder.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\FlatBVH.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Instance.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp" />
@@ -268,6 +270,7 @@
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\MovingAverage.h" />
     <ClInclude Include="src\Math\Quaternion.h" />
+    <ClInclude Include="src\Math\Solver.h" />
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\OpenCL\CLManager.h" />
@@ -283,6 +286,7 @@
     <ClInclude Include="src\Raytracing\Primitives\Box.h" />
     <ClInclude Include="src\Raytracing\Primitives\BVH.h" />
     <ClInclude Include="src\Raytracing\Primitives\CSG.h" />
+    <ClInclude Include="src\Raytracing\Primitives\Cylinder.h" />
     <ClInclude Include="src\Raytracing\Primitives\FlatBVH.h" />
     <ClInclude Include="src\Raytracing\Primitives\Instance.h" />
     <ClInclude Include="src\Raytracing\Primitives\Mesh.h" />

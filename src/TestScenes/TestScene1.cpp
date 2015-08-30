@@ -14,7 +14,7 @@ Scene Scene::createTestScene1()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 7.0);
+	scene.camera.position = Vector3(2.0, 6.0, 9.0);
 	scene.camera.orientation = EulerAngle(-30.0, 0.0, 0.0);
 
 	// GROUND //
@@ -99,6 +99,37 @@ Scene Scene::createTestScene1()
 	scene.materials.push_back(triangle1Material);
 	scene.primitives.triangles.push_back(triangle1);
 
+	// CYLINDER 1 //
+
+	ColorTexture cylinder1Texture;
+	cylinder1Texture.id = 5;
+	cylinder1Texture.color = Color(1.0, 1.0, 0.0);
+	cylinder1Texture.intensity = 0.5;
+
+	Material cylinder1Material;
+	cylinder1Material.id = 5;
+	cylinder1Material.colorTextureId = cylinder1Texture.id;
+
+	Cylinder cylinder1;
+	cylinder1.id = 1;
+	cylinder1.invisible = true;
+	cylinder1.materialId = cylinder1Material.id;
+	cylinder1.radius = 1.0;
+	cylinder1.height = 2.0;
+
+	scene.textures.colorTextures.push_back(cylinder1Texture);
+	scene.materials.push_back(cylinder1Material);
+	scene.primitives.cylinders.push_back(cylinder1);
+
+	// INSTANCE 1 //
+
+	Instance instance1;
+	instance1.primitiveId = 1;
+	instance1.materialId = cylinder1Material.id;
+	instance1.translate = Vector3(6.0, 0.0, 0.0);
+
+	scene.primitives.instances.push_back(instance1);
+
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
@@ -107,7 +138,7 @@ Scene Scene::createTestScene1()
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
 	pointLight1.intensity = 1.5;
-	pointLight1.position = Vector3(5.0, 5.0, 5.0);
+	pointLight1.position = Vector3(2.0, 5.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 

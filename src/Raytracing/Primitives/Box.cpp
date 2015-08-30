@@ -93,8 +93,8 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 
 		return tempIntersection;
 	};
-	(void)intersections;
 
+	// CSG intersections
 	intersections.push_back(calculateIntersection(tmin, minNormal, CSGDirection::IN));
 	intersections.push_back(calculateIntersection(tmax, maxNormal, CSGDirection::OUT));
 
