@@ -36,7 +36,8 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	double tmin = std::min(tx0, tx1);
 	double tmax = std::max(tx0, tx1);
 
-	Vector3 minNormal = Vector3(1.0, 0.0, 0.0) * copysign(1.0, ray.direction.x);
+	// normals will point out of the box
+	Vector3 minNormal = Vector3(1.0, 0.0, 0.0) * copysign(1.0, -ray.direction.x);
 	Vector3 maxNormal = Vector3(1.0, 0.0, 0.0) * copysign(1.0, ray.direction.x);
 
 	double ty0 = (min.y - ray.origin.y) * ray.inverseDirection.y;
@@ -46,7 +47,7 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 
 	if (tymin > tmin)
 	{
-		minNormal = Vector3(0.0, 1.0, 0.0) * copysign(1.0, ray.direction.y);
+		minNormal = Vector3(0.0, 1.0, 0.0) * copysign(1.0, -ray.direction.y);
 		tmin = tymin;
 	}
 
@@ -63,7 +64,7 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 
 	if (tzmin > tmin)
 	{
-		minNormal = Vector3(0.0, 0.0, 1.0) * copysign(1.0, ray.direction.z);
+		minNormal = Vector3(0.0, 0.0, 1.0) * copysign(1.0, -ray.direction.z);
 		tmin = tzmin;
 	}
 
@@ -76,8 +77,8 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (tmax < std::max(tmin, 0.0))
 		return false;
 
-	bool isInside = (tmin < 0.0);
-	double t = isInside ? tmax : tmin;
+	// closer intersection (can be negative)
+	double t = tmin;
 
 	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
@@ -89,21 +90,18 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	intersections[0].distance = t;
 	intersections[0].primitive = this;
 	intersections[0].position = ray.origin + (t * ray.direction);
-	intersections[0].normal = isInside ? maxNormal : -minNormal;
+	intersections[0].normal = minNormal;
 	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
 
-	// another intersection for CSG
-	if (!isInside)
-	{
-		t = tmax;
+	// further intersection (for CSG)
+	t = tmax;
 
-		intersections[1].wasFound = true;
-		intersections[1].distance = t;
-		intersections[1].primitive = this;
-		intersections[1].position = ray.origin + (t * ray.direction);
-		intersections[1].normal = maxNormal;
-		intersections[1].onb = ONB::fromNormal(intersections[1].normal);
-	}
+	intersections[1].wasFound = true;
+	intersections[1].distance = t;
+	intersections[1].primitive = this;
+	intersections[1].position = ray.origin + (t * ray.direction);
+	intersections[1].normal = -maxNormal;
+	intersections[1].onb = ONB::fromNormal(intersections[1].normal);
 
 	return true;
 }

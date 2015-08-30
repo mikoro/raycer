@@ -28,17 +28,9 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (ray.fastOcclusion && intersections[0].wasFound)
 		return true;
 
-	if (leftPrimitive == nullptr && rightPrimitive == nullptr)
-		return false;
-
-	if (leftPrimitive == nullptr)
-		return rightPrimitive->intersect(ray, intersections);
-
-	if (rightPrimitive == nullptr)
-		return leftPrimitive->intersect(ray, intersections);
-
 	std::array<Intersection, 2> leftIntersections;
 	std::array<Intersection, 2> rightIntersections;
+	std::array<Intersection, 2> tempIntersections;
 
 	leftPrimitive->intersect(ray, leftIntersections);
 	rightPrimitive->intersect(ray, rightIntersections);
@@ -49,16 +41,28 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (!leftWasFound && !rightWasFound)
 		return false;
 
+	auto checkAndAssing = [&](std::array<Intersection, 2>& destination, const std::array<Intersection, 2>& result)
+	{
+		if (result[0].distance < ray.minDistance || result[0].distance > ray.maxDistance)
+			return false;
+
+		if (result[0].distance > intersections[0].distance)
+			return false;
+
+		if (result[0].distance < 0.0)
+			return false;
+
+		destination[0] = result[0];
+		destination[1] = result[1];
+
+		return true;
+	};
+
 	// only right was found
 	if (!leftWasFound)
 	{
 		if (operation == CSGOperation::UNION)
-		{
-			intersections[0] = rightIntersections[0];
-			intersections[1] = rightIntersections[1];
-
-			return true;
-		}
+			return checkAndAssing(intersections, rightIntersections);
 		else
 			return false;
 	}
@@ -67,12 +71,7 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (!rightWasFound)
 	{
 		if (operation == CSGOperation::UNION || operation == CSGOperation::SUBSTRACTION)
-		{
-			intersections[0] = leftIntersections[0];
-			intersections[1] = leftIntersections[1];
-
-			return true;
-		}
+			return checkAndAssing(intersections, leftIntersections);
 		else
 			return false;
 	}
@@ -80,10 +79,10 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (operation == CSGOperation::UNION)
 	{
 		// select intersections furthest apart
-		intersections[0] = (leftIntersections[0].distance < rightIntersections[0].distance) ? leftIntersections[0] : rightIntersections[0];
-		intersections[1] = (leftIntersections[1].distance > rightIntersections[1].distance) ? leftIntersections[1] : rightIntersections[1];
+		tempIntersections[0] = (leftIntersections[0].distance < rightIntersections[0].distance) ? leftIntersections[0] : rightIntersections[0];
+		tempIntersections[1] = (leftIntersections[1].distance > rightIntersections[1].distance) ? leftIntersections[1] : rightIntersections[1];
 
-		return true;
+		return checkAndAssing(intersections, tempIntersections);
 	}
 	else if (operation == CSGOperation::SUBSTRACTION)
 	{
@@ -93,43 +92,33 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 
 		// right misses left
 		if (rightIntersections[1].distance < leftIntersections[0].distance || rightIntersections[0].distance > leftIntersections[1].distance)
-		{
-			intersections[0] = leftIntersections[0];
-			intersections[1] = leftIntersections[1];
-
-			return true;
-		}
+			return checkAndAssing(intersections, leftIntersections);
 
 		// left side
-		intersections[0] = (leftIntersections[0].distance > rightIntersections[0].distance) ? rightIntersections[1] : leftIntersections[0];
+		tempIntersections[0] = (leftIntersections[0].distance > rightIntersections[0].distance) ? rightIntersections[1] : leftIntersections[0];
 
 		// right side
-		intersections[1] = (rightIntersections[1].distance > leftIntersections[1].distance) ? rightIntersections[0] : leftIntersections[1];
+		tempIntersections[1] = (rightIntersections[1].distance > leftIntersections[1].distance) ? rightIntersections[0] : leftIntersections[1];
 
-		return true;
+		return checkAndAssing(intersections, tempIntersections);
 	}
 	else if (operation == CSGOperation::INTERSECTION)
 	{
 		// right completely intersects left
 		if (rightIntersections[0].distance < leftIntersections[0].distance && rightIntersections[1].distance > leftIntersections[1].distance)
-		{
-			intersections[0] = leftIntersections[0];
-			intersections[1] = leftIntersections[1];
-
-			return true;
-		}
+			return checkAndAssing(intersections, leftIntersections);
 
 		// right misses left
 		if (rightIntersections[1].distance < leftIntersections[0].distance || rightIntersections[0].distance > leftIntersections[1].distance)
 			return false;
 
 		// left side
-		intersections[0] = (leftIntersections[0].distance > rightIntersections[0].distance) ? leftIntersections[0] : rightIntersections[0];
+		tempIntersections[0] = (leftIntersections[0].distance > rightIntersections[0].distance) ? leftIntersections[0] : rightIntersections[0];
 
 		// right side
-		intersections[1] = (rightIntersections[1].distance > leftIntersections[1].distance) ? leftIntersections[1] : rightIntersections[1];
+		tempIntersections[1] = (rightIntersections[1].distance > leftIntersections[1].distance) ? leftIntersections[1] : rightIntersections[1];
 
-		return true;
+		return checkAndAssing(intersections, tempIntersections);
 	}
 
 	return false;

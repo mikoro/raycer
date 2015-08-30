@@ -14,7 +14,7 @@ Scene Scene::createTestScene17()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 7.0);
+	scene.camera.position = Vector3(0.0, 3.0, 3.0);
 	scene.camera.orientation = EulerAngle(-30.0, 0.0, 0.0);
 
 	// GROUND //
@@ -39,13 +39,12 @@ Scene Scene::createTestScene17()
 
 	scene.textures.checkerTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	scene.primitives.planes.push_back(groundPlane);
+	//scene.primitives.planes.push_back(groundPlane);
 
 	// SPHERE 1 //
 
-	ColorTexture sphere1Texture;
+	MarbleTexture sphere1Texture;
 	sphere1Texture.id = 2;
-	sphere1Texture.color = Color(1.0, 0.0, 0.0);
 	sphere1Texture.intensity = 0.5;
 
 	Material sphere1Material;
@@ -59,64 +58,65 @@ Scene Scene::createTestScene17()
 	sphere1.position = Vector3(0.0, 1.0, 0.0);
 	sphere1.radius = 1.0;
 
-	scene.textures.colorTextures.push_back(sphere1Texture);
+	scene.textures.marbleTextures.push_back(sphere1Texture);
 	scene.materials.push_back(sphere1Material);
+	scene.primitives.spheres.push_back(sphere1);
 
 	// SPHERE 2 //
-
-	ColorTexture sphere2Texture;
-	sphere2Texture.id = 3;
-	sphere2Texture.color = Color(0.0, 1.0, 0.0);
-	sphere2Texture.intensity = 0.5;
-
-	Material sphere2Material;
-	sphere2Material.id = 3;
-	sphere2Material.colorTextureId = sphere2Texture.id;
 
 	Sphere sphere2;
 	sphere2.id = 2;
 	sphere2.invisible = true;
-	sphere2.materialId = sphere2Material.id;
-	sphere2.position = Vector3(1.0, 1.0, 0.0);
-	sphere2.radius = 1.0;
+	sphere2.materialId = sphere1Material.id;
+	sphere2.position = Vector3(0.0, 1.3, 0.0);
+	sphere2.radius = 0.8;
 
-	scene.textures.colorTextures.push_back(sphere2Texture);
-	scene.materials.push_back(sphere2Material);
-
-	scene.primitives.spheres.push_back(sphere1);
 	scene.primitives.spheres.push_back(sphere2);
+
+	// SPHERE 3 //
+
+	Sphere sphere3;
+	sphere3.id = 3;
+	sphere3.invisible = true;
+	sphere3.materialId = sphere1Material.id;
+	sphere3.position = Vector3(0.0, 3.0, 0.0);
+	sphere3.radius = 2.0;
+
+	scene.primitives.spheres.push_back(sphere3);
 
 	// BOX 1 //
 
-	ColorTexture box1Texture;
-	box1Texture.id = 4;
-	box1Texture.color = Color(0.0, 0.0, 1.0);
-	box1Texture.intensity = 0.5;
-
-	Material box1Material;
-	box1Material.id = 4;
-	box1Material.colorTextureId = box1Texture.id;
-
 	Box box1;
-	box1.id = 3;
+	box1.id = 4;
 	box1.invisible = true;
-	box1.position = Vector3(0.0, 2.0, 0.0);
+	box1.materialId = sphere1Material.id;
+	box1.position = Vector3(0.0, 2.5, 0.0);
 	box1.extent = Vector3(2.0, 2.0, 2.0);
-	box1.materialId = box1Material.id;
-
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
+	
 	scene.primitives.boxes.push_back(box1);
 
-	// CSG
+	// CSG 1
 
 	CSG csg1;
+	csg1.id = 5;
+	csg1.invisible = false;
 	csg1.materialId = 1;
 	csg1.operation = CSGOperation::SUBSTRACTION;
 	csg1.leftPrimitiveId = 1;
 	csg1.rightPrimitiveId = 2;
 
 	scene.primitives.csgs.push_back(csg1);
+
+	// CSG 2
+
+	CSG csg2;
+	csg2.id = 6;
+	csg2.materialId = 1;
+	csg2.operation = CSGOperation::SUBSTRACTION;
+	csg2.leftPrimitiveId = 5;
+	csg2.rightPrimitiveId = 3;
+
+	//scene.primitives.csgs.push_back(csg2);
 
 	// LIGHTS //
 
@@ -126,7 +126,7 @@ Scene Scene::createTestScene17()
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
 	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
+	directionalLight1.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight1);
 

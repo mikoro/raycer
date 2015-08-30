@@ -48,7 +48,9 @@ bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersection
 	}
 
 	double t2 = sqrt(radius2 - sphereToRayDistance2);
-	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
+
+	// closer intersection (can be negative)
+	double t = t1 - t2;
 
 	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
@@ -66,7 +68,7 @@ bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersection
 	intersections[0].primitive = this;
 	intersections[0].position = ip;
 	intersections[0].normal = normal;
-	intersections[0].onb = ONB::fromNormal(normal);
+	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
 
 	// spherical texture coordinate calculation
 	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
@@ -78,30 +80,27 @@ bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersection
 	intersections[0].texcoord.x = u - floor(u);
 	intersections[0].texcoord.y = v - floor(v);
 
-	// another intersection for CSG
-	if (rayOriginIsOutside)
-	{
-		t = t1 + t2;
+	// further intersection (for CSG)
+	t = t1 + t2;
 
-		ip = ray.origin + (t * ray.direction);
-		normal = (ip - actualPosition).normalized();
+	ip = ray.origin + (t * ray.direction);
+	normal = (ip - actualPosition).normalized();
 
-		intersections[1].wasFound = true;
-		intersections[1].distance = t;
-		intersections[1].primitive = this;
-		intersections[1].position = ip;
-		intersections[1].normal = normal;
-		intersections[1].onb = ONB::fromNormal(normal);
+	intersections[1].wasFound = true;
+	intersections[1].distance = t;
+	intersections[1].primitive = this;
+	intersections[1].position = ip;
+	intersections[1].normal = -normal;
+	intersections[1].onb = ONB::fromNormal(intersections[1].normal);
 
-		u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
-		v = 0.5 - asin(normal.y) / M_PI;
+	u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
+	v = 0.5 - asin(normal.y) / M_PI;
 
-		u /= material->texcoordScale.x;
-		v /= material->texcoordScale.y;
+	u /= material->texcoordScale.x;
+	v /= material->texcoordScale.y;
 
-		intersections[1].texcoord.x = u - floor(u);
-		intersections[1].texcoord.y = v - floor(v);
-	}
+	intersections[1].texcoord.x = u - floor(u);
+	intersections[1].texcoord.y = v - floor(v);
 
 	return true;
 }
