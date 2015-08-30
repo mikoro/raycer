@@ -18,12 +18,12 @@ void Sphere::initialize()
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
-bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
+bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersections[0].wasFound)
+	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
 	Vector3 actualPosition = position + ray.time * displacement;
@@ -47,60 +47,49 @@ bool Sphere::intersect(const Ray& ray, std::array<Intersection, 2>& intersection
 			return false;
 	}
 
-	double t2 = sqrt(radius2 - sphereToRayDistance2);
+	auto calculateIntersection = [&](double t, IntersectionDirection direction)
+	{
+		Intersection tempIntersection;
 
-	// closer intersection (can be negative)
-	double t = t1 - t2;
+		Vector3 ip = ray.origin + (t * ray.direction);
+		Vector3 normal = (ip - actualPosition).normalized();
+
+		tempIntersection.wasFound = true;
+		tempIntersection.distance = t;
+		tempIntersection.primitive = this;
+		tempIntersection.position = ip;
+		tempIntersection.normal = normal;
+		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
+		tempIntersection.direction = direction;
+
+		double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
+		double v = 0.5 - asin(normal.y) / M_PI;
+
+		u /= material->texcoordScale.x;
+		v /= material->texcoordScale.y;
+
+		tempIntersection.texcoord.x = u - floor(u);
+		tempIntersection.texcoord.y = v - floor(v);
+
+		return tempIntersection;
+	};
+
+	double t2 = sqrt(radius2 - sphereToRayDistance2);
+	(void)intersections;
+
+	intersections.push_back(calculateIntersection(t1 - t2, IntersectionDirection::DIR_IN));
+	intersections.push_back(calculateIntersection(t1 + t2, IntersectionDirection::DIR_OUT));
+
+	// default intersection
+	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 
 	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
-	// there was another intersection closer to camera
-	if (t > intersections[0].distance)
+	if (t > intersection.distance)
 		return false;
 
-	// intersection position and normal
-	Vector3 ip = ray.origin + (t * ray.direction);
-	Vector3 normal = (ip - actualPosition).normalized();
-
-	intersections[0].wasFound = true;
-	intersections[0].distance = t;
-	intersections[0].primitive = this;
-	intersections[0].position = ip;
-	intersections[0].normal = normal;
-	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
-
-	// spherical texture coordinate calculation
-	double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
-	double v = 0.5 - asin(normal.y) / M_PI;
-
-	u /= material->texcoordScale.x;
-	v /= material->texcoordScale.y;
-
-	intersections[0].texcoord.x = u - floor(u);
-	intersections[0].texcoord.y = v - floor(v);
-
-	// further intersection (for CSG)
-	t = t1 + t2;
-
-	ip = ray.origin + (t * ray.direction);
-	normal = (ip - actualPosition).normalized();
-
-	intersections[1].wasFound = true;
-	intersections[1].distance = t;
-	intersections[1].primitive = this;
-	intersections[1].position = ip;
-	intersections[1].normal = -normal;
-	intersections[1].onb = ONB::fromNormal(intersections[1].normal);
-
-	u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
-	v = 0.5 - asin(normal.y) / M_PI;
-
-	u /= material->texcoordScale.x;
-	v /= material->texcoordScale.y;
-
-	intersections[1].texcoord.x = u - floor(u);
-	intersections[1].texcoord.y = v - floor(v);
+	intersection = calculateIntersection(t, IntersectionDirection::DIR_IN);
 
 	return true;
 }

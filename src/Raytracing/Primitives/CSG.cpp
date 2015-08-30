@@ -20,20 +20,23 @@ void CSG::initialize()
 {
 }
 
-bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
+bool CSG::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
 {
+	(void)intersections;
+
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersections[0].wasFound)
+	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
+	/*
 	std::array<Intersection, 2> leftIntersections;
 	std::array<Intersection, 2> rightIntersections;
 	std::array<Intersection, 2> tempIntersections;
 
-	leftPrimitive->intersect(ray, leftIntersections);
-	rightPrimitive->intersect(ray, rightIntersections);
+	leftPrimitive->intersect(ray, TODO, leftIntersections);
+	rightPrimitive->intersect(ray, TODO, rightIntersections);
 
 	bool leftWasFound = leftIntersections[0].wasFound && leftIntersections[1].wasFound;
 	bool rightWasFound = rightIntersections[0].wasFound && rightIntersections[1].wasFound;
@@ -120,6 +123,7 @@ bool CSG::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 
 		return checkAndAssing(intersections, tempIntersections);
 	}
+	*/
 
 	return false;
 }

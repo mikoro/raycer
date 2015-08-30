@@ -13,14 +13,17 @@ namespace Raycer
 {
 	class Primitive;
 
+	enum class IntersectionDirection { DIR_IN, DIR_OUT };
+
 	struct Intersection
 	{
 		bool wasFound = false;
 		double distance = std::numeric_limits<double>::max();
+		Primitive* primitive = nullptr;
 		Vector3 position;
 		Vector3 normal;
 		ONB onb;
 		Vector2 texcoord;
-		Primitive* primitive = nullptr;
+		IntersectionDirection direction = IntersectionDirection::DIR_IN;
 	};
 }

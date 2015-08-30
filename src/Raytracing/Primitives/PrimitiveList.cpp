@@ -22,16 +22,16 @@ void PrimitiveList::initialize()
 {
 }
 
-bool PrimitiveList::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
+bool PrimitiveList::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
 {
-	if (ray.fastOcclusion && intersections[0].wasFound)
+	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
 	bool wasFound = false;
 
 	for (Primitive* primitive : primitives)
 	{
-		if (primitive->intersect(ray, intersections))
+		if (primitive->intersect(ray, intersection, intersections))
 			wasFound = true;
 	}
 

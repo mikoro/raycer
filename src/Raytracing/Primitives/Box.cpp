@@ -19,12 +19,12 @@ void Box::initialize()
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-box-intersection
-bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
+bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
 {
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersections[0].wasFound)
+	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
 	Vector3 min = position - extent / 2.0;
@@ -77,31 +77,38 @@ bool Box::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
 	if (tmax < std::max(tmin, 0.0))
 		return false;
 
-	// closer intersection (can be negative)
-	double t = tmin;
+	auto calculateIntersection = [&](double t, const Vector3& normal, IntersectionDirection direction)
+	{
+		Intersection tempIntersection;
+
+		tempIntersection.wasFound = true;
+		tempIntersection.distance = t;
+		tempIntersection.primitive = this;
+		tempIntersection.position = ray.origin + (t * ray.direction);
+		tempIntersection.normal = normal;
+		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
+		tempIntersection.direction = direction;
+
+		// TODO: texcoord calculation
+
+		return tempIntersection;
+	};
+	(void)intersections;
+
+	intersections.push_back(calculateIntersection(tmin, minNormal, IntersectionDirection::DIR_IN));
+	intersections.push_back(calculateIntersection(tmax, maxNormal, IntersectionDirection::DIR_OUT));
+
+	// default intersection
+	bool isInside = (tmin < 0.0);
+	double t = isInside ? tmax : tmin;
 
 	if (t < ray.minDistance || t > ray.maxDistance)
 		return false;
 
-	if (t > intersections[0].distance)
+	if (t > intersection.distance)
 		return false;
 
-	intersections[0].wasFound = true;
-	intersections[0].distance = t;
-	intersections[0].primitive = this;
-	intersections[0].position = ray.origin + (t * ray.direction);
-	intersections[0].normal = minNormal;
-	intersections[0].onb = ONB::fromNormal(intersections[0].normal);
-
-	// further intersection (for CSG)
-	t = tmax;
-
-	intersections[1].wasFound = true;
-	intersections[1].distance = t;
-	intersections[1].primitive = this;
-	intersections[1].position = ray.origin + (t * ray.direction);
-	intersections[1].normal = -maxNormal;
-	intersections[1].onb = ONB::fromNormal(intersections[1].normal);
+	intersection = calculateIntersection(t, isInside ? maxNormal : minNormal, IntersectionDirection::DIR_IN);
 
 	return true;
 }

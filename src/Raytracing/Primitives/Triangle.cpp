@@ -42,12 +42,14 @@ void Triangle::initialize()
 
 // Möller-Trumbore algorithm
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/ray-tracing-rendering-a-triangle/moller-trumbore-ray-triangle-intersection
-bool Triangle::intersect(const Ray& ray, std::array<Intersection, 2>& intersections)
+bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
 {
+	(void)intersections;
+
 	if (ray.isShadowRay && material->nonShadowing)
 		return false;
 
-	if (ray.fastOcclusion && intersections[0].wasFound)
+	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
 	Vector3 v0v1 = vertices[1] - vertices[0];
@@ -80,7 +82,7 @@ bool Triangle::intersect(const Ray& ray, std::array<Intersection, 2>& intersecti
 		return false;
 
 	// another intersection is closer
-	if (t > intersections[0].distance)
+	if (t > intersection.distance)
 		return false;
 
 	double w = 1.0 - u - v;
@@ -88,13 +90,13 @@ bool Triangle::intersect(const Ray& ray, std::array<Intersection, 2>& intersecti
 	Vector3 finalNormal = material->normalInterpolation ? (w * normals[0] + u * normals[1] + v * normals[2]) : normal;
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
 
-	intersections[0].wasFound = true;
-	intersections[0].distance = t;
-	intersections[0].primitive = this;
-	intersections[0].position = ray.origin + (t * ray.direction);
-	intersections[0].normal = finalNormal;
-	intersections[0].onb = ONB(tangent, bitangent, finalNormal);
-	intersections[0].texcoord = interpolatedTexcoord / material->texcoordScale;
+	intersection.wasFound = true;
+	intersection.distance = t;
+	intersection.primitive = this;
+	intersection.position = ray.origin + (t * ray.direction);
+	intersection.normal = finalNormal;
+	intersection.onb = ONB(tangent, bitangent, finalNormal);
+	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
 
 	return true;
 }

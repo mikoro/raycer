@@ -57,15 +57,19 @@ void Camera::update(const Scene& scene, double timeStep)
 			pixelCoordinate.y = mouseInfo.framebufferY;
 
 			Ray ray = getRay(pixelCoordinate);
-			std::array<Intersection, 2> intersections;
+			Intersection intersection;
+			std::vector<Intersection> intersections;
 
 			for (Primitive* primitive : scene.primitives.all)
-				primitive->intersect(ray, intersections);
+			{
+				intersections.clear();
+				primitive->intersect(ray, intersection, intersections);
+			}
 
-			if (intersections[0].wasFound)
+			if (intersection.wasFound)
 			{
 				isMovingPrimitive = true;
-				movingPrimitive = intersections[0].primitive;
+				movingPrimitive = intersection.primitive;
 			}
 		}
 		else
