@@ -8,14 +8,19 @@
 #include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 
+#undef IN
+#undef OUT
+#undef DIFFERENCE
+
 namespace Raycer
 {
 	class Ray;
-	struct Intersection;
 	class AABB;
 	class EulerAngle;
 
-	enum class CSGOperation { UNION, SUBSTRACTION, INTERSECTION };
+	enum class CSGSide { LEFT, RIGHT };
+	enum class CSGDirection { IN, OUT };
+	enum class CSGOperation { UNION, DIFFERENCE, INTERSECTION };
 
 	class CSG : public Primitive
 	{

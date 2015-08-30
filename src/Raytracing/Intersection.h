@@ -8,12 +8,11 @@
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
 #include "Raytracing/ONB.h"
+#include "Raytracing/Primitives/CSG.h"
 
 namespace Raycer
 {
 	class Primitive;
-
-	enum class IntersectionDirection { DIR_IN, DIR_OUT };
 
 	struct Intersection
 	{
@@ -24,6 +23,6 @@ namespace Raycer
 		Vector3 normal;
 		ONB onb;
 		Vector2 texcoord;
-		IntersectionDirection direction = IntersectionDirection::DIR_IN;
+		CSGDirection direction = CSGDirection::IN;
 	};
 }

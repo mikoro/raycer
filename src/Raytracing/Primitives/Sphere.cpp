@@ -47,7 +47,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 			return false;
 	}
 
-	auto calculateIntersection = [&](double t, IntersectionDirection direction)
+	auto calculateIntersection = [&](double t, CSGDirection direction)
 	{
 		Intersection tempIntersection;
 
@@ -77,8 +77,8 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 	double t2 = sqrt(radius2 - sphereToRayDistance2);
 	(void)intersections;
 
-	intersections.push_back(calculateIntersection(t1 - t2, IntersectionDirection::DIR_IN));
-	intersections.push_back(calculateIntersection(t1 + t2, IntersectionDirection::DIR_OUT));
+	intersections.push_back(calculateIntersection(t1 - t2, CSGDirection::IN));
+	intersections.push_back(calculateIntersection(t1 + t2, CSGDirection::OUT));
 
 	// default intersection
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
@@ -89,7 +89,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 	if (t > intersection.distance)
 		return false;
 
-	intersection = calculateIntersection(t, IntersectionDirection::DIR_IN);
+	intersection = calculateIntersection(t, CSGDirection::IN);
 
 	return true;
 }

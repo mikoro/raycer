@@ -39,7 +39,7 @@ Scene Scene::createTestScene17()
 
 	scene.textures.checkerTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	//scene.primitives.planes.push_back(groundPlane);
+	scene.primitives.planes.push_back(groundPlane);
 
 	// SPHERE 1 //
 
@@ -73,21 +73,10 @@ Scene Scene::createTestScene17()
 
 	scene.primitives.spheres.push_back(sphere2);
 
-	// SPHERE 3 //
-
-	Sphere sphere3;
-	sphere3.id = 3;
-	sphere3.invisible = true;
-	sphere3.materialId = sphere1Material.id;
-	sphere3.position = Vector3(0.0, 3.0, 0.0);
-	sphere3.radius = 2.0;
-
-	scene.primitives.spheres.push_back(sphere3);
-
 	// BOX 1 //
 
 	Box box1;
-	box1.id = 4;
+	box1.id = 3;
 	box1.invisible = true;
 	box1.materialId = sphere1Material.id;
 	box1.position = Vector3(0.0, 2.5, 0.0);
@@ -98,10 +87,10 @@ Scene Scene::createTestScene17()
 	// CSG 1
 
 	CSG csg1;
-	csg1.id = 5;
-	csg1.invisible = false;
+	csg1.id = 4;
+	csg1.invisible = true;
 	csg1.materialId = 1;
-	csg1.operation = CSGOperation::SUBSTRACTION;
+	csg1.operation = CSGOperation::DIFFERENCE;
 	csg1.leftPrimitiveId = 1;
 	csg1.rightPrimitiveId = 2;
 
@@ -110,13 +99,13 @@ Scene Scene::createTestScene17()
 	// CSG 2
 
 	CSG csg2;
-	csg2.id = 6;
+	csg2.id = 5;
 	csg2.materialId = 1;
-	csg2.operation = CSGOperation::SUBSTRACTION;
-	csg2.leftPrimitiveId = 5;
+	csg2.operation = CSGOperation::DIFFERENCE;
+	csg2.leftPrimitiveId = 4;
 	csg2.rightPrimitiveId = 3;
 
-	//scene.primitives.csgs.push_back(csg2);
+	scene.primitives.csgs.push_back(csg2);
 
 	// LIGHTS //
 

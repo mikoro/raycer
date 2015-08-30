@@ -77,7 +77,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 	if (tmax < std::max(tmin, 0.0))
 		return false;
 
-	auto calculateIntersection = [&](double t, const Vector3& normal, IntersectionDirection direction)
+	auto calculateIntersection = [&](double t, const Vector3& normal, CSGDirection direction)
 	{
 		Intersection tempIntersection;
 
@@ -95,8 +95,8 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 	};
 	(void)intersections;
 
-	intersections.push_back(calculateIntersection(tmin, minNormal, IntersectionDirection::DIR_IN));
-	intersections.push_back(calculateIntersection(tmax, maxNormal, IntersectionDirection::DIR_OUT));
+	intersections.push_back(calculateIntersection(tmin, minNormal, CSGDirection::IN));
+	intersections.push_back(calculateIntersection(tmax, maxNormal, CSGDirection::OUT));
 
 	// default intersection
 	bool isInside = (tmin < 0.0);
@@ -108,7 +108,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 	if (t > intersection.distance)
 		return false;
 
-	intersection = calculateIntersection(t, isInside ? maxNormal : minNormal, IntersectionDirection::DIR_IN);
+	intersection = calculateIntersection(t, isInside ? maxNormal : minNormal, CSGDirection::IN);
 
 	return true;
 }
