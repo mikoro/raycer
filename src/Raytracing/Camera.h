@@ -18,6 +18,15 @@ namespace Raycer
 
 	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
 
+	struct CameraState
+	{
+		Vector3 position;
+		Vector3 forward;
+		Vector3 right;
+		Vector3 up;
+		Vector3 imagePlaneCenter;
+	};
+
 	class Camera
 	{
 	public:
@@ -31,8 +40,7 @@ namespace Raycer
 		void update(const Scene& scene, double timeStep);
 		bool hasMoved() const;
 
-		Vector3 getPosition(double time) const;
-		ONB getONB(double time) const;
+		CameraState getCameraState(double time) const;
 		Ray getRay(const Vector2& pixelCoordinate, double time) const;
 
 		Vector3 position;
@@ -50,6 +58,8 @@ namespace Raycer
 		EulerAngle rotateInTime = EulerAngle(0.0, 0.0, 0.0);
 
 	private:
+
+		CameraState cameraState;
 
 		double aspectRatio = 1.0;
 		double imagePlaneDistance = 1.0;

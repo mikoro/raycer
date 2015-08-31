@@ -255,6 +255,14 @@ void Camera::update(const Scene& scene, double timeStep)
 
 	orientation.clampPitch();
 	orientation.normalize();
+
+	onb = ONB::fromNormal(orientation.getDirection());
+
+	cameraState.position = position;
+	cameraState.forward = onb.w;
+	cameraState.right = onb.u;
+	cameraState.up = onb.v;
+	cameraState.imagePlaneCenter = position + (forward * imagePlaneDistance);
 }
 
 bool Camera::hasMoved() const
@@ -262,33 +270,36 @@ bool Camera::hasMoved() const
 	return cameraHasMoved;
 }
 
-Vector3 Camera::getPosition(double time) const
+CameraState Camera::getCameraState(double time) const
 {
 	if (!isTimeVariant)
-		return position;
+		return cameraState;
 	else
-		return position + time * translateInTime;
-}
+	{
+		CameraState newCameraState;
+		ONB onb = ONB::fromNormal((orientation + time * rotateInTime).getDirection());
 
-ONB Camera::getONB(double time) const
-{
-	if (!isTimeVariant)
-		return ONB::fromNormal(orientation.getDirection());
-	else
-		return ONB::fromNormal((orientation + time * rotateInTime).getDirection());
+		newCameraState.position = position + time * translateInTime;
+		newCameraState.forward = onb.w;
+		newCameraState.right = onb.u;
+		newCameraState.up = onb.v;
+		newCameraState.imagePlaneCenter = newCameraState.position + (newCameraState.forward * imagePlaneDistance);
+
+		return newCameraState;
+	}
 }
 
 Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 {
-	ONB onb = getONB(time);
-	Vector3 forward = onb.w;
-	Vector3 right = onb.u;
-	Vector3 up = onb.v;
-	Vector3 actualPosition = getPosition(time);
-	Vector3 imagePlaneCenter = actualPosition + (forward * imagePlaneDistance);
-
 	Ray ray;
 	ray.time = time;
+
+	CameraState currentCameraState = getCameraState(time);
+	Vector3 currentPosition = currentCameraState.position;
+	Vector3 forward = currentCameraState.forward;
+	Vector3 right = currentCameraState.right;
+	Vector3 up = currentCameraState.up;
+	Vector3 imagePlaneCenter = currentCameraState.imagePlaneCenter;
 
 	switch (projectionType)
 	{
@@ -299,8 +310,8 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 
 			Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 
-			ray.origin = actualPosition;
-			ray.direction = (imagePlanePixelPosition - actualPosition).normalized();
+			ray.origin = currentPosition;
+			ray.direction = (imagePlanePixelPosition - currentPosition).normalized();
 
 		} break;
 
@@ -309,7 +320,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
 
-			ray.origin = actualPosition + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
+			ray.origin = currentPosition + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
 			ray.direction = forward;
 
 		} break;
@@ -338,7 +349,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 			double v = sin(theta) * sin(phi);
 			double w = cos(theta);
 
-			ray.origin = actualPosition;
+			ray.origin = currentPosition;
 			ray.direction = u * right + v * up + w * forward;
 
 		} break;

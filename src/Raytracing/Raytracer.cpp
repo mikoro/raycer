@@ -153,10 +153,10 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 	double focalDistance = scene.camera.focalDistance;
 	Sampler* sampler = samplers[scene.raytracer.dofSamplerType].get();
 
-	ONB onb = scene.camera.getONB(time);
-	Vector3 cameraPosition = scene.camera.getPosition(time);
-	Vector3 cameraRight = onb.u;
-	Vector3 cameraUp = onb.v;
+	CameraState cameraState = scene.camera.getCameraState(time);
+	Vector3 cameraPosition = cameraState.position;
+	Vector3 cameraRight = cameraState.right;
+	Vector3 cameraUp = cameraState.up;
 
 	for (int y = 0; y < n; ++y)
 	{
