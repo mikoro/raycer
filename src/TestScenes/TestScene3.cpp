@@ -51,9 +51,10 @@ Scene Scene::createTestScene3()
 
 	Mesh mesh1;
 	mesh1.id = 1;
+	mesh1.invisible = true;
 	mesh1.materialId = mesh1Material.id;
 	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 100.0, 0.0);
+	mesh1.position = Vector3(0.0, 0.0, 0.0);
 	mesh1.scale = Vector3(6.0, 6.0, 6.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
 
@@ -75,8 +76,6 @@ Scene Scene::createTestScene3()
 	Instance instance1;
 	instance1.materialId = instance1Material.id;
 	instance1.primitiveId = mesh1.id;
-	instance1.translate = Vector3(0.0, -100.0, 0.0);
-	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(instance1Texture);
 	scene.materials.push_back(instance1Material);

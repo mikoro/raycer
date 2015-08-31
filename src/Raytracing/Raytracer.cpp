@@ -324,10 +324,6 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		}
 	}
 
-	// invert normal if facing away
-	if (!isOutside)
-		intersection.normal = -intersection.normal;
-
 	double ambientOcclusionAmount = 1.0;
 
 	if (scene.lights.ambientLight.enableOcclusion)

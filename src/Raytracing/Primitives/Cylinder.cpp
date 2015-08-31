@@ -51,6 +51,9 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 		Vector3 normal = Vector3(ip.x, 0.0, ip.z).normalized();
 
+		if (direction == CSGDirection::OUT)
+			normal = -normal;
+
 		tempIntersection.wasFound = true;
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;

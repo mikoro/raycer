@@ -80,12 +80,12 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 	auto calculateIntersection = [&](double t, const Vector3& normal, CSGDirection direction)
 	{
 		Intersection tempIntersection;
-
+		
 		tempIntersection.wasFound = true;
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;
 		tempIntersection.position = ray.origin + (t * ray.direction);
-		tempIntersection.normal = normal;
+		tempIntersection.normal = direction == CSGDirection::IN ? normal : -normal;
 		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
 		tempIntersection.direction = direction;
 

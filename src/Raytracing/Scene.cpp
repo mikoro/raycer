@@ -351,10 +351,10 @@ void Scene::initialize()
 		primitive->initialize();
 	};
 
-	for (Primitive* primitive : primitives.all)
+	for (Primitive* primitive : primitives.invisible)
 		initPrimitive(primitive);
 
-	for (Primitive* primitive : primitives.invisible)
+	for (Primitive* primitive : primitives.all)
 		initPrimitive(primitive);
 
 	// CAMERA

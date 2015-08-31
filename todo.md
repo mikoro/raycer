@@ -1,6 +1,8 @@
+misc
+ - instances for first test scenes
+
 tracer
  - raymarching + height map + volumetric fog
- - triangle edge intersection glitch
  - normal mapping
  - camera motion blur
  - relativistic effects
@@ -14,3 +16,7 @@ primitives
 
 textures
  - EWA texture filtering
+
+math
+ - regula falsi
+ - Durand–Kerner
