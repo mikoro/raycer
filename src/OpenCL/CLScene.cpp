@@ -39,16 +39,16 @@ namespace
 void CLScene::readScene(const Scene& scene)
 {
 	readVector3(camera.position, scene.camera.position);
-	readVector3(camera.forward, scene.camera.forward);
-	readVector3(camera.right, scene.camera.right);
-	readVector3(camera.up, scene.camera.up);
-	readVector3(camera.imagePlaneCenter, scene.camera.imagePlaneCenter);
+	//readVector3(camera.forward, scene.camera.forward);
+	//readVector3(camera.right, scene.camera.right);
+	//readVector3(camera.up, scene.camera.up);
+	//readVector3(camera.imagePlaneCenter, scene.camera.imagePlaneCenter);
 	camera.projectionType = (cl_int)scene.camera.projectionType;
 	camera.fov = (cl_float)scene.camera.fov;
 	camera.orthoSize = (cl_float)scene.camera.orthoSize;
 	camera.fishEyeAngle = (cl_float)scene.camera.fishEyeAngle;
 	camera.apertureSize = (cl_float)scene.camera.apertureSize;
-	camera.focalLenght = (cl_float)scene.camera.focalLenght;
+	camera.focalLenght = (cl_float)scene.camera.focalDistance;
 	camera.imagePlaneWidth = (cl_float)scene.camera.imagePlaneWidth;
 	camera.imagePlaneHeight = (cl_float)scene.camera.imagePlaneHeight;
 	camera.aspectRatio = (cl_float)scene.camera.aspectRatio;

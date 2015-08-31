@@ -14,6 +14,7 @@ namespace Raycer
 	class Vector2;
 	class Scene;
 	class Primitive;
+	class ONB;
 
 	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
 
@@ -21,7 +22,6 @@ namespace Raycer
 	{
 	public:
 
-		friend class Raytracer;
 		friend class CLScene;
 
 		Camera();
@@ -29,26 +29,27 @@ namespace Raycer
 		void initialize();
 		void setImagePlaneSize(int width, int height);
 		void update(const Scene& scene, double timeStep);
-		void precalculate();
 		bool hasMoved() const;
 
-		Ray getRay(const Vector2& pixelCoordinate) const;
+		Vector3 getPosition(double time) const;
+		ONB getONB(double time) const;
+		Ray getRay(const Vector2& pixelCoordinate, double time) const;
 
 		Vector3 position;
 		EulerAngle orientation;
 		CameraProjectionType projectionType = CameraProjectionType::PERSPECTIVE;
+
 		double fov = 75.0;
 		double orthoSize = 10.0;
 		double fishEyeAngle = 180.0;
 		double apertureSize = 0.1;
-		double focalLenght = 10.0;
+		double focalDistance = 10.0;
+
+		bool isTimeVariant = false;
+		Vector3 translateInTime = Vector3(0.0, 0.0, 0.0);
+		EulerAngle rotateInTime = EulerAngle(0.0, 0.0, 0.0);
 
 	private:
-
-		Vector3 forward;
-		Vector3 right;
-		Vector3 up;
-		Vector3 imagePlaneCenter;
 
 		double aspectRatio = 1.0;
 		double imagePlaneDistance = 1.0;

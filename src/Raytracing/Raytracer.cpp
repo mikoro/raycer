@@ -95,7 +95,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (scene.raytracer.multiSamples == 0)
-		return generateDofSamples(scene, pixelCoordinate, interrupted);
+		return generateTimeSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
@@ -111,7 +111,7 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 		{
 			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
-			sampledPixelColor += generateDofSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
+			sampledPixelColor += generateTimeSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;
 		}
 	}
@@ -119,33 +119,51 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 	return sampledPixelColor / filterWeightSum;
 }
 
-Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
+Color Raytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	Ray ray = scene.camera.getRay(pixelCoordinate);
+	if (scene.raytracer.timeSamples == 0)
+		return generateDofSamples(scene, pixelCoordinate, 0.0, interrupted);
+
+	Color sampledPixelColor;
+	int n = scene.raytracer.timeSamples;
+	Sampler* sampler = samplers[scene.raytracer.timeSamplerType].get();
+
+	for (int i = 0; i < n; ++i)
+		sampledPixelColor += generateDofSamples(scene, pixelCoordinate, sampler->getSample(i, n), interrupted);
+
+	return sampledPixelColor / (double)(n);
+}
+
+Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
+{
+	Ray ray = scene.camera.getRay(pixelCoordinate, time);
 
 	if (ray.isInvalid && scene.raytracer.dofSamples == 0)
 		return scene.raytracer.offLensColor;
 
+	Intersection intersection;
+
 	if (scene.raytracer.dofSamples == 0)
-		return generateTimeSamples(scene, ray, interrupted);
+		return raytrace(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
 	int permutation = randomDist(generator);
 	int n = scene.raytracer.dofSamples;
 	double apertureSize = scene.camera.apertureSize;
-	double focalLength = scene.camera.focalLenght;
+	double focalDistance = scene.camera.focalDistance;
 	Sampler* sampler = samplers[scene.raytracer.dofSamplerType].get();
 
-	Vector3 cameraOrigin = scene.camera.position;
-	Vector3 cameraRight = scene.camera.right;
-	Vector3 cameraUp = scene.camera.up;
+	ONB onb = scene.camera.getONB(time);
+	Vector3 cameraPosition = scene.camera.getPosition(time);
+	Vector3 cameraRight = onb.u;
+	Vector3 cameraUp = onb.v;
 
 	for (int y = 0; y < n; ++y)
 	{
 		for (int x = 0; x < n; ++x)
 		{
 			Vector2 jitter = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
-			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter);
+			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter, time);
 
 			if (primaryRay.isInvalid)
 			{
@@ -153,40 +171,22 @@ Color Raytracer::generateDofSamples(const Scene& scene, const Vector2& pixelCoor
 				continue;
 			}
 
-			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalLength;
+			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalDistance;
 			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n, permutation);
 
 			Ray sampleRay;
-			sampleRay.origin = cameraOrigin + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
+			Intersection sampleIntersection;
+
+			sampleRay.origin = cameraPosition + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
 			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
+			sampleRay.time = time;
 			sampleRay.update();
 
-			sampledPixelColor += generateTimeSamples(scene, sampleRay, interrupted);
+			sampledPixelColor += raytrace(scene, ray, sampleIntersection, 0, interrupted);
 		}
 	}
 
 	return sampledPixelColor / (double)(n * n);
-}
-
-Color Raytracer::generateTimeSamples(const Scene& scene, Ray& ray, const std::atomic<bool>& interrupted)
-{
-	Intersection intersection;
-
-	if (scene.raytracer.timeSamples == 0)
-		return raytrace(scene, ray, intersection, 0, interrupted);
-
-	Color sampledPixelColor;
-	int n = scene.raytracer.timeSamples;
-	Sampler* sampler = samplers[scene.raytracer.timeSamplerType].get();
-
-	for (int i = 0; i < n; ++i)
-	{
-		intersection = Intersection();
-		ray.time = sampler->getSample(i, n);
-		sampledPixelColor += raytrace(scene, ray, intersection, 0, interrupted);
-	}
-
-	return sampledPixelColor / (double)(n);
 }
 
 Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)

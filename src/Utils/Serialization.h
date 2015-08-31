@@ -48,7 +48,7 @@ namespace Raycer
 			cereal::make_nvp("orthoSize", b.orthoSize),
 			cereal::make_nvp("fishEyeAngle", b.fishEyeAngle),
 			cereal::make_nvp("apertureSize", b.apertureSize),
-			cereal::make_nvp("focalLenght", b.focalLenght));
+			cereal::make_nvp("focalDistance", b.focalDistance));
 	}
 
 	template<class Archive>

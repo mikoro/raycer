@@ -27,7 +27,7 @@ Scene Scene::createTestScene8()
 	scene.camera.position = Vector3(0.0, 8.0, -2.0);
 	scene.camera.orientation = EulerAngle(-20.0, 180.0, 0.0);
 	scene.camera.apertureSize = 0.2;
-	scene.camera.focalLenght = 30.0;
+	scene.camera.focalDistance = 30.0;
 	
 	// GROUND //
 

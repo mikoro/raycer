@@ -52,7 +52,7 @@ int ConsoleRunner::run()
 
 	scene.initialize();
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
-	scene.camera.precalculate();
+	scene.camera.update(scene, 0.0);
 
 	RaytracerState state;
 	state.image = &image;

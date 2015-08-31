@@ -46,6 +46,11 @@ void Camera::update(const Scene& scene, double timeStep)
 	Settings& settings = App::getSettings();
 	MouseInfo mouseInfo = windowRunner.getMouseInfo();
 
+	ONB onb = ONB::fromNormal(orientation.getDirection());
+	Vector3 forward = onb.w;
+	Vector3 right = onb.u;
+	Vector3 up = onb.v;
+
 	// PRIMITIVE SELECTION AND MOVEMENT //
 
 	if (windowRunner.mouseWasPressed(GLFW_MOUSE_BUTTON_RIGHT))
@@ -56,7 +61,7 @@ void Camera::update(const Scene& scene, double timeStep)
 			pixelCoordinate.x = mouseInfo.framebufferX;
 			pixelCoordinate.y = mouseInfo.framebufferY;
 
-			Ray ray = getRay(pixelCoordinate);
+			Ray ray = getRay(pixelCoordinate, 0.0);
 			Intersection intersection;
 			std::vector<Intersection> intersections;
 
@@ -140,6 +145,7 @@ void Camera::update(const Scene& scene, double timeStep)
 	fov = std::max(1.0, std::min(fov, 180.0));
 	orthoSize = std::max(0.0, orthoSize);
 	fishEyeAngle = std::max(1.0, std::min(fishEyeAngle, 360.0));
+	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
 
 	// CAMERA MOVEMENT //
 
@@ -251,24 +257,38 @@ void Camera::update(const Scene& scene, double timeStep)
 	orientation.normalize();
 }
 
-void Camera::precalculate()
-{
-	forward = orientation.getDirection();
-	right = forward.cross(Vector3::ALMOST_UP).normalized();
-	up = right.cross(forward).normalized();
-
-	imagePlaneDistance = 0.5 / tan(MathUtils::degToRad(fov / 2.0));
-	imagePlaneCenter = position + (forward * imagePlaneDistance);
-}
-
 bool Camera::hasMoved() const
 {
 	return cameraHasMoved;
 }
 
-Ray Camera::getRay(const Vector2& pixelCoordinate) const
+Vector3 Camera::getPosition(double time) const
 {
+	if (!isTimeVariant)
+		return position;
+	else
+		return position + time * translateInTime;
+}
+
+ONB Camera::getONB(double time) const
+{
+	if (!isTimeVariant)
+		return ONB::fromNormal(orientation.getDirection());
+	else
+		return ONB::fromNormal((orientation + time * rotateInTime).getDirection());
+}
+
+Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
+{
+	ONB onb = getONB(time);
+	Vector3 forward = onb.w;
+	Vector3 right = onb.u;
+	Vector3 up = onb.v;
+	Vector3 actualPosition = getPosition(time);
+	Vector3 imagePlaneCenter = actualPosition + (forward * imagePlaneDistance);
+
 	Ray ray;
+	ray.time = time;
 
 	switch (projectionType)
 	{
@@ -279,8 +299,8 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 
 			Vector3 imagePlanePixelPosition = imagePlaneCenter + (dx * right) + (dy * aspectRatio * up);
 
-			ray.origin = position;
-			ray.direction = (imagePlanePixelPosition - position).normalized();
+			ray.origin = actualPosition;
+			ray.direction = (imagePlanePixelPosition - actualPosition).normalized();
 
 		} break;
 
@@ -289,7 +309,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 			double dx = (pixelCoordinate.x / imagePlaneWidth) - 0.5;
 			double dy = (pixelCoordinate.y / imagePlaneHeight) - 0.5;
 
-			ray.origin = position + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
+			ray.origin = actualPosition + (dx * orthoSize * right) + (dy * orthoSize * aspectRatio * up);
 			ray.direction = forward;
 
 		} break;
@@ -318,7 +338,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate) const
 			double v = sin(theta) * sin(phi);
 			double w = cos(theta);
 
-			ray.origin = position;
+			ray.origin = actualPosition;
 			ray.direction = u * right + v * up + w * forward;
 
 		} break;
