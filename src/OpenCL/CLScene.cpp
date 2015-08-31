@@ -58,7 +58,7 @@ void CLScene::readScene(const Scene& scene)
 	raytracer.maxRayIterations = (cl_int)scene.raytracer.maxRayIterations;
 	raytracer.rayStartOffset = (cl_float)scene.raytracer.rayStartOffset;
 	raytracer.multiSamples = (cl_int)scene.raytracer.multiSamples;
-	raytracer.dofSamples = (cl_int)scene.raytracer.dofSamples;
+	raytracer.dofSamples = (cl_int)scene.raytracer.cameraSamples;
 	raytracer.timeSamples = (cl_int)scene.raytracer.timeSamples;
 
 	toneMapper.type = (cl_int)scene.toneMapper.type;

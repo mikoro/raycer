@@ -59,12 +59,12 @@ namespace Raycer
 			cereal::make_nvp("backgroundColor", b.backgroundColor),
 			cereal::make_nvp("offLensColor", b.offLensColor),
 			cereal::make_nvp("multiSamples", b.multiSamples),
-			cereal::make_nvp("dofSamples", b.dofSamples),
 			cereal::make_nvp("timeSamples", b.timeSamples),
+			cereal::make_nvp("cameraSamples", b.cameraSamples),
 			cereal::make_nvp("multiSamplerType", b.multiSamplerType),
 			cereal::make_nvp("multiSamplerFilterType", b.multiSamplerFilterType),
-			cereal::make_nvp("dofSamplerType", b.dofSamplerType),
 			cereal::make_nvp("timeSamplerType", b.timeSamplerType),
+			cereal::make_nvp("cameraSamplerType", b.cameraSamplerType),
 			cereal::make_nvp("visualizeDepth", b.visualizeDepth),
 			cereal::make_nvp("visualizeDepthMaxDistance", b.visualizeDepthMaxDistance));
 	}

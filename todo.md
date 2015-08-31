@@ -1,10 +1,10 @@
 misc
  - instances for first test scenes
+ - update cl raytracer structs
 
 tracer
  - raymarching + height map + volumetric fog
  - normal mapping
- - camera motion blur
  - relativistic effects
 
 lighting

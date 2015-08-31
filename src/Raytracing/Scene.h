@@ -89,12 +89,12 @@ namespace Raycer
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
 			int multiSamples = 0;
-			int dofSamples = 0;
 			int timeSamples = 0;
+			int cameraSamples = 0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
-			SamplerType dofSamplerType = SamplerType::CMJ;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
+			SamplerType cameraSamplerType = SamplerType::CMJ;
 			bool visualizeDepth = false;
 			double visualizeDepthMaxDistance = 20.0;
 		} raytracer;
