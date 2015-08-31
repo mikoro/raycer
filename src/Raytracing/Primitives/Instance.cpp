@@ -35,16 +35,29 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 	Ray instanceRay = ray;
 	Intersection instanceIntersection = intersection;
-	// TODO: intersections handling
+	std::vector<Intersection> instanceIntersections;
 
 	instanceRay.origin = transformationInv.transformPosition(ray.origin);
 	instanceRay.direction = transformationInv.transformDirection(ray.direction).normalized();
 	instanceRay.update();
 
-	if (primitive->intersect(instanceRay, instanceIntersection, intersections))
+	bool wasFound = primitive->intersect(instanceRay, instanceIntersection, instanceIntersections);
+
+	for (Intersection& tempIntersection : instanceIntersections)
+	{
+		Vector3 position = transformation.transformPosition(tempIntersection.position);
+
+		tempIntersection.distance = (position - ray.origin).length();
+		tempIntersection.position = position;
+		tempIntersection.normal = transformationInvT.transformDirection(tempIntersection.normal).normalized();
+		tempIntersection.onb = tempIntersection.onb.transformed(transformationInvT);
+
+		intersections.push_back(tempIntersection);
+	}
+
+	if (wasFound)
 	{
 		Vector3 position = transformation.transformPosition(instanceIntersection.position);
-
 		double t = (position - ray.origin).length();
 
 		if (t < ray.minDistance || t > ray.maxDistance)

@@ -83,11 +83,11 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 	Intersection tempIntersection1 = calculateIntersection(result.roots[0], CSGDirection::IN);
 	Intersection tempIntersection2 = calculateIntersection(result.roots[1], CSGDirection::OUT);
 
-	if (tempIntersection1.wasFound && tempIntersection2.wasFound)
-	{
+	if (tempIntersection1.wasFound)
 		intersections.push_back(tempIntersection1);
+
+	if (tempIntersection2.wasFound)
 		intersections.push_back(tempIntersection2);
-	}
 
 	// default intersection
 	if (checkIntersection(tempIntersection1))

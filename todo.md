@@ -1,16 +1,16 @@
 tracer
  - raymarching + height map + volumetric fog
  - triangle edge intersection glitch
+ - normal mapping
+ - camera motion blur
+ - relativistic effects
 
 lighting
- - path tracing
+ - path tracing + materials
 
 primitives
- - cone
- - cylinder
  - torus
  - metaball
- - constructive solid geometry
 
 textures
- - Elliptical Weighted Average texture filtering
+ - EWA texture filtering

@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include <algorithm>
+#include <cmath>
 
 #include "Math/Solver.h"
 
@@ -16,35 +17,14 @@ QuadraticResult Solver::quadratic(double a, double b, double c)
 	if (discriminant < 0.0)
 		return result;
 
-	double discriminantSqrt = sqrt(discriminant);
+	double q = -0.5 * (b + copysign(1.0, b) * sqrt(discriminant));
 
-	result.roots[0] = (-b + discriminantSqrt) / (2.0 * a);
-	result.roots[1] = (-b - discriminantSqrt) / (2.0 * a);
-	result.rootCount = (discriminant == 0.0) ? 1 : 2;
+	result.rootCount = 2;
+	result.roots[0] = q / a;
+	result.roots[1] = c / q;
 
 	if (result.roots[0] > result.roots[1])
 		std::swap(result.roots[0], result.roots[1]);
 
 	return result;
-}
-
-CubicResult Solver::cubic(double a, double b, double c, double d)
-{
-	(void)a;
-	(void)b;
-	(void)c;
-	(void)d;
-
-	return CubicResult();
-}
-
-QuarticResult Solver::quartic(double a, double b, double c, double d, double e)
-{
-	(void)a;
-	(void)b;
-	(void)c;
-	(void)d;
-	(void)e;
-
-	return QuarticResult();
 }

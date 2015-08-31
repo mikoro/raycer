@@ -644,5 +644,8 @@
     <None Include="data\shaders\text.vert">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="src\Utils\Log.inl">
+      <Filter>Utils</Filter>
+    </None>
   </ItemGroup>
 </Project>
