@@ -193,7 +193,6 @@ void CLScene::readScene(const Scene& scene)
 		OpenCL::Sphere clSphere;
 
 		readVector3(clSphere.position, sphere.position);
-		readVector3(clSphere.displacement, sphere.displacement);
 		clSphere.radius = (cl_float)sphere.radius;
 		clSphere.materialIndex = (cl_int)findMaterialIndex(sphere.materialId);
 

@@ -143,7 +143,6 @@ typedef struct Plane
 typedef struct Sphere
 {
 	float4 position;
-	float4 displacement;
 	float radius;
 	int materialIndex;
 } Sphere;

@@ -20,9 +20,9 @@ void Instance::initialize()
 	Matrix4x4 translation1 = Matrix4x4::translate(-position);
 	Matrix4x4 translation2 = Matrix4x4::translate(position + translate);
 
-	transformation = translation2 * rotation * scaling * translation1;
-	transformationInv = transformation.inverted();
-	transformationInvT = transformationInv.transposed();
+	cachedTransformation = translation2 * rotation * scaling * translation1;
+	cachedTransformationInv = cachedTransformation.inverted();
+	cachedTransformationInvT = cachedTransformationInv.transposed();
 }
 
 bool Instance::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -33,6 +33,30 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection, std::vector
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
+	if (isTimeVariant)
+	{
+		Vector3 position = primitive->getAABB().getCenter();
+		Vector3 newScale = scale + ray.time * scaleInTime;
+		EulerAngle newRotate = rotate + ray.time * rotateInTime;
+		Vector3 newTranslate = translate + ray.time * translateInTime;
+
+		Matrix4x4 scaling = Matrix4x4::scale(newScale);
+		Matrix4x4 rotation = Matrix4x4::rotateXYZ(newRotate);
+		Matrix4x4 translation1 = Matrix4x4::translate(-position);
+		Matrix4x4 translation2 = Matrix4x4::translate(position + newTranslate);
+
+		Matrix4x4 newTransformation = translation2 * rotation * scaling * translation1;
+		Matrix4x4 newTransformationInv = newTransformation.inverted();
+		Matrix4x4 newTransformationInvT = newTransformationInv.transposed();
+
+		return internalIntersect(ray, intersection, intersections, newTransformation, newTransformationInv, newTransformationInvT);
+	}
+	else
+		return internalIntersect(ray, intersection, intersections, cachedTransformation, cachedTransformationInv, cachedTransformationInvT);
+}
+
+bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections, const Matrix4x4& transformation, const Matrix4x4& transformationInv, const Matrix4x4& transformationInvT)
+{
 	Ray instanceRay = ray;
 	Intersection instanceIntersection = intersection;
 	std::vector<Intersection> instanceIntersections;
@@ -98,7 +122,7 @@ void Instance::transform(const Vector3& scale_, const EulerAngle& rotate_, const
 	Matrix4x4 translation1 = Matrix4x4::translate(-position);
 	Matrix4x4 translation2 = Matrix4x4::translate(position + translate);
 
-	transformation = translation2 * rotation * scaling * translation1;
-	transformationInv = transformation.inverted();
-	transformationInvT = transformationInv.transposed();
+	cachedTransformation = translation2 * rotation * scaling * translation1;
+	cachedTransformationInv = cachedTransformation.inverted();
+	cachedTransformationInvT = cachedTransformationInv.transposed();
 }

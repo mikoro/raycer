@@ -41,6 +41,16 @@ namespace Raycer
 		return EulerAngle(e1.pitch - e2.pitch, e1.yaw - e2.yaw, e1.roll - e2.roll);
 	}
 
+	EulerAngle operator*(const EulerAngle& e, double s)
+	{
+		return EulerAngle(e.pitch * s, e.yaw * s, e.roll * s);
+	}
+
+	EulerAngle operator*(double s, const EulerAngle& e)
+	{
+		return EulerAngle(e.pitch * s, e.yaw * s, e.roll * s);
+	}
+
 	EulerAngle operator-(const EulerAngle& e)
 	{
 		return EulerAngle(-e.pitch, -e.yaw, -e.roll);

@@ -21,6 +21,7 @@ namespace Raycer
 	{
 	public:
 
+		friend class Raytracer;
 		friend class CLScene;
 
 		Camera();
@@ -42,12 +43,12 @@ namespace Raycer
 		double apertureSize = 0.1;
 		double focalLenght = 10.0;
 
+	private:
+
 		Vector3 forward;
 		Vector3 right;
 		Vector3 up;
 		Vector3 imagePlaneCenter;
-
-	private:
 
 		double aspectRatio = 1.0;
 		double imagePlaneDistance = 1.0;

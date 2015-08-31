@@ -26,16 +26,24 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		int primitiveId = 0;
+
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translate = Vector3(0.0, 0.0, 0.0);
-		
+
+		bool isTimeVariant = false;
+		Vector3 scaleInTime = Vector3(0.0, 0.0, 0.0);
+		EulerAngle rotateInTime = EulerAngle(0.0, 0.0, 0.0);
+		Vector3 translateInTime = Vector3(0.0, 0.0, 0.0);
+
 		Primitive* primitive = nullptr;
 
 	private:
 
-		Matrix4x4 transformation;
-		Matrix4x4 transformationInv;
-		Matrix4x4 transformationInvT;
+		bool internalIntersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections, const Matrix4x4& transformation, const Matrix4x4& transformationInv, const Matrix4x4& transformationInvT);
+
+		Matrix4x4 cachedTransformation;
+		Matrix4x4 cachedTransformationInv;
+		Matrix4x4 cachedTransformationInvT;
 	};
 }

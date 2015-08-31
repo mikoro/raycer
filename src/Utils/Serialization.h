@@ -222,7 +222,6 @@ namespace Raycer
 			cereal::make_nvp("materialId", b.materialId),
 			cereal::make_nvp("invisible", b.invisible),
 			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("displacement", b.displacement),
 			cereal::make_nvp("radius", b.radius));
 	}
 

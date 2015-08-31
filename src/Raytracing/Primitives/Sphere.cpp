@@ -26,8 +26,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
-	Vector3 actualPosition = position + ray.time * displacement;
-	Vector3 rayOriginToSphere = actualPosition - ray.origin;
+	Vector3 rayOriginToSphere = position - ray.origin;
 	double rayOriginToSphereDistance2 = rayOriginToSphere.lengthSquared();
 
 	double t1 = rayOriginToSphere.dot(ray.direction);
@@ -52,10 +51,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 		Intersection tempIntersection;
 
 		Vector3 ip = ray.origin + (t * ray.direction);
-		Vector3 normal = (ip - actualPosition).normalized();
-
-		if (direction == CSGDirection::OUT)
-			normal = -normal;
+		Vector3 normal = (ip - position).normalized();
 
 		tempIntersection.wasFound = true;
 		tempIntersection.distance = t;

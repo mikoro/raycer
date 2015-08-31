@@ -164,7 +164,6 @@ namespace Raycer
 		struct Sphere
 		{
 			cl_float4 ALIGN(16) position;
-			cl_float4 ALIGN(16) displacement;
 			cl_float ALIGN(4) radius;
 			cl_int ALIGN(4) materialIndex;
 		};
