@@ -12,13 +12,15 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.raytracer.backgroundColor = Color::WHITE;
+	scene.raytracer.backgroundColor = Color(1.0, 1.0, 1.0);
 	scene.raytracer.maxRayIterations = 4;
 	scene.raytracer.multiSamples = 0;
+	scene.raytracer.cameraSamples = 0;
 
 	scene.rootBVH.enabled = true;
 
 	scene.simpleFog.enabled = true;
+	scene.simpleFog.color = Color(1.0, 1.0, 1.0);
 	scene.simpleFog.distance = 200.0;
 	scene.simpleFog.steepness = 2.0;
 
@@ -34,14 +36,12 @@ Scene Scene::createTestScene8()
 	ColorTexture groundTexture;
 	groundTexture.id = 1;
 	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.05;
+	groundTexture.intensity = 0.5;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.colorTextureId = groundTexture.id;
-	groundMaterial.specularReflectance = Color(0.5, 0.5, 0.5);
-	groundMaterial.shininess = 2.0;
-	groundMaterial.rayReflectance = 1.0;
+	groundMaterial.rayReflectance = 0.3;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -76,15 +76,15 @@ Scene Scene::createTestScene8()
 			ColorTexture sphereTexture;
 			sphereTexture.id = index;
 			sphereTexture.color = Color::random(gen);
-			sphereTexture.intensity = 1.0;
+			sphereTexture.intensity = 0.5;
 
 			Material sphereMaterial;
 			sphereMaterial.id = index;
 			sphereMaterial.colorTextureId = sphereTexture.id;
-			sphereMaterial.diffuseReflectance = Color(0.5, 0.5, 0.5);
-			sphereMaterial.specularReflectance = Color(0.5, 0.5, 0.5);
-			sphereMaterial.shininess = shininessDist(gen);
-			sphereMaterial.rayReflectance = 0.2;
+			sphereMaterial.rayReflectance = 0.05;
+			sphereMaterial.diffuseReflectance = sphereTexture.color;
+			sphereMaterial.specularReflectance = Color(1.0, 1.0, 1.0);
+			sphereMaterial.shininess = 256.0;
 
 			Sphere sphere;
 			sphere.radius = radiusDist(gen);
@@ -104,7 +104,7 @@ Scene Scene::createTestScene8()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.0;
+	scene.lights.ambientLight.intensity = 0.1;
 	
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);

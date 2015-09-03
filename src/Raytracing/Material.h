@@ -28,6 +28,7 @@ namespace Raycer
 		bool nonShadowing = false;
 		bool normalInterpolation = false;
 		bool backfaceCulling = false;
+		bool invertNormal = false;
 
 		double rayReflectance = 0.0;
 		double rayTransmittance = 0.0;

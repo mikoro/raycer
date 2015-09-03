@@ -61,6 +61,7 @@ Scene Scene::createTestScene9()
 	sphere1Material.colorTextureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
 	sphere1Material.nonShadowing = true;
+	sphere1Material.invertNormal = true;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -117,7 +118,7 @@ Scene Scene::createTestScene9()
 
 	ImageTexture sphere4Texture;
 	sphere4Texture.id = 5;
-	sphere4Texture.imageFilePath = "data/images/poolball.jpg";
+	sphere4Texture.imageFilePath = "data/images/poolball1.jpg";
 	sphere4Texture.intensity = 0.5;
 
 	Material sphere4Material;

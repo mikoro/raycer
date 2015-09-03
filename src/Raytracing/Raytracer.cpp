@@ -182,7 +182,7 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 			sampleRay.time = time;
 			sampleRay.update();
 
-			sampledPixelColor += raytrace(scene, ray, sampleIntersection, 0, interrupted);
+			sampledPixelColor += raytrace(scene, sampleRay, sampleIntersection, 0, interrupted);
 		}
 	}
 
@@ -215,18 +215,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	}
 
 	Material* material = intersection.primitive->material;
-	Color textureColor = material->colorTexture->getColor(intersection.texcoord, intersection.position) * material->colorTexture->intensity;
-
-	if (material->skipLighting)
-	{
-		finalColor = textureColor;
-
-		if (scene.simpleFog.enabled)
-			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
-
-		return finalColor;
-	}
-
+	
 	double c1 = -(ray.direction.dot(intersection.normal));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
@@ -324,14 +313,21 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		}
 	}
 
-	double ambientOcclusionAmount = 1.0;
+	Color textureColor = material->colorTexture->getColor(intersection.texcoord, intersection.position) * material->colorTexture->intensity;
 
-	if (scene.lights.ambientLight.enableOcclusion)
-		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
+	if (!material->skipLighting)
+	{
+		double ambientOcclusionAmount = 1.0;
 
-	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
-	finalColor = (reflectionColor + refractionColor + lightColor) * textureColor;
+		if (scene.lights.ambientLight.enableOcclusion)
+			ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
 
+		Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
+		finalColor = textureColor * lightColor + refractionColor + reflectionColor;
+	}
+	else
+		finalColor = textureColor + refractionColor + reflectionColor;
+	
 	if (scene.simpleFog.enabled && isOutside)
 		finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
 

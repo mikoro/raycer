@@ -17,7 +17,7 @@ Scene Scene::createTestScene7()
 
 	scene.camera.position = Vector3(0.0, 0.0, 7.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-	scene.camera.apertureSize = 0.5;
+	scene.camera.apertureSize = 1.0;
 	scene.camera.focalDistance = 30.0;
 	
 	// SPHERES //

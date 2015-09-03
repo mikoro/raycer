@@ -53,6 +53,9 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 		Vector3 ip = ray.origin + (t * ray.direction);
 		Vector3 normal = (ip - position).normalized();
 
+		if (material->invertNormal)
+			normal = -normal;
+
 		tempIntersection.wasFound = true;
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;
