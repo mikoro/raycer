@@ -28,3 +28,39 @@ QuadraticResult Solver::quadratic(double a, double b, double c)
 
 	return result;
 }
+
+double Solver::falsePosition(std::function<double(double)> f, double begin, double end, double maxError, int maxIterations)
+{
+	double x0 = 0.0;
+	double y0 = 0.0;
+	double x1 = begin;
+	double y1 = f(x1);
+	double x2 = end;
+	double y2 = f(x2);
+
+	// no root
+	if (y1 * y2 > 0.0)
+		return begin;
+
+	for (int i = 0; i < maxIterations; ++i)
+	{
+		x0 = x1 - ((y1 * (x2 - x1)) / (y2 - y1));
+		y0 = f(x0);
+
+		if (y0 < maxError)
+			break;
+
+		if (y0 * y1 > 0.0)
+		{
+			x1 = x0;
+			y1 = y0;
+		}
+		else
+		{
+			x2 = x0;
+			y2 = y0;
+		}
+	}
+
+	return x0;
+}

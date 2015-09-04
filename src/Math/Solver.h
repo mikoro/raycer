@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include <functional>
+
 namespace Raycer
 {
 	struct QuadraticResult
@@ -16,8 +18,6 @@ namespace Raycer
 	public:
 
 		static QuadraticResult quadratic(double a, double b, double c);
-
-		template<typename F>
-		static double regulaFalsi(double begin, double end, F f, int maxIterations = 16);
+		static double falsePosition(std::function<double(double)> f, double begin, double end, double maxError = 0.001, int maxIterations = 16);
 	};
 }
