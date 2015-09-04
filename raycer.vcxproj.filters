@@ -361,6 +361,9 @@
     <ClCompile Include="src\Math\Solver.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Tests\SolverTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
