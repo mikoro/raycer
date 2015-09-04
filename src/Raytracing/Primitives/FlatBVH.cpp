@@ -13,6 +13,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Math/Vector3.h"
+#include "Math/EulerAngle.h"
 
 using namespace Raycer;
 

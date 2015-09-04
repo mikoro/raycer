@@ -13,6 +13,7 @@
 #include "Math/Vector2.h"
 #include "Math/Matrix4x4.h"
 #include "Math/Solver.h"
+#include "Math/EulerAngle.h"
 
 using namespace Raycer;
 
