@@ -3,7 +3,9 @@
 
 #pragma once
 
+#include <complex>
 #include <functional>
+#include <vector>
 
 namespace Raycer
 {
@@ -17,7 +19,8 @@ namespace Raycer
 	{
 	public:
 
-		static QuadraticResult quadratic(double a, double b, double c);
-		static double falsePosition(std::function<double(double)> f, double begin, double end, double maxError = 0.000001, int maxIterations = 32);
+		static double findRoot(std::function<double(double)> f, double begin, double end, int iterations = 32);
+		static QuadraticResult findRoots(double a, double b, double c);
+		static std::vector<std::complex<double>> findRoots(const std::vector<double>& coefficients, int iterations = 32);
 	};
 }
