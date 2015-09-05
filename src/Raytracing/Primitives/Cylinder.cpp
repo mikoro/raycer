@@ -33,7 +33,7 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 	double b = 2.0 * (ray.origin.x * ray.direction.x + ray.origin.z * ray.direction.z);
 	double c = ray.origin.x * ray.origin.x + ray.origin.z * ray.origin.z - radius * radius;
 
-	QuadraticResult result = Solver::findRoots(a, b, c);
+	QuadraticResult result = Solver::findQuadraticRoots(a, b, c);
 
 	if (result.rootCount == 0)
 		return false;

@@ -35,6 +35,11 @@ bool MathUtils::almostSame(double first, double second, int epsilons)
 	return false;
 }
 
+bool MathUtils::almostSame(std::complex<double> first, std::complex<double> second, int epsilons)
+{
+	return almostSame(first.real(), second.real(), epsilons) && almostSame(first.imag(), second.imag(), epsilons);
+}
+
 double MathUtils::degToRad(double degrees)
 {
 	return (degrees * (M_PI / 180.0));

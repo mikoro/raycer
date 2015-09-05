@@ -163,6 +163,7 @@
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\MovingAverage.cpp" />
+    <ClCompile Include="src\Math\Polynomial.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Solver.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
@@ -243,6 +244,7 @@
     <ClCompile Include="src\Tests\Matrix4x4Test.cpp" />
     <ClCompile Include="src\Tests\ObjReaderTest.cpp" />
     <ClCompile Include="src\Tests\PlyReaderTest.cpp" />
+    <ClCompile Include="src\Tests\PolynomialTest.cpp" />
     <ClCompile Include="src\Tests\SamplerTest.cpp" />
     <ClCompile Include="src\Tests\SolverTest.cpp" />
     <ClCompile Include="src\Tests\TestScenesTest.cpp" />
@@ -270,6 +272,7 @@
     <ClInclude Include="src\Math\Matrix4x4.h" />
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\MovingAverage.h" />
+    <ClInclude Include="src\Math\Polynomial.h" />
     <ClInclude Include="src\Math\Quaternion.h" />
     <ClInclude Include="src\Math\Solver.h" />
     <ClInclude Include="src\Math\Vector2.h" />

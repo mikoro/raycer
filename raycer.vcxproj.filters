@@ -364,6 +364,12 @@
     <ClCompile Include="src\Tests\SolverTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\Math\Polynomial.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Tests\PolynomialTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -620,6 +626,9 @@
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Math\Solver.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Math\Polynomial.h">
       <Filter>Math</Filter>
     </ClInclude>
   </ItemGroup>
