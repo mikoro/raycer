@@ -1,7 +1,3 @@
-misc
- - instances for first test scenes
- - update cl raytracer structs
-
 tracer
  - raymarching + height map + volumetric fog
  - normal mapping
@@ -12,12 +8,8 @@ lighting
  - path tracing + materials
 
 primitives
- - torus
  - metaball
+ - higher order polynomial structure
 
 textures
  - EWA texture filtering
-
-math
- - regula falsi
- - Durand–Kerner

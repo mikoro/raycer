@@ -32,8 +32,7 @@ void intersectPlane(constant Plane* plane, Ray* ray, Intersection* intersection,
 
 void intersectSphere(constant Sphere* sphere, Ray* ray, Intersection* intersection, constant Material* materials)
 {
-	float4 actualPosition = sphere->position + ray->time * sphere->displacement;
-	float4 rayOriginToSphere = actualPosition - ray->origin;
+	float4 rayOriginToSphere = sphere->position - ray->origin;
 	float rayOriginToSphereDistance2 = length(rayOriginToSphere);
 	rayOriginToSphereDistance2 = rayOriginToSphereDistance2 * rayOriginToSphereDistance2;
 
@@ -62,7 +61,7 @@ void intersectSphere(constant Sphere* sphere, Ray* ray, Intersection* intersecti
 		return;
 
 	float4 ip = ray->origin + (t * ray->direction);
-	float4 normal = normalize(ip - actualPosition);
+	float4 normal = normalize(ip - sphere->position);
 
 	intersection->wasFound = true;
 	intersection->distance = t;

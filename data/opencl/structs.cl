@@ -17,15 +17,20 @@ typedef struct Camera
 	float4 right;
 	float4 up;
 	float4 imagePlaneCenter;
+	float4 translateInTime;
+	float4 rotateInTime;
 	int projectionType;
+	int isTimeVariant;
+	int hasMoved;
 	float fov;
 	float orthoSize;
 	float fishEyeAngle;
 	float apertureSize;
-	float focalLenght;
+	float focalDistance;
+	float aspectRatio;
 	float imagePlaneWidth;
 	float imagePlaneHeight;
-	float aspectRatio;
+	float imagePlaneDistance;
 } Camera;
 
 typedef struct Raytracer
@@ -35,8 +40,8 @@ typedef struct Raytracer
 	int maxRayIterations;
 	float rayStartOffset;
 	int multiSamples;
-	int dofSamples;
 	int timeSamples;
+	int cameraSamples;
 } Raytracer;
 
 typedef struct ToneMapper
@@ -73,6 +78,9 @@ typedef struct Material
 	float shininess;
 	int skipLighting;
 	int nonShadowing;
+	int normalInterpolation;
+	int backfaceCulling;
+	int invertNormal;
 	int hasTexture;
 	int textureIndex;
 	float rayReflectance;
@@ -137,6 +145,7 @@ typedef struct Plane
 	float4 normal;
 	float4 uAxis;
 	float4 vAxis;
+	int invisible;
 	int materialIndex;
 } Plane;
 
@@ -144,6 +153,7 @@ typedef struct Sphere
 {
 	float4 position;
 	float radius;
+	int invisible;
 	int materialIndex;
 } Sphere;
 
@@ -151,6 +161,7 @@ typedef struct Box
 {
 	float4 position;
 	float4 extent;
+	int invisible;
 	int materialIndex;
 } Box;
 
@@ -162,6 +173,7 @@ typedef struct Triangle
 	float4 tangent;
 	float4 bitangent;
 	float2 texcoords[3];
+	int invisible;
 	int materialIndex;
 } Triangle;
 

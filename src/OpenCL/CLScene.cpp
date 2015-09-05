@@ -34,32 +34,45 @@ namespace
 		destination.s[2] = (cl_float)source.b;
 		destination.s[3] = (cl_float)source.a;
 	}
+
+	void readEulerAngle(cl_float4& destination, const EulerAngle& source)
+	{
+		destination.s[0] = (cl_float)source.pitch;
+		destination.s[1] = (cl_float)source.yaw;
+		destination.s[2] = (cl_float)source.roll;
+		destination.s[3] = 0.0f;
+	}
 }
 
 void CLScene::readScene(const Scene& scene)
 {
-	readVector3(camera.position, scene.camera.position);
-	//readVector3(camera.forward, scene.camera.forward);
-	//readVector3(camera.right, scene.camera.right);
-	//readVector3(camera.up, scene.camera.up);
-	//readVector3(camera.imagePlaneCenter, scene.camera.imagePlaneCenter);
+	readVector3(camera.position, scene.camera.cameraState.position);
+	readVector3(camera.forward, scene.camera.cameraState.forward);
+	readVector3(camera.right, scene.camera.cameraState.right);
+	readVector3(camera.up, scene.camera.cameraState.up);
+	readVector3(camera.imagePlaneCenter, scene.camera.cameraState.imagePlaneCenter);
+	readVector3(camera.translateInTime, scene.camera.translateInTime);
+	readEulerAngle(camera.rotateInTime, scene.camera.rotateInTime);
 	camera.projectionType = (cl_int)scene.camera.projectionType;
+	camera.isTimeVariant = (cl_int)scene.camera.isTimeVariant;
+	camera.hasMoved = (cl_int)scene.camera.cameraHasMoved;
 	camera.fov = (cl_float)scene.camera.fov;
 	camera.orthoSize = (cl_float)scene.camera.orthoSize;
 	camera.fishEyeAngle = (cl_float)scene.camera.fishEyeAngle;
 	camera.apertureSize = (cl_float)scene.camera.apertureSize;
-	camera.focalLenght = (cl_float)scene.camera.focalDistance;
+	camera.focalDistance = (cl_float)scene.camera.focalDistance;
+	camera.aspectRatio = (cl_float)scene.camera.aspectRatio;
 	camera.imagePlaneWidth = (cl_float)scene.camera.imagePlaneWidth;
 	camera.imagePlaneHeight = (cl_float)scene.camera.imagePlaneHeight;
-	camera.aspectRatio = (cl_float)scene.camera.aspectRatio;
+	camera.imagePlaneDistance = (cl_float)scene.camera.imagePlaneDistance;
 
 	readColor(raytracer.backgroundColor, scene.raytracer.backgroundColor);
 	readColor(raytracer.offLensColor, scene.raytracer.offLensColor);
 	raytracer.maxRayIterations = (cl_int)scene.raytracer.maxRayIterations;
 	raytracer.rayStartOffset = (cl_float)scene.raytracer.rayStartOffset;
 	raytracer.multiSamples = (cl_int)scene.raytracer.multiSamples;
-	raytracer.dofSamples = (cl_int)scene.raytracer.cameraSamples;
 	raytracer.timeSamples = (cl_int)scene.raytracer.timeSamples;
+	raytracer.cameraSamples = (cl_int)scene.raytracer.cameraSamples;
 
 	toneMapper.type = (cl_int)scene.toneMapper.type;
 	toneMapper.applyGamma = (cl_int)scene.toneMapper.applyGamma;
@@ -114,6 +127,9 @@ void CLScene::readScene(const Scene& scene)
 		clMaterial.shininess = (cl_float)material.shininess;
 		clMaterial.skipLighting = (cl_int)material.skipLighting;
 		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
+		clMaterial.normalInterpolation = (cl_int)material.normalInterpolation;
+		clMaterial.backfaceCulling = (cl_int)material.backfaceCulling;
+		clMaterial.invertNormal = (cl_int)material.invertNormal;
 		clMaterial.hasTexture = (cl_int)0;
 		clMaterial.textureIndex = (cl_int)0;
 		clMaterial.rayReflectance = (cl_float)material.rayReflectance;
@@ -183,6 +199,7 @@ void CLScene::readScene(const Scene& scene)
 		readVector3(clPlane.normal, plane.normal);
 		readVector3(clPlane.uAxis, plane.uAxis);
 		readVector3(clPlane.vAxis, plane.vAxis);
+		clPlane.invisible = (cl_int)plane.invisible;
 		clPlane.materialIndex = (cl_int)findMaterialIndex(plane.materialId);
 
 		planes.push_back(clPlane);
@@ -194,6 +211,7 @@ void CLScene::readScene(const Scene& scene)
 
 		readVector3(clSphere.position, sphere.position);
 		clSphere.radius = (cl_float)sphere.radius;
+		clSphere.invisible = (cl_int)sphere.invisible;
 		clSphere.materialIndex = (cl_int)findMaterialIndex(sphere.materialId);
 
 		spheres.push_back(clSphere);
@@ -205,6 +223,7 @@ void CLScene::readScene(const Scene& scene)
 
 		readVector3(clBox.position, box.position);
 		readVector3(clBox.extent, box.extent);
+		clBox.invisible = (cl_int)box.invisible;
 		clBox.materialIndex = (cl_int)findMaterialIndex(box.materialId);
 
 		boxes.push_back(clBox);
@@ -226,6 +245,7 @@ void CLScene::readScene(const Scene& scene)
 		readVector3(clTriangle.normal, triangle.normal);
 		readVector3(clTriangle.tangent, triangle.tangent);
 		readVector3(clTriangle.bitangent, triangle.bitangent);
+		clTriangle.invisible = (cl_int)triangle.invisible;
 		clTriangle.materialIndex = (cl_int)findMaterialIndex(triangle.materialId);
 
 		triangles.push_back(clTriangle);
