@@ -364,9 +364,6 @@
     <ClCompile Include="src\Tests\SolverTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="src\Math\Polynomial.cpp">
-      <Filter>Math</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tests\PolynomialTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -664,6 +661,9 @@
     </None>
     <None Include="src\Utils\Log.inl">
       <Filter>Utils</Filter>
+    </None>
+    <None Include="src\Math\Polynomial.inl">
+      <Filter>Math</Filter>
     </None>
   </ItemGroup>
 </Project>

@@ -45,10 +45,10 @@ bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 	coefficients[3] = 2.0 * beta * gamma + 8.0 * outerRadius2 * ray.origin.z * ray.direction.z;
 	coefficients[4] = gamma * gamma + 4.0 * outerRadius2 * ray.origin.z * ray.origin.z - 4.0 * outerRadius2 * innerRadius2;
 
-	Polynomial polynomial(coefficients, 5);
+	Polynomial<5> polynomial(coefficients);
 	double t;
 
-	if (!polynomial.findSmallestPositiveRealRoot(t))
+	if (!polynomial.findSmallestPositiveRealRoot(t, 32, 0.0001, 0.01))
 		return false;
 
 	if (t < ray.minDistance || t > ray.maxDistance)

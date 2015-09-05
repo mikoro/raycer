@@ -12,10 +12,12 @@ Scene Scene::createTestScene1()
 
 	scene.raytracer.multiSamples = 0;
 
+	scene.rootBVH.enabled = true;
+	scene.rootBVH.buildInfo.maxLeafSize = 1;
+	
 	// CAMERA //
 
-	//scene.camera.position = Vector3(6.5, 6.0, 9.0);
-	scene.camera.position = Vector3(0.0, 6.0, 9.0);
+	scene.camera.position = Vector3(6.5, 6.0, 9.0);
 	scene.camera.orientation = EulerAngle(-30.0, 0.0, 0.0);
 
 	// GROUND //
@@ -67,7 +69,7 @@ Scene Scene::createTestScene1()
 	scene.textures.colorTextures.push_back(triangleTexture);
 	scene.materials.push_back(triangleMaterial);
 	scene.primitives.triangles.push_back(triangle);
-	//scene.primitives.instances.push_back(instance);
+	scene.primitives.instances.push_back(instance);
 
 	// SPHERE //
 
@@ -88,12 +90,12 @@ Scene Scene::createTestScene1()
 
 	instance.primitiveId = sphere.id;
 	instance.materialId = sphere.materialId;
-	instance.translate = Vector3(4.0, 1.5, 0.0);
+	instance.translate = Vector3(3.0, 1.5, 0.0);
 
 	scene.textures.colorTextures.push_back(sphereTexture);
 	scene.materials.push_back(sphereMaterial);
 	scene.primitives.spheres.push_back(sphere);
-	//scene.primitives.instances.push_back(instance);
+	scene.primitives.instances.push_back(instance);
 
 	// BOX //
 
@@ -114,13 +116,13 @@ Scene Scene::createTestScene1()
 
 	instance.primitiveId = box.id;
 	instance.materialId = box.materialId;
-	instance.translate = Vector3(8.0, 1.5, 0.0);
+	instance.translate = Vector3(6.0, 1.5, 0.0);
 	instance.rotate = EulerAngle(-10.0, 10.0, -10.0);
 
 	scene.textures.colorTextures.push_back(boxTexture);
 	scene.materials.push_back(boxMaterial);
 	scene.primitives.boxes.push_back(box);
-	//scene.primitives.instances.push_back(instance);
+	scene.primitives.instances.push_back(instance);
 	
 	// CYLINDER //
 
@@ -142,13 +144,13 @@ Scene Scene::createTestScene1()
 
 	instance.primitiveId = cylinder.id;
 	instance.materialId = cylinder.materialId;
-	instance.translate = Vector3(12.0, 0.5, 0.0);
+	instance.translate = Vector3(9.0, 0.5, 0.0);
 	instance.rotate = EulerAngle(-10.0, 10.0, 10.0);
 
 	scene.textures.colorTextures.push_back(cylinderTexture);
 	scene.materials.push_back(cylinderMaterial);
 	scene.primitives.cylinders.push_back(cylinder);
-	//scene.primitives.instances.push_back(instance);
+	scene.primitives.instances.push_back(instance);
 
 	// TORUS //
 
@@ -170,8 +172,8 @@ Scene Scene::createTestScene1()
 
 	instance.primitiveId = torus.id;
 	instance.materialId = torus.materialId;
-	instance.translate = Vector3(0.0, 1.25, 0.0);
-	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+	instance.translate = Vector3(12.0, 1.75, 0.0);
+	instance.rotate = EulerAngle(-20.0, -20.0, 0.0);
 
 	scene.textures.colorTextures.push_back(torusTexture);
 	scene.materials.push_back(torusMaterial);
@@ -186,8 +188,7 @@ Scene Scene::createTestScene1()
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
 	pointLight1.intensity = 1.5;
-	//pointLight1.position = Vector3(6.5, 10.0, 5.0);
-	pointLight1.position = Vector3(0.0, 10.0, 5.0);
+	pointLight1.position = Vector3(6.5, 10.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 

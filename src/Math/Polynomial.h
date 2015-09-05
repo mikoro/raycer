@@ -3,43 +3,40 @@
 
 #pragma once
 
+#include <algorithm>
+#include <cmath>
 #include <complex>
 #include <functional>
 #include <vector>
 
 namespace Raycer
 {
+	template <int N>
 	class Polynomial
 	{
 	public:
 
 		Polynomial();
-		Polynomial(int size);
-		Polynomial(double* coefficients, int size);
+		Polynomial(const double* coefficients);
 
-		void setSize(int size);
-		void setCoefficient(int index, double value);
-		void setCoefficients(double* coefficients, int size);
+		void setCoefficients(const double* coefficients);
 
-		double evaluate(double x) const;
 		std::complex<double> evaluate(const std::complex<double>& x) const;
 
-		bool isNormalized() const;
-		void normalize();
-
-		std::vector<std::complex<double>> findAllRoots(int iterations = 64);
-		std::vector<double> findAllPositiveRealRoots(int iterations = 64, double maxImagValue = 0.0001);
-		bool findSmallestPositiveRealRoot(double& result, int iterations = 64, double maxImagValue = 0.0001);
+		const std::complex<double>* findAllRoots(int maxIterations = 64, double changeThreshold = 0.0001);
+		const double* findAllPositiveRealRoots(int& count, int maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
+		bool findSmallestPositiveRealRoot(double& result, int maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
 
 	private:
 
-		std::vector<double> coefficients;
-		std::vector<std::complex<double>> seedRoots;
-		std::vector<std::complex<double>> roots;
-		std::vector<std::complex<double>> previousRoots;
-		std::vector<double> positiveRealRoots;
+		const int size = N;
+		const int degree = N - 1;
 
-		int size = 0;
-		int degree = 0;
+		double coefficients[N];
+		std::complex<double> roots[N - 1];
+		std::complex<double> previousRoots[N - 1];
+		double positiveRealRoots[N - 1];
 	};
 }
+
+#include "Math/Polynomial.inl"

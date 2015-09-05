@@ -3,41 +3,35 @@
 
 #include "Math/MathUtils.h"
 
-#include <cmath>
-#include <limits>
 #include <algorithm>
+#include <cmath>
 
 using namespace Raycer;
 
-namespace
+bool MathUtils::almostZero(double value, double threshold)
 {
-	const double epsilon = std::numeric_limits<double>::epsilon();
-}
-
-bool MathUtils::almostZero(double value, int epsilons)
-{
-	return std::abs(value) < (epsilon * epsilons);
+	return std::abs(value) < threshold;
 }
 
 // https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/
-bool MathUtils::almostSame(double first, double second, int epsilons)
+bool MathUtils::almostSame(double first, double second, double threshold)
 {
 	double difference = std::abs(first - second);
 
-	if (difference < (epsilon * epsilons))
+	if (difference < threshold)
 		return true;
 
 	double larger = std::max(std::abs(first), std::abs(second));
 
-	if (difference < (larger * epsilon * epsilons))
+	if (difference < (larger * threshold))
 		return true;
 
 	return false;
 }
 
-bool MathUtils::almostSame(std::complex<double> first, std::complex<double> second, int epsilons)
+bool MathUtils::almostSame(std::complex<double> first, std::complex<double> second, double threshold)
 {
-	return almostSame(first.real(), second.real(), epsilons) && almostSame(first.imag(), second.imag(), epsilons);
+	return almostSame(first.real(), second.real(), threshold) && almostSame(first.imag(), second.imag(), threshold);
 }
 
 double MathUtils::degToRad(double degrees)

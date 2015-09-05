@@ -163,7 +163,6 @@
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\MovingAverage.cpp" />
-    <ClCompile Include="src\Math\Polynomial.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Solver.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
@@ -365,6 +364,7 @@
     <None Include="data\shaders\framebuffer_bicubic.vert" />
     <None Include="data\shaders\text.frag" />
     <None Include="data\shaders\text.vert" />
+    <None Include="src\Math\Polynomial.inl" />
     <None Include="src\Utils\Log.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

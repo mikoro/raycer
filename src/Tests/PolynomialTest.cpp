@@ -14,15 +14,16 @@ using namespace Raycer;
 
 TEST_CASE("Polynomial functionality", "[polynomial]")
 {
-	Polynomial polynomial;
+	Polynomial<5> polynomial;
 
 	double coefficients[5] = { 2.0, 7.0, 5.0, 3.0, -10.0 };
-	polynomial.setCoefficients(coefficients, 5);
-	auto result1 = polynomial.findAllRoots(32);
-	auto result2 = polynomial.findAllPositiveRealRoots(32, 0.0001);
+	polynomial.setCoefficients(coefficients);
 
-	REQUIRE(result1.size() == 4);
-	REQUIRE(result2.size() == 2);
+	int count;
+	const double* result = polynomial.findAllPositiveRealRoots(count, 32, 0.0001);
+
+	REQUIRE(count == 1);
+	REQUIRE(MathUtils::almostSame(result[0], 0.79988784795406020));
 }
 
 #endif
