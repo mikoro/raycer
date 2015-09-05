@@ -19,7 +19,7 @@ TEST_CASE("Polynomial functionality", "[polynomial]")
 	double coefficients[5] = { 2.0, 7.0, 5.0, 3.0, -10.0 };
 	polynomial.setCoefficients(coefficients, 5);
 	auto result1 = polynomial.findAllRoots(32);
-	auto result2 = polynomial.findAllRealRoots(32, 0.0001);
+	auto result2 = polynomial.findAllPositiveRealRoots(32, 0.0001);
 
 	REQUIRE(result1.size() == 4);
 	REQUIRE(result2.size() == 2);

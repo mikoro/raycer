@@ -14,7 +14,8 @@ Scene Scene::createTestScene1()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(2.0, 6.0, 9.0);
+	//scene.camera.position = Vector3(6.5, 6.0, 9.0);
+	scene.camera.position = Vector3(0.0, 6.0, 9.0);
 	scene.camera.orientation = EulerAngle(-30.0, 0.0, 0.0);
 
 	// GROUND //
@@ -37,98 +38,145 @@ Scene Scene::createTestScene1()
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// SPHERE 1 //
+	// TRIANGLE //
 
-	ColorTexture sphere1Texture;
-	sphere1Texture.id = 2;
-	sphere1Texture.color = Color(0.0, 1.0, 0.0);
-	sphere1Texture.intensity = 0.5;
+	ColorTexture triangleTexture;
+	triangleTexture.id = 2;
+	triangleTexture.color = Color(1.0, 0.0, 0.0);
+	triangleTexture.intensity = 0.5;
 
-	Material sphere1Material;
-	sphere1Material.id = 2;
-	sphere1Material.colorTextureId = sphere1Texture.id;
+	Material triangleMaterial;
+	triangleMaterial.id = 2;
+	triangleMaterial.colorTextureId = triangleTexture.id;
 
-	Sphere sphere1;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.position = Vector3(0.0, 1.0, 0.0);
-	sphere1.radius = 1.0;
+	Triangle triangle;
+	triangle.id = 2;
+	triangle.invisible = true;
+	triangle.materialId = triangleMaterial.id;
+	triangle.vertices[0] = Vector3(-1.0, 0.0, 0.0);
+	triangle.vertices[1] = Vector3(1.0, 0.0, 0.0);
+	triangle.vertices[2] = Vector3(0.0, 2.0, 0.0);
+	triangle.normals[0] = triangle.normals[1] = triangle.normals[2] = Vector3::FORWARD;
 
-	scene.textures.colorTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	Instance instance;
+	instance.primitiveId = triangle.id;
+	instance.materialId = triangle.materialId;
+	instance.translate = Vector3(0.0, 0.5, 0.0);
+	instance.rotate = EulerAngle(-10.0, 10.0, 10.0);
 
-	// BOX 1 //
+	scene.textures.colorTextures.push_back(triangleTexture);
+	scene.materials.push_back(triangleMaterial);
+	scene.primitives.triangles.push_back(triangle);
+	//scene.primitives.instances.push_back(instance);
 
-	ColorTexture box1Texture;
-	box1Texture.id = 3;
-	box1Texture.color = Color(0.0, 0.0, 1.0);
-	box1Texture.intensity = 0.5;
+	// SPHERE //
 
-	Material box1Material;
-	box1Material.id = 3;
-	box1Material.colorTextureId = box1Texture.id;
+	ColorTexture sphereTexture;
+	sphereTexture.id = 3;
+	sphereTexture.color = Color(0.0, 1.0, 0.0);
+	sphereTexture.intensity = 0.5;
 
-	Box box1;
-	box1.position = Vector3(3.0, 1.0, 0.0);
-	box1.extent = Vector3(2.0, 2.0, 2.0);
-	box1.materialId = box1Material.id;
+	Material sphereMaterial;
+	sphereMaterial.id = 3;
+	sphereMaterial.colorTextureId = sphereTexture.id;
 
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
-	scene.primitives.boxes.push_back(box1);
+	Sphere sphere;
+	sphere.id = 3;
+	sphere.invisible = true;
+	sphere.materialId = sphereMaterial.id;
+	sphere.radius = 1.0;
 
-	// TRIANGLE 1 //
+	instance.primitiveId = sphere.id;
+	instance.materialId = sphere.materialId;
+	instance.translate = Vector3(4.0, 1.5, 0.0);
 
-	ColorTexture triangle1Texture;
-	triangle1Texture.id = 4;
-	triangle1Texture.color = Color(1.0, 0.0, 0.0);
-	triangle1Texture.intensity = 0.5;
+	scene.textures.colorTextures.push_back(sphereTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+	//scene.primitives.instances.push_back(instance);
 
-	Material triangle1Material;
-	triangle1Material.id = 4;
-	triangle1Material.colorTextureId = triangle1Texture.id;
+	// BOX //
 
-	Triangle triangle1;
-	triangle1.materialId = triangle1Material.id;
-	triangle1.vertices[0] = Vector3(-4.0, 0.0, 0.0);
-	triangle1.vertices[1] = Vector3(-2.0, 0.0, 0.0);
-	triangle1.vertices[2] = Vector3(-3.0, 2.0, 0.0);
-	triangle1.normals[0] = triangle1.normals[1] = triangle1.normals[2] = Vector3::FORWARD;
+	ColorTexture boxTexture;
+	boxTexture.id = 4;
+	boxTexture.color = Color(0.0, 0.0, 1.0);
+	boxTexture.intensity = 0.5;
 
-	scene.textures.colorTextures.push_back(triangle1Texture);
-	scene.materials.push_back(triangle1Material);
-	scene.primitives.triangles.push_back(triangle1);
+	Material boxMaterial;
+	boxMaterial.id = 4;
+	boxMaterial.colorTextureId = boxTexture.id;
 
-	// CYLINDER 1 //
+	Box box;
+	box.id = 4;
+	box.invisible = true;
+	box.materialId = boxMaterial.id;
+	box.extent = Vector3(2.0, 2.0, 2.0);
 
-	ColorTexture cylinder1Texture;
-	cylinder1Texture.id = 5;
-	cylinder1Texture.color = Color(1.0, 1.0, 0.0);
-	cylinder1Texture.intensity = 0.5;
+	instance.primitiveId = box.id;
+	instance.materialId = box.materialId;
+	instance.translate = Vector3(8.0, 1.5, 0.0);
+	instance.rotate = EulerAngle(-10.0, 10.0, -10.0);
 
-	Material cylinder1Material;
-	cylinder1Material.id = 5;
-	cylinder1Material.colorTextureId = cylinder1Texture.id;
+	scene.textures.colorTextures.push_back(boxTexture);
+	scene.materials.push_back(boxMaterial);
+	scene.primitives.boxes.push_back(box);
+	//scene.primitives.instances.push_back(instance);
+	
+	// CYLINDER //
 
-	Cylinder cylinder1;
-	cylinder1.id = 1;
-	cylinder1.invisible = true;
-	cylinder1.materialId = cylinder1Material.id;
-	cylinder1.radius = 1.0;
-	cylinder1.height = 2.0;
+	ColorTexture cylinderTexture;
+	cylinderTexture.id = 5;
+	cylinderTexture.color = Color(1.0, 1.0, 0.0);
+	cylinderTexture.intensity = 0.5;
 
-	scene.textures.colorTextures.push_back(cylinder1Texture);
-	scene.materials.push_back(cylinder1Material);
-	scene.primitives.cylinders.push_back(cylinder1);
+	Material cylinderMaterial;
+	cylinderMaterial.id = 5;
+	cylinderMaterial.colorTextureId = cylinderTexture.id;
 
-	// INSTANCE 1 //
+	Cylinder cylinder;
+	cylinder.id = 5;
+	cylinder.invisible = true;
+	cylinder.materialId = cylinderMaterial.id;
+	cylinder.radius = 1.0;
+	cylinder.height = 2.0;
 
-	Instance instance1;
-	instance1.primitiveId = 1;
-	instance1.materialId = cylinder1Material.id;
-	instance1.translate = Vector3(6.0, 0.0, 0.0);
+	instance.primitiveId = cylinder.id;
+	instance.materialId = cylinder.materialId;
+	instance.translate = Vector3(12.0, 0.5, 0.0);
+	instance.rotate = EulerAngle(-10.0, 10.0, 10.0);
 
-	scene.primitives.instances.push_back(instance1);
+	scene.textures.colorTextures.push_back(cylinderTexture);
+	scene.materials.push_back(cylinderMaterial);
+	scene.primitives.cylinders.push_back(cylinder);
+	//scene.primitives.instances.push_back(instance);
+
+	// TORUS //
+
+	ColorTexture torusTexture;
+	torusTexture.id = 6;
+	torusTexture.color = Color(0.0, 1.0, 1.0);
+	torusTexture.intensity = 0.5;
+
+	Material torusMaterial;
+	torusMaterial.id = 6;
+	torusMaterial.colorTextureId = torusTexture.id;
+
+	Torus torus;
+	torus.id = 6;
+	torus.invisible = true;
+	torus.materialId = torusMaterial.id;
+	torus.outerRadius = 1.0;
+	torus.innerRadius = 0.25;
+
+	instance.primitiveId = torus.id;
+	instance.materialId = torus.materialId;
+	instance.translate = Vector3(0.0, 1.25, 0.0);
+	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+
+	scene.textures.colorTextures.push_back(torusTexture);
+	scene.materials.push_back(torusMaterial);
+	scene.primitives.toruses.push_back(torus);
+	scene.primitives.instances.push_back(instance);
 
 	// LIGHTS //
 
@@ -138,7 +186,8 @@ Scene Scene::createTestScene1()
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
 	pointLight1.intensity = 1.5;
-	pointLight1.position = Vector3(2.0, 5.0, 5.0);
+	//pointLight1.position = Vector3(6.5, 10.0, 5.0);
+	pointLight1.position = Vector3(0.0, 10.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 

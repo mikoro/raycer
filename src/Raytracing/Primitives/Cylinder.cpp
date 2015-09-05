@@ -115,7 +115,9 @@ AABB Cylinder::getAABB() const
 
 void Cylinder::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	(void)scale;
 	(void)rotate;
 	(void)translate;
+
+	radius *= scale.x;
+	height *= scale.x;
 }

@@ -259,6 +259,9 @@ void Scene::initialize()
 	for (Cylinder& cylinder : primitives.cylinders)
 		sortPrimitive(&cylinder);
 
+	for (Torus& torus : primitives.toruses)
+		sortPrimitive(&torus);
+
 	for (Mesh& mesh : primitives.meshes)
 		sortPrimitive(&mesh);
 

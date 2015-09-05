@@ -151,20 +151,14 @@ AABB CSG::getAABB() const
 {
 	AABB aabb;
 
-	if (leftPrimitive != nullptr)
-		aabb.expand(leftPrimitive->getAABB());
-
-	if (rightPrimitive != nullptr)
-		aabb.expand(rightPrimitive->getAABB());
+	aabb.expand(leftPrimitive->getAABB());
+	aabb.expand(rightPrimitive->getAABB());
 
 	return aabb;
 }
 
 void CSG::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
 {
-	if (leftPrimitive != nullptr)
-		leftPrimitive->transform(scale, rotate, translate);
-
-	if (rightPrimitive != nullptr)
-		rightPrimitive->transform(scale, rotate, translate);
+	leftPrimitive->transform(scale, rotate, translate);
+	rightPrimitive->transform(scale, rotate, translate);
 }

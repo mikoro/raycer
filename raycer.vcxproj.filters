@@ -370,6 +370,9 @@
     <ClCompile Include="src\Tests\PolynomialTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Primitives\Torus.cpp">
+      <Filter>Raytracing\Primitives</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -630,6 +633,9 @@
     </ClInclude>
     <ClInclude Include="src\Math\Polynomial.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Primitives\Torus.h">
+      <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

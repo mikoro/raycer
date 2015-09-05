@@ -94,7 +94,11 @@ AABB Mesh::getAABB() const
 
 void Mesh::transform(const Vector3& scale_, const EulerAngle& rotate_, const Vector3& translate_)
 {
-	(void)scale_;
-	(void)rotate_;
-	(void)translate_;
+	if (enableBVH)
+		bvh.transform(scale_, rotate_, translate_);
+	else
+	{
+		for (Triangle& triangle : triangles)
+			triangle.transform(scale_, rotate_, translate_);
+	}
 }

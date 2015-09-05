@@ -19,6 +19,11 @@ Polynomial::Polynomial(int size_)
 	setSize(size_);
 }
 
+Polynomial::Polynomial(double* coefficients_, int size_)
+{
+	setCoefficients(coefficients_, size_);
+}
+
 void Polynomial::setSize(int size_)
 {
 	size = size_;
@@ -28,6 +33,7 @@ void Polynomial::setSize(int size_)
 	seedRoots.resize(degree);
 	roots.resize(degree);
 	previousRoots.resize(degree);
+	positiveRealRoots.reserve(degree);
 
 	for (int i = 0; i < size; ++i)
 		coefficients[i] = 0.0;
@@ -143,20 +149,29 @@ std::vector<std::complex<double>> Polynomial::findAllRoots(int iterations)
 	return roots;
 }
 
-std::vector<double> Polynomial::findAllRealRoots(int iterations, double maxImagValue)
+std::vector<double> Polynomial::findAllPositiveRealRoots(int iterations, double maxImagValue)
 {
 	findAllRoots(iterations);
-
-	std::vector<double> realRoots;
-	realRoots.reserve(degree);
+	positiveRealRoots.clear();
 
 	for (int i = 0; i < degree; ++i)
 	{
-		if (std::abs(roots[i].imag()) < maxImagValue)
-			realRoots.push_back(roots[i].real());
+		if (std::abs(roots[i].imag()) < maxImagValue && roots[i].real() > 0.0)
+			positiveRealRoots.push_back(roots[i].real());
 	}
 
-	std::sort(realRoots.begin(), realRoots.end());
+	return positiveRealRoots;
+}
 
-	return realRoots;
+bool Polynomial::findSmallestPositiveRealRoot(double& result, int iterations, double maxImagValue)
+{
+	findAllPositiveRealRoots(iterations, maxImagValue);
+
+	if (positiveRealRoots.size() == 0)
+		return false;
+
+	std::sort(positiveRealRoots.begin(), positiveRealRoots.end());
+	result = positiveRealRoots[0];
+
+	return true;
 }

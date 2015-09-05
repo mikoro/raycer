@@ -15,10 +15,11 @@ namespace Raycer
 
 		Polynomial();
 		Polynomial(int size);
+		Polynomial(double* coefficients, int size);
 
 		void setSize(int size);
 		void setCoefficient(int index, double value);
-		void setCoefficients(double* values, int size);
+		void setCoefficients(double* coefficients, int size);
 
 		double evaluate(double x) const;
 		std::complex<double> evaluate(const std::complex<double>& x) const;
@@ -26,8 +27,9 @@ namespace Raycer
 		bool isNormalized() const;
 		void normalize();
 
-		std::vector<std::complex<double>> findAllRoots(int iterations = 32);
-		std::vector<double> findAllRealRoots(int iterations = 32, double maxImagValue = 0.0001);
+		std::vector<std::complex<double>> findAllRoots(int iterations = 64);
+		std::vector<double> findAllPositiveRealRoots(int iterations = 64, double maxImagValue = 0.0001);
+		bool findSmallestPositiveRealRoot(double& result, int iterations = 64, double maxImagValue = 0.0001);
 
 	private:
 
@@ -35,6 +37,7 @@ namespace Raycer
 		std::vector<std::complex<double>> seedRoots;
 		std::vector<std::complex<double>> roots;
 		std::vector<std::complex<double>> previousRoots;
+		std::vector<double> positiveRealRoots;
 
 		int size = 0;
 		int degree = 0;
