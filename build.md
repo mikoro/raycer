@@ -44,12 +44,20 @@ The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, 
 - Install boost (macports)
 - Install GLFW (macports)
 - Install Freetype (macports)
-- Optional: Compile freetype-gl (gcc49)
+- Optional: Compile freetype-gl (with gcc49)
 
-Compile:
+Compile and run:
 
     export CXX=g++
     make -j4
+	cd bin && ./raycer
+
+Build and run bundle:
+
+    platform/mac/build_bundle.sh
+	open Raycer.app
+
+See remarks of the linux build.
 
 ## Framework versions
 

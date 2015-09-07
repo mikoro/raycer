@@ -15,7 +15,7 @@ endif
 # mac
 ifneq "$(findstring darwin,$(UNAME))" ""
 	CFLAGS += -isystem /opt/local/include -Wno-deprecated-declarations
-	LDFLAGS += -L/opt/local/lib -Lplatform/mac/lib -framework Cocoa -framework OpenGL -framework OpenCL -framework IOKit -framework CoreVideo -lstdc++ -lglfw -lboost_system-mt -lfreetype -lfreetype-gl
+	LDFLAGS += -L/opt/local/lib -Lplatform/mac/lib -framework Cocoa -framework OpenGL -framework OpenCL -framework IOKit -framework CoreVideo -lstdc++ -lglfw -lboost_system-mt -lboost_filesystem-mt -lfreetype -lfreetype-gl
 endif
 
 # travis-ci environment
