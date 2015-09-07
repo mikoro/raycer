@@ -106,7 +106,7 @@ void Camera::update(const Scene& scene, double timeStep)
 			translate += right * (double)mouseInfo.deltaX / 100.0;
 		}
 
-		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.01);
+		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.05);
 		movingPrimitive->transform(scale, rotate, translate);
 	}
 

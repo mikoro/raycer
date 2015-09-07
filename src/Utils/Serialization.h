@@ -48,7 +48,10 @@ namespace Raycer
 			cereal::make_nvp("orthoSize", b.orthoSize),
 			cereal::make_nvp("fishEyeAngle", b.fishEyeAngle),
 			cereal::make_nvp("apertureSize", b.apertureSize),
-			cereal::make_nvp("focalDistance", b.focalDistance));
+			cereal::make_nvp("focalDistance", b.focalDistance),
+			cereal::make_nvp("isTimeVariant", b.isTimeVariant),
+			cereal::make_nvp("translateInTime", b.translateInTime),
+			cereal::make_nvp("rotateInTime", b.rotateInTime));
 	}
 
 	template<class Archive>
@@ -141,6 +144,7 @@ namespace Raycer
 			cereal::make_nvp("boxes", b.boxes),
 			cereal::make_nvp("triangles", b.triangles),
 			cereal::make_nvp("cylinders", b.cylinders),
+			cereal::make_nvp("toruses", b.toruses),
 			cereal::make_nvp("meshes", b.meshes),
 			cereal::make_nvp("instances", b.instances),
 			cereal::make_nvp("csgs", b.csgs));
@@ -257,6 +261,16 @@ namespace Raycer
 			cereal::make_nvp("invisible", b.invisible),
 			cereal::make_nvp("radius", b.radius),
 			cereal::make_nvp("height", b.height));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, Torus& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("invisible", b.invisible),
+			cereal::make_nvp("outerRadius", b.outerRadius),
+			cereal::make_nvp("innerRadius", b.innerRadius));
 	}
 
 	template<class Archive>

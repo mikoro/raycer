@@ -1,3 +1,7 @@
+misc
+ - scaling in bbox creation
+ - scaling primitives (only instances)
+
 tracer
  - raymarching + height map + volumetric fog
  - normal mapping
@@ -8,7 +12,7 @@ lighting
  - path tracing + materials
 
 primitives
- - metaball
+ - blinn's blobs
  - higher order polynomial structure
 
 textures

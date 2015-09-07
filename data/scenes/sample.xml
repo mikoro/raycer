@@ -3,9 +3,9 @@
 	<scene>
 		<camera>
 			<position>
-				<x>0</x>
-				<y>5</y>
-				<z>7</z>
+				<x>6.5</x>
+				<y>6</y>
+				<z>9</z>
 			</position>
 			<orientation>
 				<pitch>-30</pitch>
@@ -17,7 +17,18 @@
 			<orthoSize>10</orthoSize>
 			<fishEyeAngle>180</fishEyeAngle>
 			<apertureSize>0.10000000000000001</apertureSize>
-			<focalLenght>10</focalLenght>
+			<focalDistance>10</focalDistance>
+			<isTimeVariant>false</isTimeVariant>
+			<translateInTime>
+				<x>0</x>
+				<y>0</y>
+				<z>0</z>
+			</translateInTime>
+			<rotateInTime>
+				<pitch>0</pitch>
+				<yaw>0</yaw>
+				<roll>0</roll>
+			</rotateInTime>
 		</camera>
 		<raytracer>
 			<maxRayIterations>3</maxRayIterations>
@@ -35,12 +46,14 @@
 				<a>1</a>
 			</offLensColor>
 			<multiSamples>0</multiSamples>
-			<dofSamples>0</dofSamples>
 			<timeSamples>0</timeSamples>
+			<cameraSamples>0</cameraSamples>
 			<multiSamplerType>3</multiSamplerType>
 			<multiSamplerFilterType>3</multiSamplerFilterType>
-			<dofSamplerType>3</dofSamplerType>
 			<timeSamplerType>2</timeSamplerType>
+			<cameraSamplerType>3</cameraSamplerType>
+			<visualizeDepth>false</visualizeDepth>
+			<visualizeDepthMaxDistance>20</visualizeDepthMaxDistance>
 		</raytracer>
 		<toneMapper>
 			<type>1</type>
@@ -66,9 +79,9 @@
 			<heightSteepness>1</heightSteepness>
 		</simpleFog>
 		<rootBVH>
-			<enabled>false</enabled>
+			<enabled>true</enabled>
 			<buildInfo>
-				<maxLeafSize>5</maxLeafSize>
+				<maxLeafSize>1</maxLeafSize>
 				<useSAH>true</useSAH>
 				<regularSAHSplits>0</regularSAHSplits>
 				<axisSelection>0</axisSelection>
@@ -147,8 +160,8 @@
 					<id>2</id>
 					<intensity>0.5</intensity>
 					<color>
-						<r>0</r>
-						<g>1</g>
+						<r>1</r>
+						<g>0</g>
 						<b>0</b>
 						<a>1</a>
 					</color>
@@ -158,8 +171,8 @@
 					<intensity>0.5</intensity>
 					<color>
 						<r>0</r>
-						<g>0</g>
-						<b>1</b>
+						<g>1</g>
+						<b>0</b>
 						<a>1</a>
 					</color>
 				</value2>
@@ -167,12 +180,32 @@
 					<id>4</id>
 					<intensity>0.5</intensity>
 					<color>
-						<r>1</r>
+						<r>0</r>
 						<g>0</g>
-						<b>0</b>
+						<b>1</b>
 						<a>1</a>
 					</color>
 				</value3>
+				<value4>
+					<id>5</id>
+					<intensity>0.5</intensity>
+					<color>
+						<r>1</r>
+						<g>1</g>
+						<b>0</b>
+						<a>1</a>
+					</color>
+				</value4>
+				<value5>
+					<id>6</id>
+					<intensity>0.5</intensity>
+					<color>
+						<r>0</r>
+						<g>1</g>
+						<b>1</b>
+						<a>1</a>
+					</color>
+				</value5>
 			</colorTextures>
 			<checkerTextures size="dynamic"/>
 			<imageTextures size="dynamic"/>
@@ -358,6 +391,92 @@
 					<a>1</a>
 				</attenuationColor>
 			</value3>
+			<value4>
+				<id>5</id>
+				<colorTextureId>5</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
+				<skipLighting>false</skipLighting>
+				<nonShadowing>false</nonShadowing>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
+				<refractiveIndex>1</refractiveIndex>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
+				<attenuation>1</attenuation>
+				<attenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</attenuationColor>
+			</value4>
+			<value5>
+				<id>6</id>
+				<colorTextureId>6</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
+				<skipLighting>false</skipLighting>
+				<nonShadowing>false</nonShadowing>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
+				<refractiveIndex>1</refractiveIndex>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
+				<attenuation>1</attenuation>
+				<attenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</attenuationColor>
+			</value5>
 		</materials>
 		<lights>
 			<ambientLight>
@@ -385,8 +504,8 @@
 					</color>
 					<intensity>1.5</intensity>
 					<position>
-						<x>5</x>
-						<y>5</y>
+						<x>6.5</x>
+						<y>10</y>
 						<z>5</z>
 					</position>
 					<distance>20</distance>
@@ -404,6 +523,7 @@
 				<value0>
 					<id>0</id>
 					<materialId>1</materialId>
+					<invisible>false</invisible>
 					<position>
 						<x>0</x>
 						<y>0</y>
@@ -418,28 +538,25 @@
 			</planes>
 			<spheres size="dynamic">
 				<value0>
-					<id>0</id>
-					<materialId>2</materialId>
+					<id>3</id>
+					<materialId>3</materialId>
+					<invisible>true</invisible>
 					<position>
-						<x>0</x>
-						<y>1</y>
-						<z>0</z>
-					</position>
-					<displacement>
 						<x>0</x>
 						<y>0</y>
 						<z>0</z>
-					</displacement>
+					</position>
 					<radius>1</radius>
 				</value0>
 			</spheres>
 			<boxes size="dynamic">
 				<value0>
-					<id>0</id>
-					<materialId>3</materialId>
+					<id>4</id>
+					<materialId>4</materialId>
+					<invisible>true</invisible>
 					<position>
-						<x>3</x>
-						<y>1</y>
+						<x>0</x>
+						<y>0</y>
 						<z>0</z>
 					</position>
 					<extent>
@@ -451,21 +568,22 @@
 			</boxes>
 			<triangles size="dynamic">
 				<value0>
-					<id>0</id>
-					<materialId>4</materialId>
+					<id>2</id>
+					<materialId>2</materialId>
+					<invisible>true</invisible>
 					<vertices>
 						<value0>
-							<x>-4</x>
+							<x>-1</x>
 							<y>0</y>
 							<z>0</z>
 						</value0>
 						<value1>
-							<x>-2</x>
+							<x>1</x>
 							<y>0</y>
 							<z>0</z>
 						</value1>
 						<value2>
-							<x>-3</x>
+							<x>0</x>
 							<y>2</y>
 							<z>0</z>
 						</value2>
@@ -504,22 +622,147 @@
 					<normal>
 						<x>0</x>
 						<y>0</y>
-						<z>1</z>
+						<z>0</z>
 					</normal>
 					<tangent>
-						<x>-nan(ind)</x>
-						<y>-nan(ind)</y>
-						<z>-nan(ind)</z>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
 					</tangent>
 					<bitangent>
-						<x>-nan(ind)</x>
-						<y>-nan(ind)</y>
-						<z>-nan(ind)</z>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
 					</bitangent>
 				</value0>
 			</triangles>
+			<cylinders size="dynamic">
+				<value0>
+					<id>5</id>
+					<materialId>5</materialId>
+					<invisible>true</invisible>
+					<radius>1</radius>
+					<height>2</height>
+				</value0>
+			</cylinders>
+			<toruses size="dynamic">
+				<value0>
+					<id>6</id>
+					<materialId>6</materialId>
+					<invisible>true</invisible>
+					<outerRadius>1</outerRadius>
+					<innerRadius>0.25</innerRadius>
+				</value0>
+			</toruses>
 			<meshes size="dynamic"/>
-			<instances size="dynamic"/>
+			<instances size="dynamic">
+				<value0>
+					<id>0</id>
+					<materialId>2</materialId>
+					<invisible>false</invisible>
+					<primitiveId>2</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>10</roll>
+					</rotate>
+					<translate>
+						<x>0</x>
+						<y>0.5</y>
+						<z>0</z>
+					</translate>
+				</value0>
+				<value1>
+					<id>0</id>
+					<materialId>3</materialId>
+					<invisible>false</invisible>
+					<primitiveId>3</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>10</roll>
+					</rotate>
+					<translate>
+						<x>3</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+				</value1>
+				<value2>
+					<id>0</id>
+					<materialId>4</materialId>
+					<invisible>false</invisible>
+					<primitiveId>4</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>-10</roll>
+					</rotate>
+					<translate>
+						<x>6</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+				</value2>
+				<value3>
+					<id>0</id>
+					<materialId>5</materialId>
+					<invisible>false</invisible>
+					<primitiveId>5</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>10</roll>
+					</rotate>
+					<translate>
+						<x>9</x>
+						<y>0.5</y>
+						<z>0</z>
+					</translate>
+				</value3>
+				<value4>
+					<id>0</id>
+					<materialId>6</materialId>
+					<invisible>false</invisible>
+					<primitiveId>6</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-20</pitch>
+						<yaw>-20</yaw>
+						<roll>0</roll>
+					</rotate>
+					<translate>
+						<x>12</x>
+						<y>1.75</y>
+						<z>0</z>
+					</translate>
+				</value4>
+			</instances>
+			<csgs size="dynamic"/>
 		</primitives>
 		<objScenes size="dynamic"/>
 	</scene>

@@ -48,11 +48,13 @@ AABB AABB::createFromCenterExtent(const Vector3& center, const Vector3& extent)
 AABB AABB::createFromVertices(const Vector3& v0, const Vector3& v1, const Vector3& v2)
 {
 	Vector3 min;
+
 	min.x = std::min(v0.x, std::min(v1.x, v2.x));
 	min.y = std::min(v0.y, std::min(v1.y, v2.y));
 	min.z = std::min(v0.z, std::min(v1.z, v2.z));
 
 	Vector3 max;
+
 	max.x = std::max(v0.x, std::max(v1.x, v2.x));
 	max.y = std::max(v0.y, std::max(v1.y, v2.y));
 	max.z = std::max(v0.z, std::max(v1.z, v2.z));
