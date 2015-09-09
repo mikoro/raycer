@@ -33,7 +33,6 @@ using namespace std::chrono;
 
 int ConsoleRunner::run()
 {
-	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 
 	interrupted = false;
@@ -71,27 +70,10 @@ int ConsoleRunner::run()
 		image.save(settings.image.fileName);
 
 		if (settings.image.autoView)
-		{
-			log.logInfo("Opening the image in an external viewer");
-
-#ifdef _WIN32
-			ShellExecuteA(NULL, "open", settings.image.fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
-#else
-			int pid = fork();
-
-			if (pid == 0)
-			{
-#ifdef __linux
-				char* arg[] = {(char*)"xdg-open", (char*)settings.image.fileName.c_str(), (char*)0};
-#elif __APPLE__
-				char* arg[] = {(char*)"open", (char*)settings.image.fileName.c_str(), (char*)0};
-#endif
-				if (execvp(arg[0], arg) == -1)
-					log.logWarning("Could not open the image (%d)", errno);
-			}
-#endif
-		}
+			openImageExternally(settings.image.fileName);
 	}
+	else
+		image.save("partial_result.png");
 
 	return 0;
 }
@@ -182,9 +164,27 @@ void ConsoleRunner::interrupt()
 	interrupted = true;
 }
 
-Image& ConsoleRunner::getResultImage()
+void ConsoleRunner::openImageExternally(const std::string& fileName)
 {
-	return image;
+	Log& log = App::getLog();
+	log.logInfo("Opening the image in an external viewer");
+
+#ifdef _WIN32
+	ShellExecuteA(NULL, "open", fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+#else
+	int pid = fork();
+
+	if (pid == 0)
+	{
+#ifdef __linux
+		char* arg[] = { (char*)"xdg-open", (char*)fileName.c_str(), (char*)0 };
+#elif __APPLE__
+		char* arg[] = { (char*)"open", (char*)fileName.c_str(), (char*)0 };
+#endif
+		if (execvp(arg[0], arg) == -1)
+			log.logWarning("Could not open the image (%d)", errno);
+	}
+#endif
 }
 
 void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed)

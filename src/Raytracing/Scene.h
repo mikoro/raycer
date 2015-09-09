@@ -58,8 +58,8 @@ namespace Raycer
 		static Scene loadFromXmlString(const std::string& text);
 
 		void saveToFile(const std::string& fileName) const;
-		std::string saveToJsonString() const;
-		std::string saveToXmlString() const;
+		std::string getJsonString() const;
+		std::string getXmlString() const;
 
 		void initialize();
 

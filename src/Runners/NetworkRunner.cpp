@@ -88,7 +88,7 @@ void NetworkRunner::runClient()
 	std::cout << "Sending a job to servers...\n\n";
 	sendJobs();
 
-	std::cout << "Waiting for results...\n\n";
+	std::cout << "\nWaiting for results...\n\n";
 	receiveResults();
 }
 
@@ -256,15 +256,25 @@ void NetworkRunner::sendJobs()
 	{
 		Settings& settings = App::getSettings();
 
-		std::ifstream settingsFile(settings.scene.fileName);
+		std::string sceneString;
 
-		if (!settingsFile.good())
-			throw std::runtime_error("Could not open the scene file");
+		if (settings.scene.enableTestScenes)
+		{
+			Scene scene = Scene::createTestScene(settings.scene.testSceneNumber);
+			sceneString = scene.getJsonString();
+		}
+		else
+		{
+			std::ifstream sceneFile(settings.scene.fileName);
 
-		std::stringstream ss;
-		ss << settingsFile.rdbuf();
-		std::string settingsFileString = ss.str();
-		settingsFile.close();
+			if (!sceneFile.good())
+				throw std::runtime_error("Could not open the scene file");
+
+			std::stringstream ss;
+			ss << sceneFile.rdbuf();
+			sceneString = ss.str();
+			sceneFile.close();
+		}
 
 		int serverCount = (int)serverEndpoints.size();
 		int width = settings.image.width;
@@ -281,7 +291,7 @@ void NetworkRunner::sendJobs()
 			int pixelOffset = i * pixelsPerServer;
 			int pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
 
-			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelOffset, pixelCount, settingsFileString);
+			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelOffset, pixelCount, sceneString);
 
 			ip::tcp::socket socket(io);
 			socket.connect(serverEndpoints.at(i));
@@ -336,6 +346,8 @@ void NetworkRunner::receiveJobs()
 			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nAddress: (.+)\nPort: (.+)\nWidth: (.+)\nHeight: (.+)\nPixelOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
+			std::cout << "\nJob received!\n\n";
+
 			ServerJob job;
 
 			int port;
@@ -360,9 +372,7 @@ void NetworkRunner::receiveJobs()
 			ss.str(match[6]);
 			ss >> job.pixelCount;
 
-			std::cout << "\nJob received!\n\n";
-
-			job.scene.loadFromJsonString(bodyString);
+			job.scene = Scene::loadFromJsonString(bodyString);
 
 			jobQueueMutex.lock();
 			jobQueue.push(job);
@@ -449,7 +459,7 @@ void NetworkRunner::handleJobs()
 					ip::tcp::socket socket(io);
 					socket.connect(job.clientEndpoint);
 					boost::asio::write(socket, boost::asio::buffer(message));
-					boost::asio::write(socket, boost::asio::buffer(job.image.getPixelData(), job.image.getPixelData().size() * sizeof(Color)));
+					boost::asio::write(socket, boost::asio::buffer(&job.image.getPixelData()[0], job.image.getPixelData().size() * sizeof(Color)));
 					socket.close();
 
 					break;
@@ -590,6 +600,9 @@ void NetworkRunner::receiveResults()
 			memcpy((char*)&resultImage.getPixelData()[0] + part.pixelOffset * sizeof(Color), &part.pixelData[0], part.pixelCount * sizeof(Color));
 
 		resultImage.save(settings.image.fileName);
+
+		if (settings.image.autoView)
+			ConsoleRunner::openImageExternally(settings.image.fileName);
 	}
 	catch (const std::exception& ex)
 	{

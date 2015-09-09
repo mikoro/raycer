@@ -22,7 +22,7 @@ namespace Raycer
 		void run(RaytracerState& state);
 		void interrupt();
 
-		Image& getResultImage();
+		static void openImageExternally(const std::string& fileName);
 
 	private:
 

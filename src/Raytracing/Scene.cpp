@@ -69,7 +69,7 @@ Scene Scene::loadFromFile(const std::string& fileName)
 	std::ifstream file(fileName, std::ios::binary);
 
 	if (!file.good())
-		throw std::runtime_error("Could not open the scene file");
+		throw std::runtime_error("Could not open the scene file for loading");
 
 	Scene scene;
 
@@ -91,6 +91,8 @@ Scene Scene::loadFromFile(const std::string& fileName)
 	}
 	else
 		throw std::runtime_error("Unsupported scene file format");
+
+	file.close();
 
 	return scene;
 }
@@ -127,7 +129,7 @@ void Scene::saveToFile(const std::string& fileName) const
 	std::ofstream file(fileName, std::ios::binary);
 
 	if (!file.good())
-		throw std::runtime_error("Could not open the scene file");
+		throw std::runtime_error("Could not open the scene file for saving");
 
 	if (StringUtils::endsWith(fileName, ".json"))
 	{
@@ -147,27 +149,37 @@ void Scene::saveToFile(const std::string& fileName) const
 	}
 	else
 		throw std::runtime_error("Unsupported scene file format");
+
+	file.close();
 }
 
-std::string Scene::saveToJsonString() const
+std::string Scene::getJsonString() const
 {
 	App::getLog().logInfo("Saving the scene to JSON string");
 
 	std::stringstream ss;
-	cereal::JSONOutputArchive archive(ss);
-	archive(*this);
+
+	// force desctructor invocation for flushing
+	{
+		cereal::JSONOutputArchive archive(ss);
+		archive(cereal::make_nvp("scene", *this));
+	}
 
 	return ss.str();
 }
 
-std::string Scene::saveToXmlString() const
+std::string Scene::getXmlString() const
 {
 	App::getLog().logInfo("Saving the scene to XML string");
 
 	std::stringstream ss;
-	cereal::XMLOutputArchive archive(ss);
-	archive(*this);
 
+	// force desctructor invocation for flushing
+	{
+		cereal::XMLOutputArchive archive(ss);
+		archive(cereal::make_nvp("scene", *this));
+	}
+	
 	return ss.str();
 }
 
