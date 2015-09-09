@@ -104,7 +104,7 @@ void Framebuffer::resize(int width, int height)
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	GLHelper::checkError("Could not reserve OpenGL texture memory");
@@ -120,7 +120,7 @@ void Framebuffer::setWindowSize(int width, int height)
 	windowHeight = height;
 
 	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, 0);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
