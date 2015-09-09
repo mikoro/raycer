@@ -50,12 +50,12 @@ Compile and run:
 
     export CXX=g++
     make -j4
-	cd bin && ./raycer
+    cd bin && ./raycer
 
 Build and run bundle:
 
     platform/mac/build_bundle.sh
-	open Raycer.app
+    open Raycer.app
 
 See remarks of the linux build.
 
