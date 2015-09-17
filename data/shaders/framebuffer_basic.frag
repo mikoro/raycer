@@ -1,15 +1,11 @@
-#version 150
+#version 330
+
+in vec2 vTexcoord;
+out vec4 fColor;
 
 uniform sampler2D texture0;
 
-in Data
-{
-	vec2 texcoord;
-} fsin;
-
-out vec3 color;
-
 void main()
 {
-	color = texture(texture0, fsin.texcoord).rgb;
+	fColor = texture(texture0, vTexcoord);
 }

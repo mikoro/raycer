@@ -1,22 +1,18 @@
-#version 150
+#version 330
 
 /*
 Filtering fragment shader. Filtering is done with 2D convolution using different kernels.
 Source and destination textures/rendertargets are of the same size.
 */
 
+in vec2 vTexcoord;
+out vec4 fColor;
+
 uniform sampler2D texture0;
 uniform float textureWidth;
 uniform float textureHeight;
 uniform float texelWidth;
 uniform float texelHeight;
-
-in Data
-{
-	vec2 texcoord;
-} fsin;
-
-out vec3 color;
 
 // uncomment this to bypass the filtering completely
 #define BYPASS
@@ -39,21 +35,21 @@ const float kernel[9] = float[](
 );
 */
 
+/*
 // EMBOSS //
 const float kernel[9] = float[](
 	-2, -1,  0,
 	-1,  1,  1,
 	 0,  1,  2
 );
+*/
 
-/*
 // EDGE //
 const float kernel[9] = float[](
 	-1, -1, -1,
 	-1,  8, -1,
 	-1, -1, -1
 );
-*/
 
 void main()
 {
@@ -70,15 +66,15 @@ void main()
 			vec2 offset = vec2(ofx, ofy);
 			
 			// evaluate the texel color
-			vec4 c = texture(texture0, fsin.texcoord + offset);
+			vec4 c = texture(texture0, vTexcoord + offset);
 			float f = kernel[(y + 1) * 3 + (x + 1)];
 			
 			combinedColor += c * f;
 		}
 	}
 	
-	color = combinedColor.rgb;
+	fColor = combinedColor;
 #else
-	color = texture(texture0, fsin.texcoord).rgb;
+	fColor = texture(texture0, vTexcoord);
 #endif
 }

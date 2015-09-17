@@ -1,4 +1,4 @@
-#version 150
+#version 330
 
 /*
 Resampling fragment shader. Interpolates a bigger/smaller image from the original
@@ -11,28 +11,24 @@ Digital Image Processing: PIKS Inside
 Reconstruction Filters in Computer Graphics (Don P. Mitchell, Arun N. Netravali)
 */
 
+in vec2 vTexcoord;
+out vec4 fColor;
+
 uniform sampler2D texture0;
 uniform float textureWidth;
 uniform float textureHeight;
 uniform float texelWidth;
 uniform float texelHeight;
 
-in Data
-{
-	vec2 texcoord;
-} fsin;
+#define INTERPOLATION_FUNCTION lanczos
 
-out vec3 color;
-
-#define INTERPOLATION_FUNCTION cubic_bspline
-
-float square(float x)
+float box(float x)
 {
 	x = abs(x) / 2.0f;
 	return (x < 0.5f) ? 1.0f : 0.0f;
 }
 
-float triangle(float x)
+float tent(float x)
 {
 	x = abs(x) / 2.0f;
 	return (1.0f - x);
@@ -66,7 +62,7 @@ float bell(float x)
 //#define B (3.0f / 2.0f)
 //#define C (-1.0f / 4.0f)
 
-float cubic_bspline(float x)
+float mitchell(float x)
 {
 	x = abs(x);
 	
@@ -92,8 +88,8 @@ float lanczos(float x)
 void main()
 {
 	// coordinates on the sampled texture [0 .. width/height]
-	float tx = fsin.texcoord.x * textureWidth;
-	float ty = fsin.texcoord.y * textureHeight;
+	float tx = vTexcoord.x * textureWidth;
+	float ty = vTexcoord.y * textureHeight;
 	
 	// texel centered coordinates on the sampled texture [0 .. 1]
 	float ctx = (floor(tx) + 0.5f) / textureWidth;
@@ -130,5 +126,5 @@ void main()
 		}
 	}
 	
-	color = (combinedColor / normalization).rgb;
+	fColor = (combinedColor / normalization);
 }
