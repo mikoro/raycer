@@ -78,12 +78,17 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 	double t = v0v2.dot(qvec) * invDeterminant;
 
-	if (t < 0.0 || t < ray.minDistance || t > ray.maxDistance)
+	if (t < 0.0)
 		return false;
 
-	// another intersection is closer
-	if (t > intersection.distance)
-		return false;
+	if (!ray.isInstanceRay)
+	{
+		if (t < ray.minDistance || t > ray.maxDistance)
+			return false;
+
+		if (t > intersection.distance)
+			return false;
+	}
 
 	double w = 1.0 - u - v;
 

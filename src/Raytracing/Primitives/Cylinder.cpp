@@ -74,11 +74,14 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 		if (tempIntersection.distance < 0.0)
 			return false;
 
-		if (tempIntersection.distance < ray.minDistance || tempIntersection.distance > ray.maxDistance)
-			return false;
+		if (!ray.isInstanceRay)
+		{
+			if (tempIntersection.distance < ray.minDistance || tempIntersection.distance > ray.maxDistance)
+				return false;
 
-		if (tempIntersection.distance > intersection.distance)
-			return false;
+			if (tempIntersection.distance > intersection.distance)
+				return false;
+		}
 
 		return true;
 	};

@@ -1,6 +1,5 @@
 misc
- - scaling in bbox creation
- - scaling primitives (only instances)
+ - extra scaling in bbox creation
 
 tracer
  - raymarching + height map + volumetric fog
@@ -13,7 +12,6 @@ lighting
 
 primitives
  - blinn's blobs
- - higher order polynomial structure
 
 textures
  - EWA texture filtering

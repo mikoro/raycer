@@ -51,11 +51,14 @@ bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 	if (!polynomial.findSmallestPositiveRealRoot(t, 32, 0.0001, 0.01))
 		return false;
 
-	if (t < ray.minDistance || t > ray.maxDistance)
-		return false;
+	if (!ray.isInstanceRay)
+	{
+		if (t < ray.minDistance || t > ray.maxDistance)
+			return false;
 
-	if (t > intersection.distance)
-		return false;
+		if (t > intersection.distance)
+			return false;
+	}
 
 	Vector3 ip = ray.origin + (t * ray.direction);
 	Vector3 normal;

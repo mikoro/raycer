@@ -103,11 +103,14 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 	bool isInside = (tmin < 0.0);
 	double t = isInside ? tmax : tmin;
 
-	if (t < ray.minDistance || t > ray.maxDistance)
-		return false;
+	if (!ray.isInstanceRay)
+	{
+		if (t < ray.minDistance || t > ray.maxDistance)
+			return false;
 
-	if (t > intersection.distance)
-		return false;
+		if (t > intersection.distance)
+			return false;
+	}
 
 	intersection = calculateIntersection(t, isInside ? maxNormal : minNormal, CSGDirection::IN);
 

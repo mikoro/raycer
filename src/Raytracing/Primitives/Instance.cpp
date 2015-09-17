@@ -63,6 +63,7 @@ bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std
 
 	instanceRay.origin = transformationInv.transformPosition(ray.origin);
 	instanceRay.direction = transformationInv.transformDirection(ray.direction).normalized();
+	instanceRay.isInstanceRay = true;
 	instanceRay.update();
 
 	bool wasFound = primitive->intersect(instanceRay, instanceIntersection, instanceIntersections);

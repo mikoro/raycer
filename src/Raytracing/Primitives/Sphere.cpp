@@ -86,11 +86,14 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 	// default intersection
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 
-	if (t < ray.minDistance || t > ray.maxDistance)
-		return false;
+	if (!ray.isInstanceRay)
+	{
+		if (t < ray.minDistance || t > ray.maxDistance)
+			return false;
 
-	if (t > intersection.distance)
-		return false;
+		if (t > intersection.distance)
+			return false;
+	}
 
 	intersection = calculateIntersection(t, CSGDirection::IN);
 
