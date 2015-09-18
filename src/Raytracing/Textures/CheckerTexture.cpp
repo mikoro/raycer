@@ -40,12 +40,12 @@ double CheckerTexture::getValue(const Vector2& texcoord, const Vector3& position
 	return 0.0;
 }
 
-Vector3 CheckerTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
+Vector3 CheckerTexture::getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const
 {
 	(void)texcoord;
 	(void)position;
 
-	type = TextureNormalType::NORMAL;
+	type = TextureNormalDataType::NORMAL_MAP;
 
 	return Vector3(0.0, 0.0, 0.0);
 }

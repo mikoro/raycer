@@ -3,7 +3,6 @@ misc
 
 tracer
  - raymarching + height map + volumetric fog
- - normal mapping
  - soft reflections
  - relativistic effects
 

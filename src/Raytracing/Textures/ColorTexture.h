@@ -19,7 +19,7 @@ namespace Raycer
 
 		Color getColor(const Vector2& texcoord, const Vector3& position) const;
 		double getValue(const Vector2& texcoord, const Vector3& position) const;
-		Vector3 getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const;
+		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const;
 
 		Color color;
 	};

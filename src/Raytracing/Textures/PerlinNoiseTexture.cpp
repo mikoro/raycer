@@ -30,7 +30,7 @@ double PerlinNoiseTexture::getValue(const Vector2& texcoord, const Vector3& posi
 		return perlinNoise.getNoise(position.x * scale.x, position.y * scale.y, position.z * scale.z);
 }
 
-Vector3 PerlinNoiseTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
+Vector3 PerlinNoiseTexture::getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const
 {
 	const double epsilon = 0.1;
 	double f = getValue(texcoord, position);
@@ -41,7 +41,7 @@ Vector3 PerlinNoiseTexture::getNormal(const Vector2& texcoord, const Vector3& po
 	double dfy = (fy - f) / epsilon;
 	double dfz = (fz - f) / epsilon;
 
-	type = TextureNormalType::GRADIENT;
+	type = TextureNormalDataType::GRADIENT;
 
 	return Vector3(dfx, dfy, dfz);
 }

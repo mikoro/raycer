@@ -62,18 +62,29 @@ double ImageTexture::getValue(const Vector2& texcoord, const Vector3& position) 
 	return image.getPixelBilinear(texcoord.x, texcoord.y).getLuminance();
 }
 
-Vector3 ImageTexture::getNormal(const Vector2& texcoord, const Vector3& position, TextureNormalType& type) const
+Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const
 {
 	(void)position;
 
 	Vector3 normal;
-	type = TextureNormalType::BUMP;
 
 	if (isBumpMap)
 	{
 		// weird suffle is needed to make this look right
 		normal.y = -bumpMapX.getPixelBilinear(texcoord.x, texcoord.y).r;
 		normal.x = bumpMapY.getPixelBilinear(texcoord.x, texcoord.y).r;
+
+		type = TextureNormalDataType::BUMP_MAP;
+	}
+	else if (isNormalMap)
+	{
+		Color color = image.getPixelBilinear(texcoord.x, texcoord.y);
+
+		normal.x = (color.r - 0.5) * 2.0;
+		normal.y = (color.g - 0.5) * 2.0;
+		normal.z = color.b;
+
+		type = TextureNormalDataType::NORMAL_MAP;
 	}
 	
 	return normal;

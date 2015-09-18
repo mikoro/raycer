@@ -5,7 +5,7 @@
 
 using namespace Raycer;
 
-// bump mapping with a sphere and squares
+// bump/normal mapping
 Scene Scene::createTestScene13()
 {
 	Scene scene;
@@ -20,19 +20,19 @@ Scene Scene::createTestScene13()
 	// SPHERE 1 //
 
 	ColorTexture sphere1Texture1;
-	sphere1Texture1.id = 3;
+	sphere1Texture1.id = 1;
 	sphere1Texture1.color = Color(1.0, 0.1, 0.1);
 	sphere1Texture1.intensity = 0.5;
 
 	PerlinNoiseTexture sphere1Texture2;
-	sphere1Texture2.id = 4;
+	sphere1Texture2.id = 2;
 	sphere1Texture2.seed = 2345654;
 	sphere1Texture2.intensity = 0.05;
 	sphere1Texture2.scale = Vector3(10.0, 10.0, 10.0);
 	sphere1Texture2.isFbm = true;
 
 	Material sphere1Material;
-	sphere1Material.id = 2;
+	sphere1Material.id = 1;
 	sphere1Material.colorTextureId = sphere1Texture1.id;
 	sphere1Material.normalMapTextureId = sphere1Texture2.id;
 	sphere1Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
@@ -53,18 +53,19 @@ Scene Scene::createTestScene13()
 	// MESH 1 //
 
 	ColorTexture mesh1Texture1;
-	mesh1Texture1.id = 5;
+	mesh1Texture1.id = 3;
 	mesh1Texture1.color = Color(1.0, 1.0, 1.0);
 	mesh1Texture1.intensity = 0.5;
 
 	ImageTexture mesh1Texture2;
-	mesh1Texture2.id = 6;
-	mesh1Texture2.imageFilePath = "data/images/bumpmap.png";
+	mesh1Texture2.id = 4;
+	mesh1Texture2.imageFilePath = "data/images/test_bumpmap.png";
+	mesh1Texture2.applyGamma = false;
 	mesh1Texture2.isBumpMap = true;
 	mesh1Texture2.intensity = 2.0;
 
 	Material mesh1Material;
-	mesh1Material.id = 3;
+	mesh1Material.id = 2;
 	mesh1Material.colorTextureId = mesh1Texture1.id;
 	mesh1Material.normalMapTextureId = mesh1Texture2.id;
 	mesh1Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
@@ -87,18 +88,19 @@ Scene Scene::createTestScene13()
 	// MESH 2 //
 
 	ImageTexture mesh2Texture1;
-	mesh2Texture1.id = 7;
+	mesh2Texture1.id = 5;
 	mesh2Texture1.imageFilePath = "data/images/stonewall.jpg";
 	mesh2Texture1.intensity = 1.0;
 
 	ImageTexture mesh2Texture2;
-	mesh2Texture2.id = 8;
+	mesh2Texture2.id = 6;
 	mesh2Texture2.imageFilePath = "data/images/stonewall_bumpmap.jpg";
+	mesh2Texture2.applyGamma = false;
 	mesh2Texture2.isBumpMap = true;
 	mesh2Texture2.intensity = 1.0;
 
 	Material mesh2Material;
-	mesh2Material.id = 4;
+	mesh2Material.id = 3;
 	mesh2Material.colorTextureId = mesh2Texture1.id;
 	mesh2Material.normalMapTextureId = mesh2Texture2.id;
 	mesh2Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
@@ -118,6 +120,42 @@ Scene Scene::createTestScene13()
 	scene.textures.imageTextures.push_back(mesh2Texture2);
 	scene.materials.push_back(mesh2Material);
 	scene.primitives.meshes.push_back(mesh2);
+
+	// MESH 3 //
+
+	ColorTexture mesh3Texture1;
+	mesh3Texture1.id = 7;
+	mesh3Texture1.color = Color(1.0, 1.0, 1.0);
+	mesh3Texture1.intensity = 0.5;
+
+	ImageTexture mesh3Texture2;
+	mesh3Texture2.id = 8;
+	mesh3Texture2.imageFilePath = "data/images/cube_normalmap.png";
+	mesh3Texture2.applyGamma = false;
+	mesh3Texture2.isNormalMap = true;
+	mesh3Texture2.intensity = 1.0;
+
+	Material mesh3Material;
+	mesh3Material.id = 4;
+	mesh3Material.colorTextureId = mesh3Texture1.id;
+	mesh3Material.normalMapTextureId = mesh3Texture2.id;
+	mesh3Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
+	mesh3Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	mesh3Material.shininess = 64.0;
+	mesh3Material.texcoordScale = Vector2(1.0, 1.0);
+	mesh3Material.nonShadowing = true;
+
+	Mesh mesh3;
+	mesh3.materialId = mesh3Material.id;
+	mesh3.meshFilePath = "data/meshes/cube_normalmap.obj";
+	mesh3.position = Vector3(-3.0, 1.0, 0.0);
+	mesh3.scale = Vector3(0.5, 0.5, 0.5);
+	mesh3.orientation = EulerAngle(0.0, 90.0, 30.0);
+
+	scene.textures.colorTextures.push_back(mesh3Texture1);
+	scene.textures.imageTextures.push_back(mesh3Texture2);
+	scene.materials.push_back(mesh3Material);
+	scene.primitives.meshes.push_back(mesh3);
 
 	// LIGHTS //
 

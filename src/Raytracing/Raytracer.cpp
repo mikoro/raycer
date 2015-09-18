@@ -225,24 +225,26 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	if (material->normalMapTexture != nullptr)
 	{
-		TextureNormalType normalType;
-		Vector3 normalData = material->normalMapTexture->getNormal(intersection.texcoord, intersection.position, normalType);
+		TextureNormalDataType normalType;
+		Vector3 normalData = material->normalMapTexture->getNormalData(intersection.texcoord, intersection.position, normalType);
 
-		if (normalType == TextureNormalType::BUMP)
+		if (normalType == TextureNormalDataType::BUMP_MAP)
 		{
 			normalData *= material->normalMapTexture->intensity;
 			ONB& onb = intersection.onb;
-			Vector3 bumpedNormal = onb.w + normalData.x * (onb.u.cross(onb.w)) + normalData.y * (onb.v.cross(onb.w));
-			intersection.normal = bumpedNormal.normalized();
+			Vector3 bumpMapNormal = onb.w + normalData.x * (onb.u.cross(onb.w)) + normalData.y * (onb.v.cross(onb.w));
+			intersection.normal = bumpMapNormal.normalized();
 		}
-		else if (normalType == TextureNormalType::GRADIENT)
+		else if (normalType == TextureNormalDataType::NORMAL_MAP)
 		{
-			Vector3 gradedNormal = (intersection.normal - (normalData * material->normalMapTexture->intensity));
-			intersection.normal = gradedNormal.normalized();
+			ONB& onb = intersection.onb;
+			Vector3 normalMapNormal = onb.u * normalData.x + onb.v * normalData.y + onb.w * normalData.z;
+			intersection.normal = normalMapNormal.normalized();
 		}
-		else if (normalType == TextureNormalType::NORMAL)
+		else if (normalType == TextureNormalDataType::GRADIENT)
 		{
-			// TODO: implement normal mapping
+			Vector3 adjustedNormal = (intersection.normal - (normalData * material->normalMapTexture->intensity));
+			intersection.normal = adjustedNormal.normalized();
 		}
 	}
 
