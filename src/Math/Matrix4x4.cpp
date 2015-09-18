@@ -464,3 +464,22 @@ Matrix4x4 Matrix4x4::rotateZ(double degrees)
 
 	return result;
 }
+
+// http://math.stackexchange.com/questions/180418/calculate-rotation-matrix-to-align-vector-a-to-vector-b-in-3d
+Matrix4x4 Matrix4x4::rotate(const Vector3& from, const Vector3& to)
+{
+	Vector3 v = from.cross(to);
+	double s = v.length();
+	double c = from.dot(to);
+
+	Matrix4x4 vx = Matrix4x4(
+		0.0, -v.z, v.y, 0.0,
+		v.z, 0.0, -v.x, 0.0,
+		-v.y, v.x, 0.0, 0.0,
+		0.0, 0.0, 0.0, 0.0);
+
+	if (s != 0.0)
+		return IDENTITY + vx + (vx * vx) * ((1.0 - c) / (s * s));
+	else
+		return IDENTITY;
+}

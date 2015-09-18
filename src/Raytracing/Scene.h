@@ -30,6 +30,7 @@
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/CSG.h"
+#include "Raytracing/Primitives/BlinnBlob.h"
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
@@ -173,6 +174,7 @@ namespace Raycer
 			std::vector<Mesh> meshes;
 			std::vector<Instance> instances;
 			std::vector<CSG> csgs;
+			std::vector<BlinnBlob> blinnBlobs;
 			std::vector<Primitive*> all;
 			std::vector<Primitive*> invisible;
 		} primitives;

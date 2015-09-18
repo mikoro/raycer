@@ -283,6 +283,9 @@ void Scene::initialize()
 	for (CSG& csg : primitives.csgs)
 		sortPrimitive(&csg);
 
+	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
+		sortPrimitive(&blinnBlob);
+
 	// POINTER MAP GENERATION AND VALIDATION
 
 	auto mapPrimitive = [&](Primitive* primitive)

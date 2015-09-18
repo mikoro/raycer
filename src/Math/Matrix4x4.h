@@ -79,6 +79,7 @@ namespace Raycer
 		static Matrix4x4 rotateX(double degrees);
 		static Matrix4x4 rotateY(double degrees);
 		static Matrix4x4 rotateZ(double degrees);
+		static Matrix4x4 rotate(const Vector3& from, const Vector3& to);
 
 		double m[4][4];
 	};

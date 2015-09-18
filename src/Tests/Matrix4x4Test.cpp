@@ -153,6 +153,13 @@ TEST_CASE("Matrix4x4 functionality", "[matrix4x4]")
 	Matrix4x4 transformationInv2 = transformation.inverted();
 
 	REQUIRE(transformationInv == transformationInv2);
+
+	Vector3 from(0.0, 22.0, 0.0);
+	Vector3 to(0.0, 0.0, 1.0);
+	rotation = Matrix4x4::rotate(from.normalized(), to.normalized());
+	from = rotation * from;
+
+	REQUIRE(from == Vector3(0.0, 0.0, 22.0));
 }
 
 #endif
