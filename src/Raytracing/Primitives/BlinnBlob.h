@@ -28,9 +28,5 @@ namespace Raycer
 		double radius = 1.0;
 		double blobbiness = 4.0;
 		double threshold = 1.0;
-
-	private:
-
-		double evaluate(const Vector3& point) const;
 	};
 }
