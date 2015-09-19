@@ -9,8 +9,9 @@ tracer
 lighting
  - path tracing + materials
 
-primitives
- - blinn's blobs
-
 textures
  - EWA texture filtering
+
+misc
+ - combine ui text toggle to one button
+ - add test scene change to interactive mode

@@ -17,7 +17,7 @@ Scene Scene::createTestScene1()
 	
 	// CAMERA //
 
-	scene.camera.position = Vector3(6.5, 6.0, 9.0);
+	scene.camera.position = Vector3(8.0, 8.0, 11.0);
 	scene.camera.orientation = EulerAngle(-30.0, 0.0, 0.0);
 
 	// GROUND //
@@ -180,6 +180,44 @@ Scene Scene::createTestScene1()
 	scene.primitives.toruses.push_back(torus);
 	scene.primitives.instances.push_back(instance);
 
+	// BLINN BLOB //
+
+	ColorTexture blobTexture;
+	blobTexture.id = 7;
+	blobTexture.color = Color(1.0, 0.0, 1.0);
+	blobTexture.intensity = 0.5;
+
+	Material blobMaterial;
+	blobMaterial.id = 7;
+	blobMaterial.colorTextureId = blobTexture.id;
+
+	BlinnBlob blob;
+	blob.id = 7;
+	blob.invisible = true;
+	blob.materialId = blobMaterial.id;
+
+	BlinnBlobDescription blobDesc;
+	blobDesc.position = Vector3(0.0, 0.0, 0.0);
+	blobDesc.radius = 0.4;
+	blob.blobs.push_back(blobDesc);
+	blobDesc.position = Vector3(0.0, 1.0, 0.1);
+	blobDesc.radius = 0.4;
+	blob.blobs.push_back(blobDesc);
+	blobDesc.position = Vector3(-0.5, 0.5, 0.2);
+	blobDesc.radius = 0.3;
+	blob.blobs.push_back(blobDesc);
+
+	instance.primitiveId = blob.id;
+	instance.materialId = blob.materialId;
+	instance.translate = Vector3(15.0, 1.5, 0.0);
+	instance.rotate = EulerAngle(-20.0, -20.0, 0.0);
+	instance.scale = Vector3(2.0, 2.0, 2.0);
+
+	scene.textures.colorTextures.push_back(blobTexture);
+	scene.materials.push_back(blobMaterial);
+	scene.primitives.blinnBlobs.push_back(blob);
+	scene.primitives.instances.push_back(instance);
+
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
@@ -188,7 +226,7 @@ Scene Scene::createTestScene1()
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
 	pointLight1.intensity = 1.5;
-	pointLight1.position = Vector3(6.5, 10.0, 5.0);
+	pointLight1.position = Vector3(8.0, 10.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;
 

@@ -15,6 +15,14 @@ namespace Raycer
 	class AABB;
 	class EulerAngle;
 
+	struct BlinnBlobDescription
+	{
+		Vector3 position;
+		double radius = 1.0;
+		double blobbiness = 4.0;
+		bool isNegative = false;
+	};
+
 	class BlinnBlob : public Primitive
 	{
 	public:
@@ -24,9 +32,7 @@ namespace Raycer
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
-		std::vector<Vector3> blobPositions;
-		double radius = 1.0;
-		double blobbiness = 4.0;
-		double threshold = 1.0;
+		std::vector<BlinnBlobDescription> blobs;
+		int solverIterations = 16;
 	};
 }

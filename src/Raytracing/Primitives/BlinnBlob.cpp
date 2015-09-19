@@ -38,43 +38,57 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 
 		double sum = 0.0;
 
-		for (const Vector3& blobPosition : blobPositions)
+		for (const BlinnBlobDescription& blob : blobs)
 		{
-			double distance = (point - blobPosition).length();
-			sum += exp(-blobbiness / radius * distance + blobbiness);
+			double distance = (point - blob.position).length();
+			sum += exp(-blob.blobbiness / blob.radius * distance + blob.blobbiness) * (blob.isNegative ? -1.0 : 1.0);
 		}
 
-		return sum - threshold;
+		// 1.0 is the threshold and is defined to be one
+		return sum - 1.0;
 	};
 
 	std::vector<double> distances;
-	distances.reserve(blobPositions.size() + 1);
-	distances.push_back(0.0);
+	distances.reserve(blobs.size() * 3);
 
-	// TODO: find better distances/positions for the root search
-	// project blob positions to the ray
-	for (const Vector3& blobPosition : blobPositions)
+	// TODO: doesn't work for negative blobs (the whole premise of finding bracket positions with simple sphere intersection is probably flawed)
+	// find bracketing positions for the root search
+	for (const BlinnBlobDescription& blob : blobs)
 	{
-		Vector3 originToBlob = (blobPosition - ray.origin);
+		Vector3 oMinusC = ray.origin - blob.position;
+		double a = 1.0;
+		double b = 2.0 * ray.direction.dot(oMinusC);
+		double c = oMinusC.dot(oMinusC) - blob.radius * blob.radius;
+		QuadraticResult result = Solver::findQuadraticRoots(a, b, c);
+
+		// if ray intersects the sphere
+		if (result.rootCount == 2 && result.roots[0] > 0.0)
+		{
+			distances.push_back(result.roots[0]);
+			distances.push_back(result.roots[1]);
+		}
+
+		// project sphere center to ray
+		Vector3 originToBlob = (blob.position - ray.origin);
 		double distance = originToBlob.dot(ray.direction);
 
 		if (distance > 0.0)
-			distances.push_back(originToBlob.dot(ray.direction));
+			distances.push_back(distance);
 	}
 
-	if (distances.size() < 2)
+	if (distances.size() == 0)
 		return false;
 
 	std::sort(distances.begin(), distances.end());
 	double t = 0.0;
 	bool wasFound = false;
 
-	// find the interval where the function first changes sign and then solve the exact root/distance
-	for (int i = 1; i < (int)distances.size(); ++i)
+	// find the position where the function becomes positive and then solve the exact root/distance
+	for (int i = 0; i < (int)distances.size(); ++i)
 	{
-		if ((evaluate(distances[i - 1]) < 0.0) != (evaluate(distances[i]) < 0.0))
+		if (evaluate(distances[i]) > 0.0)
 		{
-			t = Solver::findRoot(evaluate, distances[i - 1], distances[i], 32);
+			t = Solver::findRoot(evaluate, 0.0, distances[i], solverIterations);
 			wasFound = true;
 			break;
 		}
@@ -96,15 +110,15 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 	Vector3 normal;
 
 	// calculate normal from gradient
-	for (const Vector3& blobPosition : blobPositions)
+	for (const BlinnBlobDescription& blob : blobs)
 	{
-		double distance = (blobPosition - ip).length();
-		double temp1 = -blobbiness / (radius * distance);
-		double temp2 = exp(-blobbiness / radius * distance + blobbiness);
+		double distance = (blob.position - ip).length();
+		double temp1 = -blob.blobbiness / (blob.radius * distance) * (blob.isNegative ? -1.0 : 1.0);
+		double temp2 = exp(-blob.blobbiness / blob.radius * distance + blob.blobbiness);
 
-		normal.x += temp1 * (ip.x - blobPosition.x) * temp2;
-		normal.y += temp1 * (ip.y - blobPosition.y) * temp2;
-		normal.z += temp1 * (ip.z - blobPosition.z) * temp2;
+		normal.x += temp1 * (ip.x - blob.position.x) * temp2;
+		normal.y += temp1 * (ip.y - blob.position.y) * temp2;
+		normal.z += temp1 * (ip.z - blob.position.z) * temp2;
 	}
 
 	normal *= -1.0;
@@ -124,8 +138,11 @@ AABB BlinnBlob::getAABB() const
 {
 	AABB aabb;
 
-	for (const Vector3& blobPosition : blobPositions)
-		aabb.expand(AABB::createFromCenterExtent(blobPosition, Vector3(radius * 2.0, radius * 2.0, radius * 2.0)));
+	for (const BlinnBlobDescription& blob : blobs)
+	{
+		if (!blob.isNegative)
+			aabb.expand(AABB::createFromCenterExtent(blob.position, Vector3(blob.radius * 2.0, blob.radius * 2.0, blob.radius * 2.0)));
+	}
 
 	return aabb;
 }
