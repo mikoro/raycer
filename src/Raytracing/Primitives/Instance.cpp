@@ -57,13 +57,15 @@ bool Instance::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections, const Matrix4x4& transformation, const Matrix4x4& transformationInv, const Matrix4x4& transformationInvT)
 {
-	Ray instanceRay = ray;
-	Intersection instanceIntersection = intersection;
+	Ray instanceRay;
+	Intersection instanceIntersection;
 	std::vector<Intersection> instanceIntersections;
 
 	instanceRay.origin = transformationInv.transformPosition(ray.origin);
 	instanceRay.direction = transformationInv.transformDirection(ray.direction).normalized();
-	instanceRay.isInstanceRay = true;
+	instanceRay.time = ray.time;
+	instanceRay.fastOcclusion = ray.fastOcclusion;
+	instanceRay.isShadowRay = ray.isShadowRay;
 	instanceRay.update();
 
 	bool wasFound = primitive->intersect(instanceRay, instanceIntersection, instanceIntersections);

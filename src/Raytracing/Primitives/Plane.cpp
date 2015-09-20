@@ -42,14 +42,11 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 	if (t < 0.0)
 		return false;
 
-	if (!ray.isInstanceRay)
-	{
-		if (t < ray.minDistance || t > ray.maxDistance)
-			return false;
+	if (t < ray.minDistance || t > ray.maxDistance)
+		return false;
 
-		if (t > intersection.distance)
-			return false;
-	}
+	if (t > intersection.distance)
+		return false;
 
 	// intersection position
 	Vector3 ip = ray.origin + (t * ray.direction);

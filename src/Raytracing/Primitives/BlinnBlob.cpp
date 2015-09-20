@@ -80,7 +80,7 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 		return false;
 
 	std::sort(distances.begin(), distances.end());
-	double t = 0.0;
+	double t = std::numeric_limits<double>::max();
 	bool wasFound = false;
 
 	// find the position where the function becomes positive and then solve the exact root/distance
@@ -97,14 +97,11 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 	if (!wasFound)
 		return false;
 
-	if (!ray.isInstanceRay)
-	{
-		if (t < ray.minDistance || t > ray.maxDistance)
-			return false;
+	if (t < ray.minDistance || t > ray.maxDistance)
+		return false;
 
-		if (t > intersection.distance)
-			return false;
-	}
+	if (t > intersection.distance)
+		return false;
 
 	Vector3 ip = ray.origin + (t * ray.direction);
 	Vector3 normal;
@@ -123,7 +120,7 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 
 	normal *= -1.0;
 	normal.normalize();
-	
+
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.primitive = this;

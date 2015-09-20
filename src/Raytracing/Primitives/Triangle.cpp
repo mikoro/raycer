@@ -81,14 +81,11 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector
 	if (t < 0.0)
 		return false;
 
-	if (!ray.isInstanceRay)
-	{
-		if (t < ray.minDistance || t > ray.maxDistance)
-			return false;
+	if (t < ray.minDistance || t > ray.maxDistance)
+		return false;
 
-		if (t > intersection.distance)
-			return false;
-	}
+	if (t > intersection.distance)
+		return false;
 
 	double w = 1.0 - u - v;
 
