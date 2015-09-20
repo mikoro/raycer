@@ -6,6 +6,8 @@
 #include <vector>
 
 #include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/Primitives/FlatBVH.h"
+#include "Raytracing/AABB.h"
 
 namespace Raycer
 {
@@ -15,18 +17,26 @@ namespace Raycer
 	class Vector3;
 	class EulerAngle;
 
-	class PrimitiveList : public Primitive
+	class PrimitiveGroup : public Primitive
 	{
 	public:
 
-		PrimitiveList();
-		PrimitiveList(const std::vector<Primitive*>& primitives);
+		PrimitiveGroup();
+		PrimitiveGroup(const std::vector<Primitive*>& primitives);
 
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
+		std::vector<int> primitiveIds;
 		std::vector<Primitive*> primitives;
+		bool enableBVH = true;
+		BVHBuildInfo bvhBuildInfo;
+
+	private:
+
+		AABB aabb;
+		FlatBVH bvh;
 	};
 }

@@ -31,11 +31,13 @@
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/CSG.h"
 #include "Raytracing/Primitives/BlinnBlob.h"
+#include "Raytracing/Primitives/PrimitiveGroup.h"
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
 #include "Math/Color.h"
 #include "Math/Vector3.h"
+#include "Utils/ObjReader.h"
 
 namespace Raycer
 {
@@ -45,6 +47,8 @@ namespace Raycer
 	{
 		std::string filePath;
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
+		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
+		Vector3 translate = Vector3(0.0, 0.0, 0.0);
 	};
 
 	class Scene
@@ -62,6 +66,7 @@ namespace Raycer
 		std::string getJsonString() const;
 		std::string getXmlString() const;
 
+		void addObjScene(const ObjReaderResult& result);
 		void initialize();
 
 		static Scene createTestScene1();
@@ -178,6 +183,7 @@ namespace Raycer
 			std::vector<Instance> instances;
 			std::vector<CSG> csgs;
 			std::vector<BlinnBlob> blinnBlobs;
+			std::vector<PrimitiveGroup> primitiveGroups;
 			std::vector<Primitive*> all;
 			std::vector<Primitive*> invisible;
 		} primitives;

@@ -182,7 +182,7 @@
     <ClCompile Include="src\Raytracing\Primitives\Instance.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Plane.cpp" />
-    <ClCompile Include="src\Raytracing\Primitives\PrimitiveList.cpp" />
+    <ClCompile Include="src\Raytracing\Primitives\PrimitiveGroup.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Sphere.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Torus.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
@@ -299,7 +299,7 @@
     <ClInclude Include="src\Raytracing\Primitives\Mesh.h" />
     <ClInclude Include="src\Raytracing\Primitives\Plane.h" />
     <ClInclude Include="src\Raytracing\Primitives\Primitive.h" />
-    <ClInclude Include="src\Raytracing\Primitives\PrimitiveList.h" />
+    <ClInclude Include="src\Raytracing\Primitives\PrimitiveGroup.h" />
     <ClInclude Include="src\Raytracing\Primitives\Sphere.h" />
     <ClInclude Include="src\Raytracing\Primitives\Torus.h" />
     <ClInclude Include="src\Raytracing\Primitives\Triangle.h" />

@@ -11,6 +11,7 @@
 #include <boost/filesystem.hpp>
 
 #include "Raytracing/Primitives/Mesh.h"
+#include "Raytracing/Primitives/PrimitiveGroup.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/Textures/ColorTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
@@ -29,6 +30,7 @@ namespace Raycer
 		std::vector<Material> materials;
 		std::vector<ColorTexture> colorTextures;
 		std::vector<ImageTexture> imageTextures;
+		PrimitiveGroup primitiveGroup;
 	};
 
 	class ObjReader
@@ -36,7 +38,7 @@ namespace Raycer
 	public:
 
 		static std::vector<Triangle> getTriangles(const std::string& objFileName);
-		static ObjReaderResult getMeshes(const std::string& objFileName, const Vector3& scale, int idStartOffset);
+		static ObjReaderResult getMeshes(const std::string& objFileName, const Vector3& scale, const EulerAngle& rotate, const Vector3& translate, bool invisible, int idStartOffset);
 
 	private:
 

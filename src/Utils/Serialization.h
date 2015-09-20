@@ -299,7 +299,8 @@ namespace Raycer
 			cereal::make_nvp("primitiveId", b.primitiveId),
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("rotate", b.rotate),
-			cereal::make_nvp("translate", b.translate));
+			cereal::make_nvp("translate", b.translate),
+			cereal::make_nvp("changePrimitive", b.changePrimitive));
 	}
 
 	template<class Archive>
@@ -565,7 +566,9 @@ namespace Raycer
 	void serialize(Archive& a, ObjScene& b)
 	{
 		a(cereal::make_nvp("filePath", b.filePath),
-			cereal::make_nvp("scale", b.scale));
+			cereal::make_nvp("scale", b.scale),
+			cereal::make_nvp("rotate", b.rotate),
+			cereal::make_nvp("translate", b.translate));
 	}
 
 	template<class Archive>

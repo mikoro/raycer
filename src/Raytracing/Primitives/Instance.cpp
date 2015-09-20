@@ -95,7 +95,8 @@ bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std
 
 		intersection.wasFound = true;
 		intersection.distance = t;
-		intersection.primitive = this;
+		intersection.primitive = changePrimitive ? this : instanceIntersection.primitive;
+		intersection.instancePrimitive = this;
 		intersection.position = position;
 		intersection.normal = transformationInvT.transformDirection(instanceIntersection.normal).normalized();
 		intersection.onb = instanceIntersection.onb.transformed(transformationInvT);

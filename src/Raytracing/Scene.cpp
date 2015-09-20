@@ -21,7 +21,6 @@
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
 #include "Utils/Serialization.h"
-#include "Utils/ObjReader.h"
 
 using namespace Raycer;
 
@@ -184,6 +183,23 @@ std::string Scene::getXmlString() const
 	return ss.str();
 }
 
+void Scene::addObjScene(const ObjReaderResult& result)
+{
+	for (const Mesh& mesh : result.meshes)
+		primitives.meshes.push_back(mesh);
+
+	for (const Material& material : result.materials)
+		materials.push_back(material);
+
+	for (const ColorTexture& colorTexture : result.colorTextures)
+		textures.colorTextures.push_back(colorTexture);
+
+	for (const ImageTexture& imageTexture : result.imageTextures)
+		textures.imageTextures.push_back(imageTexture);
+
+	primitives.primitiveGroups.push_back(result.primitiveGroup);
+}
+
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
@@ -195,19 +211,8 @@ void Scene::initialize()
 
 	for (const ObjScene& objScene : objScenes)
 	{
-		ObjReaderResult result = ObjReader::getMeshes(objScene.filePath, objScene.scale, 1000000);
-
-		for (Mesh& mesh : result.meshes)
-			primitives.meshes.push_back(mesh);
-
-		for (Material& material : result.materials)
-			materials.push_back(material);
-
-		for (ColorTexture& colorTexture : result.colorTextures)
-			textures.colorTextures.push_back(colorTexture);
-
-		for (ImageTexture& imageTexture : result.imageTextures)
-			textures.imageTextures.push_back(imageTexture);
+		ObjReaderResult result = ObjReader::getMeshes(objScene.filePath, objScene.scale, objScene.rotate, objScene.translate, false, 1000000);
+		addObjScene(result);
 	}
 
 	objScenes.clear();
@@ -287,6 +292,9 @@ void Scene::initialize()
 	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
 		sortPrimitive(&blinnBlob);
 
+	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
+		sortPrimitive(&primitiveGroup);
+
 	// POINTER MAP GENERATION AND VALIDATION
 
 	auto mapPrimitive = [&](Primitive* primitive)
@@ -344,6 +352,17 @@ void Scene::initialize()
 			csg.rightPrimitive = primitivesMap[csg.rightPrimitiveId];
 		else
 			throw std::runtime_error(tfm::format("A CSG has a non-existent right primitive id (%d)", csg.rightPrimitiveId));
+	}
+
+	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
+	{
+		for (int primitiveId : primitiveGroup.primitiveIds)
+		{
+			if (primitivesMap.count(primitiveId))
+				primitiveGroup.primitives.push_back(primitivesMap[primitiveId]);
+			else
+				throw std::runtime_error(tfm::format("A primitive group has a non-existent primitive id (%d)", primitiveId));
+		}
 	}
 
 	auto initPrimitive = [&](Primitive* primitive)

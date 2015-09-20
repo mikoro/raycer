@@ -36,6 +36,8 @@ namespace Raycer
 		EulerAngle rotateInTime = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translateInTime = Vector3(0.0, 0.0, 0.0);
 
+		bool changePrimitive = false;
+
 		Primitive* primitive = nullptr;
 
 	private:

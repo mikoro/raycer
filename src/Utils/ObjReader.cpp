@@ -100,7 +100,7 @@ std::vector<Triangle> ObjReader::getTriangles(const std::string& objFileName)
 	return triangles;
 }
 
-ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vector3& scale, int idStartOffset)
+ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vector3& scale, const EulerAngle& rotate, const Vector3& translate, bool invisible, int idStartOffset)
 {
 	Log& log = App::getLog();
 
@@ -148,7 +148,11 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vecto
 
 			hasMesh = true;
 			mesh = Mesh();
+			mesh.id = ++currentId;
 			mesh.scale = scale;
+			mesh.orientation = rotate;
+			mesh.position = translate;
+			mesh.invisible = invisible;
 			continue;
 		}
 
@@ -212,6 +216,25 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vecto
 	if (hasMesh)
 		result.meshes.push_back(mesh);
 
+	ColorTexture groupColorTexture;
+	groupColorTexture.id = ++currentId;
+	groupColorTexture.color = Color(1.0, 1.0, 1.0);
+	groupColorTexture.intensity = 1.0;
+
+	Material groupMaterial;
+	groupMaterial.id = ++currentId;
+	groupMaterial.colorTextureId = groupColorTexture.id;
+
+	result.primitiveGroup.id = ++currentId;
+	result.primitiveGroup.materialId = groupMaterial.id;
+	result.primitiveGroup.invisible = true;
+
+	result.colorTextures.push_back(groupColorTexture);
+	result.materials.push_back(groupMaterial);
+
+	for (const Mesh& groupMesh : result.meshes)
+		result.primitiveGroup.primitiveIds.push_back(groupMesh.id);
+
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
@@ -256,6 +279,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 					ColorTexture colorTexture;
 					colorTexture.id = ++currentId;
 					colorTexture.color = Color(1.0, 1.0, 1.0);
+					colorTexture.intensity = 1.0;
 					material.colorTextureId = colorTexture.id;
 					result.colorTextures.push_back(colorTexture);
 				}
@@ -339,6 +363,7 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			ImageTexture imageTexture;
 			imageTexture.id = ++currentId;
 			imageTexture.isBumpMap = true;
+			imageTexture.applyGamma = false;
 			material.normalMapTextureId = imageTexture.id;
 
 			std::string imageFileName;

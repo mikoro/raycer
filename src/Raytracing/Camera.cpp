@@ -77,7 +77,7 @@ void Camera::update(const Scene& scene, double timeStep)
 				if (intersection.wasFound)
 				{
 					isMovingPrimitive = true;
-					movingPrimitive = intersection.primitive;
+					movingPrimitive = (intersection.instancePrimitive != nullptr) ? intersection.instancePrimitive : intersection.primitive;
 				}
 			}
 		}

@@ -9,7 +9,7 @@
 
 #include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/FlatBVH.h"
-#include "Raytracing/Primitives/PrimitiveList.h"
+#include "Raytracing/Primitives/PrimitiveGroup.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "App.h"
@@ -125,7 +125,7 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 	else
 	{
 		leafCount++;
-		node->left = std::shared_ptr<PrimitiveList>(new PrimitiveList(leftPrimitives));
+		node->left = std::shared_ptr<PrimitiveGroup>(new PrimitiveGroup(leftPrimitives));
 	}
 
 	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
@@ -136,7 +136,7 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 	else
 	{
 		leafCount++;
-		node->right = std::shared_ptr<PrimitiveList>(new PrimitiveList(rightPrimitives));
+		node->right = std::shared_ptr<PrimitiveGroup>(new PrimitiveGroup(rightPrimitives));
 	}
 }
 
