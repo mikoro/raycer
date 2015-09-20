@@ -136,9 +136,10 @@ Color Raytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoo
 
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
 {
-	Ray ray = scene.camera.getRay(pixelCoordinate, time);
+	Ray ray;
+	bool isValid = scene.camera.getRay(pixelCoordinate, ray, time);
 
-	if (ray.isInvalid && scene.raytracer.cameraSamples == 0)
+	if (!isValid && scene.raytracer.cameraSamples == 0)
 		return scene.raytracer.offLensColor;
 
 	Intersection intersection;
@@ -162,10 +163,11 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 	{
 		for (int x = 0; x < n; ++x)
 		{
+			Ray primaryRay;
 			Vector2 jitter = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
-			Ray primaryRay = scene.camera.getRay(pixelCoordinate + jitter, time);
+			isValid = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
 
-			if (primaryRay.isInvalid)
+			if (!isValid)
 			{
 				sampledPixelColor += scene.raytracer.offLensColor;
 				continue;

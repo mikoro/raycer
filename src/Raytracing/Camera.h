@@ -41,7 +41,7 @@ namespace Raycer
 		bool hasMoved() const;
 
 		CameraState getCameraState(double time) const;
-		Ray getRay(const Vector2& pixelCoordinate, double time) const;
+		bool getRay(const Vector2& pixelCoordinate, Ray& ray, double time) const;
 
 		Vector3 position;
 		EulerAngle orientation;

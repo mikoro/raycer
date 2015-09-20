@@ -27,7 +27,6 @@ namespace Raycer
 
 		bool fastOcclusion = false;
 		bool isShadowRay = false;
-		bool isInvalid = false;
 		bool isInstanceRay = false;
 	};
 }

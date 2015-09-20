@@ -61,20 +61,24 @@ void Camera::update(const Scene& scene, double timeStep)
 			pixelCoordinate.x = mouseInfo.framebufferX;
 			pixelCoordinate.y = mouseInfo.framebufferY;
 
-			Ray ray = getRay(pixelCoordinate, 0.0);
+			Ray ray;
+			bool isValid = getRay(pixelCoordinate, ray, 0.0);
 			Intersection intersection;
 			std::vector<Intersection> intersections;
 
-			for (Primitive* primitive : scene.primitives.all)
+			if (isValid)
 			{
-				intersections.clear();
-				primitive->intersect(ray, intersection, intersections);
-			}
+				for (Primitive* primitive : scene.primitives.all)
+				{
+					intersections.clear();
+					primitive->intersect(ray, intersection, intersections);
+				}
 
-			if (intersection.wasFound)
-			{
-				isMovingPrimitive = true;
-				movingPrimitive = intersection.primitive;
+				if (intersection.wasFound)
+				{
+					isMovingPrimitive = true;
+					movingPrimitive = intersection.primitive;
+				}
 			}
 		}
 		else
@@ -289,9 +293,8 @@ CameraState Camera::getCameraState(double time) const
 	}
 }
 
-Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
+bool Camera::getRay(const Vector2& pixelCoordinate, Ray& ray, double time) const
 {
-	Ray ray;
 	ray.time = time;
 
 	CameraState currentCameraState = getCameraState(time);
@@ -337,10 +340,7 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 			double r = sqrt(dx * dx + dy * dy);
 
 			if (r > 1.0)
-			{
-				ray.isInvalid = true;
-				break;
-			}
+				return false;
 
 			double phi = atan2(dy, dx);
 			double theta = r * (MathUtils::degToRad(fishEyeAngle) / 2.0);
@@ -358,5 +358,6 @@ Ray Camera::getRay(const Vector2& pixelCoordinate, double time) const
 	}
 
 	ray.update();
-	return ray;
+
+	return true;
 }
