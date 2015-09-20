@@ -147,7 +147,8 @@ namespace Raycer
 			cereal::make_nvp("toruses", b.toruses),
 			cereal::make_nvp("meshes", b.meshes),
 			cereal::make_nvp("instances", b.instances),
-			cereal::make_nvp("csgs", b.csgs));
+			cereal::make_nvp("csgs", b.csgs),
+			cereal::make_nvp("blinnBlobs", b.blinnBlobs));
 	}
 
 	// ---------------------------------------------
@@ -226,7 +227,8 @@ namespace Raycer
 			cereal::make_nvp("materialId", b.materialId),
 			cereal::make_nvp("invisible", b.invisible),
 			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("radius", b.radius));
+			cereal::make_nvp("radius", b.radius),
+			cereal::make_nvp("uvMapType", b.uvMapType));
 	}
 
 	template<class Archive>
@@ -309,6 +311,16 @@ namespace Raycer
 			cereal::make_nvp("operation", b.operation),
 			cereal::make_nvp("leftPrimitiveId", b.leftPrimitiveId),
 			cereal::make_nvp("rightPrimitiveId", b.rightPrimitiveId));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, BlinnBlob& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("invisible", b.invisible),
+			cereal::make_nvp("blobs", b.blobs),
+			cereal::make_nvp("solverIterations", b.solverIterations));
 	}
 
 	// ---------------------------------------------
@@ -536,7 +548,7 @@ namespace Raycer
 	}
 
 	// ---------------------------------------------
-	// BVHBUILDINFO
+	// MISC
 	// ---------------------------------------------
 
 	template<class Archive>
@@ -549,14 +561,19 @@ namespace Raycer
 			cereal::make_nvp("axisSplit", b.axisSplit));
 	}
 
-	// ---------------------------------------------
-	// OBJ SCENE
-	// ---------------------------------------------
-
 	template<class Archive>
 	void serialize(Archive& a, ObjScene& b)
 	{
 		a(cereal::make_nvp("filePath", b.filePath),
 			cereal::make_nvp("scale", b.scale));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, BlinnBlobDescription& b)
+	{
+		a(cereal::make_nvp("id", b.position),
+			cereal::make_nvp("materialId", b.radius),
+			cereal::make_nvp("invisible", b.blobbiness),
+			cereal::make_nvp("operation", b.isNegative));
 	}
 }
