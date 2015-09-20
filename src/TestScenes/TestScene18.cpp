@@ -2,6 +2,7 @@
 // License: MIT, see the LICENSE file.
 
 #include "Raytracing/Scene.h"
+#include "Utils/ObjReader.h"
 
 using namespace Raycer;
 
@@ -12,18 +13,20 @@ Scene Scene::createTestScene18()
 
 	scene.raytracer.multiSamples = 0;
 
+	scene.rootBVH.enabled = true;
+
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 4.0, 0.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
+	scene.camera.position = Vector3(0.0, 5.0, 5.0);
+	scene.camera.orientation = EulerAngle(-10.0, 0.0, 0.0);
 
 	// SPHERE 1 //
 
 	ImageTexture sphere1Texture;
 	sphere1Texture.id = 1;
 	sphere1Texture.intensity = 1.0;
-	sphere1Texture.imageFilePath = "data/images/gallery.hdr";
-	sphere1Texture.applyGamma = false;
+	sphere1Texture.imageFilePath = "data/images/sky.jpg";
+	sphere1Texture.applyGamma = true;
 
 	Material sphere1Material;
 	sphere1Material.id = 1;
@@ -36,7 +39,7 @@ Scene Scene::createTestScene18()
 	sphere1.materialId = sphere1Material.id;
 	sphere1.position = Vector3(0.0, 0.0, 0.0);
 	sphere1.radius = 1000.0;
-	sphere1.uvMapType = SphereUVMapType::LIGHT_PROBE;
+	sphere1.uvMapType = SphereUVMapType::SPHERICAL;
 
 	scene.textures.imageTextures.push_back(sphere1Texture);
 	scene.materials.push_back(sphere1Material);
@@ -57,12 +60,32 @@ Scene Scene::createTestScene18()
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
-	groundPlane.position = Vector3(0.0, 2.0, 0.0);
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
 	scene.textures.imageTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
-	//scene.primitives.planes.push_back(groundPlane);
+	scene.primitives.planes.push_back(groundPlane);
+
+	// MESHES //
+
+	ObjReaderResult result = ObjReader::getMeshes("data/meshes/sunflower/sunflower.obj", Vector3(0.1, 0.1, 0.1), EulerAngle(0.0, 0.0, 0.0), Vector3(0.0, 1.5, 0.0), true, 2000000);
+	scene.addObjScene(result);
+
+	Instance instance;
+	instance.id = 0;
+	instance.primitiveId = result.primitiveGroup.id;
+	instance.materialId = result.primitiveGroup.materialId;
+
+	for (int y = -100; y < 100; y += 2)
+	{
+		for (int x = -100; x < 100; x += 2)
+		{
+			instance.translate = Vector3(x, 0.0, y);
+
+			scene.primitives.instances.push_back(instance);
+		}
+	}
 
 	// LIGHTS //
 
