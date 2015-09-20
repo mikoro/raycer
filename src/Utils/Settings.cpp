@@ -45,8 +45,7 @@ void Settings::load(const std::string& fileName)
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
-	window.showFps = iniReader.getValue<bool>("window", "showFps");
-	window.showCameraInfo = iniReader.getValue<bool>("window", "showCameraInfo");
+	window.showInfoText = iniReader.getValue<bool>("window", "showInfoText");
 	window.defaultFont = iniReader.getValue("window", "defaultFont");
 	window.defaultFontSize = iniReader.getValue<int>("window", "defaultFontSize");
 

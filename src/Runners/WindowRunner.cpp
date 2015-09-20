@@ -371,10 +371,7 @@ void WindowRunner::update(double timeStep)
 		shouldRun = false;
 
 	if (keyWasPressed(GLFW_KEY_F1))
-		settings.window.showFps = !settings.window.showFps;
-
-	if (keyWasPressed(GLFW_KEY_F2))
-		settings.window.showCameraInfo = !settings.window.showCameraInfo;
+		settings.window.showInfoText = !settings.window.showInfoText;
 
 	if (keyWasPressed(GLFW_KEY_F9))
 	{
@@ -444,7 +441,7 @@ void WindowRunner::render(double timeStep, double interpolation)
 
 	framebuffer.render();
 
-	if (settings.window.showFps)
+	if (settings.window.showInfoText)
 		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
 
 	defaultText.render();

@@ -62,8 +62,7 @@ namespace Raycer
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
-			bool showFps;
-			bool showCameraInfo;
+			bool showInfoText;
 			std::string defaultFont;
 			int defaultFontSize;
 		} window;
