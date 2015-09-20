@@ -15,6 +15,8 @@ namespace Raycer
 	class AABB;
 	class EulerAngle;
 
+	enum class SphereUVMapType { SPHERICAL, LIGHT_PROBE };
+
 	class Sphere : public Primitive
 	{
 	public:
@@ -26,5 +28,6 @@ namespace Raycer
 
 		Vector3 position;
 		double radius = 1.0;
+		SphereUVMapType uvMapType = SphereUVMapType::SPHERICAL;
 	};
 }

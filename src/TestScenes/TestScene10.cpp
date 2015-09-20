@@ -92,7 +92,7 @@ Scene Scene::createTestScene10()
 	sphere2Material.colorTextureId = sphere2Texture.id;
 	sphere2Material.specularReflectance = Color(0.8, 0.8, 0.8);
 	sphere2Material.shininess = 128.0;
-	sphere2Material.texcoordScale = Vector2(-1.0, -1.0);
+	sphere2Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere2;
 	sphere2.id = 2;
@@ -126,7 +126,7 @@ Scene Scene::createTestScene10()
 	sphere3Material.colorTextureId = sphere3Texture.id;
 	sphere3Material.specularReflectance = Color(0.8, 0.8, 0.8);
 	sphere3Material.shininess = 128.0;
-	sphere3Material.texcoordScale = Vector2(-1.0, -1.0);
+	sphere3Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere3;
 	sphere3.id = 3;

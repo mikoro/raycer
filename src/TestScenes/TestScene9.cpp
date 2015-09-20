@@ -124,7 +124,7 @@ Scene Scene::createTestScene9()
 	Material sphere4Material;
 	sphere4Material.id = 5;
 	sphere4Material.colorTextureId = sphere4Texture.id;
-	sphere4Material.texcoordScale = Vector2(-1.0, -1.0);
+	sphere4Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere4;
 	sphere4.materialId = sphere4Material.id;

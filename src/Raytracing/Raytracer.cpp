@@ -212,7 +212,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (scene.raytracer.visualizeDepth)
 	{
 		double colorValue = 1.0 - std::min(intersection.distance, scene.raytracer.visualizeDepthMaxDistance) / scene.raytracer.visualizeDepthMaxDistance;
-		colorValue = pow(colorValue, 4.0);
+		colorValue = pow(colorValue, 2.0);
 		return Color(colorValue, colorValue, colorValue);
 	}
 

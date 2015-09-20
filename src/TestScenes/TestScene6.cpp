@@ -32,7 +32,7 @@ Scene Scene::createTestScene6()
 	sphere1Material.id = 1;
 	sphere1Material.colorTextureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
-	sphere1Material.texcoordScale = Vector2(1.0, -1.0);
+	sphere1Material.texcoordScale = Vector2(-1.0, 1.0);
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;

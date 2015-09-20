@@ -65,8 +65,20 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
 		tempIntersection.direction = direction;
 
-		double u = 0.5 + atan2(normal.z, normal.x) / (2.0 * M_PI);
-		double v = 0.5 - asin(normal.y) / M_PI;
+		double u = 0.0;
+		double v = 0.0;
+
+		if (uvMapType == SphereUVMapType::SPHERICAL)
+		{
+			u = 0.5 - atan2(normal.z, normal.x) / (2.0 * M_PI);
+			v = 0.5 + asin(normal.y) / M_PI;
+		}
+		else if (uvMapType == SphereUVMapType::LIGHT_PROBE)
+		{
+			double r = (1.0 / M_PI) * acos(normal.z) / sqrt(normal.x * normal.x + normal.y * normal.y);
+			u = (r * normal.x + 1.0) / 2.0;
+			v = (r * normal.y + 1.0) / 2.0;
+		}
 
 		u /= material->texcoordScale.x;
 		v /= material->texcoordScale.y;
