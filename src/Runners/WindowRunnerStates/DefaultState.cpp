@@ -45,6 +45,8 @@ void DefaultState::initialize()
 
 	if (settings.openCL.enabled)
 		clRaytracer.initialize();
+
+	currentTestSceneNumber = settings.scene.testSceneNumber;
 }
 
 void DefaultState::pause()
@@ -62,8 +64,23 @@ void DefaultState::shutdown()
 void DefaultState::update(double timeStep)
 {
 	WindowRunner& windowRunner = App::getWindowRunner();
+	Framebuffer& framebuffer = App::getFramebuffer();
 
-	scene.camera.update(scene, timeStep);
+	bool increaseTestSceneNumber = windowRunner.keyWasPressed(GLFW_KEY_F2);
+	bool decreaseTestSceneNumber = windowRunner.keyWasPressed(GLFW_KEY_F3);
+
+	if (increaseTestSceneNumber || decreaseTestSceneNumber)
+	{
+		if (increaseTestSceneNumber)
+			currentTestSceneNumber++;
+
+		if (decreaseTestSceneNumber)
+			currentTestSceneNumber--;
+
+		scene = Scene::createTestScene(currentTestSceneNumber);
+		scene.initialize();
+		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
 		scene.raytracer.visualizeDepth = !scene.raytracer.visualizeDepth;
@@ -90,6 +107,8 @@ void DefaultState::update(double timeStep)
 		}
 #endif
 	}
+
+	scene.camera.update(scene, timeStep);
 }
 
 void DefaultState::render(double timeStep, double interpolation)
