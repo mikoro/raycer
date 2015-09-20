@@ -82,6 +82,8 @@ namespace Raycer
 		static Scene createTestScene16();
 		static Scene createTestScene17();
 
+		static const int TEST_SCENE_COUNT = 17;
+
 		Camera camera;
 
 		struct Raytracer

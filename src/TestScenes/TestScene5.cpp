@@ -10,7 +10,7 @@ Scene Scene::createTestScene5()
 {
 	Scene scene;
 
-	scene.raytracer.backgroundColor = Color::WHITE;
+	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
 	scene.raytracer.maxRayIterations = 16;
 	scene.raytracer.multiSamples = 0;
 
@@ -19,22 +19,25 @@ Scene Scene::createTestScene5()
 	// CAMERA //
 
 	scene.camera.position = Vector3(9.49, 4.44, 3.94);
-	scene.camera.orientation = EulerAngle(-19.78, 31.71, 0.0);
+	scene.camera.orientation = EulerAngle(-20.0, 35.0, 0.0);
 
 	// BOX 1 //
 
 	ColorTexture box1Texture;
 	box1Texture.id = 3;
-	box1Texture.color = Color(1.0, 0.5, 0.5);
+	box1Texture.color = Color(1.0, 1.0, 1.0);
 	box1Texture.intensity = 1.0;
 
 	Material box1Material;
 	box1Material.id = 3;
 	box1Material.colorTextureId = box1Texture.id;
-	box1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
-	box1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
-	box1Material.rayTransmittance = 1.0;
+	box1Material.ambientReflectance = Color(0.5, 0.0, 0.0);
+	box1Material.diffuseReflectance = Color(0.5, 0.0, 0.0);
+	box1Material.rayTransmittance = 0.75;
 	box1Material.refractiveIndex = 1.0;
+	box1Material.enableAttenuation = true;
+	box1Material.attenuation = 1.0;
+	box1Material.attenuationColor = Color(0.1, 0.0, 0.0);
 	box1Material.nonShadowing = true;
 
 	Box box1;
@@ -64,15 +67,15 @@ Scene Scene::createTestScene5()
 
 	ColorTexture box2Texture;
 	box2Texture.id = 4;
-	box2Texture.color = Color(0.8, 0.8, 1.0);
+	box2Texture.color = Color(1.0, 1.0, 1.0);
 	box2Texture.intensity = 1.0;
 
 	Material box2Material;
 	box2Material.id = 4;
 	box2Material.colorTextureId = box2Texture.id;
-	box2Material.ambientReflectance = Color(0.0, 0.0, 0.0);
-	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
-	box2Material.rayReflectance = 1.0;
+	box2Material.ambientReflectance = Color(0.1, 0.1, 0.3);
+	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.3);
+	box2Material.rayReflectance = 0.75;
 	box2Material.nonShadowing = true;
 
 	Box box2;
@@ -87,25 +90,9 @@ Scene Scene::createTestScene5()
 
 	// INSTANCE 1 //
 
-	ColorTexture instance1Texture;
-	instance1Texture.id = 5;
-	instance1Texture.color = Color(0.8, 0.8, 1.0);
-	instance1Texture.intensity = 0.8;
-
-	Material instance1Material;
-	instance1Material.id = 5;
-	instance1Material.colorTextureId = instance1Texture.id;
-	instance1Material.ambientReflectance = Color(0.0, 0.0, 0.0);
-	instance1Material.diffuseReflectance = Color(0.1, 0.1, 0.1);
-	instance1Material.rayReflectance = 1.0;
-	instance1Material.nonShadowing = true;
-
 	Instance instance1;
-	instance1.materialId = instance1Material.id;
 	instance1.primitiveId = box2.id;
-
-	scene.textures.colorTextures.push_back(instance1Texture);
-	scene.materials.push_back(instance1Material);
+	instance1.materialId = box2Material.id;
 
 	instance1.translate = Vector3(0.0, -100.0, -5.0);
 	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);

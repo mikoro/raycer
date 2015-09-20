@@ -47,13 +47,12 @@ Scene Scene::createTestScene3()
 	Material mesh1Material;
 	mesh1Material.id = 2;
 	mesh1Material.colorTextureId = mesh1Texture.id;
-	mesh1Material.normalInterpolation = false;
 
 	Mesh mesh1;
 	mesh1.id = 1;
 	mesh1.invisible = true;
 	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey2.obj";
+	mesh1.meshFilePath = "data/meshes/monkey3.obj";
 	mesh1.position = Vector3(0.0, 0.0, 0.0);
 	mesh1.scale = Vector3(6.0, 6.0, 6.0);
 	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);

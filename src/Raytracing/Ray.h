@@ -25,7 +25,7 @@ namespace Raycer
 		double maxDistance = std::numeric_limits<double>::max();
 		double time = 0.0;
 
-		bool fastOcclusion = false;
 		bool isShadowRay = false;
+		bool fastOcclusion = false;
 	};
 }

@@ -26,7 +26,7 @@ namespace Raycer
 
 		bool skipLighting = false;
 		bool nonShadowing = false;
-		bool normalInterpolation = false;
+		bool normalInterpolation = true;
 		bool backfaceCulling = false;
 		bool invertNormal = false;
 

@@ -12,7 +12,7 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.raytracer.backgroundColor = Color(1.0, 1.0, 1.0);
+	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
 	scene.raytracer.maxRayIterations = 4;
 	scene.raytracer.multiSamples = 0;
 	scene.raytracer.cameraSamples = 0;
@@ -20,7 +20,7 @@ Scene Scene::createTestScene8()
 	scene.rootBVH.enabled = true;
 
 	scene.simpleFog.enabled = true;
-	scene.simpleFog.color = Color(1.0, 1.0, 1.0);
+	scene.simpleFog.color = Color(0.8, 0.8, 0.8);
 	scene.simpleFog.distance = 200.0;
 	scene.simpleFog.steepness = 2.0;
 
@@ -36,12 +36,14 @@ Scene Scene::createTestScene8()
 	ColorTexture groundTexture;
 	groundTexture.id = 1;
 	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.5;
+	groundTexture.intensity = 1.0;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.colorTextureId = groundTexture.id;
-	groundMaterial.rayReflectance = 0.3;
+	groundMaterial.rayReflectance = 0.5;
+	groundMaterial.ambientReflectance = Color(0.1, 0.1, 0.1);
+	groundMaterial.diffuseReflectance = Color(0.1, 0.1, 0.1);
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -75,15 +77,16 @@ Scene Scene::createTestScene8()
 
 			ColorTexture sphereTexture;
 			sphereTexture.id = index;
-			sphereTexture.color = Color::random(gen);
-			sphereTexture.intensity = 0.5;
+			sphereTexture.color = Color(1.0, 1.0, 1.0);
+			sphereTexture.intensity = 1.0;
 
 			Material sphereMaterial;
 			sphereMaterial.id = index;
 			sphereMaterial.colorTextureId = sphereTexture.id;
 			sphereMaterial.rayReflectance = 0.05;
-			sphereMaterial.diffuseReflectance = sphereTexture.color;
-			sphereMaterial.specularReflectance = Color(1.0, 1.0, 1.0);
+			sphereMaterial.ambientReflectance = Color::random(gen) * 0.8;
+			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+			sphereMaterial.specularReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.shininess = 256.0;
 
 			Sphere sphere;

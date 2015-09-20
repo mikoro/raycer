@@ -77,6 +77,12 @@ void DefaultState::update(double timeStep)
 		if (decreaseTestSceneNumber)
 			currentTestSceneNumber--;
 
+		if (currentTestSceneNumber < 1)
+			currentTestSceneNumber = 1;
+
+		if (currentTestSceneNumber > Scene::TEST_SCENE_COUNT)
+			currentTestSceneNumber = Scene::TEST_SCENE_COUNT;
+
 		scene = Scene::createTestScene(currentTestSceneNumber);
 		scene.initialize();
 		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
