@@ -81,8 +81,9 @@ namespace Raycer
 		static Scene createTestScene15();
 		static Scene createTestScene16();
 		static Scene createTestScene17();
+		static Scene createTestScene18();
 
-		static const int TEST_SCENE_COUNT = 17;
+		static const int TEST_SCENE_COUNT = 18;
 
 		Camera camera;
 
@@ -100,7 +101,7 @@ namespace Raycer
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 			SamplerType cameraSamplerType = SamplerType::CMJ;
 			bool visualizeDepth = false;
-			double visualizeDepthMaxDistance = 20.0;
+			double visualizeDepthMaxDistance = 25.0;
 		} raytracer;
 
 		struct ToneMapper

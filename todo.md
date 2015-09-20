@@ -1,6 +1,3 @@
-misc
- - extra scaling in bbox creation
-
 tracer
  - raymarching + height map + volumetric fog
  - soft reflections
@@ -11,7 +8,3 @@ lighting
 
 textures
  - EWA texture filtering
-
-misc
- - combine ui text toggle to one button
- - add test scene change to interactive mode
