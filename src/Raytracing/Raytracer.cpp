@@ -200,7 +200,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	std::vector<Intersection> intersections;
 
-	for (Primitive* primitive : scene.primitives.all)
+	for (Primitive* primitive : scene.primitives.visible)
 	{
 		intersections.clear();
 		primitive->intersect(ray, intersection, intersections);
@@ -455,7 +455,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			sampleRay.maxDistance = scene.lights.ambientLight.maxDistance;
 			sampleRay.update();
 
-			for (Primitive* primitive : scene.primitives.all)
+			for (Primitive* primitive : scene.primitives.visible)
 			{
 				sampleIntersections.clear();
 
@@ -487,7 +487,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	shadowRay.time = ray.time;
 	shadowRay.update();
 
-	for (Primitive* primitive : scene.primitives.all)
+	for (Primitive* primitive : scene.primitives.visible)
 	{
 		shadowIntersections.clear();
 
@@ -516,7 +516,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 		shadowRay.time = ray.time;
 		shadowRay.update();
 
-		for (Primitive* primitive : scene.primitives.all)
+		for (Primitive* primitive : scene.primitives.visible)
 		{
 			shadowIntersections.clear();
 
@@ -555,7 +555,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 			shadowRay.time = ray.time;
 			shadowRay.update();
 
-			for (Primitive* primitive : scene.primitives.all)
+			for (Primitive* primitive : scene.primitives.visible)
 			{
 				shadowIntersections.clear();
 

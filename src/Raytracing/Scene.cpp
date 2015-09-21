@@ -259,7 +259,7 @@ void Scene::initialize()
 		if (primitive->invisible)
 			primitives.invisible.push_back(primitive);
 		else
-			primitives.all.push_back(primitive);
+			primitives.visible.push_back(primitive);
 	};
 
 	for (Plane& plane : primitives.planes)
@@ -274,28 +274,28 @@ void Scene::initialize()
 	for (Triangle& triangle : primitives.triangles)
 		sortPrimitive(&triangle);
 
+	for (Mesh& mesh : primitives.meshes)
+		sortPrimitive(&mesh);
+
 	for (Cylinder& cylinder : primitives.cylinders)
 		sortPrimitive(&cylinder);
 
 	for (Torus& torus : primitives.toruses)
 		sortPrimitive(&torus);
 
-	for (Mesh& mesh : primitives.meshes)
-		sortPrimitive(&mesh);
-
-	for (Instance& instance : primitives.instances)
-		sortPrimitive(&instance);
+	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
+		sortPrimitive(&blinnBlob);
 
 	for (CSG& csg : primitives.csgs)
 		sortPrimitive(&csg);
 
-	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
-		sortPrimitive(&blinnBlob);
-
 	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
 		sortPrimitive(&primitiveGroup);
 
-	// POINTER MAP GENERATION AND VALIDATION
+	for (Instance& instance : primitives.instances)
+		sortPrimitive(&instance);
+
+	// POINTER MAP GENERATION
 
 	auto mapPrimitive = [&](Primitive* primitive)
 	{
@@ -308,10 +308,10 @@ void Scene::initialize()
 		}
 	};
 
-	for (Primitive* primitive : primitives.all)
+	for (Primitive* primitive : primitives.invisible)
 		mapPrimitive(primitive);
 
-	for (Primitive* primitive : primitives.invisible)
+	for (Primitive* primitive : primitives.visible)
 		mapPrimitive(primitive);
 
 	for (Material& material : materials)
@@ -331,15 +331,7 @@ void Scene::initialize()
 		texturesMap[texture->id] = texture;
 	}
 
-	// INITIALIZATION AND VALIDATION
-
-	for (Instance& instance : primitives.instances)
-	{
-		if (primitivesMap.count(instance.primitiveId))
-			instance.primitive = primitivesMap[instance.primitiveId];
-		else
-			throw std::runtime_error(tfm::format("An instance has a non-existent primitive id (%d)", instance.primitiveId));
-	}
+	// POINTER SETTING
 
 	for (CSG& csg : primitives.csgs)
 	{
@@ -354,6 +346,14 @@ void Scene::initialize()
 			throw std::runtime_error(tfm::format("A CSG has a non-existent right primitive id (%d)", csg.rightPrimitiveId));
 	}
 
+	for (Instance& instance : primitives.instances)
+	{
+		if (primitivesMap.count(instance.primitiveId))
+			instance.primitive = primitivesMap[instance.primitiveId];
+		else
+			throw std::runtime_error(tfm::format("An instance has a non-existent primitive id (%d)", instance.primitiveId));
+	}
+
 	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
 	{
 		for (int primitiveId : primitiveGroup.primitiveIds)
@@ -365,7 +365,7 @@ void Scene::initialize()
 		}
 	}
 
-	auto initPrimitive = [&](Primitive* primitive)
+	auto setPrimitivePointers = [&](Primitive* primitive)
 	{
 		if (materialsMap.count(primitive->materialId))
 		{
@@ -385,15 +385,48 @@ void Scene::initialize()
 		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has a non-existent material id (%d)", primitive->materialId));
-
-		primitive->initialize();
 	};
 
 	for (Primitive* primitive : primitives.invisible)
-		initPrimitive(primitive);
+		setPrimitivePointers(primitive);
 
-	for (Primitive* primitive : primitives.all)
-		initPrimitive(primitive);
+	for (Primitive* primitive : primitives.visible)
+		setPrimitivePointers(primitive);
+
+	// INITIALIZATION
+
+	for (Plane& plane : primitives.planes)
+		plane.initialize();
+
+	for (Sphere& sphere : primitives.spheres)
+		sphere.initialize();
+
+	for (Box& box : primitives.boxes)
+		box.initialize();
+
+	for (Triangle& triangle : primitives.triangles)
+		triangle.initialize();
+
+	for (Mesh& mesh : primitives.meshes)
+		mesh.initialize();
+
+	for (Cylinder& cylinder : primitives.cylinders)
+		cylinder.initialize();
+
+	for (Torus& torus : primitives.toruses)
+		torus.initialize();
+
+	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
+		blinnBlob.initialize();
+
+	for (CSG& csg : primitives.csgs)
+		csg.initialize();
+
+	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
+		primitiveGroup.initialize();
+
+	for (Instance& instance : primitives.instances)
+		instance.initialize();
 
 	// CAMERA
 
@@ -405,7 +438,7 @@ void Scene::initialize()
 	{
 		boundingBoxes.material.colorTexture = &boundingBoxes.texture;
 
-		for (Primitive* primitive : primitives.all)
+		for (Primitive* primitive : primitives.visible)
 		{
 			AABB aabb = primitive->getAABB();
 
@@ -418,15 +451,15 @@ void Scene::initialize()
 		}
 
 		for (Box& box : primitives.boundingBoxes)
-			primitives.all.push_back(&box);
+			primitives.visible.push_back(&box);
 	}
 
 	// ROOT BVH
 
 	if (rootBVH.enabled)
 	{
-		rootBVH.bvh.build(primitives.all, rootBVH.buildInfo);
-		primitives.all.clear();
-		primitives.all.push_back(&rootBVH.bvh);
+		rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo);
+		primitives.visible.clear();
+		primitives.visible.push_back(&rootBVH.bvh);
 	}
 }

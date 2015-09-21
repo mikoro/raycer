@@ -68,7 +68,7 @@ void Camera::update(const Scene& scene, double timeStep)
 
 			if (isValid)
 			{
-				for (Primitive* primitive : scene.primitives.all)
+				for (Primitive* primitive : scene.primitives.visible)
 				{
 					intersections.clear();
 					primitive->intersect(ray, intersection, intersections);

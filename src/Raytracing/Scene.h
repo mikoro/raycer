@@ -184,7 +184,7 @@ namespace Raycer
 			std::vector<CSG> csgs;
 			std::vector<BlinnBlob> blinnBlobs;
 			std::vector<PrimitiveGroup> primitiveGroups;
-			std::vector<Primitive*> all;
+			std::vector<Primitive*> visible;
 			std::vector<Primitive*> invisible;
 		} primitives;
 
