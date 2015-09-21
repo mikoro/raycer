@@ -3,9 +3,9 @@
 	<scene>
 		<camera>
 			<position>
-				<x>6.5</x>
-				<y>6</y>
-				<z>9</z>
+				<x>8</x>
+				<y>8</y>
+				<z>11</z>
 			</position>
 			<orientation>
 				<pitch>-30</pitch>
@@ -53,7 +53,7 @@
 			<timeSamplerType>2</timeSamplerType>
 			<cameraSamplerType>3</cameraSamplerType>
 			<visualizeDepth>false</visualizeDepth>
-			<visualizeDepthMaxDistance>20</visualizeDepthMaxDistance>
+			<visualizeDepthMaxDistance>25</visualizeDepthMaxDistance>
 		</raytracer>
 		<toneMapper>
 			<type>1</type>
@@ -206,6 +206,16 @@
 						<a>1</a>
 					</color>
 				</value5>
+				<value6>
+					<id>7</id>
+					<intensity>0.5</intensity>
+					<color>
+						<r>1</r>
+						<g>0</g>
+						<b>1</b>
+						<a>1</a>
+					</color>
+				</value6>
 			</colorTextures>
 			<checkerTextures size="dynamic"/>
 			<imageTextures size="dynamic"/>
@@ -477,6 +487,49 @@
 					<a>1</a>
 				</attenuationColor>
 			</value5>
+			<value6>
+				<id>7</id>
+				<colorTextureId>7</colorTextureId>
+				<normalMapTextureId>0</normalMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</ambientReflectance>
+				<diffuseReflectance>
+					<r>1</r>
+					<g>1</g>
+					<b>1</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<shininess>0</shininess>
+				<skipLighting>false</skipLighting>
+				<nonShadowing>false</nonShadowing>
+				<rayReflectance>0</rayReflectance>
+				<rayTransmittance>0</rayTransmittance>
+				<refractiveIndex>1</refractiveIndex>
+				<isFresnel>false</isFresnel>
+				<enableAttenuation>false</enableAttenuation>
+				<attenuation>1</attenuation>
+				<attenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</attenuationColor>
+			</value6>
 		</materials>
 		<lights>
 			<ambientLight>
@@ -504,7 +557,7 @@
 					</color>
 					<intensity>1.5</intensity>
 					<position>
-						<x>6.5</x>
+						<x>8</x>
 						<y>10</y>
 						<z>5</z>
 					</position>
@@ -547,6 +600,7 @@
 						<z>0</z>
 					</position>
 					<radius>1</radius>
+					<uvMapType>0</uvMapType>
 				</value0>
 			</spheres>
 			<boxes size="dynamic">
@@ -676,6 +730,7 @@
 						<y>0.5</y>
 						<z>0</z>
 					</translate>
+					<changePrimitive>false</changePrimitive>
 				</value0>
 				<value1>
 					<id>0</id>
@@ -697,6 +752,7 @@
 						<y>1.5</y>
 						<z>0</z>
 					</translate>
+					<changePrimitive>false</changePrimitive>
 				</value1>
 				<value2>
 					<id>0</id>
@@ -718,6 +774,7 @@
 						<y>1.5</y>
 						<z>0</z>
 					</translate>
+					<changePrimitive>false</changePrimitive>
 				</value2>
 				<value3>
 					<id>0</id>
@@ -739,6 +796,7 @@
 						<y>0.5</y>
 						<z>0</z>
 					</translate>
+					<changePrimitive>false</changePrimitive>
 				</value3>
 				<value4>
 					<id>0</id>
@@ -760,9 +818,72 @@
 						<y>1.75</y>
 						<z>0</z>
 					</translate>
+					<changePrimitive>false</changePrimitive>
 				</value4>
+				<value5>
+					<id>0</id>
+					<materialId>7</materialId>
+					<invisible>false</invisible>
+					<primitiveId>7</primitiveId>
+					<scale>
+						<x>2</x>
+						<y>2</y>
+						<z>2</z>
+					</scale>
+					<rotate>
+						<pitch>-20</pitch>
+						<yaw>-20</yaw>
+						<roll>0</roll>
+					</rotate>
+					<translate>
+						<x>15</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+					<changePrimitive>false</changePrimitive>
+				</value5>
 			</instances>
 			<csgs size="dynamic"/>
+			<blinnBlobs size="dynamic">
+				<value0>
+					<id>7</id>
+					<materialId>7</materialId>
+					<invisible>true</invisible>
+					<blobs size="dynamic">
+						<value0>
+							<position>
+								<x>0</x>
+								<y>0</y>
+								<z>0</z>
+							</position>
+							<radius>0.40000000000000002</radius>
+							<blobbiness>4</blobbiness>
+							<isNegative>false</isNegative>
+						</value0>
+						<value1>
+							<position>
+								<x>0</x>
+								<y>1</y>
+								<z>0.10000000000000001</z>
+							</position>
+							<radius>0.40000000000000002</radius>
+							<blobbiness>4</blobbiness>
+							<isNegative>false</isNegative>
+						</value1>
+						<value2>
+							<position>
+								<x>-0.5</x>
+								<y>0.5</y>
+								<z>0.20000000000000001</z>
+							</position>
+							<radius>0.29999999999999999</radius>
+							<blobbiness>4</blobbiness>
+							<isNegative>false</isNegative>
+						</value2>
+					</blobs>
+					<solverIterations>16</solverIterations>
+				</value0>
+			</blinnBlobs>
 		</primitives>
 		<objScenes size="dynamic"/>
 	</scene>

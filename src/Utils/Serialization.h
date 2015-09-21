@@ -574,9 +574,9 @@ namespace Raycer
 	template<class Archive>
 	void serialize(Archive& a, BlinnBlobDescription& b)
 	{
-		a(cereal::make_nvp("id", b.position),
-			cereal::make_nvp("materialId", b.radius),
-			cereal::make_nvp("invisible", b.blobbiness),
-			cereal::make_nvp("operation", b.isNegative));
+		a(cereal::make_nvp("position", b.position),
+			cereal::make_nvp("radius", b.radius),
+			cereal::make_nvp("blobbiness", b.blobbiness),
+			cereal::make_nvp("isNegative", b.isNegative));
 	}
 }
