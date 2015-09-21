@@ -63,6 +63,7 @@ void DefaultState::shutdown()
 
 void DefaultState::update(double timeStep)
 {
+	Log& log = App::getLog();
 	WindowRunner& windowRunner = App::getWindowRunner();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
@@ -83,8 +84,18 @@ void DefaultState::update(double timeStep)
 		if (currentTestSceneNumber > Scene::TEST_SCENE_COUNT)
 			currentTestSceneNumber = Scene::TEST_SCENE_COUNT;
 
-		scene = Scene::createTestScene(currentTestSceneNumber);
-		scene.initialize();
+		try
+		{
+			scene = Scene::createTestScene(currentTestSceneNumber);
+			scene.initialize();
+		}
+		catch (const std::exception& ex)
+		{
+			log.logWarning("Could not create test scene: %s", ex.what());
+			scene = Scene();
+			scene.initialize();
+		}
+
 		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 	}
 
