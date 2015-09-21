@@ -73,6 +73,7 @@ Scene Scene::createTestScene11()
 				Instance instance1;
 				instance1.materialId = instance1Material.id;
 				instance1.primitiveId = mesh1.id;
+				instance1.changePrimitive = true;
 				instance1.scale = Vector3(scale, scale, scale);
 				instance1.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
 				instance1.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
