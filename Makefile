@@ -3,7 +3,7 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst
 UNAME := $(shell uname -s | tr "[:upper:]" "[:lower:]")
 SOURCES := $(call rwildcard, src/, *.cpp)
 OBJS := $(subst src/,build/,$(SOURCES:.cpp=.o))
-CFLAGS = -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast -fopenmp
+CFLAGS = -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast -fopenmp -Wno-deprecated-declarations
 LDFLAGS = 
 TARGET = raycer
 
@@ -14,7 +14,7 @@ endif
 
 # mac
 ifneq "$(findstring darwin,$(UNAME))" ""
-	CFLAGS += -isystem /opt/local/include -Wno-deprecated-declarations
+	CFLAGS += -isystem /opt/local/include
 	LDFLAGS += -L/opt/local/lib -Lplatform/mac/lib -framework Cocoa -framework OpenGL -framework OpenCL -framework IOKit -framework CoreVideo -lstdc++ -lglfw -lboost_system-mt -lboost_filesystem-mt -lfreetype -lfreetype-gl
 endif
 

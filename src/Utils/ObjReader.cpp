@@ -251,7 +251,9 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 
 	path mtlFilePath = objFileDirectory;
 	mtlFilePath.append(mtlFileName.begin(), mtlFileName.end());
-	std::ifstream file(mtlFilePath.string());
+	std::string mtlFilePathString = mtlFilePath.string();
+	std::replace(mtlFilePathString.begin(), mtlFilePathString.end(), '\\', '/');
+	std::ifstream file(mtlFilePathString);
 
 	if (!file.good())
 		throw std::runtime_error("Could not open the MTL file");
@@ -350,7 +352,9 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			path imageFilePath = objFileDirectory;
 			ss >> imageFileName;
 			imageFilePath.append(imageFileName.begin(), imageFileName.end());
-			imageTexture.imageFilePath = imageFilePath.string();
+			std::string imageFilePathString = imageFilePath.string();
+			std::replace(imageFilePathString.begin(), imageFilePathString.end(), '\\', '/');
+			imageTexture.imageFilePath = imageFilePathString;
 
 			hasTexture = true;
 			result.imageTextures.push_back(imageTexture);
@@ -370,7 +374,9 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			path imageFilePath = objFileDirectory;
 			ss >> imageFileName;
 			imageFilePath.append(imageFileName.begin(), imageFileName.end());
-			imageTexture.imageFilePath = imageFilePath.string();
+			std::string imageFilePathString = imageFilePath.string();
+			std::replace(imageFilePathString.begin(), imageFilePathString.end(), '\\', '/');
+			imageTexture.imageFilePath = imageFilePathString;
 
 			hasBumpMapTexture = true;
 			result.imageTextures.push_back(imageTexture);
