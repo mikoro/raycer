@@ -31,6 +31,8 @@ Camera::Camera()
 
 void Camera::initialize()
 {
+	originalPosition = position;
+	originalOrientation = orientation;
 }
 
 void Camera::setImagePlaneSize(int width, int height)
@@ -38,6 +40,18 @@ void Camera::setImagePlaneSize(int width, int height)
 	imagePlaneWidth = (double)(width - 1);
 	imagePlaneHeight = (double)(height - 1);
 	aspectRatio = (double)height / (double)width;
+}
+
+void Camera::reset()
+{
+	position = originalPosition;
+	orientation = originalOrientation;
+	velocity = Vector3(0.0, 0.0, 0.0);
+	smoothVelocity = Vector3(0.0, 0.0, 0.0);
+	smoothAcceleration = Vector3(0.0, 0.0, 0.0);
+	angularVelocity = Vector3(0.0, 0.0, 0.0);
+	smoothAngularVelocity = Vector3(0.0, 0.0, 0.0);
+	smoothAngularAcceleration = Vector3(0.0, 0.0, 0.0);
 }
 
 void Camera::update(const Scene& scene, double timeStep)

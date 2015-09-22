@@ -38,6 +38,7 @@ namespace Raycer
 		void initialize();
 		void setImagePlaneSize(int width, int height);
 		void update(const Scene& scene, double timeStep);
+		void reset();
 		bool hasMoved() const;
 
 		CameraState getCameraState(double time) const;
@@ -77,5 +78,8 @@ namespace Raycer
 
 		bool isMovingPrimitive = false;
 		Primitive* movingPrimitive = nullptr;
+
+		Vector3 originalPosition;
+		EulerAngle originalOrientation;
 	};
 }

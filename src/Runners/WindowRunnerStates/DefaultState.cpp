@@ -99,6 +99,9 @@ void DefaultState::update(double timeStep)
 		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 	}
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_R))
+		scene.camera.reset();
+
 	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
 		scene.raytracer.visualizeDepth = !scene.raytracer.visualizeDepth;
 
