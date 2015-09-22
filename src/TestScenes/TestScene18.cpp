@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <random>
+
 #include "Raytracing/Scene.h"
 #include "Utils/ObjReader.h"
 
@@ -12,19 +14,22 @@ Scene Scene::createTestScene18()
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
+	scene.raytracer.cameraSamples = 5;
 
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 5.0);
-	scene.camera.orientation = EulerAngle(-10.0, 0.0, 0.0);
+	scene.camera.position = Vector3(0.0, 3.8, 0.0);
+	scene.camera.orientation = EulerAngle(-8.0, 90.0, 0.0);
+	scene.camera.focalDistance = 10.0;
+	scene.camera.apertureSize = 0.02;
 
 	// SPHERE 1 //
 
 	ImageTexture sphere1Texture;
 	sphere1Texture.id = 1;
-	sphere1Texture.intensity = 1.0;
+	sphere1Texture.intensity = 1.2;
 	sphere1Texture.imageFilePath = "data/images/sky.jpg";
 	sphere1Texture.applyGamma = true;
 
@@ -57,6 +62,7 @@ Scene Scene::createTestScene18()
 	groundMaterial.id = 2;
 	groundMaterial.colorTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(5.0, 5.0);
+	groundMaterial.nonShadowing = true;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -69,7 +75,7 @@ Scene Scene::createTestScene18()
 
 	// MESHES //
 
-	ObjReaderResult result = ObjReader::getMeshes("data/meshes/sunflower/sunflower.obj", Vector3(0.1, 0.1, 0.1), EulerAngle(0.0, 0.0, 0.0), Vector3(0.0, 1.5, 0.0), true, 2000000);
+	ObjReaderResult result = ObjReader::getMeshes("data/meshes/sunflower/sunflower.obj", Vector3(0.1, 0.1, 0.1), EulerAngle(0.0, 90.0, 0.0), Vector3(0.0, 1.5, 0.0), true, 2000000);
 	scene.addObjScene(result);
 
 	Instance instance;
@@ -77,11 +83,16 @@ Scene Scene::createTestScene18()
 	instance.primitiveId = result.primitiveGroup.id;
 	instance.materialId = result.primitiveGroup.materialId;
 
-	for (int y = -100; y < 100; y += 2)
+	std::mt19937 gen(230947887);
+	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);
+	std::uniform_real_distribution<double> translateDist(0.0, 0.5);
+
+	for (int y = -200; y < 200; y += 1)
 	{
-		for (int x = -100; x < 100; x += 2)
+		for (int x = -400; x < 0; x += 1)
 		{
-			instance.translate = Vector3(x, 0.0, y);
+			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), y + translateDist(gen));
+			instance.rotate = EulerAngle(0.0, rotationDist(gen), 30.0 + rotationDist(gen));
 
 			scene.primitives.instances.push_back(instance);
 		}
@@ -94,9 +105,9 @@ Scene Scene::createTestScene18()
 
 	DirectionalLight directionalLight1;
 	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
 
+	directionalLight1.intensity = 0.6;
+	directionalLight1.direction = EulerAngle(-40.0, 35.0, 0.0).getDirection();
 	scene.lights.directionalLights.push_back(directionalLight1);
 
 	return scene;
