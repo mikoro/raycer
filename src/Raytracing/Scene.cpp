@@ -9,7 +9,8 @@
 #include "cereal/archives/json.hpp"
 #include "cereal/archives/xml.hpp"
 #include "cereal/types/vector.hpp"
-//#include "cereal/archives/binary.hpp"
+#include "cereal/types/string.hpp"
+#include "cereal/archives/binary.hpp"
 
 #include "tinyformat/tinyformat.h"
 
@@ -85,9 +86,8 @@ Scene Scene::loadFromFile(const std::string& fileName)
 	}
 	else if (StringUtils::endsWith(fileName, ".bin"))
 	{
-		// TODO: will not compile
-		//cereal::BinaryInputArchive archive(file);
-		//archive(scene);
+		cereal::BinaryInputArchive archive(file);
+		archive(scene);
 	}
 	else
 		throw std::runtime_error("Unsupported scene file format");
@@ -121,7 +121,6 @@ Scene Scene::loadFromXmlString(const std::string& text)
 	return scene;
 }
 
-
 void Scene::saveToFile(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving scene to %s", fileName);
@@ -143,9 +142,8 @@ void Scene::saveToFile(const std::string& fileName) const
 	}
 	else if (StringUtils::endsWith(fileName, ".bin"))
 	{
-		// TODO: will not compile
-		//cereal::BinaryOutputArchive archive(file);
-		//archive(cereal::make_nvp("scene", *this));
+		cereal::BinaryOutputArchive archive(file);
+		archive(cereal::make_nvp("scene", *this));
 	}
 	else
 		throw std::runtime_error("Unsupported scene file format");
@@ -179,7 +177,7 @@ std::string Scene::getXmlString() const
 		cereal::XMLOutputArchive archive(ss);
 		archive(cereal::make_nvp("scene", *this));
 	}
-	
+
 	return ss.str();
 }
 

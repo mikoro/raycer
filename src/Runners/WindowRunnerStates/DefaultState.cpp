@@ -106,7 +106,12 @@ void DefaultState::update(double timeStep)
 		scene.raytracer.visualizeDepth = !scene.raytracer.visualizeDepth;
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
-		scene.saveToFile("scene.xml");
+	{
+		if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
+			scene.saveToFile("scene.bin");
+		else
+			scene.saveToFile("scene.xml");
+	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F8))
 	{
