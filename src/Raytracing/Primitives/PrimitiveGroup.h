@@ -21,6 +21,9 @@ namespace Raycer
 	{
 	public:
 
+		friend class Scene;
+		friend class CLScene;
+
 		PrimitiveGroup();
 		PrimitiveGroup(const std::vector<Primitive*>& primitives);
 
@@ -30,11 +33,12 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
 		std::vector<int> primitiveIds;
-		std::vector<Primitive*> primitives;
 		bool enableBVH = true;
 		BVHBuildInfo bvhBuildInfo;
 
 	private:
+
+		std::vector<Primitive*> primitives;
 
 		AABB aabb;
 		FlatBVH bvh;

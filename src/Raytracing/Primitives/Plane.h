@@ -19,6 +19,12 @@ namespace Raycer
 	{
 	public:
 
+		friend class Scene;
+		friend class CLScene;
+
+		friend class Scene;
+		friend class CLScene;
+
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
@@ -26,6 +32,9 @@ namespace Raycer
 
 		Vector3 position;
 		Vector3 normal;
+
+	private:
+
 		Vector3 uAxis;
 		Vector3 vAxis;
 	};

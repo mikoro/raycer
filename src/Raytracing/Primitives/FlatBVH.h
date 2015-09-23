@@ -47,6 +47,9 @@ namespace Raycer
 	{
 	public:
 
+		friend class Scene;
+		friend class CLScene;
+
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;

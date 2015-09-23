@@ -119,24 +119,24 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 
 	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->left = std::make_shared<BVH>();
+		node->left = std::unique_ptr<BVH>(new BVH());
 		buildRecursive(leftPrimitives, (BVH*)node->left.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->left = std::shared_ptr<PrimitiveGroup>(new PrimitiveGroup(leftPrimitives));
+		node->left = std::unique_ptr<PrimitiveGroup>(new PrimitiveGroup(leftPrimitives));
 	}
 
 	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->right = std::make_shared<BVH>();
+		node->right = std::unique_ptr<BVH>(new BVH());
 		buildRecursive(rightPrimitives, (BVH*)node->right.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->right = std::shared_ptr<PrimitiveGroup>(new PrimitiveGroup(rightPrimitives));
+		node->right = std::unique_ptr<PrimitiveGroup>(new PrimitiveGroup(rightPrimitives));
 	}
 }
 

@@ -20,6 +20,9 @@ namespace Raycer
 	{
 	public:
 
+		friend class Scene;
+		friend class CLScene;
+
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
@@ -38,11 +41,11 @@ namespace Raycer
 
 		bool changePrimitive = false;
 
-		Primitive* primitive = nullptr;
-
 	private:
 
 		bool internalIntersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections, const Matrix4x4& transformation, const Matrix4x4& transformationInv, const Matrix4x4& transformationInvT);
+
+		Primitive* primitive = nullptr;
 
 		Matrix4x4 cachedTransformation;
 		Matrix4x4 cachedTransformationInv;

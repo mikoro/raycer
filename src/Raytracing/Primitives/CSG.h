@@ -26,6 +26,9 @@ namespace Raycer
 	{
 	public:
 
+		friend class Scene;
+		friend class CLScene;
+
 		void initialize();
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
@@ -35,7 +38,9 @@ namespace Raycer
 		int leftPrimitiveId = 0;
 		int rightPrimitiveId = 0;
 
-		Primitive* leftPrimitive;
-		Primitive* rightPrimitive;
+	private:
+
+		Primitive* leftPrimitive = nullptr;
+		Primitive* rightPrimitive = nullptr;
 	};
 }
