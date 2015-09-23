@@ -14,8 +14,6 @@ Scene Scene::createTestScene5()
 	scene.raytracer.maxRayIterations = 8;
 	scene.raytracer.multiSamples = 0;
 
-	scene.rootBVH.enabled = true;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(9.49, 4.44, 3.94);
@@ -58,11 +56,14 @@ Scene Scene::createTestScene5()
 	ModelLoaderInfo modelInfo1;
 	modelInfo1.modelFilePath = "data/meshes/cube1.obj";
 	modelInfo1.defaultMaterialId = box1Material.id;
+	modelInfo1.addAllInstance = true;
 
 	modelInfo1.translate = Vector3(4.0, 1.0, 0.0);
 	modelInfo1.idStartOffset = 1000;
+	modelInfo1.allGroupId = 100;
 	scene.models.push_back(modelInfo1);
 	modelInfo1.idStartOffset = 2000;
+	modelInfo1.allGroupId = 101;
 	modelInfo1.translate = Vector3(8.0, 1.0, 0.0);
 	scene.models.push_back(modelInfo1);
 
@@ -78,15 +79,16 @@ Scene Scene::createTestScene5()
 	box2Material.ambientMapTextureId = box2Texture.id;
 	box2Material.diffuseMapTextureId = box2Texture.id;
 	box2Material.ambientReflectance = Color(0.1, 0.1, 0.3);
-	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.3);
+	box2Material.diffuseReflectance = Color(0.0, 0.0, 0.0);
 	box2Material.rayReflectance = 0.75;
 	box2Material.nonShadowing = true;
 
 	Box box2;
 	box2.id = 1;
 	box2.materialId = box2Material.id;
+	box2.invisible = true;
 	box2.extent = Vector3(20.0, 10.0, 1.0);
-	box2.position = Vector3(0.0, 100.0, 0.0);
+	box2.position = Vector3(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(box2Texture);
 	scene.materials.push_back(box2Material);
@@ -96,13 +98,12 @@ Scene Scene::createTestScene5()
 
 	Instance instance1;
 	instance1.primitiveId = box2.id;
-	instance1.materialId = box2Material.id;
 
-	instance1.translate = Vector3(0.0, -100.0, -5.0);
+	instance1.translate = Vector3(0.0, 0.0, -5.0);
 	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 	scene.primitives.instances.push_back(instance1);
 
-	instance1.translate = Vector3(0.0, -100.0, 5.0);
+	instance1.translate = Vector3(0.0, 0.0, 5.0);
 	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
 	scene.primitives.instances.push_back(instance1);
 

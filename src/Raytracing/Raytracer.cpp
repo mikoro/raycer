@@ -218,22 +218,23 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	Material* material = intersection.primitive->material;
 
-	if (material->skipLighting)
-	{
-		if (material->ambientMapTexture != nullptr)
-			return material->ambientMapTexture->getColor(intersection.texcoord, intersection.position) * material->ambientMapTexture->intensity;
-		else if (material->diffuseMapTexture != nullptr)
-			return material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
-		else
-			return finalColor;
-	}
-
 	double c1 = -(ray.direction.dot(intersection.normal));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
-	double fresnelReflectance = 1.0;
-	double fresnelTransmittance = 1.0;
+
+	if (material->skipLighting)
+	{
+		if (material->ambientMapTexture != nullptr)
+			finalColor = material->ambientMapTexture->getColor(intersection.texcoord, intersection.position) * material->ambientMapTexture->intensity;
+		else if (material->diffuseMapTexture != nullptr)
+			finalColor = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
+		
+		if (scene.simpleFog.enabled && isOutside)
+			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
+
+		return finalColor;
+	}
 
 	if (material->normalMapTexture != nullptr)
 	{
@@ -259,6 +260,9 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			intersection.normal = adjustedNormal.normalized();
 		}
 	}
+
+	double fresnelReflectance = 1.0;
+	double fresnelTransmittance = 1.0;
 
 	if (material->fresnelReflection)
 	{

@@ -21,6 +21,8 @@ Scene Scene::createTestScene4()
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/cornellbox.obj";
+	modelInfo.addAllInstance = true;
+	modelInfo.allGroupId = 1;
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //

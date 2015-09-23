@@ -121,7 +121,7 @@ Scene Scene::createTestScene1()
 	instance.primitiveId = box.id;
 	instance.materialId = box.materialId;
 	instance.translate = Vector3(6.0, 1.5, 0.0);
-	instance.rotate = EulerAngle(-10.0, 10.0, -10.0);
+	instance.rotate = EulerAngle(10.0, 45.0, -10.0);
 
 	scene.textures.colorTextures.push_back(boxTexture);
 	scene.materials.push_back(boxMaterial);
@@ -150,7 +150,7 @@ Scene Scene::createTestScene1()
 	instance.primitiveId = cylinder.id;
 	instance.materialId = cylinder.materialId;
 	instance.translate = Vector3(9.0, 0.5, 0.0);
-	instance.rotate = EulerAngle(-10.0, 10.0, 10.0);
+	instance.rotate = EulerAngle(-10.0, 10.0, -10.0);
 
 	scene.textures.colorTextures.push_back(cylinderTexture);
 	scene.materials.push_back(cylinderMaterial);
