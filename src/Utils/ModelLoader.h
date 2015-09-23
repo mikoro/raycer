@@ -21,9 +21,15 @@ namespace Raycer
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translate = Vector3(0.0, 0.0, 0.0);
-		bool invisible = false;
-		int idStartOffset = 1000000;
+		bool invisibleTriangles = false;
+		bool ignoreMaterials = false;
+		bool addAllGroup = false;
+		bool addAllInstance = false;
+		bool addGroups = false;
+		bool addGroupInstances = false;
 		int defaultMaterialId = 0;
+		int allGroupId = 0;
+		int idStartOffset = 1000000;
 	};
 
 	struct ModelLoaderResult
@@ -32,6 +38,11 @@ namespace Raycer
 		std::vector<Material> materials;
 		std::vector<ImageTexture> textures;
 		std::vector<PrimitiveGroup> groups;
-		PrimitiveGroup all;
+		PrimitiveGroup allGroup;
+
+		bool addAllGroup = false;
+		bool addAllInstance = false;
+		bool addGroups = false;
+		bool addGroupInstances = false;
 	};
 }

@@ -373,9 +373,6 @@
     <ClCompile Include="src\Utils\ObjModelLoader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp">
-      <Filter>Raytracing\Primitives</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -642,9 +639,6 @@
     </ClInclude>
     <ClInclude Include="src\Utils\ObjModelLoader.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\Primitives\Mesh.h">
-      <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

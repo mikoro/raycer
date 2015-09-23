@@ -190,6 +190,32 @@ void Scene::addModel(const ModelLoaderResult& result)
 
 	for (const ImageTexture& imageTexture : result.textures)
 		textures.imageTextures.push_back(imageTexture);
+
+	if (result.addAllGroup)
+		primitives.primitiveGroups.push_back(result.allGroup);
+
+	if (result.addAllInstance)
+	{
+		Instance instance;
+		instance.primitiveId = result.allGroup.id;
+		primitives.instances.push_back(instance);
+	}
+
+	if (result.addGroups)
+	{
+		for (const PrimitiveGroup& group : result.groups)
+			primitives.primitiveGroups.push_back(group);
+	}
+	
+	if (result.addGroupInstances)
+	{
+		for (const PrimitiveGroup& group : result.groups)
+		{
+			Instance instance;
+			instance.primitiveId = group.id;
+			primitives.instances.push_back(instance);
+		}
+	}
 }
 
 void Scene::initialize()
@@ -262,9 +288,6 @@ void Scene::initialize()
 
 	for (Triangle& triangle : primitives.triangles)
 		sortPrimitive(&triangle);
-
-	for (Mesh& mesh : primitives.meshes)
-		sortPrimitive(&mesh);
 
 	for (Cylinder& cylinder : primitives.cylinders)
 		sortPrimitive(&cylinder);
@@ -409,9 +432,6 @@ void Scene::initialize()
 
 	for (Triangle& triangle : primitives.triangles)
 		triangle.initialize();
-
-	for (Mesh& mesh : primitives.meshes)
-		mesh.initialize();
 
 	for (Cylinder& cylinder : primitives.cylinders)
 		cylinder.initialize();

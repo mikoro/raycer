@@ -79,16 +79,13 @@ Scene Scene::createTestScene18()
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";
+	modelInfo.addAllInstance = true;
+	modelInfo.allGroupId = 1;
 	modelInfo.scale = Vector3(0.1, 0.1, 0.1);
 	modelInfo.rotate = EulerAngle(0.0, 90.0, 0.0);
 	modelInfo.translate = Vector3(0.0, 1.5, 0.0);
-	modelInfo.invisible = true;
 	
-	ModelLoaderResult result = ObjModelLoader::readFile(modelInfo);
-	scene.addModel(result);
-
-	Instance instance;
-	instance.primitiveId = result.all.id;
+	scene.models.push_back(modelInfo);
 
 	std::mt19937 gen(230947887);
 	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);
@@ -98,6 +95,8 @@ Scene Scene::createTestScene18()
 	{
 		for (int x = -400; x < 0; x += 1)
 		{
+			Instance instance;
+			instance.primitiveId = 1;
 			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), y + translateDist(gen));
 			instance.rotate = EulerAngle(0.0, rotationDist(gen), 30.0 + rotationDist(gen));
 

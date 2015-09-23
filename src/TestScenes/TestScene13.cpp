@@ -75,17 +75,18 @@ Scene Scene::createTestScene13()
 	mesh1Material.shininess = 64.0;
 	mesh1Material.texcoordScale = Vector2(0.1, 0.1);
 
-	Mesh mesh1;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/square.obj";
-	mesh1.position = Vector3(-10.0, 0.0, 10.0);
-	mesh1.scale = Vector3(20.0, 20.0, 20.0);
-	mesh1.orientation = EulerAngle(-90.0, 0.0, 0.0);
+	ModelLoaderInfo modelInfo1;
+	modelInfo1.modelFilePath = "data/meshes/square.obj";
+	modelInfo1.defaultMaterialId = mesh1Material.id;
+	modelInfo1.idStartOffset = 1000;
+	modelInfo1.scale = Vector3(20.0, 20.0, 20.0);
+	modelInfo1.rotate = EulerAngle(-90.0, 0.0, 0.0);
+	modelInfo1.translate = Vector3(-10.0, 0.0, 10.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture1);
 	scene.textures.imageTextures.push_back(mesh1Texture2);
 	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	scene.models.push_back(modelInfo1);
 
 	// MESH 2 //
 
@@ -112,17 +113,18 @@ Scene Scene::createTestScene13()
 	mesh2Material.nonShadowing = true;
 	mesh2Material.texcoordScale = Vector2(0.25, 0.5);
 
-	Mesh mesh2;
-	mesh2.materialId = mesh2Material.id;
-	mesh2.meshFilePath = "data/meshes/square.obj";
-	mesh2.position = Vector3(-10.0, 0.0, -2.5);
-	mesh2.scale = Vector3(20.0, 10.0, 5.0);
-	mesh2.orientation = EulerAngle(0.0, 0.0, 0.0);
+	ModelLoaderInfo modelInfo2;
+	modelInfo2.modelFilePath = "data/meshes/square.obj";
+	modelInfo2.defaultMaterialId = mesh2Material.id;
+	modelInfo2.idStartOffset = 2000;
+	modelInfo2.scale = Vector3(20.0, 10.0, 5.0);
+	modelInfo2.rotate = EulerAngle(0.0, 0.0, 0.0);
+	modelInfo2.translate = Vector3(-10.0, 0.0, -2.5);
 
 	scene.textures.imageTextures.push_back(mesh2Texture1);
 	scene.textures.imageTextures.push_back(mesh2Texture2);
 	scene.materials.push_back(mesh2Material);
-	scene.primitives.meshes.push_back(mesh2);
+	scene.models.push_back(modelInfo2);
 
 	// MESH 3 //
 
@@ -149,17 +151,18 @@ Scene Scene::createTestScene13()
 	mesh3Material.texcoordScale = Vector2(1.0, 1.0);
 	mesh3Material.nonShadowing = true;
 
-	Mesh mesh3;
-	mesh3.materialId = mesh3Material.id;
-	mesh3.meshFilePath = "data/meshes/cube_normalmap.obj";
-	mesh3.position = Vector3(-3.0, 1.0, 0.0);
-	mesh3.scale = Vector3(0.5, 0.5, 0.5);
-	mesh3.orientation = EulerAngle(0.0, 90.0, 30.0);
+	ModelLoaderInfo modelInfo3;
+	modelInfo3.modelFilePath = "data/meshes/cube_normalmap.obj";
+	modelInfo3.defaultMaterialId = mesh3Material.id;
+	modelInfo3.idStartOffset = 3000;
+	modelInfo3.scale = Vector3(0.5, 0.5, 0.5);
+	modelInfo3.rotate = EulerAngle(0.0, 90.0, 30.0);
+	modelInfo3.translate = Vector3(-3.0, 1.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh3Texture1);
 	scene.textures.imageTextures.push_back(mesh3Texture2);
 	scene.materials.push_back(mesh3Material);
-	scene.primitives.meshes.push_back(mesh3);
+	scene.models.push_back(modelInfo3);
 
 	// LIGHTS //
 

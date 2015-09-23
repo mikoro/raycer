@@ -50,38 +50,18 @@ Scene Scene::createTestScene3()
 	mesh1Material.ambientMapTextureId = mesh1Texture.id;
 	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
 
-	Mesh mesh1;
-	mesh1.id = 1;
-	mesh1.invisible = true;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(6.0, 6.0, 6.0);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+	ModelLoaderInfo modelInfo1;
+	modelInfo1.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo1.defaultMaterialId = mesh1Material.id;
+	modelInfo1.addAllInstance = true;
+	modelInfo1.allGroupId = 1;
+	modelInfo1.scale = Vector3(6.0, 6.0, 6.0);
+	modelInfo1.rotate = EulerAngle(0.0, 0.0, 0.0);
+	modelInfo1.translate = Vector3(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
-
-	// INSTANCE 1 //
-
-	ColorTexture instance1Texture;
-	instance1Texture.id = 3;
-	instance1Texture.color = Color(1.0, 1.0, 1.0);
-	instance1Texture.intensity = 0.8;
-
-	Material instance1Material;
-	instance1Material.id = 3;
-	instance1Material.ambientMapTextureId = instance1Texture.id;
-	instance1Material.diffuseMapTextureId = instance1Texture.id;
-
-	Instance instance1;
-	instance1.materialId = instance1Material.id;
-	instance1.primitiveId = mesh1.id;
-
-	scene.textures.colorTextures.push_back(instance1Texture);
-	scene.materials.push_back(instance1Material);
-	scene.primitives.instances.push_back(instance1);
+	scene.models.push_back(modelInfo1);
 
 	// LIGHTS //
 

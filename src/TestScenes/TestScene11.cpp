@@ -33,17 +33,18 @@ Scene Scene::createTestScene11()
 	mesh1Material.ambientMapTextureId = mesh1Texture.id;
 	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
 
-	Mesh mesh1;
-	mesh1.id = 1;
-	mesh1.materialId = mesh1Material.id;
-	mesh1.meshFilePath = "data/meshes/monkey3.obj";
-	mesh1.position = Vector3(0.0, 0.0, 0.0);
-	mesh1.scale = Vector3(6.0, 6.0, 6.0);
-	mesh1.orientation = EulerAngle(0.0, 0.0, 0.0);
+	ModelLoaderInfo modelInfo1;
+	modelInfo1.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo1.defaultMaterialId = mesh1Material.id;
+	modelInfo1.addAllGroup = true;
+	modelInfo1.allGroupId = 1;
+	modelInfo1.scale = Vector3(6.0, 6.0, 6.0);
+	modelInfo1.rotate = EulerAngle(0.0, 0.0, 0.0);
+	modelInfo1.translate = Vector3(0.0, 0.0, 0.0);
 
 	scene.textures.colorTextures.push_back(mesh1Texture);
 	scene.materials.push_back(mesh1Material);
-	scene.primitives.meshes.push_back(mesh1);
+	scene.models.push_back(modelInfo1);
 
 	// INSTANCES
 
@@ -74,7 +75,7 @@ Scene Scene::createTestScene11()
 
 				Instance instance1;
 				instance1.materialId = instance1Material.id;
-				instance1.primitiveId = mesh1.id;
+				instance1.primitiveId = 1;
 				instance1.changePrimitive = true;
 				instance1.scale = Vector3(scale, scale, scale);
 				instance1.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));

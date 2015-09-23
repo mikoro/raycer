@@ -144,10 +144,10 @@ namespace Raycer
 			cereal::make_nvp("triangles", b.triangles),
 			cereal::make_nvp("cylinders", b.cylinders),
 			cereal::make_nvp("toruses", b.toruses),
-			cereal::make_nvp("meshes", b.meshes),
 			cereal::make_nvp("instances", b.instances),
 			cereal::make_nvp("csgs", b.csgs),
-			cereal::make_nvp("blinnBlobs", b.blinnBlobs));
+			cereal::make_nvp("blinnBlobs", b.blinnBlobs),
+			cereal::make_nvp("primitiveGroups", b.primitiveGroups));
 	}
 
 	// ---------------------------------------------
@@ -275,21 +275,6 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, Mesh& b)
-	{
-		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("materialId", b.materialId),
-			cereal::make_nvp("invisible", b.invisible),
-			cereal::make_nvp("meshFilePath", b.meshFilePath),
-			cereal::make_nvp("position", b.position),
-			cereal::make_nvp("scale", b.scale),
-			cereal::make_nvp("orientation", b.orientation),
-			cereal::make_nvp("enableBVH", b.enableBVH),
-			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo),
-			cereal::make_nvp("triangles", b.triangles));
-	}
-
-	template<class Archive>
 	void serialize(Archive& a, Instance& b)
 	{
 		a(cereal::make_nvp("id", b.id),
@@ -321,6 +306,17 @@ namespace Raycer
 			cereal::make_nvp("invisible", b.invisible),
 			cereal::make_nvp("blobs", b.blobs),
 			cereal::make_nvp("solverIterations", b.solverIterations));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, PrimitiveGroup& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("invisible", b.invisible),
+			cereal::make_nvp("primitiveIds", b.primitiveIds),
+			cereal::make_nvp("enableBVH", b.enableBVH),
+			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
 	}
 
 	// ---------------------------------------------
@@ -574,9 +570,16 @@ namespace Raycer
 		a(cereal::make_nvp("modelFilePath", b.modelFilePath),
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("rotate", b.rotate),
-			cereal::make_nvp("translate", b.invisible),
-			cereal::make_nvp("idStartOffset", b.idStartOffset),
-			cereal::make_nvp("defaultMaterialId", b.defaultMaterialId));
+			cereal::make_nvp("translate", b.translate),
+			cereal::make_nvp("invisibleTriangles", b.invisibleTriangles),
+			cereal::make_nvp("ignoreMaterials", b.ignoreMaterials),
+			cereal::make_nvp("addAllGroup", b.addAllGroup),
+			cereal::make_nvp("addAllInstance", b.addAllInstance),
+			cereal::make_nvp("addGroups", b.addGroups),
+			cereal::make_nvp("addGroupInstances", b.addGroupInstances),
+			cereal::make_nvp("defaultMaterialId", b.defaultMaterialId),
+			cereal::make_nvp("allGroupId", b.allGroupId),
+			cereal::make_nvp("idStartOffset", b.idStartOffset));
 	}
 
 	template<class Archive>

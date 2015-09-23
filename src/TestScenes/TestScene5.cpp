@@ -55,14 +55,16 @@ Scene Scene::createTestScene5()
 
 	// MESH 1 //
 
-	Mesh mesh1;
-	mesh1.materialId = box1Material.id;
-	mesh1.meshFilePath = "data/meshes/cube1.obj";
+	ModelLoaderInfo modelInfo1;
+	modelInfo1.modelFilePath = "data/meshes/cube1.obj";
+	modelInfo1.defaultMaterialId = box1Material.id;
 
-	mesh1.position = Vector3(4.0, 1.0, 0.0);
-	scene.primitives.meshes.push_back(mesh1);
-	mesh1.position = Vector3(8.0, 1.0, 0.0);
-	scene.primitives.meshes.push_back(mesh1);
+	modelInfo1.translate = Vector3(4.0, 1.0, 0.0);
+	modelInfo1.idStartOffset = 1000;
+	scene.models.push_back(modelInfo1);
+	modelInfo1.idStartOffset = 2000;
+	modelInfo1.translate = Vector3(8.0, 1.0, 0.0);
+	scene.models.push_back(modelInfo1);
 
 	// BOX 2 //
 

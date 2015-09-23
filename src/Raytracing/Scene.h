@@ -27,7 +27,6 @@
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Primitives/Cylinder.h"
 #include "Raytracing/Primitives/Torus.h"
-#include "Raytracing/Primitives/Mesh.h"
 #include "Raytracing/Primitives/Instance.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/CSG.h"
@@ -172,7 +171,6 @@ namespace Raycer
 			std::vector<Triangle> triangles;
 			std::vector<Cylinder> cylinders;
 			std::vector<Torus> toruses;
-			std::vector<Mesh> meshes;
 			std::vector<Instance> instances;
 			std::vector<CSG> csgs;
 			std::vector<BlinnBlob> blinnBlobs;

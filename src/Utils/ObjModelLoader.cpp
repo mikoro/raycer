@@ -35,10 +35,25 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		throw std::runtime_error("Could not open the OBJ file");
 
 	ModelLoaderResult result;
+
+	result.allGroup.id = info.allGroupId;
+	result.allGroup.invisible = true;
+
+	result.addAllGroup = info.addAllGroup;
+	result.addAllInstance = info.addAllInstance;
+	result.addGroups = info.addGroups;
+	result.addGroupInstances = info.addGroupInstances;
+
+	if (info.addAllInstance)
+		result.addAllGroup = true;
+
+	if (info.addGroupInstances)
+		result.addGroups = true;
+
 	int currentId = info.idStartOffset;
 	int currentMaterialId = info.defaultMaterialId;
-	result.all.id = ++currentId;
-
+	bool invisible = info.invisibleTriangles || info.addAllInstance || info.addGroupInstances;
+	
 	std::map<std::string, int> materialsMap;
 	std::string objFileDirectory = boost::filesystem::absolute(info.modelFilePath).parent_path().string();
 
@@ -61,7 +76,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		ss >> part;
 
 		// new material file
-		if (part == "mtllib")
+		if (part == "mtllib" && !info.ignoreMaterials)
 		{
 			ss >> part;
 			processMaterialFile(objFileDirectory, part, result, materialsMap, currentId);
@@ -73,11 +88,12 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		{
 			result.groups.push_back(PrimitiveGroup());
 			result.groups.back().id = ++currentId;
+			result.groups.back().invisible = true;
 			continue;
 		}
 
 		// select material
-		if (part == "usemtl")
+		if (part == "usemtl" && !info.ignoreMaterials)
 		{
 			ss >> part;
 
@@ -128,7 +144,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 
 		// face
 		if (part == "f")
-			processFace(ss, vertices, normals, texcoords, info, result, currentId, currentMaterialId);
+			processFace(ss, vertices, normals, texcoords, result, currentId, currentMaterialId, invisible);
 	}
 
 	file.close();
@@ -358,7 +374,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		result.materials.push_back(currentMaterial);
 }
 
-void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, int& currentId, int currentMaterialId)
+void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, ModelLoaderResult& result, int& currentId, int currentMaterialId, bool invisible)
 {
 	std::vector<int> vertexIndices;
 	std::vector<int> normalIndices;
@@ -435,12 +451,12 @@ void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& v
 		Triangle triangle;
 		triangle.id = ++currentId;
 		triangle.materialId = currentMaterialId;
-		triangle.invisible = info.invisible;
+		triangle.invisible = invisible;
 
 		if (result.groups.size() > 0)
 			result.groups.back().primitiveIds.push_back(triangle.id);
 
-		result.all.primitiveIds.push_back(triangle.id);
+		result.allGroup.primitiveIds.push_back(triangle.id);
 
 		triangle.vertices[0] = vertices[vertexIndices[0]];
 		triangle.vertices[1] = vertices[vertexIndices[i - 1]];

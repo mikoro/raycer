@@ -182,7 +182,6 @@
     <ClCompile Include="src\Raytracing\Primitives\Cylinder.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\FlatBVH.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Instance.cpp" />
-    <ClCompile Include="src\Raytracing\Primitives\Mesh.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Plane.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\PrimitiveGroup.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Sphere.cpp" />
@@ -298,7 +297,6 @@
     <ClInclude Include="src\Raytracing\Primitives\Cylinder.h" />
     <ClInclude Include="src\Raytracing\Primitives\FlatBVH.h" />
     <ClInclude Include="src\Raytracing\Primitives\Instance.h" />
-    <ClInclude Include="src\Raytracing\Primitives\Mesh.h" />
     <ClInclude Include="src\Raytracing\Primitives\Plane.h" />
     <ClInclude Include="src\Raytracing\Primitives\Primitive.h" />
     <ClInclude Include="src\Raytracing\Primitives\PrimitiveGroup.h" />
