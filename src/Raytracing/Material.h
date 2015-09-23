@@ -19,6 +19,7 @@ namespace Raycer
 		bool normalInterpolation = true;
 		bool backfaceCulling = false;
 		bool invertNormal = false;
+		bool enableCSG = false;
 
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 

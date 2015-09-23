@@ -52,6 +52,7 @@ Scene Scene::createTestScene17()
 	marbleMaterial.id = 2;
 	marbleMaterial.ambientMapTextureId = marbleMaterial.id;
 	marbleMaterial.diffuseMapTextureId = marbleMaterial.id;
+	marbleMaterial.enableCSG = true;
 
 	WoodTexture woodTexture;
 	woodTexture.id = 3;
@@ -61,6 +62,7 @@ Scene Scene::createTestScene17()
 	woodMaterial.id = 3;
 	woodMaterial.ambientMapTextureId = woodMaterial.id;
 	woodMaterial.diffuseMapTextureId = woodMaterial.id;
+	woodMaterial.enableCSG = true;
 
 	FireTexture fireTexture;
 	fireTexture.id = 4;
@@ -70,6 +72,7 @@ Scene Scene::createTestScene17()
 	fireMaterial.id = 4;
 	fireMaterial.ambientMapTextureId = fireMaterial.id;
 	fireMaterial.diffuseMapTextureId = fireMaterial.id;
+	fireMaterial.enableCSG = true;
 
 	scene.textures.marbleTextures.push_back(marbleTexture);
 	scene.textures.woodTextures.push_back(woodTexture);

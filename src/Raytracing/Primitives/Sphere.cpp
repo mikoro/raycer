@@ -91,10 +91,13 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 
 	double t2 = sqrt(radius2 - sphereToRayDistance2);
 
-	// CSG intersections
-	intersections.push_back(calculateIntersection(t1 - t2, CSGDirection::IN));
-	intersections.push_back(calculateIntersection(t1 + t2, CSGDirection::OUT));
-
+	if (material->enableCSG)
+	{
+		// CSG intersections
+		intersections.push_back(calculateIntersection(t1 - t2, CSGDirection::IN));
+		intersections.push_back(calculateIntersection(t1 + t2, CSGDirection::OUT));
+	}
+	
 	// default intersection
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 

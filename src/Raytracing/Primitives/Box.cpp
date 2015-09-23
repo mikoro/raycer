@@ -95,10 +95,13 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 		return tempIntersection;
 	};
 
-	// CSG intersections
-	intersections.push_back(calculateIntersection(tmin, minNormal, CSGDirection::IN));
-	intersections.push_back(calculateIntersection(tmax, maxNormal, CSGDirection::OUT));
-
+	if (material->enableCSG)
+	{
+		// CSG intersections
+		intersections.push_back(calculateIntersection(tmin, minNormal, CSGDirection::IN));
+		intersections.push_back(calculateIntersection(tmax, maxNormal, CSGDirection::OUT));
+	}
+	
 	// default intersection
 	bool isInside = (tmin < 0.0);
 	double t = isInside ? tmax : tmin;
