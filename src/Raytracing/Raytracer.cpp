@@ -221,9 +221,9 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 	if (material->skipLighting)
 	{
 		if (material->ambientMapTexture != nullptr)
-			return material->ambientMapTexture->getColor(intersection.texcoord, intersection.position);
+			return material->ambientMapTexture->getColor(intersection.texcoord, intersection.position) * material->ambientMapTexture->intensity;
 		else if (material->diffuseMapTexture != nullptr)
-			return material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position);
+			return material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
 		else
 			return finalColor;
 	}
@@ -362,13 +362,13 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 	Color mappedSpecularReflectance = Color(1.0, 1.0, 1.0);
 
 	if (material->ambientMapTexture != nullptr)
-		mappedAmbientReflectance = material->ambientMapTexture->getColor(intersection.texcoord, intersection.position);
+		mappedAmbientReflectance = material->ambientMapTexture->getColor(intersection.texcoord, intersection.position) * material->ambientMapTexture->intensity;
 
 	if (material->diffuseMapTexture != nullptr)
-		mappedDiffuseReflectance = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position);
+		mappedDiffuseReflectance = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
 
 	if (material->specularMapTexture != nullptr)
-		mappedSpecularReflectance = material->specularMapTexture->getColor(intersection.texcoord, intersection.position);
+		mappedSpecularReflectance = material->specularMapTexture->getColor(intersection.texcoord, intersection.position) * material->specularMapTexture->intensity;
 
 	Color finalAmbientReflectance = material->ambientReflectance * mappedAmbientReflectance;
 	Color finalDiffuseReflectance = material->diffuseReflectance * mappedDiffuseReflectance;

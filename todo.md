@@ -10,4 +10,4 @@ textures
  - EWA texture filtering
 
 misc
- - primitive attributes to private (+friend class Scene)
+ - replace color textures with reflectance attributes

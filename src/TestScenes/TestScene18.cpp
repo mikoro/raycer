@@ -14,7 +14,7 @@ Scene Scene::createTestScene18()
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
-	scene.raytracer.cameraSamples = 5;
+	//scene.raytracer.cameraSamples = 5;
 
 	scene.rootBVH.enabled = true;
 
