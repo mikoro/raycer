@@ -40,7 +40,8 @@ Scene Scene::createTestScene8()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.rayReflectance = 0.5;
 	groundMaterial.ambientReflectance = Color(0.1, 0.1, 0.1);
 	groundMaterial.diffuseReflectance = Color(0.1, 0.1, 0.1);
@@ -82,7 +83,8 @@ Scene Scene::createTestScene8()
 
 			Material sphereMaterial;
 			sphereMaterial.id = index;
-			sphereMaterial.colorTextureId = sphereTexture.id;
+			sphereMaterial.ambientMapTextureId = sphereTexture.id;
+			sphereMaterial.diffuseMapTextureId = sphereTexture.id;
 			sphereMaterial.rayReflectance = 0.05;
 			sphereMaterial.ambientReflectance = Color::random(gen) * 0.8;
 			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;

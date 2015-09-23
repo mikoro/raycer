@@ -107,7 +107,6 @@ namespace Raycer
 	void serialize(Archive& a, Scene::BoundingBoxes& b)
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("texture", b.texture),
 			cereal::make_nvp("material", b.material));
 	}
 
@@ -529,23 +528,30 @@ namespace Raycer
 	void serialize(Archive& a, Material& b)
 	{
 		a(cereal::make_nvp("id", b.id),
-			cereal::make_nvp("colorTextureId", b.colorTextureId),
-			cereal::make_nvp("normalMapTextureId", b.normalMapTextureId),
-			cereal::make_nvp("heightMapTextureId", b.heightMapTextureId),
-			cereal::make_nvp("texcoordScale", b.texcoordScale),
-			cereal::make_nvp("ambientReflectance", b.ambientReflectance),
-			cereal::make_nvp("diffuseReflectance", b.diffuseReflectance),
-			cereal::make_nvp("specularReflectance", b.specularReflectance),
-			cereal::make_nvp("shininess", b.shininess),
 			cereal::make_nvp("skipLighting", b.skipLighting),
 			cereal::make_nvp("nonShadowing", b.nonShadowing),
+			cereal::make_nvp("normalInterpolation", b.normalInterpolation),
+			cereal::make_nvp("backfaceCulling", b.backfaceCulling),
+			cereal::make_nvp("invertNormal", b.invertNormal),
+			cereal::make_nvp("texcoordScale", b.texcoordScale),
+			cereal::make_nvp("ambientMapTextureId", b.ambientMapTextureId),
+			cereal::make_nvp("ambientReflectance", b.ambientReflectance),
+			cereal::make_nvp("diffuseMapTextureId", b.diffuseMapTextureId),
+			cereal::make_nvp("diffuseReflectance", b.diffuseReflectance),
+			cereal::make_nvp("specularMapTextureId", b.specularMapTextureId),
+			cereal::make_nvp("specularReflectance", b.specularReflectance),
+			cereal::make_nvp("shininess", b.shininess),
+			cereal::make_nvp("rayReflectanceMapTextureId", b.rayReflectanceMapTextureId),
 			cereal::make_nvp("rayReflectance", b.rayReflectance),
+			cereal::make_nvp("fresnelReflection", b.fresnelReflection),
+			cereal::make_nvp("rayTransmittanceMapTextureId", b.rayTransmittanceMapTextureId),
 			cereal::make_nvp("rayTransmittance", b.rayTransmittance),
 			cereal::make_nvp("refractiveIndex", b.refractiveIndex),
-			cereal::make_nvp("isFresnel", b.isFresnel),
 			cereal::make_nvp("enableAttenuation", b.enableAttenuation),
-			cereal::make_nvp("attenuation", b.attenuation),
-			cereal::make_nvp("attenuationColor", b.attenuationColor));
+			cereal::make_nvp("attenuationFactor", b.attenuationFactor),
+			cereal::make_nvp("attenuationColor", b.attenuationColor),
+			cereal::make_nvp("normalMapTextureId", b.normalMapTextureId),
+			cereal::make_nvp("heightMapTextureId", b.heightMapTextureId));
 	}
 
 	// ---------------------------------------------

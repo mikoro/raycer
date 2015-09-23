@@ -29,7 +29,8 @@ Scene Scene::createTestScene1()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -49,7 +50,8 @@ Scene Scene::createTestScene1()
 
 	Material triangleMaterial;
 	triangleMaterial.id = 2;
-	triangleMaterial.colorTextureId = triangleTexture.id;
+	triangleMaterial.ambientMapTextureId = triangleTexture.id;
+	triangleMaterial.diffuseMapTextureId = triangleTexture.id;
 
 	Triangle triangle;
 	triangle.id = 2;
@@ -80,7 +82,8 @@ Scene Scene::createTestScene1()
 
 	Material sphereMaterial;
 	sphereMaterial.id = 3;
-	sphereMaterial.colorTextureId = sphereTexture.id;
+	sphereMaterial.ambientMapTextureId = sphereTexture.id;
+	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
 
 	Sphere sphere;
 	sphere.id = 3;
@@ -106,7 +109,8 @@ Scene Scene::createTestScene1()
 
 	Material boxMaterial;
 	boxMaterial.id = 4;
-	boxMaterial.colorTextureId = boxTexture.id;
+	boxMaterial.ambientMapTextureId = boxTexture.id;
+	boxMaterial.diffuseMapTextureId = boxTexture.id;
 
 	Box box;
 	box.id = 4;
@@ -133,7 +137,8 @@ Scene Scene::createTestScene1()
 
 	Material cylinderMaterial;
 	cylinderMaterial.id = 5;
-	cylinderMaterial.colorTextureId = cylinderTexture.id;
+	cylinderMaterial.ambientMapTextureId = cylinderTexture.id;
+	cylinderMaterial.diffuseMapTextureId = cylinderTexture.id;
 
 	Cylinder cylinder;
 	cylinder.id = 5;
@@ -161,7 +166,8 @@ Scene Scene::createTestScene1()
 
 	Material torusMaterial;
 	torusMaterial.id = 6;
-	torusMaterial.colorTextureId = torusTexture.id;
+	torusMaterial.ambientMapTextureId = torusTexture.id;
+	torusMaterial.diffuseMapTextureId = torusTexture.id;
 
 	Torus torus;
 	torus.id = 6;
@@ -189,7 +195,8 @@ Scene Scene::createTestScene1()
 
 	Material blobMaterial;
 	blobMaterial.id = 7;
-	blobMaterial.colorTextureId = blobTexture.id;
+	blobMaterial.ambientMapTextureId = blobTexture.id;
+	blobMaterial.diffuseMapTextureId = blobTexture.id;
 
 	BlinnBlob blob;
 	blob.id = 7;
@@ -225,7 +232,7 @@ Scene Scene::createTestScene1()
 
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.5;
+	pointLight1.intensity = 1.0;
 	pointLight1.position = Vector3(8.0, 10.0, 5.0);
 	pointLight1.distance = 20.0;
 	pointLight1.attenuation = 1.0;

@@ -9,7 +9,7 @@ namespace Raycer
 	class Vector2;
 	class Vector3;
 
-	enum class TextureNormalDataType { BUMP_MAP, NORMAL_MAP, GRADIENT };
+	enum class TextureNormalDataType { NONE, BUMP_MAP, NORMAL_MAP, GRADIENT };
 
 	class Texture
 	{

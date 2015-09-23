@@ -36,7 +36,8 @@ Scene Scene::createTestScene9()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(10.0, 10.0);
 
 	Plane groundPlane;
@@ -58,7 +59,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
-	sphere1Material.colorTextureId = sphere1Texture.id;
+	sphere1Material.ambientMapTextureId = sphere1Texture.id;
+	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
 	sphere1Material.nonShadowing = true;
 	sphere1Material.invertNormal = true;
@@ -81,7 +83,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere2Material;
 	sphere2Material.id = 3;
-	sphere2Material.colorTextureId = sphere2Texture.id;
+	sphere2Material.ambientMapTextureId = sphere2Texture.id;
+	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
 
 	Sphere sphere2;
 	sphere2.materialId = sphere2Material.id;
@@ -102,7 +105,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere3Material;
 	sphere3Material.id = 4;
-	sphere3Material.colorTextureId = sphere3Texture.id;
+	sphere3Material.ambientMapTextureId = sphere3Texture.id;
+	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
 	sphere3Material.texcoordScale = Vector2(0.1, 0.1);
 
 	Sphere sphere3;
@@ -123,7 +127,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere4Material;
 	sphere4Material.id = 5;
-	sphere4Material.colorTextureId = sphere4Texture.id;
+	sphere4Material.ambientMapTextureId = sphere4Texture.id;
+	sphere4Material.diffuseMapTextureId = sphere4Texture.id;
 	sphere4Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere4;
@@ -143,7 +148,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere5Material;
 	sphere5Material.id = 6;
-	sphere5Material.colorTextureId = sphere5Texture.id;
+	sphere5Material.ambientMapTextureId = sphere5Texture.id;
+	sphere5Material.diffuseMapTextureId = sphere5Texture.id;
 
 	Sphere sphere5;
 	sphere5.materialId = sphere5Material.id;
@@ -162,7 +168,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere6Material;
 	sphere6Material.id = 7;
-	sphere6Material.colorTextureId = sphere6Texture.id;
+	sphere6Material.ambientMapTextureId = sphere6Texture.id;
+	sphere6Material.diffuseMapTextureId = sphere6Texture.id;
 
 	Sphere sphere6;
 	sphere6.materialId = sphere6Material.id;
@@ -181,7 +188,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere7Material;
 	sphere7Material.id = 8;
-	sphere7Material.colorTextureId = sphere7Texture.id;
+	sphere7Material.ambientMapTextureId = sphere7Texture.id;
+	sphere7Material.diffuseMapTextureId = sphere7Texture.id;
 
 	Sphere sphere7;
 	sphere7.materialId = sphere7Material.id;
@@ -200,7 +208,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere8Material;
 	sphere8Material.id = 9;
-	sphere8Material.colorTextureId = sphere8Texture.id;
+	sphere8Material.ambientMapTextureId = sphere8Texture.id;
+	sphere8Material.diffuseMapTextureId = sphere8Texture.id;
 
 	Sphere sphere8;
 	sphere8.materialId = sphere8Material.id;
@@ -219,7 +228,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere9Material;
 	sphere9Material.id = 10;
-	sphere9Material.colorTextureId = sphere9Texture.id;
+	sphere9Material.ambientMapTextureId = sphere9Texture.id;
+	sphere9Material.diffuseMapTextureId = sphere9Texture.id;
 
 	Sphere sphere9;
 	sphere9.materialId = sphere9Material.id;
@@ -239,7 +249,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere10Material;
 	sphere10Material.id = 11;
-	sphere10Material.colorTextureId = sphere10Texture.id;
+	sphere10Material.ambientMapTextureId = sphere10Texture.id;
+	sphere10Material.diffuseMapTextureId = sphere10Texture.id;
 
 	Sphere sphere10;
 	sphere10.materialId = sphere10Material.id;
@@ -259,7 +270,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere11Material;
 	sphere11Material.id = 12;
-	sphere11Material.colorTextureId = sphere11Texture.id;
+	sphere11Material.ambientMapTextureId = sphere11Texture.id;
+	sphere11Material.diffuseMapTextureId = sphere11Texture.id;
 
 	Sphere sphere11;
 	sphere11.materialId = sphere11Material.id;
@@ -281,7 +293,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere12Material;
 	sphere12Material.id = 13;
-	sphere12Material.colorTextureId = sphere12Texture.id;
+	sphere12Material.ambientMapTextureId = sphere12Texture.id;
+	sphere12Material.diffuseMapTextureId = sphere12Texture.id;
 
 	Sphere sphere12;
 	sphere12.materialId = sphere12Material.id;
@@ -303,7 +316,8 @@ Scene Scene::createTestScene9()
 
 	Material sphere13Material;
 	sphere13Material.id = 14;
-	sphere13Material.colorTextureId = sphere13Texture.id;
+	sphere13Material.ambientMapTextureId = sphere13Texture.id;
+	sphere13Material.diffuseMapTextureId = sphere13Texture.id;
 
 	Sphere sphere13;
 	sphere13.materialId = sphere13Material.id;

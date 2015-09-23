@@ -11,7 +11,7 @@ Scene Scene::createTestScene5()
 	Scene scene;
 
 	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
-	scene.raytracer.maxRayIterations = 16;
+	scene.raytracer.maxRayIterations = 8;
 	scene.raytracer.multiSamples = 0;
 
 	scene.rootBVH.enabled = true;
@@ -30,13 +30,14 @@ Scene Scene::createTestScene5()
 
 	Material box1Material;
 	box1Material.id = 3;
-	box1Material.colorTextureId = box1Texture.id;
+	box1Material.ambientMapTextureId = box1Texture.id;
+	box1Material.diffuseMapTextureId = box1Texture.id;
 	box1Material.ambientReflectance = Color(0.5, 0.0, 0.0);
 	box1Material.diffuseReflectance = Color(0.5, 0.0, 0.0);
 	box1Material.rayTransmittance = 0.75;
 	box1Material.refractiveIndex = 1.0;
 	box1Material.enableAttenuation = true;
-	box1Material.attenuation = 1.0;
+	box1Material.attenuationFactor = 1.0;
 	box1Material.attenuationColor = Color(0.1, 0.0, 0.0);
 	box1Material.nonShadowing = true;
 
@@ -72,7 +73,8 @@ Scene Scene::createTestScene5()
 
 	Material box2Material;
 	box2Material.id = 4;
-	box2Material.colorTextureId = box2Texture.id;
+	box2Material.ambientMapTextureId = box2Texture.id;
+	box2Material.diffuseMapTextureId = box2Texture.id;
 	box2Material.ambientReflectance = Color(0.1, 0.1, 0.3);
 	box2Material.diffuseReflectance = Color(0.1, 0.1, 0.3);
 	box2Material.rayReflectance = 0.75;

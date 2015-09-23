@@ -26,7 +26,8 @@ Scene Scene::createTestScene3()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -46,7 +47,8 @@ Scene Scene::createTestScene3()
 
 	Material mesh1Material;
 	mesh1Material.id = 2;
-	mesh1Material.colorTextureId = mesh1Texture.id;
+	mesh1Material.ambientMapTextureId = mesh1Texture.id;
+	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
 
 	Mesh mesh1;
 	mesh1.id = 1;
@@ -70,7 +72,8 @@ Scene Scene::createTestScene3()
 
 	Material instance1Material;
 	instance1Material.id = 3;
-	instance1Material.colorTextureId = instance1Texture.id;
+	instance1Material.ambientMapTextureId = instance1Texture.id;
+	instance1Material.diffuseMapTextureId = instance1Texture.id;
 
 	Instance instance1;
 	instance1.materialId = instance1Material.id;

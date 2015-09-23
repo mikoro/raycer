@@ -29,7 +29,8 @@ Scene Scene::createTestScene17()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(2.0, 2.0);
 
 	Plane groundPlane;
@@ -49,7 +50,8 @@ Scene Scene::createTestScene17()
 
 	Material marbleMaterial;
 	marbleMaterial.id = 2;
-	marbleMaterial.colorTextureId = marbleMaterial.id;
+	marbleMaterial.ambientMapTextureId = marbleMaterial.id;
+	marbleMaterial.diffuseMapTextureId = marbleMaterial.id;
 
 	WoodTexture woodTexture;
 	woodTexture.id = 3;
@@ -57,7 +59,8 @@ Scene Scene::createTestScene17()
 
 	Material woodMaterial;
 	woodMaterial.id = 3;
-	woodMaterial.colorTextureId = woodMaterial.id;
+	woodMaterial.ambientMapTextureId = woodMaterial.id;
+	woodMaterial.diffuseMapTextureId = woodMaterial.id;
 
 	FireTexture fireTexture;
 	fireTexture.id = 4;
@@ -65,7 +68,8 @@ Scene Scene::createTestScene17()
 
 	Material fireMaterial;
 	fireMaterial.id = 4;
-	fireMaterial.colorTextureId = fireMaterial.id;
+	fireMaterial.ambientMapTextureId = fireMaterial.id;
+	fireMaterial.diffuseMapTextureId = fireMaterial.id;
 
 	scene.textures.marbleTextures.push_back(marbleTexture);
 	scene.textures.woodTextures.push_back(woodTexture);

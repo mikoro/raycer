@@ -26,7 +26,8 @@ Scene Scene::createTestScene12()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 
 	Plane groundPlane;
@@ -47,7 +48,8 @@ Scene Scene::createTestScene12()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
-	sphere1Material.colorTextureId = sphere1Texture.id;
+	sphere1Material.ambientMapTextureId = sphere1Texture.id;
+	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
 
 	Sphere sphere1;
 	sphere1.materialId = sphere1Material.id;
@@ -74,7 +76,8 @@ Scene Scene::createTestScene12()
 
 	Material mesh1Material;
 	mesh1Material.id = 3;
-	mesh1Material.colorTextureId = mesh1Texture.id;
+	mesh1Material.ambientMapTextureId = mesh1Texture.id;
+	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
 
 	Mesh mesh1;
 	mesh1.materialId = mesh1Material.id;

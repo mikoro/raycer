@@ -36,7 +36,8 @@ Scene Scene::createTestScene10()
 
 	Material floorMaterial;
 	floorMaterial.id = 1;
-	floorMaterial.colorTextureId = floorTexture.id;
+	floorMaterial.ambientMapTextureId = floorTexture.id;
+	floorMaterial.diffuseMapTextureId = floorTexture.id;
 	floorMaterial.normalMapTextureId = floorNormalTexture.id;
 
 	Plane floorPlane;
@@ -58,7 +59,8 @@ Scene Scene::createTestScene10()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
-	sphere1Material.colorTextureId = sphere1Texture.id;
+	sphere1Material.ambientMapTextureId = sphere1Texture.id;
+	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
 	sphere1Material.specularReflectance = Color(0.8, 0.8, 0.8);
 	sphere1Material.shininess = 128.0;
 
@@ -89,7 +91,8 @@ Scene Scene::createTestScene10()
 
 	Material sphere2Material;
 	sphere2Material.id = 3;
-	sphere2Material.colorTextureId = sphere2Texture.id;
+	sphere2Material.ambientMapTextureId = sphere2Texture.id;
+	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
 	sphere2Material.specularReflectance = Color(0.8, 0.8, 0.8);
 	sphere2Material.shininess = 128.0;
 	sphere2Material.texcoordScale = Vector2(1.0, 1.0);
@@ -123,7 +126,8 @@ Scene Scene::createTestScene10()
 
 	Material sphere3Material;
 	sphere3Material.id = 4;
-	sphere3Material.colorTextureId = sphere3Texture.id;
+	sphere3Material.ambientMapTextureId = sphere3Texture.id;
+	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
 	sphere3Material.specularReflectance = Color(0.8, 0.8, 0.8);
 	sphere3Material.shininess = 128.0;
 	sphere3Material.texcoordScale = Vector2(1.0, 1.0);

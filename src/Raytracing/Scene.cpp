@@ -27,10 +27,8 @@ using namespace Raycer;
 
 Scene::Scene()
 {
-	boundingBoxes.texture.color = Color(0.8, 0.8, 1.0);
-	boundingBoxes.texture.intensity = 1.0;
-	boundingBoxes.material.ambientReflectance = Color(0.0, 0.0, 0.0);
-	boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.1);
+	boundingBoxes.material.ambientReflectance = Color(0.1, 0.1, 0.2);
+	boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.2);
 	boundingBoxes.material.rayTransmittance = 1.0;
 	boundingBoxes.material.nonShadowing = true;
 }
@@ -201,10 +199,7 @@ void Scene::addObjScene(const ObjReaderResult& result)
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
-	std::map<int, Primitive*> primitivesMap;
-	std::map<int, Material*> materialsMap;
-	std::map<int, Texture*> texturesMap;
-
+	
 	// OBJ SCENES
 
 	for (const ObjScene& objScene : objScenes)
@@ -295,6 +290,24 @@ void Scene::initialize()
 
 	// POINTER MAP GENERATION
 
+	for (Texture* texture : texturesList)
+	{
+		if (texturesMap.count(texture->id))
+			throw std::runtime_error(tfm::format("A duplicate texture id (%d) was found", texture->id));
+
+		texturesMap[texture->id] = texture;
+	}
+
+	materials.push_back(defaultMaterial);
+
+	for (Material& material : materials)
+	{
+		if (materialsMap.count(material.id))
+			throw std::runtime_error(tfm::format("A duplicate material id (%d) was found", material.id));
+
+		materialsMap[material.id] = &material;
+	}
+
 	auto mapPrimitive = [&](Primitive* primitive)
 	{
 		if (primitive->id != 0)
@@ -312,24 +325,31 @@ void Scene::initialize()
 	for (Primitive* primitive : primitives.visible)
 		mapPrimitive(primitive);
 
+	// POINTER SETTING
+
 	for (Material& material : materials)
 	{
-		if (materialsMap.count(material.id))
-			throw std::runtime_error(tfm::format("A duplicate material id (%d) was found", material.id));
+		if (texturesMap.count(material.ambientMapTextureId))
+			material.ambientMapTexture = texturesMap[material.ambientMapTextureId];
 
-		materialsMap[material.id] = &material;
+		if (texturesMap.count(material.diffuseMapTextureId))
+			material.diffuseMapTexture = texturesMap[material.diffuseMapTextureId];
+
+		if (texturesMap.count(material.specularMapTextureId))
+			material.specularMapTexture = texturesMap[material.specularMapTextureId];
+
+		if (texturesMap.count(material.rayReflectanceMapTextureId))
+			material.rayReflectanceMapTexture = texturesMap[material.rayReflectanceMapTextureId];
+
+		if (texturesMap.count(material.rayTransmittanceMapTextureId))
+			material.rayTransmittanceMapTexture = texturesMap[material.rayTransmittanceMapTextureId];
+
+		if (texturesMap.count(material.normalMapTextureId))
+			material.normalMapTexture = texturesMap[material.normalMapTextureId];
+
+		if (texturesMap.count(material.heightMapTextureId))
+			material.heightMapTexture = texturesMap[material.heightMapTextureId];
 	}
-
-	for (Texture* texture : texturesList)
-	{
-		if (texturesMap.count(texture->id))
-			throw std::runtime_error(tfm::format("A duplicate texture id (%d) was found", texture->id));
-
-		texture->initialize();
-		texturesMap[texture->id] = texture;
-	}
-
-	// POINTER SETTING
 
 	for (CSG& csg : primitives.csgs)
 	{
@@ -366,21 +386,7 @@ void Scene::initialize()
 	auto setPrimitivePointers = [&](Primitive* primitive)
 	{
 		if (materialsMap.count(primitive->materialId))
-		{
 			primitive->material = materialsMap[primitive->materialId];
-
-			if (texturesMap.count(primitive->material->colorTextureId))
-				primitive->material->colorTexture = texturesMap[primitive->material->colorTextureId];
-			else
-				throw std::runtime_error(tfm::format("A material (%d) has a non-existent color texture id (%d)", primitive->materialId, primitive->material->colorTextureId));
-
-			// normal and height maps can be null
-			if (texturesMap.count(primitive->material->normalMapTextureId))
-				primitive->material->normalMapTexture = texturesMap[primitive->material->normalMapTextureId];
-
-			if (texturesMap.count(primitive->material->heightMapTextureId))
-				primitive->material->heightMapTexture = texturesMap[primitive->material->heightMapTextureId];
-		}
 		else
 			throw std::runtime_error(tfm::format("A primitive has a non-existent material id (%d)", primitive->materialId));
 	};
@@ -392,6 +398,9 @@ void Scene::initialize()
 		setPrimitivePointers(primitive);
 
 	// INITIALIZATION
+
+	for (Texture* texture : texturesList)
+		texture->initialize();
 
 	for (Plane& plane : primitives.planes)
 		plane.initialize();
@@ -434,8 +443,6 @@ void Scene::initialize()
 
 	if (boundingBoxes.enabled)
 	{
-		boundingBoxes.material.colorTexture = &boundingBoxes.texture;
-
 		for (Primitive* primitive : primitives.visible)
 		{
 			AABB aabb = primitive->getAABB();

@@ -63,7 +63,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	Image& image = *state.image;
 	Scene& scene = *state.scene;
 
-	#pragma omp parallel for schedule(dynamic, 1000)
+#pragma omp parallel for schedule(dynamic, 1000)
 	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)
@@ -211,23 +211,33 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	if (scene.raytracer.visualizeDepth)
 	{
-		double colorValue = 1.0 - std::min(intersection.distance, scene.raytracer.visualizeDepthMaxDistance) / scene.raytracer.visualizeDepthMaxDistance;
-		colorValue = pow(colorValue, 2.0);
-		return Color(colorValue, colorValue, colorValue);
+		double depth = 1.0 - std::min(intersection.distance, scene.raytracer.visualizeDepthMaxDistance) / scene.raytracer.visualizeDepthMaxDistance;
+		depth = pow(depth, 2.0);
+		return Color(depth, depth, depth);
 	}
 
 	Material* material = intersection.primitive->material;
-	
+
+	if (material->skipLighting)
+	{
+		if (material->ambientMapTexture != nullptr)
+			return material->ambientMapTexture->getColor(intersection.texcoord, intersection.position);
+		else if (material->diffuseMapTexture != nullptr)
+			return material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position);
+		else
+			return finalColor;
+	}
+
 	double c1 = -(ray.direction.dot(intersection.normal));
 	bool isOutside = (c1 >= 0.0);
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
-	double rf = 1.0;
-	double tf = 1.0;
+	double fresnelReflectance = 1.0;
+	double fresnelTransmittance = 1.0;
 
 	if (material->normalMapTexture != nullptr)
 	{
-		TextureNormalDataType normalType;
+		TextureNormalDataType normalType = TextureNormalDataType::NONE;
 		Vector3 normalData = material->normalMapTexture->getNormalData(intersection.texcoord, intersection.position, normalType);
 
 		if (normalType == TextureNormalDataType::BUMP_MAP)
@@ -250,22 +260,55 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		}
 	}
 
-	if (material->isFresnel)
+	if (material->fresnelReflection)
 	{
 		double rf0 = (n2 - n1) / (n2 + n1);
 		rf0 = rf0 * rf0;
-		rf = rf0 + (1.0 - rf0) * pow(1.0 - std::abs(c1), 5.0);
-		tf = 1.0 - rf;
+		fresnelReflectance = rf0 + (1.0 - rf0) * pow(1.0 - std::abs(c1), 5.0);
+		fresnelTransmittance = 1.0 - fresnelReflectance;
 	}
 
-	double transmittance = material->rayTransmittance * tf;
-	double reflectance = material->rayReflectance * rf;
+	double mappedReflectance = 1.0;
+	double mappedTransmittance = 1.0;
 
-	Color refractionColor;
-	Color reflectionColor;
+	if (material->rayReflectanceMapTexture != nullptr)
+		mappedReflectance = material->rayReflectanceMapTexture->getValue(intersection.texcoord, intersection.position);
+
+	if (material->rayTransmittanceMapTexture != nullptr)
+		mappedTransmittance = material->rayTransmittanceMapTexture->getValue(intersection.texcoord, intersection.position);
+
+	double totalReflectance = material->rayReflectance * mappedReflectance * fresnelReflectance;
+	double totalTransmittance = material->rayTransmittance * mappedTransmittance * fresnelTransmittance;
+
+	Color reflectedColor;
+
+	// calculate and trace reflected ray
+	if (totalReflectance > 0.0 && iteration < scene.raytracer.maxRayIterations)
+	{
+		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
+		R.normalize();
+
+		Ray reflectedRay;
+		Intersection reflectedIntersection;
+
+		reflectedRay.origin = intersection.position + R * scene.raytracer.rayStartOffset;
+		reflectedRay.direction = R;
+		reflectedRay.update();
+
+		reflectedColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * totalReflectance;
+
+		// only attenuate if ray has traveled inside a primitive
+		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
+		{
+			double a = exp(-material->attenuationFactor * reflectedIntersection.distance);
+			reflectedColor = Color::lerp(material->attenuationColor, reflectedColor, a);
+		}
+	}
+
+	Color transmittedColor;
 
 	// calculate and trace refracted ray
-	if (transmittance > 0.0 && iteration < scene.raytracer.maxRayIterations)
+	if (totalTransmittance > 0.0 && iteration < scene.raytracer.maxRayIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -283,55 +326,25 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			refractedRay.direction = T;
 			refractedRay.update();
 
-			refractionColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * transmittance;
+			transmittedColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * totalTransmittance;
 
 			// only attenuate if ray has traveled inside a primitive
 			if (isOutside && refractedIntersection.wasFound && material->enableAttenuation)
 			{
-				double a = exp(-material->attenuation * refractedIntersection.distance);
-				refractionColor = Color::lerp(material->attenuationColor, refractionColor, a);
+				double a = exp(-material->attenuationFactor * refractedIntersection.distance);
+				transmittedColor = Color::lerp(material->attenuationColor, transmittedColor, a);
 			}
 		}
 	}
 
-	// calculate and trace reflected ray
-	if (reflectance > 0.0 && iteration < scene.raytracer.maxRayIterations)
-	{
-		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
-		R.normalize();
+	double ambientOcclusionAmount = 1.0;
 
-		Ray reflectedRay;
-		Intersection reflectedIntersection;
+	if (scene.lights.ambientLight.enableOcclusion)
+		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
 
-		reflectedRay.origin = intersection.position + R * scene.raytracer.rayStartOffset;
-		reflectedRay.direction = R;
-		reflectedRay.update();
+	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
+	finalColor = lightColor + reflectedColor + transmittedColor;
 
-		reflectionColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * reflectance;
-
-		// only attenuate if ray has traveled inside a primitive
-		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
-		{
-			double a = exp(-material->attenuation * reflectedIntersection.distance);
-			reflectionColor = Color::lerp(material->attenuationColor, reflectionColor, a);
-		}
-	}
-
-	Color textureColor = material->colorTexture->getColor(intersection.texcoord, intersection.position) * material->colorTexture->intensity;
-	Color lightColor = Color(1.0, 1.0, 1.0);
-
-	if (!material->skipLighting)
-	{
-		double ambientOcclusionAmount = 1.0;
-
-		if (scene.lights.ambientLight.enableOcclusion)
-			ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
-
-		lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
-	}
-
-	finalColor = textureColor * (lightColor + refractionColor + reflectionColor);
-	
 	if (scene.simpleFog.enabled && isOutside)
 		finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
 
@@ -344,11 +357,28 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 	Vector3 directionToCamera = -ray.direction;
 	Material* material = intersection.primitive->material;
 
-	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * material->ambientReflectance * ambientOcclusionAmount;
+	Color mappedAmbientReflectance = Color(1.0, 1.0, 1.0);
+	Color mappedDiffuseReflectance = Color(1.0, 1.0, 1.0);
+	Color mappedSpecularReflectance = Color(1.0, 1.0, 1.0);
+
+	if (material->ambientMapTexture != nullptr)
+		mappedAmbientReflectance = material->ambientMapTexture->getColor(intersection.texcoord, intersection.position);
+
+	if (material->diffuseMapTexture != nullptr)
+		mappedDiffuseReflectance = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position);
+
+	if (material->specularMapTexture != nullptr)
+		mappedSpecularReflectance = material->specularMapTexture->getColor(intersection.texcoord, intersection.position);
+
+	Color finalAmbientReflectance = material->ambientReflectance * mappedAmbientReflectance;
+	Color finalDiffuseReflectance = material->diffuseReflectance * mappedDiffuseReflectance;
+	Color finalSpecularReflectance = material->specularReflectance * mappedSpecularReflectance;
+
+	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * ambientOcclusionAmount * finalAmbientReflectance;
 
 	for (const DirectionalLight& light : scene.lights.directionalLights)
 	{
-		Color directionalLightColor = calculatePhongShadingColor(intersection.normal, -light.direction, directionToCamera, light, material);
+		Color directionalLightColor = calculatePhongShadingColor(intersection.normal, -light.direction, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
 		lightColor += directionalLightColor * (1.0 - shadowAmount);
 	}
@@ -359,7 +389,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		double distanceToLight = directionToLight.length();
 		directionToLight.normalize();
 
-		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, material);
+		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.distance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
@@ -373,7 +403,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		double distanceToLight = directionToLight.length();
 		directionToLight.normalize();
 
-		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, material);
+		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.distance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
@@ -390,7 +420,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 	return lightColor;
 }
 
-Color Raytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Material* material)
+Color Raytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess)
 {
 	Color phongColor;
 
@@ -398,15 +428,15 @@ Color Raytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3
 
 	if (diffuseAmount > 0.0)
 	{
-		phongColor = light.color * light.intensity * diffuseAmount * material->diffuseReflectance;
+		phongColor = light.color * light.intensity * diffuseAmount * diffuseReflectance;
 
-		if (!material->specularReflectance.isZero())
+		if (!specularReflectance.isZero())
 		{
 			Vector3 reflectionDirection = ((2.0 * diffuseAmount * normal) - directionToLight).normalized();
 			double specularAmount = reflectionDirection.dot(directionToCamera);
 
 			if (specularAmount > 0.0)
-				phongColor += light.color * light.intensity * pow(specularAmount, material->shininess) * material->specularReflectance;
+				phongColor += light.color * light.intensity * pow(specularAmount, shininess) * specularReflectance;
 		}
 	}
 

@@ -26,7 +26,8 @@ Scene Scene::createTestScene16()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 
 	Plane groundPlane;
 	groundPlane.materialId = groundMaterial.id;
@@ -46,7 +47,8 @@ Scene Scene::createTestScene16()
 
 	Material box1Material;
 	box1Material.id = 3;
-	box1Material.colorTextureId = box1Texture.id;
+	box1Material.ambientMapTextureId = box1Texture.id;
+	box1Material.diffuseMapTextureId = box1Texture.id;
 
 	Box box1;
 	box1.materialId = box1Material.id;

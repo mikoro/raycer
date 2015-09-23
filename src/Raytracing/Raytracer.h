@@ -46,7 +46,7 @@ namespace Raycer
 		Color raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted);
 
 		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount);
-		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Material* material);
+		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess);
 		Color calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
 
 		double calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection);

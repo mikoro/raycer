@@ -141,7 +141,6 @@ namespace Raycer
 		struct BoundingBoxes
 		{
 			bool enabled = false;
-			ColorTexture texture;
 			Material material;
 		} boundingBoxes;
 
@@ -161,6 +160,7 @@ namespace Raycer
 		} textures;
 
 		std::vector<Material> materials;
+		Material defaultMaterial;
 
 		struct Lights
 		{
@@ -189,5 +189,8 @@ namespace Raycer
 		} primitives;
 
 		std::vector<ObjScene> objScenes;
+		std::map<int, Primitive*> primitivesMap;
+		std::map<int, Material*> materialsMap;
+		std::map<int, Texture*> texturesMap;
 	};
 }

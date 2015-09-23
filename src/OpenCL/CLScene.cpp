@@ -111,19 +111,19 @@ void CLScene::readScene(const Scene& scene)
 	{
 		OpenCL::Material clMaterial;
 
-		ColorTexture* colorTexture = dynamic_cast<ColorTexture*>(material.colorTexture);
-
-		if (colorTexture != nullptr)
-			readColor(clMaterial.color, colorTexture->color);
-		else
-			readColor(clMaterial.color, Color::WHITE);
+// 		ColorTexture* colorTexture = dynamic_cast<ColorTexture*>(material.colorTexture);
+// 
+// 		if (colorTexture != nullptr)
+// 			readColor(clMaterial.color, colorTexture->color);
+// 		else
+// 			readColor(clMaterial.color, Color::WHITE);
 
 		readColor(clMaterial.ambientReflectance, material.ambientReflectance);
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
 		readColor(clMaterial.attenuationColor, material.attenuationColor);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
-		clMaterial.colorIntensity = (cl_float)material.colorTexture->intensity;
+		//clMaterial.colorIntensity = (cl_float)material.colorTexture->intensity;
 		clMaterial.shininess = (cl_float)material.shininess;
 		clMaterial.skipLighting = (cl_int)material.skipLighting;
 		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
@@ -135,9 +135,9 @@ void CLScene::readScene(const Scene& scene)
 		clMaterial.rayReflectance = (cl_float)material.rayReflectance;
 		clMaterial.rayTransmittance = (cl_float)material.rayTransmittance;
 		clMaterial.refractiveIndex = (cl_float)material.refractiveIndex;
-		clMaterial.isFresnel = (cl_int)material.isFresnel;
+		clMaterial.isFresnel = (cl_int)material.fresnelReflection;
 		clMaterial.enableAttenuation = (cl_int)material.enableAttenuation;
-		clMaterial.attenuation = (cl_float)material.attenuation;
+		clMaterial.attenuation = (cl_float)material.attenuationFactor;
 		clMaterial.id = (cl_int)material.id;
 
 		materials.push_back(clMaterial);

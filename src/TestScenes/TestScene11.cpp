@@ -30,7 +30,8 @@ Scene Scene::createTestScene11()
 
 	Material mesh1Material;
 	mesh1Material.id = 1;
-	mesh1Material.colorTextureId = mesh1Texture.id;
+	mesh1Material.ambientMapTextureId = mesh1Texture.id;
+	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
 
 	Mesh mesh1;
 	mesh1.id = 1;
@@ -66,7 +67,8 @@ Scene Scene::createTestScene11()
 
 				Material instance1Material;
 				instance1Material.id = count;
-				instance1Material.colorTextureId = instance1Texture.id;
+				instance1Material.ambientMapTextureId = instance1Texture.id;
+				instance1Material.diffuseMapTextureId = instance1Texture.id;
 
 				double scale = scaleDist(gen);
 

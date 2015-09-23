@@ -223,7 +223,8 @@ ObjReaderResult ObjReader::getMeshes(const std::string& objFileName, const Vecto
 
 	Material groupMaterial;
 	groupMaterial.id = ++currentId;
-	groupMaterial.colorTextureId = groupColorTexture.id;
+	groupMaterial.ambientMapTextureId = groupColorTexture.id;
+	groupMaterial.diffuseMapTextureId = groupColorTexture.id;
 
 	result.primitiveGroup.id = ++currentId;
 	result.primitiveGroup.materialId = groupMaterial.id;
@@ -282,7 +283,8 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 					colorTexture.id = ++currentId;
 					colorTexture.color = Color(1.0, 1.0, 1.0);
 					colorTexture.intensity = 1.0;
-					material.colorTextureId = colorTexture.id;
+					material.ambientMapTextureId = colorTexture.id;
+					material.diffuseMapTextureId = colorTexture.id;
 					result.colorTextures.push_back(colorTexture);
 				}
 
@@ -346,7 +348,8 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 		{
 			ImageTexture imageTexture;
 			imageTexture.id = ++currentId;
-			material.colorTextureId = imageTexture.id;
+			material.ambientMapTextureId = imageTexture.id;
+			material.diffuseMapTextureId = imageTexture.id;
 
 			std::string imageFileName;
 			path imageFilePath = objFileDirectory;
@@ -394,7 +397,8 @@ void ObjReader::processMaterialFile(const bf::path& objFileDirectory, const std:
 			ColorTexture colorTexture;
 			colorTexture.id = ++currentId;
 			colorTexture.color = Color(1.0, 1.0, 1.0);
-			material.colorTextureId = colorTexture.id;
+			material.ambientMapTextureId = colorTexture.id;
+			material.diffuseMapTextureId = colorTexture.id;
 			result.colorTextures.push_back(colorTexture);
 		}
 

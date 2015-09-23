@@ -35,7 +35,8 @@ Scene Scene::createTestScene18()
 
 	Material sphere1Material;
 	sphere1Material.id = 1;
-	sphere1Material.colorTextureId = sphere1Texture.id;
+	sphere1Material.ambientMapTextureId = sphere1Texture.id;
+	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
 	sphere1Material.texcoordScale = Vector2(1.0, 1.0);
 	sphere1Material.skipLighting = true;
 	sphere1Material.nonShadowing = true;
@@ -60,7 +61,8 @@ Scene Scene::createTestScene18()
 
 	Material groundMaterial;
 	groundMaterial.id = 2;
-	groundMaterial.colorTextureId = groundTexture.id;
+	groundMaterial.ambientMapTextureId = groundTexture.id;
+	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(5.0, 5.0);
 	groundMaterial.nonShadowing = true;
 

@@ -29,7 +29,8 @@ Scene Scene::createTestScene7()
 
 	Material sphereMaterial;
 	sphereMaterial.id = 2;
-	sphereMaterial.colorTextureId = sphereTexture.id;
+	sphereMaterial.ambientMapTextureId = sphereTexture.id;
+	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
 
 	scene.textures.colorTextures.push_back(sphereTexture);
 	scene.materials.push_back(sphereMaterial);
