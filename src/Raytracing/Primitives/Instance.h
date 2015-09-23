@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "Raytracing/Primitives/Primitive.h"
+#include "Raytracing/AABB.h"
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
 #include "Math/Matrix4x4.h"
@@ -23,7 +24,7 @@ namespace Raycer
 		friend class Scene;
 		friend class CLScene;
 
-		void initialize();
+		void initialize(const Scene& scene);
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
@@ -50,5 +51,6 @@ namespace Raycer
 		Matrix4x4 cachedTransformation;
 		Matrix4x4 cachedTransformationInv;
 		Matrix4x4 cachedTransformationInvT;
+		AABB cachedAabb;
 	};
 }

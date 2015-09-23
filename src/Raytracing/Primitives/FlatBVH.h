@@ -38,6 +38,7 @@ namespace Raycer
 		int primitiveCount;
 	};
 
+	class Scene;
 	class Ray;
 	struct Intersection;
 	class Vector3;
@@ -50,12 +51,16 @@ namespace Raycer
 		friend class Scene;
 		friend class CLScene;
 
-		void initialize();
+		void initialize(const Scene& scene);
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
-		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
+		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo, const Scene& scene);
+
+		bool hasBeenBuilt = false;
+		std::vector<FlatBVHNode> flatNodes;
+		std::vector<int> orderedPrimitiveIds;
 
 	private:
 
@@ -65,6 +70,5 @@ namespace Raycer
 		double calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry);
 
 		std::vector<Primitive*> orderedPrimitives;
-		std::vector<FlatBVHNode> flatNodes;
 	};
 }

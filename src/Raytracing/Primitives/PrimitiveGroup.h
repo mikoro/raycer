@@ -27,7 +27,7 @@ namespace Raycer
 		PrimitiveGroup();
 		PrimitiveGroup(const std::vector<Primitive*>& primitives);
 
-		void initialize();
+		void initialize(const Scene& scene);
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
@@ -35,12 +35,11 @@ namespace Raycer
 		std::vector<int> primitiveIds;
 		bool enableBVH = true;
 		BVHBuildInfo bvhBuildInfo;
+		FlatBVH bvh;
 
 	private:
 
 		std::vector<Primitive*> primitives;
-
 		AABB aabb;
-		FlatBVH bvh;
 	};
 }

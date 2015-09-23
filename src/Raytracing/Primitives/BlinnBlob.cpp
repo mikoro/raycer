@@ -17,8 +17,9 @@
 
 using namespace Raycer;
 
-void BlinnBlob::initialize()
+void Raycer::BlinnBlob::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)

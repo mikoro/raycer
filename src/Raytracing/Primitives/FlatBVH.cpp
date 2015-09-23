@@ -8,6 +8,7 @@
 #include <stdexcept>
 
 #include "Raytracing/Primitives/FlatBVH.h"
+#include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "App.h"
@@ -17,8 +18,9 @@
 
 using namespace Raycer;
 
-void FlatBVH::initialize()
+void Raycer::FlatBVH::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool FlatBVH::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -88,9 +90,24 @@ void FlatBVH::transform(const Vector3& scale, const EulerAngle& rotate, const Ve
 	(void)translate;
 }
 
-void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo)
+void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo, const Scene& scene)
 {
 	Log& log = App::getLog();
+
+	if (hasBeenBuilt)
+	{
+		orderedPrimitives.clear();
+
+		for (int primitiveId : orderedPrimitiveIds)
+			orderedPrimitives.push_back(scene.primitivesMap.at(primitiveId));
+
+		return;
+	}
+	else
+	{
+		flatNodes.clear();
+		orderedPrimitiveIds.clear();
+	}
 
 	log.logInfo("Building BVH (primitives: %d)", primitives.size());
 
@@ -190,6 +207,11 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		stack[stackptr].parent = nodeCount - 1;
 		stackptr++;
 	}
+
+	hasBeenBuilt = true;
+
+	for (const Primitive* primitive : orderedPrimitives)
+		orderedPrimitiveIds.push_back(primitive->id);
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();

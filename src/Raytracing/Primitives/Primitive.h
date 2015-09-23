@@ -9,6 +9,7 @@
 
 namespace Raycer
 {
+	class Scene;
 	class Ray;
 	struct Intersection;
 	class AABB;
@@ -22,7 +23,7 @@ namespace Raycer
 
 		virtual ~Primitive() {}
 
-		virtual void initialize() = 0;
+		virtual void initialize(const Scene& scene) = 0;
 		virtual bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections) = 0;
 		virtual AABB getAABB() const = 0;
 		virtual void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) = 0;

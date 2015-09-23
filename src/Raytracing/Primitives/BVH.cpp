@@ -19,8 +19,9 @@
 
 using namespace Raycer;
 
-void BVH::initialize()
+void Raycer::BVH::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool BVH::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)

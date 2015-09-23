@@ -17,8 +17,9 @@
 
 using namespace Raycer;
 
-void Cylinder::initialize()
+void Raycer::Cylinder::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)

@@ -14,8 +14,10 @@
 
 using namespace Raycer;
 
-void Triangle::initialize()
+void Raycer::Triangle::initialize(const Scene& scene)
 {
+	(void)scene;
+
 	Vector3 v0tov1 = vertices[1] - vertices[0];
 	Vector3 v0tov2 = vertices[2] - vertices[0];
 	Vector2 t0tot1 = texcoords[1] - texcoords[0];

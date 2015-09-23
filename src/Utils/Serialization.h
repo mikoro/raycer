@@ -100,7 +100,8 @@ namespace Raycer
 	void serialize(Archive& a, Scene::RootBVH& b)
 	{
 		a(cereal::make_nvp("enabled", b.enabled),
-			cereal::make_nvp("buildInfo", b.buildInfo));
+			cereal::make_nvp("buildInfo", b.buildInfo),
+			cereal::make_nvp("bvh", b.bvh));
 	}
 
 	template<class Archive>
@@ -316,7 +317,19 @@ namespace Raycer
 			cereal::make_nvp("invisible", b.invisible),
 			cereal::make_nvp("primitiveIds", b.primitiveIds),
 			cereal::make_nvp("enableBVH", b.enableBVH),
-			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo));
+			cereal::make_nvp("bvhBuildInfo", b.bvhBuildInfo),
+			cereal::make_nvp("bvh", b.bvh));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, FlatBVH& b)
+	{
+		a(cereal::make_nvp("id", b.id),
+			cereal::make_nvp("materialId", b.materialId),
+			cereal::make_nvp("invisible", b.invisible),
+			cereal::make_nvp("hasBeenBuilt", b.hasBeenBuilt),
+			cereal::make_nvp("flatNodes", b.flatNodes),
+			cereal::make_nvp("orderedPrimitiveIds", b.orderedPrimitiveIds));
 	}
 
 	// ---------------------------------------------
@@ -589,5 +602,24 @@ namespace Raycer
 			cereal::make_nvp("radius", b.radius),
 			cereal::make_nvp("blobbiness", b.blobbiness),
 			cereal::make_nvp("isNegative", b.isNegative));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, FlatBVHNode& b)
+	{
+		a(cereal::make_nvp("aabb", b.aabb),
+			cereal::make_nvp("rightOffset", b.rightOffset),
+			cereal::make_nvp("startOffset", b.startOffset),
+			cereal::make_nvp("primitiveCount", b.primitiveCount));
+	}
+
+	template<class Archive>
+	void serialize(Archive& a, AABB& b)
+	{
+		a(cereal::make_nvp("min", b.min),
+			cereal::make_nvp("max", b.max),
+			cereal::make_nvp("center", b.center),
+			cereal::make_nvp("extent", b.extent),
+			cereal::make_nvp("surfaceArea", b.surfaceArea));
 	}
 }

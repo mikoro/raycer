@@ -27,8 +27,9 @@ namespace
 	};
 }
 
-void CSG::initialize()
+void Raycer::CSG::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool CSG::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)

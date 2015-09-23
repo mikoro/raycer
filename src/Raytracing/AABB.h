@@ -31,8 +31,6 @@ namespace Raycer
 		Vector3 getExtent() const;
 		double getSurfaceArea() const;
 
-	private:
-
 		Vector3 min;
 		Vector3 max;
 		Vector3 center;

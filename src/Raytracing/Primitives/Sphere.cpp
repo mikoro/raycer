@@ -14,8 +14,9 @@
 
 using namespace Raycer;
 
-void Sphere::initialize()
+void Raycer::Sphere::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection

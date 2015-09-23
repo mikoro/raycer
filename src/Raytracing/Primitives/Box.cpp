@@ -14,8 +14,9 @@
 
 using namespace Raycer;
 
-void Box::initialize()
+void Raycer::Box::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/

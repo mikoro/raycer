@@ -317,8 +317,6 @@ void Scene::initialize()
 		texturesMap[texture->id] = texture;
 	}
 
-	materials.push_back(defaultMaterial);
-
 	for (Material& material : materials)
 	{
 		if (materialsMap.count(material.id))
@@ -326,6 +324,10 @@ void Scene::initialize()
 
 		materialsMap[material.id] = &material;
 	}
+
+	// add default material
+	if (!materialsMap.count(0))
+		materialsMap[0] = &defaultMaterial;
 
 	auto mapPrimitive = [&](Primitive* primitive)
 	{
@@ -422,34 +424,34 @@ void Scene::initialize()
 		texture->initialize();
 
 	for (Plane& plane : primitives.planes)
-		plane.initialize();
+		plane.initialize(*this);
 
 	for (Sphere& sphere : primitives.spheres)
-		sphere.initialize();
+		sphere.initialize(*this);
 
 	for (Box& box : primitives.boxes)
-		box.initialize();
+		box.initialize(*this);
 
 	for (Triangle& triangle : primitives.triangles)
-		triangle.initialize();
+		triangle.initialize(*this);
 
 	for (Cylinder& cylinder : primitives.cylinders)
-		cylinder.initialize();
+		cylinder.initialize(*this);
 
 	for (Torus& torus : primitives.toruses)
-		torus.initialize();
+		torus.initialize(*this);
 
 	for (BlinnBlob& blinnBlob : primitives.blinnBlobs)
-		blinnBlob.initialize();
+		blinnBlob.initialize(*this);
 
 	for (CSG& csg : primitives.csgs)
-		csg.initialize();
+		csg.initialize(*this);
 
 	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
-		primitiveGroup.initialize();
+		primitiveGroup.initialize(*this);
 
 	for (Instance& instance : primitives.instances)
-		instance.initialize();
+		instance.initialize(*this);
 
 	// CAMERA
 
@@ -479,7 +481,7 @@ void Scene::initialize()
 
 	if (rootBVH.enabled)
 	{
-		rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo);
+		rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo, *this);
 		primitives.visible.clear();
 		primitives.visible.push_back(&rootBVH.bvh);
 	}

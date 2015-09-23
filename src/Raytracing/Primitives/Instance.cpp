@@ -11,8 +11,10 @@
 
 using namespace Raycer;
 
-void Instance::initialize()
+void Raycer::Instance::initialize(const Scene& scene)
 {
+	(void)scene;
+
 	Vector3 position = primitive->getAABB().getCenter();
 
 	Matrix4x4 scaling = Matrix4x4::scale(scale);

@@ -79,7 +79,7 @@ Scene Scene::createTestScene18()
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";
-	modelInfo.addAllInstance = true;
+	modelInfo.addAllGroup = true;
 	modelInfo.allGroupId = 1;
 	modelInfo.scale = Vector3(0.1, 0.1, 0.1);
 	modelInfo.rotate = EulerAngle(0.0, 90.0, 0.0);

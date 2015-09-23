@@ -15,8 +15,10 @@
 
 using namespace Raycer;
 
-void Plane::initialize()
+void Raycer::Plane::initialize(const Scene& scene)
 {
+	(void)scene;
+
 	uAxis = Vector3(normal.y, normal.z, -normal.x).normalized();
 	vAxis = uAxis.cross(normal).normalized();
 }

@@ -17,8 +17,9 @@
 
 using namespace Raycer;
 
-void Torus::initialize()
+void Raycer::Torus::initialize(const Scene& scene)
 {
+	(void)scene;
 }
 
 bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)

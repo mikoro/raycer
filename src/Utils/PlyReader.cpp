@@ -453,7 +453,8 @@ namespace
 					triangle.texcoords[2] = texcoords[face[i]];
 				}
 
-				triangle.initialize();
+				// TODO: PLY reader needs to be adapted to follow ModelLoader
+				//triangle.initialize(TODO);
 
 				if (header.hasNormals)
 				{
