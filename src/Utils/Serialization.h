@@ -35,7 +35,7 @@ namespace Raycer
 			cereal::make_nvp("materials", b.materials),
 			cereal::make_nvp("lights", b.lights),
 			cereal::make_nvp("primitives", b.primitives),
-			cereal::make_nvp("objScenes", b.objScenes));
+			cereal::make_nvp("models", b.models));
 	}
 
 	template<class Archive>
@@ -569,12 +569,14 @@ namespace Raycer
 	}
 
 	template<class Archive>
-	void serialize(Archive& a, ObjScene& b)
+	void serialize(Archive& a, ModelLoaderInfo& b)
 	{
-		a(cereal::make_nvp("filePath", b.filePath),
+		a(cereal::make_nvp("modelFilePath", b.modelFilePath),
 			cereal::make_nvp("scale", b.scale),
 			cereal::make_nvp("rotate", b.rotate),
-			cereal::make_nvp("translate", b.translate));
+			cereal::make_nvp("translate", b.invisible),
+			cereal::make_nvp("idStartOffset", b.idStartOffset),
+			cereal::make_nvp("defaultMaterialId", b.defaultMaterialId));
 	}
 
 	template<class Archive>

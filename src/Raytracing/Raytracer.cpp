@@ -63,7 +63,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	Image& image = *state.image;
 	Scene& scene = *state.scene;
 
-#pragma omp parallel for schedule(dynamic, 1000)
+	#pragma omp parallel for schedule(dynamic, 1000)
 	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
 	{
 		if (interrupted)

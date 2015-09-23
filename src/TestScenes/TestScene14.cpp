@@ -19,10 +19,9 @@ Scene Scene::createTestScene14()
 	scene.camera.position = Vector3(15.0, 2.0, 0.0);
 	scene.camera.orientation = EulerAngle(1.0, 90.0, 0.0);
 	
-	ObjScene objScene;
-	objScene.filePath = "data/meshes/sponza1/sponza.obj";
-	objScene.scale = Vector3(1.0, 1.0, 1.0);
-	scene.objScenes.push_back(objScene);
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/sponza1/sponza.obj";
+	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 

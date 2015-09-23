@@ -22,6 +22,7 @@
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
 #include "Utils/Serialization.h"
+#include "Utils/ObjModelLoader.h"
 
 using namespace Raycer;
 
@@ -179,36 +180,31 @@ std::string Scene::getXmlString() const
 	return ss.str();
 }
 
-void Scene::addObjScene(const ObjReaderResult& result)
+void Scene::addModel(const ModelLoaderResult& result)
 {
-	for (const Mesh& mesh : result.meshes)
-		primitives.meshes.push_back(mesh);
+	for (const Triangle& triangle : result.triangles)
+		primitives.triangles.push_back(triangle);
 
 	for (const Material& material : result.materials)
 		materials.push_back(material);
 
-	for (const ColorTexture& colorTexture : result.colorTextures)
-		textures.colorTextures.push_back(colorTexture);
-
-	for (const ImageTexture& imageTexture : result.imageTextures)
+	for (const ImageTexture& imageTexture : result.textures)
 		textures.imageTextures.push_back(imageTexture);
-
-	primitives.primitiveGroups.push_back(result.primitiveGroup);
 }
 
 void Scene::initialize()
 {
 	std::vector<Texture*> texturesList;
 	
-	// OBJ SCENES
+	// MODELS
 
-	for (const ObjScene& objScene : objScenes)
+	for (const ModelLoaderInfo& modelInfo : models)
 	{
-		ObjReaderResult result = ObjReader::getMeshes(objScene.filePath, objScene.scale, objScene.rotate, objScene.translate, false, 1000000);
-		addObjScene(result);
+		if (StringUtils::endsWith(modelInfo.modelFilePath, ".obj"))
+			addModel(ObjModelLoader::readFile(modelInfo));
 	}
 
-	objScenes.clear();
+	models.clear();
 
 	// TEXTURE POINTERS
 

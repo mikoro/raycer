@@ -19,10 +19,9 @@ Scene Scene::createTestScene4()
 
 	// OBJ SCENES
 
-	ObjScene objScene;
-	objScene.filePath = "data/meshes/cornellbox.obj";
-	objScene.scale = Vector3(1.0, 1.0, 1.0);
-	scene.objScenes.push_back(objScene);
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/cornellbox.obj";
+	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 
@@ -37,6 +36,7 @@ Scene Scene::createTestScene4()
 	pointLight1.attenuation = 1.0;
 
 	scene.lights.pointLights.push_back(pointLight1);
+	scene.lights.directionalLights.push_back(DirectionalLight());
 
 	return scene;
 }

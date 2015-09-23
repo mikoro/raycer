@@ -8,7 +8,6 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
-#include "Utils/ObjReader.h"
 #include "Utils/PlyReader.h"
 #include "Utils/StringUtils.h"
 #include "Math/Matrix4x4.h"
@@ -19,12 +18,12 @@ void Mesh::initialize()
 {
 	if (meshFilePath.length() > 0)
 	{
-		if (StringUtils::endsWith(meshFilePath, "obj"))
-			triangles = ObjReader::getTriangles(meshFilePath);
-		else if (StringUtils::endsWith(meshFilePath, "ply"))
-			triangles = PlyReader::readFile(meshFilePath);
-		else
-			throw std::runtime_error("Unknown mesh file format");
+// 		if (StringUtils::endsWith(meshFilePath, "obj"))
+// 			triangles = ObjReader::getTriangles(meshFilePath);
+// 		else if (StringUtils::endsWith(meshFilePath, "ply"))
+// 			triangles = PlyReader::readFile(meshFilePath);
+// 		else
+// 			throw std::runtime_error("Unknown mesh file format");
 	}
 	
 	Matrix4x4 scaling = Matrix4x4::scale(scale);

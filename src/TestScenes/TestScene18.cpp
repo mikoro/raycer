@@ -4,7 +4,7 @@
 #include <random>
 
 #include "Raytracing/Scene.h"
-#include "Utils/ObjReader.h"
+#include "Utils/ObjModelLoader.h"
 
 using namespace Raycer;
 
@@ -77,13 +77,18 @@ Scene Scene::createTestScene18()
 
 	// MESHES //
 
-	ObjReaderResult result = ObjReader::getMeshes("data/meshes/sunflower/sunflower.obj", Vector3(0.1, 0.1, 0.1), EulerAngle(0.0, 90.0, 0.0), Vector3(0.0, 1.5, 0.0), true, 2000000);
-	scene.addObjScene(result);
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";
+	modelInfo.scale = Vector3(0.1, 0.1, 0.1);
+	modelInfo.rotate = EulerAngle(0.0, 90.0, 0.0);
+	modelInfo.translate = Vector3(0.0, 1.5, 0.0);
+	modelInfo.invisible = true;
+	
+	ModelLoaderResult result = ObjModelLoader::readFile(modelInfo);
+	scene.addModel(result);
 
 	Instance instance;
-	instance.id = 0;
-	instance.primitiveId = result.primitiveGroup.id;
-	instance.materialId = result.primitiveGroup.materialId;
+	instance.primitiveId = result.all.id;
 
 	std::mt19937 gen(230947887);
 	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);

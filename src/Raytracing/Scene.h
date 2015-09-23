@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -37,19 +38,11 @@
 #include "Rendering/ToneMappers/ToneMapper.h"
 #include "Math/Color.h"
 #include "Math/Vector3.h"
-#include "Utils/ObjReader.h"
+#include "Utils/ModelLoader.h"
 
 namespace Raycer
 {
 	class Primitive;
-
-	struct ObjScene
-	{
-		std::string filePath;
-		Vector3 scale = Vector3(1.0, 1.0, 1.0);
-		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
-		Vector3 translate = Vector3(0.0, 0.0, 0.0);
-	};
 
 	class Scene
 	{
@@ -66,7 +59,7 @@ namespace Raycer
 		std::string getJsonString() const;
 		std::string getXmlString() const;
 
-		void addObjScene(const ObjReaderResult& result);
+		void addModel(const ModelLoaderResult& result);
 		void initialize();
 
 		static Scene createTestScene1();
@@ -188,7 +181,8 @@ namespace Raycer
 			std::vector<Primitive*> invisible;
 		} primitives;
 
-		std::vector<ObjScene> objScenes;
+		std::vector<ModelLoaderInfo> models;
+
 		std::map<int, Primitive*> primitivesMap;
 		std::map<int, Material*> materialsMap;
 		std::map<int, Texture*> texturesMap;
