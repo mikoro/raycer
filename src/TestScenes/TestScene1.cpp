@@ -14,7 +14,7 @@ Scene Scene::createTestScene1()
 
 	scene.rootBVH.enabled = true;
 	scene.rootBVH.buildInfo.maxLeafSize = 1;
-	
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(8.0, 8.0, 11.0);
@@ -22,36 +22,26 @@ Scene Scene::createTestScene1()
 
 	// GROUND //
 
-	ColorTexture groundTexture;
-	groundTexture.id = 1;
-	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.3;
-
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.ambientMapTextureId = groundTexture.id;
-	groundMaterial.diffuseMapTextureId = groundTexture.id;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
-	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
 	// TRIANGLE //
 
-	ColorTexture triangleTexture;
-	triangleTexture.id = 2;
-	triangleTexture.color = Color(1.0, 0.0, 0.0);
-	triangleTexture.intensity = 0.5;
-
 	Material triangleMaterial;
 	triangleMaterial.id = 2;
-	triangleMaterial.ambientMapTextureId = triangleTexture.id;
-	triangleMaterial.diffuseMapTextureId = triangleTexture.id;
+	triangleMaterial.ambientReflectance = Color(1.0, 0.0, 0.0) * 0.5;
+	triangleMaterial.diffuseReflectance = triangleMaterial.ambientReflectance;
 
 	Triangle triangle;
 	triangle.id = 2;
@@ -63,27 +53,21 @@ Scene Scene::createTestScene1()
 	triangle.normals[0] = triangle.normals[1] = triangle.normals[2] = Vector3::FORWARD;
 
 	Instance instance;
+	instance.id = 1002;
 	instance.primitiveId = triangle.id;
-	instance.materialId = triangle.materialId;
 	instance.translate = Vector3(0.0, 0.5, 0.0);
 	instance.rotate = EulerAngle(-10.0, 10.0, 10.0);
 
-	scene.textures.colorTextures.push_back(triangleTexture);
 	scene.materials.push_back(triangleMaterial);
 	scene.primitives.triangles.push_back(triangle);
 	scene.primitives.instances.push_back(instance);
 
 	// SPHERE //
 
-	ColorTexture sphereTexture;
-	sphereTexture.id = 3;
-	sphereTexture.color = Color(0.0, 1.0, 0.0);
-	sphereTexture.intensity = 0.5;
-
 	Material sphereMaterial;
 	sphereMaterial.id = 3;
-	sphereMaterial.ambientMapTextureId = sphereTexture.id;
-	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.ambientReflectance = Color(0.0, 1.0, 0.0) * 0.5;
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 
 	Sphere sphere;
 	sphere.id = 3;
@@ -91,26 +75,20 @@ Scene Scene::createTestScene1()
 	sphere.materialId = sphereMaterial.id;
 	sphere.radius = 1.0;
 
+	instance.id = 1003;
 	instance.primitiveId = sphere.id;
-	instance.materialId = sphere.materialId;
 	instance.translate = Vector3(3.0, 1.5, 0.0);
 
-	scene.textures.colorTextures.push_back(sphereTexture);
 	scene.materials.push_back(sphereMaterial);
 	scene.primitives.spheres.push_back(sphere);
 	scene.primitives.instances.push_back(instance);
 
 	// BOX //
 
-	ColorTexture boxTexture;
-	boxTexture.id = 4;
-	boxTexture.color = Color(0.0, 0.0, 1.0);
-	boxTexture.intensity = 0.5;
-
 	Material boxMaterial;
 	boxMaterial.id = 4;
-	boxMaterial.ambientMapTextureId = boxTexture.id;
-	boxMaterial.diffuseMapTextureId = boxTexture.id;
+	boxMaterial.ambientReflectance = Color(0.0, 0.0, 1.0) * 0.5;
+	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
 
 	Box box;
 	box.id = 4;
@@ -118,27 +96,21 @@ Scene Scene::createTestScene1()
 	box.materialId = boxMaterial.id;
 	box.extent = Vector3(2.0, 2.0, 2.0);
 
+	instance.id = 1004;
 	instance.primitiveId = box.id;
-	instance.materialId = box.materialId;
 	instance.translate = Vector3(6.0, 1.5, 0.0);
 	instance.rotate = EulerAngle(10.0, 45.0, -10.0);
 
-	scene.textures.colorTextures.push_back(boxTexture);
 	scene.materials.push_back(boxMaterial);
 	scene.primitives.boxes.push_back(box);
 	scene.primitives.instances.push_back(instance);
 	
 	// CYLINDER //
 
-	ColorTexture cylinderTexture;
-	cylinderTexture.id = 5;
-	cylinderTexture.color = Color(1.0, 1.0, 0.0);
-	cylinderTexture.intensity = 0.5;
-
 	Material cylinderMaterial;
 	cylinderMaterial.id = 5;
-	cylinderMaterial.ambientMapTextureId = cylinderTexture.id;
-	cylinderMaterial.diffuseMapTextureId = cylinderTexture.id;
+	cylinderMaterial.ambientReflectance = Color(1.0, 1.0, 0.0) * 0.5;
+	cylinderMaterial.diffuseReflectance = cylinderMaterial.ambientReflectance;
 
 	Cylinder cylinder;
 	cylinder.id = 5;
@@ -147,27 +119,21 @@ Scene Scene::createTestScene1()
 	cylinder.radius = 1.0;
 	cylinder.height = 2.0;
 
+	instance.id = 1005;
 	instance.primitiveId = cylinder.id;
-	instance.materialId = cylinder.materialId;
 	instance.translate = Vector3(9.0, 0.5, 0.0);
 	instance.rotate = EulerAngle(-10.0, 10.0, -10.0);
 
-	scene.textures.colorTextures.push_back(cylinderTexture);
 	scene.materials.push_back(cylinderMaterial);
 	scene.primitives.cylinders.push_back(cylinder);
 	scene.primitives.instances.push_back(instance);
 
 	// TORUS //
 
-	ColorTexture torusTexture;
-	torusTexture.id = 6;
-	torusTexture.color = Color(0.0, 1.0, 1.0);
-	torusTexture.intensity = 0.5;
-
 	Material torusMaterial;
 	torusMaterial.id = 6;
-	torusMaterial.ambientMapTextureId = torusTexture.id;
-	torusMaterial.diffuseMapTextureId = torusTexture.id;
+	torusMaterial.ambientReflectance = Color(0.0, 1.0, 1.0) * 0.5;
+	torusMaterial.diffuseReflectance = torusMaterial.ambientReflectance;
 
 	Torus torus;
 	torus.id = 6;
@@ -176,27 +142,21 @@ Scene Scene::createTestScene1()
 	torus.outerRadius = 1.0;
 	torus.innerRadius = 0.25;
 
+	instance.id = 1006;
 	instance.primitiveId = torus.id;
-	instance.materialId = torus.materialId;
 	instance.translate = Vector3(12.0, 1.75, 0.0);
 	instance.rotate = EulerAngle(-20.0, -20.0, 0.0);
 
-	scene.textures.colorTextures.push_back(torusTexture);
 	scene.materials.push_back(torusMaterial);
 	scene.primitives.toruses.push_back(torus);
 	scene.primitives.instances.push_back(instance);
 
 	// BLINN BLOB //
 
-	ColorTexture blobTexture;
-	blobTexture.id = 7;
-	blobTexture.color = Color(1.0, 0.0, 1.0);
-	blobTexture.intensity = 0.5;
-
 	Material blobMaterial;
 	blobMaterial.id = 7;
-	blobMaterial.ambientMapTextureId = blobTexture.id;
-	blobMaterial.diffuseMapTextureId = blobTexture.id;
+	blobMaterial.ambientReflectance = Color(1.0, 0.0, 1.0) * 0.5;
+	blobMaterial.diffuseReflectance = blobMaterial.ambientReflectance;
 
 	BlinnBlob blob;
 	blob.id = 7;
@@ -214,13 +174,12 @@ Scene Scene::createTestScene1()
 	blobDesc.radius = 0.3;
 	blob.blobs.push_back(blobDesc);
 
+	instance.id = 1007;
 	instance.primitiveId = blob.id;
-	instance.materialId = blob.materialId;
 	instance.translate = Vector3(15.0, 1.5, 0.0);
 	instance.rotate = EulerAngle(-20.0, -20.0, 0.0);
 	instance.scale = Vector3(2.0, 2.0, 2.0);
 
-	scene.textures.colorTextures.push_back(blobTexture);
 	scene.materials.push_back(blobMaterial);
 	scene.primitives.blinnBlobs.push_back(blob);
 	scene.primitives.instances.push_back(instance);
@@ -230,14 +189,14 @@ Scene Scene::createTestScene1()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(8.0, 10.0, 5.0);
-	pointLight1.distance = 20.0;
-	pointLight1.attenuation = 1.0;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.0;
+	pointLight.position = Vector3(8.0, 10.0, 5.0);
+	pointLight.distance = 20.0;
+	pointLight.attenuation = 1.0;
 
-	scene.lights.pointLights.push_back(pointLight1);
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }
