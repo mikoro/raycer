@@ -309,18 +309,10 @@ void Scene::initialize()
 
 	// POINTER MAP GENERATION
 
-	for (Texture* texture : texturesList)
-	{
-		if (texturesMap.count(texture->id))
-			throw std::runtime_error(tfm::format("A duplicate texture id (%d) was found", texture->id));
-
-		texturesMap[texture->id] = texture;
-	}
-
 	for (Material& material : materials)
 	{
 		if (materialsMap.count(material.id))
-			throw std::runtime_error(tfm::format("A duplicate material id (%d) was found", material.id));
+			throw std::runtime_error(tfm::format("A duplicate material id was found (id: %s)", material.id));
 
 		materialsMap[material.id] = &material;
 	}
@@ -329,15 +321,26 @@ void Scene::initialize()
 	if (!materialsMap.count(0))
 		materialsMap[0] = &defaultMaterial;
 
+	for (Texture* texture : texturesList)
+	{
+		if (texture->id == 0)
+			throw std::runtime_error(tfm::format("A texture must have a non-zero id (id: %s, type: %s)", texture->id, typeid(*texture).name()));
+
+		if (texturesMap.count(texture->id))
+			throw std::runtime_error(tfm::format("A duplicate texture id was found (id: %s, type: %s)", texture->id, typeid(*texture).name()));
+
+		texturesMap[texture->id] = texture;
+	}
+
 	auto mapPrimitive = [&](Primitive* primitive)
 	{
-		if (primitive->id != 0)
-		{
-			if (primitivesMap.count(primitive->id))
-				throw std::runtime_error(tfm::format("A duplicate primitive id (%d) was found", primitive->id));
+		if (primitive->id == 0)
+			throw std::runtime_error(tfm::format("A primitive must have a non-zero id (id: %s, type: %s)", primitive->id, typeid(*primitive).name()));
 
-			primitivesMap[primitive->id] = primitive;
-		}
+		if (primitivesMap.count(primitive->id))
+			throw std::runtime_error(tfm::format("A duplicate primitive id was found (id: %s, type: %s)", primitive->id, typeid(*primitive).name()));
+
+		primitivesMap[primitive->id] = primitive;
 	};
 
 	for (Primitive* primitive : primitives.invisible)

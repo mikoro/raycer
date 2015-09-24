@@ -15,3 +15,4 @@ misc
  - move cereal stuff to classes and change variables to private
  - optimize instance aabb caching
  - every primitive needs to have unique id
+ - reorganize primitives (scene, cereal)

@@ -108,24 +108,24 @@ void DefaultState::update(double timeStep)
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
 	{
 		if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
-			scene.saveToFile("scene.bin");
-		else
 			scene.saveToFile("scene.xml");
+		else
+			scene.saveToFile("scene.bin");
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F8))
 	{
 		windowRunner.pause();
-		scene.saveToFile("scene.xml");
+		scene.saveToFile("scene.bin");
 
 #ifdef _WIN32
-		ShellExecuteA(NULL, "open", "raycer.exe", "-s scene.xml --non-interactive --non-test --view", NULL, SW_SHOWNORMAL);
+		ShellExecuteA(NULL, "open", "raycer.exe", "-s scene.bin --non-interactive --non-test --view", NULL, SW_SHOWNORMAL);
 #else
 		int pid = fork();
 
 		if (pid == 0)
 		{
-			char* arg[] = { (char*)"raycer", (char*)"-s scene.xml", (char*)"--non-interactive", (char*)"--non-test", (char*)"--view", (char*)0 };
+			char* arg[] = { (char*)"raycer", (char*)"-s scene.bin", (char*)"--non-interactive", (char*)"--non-test", (char*)"--view", (char*)0 };
 
 			if (execvp(arg[0], arg) == -1)
 				App::getLog().logWarning("Could not launch external rendering (%d) (try adding raycer to PATH)", errno);
