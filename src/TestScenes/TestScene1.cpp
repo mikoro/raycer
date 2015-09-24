@@ -191,7 +191,7 @@ Scene Scene::createTestScene1()
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
-	pointLight.intensity = 1.0;
+	pointLight.intensity = 1.5;
 	pointLight.position = Vector3(8.0, 10.0, 5.0);
 	pointLight.distance = 20.0;
 	pointLight.attenuation = 1.0;

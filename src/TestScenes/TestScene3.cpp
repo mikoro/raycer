@@ -19,49 +19,36 @@ Scene Scene::createTestScene3()
 
 	// GROUND //
 
-	ColorTexture groundTexture;
-	groundTexture.id = 1;
-	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.3;
-
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.ambientMapTextureId = groundTexture.id;
-	groundMaterial.diffuseMapTextureId = groundTexture.id;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
-	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// MESH 1 //
+	// MONKEY MESH //
 
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 2;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 0.8;
+	Material monkeyMaterial;
+	monkeyMaterial.id = 2;
+	monkeyMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.8;
+	monkeyMaterial.diffuseReflectance = monkeyMaterial.ambientReflectance;
 
-	Material mesh1Material;
-	mesh1Material.id = 2;
-	mesh1Material.ambientMapTextureId = mesh1Texture.id;
-	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
+	ModelLoaderInfo monkeyModelInfo;
+	monkeyModelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	monkeyModelInfo.defaultMaterialId = monkeyMaterial.id;
+	monkeyModelInfo.combinedGroupId = 2;
+	monkeyModelInfo.combinedGroupInstanceId = 3;
+	monkeyModelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
-	ModelLoaderInfo modelInfo1;
-	modelInfo1.modelFilePath = "data/meshes/monkey3.obj";
-	modelInfo1.defaultMaterialId = mesh1Material.id;
-	modelInfo1.addAllInstance = true;
-	modelInfo1.allGroupId = 1;
-	modelInfo1.scale = Vector3(6.0, 6.0, 6.0);
-	modelInfo1.rotate = EulerAngle(0.0, 0.0, 0.0);
-	modelInfo1.translate = Vector3(0.0, 0.0, 0.0);
-
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.models.push_back(modelInfo1);
+	scene.materials.push_back(monkeyMaterial);
+	scene.models.push_back(monkeyModelInfo);
 
 	// LIGHTS //
 

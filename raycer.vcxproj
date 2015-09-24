@@ -353,7 +353,6 @@
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\PlyReader.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
-    <ClInclude Include="src\Utils\Serialization.h" />
     <ClInclude Include="src\Utils\Settings.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />
     <ClInclude Include="src\Utils\ValueNoise.h" />

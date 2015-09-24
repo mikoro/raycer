@@ -6,6 +6,8 @@
 #include <cstdint>
 #include <random>
 
+#include "cereal/cereal.hpp"
+
 namespace Raycer
 {
 	class Color
@@ -59,5 +61,18 @@ namespace Raycer
 		double g;
 		double b;
 		double a;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(r),
+				CEREAL_NVP(g),
+				CEREAL_NVP(b),
+				CEREAL_NVP(a));
+		}
 	};
 }

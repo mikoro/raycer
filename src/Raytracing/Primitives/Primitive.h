@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Vector2.h"
 
 namespace Raycer
@@ -15,7 +17,7 @@ namespace Raycer
 	class AABB;
 	class Vector3;
 	class EulerAngle;
-	struct Material;
+	class Material;
 
 	class Primitive
 	{
@@ -32,5 +34,17 @@ namespace Raycer
 		int materialId = 0;
 		Material* material = nullptr;
 		bool invisible = false;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(id),
+				CEREAL_NVP(materialId),
+				CEREAL_NVP(invisible));
+		}
 	};
 }

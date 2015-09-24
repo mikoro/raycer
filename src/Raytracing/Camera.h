@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
 
@@ -81,5 +83,23 @@ namespace Raycer
 
 		Vector3 originalPosition;
 		EulerAngle originalOrientation;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(orientation),
+				CEREAL_NVP(projectionType),
+				CEREAL_NVP(fov),
+				CEREAL_NVP(orthoSize),
+				CEREAL_NVP(fishEyeAngle),
+				CEREAL_NVP(apertureSize),
+				CEREAL_NVP(focalDistance),
+				CEREAL_NVP(isTimeVariant),
+				CEREAL_NVP(translateInTime),
+				CEREAL_NVP(rotateInTime));
+		}
 	};
 }

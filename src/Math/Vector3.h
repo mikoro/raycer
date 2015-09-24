@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "cereal/cereal.hpp"
+
 namespace Raycer
 {
 	class Vector3
@@ -61,5 +63,17 @@ namespace Raycer
 		double x;
 		double y;
 		double z;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(x),
+				CEREAL_NVP(y),
+				CEREAL_NVP(z));
+		}
 	};
 }

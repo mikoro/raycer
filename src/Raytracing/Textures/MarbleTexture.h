@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/PerlinNoise.h"
 #include "Math/Color.h"
@@ -32,5 +34,19 @@ namespace Raycer
 	private:
 
 		PerlinNoise perlinNoise;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(seed),
+				CEREAL_NVP(marbleColor),
+				CEREAL_NVP(streakColor),
+				CEREAL_NVP(density),
+				CEREAL_NVP(swirliness),
+				CEREAL_NVP(transparency));
+		}
 	};
 }

@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/AABB.h"
@@ -41,5 +43,17 @@ namespace Raycer
 
 		std::vector<Primitive*> primitives;
 		AABB aabb;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(primitiveIds),
+				CEREAL_NVP(enableBVH),
+				CEREAL_NVP(bvhBuildInfo),
+				CEREAL_NVP(bvh));
+		}
 	};
 }

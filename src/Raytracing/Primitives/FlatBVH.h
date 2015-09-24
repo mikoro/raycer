@@ -6,6 +6,8 @@
 #include <random>
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
 
@@ -21,13 +23,16 @@ namespace Raycer
 		int regularSAHSplits = 0;
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
-	};
 
-	struct FlatBVHBuildEntry
-	{
-		int start;
-		int end;
-		int parent;
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(maxLeafSize),
+				CEREAL_NVP(useSAH),
+				CEREAL_NVP(regularSAHSplits),
+				CEREAL_NVP(axisSelection),
+				CEREAL_NVP(axisSplit));
+		}
 	};
 
 	struct FlatBVHNode
@@ -36,6 +41,22 @@ namespace Raycer
 		int rightOffset;
 		int startOffset;
 		int primitiveCount;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(aabb),
+				CEREAL_NVP(rightOffset),
+				CEREAL_NVP(startOffset),
+				CEREAL_NVP(primitiveCount));
+		}
+	};
+
+	struct FlatBVHBuildEntry
+	{
+		int start;
+		int end;
+		int parent;
 	};
 
 	class Scene;
@@ -70,5 +91,16 @@ namespace Raycer
 		double calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry);
 
 		std::vector<Primitive*> orderedPrimitives;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(hasBeenBuilt),
+				CEREAL_NVP(flatNodes),
+				CEREAL_NVP(orderedPrimitiveIds));
+		}
 	};
 }

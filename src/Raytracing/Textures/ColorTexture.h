@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Math/Color.h"
 
@@ -22,5 +24,16 @@ namespace Raycer
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const;
 
 		Color color;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(color));
+		}
 	};
 }

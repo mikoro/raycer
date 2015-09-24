@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
@@ -34,5 +36,18 @@ namespace Raycer
 		Vector3 normal;
 		Vector3 tangent;
 		Vector3 bitangent;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(vertices),
+				CEREAL_NVP(normals),
+				CEREAL_NVP(texcoords));
+		}
 	};
 }

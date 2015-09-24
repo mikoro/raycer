@@ -5,6 +5,8 @@
 
 #include <string>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Rendering/Image.h"
 
@@ -35,5 +37,18 @@ namespace Raycer
 		Image image;
 		Image bumpMapX;
 		Image bumpMapY;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(imageFilePath),
+				CEREAL_NVP(applyGamma),
+				CEREAL_NVP(gamma),
+				CEREAL_NVP(isBumpMap),
+				CEREAL_NVP(isNormalMap));
+		}
 	};
 }

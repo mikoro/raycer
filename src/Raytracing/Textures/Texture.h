@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 namespace Raycer
 {
 	class Color;
@@ -25,5 +27,16 @@ namespace Raycer
 
 		int id = 0;
 		double intensity = 1.0;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(id),
+				CEREAL_NVP(intensity));
+		}
 	};
 }

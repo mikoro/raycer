@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Utils/ValueNoise.h"
 #include "Math/Vector3.h"
@@ -33,5 +35,20 @@ namespace Raycer
 	private:
 
 		ValueNoise valueNoise;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(seed),
+				CEREAL_NVP(scale),
+				CEREAL_NVP(baseColor),
+				CEREAL_NVP(isFbm),
+				CEREAL_NVP(octaves),
+				CEREAL_NVP(lacunarity),
+				CEREAL_NVP(persistence));
+		}
 	};
 }

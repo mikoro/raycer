@@ -8,9 +8,9 @@
 #include "cereal/cereal.hpp"
 #include "cereal/archives/json.hpp"
 #include "cereal/archives/xml.hpp"
+#include "cereal/archives/binary.hpp"
 #include "cereal/types/vector.hpp"
 #include "cereal/types/string.hpp"
-#include "cereal/archives/binary.hpp"
 
 #include "tinyformat/tinyformat.h"
 
@@ -21,17 +21,20 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
-#include "Utils/Serialization.h"
 #include "Utils/ObjModelLoader.h"
 
 using namespace Raycer;
 
 Scene::Scene()
 {
-	boundingBoxes.material.ambientReflectance = Color(0.1, 0.1, 0.2);
-	boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.2);
-	boundingBoxes.material.rayTransmittance = 1.0;
-	boundingBoxes.material.nonShadowing = true;
+	if (boundingBoxes.useDefaultMaterial)
+	{
+		boundingBoxes.material = Material();
+		boundingBoxes.material.ambientReflectance = Color(0.1, 0.1, 0.2);
+		boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.2);
+		boundingBoxes.material.rayTransmittance = 1.0;
+		boundingBoxes.material.nonShadowing = true;
+	}
 }
 
 Scene Scene::createTestScene(int number)
@@ -191,31 +194,11 @@ void Scene::addModel(const ModelLoaderResult& result)
 	for (const ImageTexture& imageTexture : result.textures)
 		textures.imageTextures.push_back(imageTexture);
 
-	if (result.addAllGroup)
-		primitives.primitiveGroups.push_back(result.allGroup);
+	for (const PrimitiveGroup& group : result.groups)
+		primitives.primitiveGroups.push_back(group);
 
-	if (result.addAllInstance)
-	{
-		Instance instance;
-		instance.primitiveId = result.allGroup.id;
+	for (const Instance& instance : result.instances)
 		primitives.instances.push_back(instance);
-	}
-
-	if (result.addGroups)
-	{
-		for (const PrimitiveGroup& group : result.groups)
-			primitives.primitiveGroups.push_back(group);
-	}
-	
-	if (result.addGroupInstances)
-	{
-		for (const PrimitiveGroup& group : result.groups)
-		{
-			Instance instance;
-			instance.primitiveId = group.id;
-			primitives.instances.push_back(instance);
-		}
-	}
 }
 
 void Scene::initialize()
@@ -277,6 +260,9 @@ void Scene::initialize()
 			primitives.visible.push_back(primitive);
 	};
 
+	for (Triangle& triangle : primitives.triangles)
+		sortPrimitive(&triangle);
+
 	for (Plane& plane : primitives.planes)
 		sortPrimitive(&plane);
 
@@ -285,9 +271,6 @@ void Scene::initialize()
 
 	for (Box& box : primitives.boxes)
 		sortPrimitive(&box);
-
-	for (Triangle& triangle : primitives.triangles)
-		sortPrimitive(&triangle);
 
 	for (Cylinder& cylinder : primitives.cylinders)
 		sortPrimitive(&cylinder);
@@ -426,6 +409,9 @@ void Scene::initialize()
 	for (Texture* texture : texturesList)
 		texture->initialize();
 
+	for (Triangle& triangle : primitives.triangles)
+		triangle.initialize(*this);
+
 	for (Plane& plane : primitives.planes)
 		plane.initialize(*this);
 
@@ -434,9 +420,6 @@ void Scene::initialize()
 
 	for (Box& box : primitives.boxes)
 		box.initialize(*this);
-
-	for (Triangle& triangle : primitives.triangles)
-		triangle.initialize(*this);
 
 	for (Cylinder& cylinder : primitives.cylinders)
 		cylinder.initialize(*this);

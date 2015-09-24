@@ -36,24 +36,17 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 
 	ModelLoaderResult result;
 
-	result.allGroup.id = info.allGroupId;
-	result.allGroup.invisible = true;
+	PrimitiveGroup combinedGroup;
+	combinedGroup.id = info.combinedGroupId;
+	combinedGroup.invisible = info.invisibleCombinedGroup;
 
-	result.addAllGroup = info.addAllGroup;
-	result.addAllInstance = info.addAllInstance;
-	result.addGroups = info.addGroups;
-	result.addGroupInstances = info.addGroupInstances;
-
-	if (info.addAllInstance)
-		result.addAllGroup = true;
-
-	if (info.addGroupInstances)
-		result.addGroups = true;
+	Instance combinedGroupInstance;
+	combinedGroupInstance.id = info.combinedGroupInstanceId;
+	combinedGroupInstance.primitiveId = combinedGroup.id;
 
 	int currentId = info.idStartOffset;
 	int currentMaterialId = info.defaultMaterialId;
-	bool invisible = info.invisibleTriangles || info.addAllInstance || info.addGroupInstances;
-	
+
 	std::map<std::string, int> materialsMap;
 	std::string objFileDirectory = boost::filesystem::absolute(info.modelFilePath).parent_path().string();
 
@@ -86,9 +79,20 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		// new group
 		if (part == "g")
 		{
-			result.groups.push_back(PrimitiveGroup());
-			result.groups.back().id = ++currentId;
-			result.groups.back().invisible = true;
+			if (info.enableGroups)
+			{
+				result.groups.push_back(PrimitiveGroup());
+				result.groups.back().id = ++currentId;
+				result.groups.back().invisible = info.invisibleGroups;
+
+				if (info.enableGroupsInstances)
+				{
+					result.instances.push_back(Instance());
+					result.instances.back().id = ++currentId;
+					result.instances.back().primitiveId = result.groups.back().id;
+				}
+			}
+
 			continue;
 		}
 
@@ -144,10 +148,18 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 
 		// face
 		if (part == "f")
-			processFace(ss, vertices, normals, texcoords, result, currentId, currentMaterialId, invisible);
+			processFace(ss, vertices, normals, texcoords, info, result, combinedGroup, currentId, currentMaterialId);
 	}
 
 	file.close();
+
+	if (info.enableCombinedGroup)
+	{
+		result.groups.push_back(combinedGroup);
+
+		if (info.enableCombinedGroupInstance)
+			result.instances.push_back(combinedGroupInstance);
+	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
@@ -374,7 +386,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		result.materials.push_back(currentMaterial);
 }
 
-void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, ModelLoaderResult& result, int& currentId, int currentMaterialId, bool invisible)
+void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup &combinedGroup, int& currentId, int currentMaterialId)
 {
 	std::vector<int> vertexIndices;
 	std::vector<int> normalIndices;
@@ -451,12 +463,13 @@ void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& v
 		Triangle triangle;
 		triangle.id = ++currentId;
 		triangle.materialId = currentMaterialId;
-		triangle.invisible = invisible;
+		triangle.invisible = info.invisibleTriangles;
 
-		if (result.groups.size() > 0)
+		if (info.enableGroups && result.groups.size() > 0)
 			result.groups.back().primitiveIds.push_back(triangle.id);
 
-		result.allGroup.primitiveIds.push_back(triangle.id);
+		if (info.enableCombinedGroup)
+			combinedGroup.primitiveIds.push_back(triangle.id);
 
 		triangle.vertices[0] = vertices[vertexIndices[0]];
 		triangle.vertices[1] = vertices[vertexIndices[i - 1]];

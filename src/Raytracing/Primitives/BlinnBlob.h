@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 
@@ -21,6 +23,15 @@ namespace Raycer
 		double radius = 1.0;
 		double blobbiness = 4.0;
 		bool isNegative = false;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(position),
+				CEREAL_NVP(radius),
+				CEREAL_NVP(blobbiness),
+				CEREAL_NVP(isNegative));
+		}
 	};
 
 	class BlinnBlob : public Primitive
@@ -37,5 +48,17 @@ namespace Raycer
 
 		std::vector<BlinnBlobDescription> blobs;
 		int solverIterations = 16;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(blobs),
+				CEREAL_NVP(solverIterations));
+		}
 	};
 }

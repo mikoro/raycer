@@ -460,9 +460,6 @@
     <ClInclude Include="src\Raytracing\Lights.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\Serialization.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Textures\CellNoiseTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Math/Color.h"
 
@@ -25,5 +27,19 @@ namespace Raycer
 		Color color2;
 		bool stripeMode = false;
 		double stripeWidth = 0.05;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(color1),
+				CEREAL_NVP(color2),
+				CEREAL_NVP(stripeMode),
+				CEREAL_NVP(stripeWidth));
+		}
 	};
 }

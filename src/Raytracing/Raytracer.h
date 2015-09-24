@@ -21,7 +21,7 @@ namespace Raycer
 	struct RaytracerState;
 	class Ray;
 	struct Intersection;
-	struct Material;
+	class Material;
 	struct Light;
 	struct DirectionalLight;
 	struct PointLight;

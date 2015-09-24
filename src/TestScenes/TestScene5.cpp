@@ -19,105 +19,95 @@ Scene Scene::createTestScene5()
 	scene.camera.position = Vector3(9.49, 4.44, 3.94);
 	scene.camera.orientation = EulerAngle(-20.0, 35.0, 0.0);
 
-	// BOX 1 //
+	// BOXES //
 
-	ColorTexture box1Texture;
-	box1Texture.id = 3;
-	box1Texture.color = Color(1.0, 1.0, 1.0);
-	box1Texture.intensity = 1.0;
+	Material boxMaterial;
+	boxMaterial.id = 1;
+	boxMaterial.ambientReflectance = Color(0.5, 0.0, 0.0);
+	boxMaterial.diffuseReflectance = Color(0.5, 0.0, 0.0);
+	boxMaterial.rayTransmittance = 0.75;
+	boxMaterial.refractiveIndex = 1.0;
+	boxMaterial.enableAttenuation = true;
+	boxMaterial.attenuationFactor = 1.0;
+	boxMaterial.attenuationColor = Color(0.1, 0.0, 0.0);
+	boxMaterial.nonShadowing = true;
 
-	Material box1Material;
-	box1Material.id = 3;
-	box1Material.ambientMapTextureId = box1Texture.id;
-	box1Material.diffuseMapTextureId = box1Texture.id;
-	box1Material.ambientReflectance = Color(0.5, 0.0, 0.0);
-	box1Material.diffuseReflectance = Color(0.5, 0.0, 0.0);
-	box1Material.rayTransmittance = 0.75;
-	box1Material.refractiveIndex = 1.0;
-	box1Material.enableAttenuation = true;
-	box1Material.attenuationFactor = 1.0;
-	box1Material.attenuationColor = Color(0.1, 0.0, 0.0);
-	box1Material.nonShadowing = true;
+	Box box;
+	box.extent = Vector3(2.0, 2.0, 2.0);
+	box.materialId = boxMaterial.id;
 
-	Box box1;
-	box1.extent = Vector3(2.0, 2.0, 2.0);
-	box1.materialId = box1Material.id;
+	scene.materials.push_back(boxMaterial);
 
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
+	box.id = 1;
+	box.position = Vector3(-4.0, 1.0, 0.0);
+	scene.primitives.boxes.push_back(box);
+	box.id = 2;
+	box.position = Vector3(-8.0, 1.0, 0.0);
+	scene.primitives.boxes.push_back(box);
 
-	box1.position = Vector3(-4.0, 1.0, 0.0);
-	scene.primitives.boxes.push_back(box1);
-	box1.position = Vector3(-8.0, 1.0, 0.0);
-	scene.primitives.boxes.push_back(box1);
+	// MESH BOXES //
 
-	// MESH 1 //
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/cube1.obj";
+	modelInfo.defaultMaterialId = boxMaterial.id;
 
-	ModelLoaderInfo modelInfo1;
-	modelInfo1.modelFilePath = "data/meshes/cube1.obj";
-	modelInfo1.defaultMaterialId = box1Material.id;
-	modelInfo1.addAllInstance = true;
+	modelInfo.translate = Vector3(4.0, 1.0, 0.0);
+	modelInfo.combinedGroupId = 6;
+	modelInfo.combinedGroupInstanceId = 7;
+	modelInfo.idStartOffset = 1000;
+	scene.models.push_back(modelInfo);
 
-	modelInfo1.translate = Vector3(4.0, 1.0, 0.0);
-	modelInfo1.idStartOffset = 1000;
-	modelInfo1.allGroupId = 100;
-	scene.models.push_back(modelInfo1);
-	modelInfo1.idStartOffset = 2000;
-	modelInfo1.allGroupId = 101;
-	modelInfo1.translate = Vector3(8.0, 1.0, 0.0);
-	scene.models.push_back(modelInfo1);
+	modelInfo.translate = Vector3(8.0, 1.0, 0.0);
+	modelInfo.combinedGroupId = 8;
+	modelInfo.combinedGroupInstanceId = 9;
+	modelInfo.idStartOffset = 2000;
+	scene.models.push_back(modelInfo);
 
-	// BOX 2 //
+	// WALL BOXES //
 
-	ColorTexture box2Texture;
-	box2Texture.id = 4;
-	box2Texture.color = Color(1.0, 1.0, 1.0);
-	box2Texture.intensity = 1.0;
+	boxMaterial = Material();
+	boxMaterial.id = 2;
+	boxMaterial.ambientReflectance = Color(0.1, 0.1, 0.3);
+	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
+	boxMaterial.rayReflectance = 0.75;
+	boxMaterial.nonShadowing = true;
 
-	Material box2Material;
-	box2Material.id = 4;
-	box2Material.ambientMapTextureId = box2Texture.id;
-	box2Material.diffuseMapTextureId = box2Texture.id;
-	box2Material.ambientReflectance = Color(0.1, 0.1, 0.3);
-	box2Material.diffuseReflectance = Color(0.0, 0.0, 0.0);
-	box2Material.rayReflectance = 0.75;
-	box2Material.nonShadowing = true;
+	box = Box();
+	box.id = 10;
+	box.materialId = boxMaterial.id;
+	box.invisible = true;
+	box.extent = Vector3(20.0, 10.0, 1.0);
+	box.position = Vector3(0.0, 0.0, 0.0);
 
-	Box box2;
-	box2.id = 1;
-	box2.materialId = box2Material.id;
-	box2.invisible = true;
-	box2.extent = Vector3(20.0, 10.0, 1.0);
-	box2.position = Vector3(0.0, 0.0, 0.0);
+	scene.materials.push_back(boxMaterial);
+	scene.primitives.boxes.push_back(box);
 
-	scene.textures.colorTextures.push_back(box2Texture);
-	scene.materials.push_back(box2Material);
-	scene.primitives.boxes.push_back(box2);
+	// WALL BOX INSTANCES //
 
-	// INSTANCE 1 //
+	Instance instance;
+	instance.primitiveId = box.id;
 
-	Instance instance1;
-	instance1.primitiveId = box2.id;
+	instance.id = 11;
+	instance.translate = Vector3(0.0, 0.0, -5.0);
+	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance);
 
-	instance1.translate = Vector3(0.0, 0.0, -5.0);
-	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
-	scene.primitives.instances.push_back(instance1);
-
-	instance1.translate = Vector3(0.0, 0.0, 5.0);
-	instance1.rotate = EulerAngle(0.0, 0.0, 0.0);
-	scene.primitives.instances.push_back(instance1);
+	instance.id = 12;
+	instance.translate = Vector3(0.0, 0.0, 5.0);
+	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
+	directionalLight.intensity = 1.0;
+	directionalLight.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }

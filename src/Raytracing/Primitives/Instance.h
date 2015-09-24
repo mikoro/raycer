@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/AABB.h"
 #include "Math/Vector3.h"
@@ -52,5 +54,22 @@ namespace Raycer
 		Matrix4x4 cachedTransformationInv;
 		Matrix4x4 cachedTransformationInvT;
 		AABB cachedAabb;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(primitiveId),
+				CEREAL_NVP(scale),
+				CEREAL_NVP(rotate),
+				CEREAL_NVP(translate),
+				CEREAL_NVP(isTimeVariant),
+				CEREAL_NVP(scaleInTime),
+				CEREAL_NVP(rotateInTime),
+				CEREAL_NVP(translateInTime),
+				CEREAL_NVP(changePrimitive));
+		}
 	};
 }

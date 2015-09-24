@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Vector3.h"
 
 namespace Raycer
@@ -17,5 +19,16 @@ namespace Raycer
 
 		Vector3 axis;
 		double angle; // degrees
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(axis),
+				CEREAL_NVP(angle));
+		}
 	};
 }

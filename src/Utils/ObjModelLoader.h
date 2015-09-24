@@ -21,6 +21,6 @@ namespace Raycer
 	private:
 
 		static void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, ModelLoaderResult& result, std::map<std::string, int>& materialsMap, int& currentId);
-		static void processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, ModelLoaderResult& result, int& currentId, int currentMaterialId, bool invisible);
+		static void processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup &combinedGroup, int& currentId, int currentMaterialId);
 	};
 }

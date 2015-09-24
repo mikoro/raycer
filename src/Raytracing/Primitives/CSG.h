@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Primitives/Primitive.h"
 #include "Math/Vector3.h"
 
@@ -42,5 +44,16 @@ namespace Raycer
 
 		Primitive* leftPrimitive = nullptr;
 		Primitive* rightPrimitive = nullptr;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),
+				CEREAL_NVP(operation),
+				CEREAL_NVP(leftPrimitiveId),
+				CEREAL_NVP(rightPrimitiveId));
+		}
 	};
 }

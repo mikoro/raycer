@@ -35,6 +35,7 @@ Scene Scene::createTestScene2()
 	groundMaterial.texcoordScale = Vector2(0.5, 0.5);
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();

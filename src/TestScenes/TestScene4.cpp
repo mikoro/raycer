@@ -17,12 +17,13 @@ Scene Scene::createTestScene4()
 	scene.camera.position = Vector3(0.0, 1.0, 3.5);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	// OBJ SCENES
+	// MODEL //
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/cornellbox.obj";
-	modelInfo.addAllInstance = true;
-	modelInfo.allGroupId = 1;
+	modelInfo.combinedGroupId = 1;
+	modelInfo.combinedGroupInstanceId = 2;
+
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
@@ -30,15 +31,14 @@ Scene Scene::createTestScene4()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(0.0, 1.9, 0.0);
-	pointLight1.distance = 3.0;
-	pointLight1.attenuation = 1.0;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.0;
+	pointLight.position = Vector3(0.0, 1.9, 0.0);
+	pointLight.distance = 3.0;
+	pointLight.attenuation = 1.0;
 
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.directionalLights.push_back(DirectionalLight());
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }

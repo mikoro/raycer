@@ -19,78 +19,64 @@ Scene Scene::createTestScene12()
 
 	// GROUND //
 
-	ColorTexture groundTexture;
-	groundTexture.id = 1;
-	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.5;
-
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.ambientMapTextureId = groundTexture.id;
-	groundMaterial.diffuseMapTextureId = groundTexture.id;
-	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.001, 1.0, 0.001).normalized();
-	
-	scene.textures.colorTextures.push_back(groundTexture);
+
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// SPHERE 1 //
+	// SPHERES //
 
-	ColorTexture sphere1Texture;
-	sphere1Texture.id = 2;
-	sphere1Texture.color = Color(1.0, 1.0, 1.0);
-	sphere1Texture.intensity = 1.0;
+	Material sphereMaterial;
+	sphereMaterial.id = 2;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 
-	Material sphere1Material;
-	sphere1Material.id = 2;
-	sphere1Material.ambientMapTextureId = sphere1Texture.id;
-	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
+	Sphere sphere;
+	sphere.materialId = sphereMaterial.id;
+	sphere.radius = 1.0;
 
-	Sphere sphere1;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.radius = 1.0;
+	scene.materials.push_back(sphereMaterial);
 
-	scene.textures.colorTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
+	sphere.id = 2;
+	sphere.position = Vector3(-1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 3;
+	sphere.position = Vector3(1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 4;
+	sphere.position = Vector3(-1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 5;
+	sphere.position = Vector3(1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere);
 
-	sphere1.position = Vector3(-1.0, 1.0, 1.0);
-	scene.primitives.spheres.push_back(sphere1);
-	sphere1.position = Vector3(1.0, 1.0, 1.0);
-	scene.primitives.spheres.push_back(sphere1);
-	sphere1.position = Vector3(-1.0, 1.0, -1.0);
-	scene.primitives.spheres.push_back(sphere1);
-	sphere1.position = Vector3(1.0, 1.0, -1.0);
-	scene.primitives.spheres.push_back(sphere1);
+	// MONKEY MESH //
 
-	// MESH 1 //
+	Material meshMaterial;
+	meshMaterial.id = 3;
+	meshMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	meshMaterial.diffuseReflectance = meshMaterial.ambientReflectance;
 
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 3;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 1.0;
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo.defaultMaterialId = meshMaterial.id;
+	modelInfo.combinedGroupId = 6;
+	modelInfo.combinedGroupInstanceId = 7;
+	modelInfo.scale = Vector3(5.0, 5.0, 5.0);
+	modelInfo.rotate = EulerAngle(-45.0, 0.0, 0.0);
+	modelInfo.translate = Vector3(5.0, 0.0, 1.0);
 
-	Material mesh1Material;
-	mesh1Material.id = 3;
-	mesh1Material.ambientMapTextureId = mesh1Texture.id;
-	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
-
-	ModelLoaderInfo modelInfo1;
-	modelInfo1.modelFilePath = "data/meshes/monkey3.obj";
-	modelInfo1.defaultMaterialId = mesh1Material.id;
-	modelInfo1.addAllInstance = true;
-	modelInfo1.allGroupId = 1;
-	modelInfo1.scale = Vector3(5.0, 5.0, 5.0);
-	modelInfo1.rotate = EulerAngle(-45.0, 0.0, 0.0);
-	modelInfo1.translate = Vector3(5.0, 0.0, 1.0);
-
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.models.push_back(modelInfo1);
+	scene.materials.push_back(meshMaterial);
+	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 /*
 
 pitch = rotation around x-axis [1 0 0]
@@ -46,5 +48,17 @@ namespace Raycer
 		double pitch;
 		double yaw;
 		double roll;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(pitch),
+				CEREAL_NVP(yaw),
+				CEREAL_NVP(roll));
+		}
 	};
 }

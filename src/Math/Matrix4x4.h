@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 /*
 
 column major
@@ -82,5 +84,15 @@ namespace Raycer
 		static Matrix4x4 rotate(const Vector3& from, const Vector3& to);
 
 		double m[4][4];
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(m));
+		}
 	};
 }

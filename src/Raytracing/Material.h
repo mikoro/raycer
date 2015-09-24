@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Color.h"
 #include "Math/Vector2.h"
 
@@ -10,10 +12,12 @@ namespace Raycer
 {
 	class Texture;
 
-	struct Material
+	class Material
 	{
+	public:
+
 		int id = 0;
-		
+
 		bool skipLighting = false;
 		bool nonShadowing = false;
 		bool normalInterpolation = true;
@@ -51,8 +55,43 @@ namespace Raycer
 
 		Texture* normalMapTexture = nullptr;
 		int normalMapTextureId = 0;
-		
+
 		Texture* heightMapTexture = nullptr;
 		int heightMapTextureId = 0;
+
+	private:
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(id),
+				CEREAL_NVP(skipLighting),
+				CEREAL_NVP(nonShadowing),
+				CEREAL_NVP(normalInterpolation),
+				CEREAL_NVP(backfaceCulling),
+				CEREAL_NVP(invertNormal),
+				CEREAL_NVP(enableCSG),
+				CEREAL_NVP(texcoordScale),
+				CEREAL_NVP(ambientMapTextureId),
+				CEREAL_NVP(ambientReflectance),
+				CEREAL_NVP(diffuseMapTextureId),
+				CEREAL_NVP(diffuseReflectance),
+				CEREAL_NVP(specularMapTextureId),
+				CEREAL_NVP(specularReflectance),
+				CEREAL_NVP(shininess),
+				CEREAL_NVP(rayReflectanceMapTextureId),
+				CEREAL_NVP(rayReflectance),
+				CEREAL_NVP(fresnelReflection),
+				CEREAL_NVP(rayTransmittanceMapTextureId),
+				CEREAL_NVP(rayTransmittance),
+				CEREAL_NVP(refractiveIndex),
+				CEREAL_NVP(enableAttenuation),
+				CEREAL_NVP(attenuationFactor),
+				CEREAL_NVP(attenuationColor),
+				CEREAL_NVP(normalMapTextureId),
+				CEREAL_NVP(heightMapTextureId));
+		}
 	};
 }

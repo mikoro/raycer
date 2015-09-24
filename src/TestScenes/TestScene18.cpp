@@ -25,31 +25,31 @@ Scene Scene::createTestScene18()
 	scene.camera.focalDistance = 10.0;
 	scene.camera.apertureSize = 0.02;
 
-	// SPHERE 1 //
+	// SKY SPHERE //
 
-	ImageTexture sphere1Texture;
-	sphere1Texture.id = 1;
-	sphere1Texture.intensity = 1.2;
-	sphere1Texture.imageFilePath = "data/images/sky.jpg";
-	sphere1Texture.applyGamma = true;
+	ImageTexture sphereTexture;
+	sphereTexture.id = 1;
+	sphereTexture.intensity = 1.2;
+	sphereTexture.imageFilePath = "data/images/sky.jpg";
+	sphereTexture.applyGamma = true;
 
-	Material sphere1Material;
-	sphere1Material.id = 1;
-	sphere1Material.ambientMapTextureId = sphere1Texture.id;
-	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
-	sphere1Material.texcoordScale = Vector2(1.0, 1.0);
-	sphere1Material.skipLighting = true;
-	sphere1Material.nonShadowing = true;
+	Material sphereMaterial;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientMapTextureId = sphereTexture.id;
+	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.texcoordScale = Vector2(1.0, 1.0);
+	sphereMaterial.skipLighting = true;
+	sphereMaterial.nonShadowing = true;
 
-	Sphere sphere1;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.position = Vector3(0.0, 0.0, 0.0);
-	sphere1.radius = 1000.0;
-	sphere1.uvMapType = SphereUVMapType::SPHERICAL;
+	Sphere sphere;
+	sphere.id = 1;
+	sphere.materialId = sphereMaterial.id;
+	sphere.radius = 1000.0;
+	sphere.uvMapType = SphereUVMapType::SPHERICAL;
 
-	scene.textures.imageTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	scene.textures.imageTextures.push_back(sphereTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
 	// GROUND //
 
@@ -67,6 +67,7 @@ Scene Scene::createTestScene18()
 	groundMaterial.nonShadowing = true;
 
 	Plane groundPlane;
+	groundPlane.id = 2;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
@@ -75,32 +76,39 @@ Scene Scene::createTestScene18()
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// MESHES //
+	// SUNFLOWER MESH //
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";
-	modelInfo.addAllGroup = true;
-	modelInfo.allGroupId = 1;
+	modelInfo.combinedGroupId = 3;
+	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.scale = Vector3(0.1, 0.1, 0.1);
 	modelInfo.rotate = EulerAngle(0.0, 90.0, 0.0);
 	modelInfo.translate = Vector3(0.0, 1.5, 0.0);
-	
+
 	scene.models.push_back(modelInfo);
+
+	// INSTANCES //
 
 	std::mt19937 gen(230947887);
 	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);
 	std::uniform_real_distribution<double> translateDist(0.0, 0.5);
+
+	int currentId = 4;
 
 	for (int y = -200; y < 200; y += 1)
 	{
 		for (int x = -400; x < 0; x += 1)
 		{
 			Instance instance;
-			instance.primitiveId = 1;
+			instance.id = currentId;
+			instance.primitiveId = modelInfo.combinedGroupId;
 			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), y + translateDist(gen));
 			instance.rotate = EulerAngle(0.0, rotationDist(gen), 30.0 + rotationDist(gen));
 
 			scene.primitives.instances.push_back(instance);
+
+			++currentId;
 		}
 	}
 
@@ -109,12 +117,12 @@ Scene Scene::createTestScene18()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
 
-	directionalLight1.intensity = 0.6;
-	directionalLight1.direction = EulerAngle(-40.0, 35.0, 0.0).getDirection();
-	scene.lights.directionalLights.push_back(directionalLight1);
+	directionalLight.intensity = 0.6;
+	directionalLight.direction = EulerAngle(-40.0, 35.0, 0.0).getDirection();
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }

@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Raytracing/Textures/Texture.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
@@ -41,5 +43,24 @@ namespace Raycer
 		ColorGradient gradient;
 		PerlinNoise noise;
 		Vector3 sunDirection;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
+				CEREAL_NVP(seed),
+				CEREAL_NVP(topColor1),
+				CEREAL_NVP(topColor2),
+				CEREAL_NVP(middleColor),
+				CEREAL_NVP(horizonColor),
+				CEREAL_NVP(cloudColor),
+				CEREAL_NVP(sunColor),
+				CEREAL_NVP(sunOrientation),
+				CEREAL_NVP(sunSize),
+				CEREAL_NVP(hasClouds),
+				CEREAL_NVP(hasSun));
+		}
 	};
 }

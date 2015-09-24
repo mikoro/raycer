@@ -3,6 +3,8 @@
 
 #pragma once
 
+#include "cereal/cereal.hpp"
+
 #include "Math/Vector3.h"
 
 namespace Raycer
@@ -31,11 +33,25 @@ namespace Raycer
 		Vector3 getExtent() const;
 		double getSurfaceArea() const;
 
+	private:
+
 		Vector3 min;
 		Vector3 max;
 		Vector3 center;
 		Vector3 extent;
 
 		double surfaceArea = 0.0;
+
+		friend class cereal::access;
+
+		template<class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(min),
+				CEREAL_NVP(max),
+				CEREAL_NVP(center),
+				CEREAL_NVP(extent),
+				CEREAL_NVP(surfaceArea));
+		}
 	};
 }

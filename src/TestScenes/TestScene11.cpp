@@ -21,30 +21,15 @@ Scene Scene::createTestScene11()
 	scene.camera.position = Vector3(0.0, 0.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	// MESH 1 //
+	// MONKEY MESH //
 
-	ColorTexture mesh1Texture;
-	mesh1Texture.id = 1;
-	mesh1Texture.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture.intensity = 0.8;
+	ModelLoaderInfo monkeyModelInfo;
+	monkeyModelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	monkeyModelInfo.combinedGroupId = 1;
+	monkeyModelInfo.enableCombinedGroupInstance = false;
+	monkeyModelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
-	Material mesh1Material;
-	mesh1Material.id = 1;
-	mesh1Material.ambientMapTextureId = mesh1Texture.id;
-	mesh1Material.diffuseMapTextureId = mesh1Texture.id;
-
-	ModelLoaderInfo modelInfo1;
-	modelInfo1.modelFilePath = "data/meshes/monkey3.obj";
-	modelInfo1.defaultMaterialId = mesh1Material.id;
-	modelInfo1.addAllGroup = true;
-	modelInfo1.allGroupId = 1;
-	modelInfo1.scale = Vector3(6.0, 6.0, 6.0);
-	modelInfo1.rotate = EulerAngle(0.0, 0.0, 0.0);
-	modelInfo1.translate = Vector3(0.0, 0.0, 0.0);
-
-	scene.textures.colorTextures.push_back(mesh1Texture);
-	scene.materials.push_back(mesh1Material);
-	scene.models.push_back(modelInfo1);
+	scene.models.push_back(monkeyModelInfo);
 
 	// INSTANCES
 
@@ -53,7 +38,7 @@ Scene Scene::createTestScene11()
 	std::uniform_real_distribution<double> rotationDist(-45.0, 45.0);
 	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
 
-	int count = 2;
+	int currentId = 2;
 
 	for (int z = -200; z < 200; z += 20)
 	{
@@ -61,30 +46,25 @@ Scene Scene::createTestScene11()
 		{
 			for (int x = -200; x < 200; x += 20)
 			{
-				ColorTexture instance1Texture;
-				instance1Texture.id = count;
-				instance1Texture.color = Color::random(gen);
-				instance1Texture.intensity = 0.8;
-
-				Material instance1Material;
-				instance1Material.id = count;
-				instance1Material.ambientMapTextureId = instance1Texture.id;
-				instance1Material.diffuseMapTextureId = instance1Texture.id;
+				Material instanceMaterial;
+				instanceMaterial.id = currentId;
+				instanceMaterial.ambientReflectance = Color::random(gen) * 0.8;
+				instanceMaterial.diffuseReflectance = instanceMaterial.ambientReflectance;
 
 				double scale = scaleDist(gen);
 
-				Instance instance1;
-				instance1.materialId = instance1Material.id;
-				instance1.primitiveId = 1;
-				instance1.changePrimitive = true;
-				instance1.scale = Vector3(scale, scale, scale);
-				instance1.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
-				instance1.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
+				Instance instance;
+				instance.materialId = instanceMaterial.id;
+				instance.primitiveId = monkeyModelInfo.combinedGroupId;
+				instance.changePrimitive = true;
+				instance.scale = Vector3(scale, scale, scale);
+				instance.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
+				instance.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
 
-				scene.textures.colorTextures.push_back(instance1Texture);
-				scene.materials.push_back(instance1Material);
-				scene.primitives.instances.push_back(instance1);
-				count++;
+				scene.materials.push_back(instanceMaterial);
+				scene.primitives.instances.push_back(instance);
+
+				++currentId;
 			}
 		}
 	}
@@ -94,15 +74,15 @@ Scene Scene::createTestScene11()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 0.8;
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
+	directionalLight.intensity = 0.8;
 
-	directionalLight1.direction = EulerAngle(0.0, 45.0, 0.0).getDirection();
-	scene.lights.directionalLights.push_back(directionalLight1);
+	directionalLight.direction = EulerAngle(0.0, 45.0, 0.0).getDirection();
+	scene.lights.directionalLights.push_back(directionalLight);
 
-	directionalLight1.direction = EulerAngle(0.0, -45.0, 0.0).getDirection();
-	scene.lights.directionalLights.push_back(directionalLight1);
+	directionalLight.direction = EulerAngle(0.0, -45.0, 0.0).getDirection();
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }
