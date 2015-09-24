@@ -120,6 +120,11 @@ double WindowRunner::getElapsedTime() const
 	return glfwGetTime() - startTime;
 }
 
+double WindowRunner::getFps() const
+{
+	return renderFpsCounter.getFps();
+}
+
 bool WindowRunner::keyIsDown(int key)
 {
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);

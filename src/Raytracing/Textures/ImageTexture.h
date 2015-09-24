@@ -27,14 +27,12 @@ namespace Raycer
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const;
 
 		std::string imageFilePath;
-		bool applyGamma = true;
-		double gamma = 2.2;
 		bool isBumpMap = false;
 		bool isNormalMap = false;
 
 	private:
 
-		Image image;
+		const Image* image;
 		Image bumpMapX;
 		Image bumpMapY;
 
@@ -45,8 +43,6 @@ namespace Raycer
 		{
 			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
 				CEREAL_NVP(imageFilePath),
-				CEREAL_NVP(applyGamma),
-				CEREAL_NVP(gamma),
 				CEREAL_NVP(isBumpMap),
 				CEREAL_NVP(isNormalMap));
 		}

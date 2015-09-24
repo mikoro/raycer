@@ -109,6 +109,7 @@ void Image::load(const std::string& fileName)
 		}
 
 		stbi_image_free(loadData);
+		applyGamma(2.2);
 	}
 }
 
@@ -305,4 +306,14 @@ Color Image::getPixelBilinear(double u, double v) const
 std::vector<Color>& Image::getPixelData()
 {
 	return pixelData;
+}
+
+std::map<std::string, Image> ImagePool::imageMap = std::map<std::string, Image>();
+
+const Image* ImagePool::load(const std::string& fileName)
+{
+	if (!imageMap.count(fileName))
+		imageMap[fileName] = Image(fileName);
+
+	return &imageMap[fileName];
 }

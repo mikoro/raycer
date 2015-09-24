@@ -3,6 +3,7 @@
 
 #pragma once
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -55,5 +56,16 @@ namespace Raycer
 		int height = 0;
 
 		std::vector<Color> pixelData;
+	};
+
+	class ImagePool
+	{
+	public:
+
+		static const Image* load(const std::string& fileName);
+
+	private:
+
+		static std::map<std::string, Image> imageMap;
 	};
 }

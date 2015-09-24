@@ -10,34 +10,31 @@ using namespace Raycer;
 
 void ImageTexture::initialize()
 {
-	image.load(imageFilePath);
-
-	if (applyGamma)
-		image.applyGamma(gamma);
+	image = ImagePool::load(imageFilePath);
 
 	if (isBumpMap)
 	{
-		bumpMapX = Image(image.getWidth(), image.getHeight());
-		bumpMapY = Image(image.getWidth(), image.getHeight());
+		bumpMapX = Image(image->getWidth(), image->getHeight());
+		bumpMapY = Image(image->getWidth(), image->getHeight());
 
-		for (int y = 0; y < image.getHeight(); ++y)
+		for (int y = 0; y < image->getHeight(); ++y)
 		{
-			for (int x = 0; x < image.getWidth(); ++x)
+			for (int x = 0; x < image->getWidth(); ++x)
 			{
-				Color current = image.getPixel(x, y);
+				Color current = image->getPixel(x, y);
 
-				if (x < image.getWidth() - 1)
+				if (x < image->getWidth() - 1)
 				{
-					Color right = image.getPixel(x + 1, y);
+					Color right = image->getPixel(x + 1, y);
 					Color rightDiff = right - current;
 					bumpMapX.setPixel(x, y, rightDiff);
 				}
 				else
 					bumpMapX.setPixel(x, y, bumpMapX.getPixel(x - 1, y));
 
-				if (y < image.getHeight() - 1)
+				if (y < image->getHeight() - 1)
 				{
-					Color top = image.getPixel(x, y + 1);
+					Color top = image->getPixel(x, y + 1);
 					Color topDiff = top - current;
 					bumpMapY.setPixel(x, y, topDiff);
 				}
@@ -52,14 +49,14 @@ Color ImageTexture::getColor(const Vector2& texcoord, const Vector3& position) c
 {
 	(void)position;
 
-	return image.getPixelBilinear(texcoord.x, texcoord.y);
+	return image->getPixelBilinear(texcoord.x, texcoord.y);
 }
 
 double ImageTexture::getValue(const Vector2& texcoord, const Vector3& position) const
 {
 	(void)position;
 
-	return image.getPixelBilinear(texcoord.x, texcoord.y).r;
+	return image->getPixelBilinear(texcoord.x, texcoord.y).r;
 }
 
 Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const
@@ -78,7 +75,7 @@ Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 	}
 	else if (isNormalMap)
 	{
-		Color color = image.getPixelBilinear(texcoord.x, texcoord.y);
+		Color color = image->getPixelBilinear(texcoord.x, texcoord.y);
 
 		normal.x = (color.r - 0.5) * 2.0;
 		normal.y = (color.g - 0.5) * 2.0;

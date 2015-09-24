@@ -42,6 +42,7 @@ namespace Raycer
 		const MouseInfo& getMouseInfo() const;
 		Text& getDefaultText();
 		double getElapsedTime() const;
+		double getFps() const;
 
 		bool keyIsDown(int key);
 		bool mouseIsDown(int button);
