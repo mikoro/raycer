@@ -31,7 +31,6 @@ Scene Scene::createTestScene18()
 	sphereTexture.id = 1;
 	sphereTexture.intensity = 1.2;
 	sphereTexture.imageFilePath = "data/images/sky.jpg";
-	sphereTexture.applyGamma = true;
 
 	Material sphereMaterial;
 	sphereMaterial.id = 1;
@@ -57,7 +56,6 @@ Scene Scene::createTestScene18()
 	groundTexture.id = 2;
 	groundTexture.intensity = 0.5;
 	groundTexture.imageFilePath = "data/images/dirt.jpg";
-	groundTexture.applyGamma = true;
 
 	Material groundMaterial;
 	groundMaterial.id = 2;
@@ -76,7 +74,7 @@ Scene Scene::createTestScene18()
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// SUNFLOWER MESH //
+	// SUNFLOWER MODEL //
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";

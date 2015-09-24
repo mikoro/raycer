@@ -16,3 +16,4 @@ misc
  - optimize instance aabb caching
  - every primitive needs to have unique id
  - reorganize primitives (scene, cereal)
+ - convert image to float, add image pool

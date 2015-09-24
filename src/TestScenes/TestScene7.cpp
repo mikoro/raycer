@@ -22,30 +22,28 @@ Scene Scene::createTestScene7()
 	
 	// SPHERES //
 
-	ColorTexture sphereTexture;
-	sphereTexture.id = 2;
-	sphereTexture.color = Color(1.0, 1.0, 1.0);
-	sphereTexture.intensity = 0.5;
-
 	Material sphereMaterial;
-	sphereMaterial.id = 2;
-	sphereMaterial.ambientMapTextureId = sphereTexture.id;
-	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 
-	scene.textures.colorTextures.push_back(sphereTexture);
 	scene.materials.push_back(sphereMaterial);
 
 	double angle = -M_PI / 2.0;
 	double radius = 8.0;
+	int currentId = 1;
 	
 	for (int i = 0; i < 50; ++i)
 	{
 		Sphere sphere;
+		sphere.id = currentId;
+		sphere.materialId = sphereMaterial.id;
 		sphere.position = Vector3(cos(angle) * radius, sin(angle) * radius, i * -1.0);
 		sphere.radius = 1.0;
-		sphere.materialId = sphereMaterial.id;
+		
 		scene.primitives.spheres.push_back(sphere);
 		angle += 0.5;
+		++currentId;
 	}
 
 	// LIGHTS //
@@ -53,12 +51,12 @@ Scene Scene::createTestScene7()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 	
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-10.0, -60.0, 0.0).getDirection();
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
+	directionalLight.intensity = 1.0;
+	directionalLight.direction = EulerAngle(-10.0, -60.0, 0.0).getDirection();
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }

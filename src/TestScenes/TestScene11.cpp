@@ -21,17 +21,17 @@ Scene Scene::createTestScene11()
 	scene.camera.position = Vector3(0.0, 0.0, 0.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 
-	// MONKEY MESH //
+	// MODEL //
 
-	ModelLoaderInfo monkeyModelInfo;
-	monkeyModelInfo.modelFilePath = "data/meshes/monkey3.obj";
-	monkeyModelInfo.combinedGroupId = 1;
-	monkeyModelInfo.enableCombinedGroupInstance = false;
-	monkeyModelInfo.scale = Vector3(6.0, 6.0, 6.0);
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo.combinedGroupId = 1;
+	modelInfo.enableCombinedGroupInstance = false;
+	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
-	scene.models.push_back(monkeyModelInfo);
+	scene.models.push_back(modelInfo);
 
-	// INSTANCES
+	// INSTANCES //
 
 	std::mt19937 gen(1230927546);
 	std::uniform_real_distribution<double> scaleDist(0.5, 2.0);
@@ -54,8 +54,9 @@ Scene Scene::createTestScene11()
 				double scale = scaleDist(gen);
 
 				Instance instance;
+				instance.id = currentId;
 				instance.materialId = instanceMaterial.id;
-				instance.primitiveId = monkeyModelInfo.combinedGroupId;
+				instance.primitiveId = modelInfo.combinedGroupId;
 				instance.changePrimitive = true;
 				instance.scale = Vector3(scale, scale, scale);
 				instance.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));

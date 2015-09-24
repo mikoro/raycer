@@ -32,11 +32,11 @@ Scene Scene::createTestScene5()
 	boxMaterial.attenuationColor = Color(0.1, 0.0, 0.0);
 	boxMaterial.nonShadowing = true;
 
+	scene.materials.push_back(boxMaterial);
+
 	Box box;
 	box.extent = Vector3(2.0, 2.0, 2.0);
 	box.materialId = boxMaterial.id;
-
-	scene.materials.push_back(boxMaterial);
 
 	box.id = 1;
 	box.position = Vector3(-4.0, 1.0, 0.0);
@@ -45,7 +45,7 @@ Scene Scene::createTestScene5()
 	box.position = Vector3(-8.0, 1.0, 0.0);
 	scene.primitives.boxes.push_back(box);
 
-	// MESH BOXES //
+	// MODEL BOXES //
 
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/cube1.obj";

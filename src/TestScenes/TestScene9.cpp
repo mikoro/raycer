@@ -41,10 +41,11 @@ Scene Scene::createTestScene9()
 	groundMaterial.texcoordScale = Vector2(10.0, 10.0);
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
-	
+
 	scene.textures.imageTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
@@ -66,6 +67,7 @@ Scene Scene::createTestScene9()
 	sphere1Material.invertNormal = true;
 
 	Sphere sphere1;
+	sphere1.id = 2;
 	sphere1.materialId = sphere1Material.id;
 	sphere1.position = Vector3(0.0, 0.0, 0.0);
 	sphere1.radius = 200.0;
@@ -87,6 +89,7 @@ Scene Scene::createTestScene9()
 	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
 
 	Sphere sphere2;
+	sphere2.id = 3;
 	sphere2.materialId = sphere2Material.id;
 	sphere2.position = Vector3(0.0, 1.0, 0.0);
 	sphere2.radius = 1.0;
@@ -110,6 +113,7 @@ Scene Scene::createTestScene9()
 	sphere3Material.texcoordScale = Vector2(0.1, 0.1);
 
 	Sphere sphere3;
+	sphere3.id = 4;
 	sphere3.materialId = sphere3Material.id;
 	sphere3.position = Vector3(0.0, 1.0, -3.0);
 	sphere3.radius = 1.0;
@@ -132,10 +136,11 @@ Scene Scene::createTestScene9()
 	sphere4Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere4;
+	sphere4.id = 5;
 	sphere4.materialId = sphere4Material.id;
 	sphere4.position = Vector3(0.0, 1.0, -6.0);
 	sphere4.radius = 1.0;
-	
+
 	scene.textures.imageTextures.push_back(sphere4Texture);
 	scene.materials.push_back(sphere4Material);
 	scene.primitives.spheres.push_back(sphere4);
@@ -152,10 +157,11 @@ Scene Scene::createTestScene9()
 	sphere5Material.diffuseMapTextureId = sphere5Texture.id;
 
 	Sphere sphere5;
+	sphere5.id = 6;
 	sphere5.materialId = sphere5Material.id;
 	sphere5.position = Vector3(0.0, 1.0, -9.0);
 	sphere5.radius = 1.0;
-	
+
 	scene.textures.marbleTextures.push_back(sphere5Texture);
 	scene.materials.push_back(sphere5Material);
 	scene.primitives.spheres.push_back(sphere5);
@@ -172,6 +178,7 @@ Scene Scene::createTestScene9()
 	sphere6Material.diffuseMapTextureId = sphere6Texture.id;
 
 	Sphere sphere6;
+	sphere6.id = 7;
 	sphere6.materialId = sphere6Material.id;
 	sphere6.position = Vector3(0.0, 1.0, -12.0);
 	sphere6.radius = 1.0;
@@ -192,6 +199,7 @@ Scene Scene::createTestScene9()
 	sphere7Material.diffuseMapTextureId = sphere7Texture.id;
 
 	Sphere sphere7;
+	sphere7.id = 8;
 	sphere7.materialId = sphere7Material.id;
 	sphere7.position = Vector3(0.0, 1.0, -15.0);
 	sphere7.radius = 1.0;
@@ -212,6 +220,7 @@ Scene Scene::createTestScene9()
 	sphere8Material.diffuseMapTextureId = sphere8Texture.id;
 
 	Sphere sphere8;
+	sphere8.id = 9;
 	sphere8.materialId = sphere8Material.id;
 	sphere8.position = Vector3(-3.0, 1.0, 0.0);
 	sphere8.radius = 1.0;
@@ -232,6 +241,7 @@ Scene Scene::createTestScene9()
 	sphere9Material.diffuseMapTextureId = sphere9Texture.id;
 
 	Sphere sphere9;
+	sphere9.id = 10;
 	sphere9.materialId = sphere9Material.id;
 	sphere9.position = Vector3(-3.0, 1.0, -3.0);
 	sphere9.radius = 1.0;
@@ -253,6 +263,7 @@ Scene Scene::createTestScene9()
 	sphere10Material.diffuseMapTextureId = sphere10Texture.id;
 
 	Sphere sphere10;
+	sphere10.id = 11;
 	sphere10.materialId = sphere10Material.id;
 	sphere10.position = Vector3(-3.0, 1.0, -6.0);
 	sphere10.radius = 1.0;
@@ -274,6 +285,7 @@ Scene Scene::createTestScene9()
 	sphere11Material.diffuseMapTextureId = sphere11Texture.id;
 
 	Sphere sphere11;
+	sphere11.id = 12;
 	sphere11.materialId = sphere11Material.id;
 	sphere11.position = Vector3(-3.0, 1.0, -9.0);
 	sphere11.radius = 1.0;
@@ -297,6 +309,7 @@ Scene Scene::createTestScene9()
 	sphere12Material.diffuseMapTextureId = sphere12Texture.id;
 
 	Sphere sphere12;
+	sphere12.id = 13;
 	sphere12.materialId = sphere12Material.id;
 	sphere12.position = Vector3(-3.0, 1.0, -12.0);
 	sphere12.radius = 1.0;
@@ -320,6 +333,7 @@ Scene Scene::createTestScene9()
 	sphere13Material.diffuseMapTextureId = sphere13Texture.id;
 
 	Sphere sphere13;
+	sphere13.id = 14;
 	sphere13.materialId = sphere13Material.id;
 	sphere13.position = Vector3(-3.0, 1.0, -15.0);
 	sphere13.radius = 1.0;
@@ -333,12 +347,12 @@ Scene Scene::createTestScene9()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.5;
-	directionalLight1.direction = EulerAngle(-40.0, 40.0, 0.0).getDirection();
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
+	directionalLight.intensity = 1.5;
+	directionalLight.direction = EulerAngle(-40.0, 40.0, 0.0).getDirection();
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }

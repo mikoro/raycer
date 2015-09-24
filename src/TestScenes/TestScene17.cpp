@@ -34,6 +34,7 @@ Scene Scene::createTestScene17()
 	groundMaterial.texcoordScale = Vector2(2.0, 2.0);
 
 	Plane groundPlane;
+	groundPlane.id = 22;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
@@ -289,12 +290,12 @@ Scene Scene::createTestScene17()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
+	DirectionalLight directionalLight;
+	directionalLight.color = Color(1.0, 1.0, 1.0);
+	directionalLight.intensity = 1.0;
+	directionalLight.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
 
-	scene.lights.directionalLights.push_back(directionalLight1);
+	scene.lights.directionalLights.push_back(directionalLight);
 
 	return scene;
 }

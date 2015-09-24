@@ -19,66 +19,57 @@ Scene Scene::createTestScene16()
 
 	// GROUND //
 
-	ColorTexture groundTexture;
-	groundTexture.id = 1;
-	groundTexture.color = Color(1.0, 1.0, 1.0);
-	groundTexture.intensity = 0.3;
-
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.ambientMapTextureId = groundTexture.id;
-	groundMaterial.diffuseMapTextureId = groundTexture.id;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
 
 	Plane groundPlane;
+	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
 	groundPlane.position = Vector3(0.0, 0.0, 0.0);
 	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
-	scene.textures.colorTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// BOX 1 //
+	// BOXES //
 
-	ColorTexture box1Texture;
-	box1Texture.id = 3;
-	box1Texture.color = Color(0.2, 0.2, 1.0);
-	box1Texture.intensity = 0.5;
+	Material boxMaterial;
+	boxMaterial.id = 2;
+	boxMaterial.ambientReflectance = Color(0.2, 0.2, 1.0) * 0.5;
+	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
 
-	Material box1Material;
-	box1Material.id = 3;
-	box1Material.ambientMapTextureId = box1Texture.id;
-	box1Material.diffuseMapTextureId = box1Texture.id;
+	scene.materials.push_back(boxMaterial);
 
-	Box box1;
-	box1.materialId = box1Material.id;
+	Box box;
+	box.materialId = boxMaterial.id;
 
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
-
-	box1.position = Vector3(0.0, 3.0, 0.0);
-	box1.extent = Vector3(2.0, 6.0, 2.0);
-	scene.primitives.boxes.push_back(box1);
-	box1.position = Vector3(-5.0, 0.5, -2.5);
-	box1.extent = Vector3(2.0, 1.0, 5.0);
-	scene.primitives.boxes.push_back(box1);
+	box.id = 2;
+	box.position = Vector3(0.0, 3.0, 0.0);
+	box.extent = Vector3(2.0, 6.0, 2.0);
+	scene.primitives.boxes.push_back(box);
+	box.id = 3;
+	box.position = Vector3(-5.0, 0.5, -2.5);
+	box.extent = Vector3(2.0, 1.0, 5.0);
+	scene.primitives.boxes.push_back(box);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.5;
-	pointLight1.position = Vector3(10.0, 10.0, 10.0);
-	pointLight1.distance = 100.0;
-	pointLight1.attenuation = 1.0;
-	pointLight1.softShadows = true;
-	pointLight1.samples = 3;
-	pointLight1.radius = 0.5;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.5;
+	pointLight.position = Vector3(10.0, 10.0, 10.0);
+	pointLight.distance = 100.0;
+	pointLight.attenuation = 1.0;
+	pointLight.softShadows = true;
+	pointLight.samples = 3;
+	pointLight.radius = 0.5;
 
-	scene.lights.pointLights.push_back(pointLight1);
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }

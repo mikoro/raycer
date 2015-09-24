@@ -33,22 +33,22 @@ Scene Scene::createTestScene3()
 	scene.materials.push_back(groundMaterial);
 	scene.primitives.planes.push_back(groundPlane);
 
-	// MONKEY MESH //
+	// MODEL //
 
-	Material monkeyMaterial;
-	monkeyMaterial.id = 2;
-	monkeyMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.8;
-	monkeyMaterial.diffuseReflectance = monkeyMaterial.ambientReflectance;
+	Material modelMaterial;
+	modelMaterial.id = 2;
+	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.8;
+	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
 
-	ModelLoaderInfo monkeyModelInfo;
-	monkeyModelInfo.modelFilePath = "data/meshes/monkey3.obj";
-	monkeyModelInfo.defaultMaterialId = monkeyMaterial.id;
-	monkeyModelInfo.combinedGroupId = 2;
-	monkeyModelInfo.combinedGroupInstanceId = 3;
-	monkeyModelInfo.scale = Vector3(6.0, 6.0, 6.0);
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo.defaultMaterialId = modelMaterial.id;
+	modelInfo.combinedGroupId = 2;
+	modelInfo.combinedGroupInstanceId = 3;
+	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
-	scene.materials.push_back(monkeyMaterial);
-	scene.models.push_back(monkeyModelInfo);
+	scene.materials.push_back(modelMaterial);
+	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 

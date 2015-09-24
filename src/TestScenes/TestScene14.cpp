@@ -13,25 +13,26 @@ Scene Scene::createTestScene14()
 	scene.raytracer.multiSamples = 0;
 
 	scene.rootBVH.enabled = true;
+	scene.rootBVH.buildInfo.maxLeafSize = 10;
 
 	// CAMERA //
 
 	scene.camera.position = Vector3(15.0, 2.0, 0.0);
 	scene.camera.orientation = EulerAngle(1.0, 90.0, 0.0);
-	
+
+	// MODEL //
+
 	ModelLoaderInfo modelInfo;
 	modelInfo.modelFilePath = "data/meshes/sponza1/sponza.obj";
+	modelInfo.invisibleTriangles = false;
+	modelInfo.enableCombinedGroup = false;
+	modelInfo.enableCombinedGroupInstance = false;
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
-
-	DirectionalLight directionalLight1;
-	directionalLight1.color = Color(1.0, 1.0, 1.0);
-	directionalLight1.intensity = 1.0;
-	directionalLight1.direction = EulerAngle(-60.0, 100.0, 0.0).getDirection();
 
 	PointLight pointLight1;
 	pointLight1.color = Color(1.0, 1.0, 1.0);
@@ -47,7 +48,6 @@ Scene Scene::createTestScene14()
 	pointLight2.distance = 10.0;
 	pointLight2.attenuation = 1.0;
 
-	//scene.lights.directionalLights.push_back(directionalLight1);
 	scene.lights.pointLights.push_back(pointLight1);
 	scene.lights.pointLights.push_back(pointLight2);
 

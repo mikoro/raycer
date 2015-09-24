@@ -20,113 +20,93 @@ Scene Scene::createTestScene6()
 	scene.camera.position = Vector3(7.0, 0.0, -12.2);
 	scene.camera.orientation = EulerAngle(0.0, 150.0, 0.0);
 
-	// SPHERE 1 //
+	// SKY SPHERE //
 
-	ImageTexture sphere1Texture;
-	sphere1Texture.id = 1;
-	sphere1Texture.intensity = 1.0;
-	sphere1Texture.imageFilePath = "data/images/rooftop.hdr";
-	sphere1Texture.applyGamma = false;
+	ImageTexture sphereTexture;
+	sphereTexture.id = 1;
+	sphereTexture.intensity = 1.0;
+	sphereTexture.imageFilePath = "data/images/rooftop.hdr";
+	sphereTexture.applyGamma = false;
 
-	Material sphere1Material;
-	sphere1Material.id = 1;
-	sphere1Material.ambientMapTextureId = sphere1Texture.id;
-	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
-	sphere1Material.skipLighting = true;
-	sphere1Material.texcoordScale = Vector2(-1.0, 1.0);
+	Material sphereMaterial;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientMapTextureId = sphereTexture.id;
+	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.skipLighting = true;
+	sphereMaterial.texcoordScale = Vector2(-1.0, 1.0);
 
-	Sphere sphere1;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.position = Vector3(0.0, 0.0, 0.0);
-	sphere1.radius = 100.0;
+	Sphere sphere;
+	sphere.id = 1;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(0.0, 0.0, 0.0);
+	sphere.radius = 100.0;
 
-	scene.textures.imageTextures.push_back(sphere1Texture);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	scene.textures.imageTextures.push_back(sphereTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	// SPHERE 2 //
+	// SMALL SPHERE 1 //
 
-	ColorTexture sphere2Texture;
-	sphere2Texture.id = 2;
-	sphere2Texture.color = Color(1.0, 1.0, 1.0);
-	sphere2Texture.intensity = 1.0;
+	sphereMaterial = Material();
+	sphereMaterial.id = 2;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayTransmittance = 1.0;
+	sphereMaterial.refractiveIndex = 1.5;
+	sphereMaterial.fresnelReflection = true;
 
-	Material sphere2Material;
-	sphere2Material.id = 2;
-	sphere2Material.ambientMapTextureId = sphere2Texture.id;
-	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
-	sphere2Material.rayReflectance = 1.0;
-	sphere2Material.rayTransmittance = 1.0;
-	sphere2Material.refractiveIndex = 1.5;
-	sphere2Material.fresnelReflection = true;
-	sphere2Material.enableAttenuation = false;
-	sphere2Material.attenuationFactor = 0.1;
-	sphere2Material.attenuationColor = Color(0.0, 0.0, 0.1);
+	sphere = Sphere();
+	sphere.id = 2;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(4.0, -2.0, 0.0);
+	sphere.radius = 2.0;
 
-	Sphere sphere2;
-	sphere2.materialId = sphere2Material.id;
-	sphere2.position = Vector3(4.0, -2.0, 0.0);
-	sphere2.radius = 2.0;
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	scene.textures.colorTextures.push_back(sphere2Texture);
-	scene.materials.push_back(sphere2Material);
-	scene.primitives.spheres.push_back(sphere2);
+	// SMALL SPHERE 2 //
 
-	// SPHERE 3 //
+	sphereMaterial = Material();
+	sphereMaterial.id = 3;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayTransmittance = 1.0;
+	sphereMaterial.refractiveIndex = 1.5;
+	sphereMaterial.fresnelReflection = true;
 
-	ColorTexture sphere3Texture;
-	sphere3Texture.id = 3;
-	sphere3Texture.color = Color(1.0, 1.0, 1.0);
-	sphere3Texture.intensity = 1.0;
+	sphere = Sphere();
+	sphere.id = 3;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(-4.0, 2.0, 0.0);
+	sphere.radius = 2.0;
 
-	Material sphere3Material;
-	sphere3Material.id = 3;
-	sphere3Material.ambientMapTextureId = sphere3Texture.id;
-	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
-	sphere3Material.rayReflectance = 1.0;
-	sphere3Material.rayTransmittance = 1.0;
-	sphere3Material.refractiveIndex = 1.5;
-	sphere3Material.fresnelReflection = true;
-	sphere3Material.enableAttenuation = false;
-	sphere3Material.attenuationFactor = 0.1;
-	sphere3Material.attenuationColor = Color(0.1, 0.0, 0.0);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	Sphere sphere3;
-	sphere3.materialId = sphere3Material.id;
-	sphere3.position = Vector3(-4.0, 2.0, 0.0);
-	sphere3.radius = 2.0;
+	// BOX //
 
-	scene.textures.colorTextures.push_back(sphere3Texture);
-	scene.materials.push_back(sphere3Material);
-	scene.primitives.spheres.push_back(sphere3);
+	Material boxMaterial;
+	boxMaterial.id = 4;
+	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
+	boxMaterial.rayReflectance = 1.0;
+	boxMaterial.rayTransmittance = 1.0;
+	boxMaterial.refractiveIndex = 1.5;
+	boxMaterial.fresnelReflection = true;
+	boxMaterial.enableAttenuation = true;
+	boxMaterial.attenuationFactor = 0.4;
+	boxMaterial.attenuationColor = Color(0.0, 0.0, 0.0);
 
-	// BOX 1 //
+	Box box;
+	box.id = 4;
+	box.materialId = boxMaterial.id;
+	box.position = Vector3(0.0, 0.0, 0.0);
+	box.extent = Vector3(1.0, 10.0, 6.0);
 
-	ColorTexture box1Texture;
-	box1Texture.id = 4;
-	box1Texture.color = Color(1.0, 1.0, 1.0);
-	box1Texture.intensity = 1.0;
-
-	Material box1Material;
-	box1Material.id = 4;
-	box1Material.ambientMapTextureId = box1Texture.id;
-	box1Material.diffuseMapTextureId = box1Texture.id;
-	box1Material.rayReflectance = 1.0;
-	box1Material.rayTransmittance = 1.0;
-	box1Material.refractiveIndex = 1.5;
-	box1Material.fresnelReflection = true;
-	box1Material.enableAttenuation = true;
-	box1Material.attenuationFactor = 0.4;
-	box1Material.attenuationColor = Color(0.0, 0.0, 0.0);
-
-	Box box1;
-	box1.position = Vector3(0.0, 0.0, 0.0);
-	box1.extent = Vector3(1.0, 10.0, 6.0);
-	box1.materialId = box1Material.id;
-
-	scene.textures.colorTextures.push_back(box1Texture);
-	scene.materials.push_back(box1Material);
-	scene.primitives.boxes.push_back(box1);
+	scene.materials.push_back(boxMaterial);
+	scene.primitives.boxes.push_back(box);
 
 	return scene;
 }

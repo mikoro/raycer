@@ -17,168 +17,151 @@ Scene Scene::createTestScene13()
 	scene.camera.position = Vector3(-0.18, 1.65, 3.59);
 	scene.camera.orientation = EulerAngle(-9.22, 17.56, 0.0);
 
-	// SPHERE 1 //
+	// SPHERE //
 
-	ColorTexture sphere1Texture1;
-	sphere1Texture1.id = 1;
-	sphere1Texture1.color = Color(1.0, 0.1, 0.1);
-	sphere1Texture1.intensity = 0.5;
+	PerlinNoiseTexture sphereNormalTexture;
+	sphereNormalTexture.id = 1;
+	sphereNormalTexture.seed = 2345654;
+	sphereNormalTexture.intensity = 0.05;
+	sphereNormalTexture.scale = Vector3(10.0, 10.0, 10.0);
+	sphereNormalTexture.isFbm = true;
 
-	PerlinNoiseTexture sphere1Texture2;
-	sphere1Texture2.id = 2;
-	sphere1Texture2.seed = 2345654;
-	sphere1Texture2.intensity = 0.05;
-	sphere1Texture2.scale = Vector3(10.0, 10.0, 10.0);
-	sphere1Texture2.isFbm = true;
+	Material sphereMaterial;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientReflectance = Color(1.0, 0.1, 0.1) * 0.5;
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.specularReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.normalMapTextureId = sphereNormalTexture.id;
+	sphereMaterial.shininess = 64.0;
+	sphereMaterial.nonShadowing = true;
 
-	Material sphere1Material;
-	sphere1Material.id = 1;
-	sphere1Material.ambientMapTextureId = sphere1Texture1.id;
-	sphere1Material.diffuseMapTextureId = sphere1Texture1.id;
-	sphere1Material.normalMapTextureId = sphere1Texture2.id;
-	sphere1Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
-	sphere1Material.specularReflectance = Color(1.0, 1.0, 1.0);
-	sphere1Material.shininess = 64.0;
-	sphere1Material.nonShadowing = true;
+	Sphere sphere;
+	sphere.id = 1;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(0.0, 1.0, 0.0);
+	sphere.radius = 1.0;
 
-	Sphere sphere1;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.position = Vector3(0.0, 1.0, 0.0);
-	sphere1.radius = 1.0;
+	scene.textures.perlinNoiseTextures.push_back(sphereNormalTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	scene.textures.colorTextures.push_back(sphere1Texture1);
-	scene.textures.perlinNoiseTextures.push_back(sphere1Texture2);
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
+	// MODEL 1 //
 
-	// MESH 1 //
+	ImageTexture model1NormalTexture;
+	model1NormalTexture.id = 2;
+	model1NormalTexture.imageFilePath = "data/images/test_bumpmap.png";
+	model1NormalTexture.isBumpMap = true;
+	model1NormalTexture.intensity = 2.0;
 
-	ColorTexture mesh1Texture1;
-	mesh1Texture1.id = 3;
-	mesh1Texture1.color = Color(1.0, 1.0, 1.0);
-	mesh1Texture1.intensity = 0.5;
+	Material model1Material;
+	model1Material.id = 2;
+	model1Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	model1Material.diffuseReflectance = model1Material.ambientReflectance;
+	model1Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	model1Material.normalMapTextureId = model1NormalTexture.id;
+	model1Material.shininess = 64.0;
+	model1Material.texcoordScale = Vector2(0.1, 0.1);
 
-	ImageTexture mesh1Texture2;
-	mesh1Texture2.id = 4;
-	mesh1Texture2.imageFilePath = "data/images/test_bumpmap.png";
-	mesh1Texture2.applyGamma = false;
-	mesh1Texture2.isBumpMap = true;
-	mesh1Texture2.intensity = 2.0;
+	ModelLoaderInfo model1Info;
+	model1Info.modelFilePath = "data/meshes/square.obj";
+	model1Info.defaultMaterialId = model1Material.id;
+	model1Info.combinedGroupId = 2;
+	model1Info.combinedGroupInstanceId = 3;
+	model1Info.idStartOffset = 1000;
+	model1Info.scale = Vector3(20.0, 20.0, 20.0);
+	model1Info.rotate = EulerAngle(-90.0, 0.0, 0.0);
+	model1Info.translate = Vector3(-10.0, 0.0, 10.0);
 
-	Material mesh1Material;
-	mesh1Material.id = 2;
-	mesh1Material.ambientMapTextureId = mesh1Texture1.id;
-	mesh1Material.diffuseMapTextureId = mesh1Texture1.id;
-	mesh1Material.normalMapTextureId = mesh1Texture2.id;
-	mesh1Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
-	mesh1Material.specularReflectance = Color(1.0, 1.0, 1.0);
-	mesh1Material.shininess = 64.0;
-	mesh1Material.texcoordScale = Vector2(0.1, 0.1);
+	scene.textures.imageTextures.push_back(model1NormalTexture);
+	scene.materials.push_back(model1Material);
+	scene.models.push_back(model1Info);
 
-	ModelLoaderInfo modelInfo1;
-	modelInfo1.modelFilePath = "data/meshes/square.obj";
-	modelInfo1.defaultMaterialId = mesh1Material.id;
-	modelInfo1.idStartOffset = 1000;
-	modelInfo1.scale = Vector3(20.0, 20.0, 20.0);
-	modelInfo1.rotate = EulerAngle(-90.0, 0.0, 0.0);
-	modelInfo1.translate = Vector3(-10.0, 0.0, 10.0);
+	// MODEL 2 //
 
-	scene.textures.colorTextures.push_back(mesh1Texture1);
-	scene.textures.imageTextures.push_back(mesh1Texture2);
-	scene.materials.push_back(mesh1Material);
-	scene.models.push_back(modelInfo1);
+	ImageTexture model2Texture;
+	model2Texture.id = 3;
+	model2Texture.imageFilePath = "data/images/stonewall.jpg";
+	model2Texture.intensity = 1.0;
 
-	// MESH 2 //
+	ImageTexture model2NormalTexture;
+	model2NormalTexture.id = 4;
+	model2NormalTexture.imageFilePath = "data/images/stonewall_bumpmap.jpg";
+	model2NormalTexture.isBumpMap = true;
+	model2NormalTexture.intensity = 2.0;
 
-	ImageTexture mesh2Texture1;
-	mesh2Texture1.id = 5;
-	mesh2Texture1.imageFilePath = "data/images/stonewall.jpg";
-	mesh2Texture1.intensity = 1.0;
+	Material model2Material;
+	model2Material.id = 3;
+	model2Material.ambientMapTextureId = model2Texture.id;
+	model2Material.diffuseMapTextureId = model2Texture.id;
+	model2Material.normalMapTextureId = model2NormalTexture.id;
+	model2Material.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	model2Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	model2Material.shininess = 64.0;
+	model2Material.nonShadowing = true;
+	model2Material.texcoordScale = Vector2(0.25, 0.5);
 
-	ImageTexture mesh2Texture2;
-	mesh2Texture2.id = 6;
-	mesh2Texture2.imageFilePath = "data/images/stonewall_bumpmap.jpg";
-	mesh2Texture2.applyGamma = false;
-	mesh2Texture2.isBumpMap = true;
-	mesh2Texture2.intensity = 1.0;
+	ModelLoaderInfo model2Info;
+	model2Info.modelFilePath = "data/meshes/square.obj";
+	model2Info.defaultMaterialId = model2Material.id;
+	model2Info.combinedGroupId = 4;
+	model2Info.combinedGroupInstanceId = 5;
+	model2Info.idStartOffset = 2000;
+	model2Info.scale = Vector3(20.0, 10.0, 5.0);
+	model2Info.rotate = EulerAngle(0.0, 0.0, 0.0);
+	model2Info.translate = Vector3(-10.0, 0.0, -2.5);
 
-	Material mesh2Material;
-	mesh2Material.id = 3;
-	mesh2Material.ambientMapTextureId = mesh2Texture1.id;
-	mesh2Material.diffuseMapTextureId = mesh2Texture1.id;
-	mesh2Material.normalMapTextureId = mesh2Texture2.id;
-	mesh2Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
-	mesh2Material.specularReflectance = Color(1.0, 1.0, 1.0);
-	mesh2Material.shininess = 64.0;
-	mesh2Material.nonShadowing = true;
-	mesh2Material.texcoordScale = Vector2(0.25, 0.5);
+	scene.textures.imageTextures.push_back(model2Texture);
+	scene.textures.imageTextures.push_back(model2NormalTexture);
+	scene.materials.push_back(model2Material);
+	scene.models.push_back(model2Info);
 
-	ModelLoaderInfo modelInfo2;
-	modelInfo2.modelFilePath = "data/meshes/square.obj";
-	modelInfo2.defaultMaterialId = mesh2Material.id;
-	modelInfo2.idStartOffset = 2000;
-	modelInfo2.scale = Vector3(20.0, 10.0, 5.0);
-	modelInfo2.rotate = EulerAngle(0.0, 0.0, 0.0);
-	modelInfo2.translate = Vector3(-10.0, 0.0, -2.5);
+	// MODEL 3 //
 
-	scene.textures.imageTextures.push_back(mesh2Texture1);
-	scene.textures.imageTextures.push_back(mesh2Texture2);
-	scene.materials.push_back(mesh2Material);
-	scene.models.push_back(modelInfo2);
-
-	// MESH 3 //
-
-	ColorTexture mesh3Texture1;
-	mesh3Texture1.id = 7;
-	mesh3Texture1.color = Color(1.0, 1.0, 1.0);
-	mesh3Texture1.intensity = 0.5;
-
-	ImageTexture mesh3Texture2;
-	mesh3Texture2.id = 8;
-	mesh3Texture2.imageFilePath = "data/images/cube_normalmap.png";
-	mesh3Texture2.applyGamma = false;
-	mesh3Texture2.isNormalMap = true;
-	mesh3Texture2.intensity = 1.0;
+	ImageTexture model3NormalTexture;
+	model3NormalTexture.id = 5;
+	model3NormalTexture.imageFilePath = "data/images/cube_normalmap.png";
+	model3NormalTexture.isNormalMap = true;
+	model3NormalTexture.intensity = 1.0;
 
 	Material mesh3Material;
 	mesh3Material.id = 4;
-	mesh3Material.ambientMapTextureId = mesh3Texture1.id;
-	mesh3Material.diffuseMapTextureId = mesh3Texture1.id;
-	mesh3Material.normalMapTextureId = mesh3Texture2.id;
-	mesh3Material.diffuseReflectance = Color(0.5, 0.5, 0.5);
+	mesh3Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.25;
+	mesh3Material.diffuseReflectance = mesh3Material.ambientReflectance;
 	mesh3Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	mesh3Material.normalMapTextureId = model3NormalTexture.id;
 	mesh3Material.shininess = 64.0;
 	mesh3Material.texcoordScale = Vector2(1.0, 1.0);
 	mesh3Material.nonShadowing = true;
 
-	ModelLoaderInfo modelInfo3;
-	modelInfo3.modelFilePath = "data/meshes/cube_normalmap.obj";
-	modelInfo3.defaultMaterialId = mesh3Material.id;
-	modelInfo3.idStartOffset = 3000;
-	modelInfo3.scale = Vector3(0.5, 0.5, 0.5);
-	modelInfo3.rotate = EulerAngle(0.0, 90.0, 30.0);
-	modelInfo3.translate = Vector3(-3.0, 1.0, 0.0);
+	ModelLoaderInfo model3Info;
+	model3Info.modelFilePath = "data/meshes/cube_normalmap.obj";
+	model3Info.defaultMaterialId = mesh3Material.id;
+	model3Info.combinedGroupId = 6;
+	model3Info.combinedGroupInstanceId = 7;
+	model3Info.idStartOffset = 3000;
+	model3Info.scale = Vector3(0.5, 0.5, 0.5);
+	model3Info.rotate = EulerAngle(-42.59, 161.79, 0.0);
+	model3Info.translate = Vector3(-3.0, 1.0, 0.0);
 
-	scene.textures.colorTextures.push_back(mesh3Texture1);
-	scene.textures.imageTextures.push_back(mesh3Texture2);
+	scene.textures.imageTextures.push_back(model3NormalTexture);
 	scene.materials.push_back(mesh3Material);
-	scene.models.push_back(modelInfo3);
+	scene.models.push_back(model3Info);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.01;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 0.8;
-	pointLight1.distance = 20.0;
-	pointLight1.attenuation = 1.0;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 0.8;
+	pointLight.distance = 20.0;
+	pointLight.attenuation = 1.0;
 
-	pointLight1.position = Vector3(-5.0, 5.0, 5.0);
-	scene.lights.pointLights.push_back(pointLight1);
-	pointLight1.position = Vector3(-5.0, 5.0, -5.0);
-	scene.lights.pointLights.push_back(pointLight1);
+	pointLight.position = Vector3(-5.0, 5.0, 5.0);
+	scene.lights.pointLights.push_back(pointLight);
+	pointLight.position = Vector3(-5.0, 5.0, -5.0);
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }
