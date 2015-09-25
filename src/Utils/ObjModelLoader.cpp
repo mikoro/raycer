@@ -130,7 +130,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 			ss >> normal.y;
 			ss >> normal.z;
 
-			normals.push_back(transformationInvT.transformDirection(normal));
+			normals.push_back(transformationInvT.transformDirection(normal).normalized());
 			continue;
 		}
 
@@ -164,7 +164,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
-	log.logInfo("OBJ file reading finished (time: %d ms)", milliseconds);
+	log.logInfo("OBJ file reading finished (time: %d ms, groups: %s, triangles: %s, materials: %s, textures: %s)", milliseconds, result.groups.size(), result.triangles.size(), result.materials.size(), result.textures.size());
 
 	return result;
 }
@@ -196,6 +196,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 	bool hasDiffuseMap = false;
 	bool hasSpecularMap = false;
 	bool hasNormalMap = false;
+	bool hasMaskMap = false;
 	bool hasHeightMap = false;
 
 	std::string line;
@@ -217,6 +218,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 				hasDiffuseMap = false;
 				hasSpecularMap = false;
 				hasNormalMap = false;
+				hasMaskMap = false;
 				hasHeightMap = false;
 			}
 
@@ -358,6 +360,23 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 
 			result.textures.push_back(imageTexture);
 			hasNormalMap = true;
+
+			continue;
+		}
+
+		// mask map
+		if (part == "map_d" && !hasMaskMap)
+		{
+			ImageTexture imageTexture;
+			imageTexture.id = ++currentId;
+			currentMaterial.maskMapTextureId = imageTexture.id;
+
+			std::string imageFilePath;
+			ss >> imageFilePath;
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+
+			result.textures.push_back(imageTexture);
+			hasMaskMap = true;
 
 			continue;
 		}

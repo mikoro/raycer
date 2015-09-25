@@ -10,6 +10,8 @@
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/ONB.h"
+#include "Raytracing/Material.h"
+#include "Raytracing/Textures/Texture.h"
 #include "Math/Matrix4x4.h"
 
 using namespace Raycer;
@@ -98,11 +100,18 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector
 		return false;
 
 	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
+	Vector3 ip = ray.origin + (t * ray.direction);
+
+	if (material->maskMapTexture != nullptr)
+	{
+		if (material->maskMapTexture->getValue(interpolatedTexcoord, ip) < 0.5)
+			return false;
+	}
 
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.primitive = this;
-	intersection.position = ray.origin + (t * ray.direction);
+	intersection.position = ip;
 	intersection.normal = finalNormal;
 	intersection.onb = ONB(tangent, bitangent, finalNormal);
 	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;

@@ -56,6 +56,9 @@ namespace Raycer
 		Texture* normalMapTexture = nullptr;
 		int normalMapTextureId = 0;
 
+		Texture* maskMapTexture = nullptr;
+		int maskMapTextureId = 0;
+
 		Texture* heightMapTexture = nullptr;
 		int heightMapTextureId = 0;
 
@@ -91,6 +94,7 @@ namespace Raycer
 				CEREAL_NVP(attenuationFactor),
 				CEREAL_NVP(attenuationColor),
 				CEREAL_NVP(normalMapTextureId),
+				CEREAL_NVP(maskMapTextureId),
 				CEREAL_NVP(heightMapTextureId));
 		}
 	};

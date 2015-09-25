@@ -354,6 +354,9 @@ void Scene::initialize()
 		if (texturesMap.count(material.normalMapTextureId))
 			material.normalMapTexture = texturesMap[material.normalMapTextureId];
 
+		if (texturesMap.count(material.maskMapTextureId))
+			material.maskMapTexture = texturesMap[material.maskMapTextureId];
+
 		if (texturesMap.count(material.heightMapTextureId))
 			material.heightMapTexture = texturesMap[material.heightMapTextureId];
 	}
