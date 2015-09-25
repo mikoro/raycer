@@ -19,5 +19,6 @@ namespace Raycer
 		static double radToDeg(double radians);
 		static double smoothstep(double t);
 		static double smootherstep(double t);
+		static double fastPow(double a, double b);
 	};
 }

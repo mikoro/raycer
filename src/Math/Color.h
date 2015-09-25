@@ -48,6 +48,7 @@ namespace Raycer
 		static Color lerp(const Color& start, const Color& end, double alpha);
 		static Color alphaBlend(const Color& first, const Color& second);
 		static Color pow(const Color& color, double power);
+		static Color fastPow(const Color& color, double power);
 		static Color random();
 		static Color random(std::mt19937& gen);
 

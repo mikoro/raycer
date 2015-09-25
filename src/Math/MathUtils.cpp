@@ -53,3 +53,17 @@ double MathUtils::smootherstep(double t)
 {
 	return t * t * t * (t * (t * 6.0 - 15.0) + 10.0);
 }
+
+double MathUtils::fastPow(double a, double b)
+{
+	union
+	{
+		double d;
+		int x[2];
+	} u = { a };
+
+	u.x[1] = (int)(b * (u.x[1] - 1072632447) + 1072632447);
+	u.x[0] = 0;
+
+	return u.d;
+}

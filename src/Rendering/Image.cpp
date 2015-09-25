@@ -201,7 +201,7 @@ void Image::clear(const Color& color)
 void Image::applyGamma(double gamma)
 {
 	for (int i = 0; i < (int)pixelData.size(); ++i)
-		pixelData[i] = Color::pow(pixelData[i], gamma);
+		pixelData[i] = Color::fastPow(pixelData[i], gamma);
 }
 
 void Image::swapComponents()
@@ -310,7 +310,7 @@ std::vector<Color>& Image::getPixelData()
 
 std::map<std::string, Image> ImagePool::imageMap = std::map<std::string, Image>();
 
-const Image* ImagePool::load(const std::string& fileName)
+const Image* ImagePool::getImage(const std::string& fileName)
 {
 	if (!imageMap.count(fileName))
 		imageMap[fileName] = Image(fileName);

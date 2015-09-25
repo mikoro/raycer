@@ -10,7 +10,7 @@ using namespace Raycer;
 
 void ImageTexture::initialize()
 {
-	image = ImagePool::load(imageFilePath);
+	image = ImagePool::getImage(imageFilePath);
 
 	if (isBumpMap)
 	{

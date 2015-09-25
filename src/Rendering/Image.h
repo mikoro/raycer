@@ -62,7 +62,7 @@ namespace Raycer
 	{
 	public:
 
-		static const Image* load(const std::string& fileName);
+		static const Image* getImage(const std::string& fileName);
 
 	private:
 

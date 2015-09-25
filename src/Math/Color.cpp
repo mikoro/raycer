@@ -259,6 +259,18 @@ Color Color::pow(const Color& color, double power)
 	return c;
 }
 
+Color Color::fastPow(const Color& color, double power)
+{
+	Color c;
+
+	c.r = MathUtils::fastPow(color.r, power);
+	c.g = MathUtils::fastPow(color.g, power);
+	c.b = MathUtils::fastPow(color.b, power);
+	c.a = color.a;
+
+	return c;
+}
+
 Color Color::random()
 {
 	std::random_device rd;
