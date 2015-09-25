@@ -84,6 +84,8 @@ namespace Raycer
 		Vector3 originalPosition;
 		EulerAngle originalOrientation;
 
+		double cameraMoveSpeedModifier = 1.0;
+
 		friend class cereal::access;
 
 		template<class Archive>

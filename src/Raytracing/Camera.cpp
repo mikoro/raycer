@@ -200,7 +200,13 @@ void Camera::update(const Scene& scene, double timeStep)
 			isMovingPrimitive = false;
 	}
 
-	double moveSpeed = settings.camera.moveSpeed;
+	if (windowRunner.keyWasPressed(GLFW_KEY_INSERT))
+		cameraMoveSpeedModifier *= 2.0;
+
+	if (windowRunner.keyWasPressed(GLFW_KEY_DELETE))
+		cameraMoveSpeedModifier *= 0.5;
+
+	double moveSpeed = settings.camera.moveSpeed * cameraMoveSpeedModifier;
 
 	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
 		moveSpeed *= settings.camera.slowModifier;
