@@ -36,7 +36,7 @@ namespace Raycer
 		void setPixel(int index, const Color& color);
 		void clear();
 		void clear(const Color& color);
-		void applyGamma(double gamma);
+		void applyFastGamma(double gamma);
 		void swapComponents();
 		void flip();
 		void fillTestPattern();

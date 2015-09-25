@@ -100,7 +100,7 @@ void Framebuffer::resize(int width, int height)
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
 	image.resize(width, height);
-	floatPixelData.resize(width * height * sizeof(float) * 4);
+	floatPixelData.resize(width * height * 4);
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);

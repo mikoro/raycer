@@ -109,7 +109,7 @@ void Image::load(const std::string& fileName)
 		}
 
 		stbi_image_free(loadData);
-		applyGamma(2.2);
+		applyFastGamma(2.2);
 	}
 }
 
@@ -198,10 +198,10 @@ void Image::clear(const Color& color)
 		pixelData[i] = color;
 }
 
-void Image::applyGamma(double gamma)
+void Image::applyFastGamma(double gamma)
 {
 	for (int i = 0; i < (int)pixelData.size(); ++i)
-		pixelData[i] = Color::fastPow(pixelData[i], gamma);
+		pixelData[i] = Color::fastPow(pixelData[i], gamma).clamped();
 }
 
 void Image::swapComponents()
