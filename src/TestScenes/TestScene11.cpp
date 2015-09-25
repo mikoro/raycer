@@ -1,89 +1,75 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <random>
-
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
-// instancing with a lot of monkeys
+// soft shadows and glossy reflections
 Scene Scene::createTestScene11()
 {
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
 
-	scene.rootBVH.enabled = true;
-
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 0.0, 0.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
+	scene.camera.position = Vector3(0.44, 7.05, 7.33);
+	scene.camera.orientation = EulerAngle(-26.56, 22.22, 0.0);
 
-	// MODEL //
+	// GROUND //
 
-	ModelLoaderInfo modelInfo;
-	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
-	modelInfo.combinedGroupId = 1;
-	modelInfo.enableCombinedGroupInstance = false;
-	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
 
-	scene.models.push_back(modelInfo);
+	Plane groundPlane;
+	groundPlane.id = 1;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
-	// INSTANCES //
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
 
-	std::mt19937 gen(1230927546);
-	std::uniform_real_distribution<double> scaleDist(0.5, 2.0);
-	std::uniform_real_distribution<double> rotationDist(-45.0, 45.0);
-	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
+	// BOXES //
 
-	int currentId = 2;
+	Material boxMaterial;
+	boxMaterial.id = 2;
+	boxMaterial.ambientReflectance = Color(0.2, 0.2, 1.0) * 0.5;
+	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
 
-	for (int z = -200; z < 200; z += 20)
-	{
-		for (int y = -200; y < 200; y += 20)
-		{
-			for (int x = -200; x < 200; x += 20)
-			{
-				Material instanceMaterial;
-				instanceMaterial.id = currentId;
-				instanceMaterial.ambientReflectance = Color::random(gen) * 0.8;
-				instanceMaterial.diffuseReflectance = instanceMaterial.ambientReflectance;
+	scene.materials.push_back(boxMaterial);
 
-				double scale = scaleDist(gen);
+	Box box;
+	box.materialId = boxMaterial.id;
 
-				Instance instance;
-				instance.id = currentId;
-				instance.materialId = instanceMaterial.id;
-				instance.primitiveId = modelInfo.combinedGroupId;
-				instance.changePrimitive = true;
-				instance.scale = Vector3(scale, scale, scale);
-				instance.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
-				instance.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
-
-				scene.materials.push_back(instanceMaterial);
-				scene.primitives.instances.push_back(instance);
-
-				++currentId;
-			}
-		}
-	}
+	box.id = 2;
+	box.position = Vector3(0.0, 3.0, 0.0);
+	box.extent = Vector3(2.0, 6.0, 2.0);
+	scene.primitives.boxes.push_back(box);
+	box.id = 3;
+	box.position = Vector3(-5.0, 0.5, -2.5);
+	box.extent = Vector3(2.0, 1.0, 5.0);
+	scene.primitives.boxes.push_back(box);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 
-	DirectionalLight directionalLight;
-	directionalLight.color = Color(1.0, 1.0, 1.0);
-	directionalLight.intensity = 0.8;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.5;
+	pointLight.position = Vector3(10.0, 10.0, 10.0);
+	pointLight.distance = 100.0;
+	pointLight.attenuation = 1.0;
+	pointLight.softShadows = true;
+	pointLight.samples = 3;
+	pointLight.radius = 0.5;
 
-	directionalLight.direction = EulerAngle(0.0, 45.0, 0.0).getDirection();
-	scene.lights.directionalLights.push_back(directionalLight);
-
-	directionalLight.direction = EulerAngle(0.0, -45.0, 0.0).getDirection();
-	scene.lights.directionalLights.push_back(directionalLight);
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }

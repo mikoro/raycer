@@ -5,139 +5,147 @@
 
 using namespace Raycer;
 
-// motion blur with spheres
+// bump/normal mapping
 Scene Scene::createTestScene10()
 {
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
-	scene.raytracer.timeSamples = 3;
-
-	scene.simpleFog.enabled = false;
-	scene.simpleFog.distance = 20.0;
-	scene.simpleFog.steepness = 2.0;
-	scene.simpleFog.color = Color(0.0, 0.0, 0.0);
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 6.0, 5.0);
-	scene.camera.orientation = EulerAngle(-40.0, 0.0, 0.0);
+	scene.camera.position = Vector3(-0.18, 1.65, 3.59);
+	scene.camera.orientation = EulerAngle(-9.22, 17.56, 0.0);
 
-	// FLOOR //
+	// SPHERE //
 
-	PerlinNoiseTexture floorNormalTexture;
-	floorNormalTexture.id = 1;
-	floorNormalTexture.intensity = 0.025;
+	PerlinNoiseTexture sphereNormalTexture;
+	sphereNormalTexture.id = 1;
+	sphereNormalTexture.seed = 2345654;
+	sphereNormalTexture.intensity = 0.05;
+	sphereNormalTexture.scale = Vector3(10.0, 10.0, 10.0);
+	sphereNormalTexture.isFbm = true;
 
-	Material floorMaterial;
-	floorMaterial.id = 1;
-	floorMaterial.ambientReflectance = Color(0.0, 1.0, 0.2) * 0.25;
-	floorMaterial.diffuseReflectance = floorMaterial.ambientReflectance;
-	floorMaterial.normalMapTextureId = floorNormalTexture.id;
+	Material sphereMaterial;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientReflectance = Color(1.0, 0.1, 0.1) * 0.5;
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.specularReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.normalMapTextureId = sphereNormalTexture.id;
+	sphereMaterial.shininess = 64.0;
+	sphereMaterial.nonShadowing = true;
 
-	Plane floorPlane;
-	floorPlane.id = 1;
-	floorPlane.materialId = floorMaterial.id;
-	floorPlane.position = Vector3(0.0, 0.0, 0.0);
-	floorPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
+	Sphere sphere;
+	sphere.id = 1;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(0.0, 1.0, 0.0);
+	sphere.radius = 1.0;
 
-	scene.textures.perlinNoiseTextures.push_back(floorNormalTexture);
-	scene.materials.push_back(floorMaterial);
-	scene.primitives.planes.push_back(floorPlane);
+	scene.textures.perlinNoiseTextures.push_back(sphereNormalTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	// SPHERE 1 //
+	// MODEL 1 //
 
-	Material sphere1Material;
-	sphere1Material.id = 2;
-	sphere1Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
-	sphere1Material.diffuseReflectance = sphere1Material.ambientReflectance;
-	sphere1Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere1Material.shininess = 128.0;
+	ImageTexture model1NormalTexture;
+	model1NormalTexture.id = 2;
+	model1NormalTexture.imageFilePath = "data/images/test_bumpmap.png";
+	model1NormalTexture.isBumpMap = true;
+	model1NormalTexture.intensity = 2.0;
 
-	Sphere sphere1;
-	sphere1.id = 2;
-	sphere1.invisible = true;
-	sphere1.materialId = sphere1Material.id;
-	sphere1.radius = 1.0;
+	Material model1Material;
+	model1Material.id = 2;
+	model1Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	model1Material.diffuseReflectance = model1Material.ambientReflectance;
+	model1Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	model1Material.normalMapTextureId = model1NormalTexture.id;
+	model1Material.shininess = 64.0;
+	model1Material.texcoordScale = Vector2(0.1, 0.1);
 
-	Instance sphere1instance;
-	sphere1instance.id = 3;
-	sphere1instance.primitiveId = sphere1.id;
-	sphere1instance.isTimeVariant = true;
-	sphere1instance.translate = Vector3(0.0, 1.0, 0.0);
-	sphere1instance.translateInTime = Vector3(0.0, 0.0, 2.0);
+	ModelLoaderInfo model1Info;
+	model1Info.modelFilePath = "data/meshes/square.obj";
+	model1Info.defaultMaterialId = model1Material.id;
+	model1Info.combinedGroupId = 2;
+	model1Info.combinedGroupInstanceId = 3;
+	model1Info.idStartOffset = 1000;
+	model1Info.scale = Vector3(20.0, 20.0, 20.0);
+	model1Info.rotate = EulerAngle(-90.0, 0.0, 0.0);
+	model1Info.translate = Vector3(-10.0, 0.0, 10.0);
 
-	scene.materials.push_back(sphere1Material);
-	scene.primitives.spheres.push_back(sphere1);
-	scene.primitives.instances.push_back(sphere1instance);
+	scene.textures.imageTextures.push_back(model1NormalTexture);
+	scene.materials.push_back(model1Material);
+	scene.models.push_back(model1Info);
 
-	// SPHERE 2 //
+	// MODEL 2 //
 
-	ImageTexture sphere2Texture;
-	sphere2Texture.id = 2;
-	sphere2Texture.imageFilePath = "data/images/poolball1.jpg";
-	sphere2Texture.intensity = 0.5;
+	ImageTexture model2Texture;
+	model2Texture.id = 3;
+	model2Texture.imageFilePath = "data/images/stonewall.jpg";
+	model2Texture.intensity = 1.0;
 
-	Material sphere2Material;
-	sphere2Material.id = 3;
-	sphere2Material.ambientMapTextureId = sphere2Texture.id;
-	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
-	sphere2Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere2Material.shininess = 128.0;
+	ImageTexture model2NormalTexture;
+	model2NormalTexture.id = 4;
+	model2NormalTexture.imageFilePath = "data/images/stonewall_bumpmap.jpg";
+	model2NormalTexture.isBumpMap = true;
+	model2NormalTexture.intensity = 2.0;
 
-	Sphere sphere2;
-	sphere2.id = 4;
-	sphere2.invisible = true;
-	sphere2.materialId = sphere2Material.id;
-	sphere2.radius = 1.0;
+	Material model2Material;
+	model2Material.id = 3;
+	model2Material.ambientMapTextureId = model2Texture.id;
+	model2Material.diffuseMapTextureId = model2Texture.id;
+	model2Material.normalMapTextureId = model2NormalTexture.id;
+	model2Material.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	model2Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	model2Material.shininess = 64.0;
+	model2Material.nonShadowing = true;
+	model2Material.texcoordScale = Vector2(0.25, 0.5);
 
-	Instance sphere2instance;
-	sphere2instance.id = 5;
-	sphere2instance.primitiveId = sphere2.id;
-	sphere2instance.isTimeVariant = true;
-	sphere2instance.translate = Vector3(-1.0, 1.0, -1.7);
-	sphere2instance.rotate = EulerAngle(0.0, -90.0, 0.0);
-	sphere2instance.translateInTime = Vector3(-1.0, 0.0, -1.0);
-	sphere2instance.rotateInTime = EulerAngle(0.0, 0.0, 0.0);
+	ModelLoaderInfo model2Info;
+	model2Info.modelFilePath = "data/meshes/square.obj";
+	model2Info.defaultMaterialId = model2Material.id;
+	model2Info.combinedGroupId = 4;
+	model2Info.combinedGroupInstanceId = 5;
+	model2Info.idStartOffset = 2000;
+	model2Info.scale = Vector3(20.0, 10.0, 5.0);
+	model2Info.rotate = EulerAngle(0.0, 0.0, 0.0);
+	model2Info.translate = Vector3(-10.0, 0.0, -2.5);
 
-	scene.textures.imageTextures.push_back(sphere2Texture);
-	scene.materials.push_back(sphere2Material);
-	scene.primitives.spheres.push_back(sphere2);
-	scene.primitives.instances.push_back(sphere2instance);
+	scene.textures.imageTextures.push_back(model2Texture);
+	scene.textures.imageTextures.push_back(model2NormalTexture);
+	scene.materials.push_back(model2Material);
+	scene.models.push_back(model2Info);
 
-	// SPHERE 3 //
+	// MODEL 3 //
 
-	ImageTexture sphere3Texture;
-	sphere3Texture.id = 3;
-	sphere3Texture.imageFilePath = "data/images/poolball2.jpg";
-	sphere3Texture.intensity = 0.5;
+	ImageTexture model3NormalTexture;
+	model3NormalTexture.id = 5;
+	model3NormalTexture.imageFilePath = "data/images/cube_normalmap.png";
+	model3NormalTexture.isNormalMap = true;
+	model3NormalTexture.intensity = 1.0;
 
-	Material sphere3Material;
-	sphere3Material.id = 4;
-	sphere3Material.ambientMapTextureId = sphere3Texture.id;
-	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
-	sphere3Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere3Material.shininess = 128.0;
+	Material mesh3Material;
+	mesh3Material.id = 4;
+	mesh3Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.25;
+	mesh3Material.diffuseReflectance = mesh3Material.ambientReflectance;
+	mesh3Material.specularReflectance = Color(1.0, 1.0, 1.0);
+	mesh3Material.normalMapTextureId = model3NormalTexture.id;
+	mesh3Material.shininess = 64.0;
+	mesh3Material.texcoordScale = Vector2(1.0, 1.0);
+	mesh3Material.nonShadowing = true;
 
-	Sphere sphere3;
-	sphere3.id = 6;
-	sphere3.invisible = true;
-	sphere3.materialId = sphere3Material.id;
-	sphere3.radius = 1.0;
+	ModelLoaderInfo model3Info;
+	model3Info.modelFilePath = "data/meshes/cube_normalmap.obj";
+	model3Info.defaultMaterialId = mesh3Material.id;
+	model3Info.combinedGroupId = 6;
+	model3Info.combinedGroupInstanceId = 7;
+	model3Info.idStartOffset = 3000;
+	model3Info.scale = Vector3(0.5, 0.5, 0.5);
+	model3Info.rotate = EulerAngle(-42.59, 161.79, 0.0);
+	model3Info.translate = Vector3(-3.0, 1.0, 0.0);
 
-	Instance sphere3instance;
-	sphere3instance.id = 7;
-	sphere3instance.primitiveId = sphere3.id;
-	sphere3instance.isTimeVariant = true;
-	sphere3instance.translate = Vector3(1.0, 1.0, -1.7);
-	sphere3instance.rotate = EulerAngle(0.0, -90.0, 90.0);
-	sphere3instance.translateInTime = Vector3(1.0, 0.0, -1.0);
-	sphere3instance.rotateInTime = EulerAngle(0.0, 0.0, 0.0);
-
-	scene.textures.imageTextures.push_back(sphere3Texture);
-	scene.materials.push_back(sphere3Material);
-	scene.primitives.spheres.push_back(sphere3);
-	scene.primitives.instances.push_back(sphere3instance);
+	scene.textures.imageTextures.push_back(model3NormalTexture);
+	scene.materials.push_back(mesh3Material);
+	scene.models.push_back(model3Info);
 
 	// LIGHTS //
 
@@ -146,15 +154,11 @@ Scene Scene::createTestScene10()
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
-	pointLight.intensity = 0.5;
+	pointLight.intensity = 0.8;
 	pointLight.distance = 20.0;
 	pointLight.attenuation = 1.0;
 
-	pointLight.position = Vector3(5.0, 5.0, 5.0);
-	scene.lights.pointLights.push_back(pointLight);
 	pointLight.position = Vector3(-5.0, 5.0, 5.0);
-	scene.lights.pointLights.push_back(pointLight);
-	pointLight.position = Vector3(5.0, 5.0, -5.0);
 	scene.lights.pointLights.push_back(pointLight);
 	pointLight.position = Vector3(-5.0, 5.0, -5.0);
 	scene.lights.pointLights.push_back(pointLight);

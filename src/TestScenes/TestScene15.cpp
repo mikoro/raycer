@@ -5,46 +5,86 @@
 
 using namespace Raycer;
 
-// sponza2 scene
+// ambient occlusion with four white spheres and a monkey
 Scene Scene::createTestScene15()
 {
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
-	scene.raytracer.cameraSamples = 0;
-
-	scene.rootBVH.enabled = true;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(8.92, 0.68, -2.02);
-	scene.camera.orientation = EulerAngle(6.66, 111.11, 0.0);
-	scene.camera.focalDistance = 10.0;
-	scene.camera.apertureSize = 0.005;
+	scene.camera.position = Vector3(2.3, 5.0, 6.0);
+	scene.camera.orientation = EulerAngle(-35.0, 0.0, 0.0);
+
+	// GROUND //
+
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
+
+	Plane groundPlane;
+	groundPlane.id = 1;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.001, 1.0, 0.001).normalized();
+
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
+
+	// SPHERES //
+
+	Material sphereMaterial;
+	sphereMaterial.id = 2;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+
+	Sphere sphere;
+	sphere.materialId = sphereMaterial.id;
+	sphere.radius = 1.0;
+
+	scene.materials.push_back(sphereMaterial);
+
+	sphere.id = 2;
+	sphere.position = Vector3(-1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 3;
+	sphere.position = Vector3(1.0, 1.0, 1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 4;
+	sphere.position = Vector3(-1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere);
+	sphere.id = 5;
+	sphere.position = Vector3(1.0, 1.0, -1.0);
+	scene.primitives.spheres.push_back(sphere);
 
 	// MODEL //
 
+	Material modelMaterial;
+	modelMaterial.id = 3;
+	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
+
 	ModelLoaderInfo modelInfo;
-	modelInfo.modelFilePath = "data/meshes/sponza2/sponza.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
-	modelInfo.scale = Vector3(0.01, 0.01, 0.01);
+	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo.defaultMaterialId = modelMaterial.id;
+	modelInfo.combinedGroupId = 6;
+	modelInfo.combinedGroupInstanceId = 7;
+	modelInfo.scale = Vector3(5.0, 5.0, 5.0);
+	modelInfo.rotate = EulerAngle(-45.0, 0.0, 0.0);
+	modelInfo.translate = Vector3(5.0, 0.0, 1.0);
+
+	scene.materials.push_back(modelMaterial);
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.05;
-
-	PointLight pointLight;
-	pointLight.color = Color(1.0, 1.0, 1.0);
-	pointLight.intensity = 1.0;
-	pointLight.position = Vector3(0.0, 8.0, 0.0);
-	pointLight.distance = 20.0;
-	pointLight.attenuation = 2.0;
-
-	scene.lights.pointLights.push_back(pointLight);
+	scene.lights.ambientLight.intensity = 0.4;
+	scene.lights.ambientLight.enableOcclusion = true;
+	scene.lights.ambientLight.maxDistance = 10.0;
+	scene.lights.ambientLight.samples = 3;
 
 	return scene;
 }

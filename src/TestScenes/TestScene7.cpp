@@ -5,56 +5,107 @@
 
 using namespace Raycer;
 
-// depth of field with a sphere spiral
+// reflection and refraction with boxes
 Scene Scene::createTestScene7()
 {
 	Scene scene;
 
+	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
+	scene.raytracer.maxRayIterations = 8;
 	scene.raytracer.multiSamples = 0;
-	scene.raytracer.cameraSamples = 3;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 0.0, 7.0);
-	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
-	scene.camera.apertureSize = 1.0;
-	scene.camera.focalDistance = 30.0;
-	
-	// SPHERES //
+	scene.camera.position = Vector3(9.49, 4.44, 3.94);
+	scene.camera.orientation = EulerAngle(-20.0, 35.0, 0.0);
 
-	Material sphereMaterial;
-	sphereMaterial.id = 1;
-	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
-	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	// BOXES //
 
-	scene.materials.push_back(sphereMaterial);
+	Material boxMaterial;
+	boxMaterial.id = 1;
+	boxMaterial.ambientReflectance = Color(0.5, 0.0, 0.0);
+	boxMaterial.diffuseReflectance = Color(0.5, 0.0, 0.0);
+	boxMaterial.rayTransmittance = 0.75;
+	boxMaterial.refractiveIndex = 1.0;
+	boxMaterial.enableAttenuation = true;
+	boxMaterial.attenuationFactor = 1.0;
+	boxMaterial.attenuationColor = Color(0.1, 0.0, 0.0);
+	boxMaterial.nonShadowing = true;
 
-	double angle = -M_PI / 2.0;
-	double radius = 8.0;
-	int currentId = 1;
-	
-	for (int i = 0; i < 50; ++i)
-	{
-		Sphere sphere;
-		sphere.id = currentId;
-		sphere.materialId = sphereMaterial.id;
-		sphere.position = Vector3(cos(angle) * radius, sin(angle) * radius, i * -1.0);
-		sphere.radius = 1.0;
-		
-		scene.primitives.spheres.push_back(sphere);
-		angle += 0.5;
-		++currentId;
-	}
+	scene.materials.push_back(boxMaterial);
+
+	Box box;
+	box.extent = Vector3(2.0, 2.0, 2.0);
+	box.materialId = boxMaterial.id;
+
+	box.id = 1;
+	box.position = Vector3(-4.0, 1.0, 0.0);
+	scene.primitives.boxes.push_back(box);
+	box.id = 2;
+	box.position = Vector3(-8.0, 1.0, 0.0);
+	scene.primitives.boxes.push_back(box);
+
+	// MODEL BOXES //
+
+	ModelLoaderInfo modelInfo;
+	modelInfo.modelFilePath = "data/meshes/cube1.obj";
+	modelInfo.defaultMaterialId = boxMaterial.id;
+
+	modelInfo.translate = Vector3(4.0, 1.0, 0.0);
+	modelInfo.combinedGroupId = 6;
+	modelInfo.combinedGroupInstanceId = 7;
+	modelInfo.idStartOffset = 1000;
+	scene.models.push_back(modelInfo);
+
+	modelInfo.translate = Vector3(8.0, 1.0, 0.0);
+	modelInfo.combinedGroupId = 8;
+	modelInfo.combinedGroupInstanceId = 9;
+	modelInfo.idStartOffset = 2000;
+	scene.models.push_back(modelInfo);
+
+	// WALL BOXES //
+
+	boxMaterial = Material();
+	boxMaterial.id = 2;
+	boxMaterial.ambientReflectance = Color(0.1, 0.1, 0.3);
+	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
+	boxMaterial.rayReflectance = 0.75;
+	boxMaterial.nonShadowing = true;
+
+	box = Box();
+	box.id = 10;
+	box.materialId = boxMaterial.id;
+	box.invisible = true;
+	box.extent = Vector3(20.0, 10.0, 1.0);
+	box.position = Vector3(0.0, 0.0, 0.0);
+
+	scene.materials.push_back(boxMaterial);
+	scene.primitives.boxes.push_back(box);
+
+	// WALL BOX INSTANCES //
+
+	Instance instance;
+	instance.primitiveId = box.id;
+
+	instance.id = 11;
+	instance.translate = Vector3(0.0, 0.0, -5.0);
+	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance);
+
+	instance.id = 12;
+	instance.translate = Vector3(0.0, 0.0, 5.0);
+	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
+	scene.primitives.instances.push_back(instance);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
-	
+
 	DirectionalLight directionalLight;
 	directionalLight.color = Color(1.0, 1.0, 1.0);
 	directionalLight.intensity = 1.0;
-	directionalLight.direction = EulerAngle(-10.0, -60.0, 0.0).getDirection();
+	directionalLight.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight);
 

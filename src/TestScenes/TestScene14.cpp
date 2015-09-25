@@ -5,51 +5,107 @@
 
 using namespace Raycer;
 
-// sponza1 scene
+// spherical environment texture map with glass primitives
 Scene Scene::createTestScene14()
 {
 	Scene scene;
 
+	scene.raytracer.maxRayIterations = 8;
 	scene.raytracer.multiSamples = 0;
 
-	scene.rootBVH.enabled = true;
-	scene.rootBVH.buildInfo.maxLeafSize = 10;
+	scene.toneMapper.type = ToneMapperType::REINHARD;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(15.0, 2.0, 0.0);
-	scene.camera.orientation = EulerAngle(1.0, 90.0, 0.0);
+	scene.camera.position = Vector3(7.0, 0.0, -12.2);
+	scene.camera.orientation = EulerAngle(0.0, 150.0, 0.0);
 
-	// MODEL //
+	// SKY SPHERE //
 
-	ModelLoaderInfo modelInfo;
-	modelInfo.modelFilePath = "data/meshes/sponza1/sponza.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
-	scene.models.push_back(modelInfo);
+	ImageTexture sphereTexture;
+	sphereTexture.id = 1;
+	sphereTexture.intensity = 1.0;
+	sphereTexture.imageFilePath = "data/images/rooftop.hdr";
 
-	// LIGHTS //
+	Material sphereMaterial;
+	sphereMaterial.id = 1;
+	sphereMaterial.ambientMapTextureId = sphereTexture.id;
+	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.skipLighting = true;
+	sphereMaterial.texcoordScale = Vector2(-1.0, 1.0);
 
-	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
+	Sphere sphere;
+	sphere.id = 1;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(0.0, 0.0, 0.0);
+	sphere.radius = 100.0;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(6.5, 8.0, 0.0);
-	pointLight1.distance = 10.0;
-	pointLight1.attenuation = 1.0;
+	scene.textures.imageTextures.push_back(sphereTexture);
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
 
-	PointLight pointLight2;
-	pointLight2.color = Color(1.0, 1.0, 1.0);
-	pointLight2.intensity = 1.0;
-	pointLight2.position = Vector3(-6.5, 8.0, 0.0);
-	pointLight2.distance = 10.0;
-	pointLight2.attenuation = 1.0;
+	// SMALL SPHERE 1 //
 
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.pointLights.push_back(pointLight2);
+	sphereMaterial = Material();
+	sphereMaterial.id = 2;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayTransmittance = 1.0;
+	sphereMaterial.refractiveIndex = 1.5;
+	sphereMaterial.fresnelReflection = true;
+
+	sphere = Sphere();
+	sphere.id = 2;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(4.0, -2.0, 0.0);
+	sphere.radius = 2.0;
+
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+
+	// SMALL SPHERE 2 //
+
+	sphereMaterial = Material();
+	sphereMaterial.id = 3;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayTransmittance = 1.0;
+	sphereMaterial.refractiveIndex = 1.5;
+	sphereMaterial.fresnelReflection = true;
+
+	sphere = Sphere();
+	sphere.id = 3;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(-4.0, 2.0, 0.0);
+	sphere.radius = 2.0;
+
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+
+	// BOX //
+
+	Material boxMaterial;
+	boxMaterial.id = 4;
+	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
+	boxMaterial.rayReflectance = 1.0;
+	boxMaterial.rayTransmittance = 1.0;
+	boxMaterial.refractiveIndex = 1.5;
+	boxMaterial.fresnelReflection = true;
+	boxMaterial.enableAttenuation = true;
+	boxMaterial.attenuationFactor = 0.4;
+	boxMaterial.attenuationColor = Color(0.0, 0.0, 0.0);
+
+	Box box;
+	box.id = 4;
+	box.materialId = boxMaterial.id;
+	box.position = Vector3(0.0, 0.0, 0.0);
+	box.extent = Vector3(1.0, 10.0, 6.0);
+
+	scene.materials.push_back(boxMaterial);
+	scene.primitives.boxes.push_back(box);
 
 	return scene;
 }

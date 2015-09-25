@@ -1,101 +1,97 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <random>
+
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
 
-// reflection and refraction with boxes
+// lots of different sized specular spheres and simple fog
 Scene Scene::createTestScene5()
 {
 	Scene scene;
 
 	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
-	scene.raytracer.maxRayIterations = 8;
+	scene.raytracer.maxRayIterations = 4;
 	scene.raytracer.multiSamples = 0;
+	scene.raytracer.cameraSamples = 0;
+
+	scene.rootBVH.enabled = true;
+
+	scene.simpleFog.enabled = true;
+	scene.simpleFog.color = Color(0.8, 0.8, 0.8);
+	scene.simpleFog.distance = 200.0;
+	scene.simpleFog.steepness = 2.0;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(9.49, 4.44, 3.94);
-	scene.camera.orientation = EulerAngle(-20.0, 35.0, 0.0);
+	scene.camera.position = Vector3(0.0, 8.0, -2.0);
+	scene.camera.orientation = EulerAngle(-20.0, 180.0, 0.0);
+	scene.camera.apertureSize = 0.2;
+	scene.camera.focalDistance = 30.0;
 
-	// BOXES //
+	// GROUND //
 
-	Material boxMaterial;
-	boxMaterial.id = 1;
-	boxMaterial.ambientReflectance = Color(0.5, 0.0, 0.0);
-	boxMaterial.diffuseReflectance = Color(0.5, 0.0, 0.0);
-	boxMaterial.rayTransmittance = 0.75;
-	boxMaterial.refractiveIndex = 1.0;
-	boxMaterial.enableAttenuation = true;
-	boxMaterial.attenuationFactor = 1.0;
-	boxMaterial.attenuationColor = Color(0.1, 0.0, 0.0);
-	boxMaterial.nonShadowing = true;
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
+	groundMaterial.rayReflectance = 0.5;
+	groundMaterial.ambientReflectance = Color(0.1, 0.1, 0.1);
+	groundMaterial.diffuseReflectance = Color(0.1, 0.1, 0.1);
 
-	scene.materials.push_back(boxMaterial);
+	Plane groundPlane;
+	groundPlane.id = 1;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0).normalized();
 
-	Box box;
-	box.extent = Vector3(2.0, 2.0, 2.0);
-	box.materialId = boxMaterial.id;
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
 
-	box.id = 1;
-	box.position = Vector3(-4.0, 1.0, 0.0);
-	scene.primitives.boxes.push_back(box);
-	box.id = 2;
-	box.position = Vector3(-8.0, 1.0, 0.0);
-	scene.primitives.boxes.push_back(box);
+	// SPHERES //
 
-	// MODEL BOXES //
+	std::mt19937 gen(8972364);
+	std::uniform_real_distribution<double> radiusDist(1.0, 2.0);
+	std::uniform_real_distribution<double> pxDist(2.0, 3.0);
+	std::uniform_real_distribution<double> pyDist(-1.0, 1.0);
+	std::uniform_real_distribution<double> specularityDist(0.0, 1.0);
+	std::uniform_real_distribution<double> shininessDist(4.0, 64.0);
 
-	ModelLoaderInfo modelInfo;
-	modelInfo.modelFilePath = "data/meshes/cube1.obj";
-	modelInfo.defaultMaterialId = boxMaterial.id;
+	double px;
+	double py = -250.0 + radiusDist(gen);
+	int currentId = 2;
 
-	modelInfo.translate = Vector3(4.0, 1.0, 0.0);
-	modelInfo.combinedGroupId = 6;
-	modelInfo.combinedGroupInstanceId = 7;
-	modelInfo.idStartOffset = 1000;
-	scene.models.push_back(modelInfo);
+	for (int y = 0; y < 100; ++y)
+	{
+		px = -200.0 + radiusDist(gen);
 
-	modelInfo.translate = Vector3(8.0, 1.0, 0.0);
-	modelInfo.combinedGroupId = 8;
-	modelInfo.combinedGroupInstanceId = 9;
-	modelInfo.idStartOffset = 2000;
-	scene.models.push_back(modelInfo);
+		for (int x = 0; x < 100; ++x)
+		{
+			Material sphereMaterial;
+			sphereMaterial.id = currentId;
+			sphereMaterial.ambientReflectance = Color::random(gen) * 0.8;
+			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+			sphereMaterial.specularReflectance = sphereMaterial.ambientReflectance;
+			sphereMaterial.shininess = 256.0;
+			sphereMaterial.rayReflectance = 0.05;
 
-	// WALL BOXES //
+			Sphere sphere;
+			sphere.id = currentId;
+			sphere.radius = radiusDist(gen);
+			sphere.position = Vector3(px, sphere.radius, py + pyDist(gen));
+			sphere.materialId = sphereMaterial.id;
 
-	boxMaterial = Material();
-	boxMaterial.id = 2;
-	boxMaterial.ambientReflectance = Color(0.1, 0.1, 0.3);
-	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
-	boxMaterial.rayReflectance = 0.75;
-	boxMaterial.nonShadowing = true;
+			scene.materials.push_back(sphereMaterial);
+			scene.primitives.spheres.push_back(sphere);
 
-	box = Box();
-	box.id = 10;
-	box.materialId = boxMaterial.id;
-	box.invisible = true;
-	box.extent = Vector3(20.0, 10.0, 1.0);
-	box.position = Vector3(0.0, 0.0, 0.0);
+			px += sphere.radius + pxDist(gen);
+			++currentId;
+		}
 
-	scene.materials.push_back(boxMaterial);
-	scene.primitives.boxes.push_back(box);
-
-	// WALL BOX INSTANCES //
-
-	Instance instance;
-	instance.primitiveId = box.id;
-
-	instance.id = 11;
-	instance.translate = Vector3(0.0, 0.0, -5.0);
-	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
-	scene.primitives.instances.push_back(instance);
-
-	instance.id = 12;
-	instance.translate = Vector3(0.0, 0.0, 5.0);
-	instance.rotate = EulerAngle(0.0, 0.0, 0.0);
-	scene.primitives.instances.push_back(instance);
+		py += 5.0;
+	}
 
 	// LIGHTS //
 
@@ -105,7 +101,7 @@ Scene Scene::createTestScene5()
 	DirectionalLight directionalLight;
 	directionalLight.color = Color(1.0, 1.0, 1.0);
 	directionalLight.intensity = 1.0;
-	directionalLight.direction = EulerAngle(-10.0, 30.0, 0.0).getDirection();
+	directionalLight.direction = EulerAngle(-30.0, 30.0, 0.0).getDirection();
 
 	scene.lights.directionalLights.push_back(directionalLight);
 
