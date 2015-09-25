@@ -23,10 +23,6 @@ AABB AABB::createFromMinMax(const Vector3& min, const Vector3& max)
 	aabb.min = min;
 	aabb.max = max;
 
-	aabb.center = (min + max) * 0.5;
-	aabb.extent = max - min;
-	aabb.surfaceArea = 2.0 * (aabb.extent.x * aabb.extent.y + aabb.extent.z * aabb.extent.y + aabb.extent.x * aabb.extent.z);
-
 	return aabb;
 }
 
@@ -34,13 +30,8 @@ AABB AABB::createFromCenterExtent(const Vector3& center, const Vector3& extent)
 {
 	AABB aabb;
 
-	aabb.center = center;
-	aabb.extent = extent;
-
 	aabb.min = center - extent / 2.0;
 	aabb.max = center + extent / 2.0;
-
-	aabb.surfaceArea = 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
 
 	return aabb;
 }
@@ -98,14 +89,11 @@ void AABB::expand(const AABB& other)
 	max.x = std::max(max.x, other.max.x);
 	max.y = std::max(max.y, other.max.y);
 	max.z = std::max(max.z, other.max.z);
-
-	center = (min + max) * 0.5;
-	extent = max - min;
-	surfaceArea = 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
 }
 
 int AABB::getLargestAxis() const
 {
+	Vector3 extent = getExtent();
 	int largest = 0;
 
 	if (extent.y > extent.x)
@@ -120,6 +108,7 @@ int AABB::getLargestAxis() const
 AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) const
 {
 	Vector3 corners[8], newMin, newMax;
+	Vector3 center = getCenter();
 
 	corners[0] = min;
 	corners[1] = Vector3(max.x, min.y, min.z);
@@ -167,15 +156,16 @@ Vector3 AABB::getMax() const
 
 Vector3 AABB::getCenter() const
 {
-	return center;
+	return (min + max) * 0.5;
 }
 
 Vector3 AABB::getExtent() const
 {
-	return extent;
+	return max - min;
 }
 
 double AABB::getSurfaceArea() const
 {
-	return surfaceArea;
+	Vector3 extent = getExtent();
+	return 2.0 * (extent.x * extent.y + extent.z * extent.y + extent.x * extent.z);
 }

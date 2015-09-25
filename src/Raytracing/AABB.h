@@ -37,10 +37,6 @@ namespace Raycer
 
 		Vector3 min;
 		Vector3 max;
-		Vector3 center;
-		Vector3 extent;
-
-		double surfaceArea = 0.0;
 
 		friend class cereal::access;
 
@@ -48,10 +44,7 @@ namespace Raycer
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(min),
-				CEREAL_NVP(max),
-				CEREAL_NVP(center),
-				CEREAL_NVP(extent),
-				CEREAL_NVP(surfaceArea));
+				CEREAL_NVP(max));
 		}
 	};
 }
