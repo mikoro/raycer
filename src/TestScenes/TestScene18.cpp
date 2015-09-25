@@ -93,21 +93,25 @@ Scene Scene::createTestScene18()
 	std::uniform_real_distribution<double> translateDist(0.0, 0.5);
 
 	int currentId = 4;
+	double xstep = 1.0;
 
-	for (int y = -200; y < 200; y += 1)
+	for (double x = 0.0; x > -400.0; x -= xstep)
 	{
-		for (int x = -400; x < 0; x += 1)
+		for (double z = -200.0; z < 200.0; z += 1.0)
 		{
 			Instance instance;
 			instance.id = currentId;
 			instance.primitiveId = modelInfo.combinedGroupId;
-			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), y + translateDist(gen));
+			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), z + translateDist(gen));
 			instance.rotate = EulerAngle(0.0, rotationDist(gen), 30.0 + rotationDist(gen));
 
 			scene.primitives.instances.push_back(instance);
 
 			++currentId;
 		}
+
+		if (x < -20.0)
+			xstep += 1.0;
 	}
 
 	// LIGHTS //

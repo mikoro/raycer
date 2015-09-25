@@ -11,13 +11,16 @@ Scene Scene::createTestScene15()
 	Scene scene;
 
 	scene.raytracer.multiSamples = 0;
+	scene.raytracer.cameraSamples = 0;
 
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(-13.0, 1.0, -0.5);
-	scene.camera.orientation = EulerAngle(3.0, -90.0, 0.0);
+	scene.camera.position = Vector3(8.92, 0.68, -2.02);
+	scene.camera.orientation = EulerAngle(6.66, 111.11, 0.0);
+	scene.camera.focalDistance = 10.0;
+	scene.camera.apertureSize = 0.005;
 
 	// MODEL //
 
@@ -32,24 +35,16 @@ Scene Scene::createTestScene15()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.01;
+	scene.lights.ambientLight.intensity = 0.05;
 
-	PointLight pointLight1;
-	pointLight1.color = Color(1.0, 1.0, 1.0);
-	pointLight1.intensity = 1.0;
-	pointLight1.position = Vector3(-5.0, 5.0, 0.0);
-	pointLight1.distance = 10.0;
-	pointLight1.attenuation = 1.0;
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.0;
+	pointLight.position = Vector3(0.0, 8.0, 0.0);
+	pointLight.distance = 20.0;
+	pointLight.attenuation = 2.0;
 
-	PointLight pointLight2;
-	pointLight2.color = Color(1.0, 1.0, 1.0);
-	pointLight2.intensity = 1.0;
-	pointLight2.position = Vector3(5.0, 5.0, 0.0);
-	pointLight2.distance = 10.0;
-	pointLight2.attenuation = 1.0;
-
-	scene.lights.pointLights.push_back(pointLight1);
-	scene.lights.pointLights.push_back(pointLight2);
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }
