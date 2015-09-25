@@ -11,5 +11,3 @@ textures
 
 misc
  - update ply reader -> ply loader
- - optimize image loader
- - optimize obj loader

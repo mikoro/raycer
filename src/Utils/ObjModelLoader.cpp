@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <cstdlib>
 #include <fstream>
 #include <stdexcept>
 
@@ -13,6 +14,7 @@
 #include "Utils/ObjModelLoader.h"
 #include "App.h"
 #include "Utils/Log.h"
+#include "Utils/StringUtils.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
@@ -61,17 +63,17 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 	std::vector<Vector2> texcoords;
 
 	std::string line;
+	std::string part;
 
 	while (std::getline(file, line))
 	{
-		std::istringstream ss(line);
-		std::string part;
-		ss >> part;
+		int lineIndex = 0;
+		StringUtils::readUntilSpace(line, lineIndex, part);
 
 		// new material file
 		if (part == "mtllib" && !info.ignoreMaterials)
 		{
-			ss >> part;
+			StringUtils::readUntilSpace(line, lineIndex, part);
 			processMaterialFile(objFileDirectory, part, result, materialsMap, currentId);
 			continue;
 		}
@@ -99,12 +101,16 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		// select material
 		if (part == "usemtl" && !info.ignoreMaterials)
 		{
-			ss >> part;
+			StringUtils::readUntilSpace(line, lineIndex, part);
 
-			if (!materialsMap.count(part))
-				throw std::runtime_error(tfm::format("Could not find material named \"%s\"", part));
+			if (materialsMap.count(part))
+				currentMaterialId = materialsMap[part];
+			else
+			{
+				log.logWarning("Could not find material named \"%s\"", part);
+				currentMaterialId = info.defaultMaterialId;
+			}
 
-			currentMaterialId = materialsMap[part];
 			continue;
 		}
 
@@ -113,9 +119,14 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		{
 			Vector3 vertex;
 
-			ss >> vertex.x;
-			ss >> vertex.y;
-			ss >> vertex.z;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			vertex.x = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			vertex.y = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			vertex.z = StringUtils::parseDouble(part);
 
 			vertices.push_back(transformation.transformPosition(vertex));
 			continue;
@@ -126,9 +137,14 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		{
 			Vector3 normal;
 
-			ss >> normal.x;
-			ss >> normal.y;
-			ss >> normal.z;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			normal.x = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			normal.y = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			normal.z = StringUtils::parseDouble(part);
 
 			normals.push_back(transformationInvT.transformDirection(normal).normalized());
 			continue;
@@ -139,8 +155,11 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		{
 			Vector2 texcoord;
 
-			ss >> texcoord.x;
-			ss >> texcoord.y;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			texcoord.x = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			texcoord.y = StringUtils::parseDouble(part);
 
 			texcoords.push_back(texcoord);
 			continue;
@@ -148,7 +167,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 
 		// face
 		if (part == "f")
-			processFace(ss, vertices, normals, texcoords, info, result, combinedGroup, currentId, currentMaterialId);
+			processFace(line.substr(lineIndex), vertices, normals, texcoords, info, result, combinedGroup, currentId, currentMaterialId);
 	}
 
 	file.close();
@@ -200,12 +219,12 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 	bool hasHeightMap = false;
 
 	std::string line;
+	std::string part;
 
 	while (std::getline(file, line))
 	{
-		std::istringstream ss(line);
-		std::string part;
-		ss >> part;
+		int lineIndex = 0;
+		StringUtils::readUntilSpace(line, lineIndex, part);
 
 		// new material
 		if (part == "newmtl")
@@ -227,7 +246,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			currentMaterial = Material();
 			currentMaterial.id = ++currentId;
 
-			ss >> part;
+			StringUtils::readUntilSpace(line, lineIndex, part);
 			materialsMap[part] = currentMaterial.id;
 
 			continue;
@@ -236,9 +255,14 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		// ambient reflectance
 		if (part == "Ka")
 		{
-			ss >> currentMaterial.ambientReflectance.r;
-			ss >> currentMaterial.ambientReflectance.g;
-			ss >> currentMaterial.ambientReflectance.b;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.ambientReflectance.r = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.ambientReflectance.g = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.ambientReflectance.b = StringUtils::parseDouble(part);
 
 			continue;
 		}
@@ -246,9 +270,14 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		// diffuse reflectance
 		if (part == "Kd")
 		{
-			ss >> currentMaterial.diffuseReflectance.r;
-			ss >> currentMaterial.diffuseReflectance.g;
-			ss >> currentMaterial.diffuseReflectance.b;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.diffuseReflectance.r = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.diffuseReflectance.g = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.diffuseReflectance.b = StringUtils::parseDouble(part);
 
 			continue;
 		}
@@ -256,9 +285,14 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		// specular reflectance
 		if (part == "Ks")
 		{
-			ss >> currentMaterial.specularReflectance.r;
-			ss >> currentMaterial.specularReflectance.g;
-			ss >> currentMaterial.specularReflectance.b;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.specularReflectance.r = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.specularReflectance.g = StringUtils::parseDouble(part);
+
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.specularReflectance.b = StringUtils::parseDouble(part);
 
 			continue;
 		}
@@ -266,14 +300,18 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		// shininess
 		if (part == "Ns")
 		{
-			ss >> currentMaterial.shininess;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.shininess = StringUtils::parseDouble(part);
+
 			continue;
 		}
 
 		// refractive index
 		if (part == "Ni")
 		{
-			ss >> currentMaterial.refractiveIndex;
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			currentMaterial.refractiveIndex = StringUtils::parseDouble(part);
+
 			continue;
 		}
 
@@ -284,9 +322,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.id = ++currentId;
 			currentMaterial.ambientMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasAmbientMap = true;
@@ -301,9 +338,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.id = ++currentId;
 			currentMaterial.diffuseMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasDiffuseMap = true;
@@ -318,9 +354,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.id = ++currentId;
 			currentMaterial.specularMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasSpecularMap = true;
@@ -336,9 +371,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.isBumpMap = true;
 			currentMaterial.normalMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasNormalMap = true;
@@ -354,9 +388,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.isNormalMap = true;
 			currentMaterial.normalMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasNormalMap = true;
@@ -371,9 +404,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.id = ++currentId;
 			currentMaterial.maskMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasMaskMap = true;
@@ -388,9 +420,8 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 			imageTexture.id = ++currentId;
 			currentMaterial.heightMapTextureId = imageTexture.id;
 
-			std::string imageFilePath;
-			ss >> imageFilePath;
-			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, imageFilePath);
+			StringUtils::readUntilSpace(line, lineIndex, part);
+			imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 
 			result.textures.push_back(imageTexture);
 			hasHeightMap = true;
@@ -405,29 +436,32 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 		result.materials.push_back(currentMaterial);
 }
 
-void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup &combinedGroup, int& currentId, int currentMaterialId)
+void ObjModelLoader::processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup &combinedGroup, int& currentId, int currentMaterialId)
 {
+	Log& log = App::getLog();
+
 	std::vector<int> vertexIndices;
 	std::vector<int> normalIndices;
 	std::vector<int> texcoordIndices;
 
-	std::string part;
-	ss >> part;
-
 	// determine what indices are available from the slash count
-	int slashCount = (int)std::count(part.begin(), part.end(), '/');
-	bool doubleSlash = (part.find("//") != std::string::npos);
+	int slashCount = (int)std::count(line.begin(), line.end(), '/');
+	bool doubleSlash = (line.find("//") != std::string::npos);
 	bool hasTexcoords = (slashCount > 0 && !doubleSlash);
 	bool hasNormals = (slashCount > 1);
 
-	do
-	{
-		// stringstream likes spaces
-		std::replace(part.begin(), part.end(), '/', ' ');
-		std::istringstream ssp(part);
+	std::string part1;
+	int lineIndex1 = 0;
 
-		int vertexIndex;
-		ssp >> vertexIndex;
+	while (StringUtils::readUntilSpace(line, lineIndex1, part1))
+	{
+		std::replace(part1.begin(), part1.end(), '/', ' ');
+
+		std::string part2;
+		int lineIndex2 = 0;
+
+		StringUtils::readUntilSpace(part1, lineIndex2, part2);
+		int vertexIndex = strtol(part2.c_str(), nullptr, 10);
 
 		if (vertexIndex < 0)
 			vertexIndex = (int)vertices.size() + vertexIndex;
@@ -435,14 +469,17 @@ void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& v
 			vertexIndex--;
 
 		if (vertexIndex < 0 || vertexIndex >= (int)vertices.size())
-			throw std::runtime_error("Vertex index was out of bounds");
+		{
+			log.logWarning("Vertex index (%s) was out of bounds", vertexIndex);
+			return;
+		}
 
 		vertexIndices.push_back(vertexIndex);
 
 		if (hasTexcoords)
 		{
-			int texcoordIndex;
-			ssp >> texcoordIndex;
+			StringUtils::readUntilSpace(part1, lineIndex2, part2);
+			int texcoordIndex = strtol(part2.c_str(), nullptr, 10);
 
 			if (texcoordIndex < 0)
 				texcoordIndex = (int)texcoords.size() + texcoordIndex;
@@ -450,15 +487,18 @@ void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& v
 				texcoordIndex--;
 
 			if (texcoordIndex < 0 || texcoordIndex >= (int)texcoords.size())
-				throw std::runtime_error("Texcoord index was out of bounds");
+			{
+				log.logWarning("Texcoord index (%s) was out of bounds", texcoordIndex);
+				return;
+			}
 
 			texcoordIndices.push_back(texcoordIndex);
 		}
 
 		if (hasNormals)
 		{
-			int normalIndex;
-			ssp >> normalIndex;
+			StringUtils::readUntilSpace(part1, lineIndex2, part2);
+			int normalIndex = strtol(part2.c_str(), nullptr, 10);
 
 			if (normalIndex < 0)
 				normalIndex = (int)normals.size() + normalIndex;
@@ -466,15 +506,20 @@ void ObjModelLoader::processFace(std::istringstream& ss, std::vector<Vector3>& v
 				normalIndex--;
 
 			if (normalIndex < 0 || normalIndex >= (int)normals.size())
-				throw std::runtime_error("Normal index was out of bounds");
+			{
+				log.logWarning("Normal index (%s) was out of bounds", normalIndex);
+				return;
+			}
 
 			normalIndices.push_back(normalIndex);
 		}
-
-	} while (ss >> part);
+	}
 
 	if (vertexIndices.size() < 3)
-		throw std::runtime_error("Too few vertices in a face");
+	{
+		log.logWarning("Too few vertices (%s) in a face", vertexIndices.size());
+		return;
+	}
 
 	// triangulate
 	for (int i = 2; i < (int)vertexIndices.size(); ++i)

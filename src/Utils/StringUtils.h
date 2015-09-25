@@ -11,6 +11,8 @@ namespace Raycer
 	{
 	public:
 
-		static bool endsWith(const std::string& text, const std::string& end);
+		static bool endsWith(const std::string& input, const std::string& end);
+		static bool readUntilSpace(const std::string& input, int& startIndex, std::string& result);
+		static double parseDouble(const std::string& input);
 	};
 }
