@@ -22,8 +22,8 @@ void Raycer::Plane::initialize(const Scene& scene)
 	uAxis = Vector3(normal.y, normal.z, -normal.x).normalized();
 	vAxis = uAxis.cross(normal).normalized();
 
-	double min = std::numeric_limits<double>::lowest();
-	double max = std::numeric_limits<double>::max();
+	double min = -1000000.0;
+	double max = 1000000.0;
 
 	aabb = AABB::createFromMinMax(Vector3(min, min, min), Vector3(max, max, max));
 }

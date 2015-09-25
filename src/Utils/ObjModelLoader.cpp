@@ -63,12 +63,15 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 	std::vector<Vector2> texcoords;
 
 	std::string line;
-	std::string part;
 
 	while (std::getline(file, line))
 	{
 		int lineIndex = 0;
+		std::string part;
 		StringUtils::readUntilSpace(line, lineIndex, part);
+
+		if (part.size() == 0)
+			continue;
 
 		// new material file
 		if (part == "mtllib" && !info.ignoreMaterials)
@@ -219,12 +222,15 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 	bool hasHeightMap = false;
 
 	std::string line;
-	std::string part;
 
 	while (std::getline(file, line))
 	{
 		int lineIndex = 0;
+		std::string part;
 		StringUtils::readUntilSpace(line, lineIndex, part);
+
+		if (part.size() == 0)
+			continue;
 
 		// new material
 		if (part == "newmtl")
@@ -444,14 +450,18 @@ void ObjModelLoader::processFace(const std::string& line, std::vector<Vector3>& 
 	std::vector<int> normalIndices;
 	std::vector<int> texcoordIndices;
 
+	std::string part1;
+	int lineIndex1 = 0;
+
+	StringUtils::readUntilSpace(line, lineIndex1, part1);
+
 	// determine what indices are available from the slash count
-	int slashCount = (int)std::count(line.begin(), line.end(), '/');
-	bool doubleSlash = (line.find("//") != std::string::npos);
+	int slashCount = (int)std::count(part1.begin(), part1.end(), '/');
+	bool doubleSlash = (part1.find("//") != std::string::npos);
 	bool hasTexcoords = (slashCount > 0 && !doubleSlash);
 	bool hasNormals = (slashCount > 1);
 
-	std::string part1;
-	int lineIndex1 = 0;
+	lineIndex1 = 0;
 
 	while (StringUtils::readUntilSpace(line, lineIndex1, part1))
 	{
