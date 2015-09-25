@@ -9,7 +9,6 @@
 
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/Primitives/FlatBVH.h"
-#include "Raytracing/AABB.h"
 
 namespace Raycer
 {
@@ -42,7 +41,6 @@ namespace Raycer
 	private:
 
 		std::vector<Primitive*> primitives;
-		AABB aabb;
 
 		friend class cereal::access;
 

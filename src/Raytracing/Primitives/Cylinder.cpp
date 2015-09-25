@@ -20,6 +20,8 @@ using namespace Raycer;
 void Raycer::Cylinder::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	aabb = AABB::createFromMinMax(Vector3(-radius, 0.0, radius), Vector3(radius, height, -radius));
 }
 
 bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -114,7 +116,7 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 AABB Cylinder::getAABB() const
 {
-	return AABB::createFromMinMax(Vector3(-radius, 0.0, radius), Vector3(radius, height, -radius));
+	return aabb;
 }
 
 void Cylinder::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -124,4 +126,6 @@ void Cylinder::transform(const Vector3& scale, const EulerAngle& rotate, const V
 
 	radius *= scale.x;
 	height *= scale.x;
+
+	aabb = AABB::createFromMinMax(Vector3(-radius, 0.0, radius), Vector3(radius, height, -radius));
 }

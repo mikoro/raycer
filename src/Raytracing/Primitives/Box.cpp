@@ -17,6 +17,8 @@ using namespace Raycer;
 void Raycer::Box::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	aabb = AABB::createFromCenterExtent(position, extent);
 }
 
 // http://tavianator.com/fast-branchless-raybounding-box-intersections-part-2-nans/
@@ -120,7 +122,7 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 
 AABB Box::getAABB() const
 {
-	return AABB::createFromCenterExtent(position, extent);
+	return aabb;
 }
 
 void Box::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -129,4 +131,6 @@ void Box::transform(const Vector3& scale, const EulerAngle& rotate, const Vector
 
 	position += translate;
 	extent *= scale;
+
+	aabb = AABB::createFromCenterExtent(position, extent);
 }

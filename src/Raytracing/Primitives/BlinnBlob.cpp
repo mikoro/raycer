@@ -20,6 +20,12 @@ using namespace Raycer;
 void Raycer::BlinnBlob::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	for (const BlinnBlobDescription& blob : blobs)
+	{
+		if (!blob.isNegative)
+			aabb.expand(AABB::createFromCenterExtent(blob.position, Vector3(blob.radius * 2.0, blob.radius * 2.0, blob.radius * 2.0)));
+	}
 }
 
 bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -134,14 +140,6 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 
 AABB BlinnBlob::getAABB() const
 {
-	AABB aabb;
-
-	for (const BlinnBlobDescription& blob : blobs)
-	{
-		if (!blob.isNegative)
-			aabb.expand(AABB::createFromCenterExtent(blob.position, Vector3(blob.radius * 2.0, blob.radius * 2.0, blob.radius * 2.0)));
-	}
-
 	return aabb;
 }
 

@@ -30,6 +30,9 @@ namespace
 void Raycer::CSG::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	aabb.expand(leftPrimitive->getAABB());
+	aabb.expand(rightPrimitive->getAABB());
 }
 
 bool CSG::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -150,11 +153,6 @@ bool CSG::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 
 AABB CSG::getAABB() const
 {
-	AABB aabb;
-
-	aabb.expand(leftPrimitive->getAABB());
-	aabb.expand(rightPrimitive->getAABB());
-
 	return aabb;
 }
 
@@ -162,4 +160,8 @@ void CSG::transform(const Vector3& scale, const EulerAngle& rotate, const Vector
 {
 	leftPrimitive->transform(scale, rotate, translate);
 	rightPrimitive->transform(scale, rotate, translate);
+
+	aabb = AABB();
+	aabb.expand(leftPrimitive->getAABB());
+	aabb.expand(rightPrimitive->getAABB());
 }

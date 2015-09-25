@@ -68,7 +68,12 @@ void PrimitiveGroup::transform(const Vector3& scale, const EulerAngle& rotate, c
 		bvh.transform(scale, rotate, translate);
 	else
 	{
+		aabb = AABB();
+
 		for (Primitive* primitive : primitives)
+		{
 			primitive->transform(scale, rotate, translate);
+			aabb.expand(primitive->getAABB());
+		}
 	}
 }

@@ -42,6 +42,8 @@ void Raycer::Triangle::initialize(const Scene& scene)
 		tangent = normal.cross(Vector3::ALMOST_UP).normalized();
 		bitangent = tangent.cross(normal).normalized();
 	}
+
+	aabb = AABB::createFromVertices(vertices[0], vertices[1], vertices[2]);
 }
 
 // Möller-Trumbore algorithm
@@ -121,7 +123,7 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 AABB Triangle::getAABB() const
 {
-	return AABB::createFromVertices(vertices[0], vertices[1], vertices[2]);
+	return aabb;
 }
 
 void Triangle::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -146,4 +148,6 @@ void Triangle::transform(const Vector3& scale, const EulerAngle& rotate, const V
 	normal = transformationInvT.transformDirection(normal).normalized();
 	tangent = transformationInvT.transformDirection(tangent).normalized();
 	bitangent = transformationInvT.transformDirection(bitangent).normalized();
+
+	aabb = AABB::createFromVertices(vertices[0], vertices[1], vertices[2]);
 }

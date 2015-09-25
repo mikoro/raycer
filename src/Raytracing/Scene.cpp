@@ -1,6 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <chrono>
 #include <map>
 #include <sstream>
 #include <stdexcept>
@@ -203,6 +204,11 @@ void Scene::addModel(const ModelLoaderResult& result)
 
 void Scene::initialize()
 {
+	Log& log = App::getLog();
+	log.logInfo("Initializing the scene");
+
+	auto startTime = std::chrono::high_resolution_clock::now();
+
 	std::vector<Texture*> texturesList;
 	
 	// MODELS
@@ -474,4 +480,9 @@ void Scene::initialize()
 		primitives.visible.clear();
 		primitives.visible.push_back(&rootBVH.bvh);
 	}
+
+	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
+	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+
+	log.logInfo("Scene initialization finished (time: %d ms)", milliseconds);
 }

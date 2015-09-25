@@ -7,6 +7,7 @@
 
 #include "cereal/cereal.hpp"
 
+#include "Raytracing/AABB.h"
 #include "Math/Vector2.h"
 
 namespace Raycer
@@ -14,7 +15,6 @@ namespace Raycer
 	class Scene;
 	class Ray;
 	struct Intersection;
-	class AABB;
 	class Vector3;
 	class EulerAngle;
 	class Material;
@@ -32,8 +32,12 @@ namespace Raycer
 
 		int id = 0;
 		int materialId = 0;
-		Material* material = nullptr;
 		bool invisible = false;
+		Material* material = nullptr;
+
+	protected:
+
+		AABB aabb;
 
 	private:
 

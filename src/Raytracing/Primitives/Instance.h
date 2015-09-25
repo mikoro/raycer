@@ -8,7 +8,6 @@
 #include "cereal/cereal.hpp"
 
 #include "Raytracing/Primitives/Primitive.h"
-#include "Raytracing/AABB.h"
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"
 #include "Math/Matrix4x4.h"
@@ -53,7 +52,6 @@ namespace Raycer
 		Matrix4x4 cachedTransformation;
 		Matrix4x4 cachedTransformationInv;
 		Matrix4x4 cachedTransformationInvT;
-		AABB cachedAabb;
 
 		friend class cereal::access;
 

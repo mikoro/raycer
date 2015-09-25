@@ -80,7 +80,7 @@ bool FlatBVH::intersect(const Ray& ray, Intersection& intersection, std::vector<
 
 AABB FlatBVH::getAABB() const
 {
-	return flatNodes[0].aabb;
+	return aabb;
 }
 
 void FlatBVH::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -209,6 +209,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	}
 
 	hasBeenBuilt = true;
+	aabb = flatNodes[0].aabb;
 
 	for (const Primitive* primitive : orderedPrimitives)
 		orderedPrimitiveIds.push_back(primitive->id);

@@ -21,6 +21,11 @@ void Raycer::Plane::initialize(const Scene& scene)
 
 	uAxis = Vector3(normal.y, normal.z, -normal.x).normalized();
 	vAxis = uAxis.cross(normal).normalized();
+
+	double min = std::numeric_limits<double>::lowest();
+	double max = std::numeric_limits<double>::max();
+
+	aabb = AABB::createFromMinMax(Vector3(min, min, min), Vector3(max, max, max));
 }
 
 bool Plane::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -72,8 +77,7 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 
 AABB Plane::getAABB() const
 {
-	// TODO: create bounds for the plane aabb
-	return AABB::createFromMinMax(Vector3(-1000.0, -1000.0, -1000.0), Vector3(1000.0, 1000.0, 1000.0));
+	return aabb;
 }
 
 void Plane::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)

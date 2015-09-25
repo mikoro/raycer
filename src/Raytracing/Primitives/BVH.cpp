@@ -12,6 +12,7 @@
 #include "Raytracing/Primitives/PrimitiveGroup.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
+#include "Raytracing/AABB.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Math/Vector3.h"

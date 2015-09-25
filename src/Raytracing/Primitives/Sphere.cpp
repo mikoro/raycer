@@ -17,6 +17,8 @@ using namespace Raycer;
 void Raycer::Sphere::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	aabb = AABB::createFromCenterExtent(position, Vector3(radius * 2.0, radius * 2.0, radius * 2.0));
 }
 
 // http://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
@@ -115,7 +117,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 
 AABB Sphere::getAABB() const
 {
-	return AABB::createFromCenterExtent(position, Vector3(radius * 2.0, radius * 2.0, radius * 2.0));
+	return aabb;
 }
 
 void Sphere::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -124,4 +126,6 @@ void Sphere::transform(const Vector3& scale, const EulerAngle& rotate, const Vec
 
 	radius *= scale.x;
 	position += translate;
+
+	aabb = AABB::createFromCenterExtent(position, Vector3(radius * 2.0, radius * 2.0, radius * 2.0));
 }

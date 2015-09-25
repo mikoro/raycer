@@ -20,6 +20,8 @@ using namespace Raycer;
 void Raycer::Torus::initialize(const Scene& scene)
 {
 	(void)scene;
+
+	aabb = AABB::createFromMinMax(Vector3(-outerRadius - innerRadius, -outerRadius - innerRadius, innerRadius), Vector3(outerRadius + innerRadius, outerRadius + innerRadius, -innerRadius));
 }
 
 bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -81,7 +83,7 @@ bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 
 AABB Torus::getAABB() const
 {
-	return AABB::createFromMinMax(Vector3(-outerRadius - innerRadius, -outerRadius - innerRadius, innerRadius), Vector3(outerRadius + innerRadius, outerRadius + innerRadius, -innerRadius));
+	return aabb;
 }
 
 void Torus::transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate)
@@ -91,4 +93,6 @@ void Torus::transform(const Vector3& scale, const EulerAngle& rotate, const Vect
 
 	outerRadius *= scale.x;
 	innerRadius *= scale.x;
+
+	aabb = AABB::createFromMinMax(Vector3(-outerRadius - innerRadius, -outerRadius - innerRadius, innerRadius), Vector3(outerRadius + innerRadius, outerRadius + innerRadius, -innerRadius));
 }

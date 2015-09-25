@@ -25,6 +25,8 @@ void Raycer::Instance::initialize(const Scene& scene)
 	cachedTransformation = translation2 * rotation * scaling * translation1;
 	cachedTransformationInv = cachedTransformation.inverted();
 	cachedTransformationInvT = cachedTransformationInv.transposed();
+
+	aabb = primitive->getAABB().transformed(scale, rotate, translate);
 }
 
 bool Instance::intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections)
@@ -112,7 +114,7 @@ bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std
 
 AABB Instance::getAABB() const
 {
-	return primitive->getAABB().transformed(scale, rotate, translate);
+	return aabb;
 }
 
 void Instance::transform(const Vector3& scale_, const EulerAngle& rotate_, const Vector3& translate_)
@@ -131,4 +133,6 @@ void Instance::transform(const Vector3& scale_, const EulerAngle& rotate_, const
 	cachedTransformation = translation2 * rotation * scaling * translation1;
 	cachedTransformationInv = cachedTransformation.inverted();
 	cachedTransformationInvT = cachedTransformationInv.transposed();
+
+	aabb = primitive->getAABB().transformed(scale, rotate, translate);
 }
