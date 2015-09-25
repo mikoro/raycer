@@ -11,5 +11,5 @@ textures
 
 misc
  - update ply reader -> ply loader
- - optimize instance aabb caching
- - framebuffer resize 0 bug
+ - optimize image loader
+ - optimize obj loader

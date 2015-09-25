@@ -270,6 +270,9 @@ void WindowRunner::windowResized(int width, int height)
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
 
+	if (width == 0 || height == 0)
+		return;
+
 	windowWidth = width;
 	windowHeight = height;
 
