@@ -63,11 +63,14 @@ namespace Raycer
 	{
 	public:
 
-		static const Image* getImage(const std::string& fileName);
+		static const Image* loadImage(const std::string& fileName);
+		static int getImageIndex(const std::string& fileName);
+		static const std::vector<Image>& getImages();
 		static void clear();
 
 	private:
 
-		static std::map<std::string, Image> imageMap;
+		static std::map<std::string, int> imageIndexMap;
+		static std::vector<Image> images;
 	};
 }

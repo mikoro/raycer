@@ -49,7 +49,9 @@ namespace
 		(void)cb;
 		(void)userData;
 
-		App::getLog().logError("OpenCL error: %s", message);
+		std::string tempMessage = tfm::format("OpenCL error: %s", message);
+		std::replace(tempMessage.begin(), tempMessage.end(), '\n', ' ');
+		App::getLog().logError(tempMessage);
 	}
 }
 

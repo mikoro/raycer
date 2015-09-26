@@ -110,7 +110,7 @@ void CLRaytracer::initialize(const Scene& scene)
 	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 
-	createTextureImages(scene);
+	createTextureImages();
 }
 
 void CLRaytracer::resizeImageBuffer(int width, int height)
@@ -315,8 +315,9 @@ void CLRaytracer::uploadCameraData()
 	CLManager::checkError(status, "Could not write camera buffer");
 }
 
-void CLRaytracer::createTextureImages(const Scene& scene)
+void CLRaytracer::createTextureImages()
 {
+	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
 
@@ -324,27 +325,41 @@ void CLRaytracer::createTextureImages(const Scene& scene)
 	imageFormat.image_channel_data_type = CL_FLOAT;
 	imageFormat.image_channel_order = CL_RGBA;
 
-	for (const ImageTexture& texture : scene.textures.imageTextures)
+	dummyTextureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, 1, 1, 0, NULL, &status);
+	CLManager::checkError(status, "Could not create dummy texture image");
+
+	const std::vector<Image>& images = ImagePool::getImages();
+	int totalBytes = 0;
+
+	for (int i = 0; i < KERNEL_TEXTURE_COUNT && i < (int)images.size(); ++i)
 	{
-		int textureImageWidth = texture.getImage()->getWidth();
-		int textureImageHeight = texture.getImage()->getHeight();
+		const Image& image = images[i];
+
+		int textureImageWidth = image.getWidth();
+		int textureImageHeight = image.getHeight();
 
 		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, NULL, &status);
 		CLManager::checkError(status, "Could not create texture image");
 
-		std::vector<float> floatPixelData = texture.getImage()->getFloatData();
+		std::vector<float> floatPixelData = image.getFloatData();
+		totalBytes += (int)floatPixelData.size() * sizeof(float);
 
 		size_t origin[3] = { 0, 0, 0 };
 		size_t region[3] = { (size_t)textureImageWidth, (size_t)textureImageHeight, 1 };
 
 		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, NULL, NULL);
-		CLManager::checkError(status, "Could not write texture image buffer");
 
+		if (status == CL_MEM_OBJECT_ALLOCATION_FAILURE)
+		{
+			log.logWarning("GPU video memory limit has been reached");
+			break;
+		}
+
+		CLManager::checkError(status, "Could not write texture image buffer");
 		textureImagePtrs.push_back(textureImagePtr);
 	}
 
-	dummyTextureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, 1, 1, 0, NULL, &status);
-	CLManager::checkError(status, "Could not create dummy texture image");
+	log.logInfo("Total texture memory used: %.2f MB", (float)totalBytes / 1024.0 / 1024.0);
 
 	for (int i = 0; i < (int)textureImagePtrs.size(); ++i)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");

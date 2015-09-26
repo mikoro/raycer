@@ -20,7 +20,7 @@ kernel void raytrace(
 	Intersection intersection = constructIntersection();
 	float4 finalColor = raytracer->backgroundColor;
 
-	intersectBVH(nodes, triangles, materials, &ray, &intersection);
+	intersectBVH(nodes, triangles, materials, ray, &intersection);
 
 	if (intersection.wasFound)
 	{

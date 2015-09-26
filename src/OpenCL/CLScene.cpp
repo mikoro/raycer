@@ -57,12 +57,12 @@ namespace
 
 	int findTextureIndex(const std::vector<ImageTexture>& textures, int textureId)
 	{
-		auto result = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture) { return texture.id == textureId; });
+		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture) { return texture.id == textureId; });
 
-		if (result == textures.end())
+		if (it == textures.end())
 			return -1;
 
-		return (int)(result - textures.begin());
+		return (*it).getImagePoolIndex();
 	}
 }
 

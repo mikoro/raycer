@@ -25,7 +25,9 @@ namespace Raycer
 		Color getColor(const Vector2& texcoord, const Vector3& position) const;
 		double getValue(const Vector2& texcoord, const Vector3& position) const;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const;
+
 		const Image* getImage() const;
+		int getImagePoolIndex() const;
 
 		std::string imageFilePath;
 		bool isBumpMap = false;

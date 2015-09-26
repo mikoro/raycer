@@ -10,7 +10,7 @@ using namespace Raycer;
 
 void ImageTexture::initialize()
 {
-	image = ImagePool::getImage(imageFilePath);
+	image = ImagePool::loadImage(imageFilePath);
 
 	if (isBumpMap)
 	{
@@ -90,4 +90,9 @@ Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 const Image* ImageTexture::getImage() const
 {
 	return image;
+}
+
+int ImageTexture::getImagePoolIndex() const
+{
+	return ImagePool::getImageIndex(imageFilePath);
 }

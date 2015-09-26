@@ -316,17 +316,32 @@ std::vector<float> Image::getFloatData() const
 	return floatPixelData;
 }
 
-std::map<std::string, Image> ImagePool::imageMap = std::map<std::string, Image>();
+std::map<std::string, int> ImagePool::imageIndexMap = std::map<std::string, int>();
+std::vector<Image> ImagePool::images = std::vector<Image>();
 
-const Image* ImagePool::getImage(const std::string& fileName)
+const Image* ImagePool::loadImage(const std::string& fileName)
 {
-	if (!imageMap.count(fileName))
-		imageMap[fileName] = Image(fileName);
+	if (!imageIndexMap.count(fileName))
+	{
+		images.push_back(Image(fileName));
+		imageIndexMap[fileName] = (int)images.size() - 1;
+	}
 
-	return &imageMap[fileName];
+	return &images[imageIndexMap[fileName]];
+}
+
+int ImagePool::getImageIndex(const std::string& fileName)
+{
+	return imageIndexMap[fileName];
+}
+
+const std::vector<Image>& ImagePool::getImages()
+{
+	return images;
 }
 
 void ImagePool::clear()
 {
-	imageMap.clear();
+	imageIndexMap.clear();
+	images.clear();
 }

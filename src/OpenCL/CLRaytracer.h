@@ -33,10 +33,10 @@ namespace Raycer
 
 	private:
 
-		void createTextureImages(const Scene& scene);
 		void createBuffers();
 		void uploadFullData();
 		void uploadCameraData();
+		void createTextureImages();
 		
 		CLScene clScene;
 
@@ -58,7 +58,7 @@ namespace Raycer
 		
 		std::vector<cl_mem> textureImagePtrs;
 		cl_mem dummyTextureImagePtr = nullptr;
-		const int KERNEL_TEXTURE_COUNT = 10;
+		const int KERNEL_TEXTURE_COUNT = 60;
 
 		cl_program raytraceProgram = nullptr;
 		cl_kernel raytraceKernel = nullptr;
