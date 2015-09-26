@@ -59,6 +59,8 @@ CLRaytracer::~CLRaytracer()
 	for (cl_mem textureImagePtr : textureImagePtrs)
 		releaseMemObject(textureImagePtr);
 
+	releaseMemObject(dummyTextureImagePtr);
+
 	if (raytraceKernel != nullptr)
 	{
 		clReleaseKernel(raytraceKernel);
@@ -81,11 +83,12 @@ void CLRaytracer::initialize(const Scene& scene)
 	uploadFullData();
 
 	std::vector<std::string> sourceFiles = {
-		"data/opencl/types.cl",
+		"data/opencl/common.cl",
 		"data/opencl/structs.cl",
 		"data/opencl/constructors.cl",
 		"data/opencl/camera.cl",
 		"data/opencl/intersections.cl",
+		"data/opencl/textures.cl",
 		"data/opencl/raytrace.cl"
 	};
 
@@ -169,7 +172,7 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 
 	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue raytrace kernel");
-
+	
 	if (settings.general.interactive)
 		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object release");
 
@@ -337,8 +340,15 @@ void CLRaytracer::createTextureImages(const Scene& scene)
 		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, NULL, NULL);
 		CLManager::checkError(status, "Could not write texture image buffer");
 
-		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtr), "Could not set kernel argument (texture image)");
-
 		textureImagePtrs.push_back(textureImagePtr);
 	}
+
+	dummyTextureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, 1, 1, 0, NULL, &status);
+	CLManager::checkError(status, "Could not create dummy texture image");
+
+	for (int i = 0; i < (int)textureImagePtrs.size(); ++i)
+		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");
+
+	for (int i = 0; i < (KERNEL_TEXTURE_COUNT - (int)textureImagePtrs.size()); ++i)
+		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &dummyTextureImagePtr), "Could not set kernel argument (dummy texture image)");
 }

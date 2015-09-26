@@ -19,19 +19,25 @@ Scene Scene::createTestScene19()
 
 	// GROUND MODEL //
 
-	CheckerTexture groundTexture;
+// 	CheckerTexture groundTexture;
+// 	groundTexture.id = 1;
+// 	groundTexture.color1 = Color(0.2, 0.2, 0.2);
+// 	groundTexture.color2 = Color(0.4, 0.4, 0.4);
+// 	groundTexture.intensity = 1.0;
+// 	groundTexture.stripeMode = true;
+// 	groundTexture.stripeWidth = 0.02;
+
+	ImageTexture groundTexture;
 	groundTexture.id = 1;
-	groundTexture.color1 = Color(0.2, 0.2, 0.2);
-	groundTexture.color2 = Color(0.4, 0.4, 0.4);
 	groundTexture.intensity = 1.0;
-	groundTexture.stripeMode = true;
-	groundTexture.stripeWidth = 0.02;
+	groundTexture.imageFilePath = "data/images/wood_floor.jpg";
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
-	groundMaterial.texcoordScale = Vector2(900.0, 900.0);
+	//groundMaterial.texcoordScale = Vector2(900.0, 900.0);
+	groundMaterial.texcoordScale = Vector2(50.0, 50.0);
 
 	ModelLoaderInfo modelInfo(ModelLoaderInfoType::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/square.obj";
@@ -41,7 +47,7 @@ Scene Scene::createTestScene19()
 	modelInfo.rotate = EulerAngle(-90.0, 0.0, 0.0);
 	modelInfo.translate = Vector3(-500.0, 0.0, 500.0);
 
-	scene.textures.checkerTextures.push_back(groundTexture);
+	scene.textures.imageTextures.push_back(groundTexture);
 	scene.materials.push_back(groundMaterial);
 	scene.models.push_back(modelInfo);
 

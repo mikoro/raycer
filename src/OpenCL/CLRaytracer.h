@@ -57,6 +57,8 @@ namespace Raycer
 		cl_mem outputImagePtr = nullptr;
 		
 		std::vector<cl_mem> textureImagePtrs;
+		cl_mem dummyTextureImagePtr = nullptr;
+		const int KERNEL_TEXTURE_COUNT = 10;
 
 		cl_program raytraceProgram = nullptr;
 		cl_kernel raytraceKernel = nullptr;
