@@ -8,8 +8,3 @@ lighting
 
 textures
  - EWA texture filtering
-
-misc
- - update ply reader -> ply loader
- - change texcoord scaling to multiply
- 

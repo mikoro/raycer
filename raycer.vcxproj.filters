@@ -196,9 +196,6 @@
     <ClCompile Include="src\Tests\SamplerTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\PlyReader.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tests\PlyReaderTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -376,6 +373,9 @@
     <ClCompile Include="src\TestScenes\TestScene19.cpp">
       <Filter>TestScenes</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\PlyModelLoader.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -517,9 +517,6 @@
     <ClInclude Include="src\Raytracing\Textures\ValueNoiseTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
-    <ClInclude Include="src\Utils\PlyReader.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Primitives\Box.h">
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
@@ -635,9 +632,6 @@
       <Filter>Raytracing\Primitives</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\ModelLoader.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\ObjModelLoader.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>

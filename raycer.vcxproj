@@ -262,7 +262,7 @@
     <ClCompile Include="src\Utils\Log.cpp" />
     <ClCompile Include="src\Utils\ObjModelLoader.cpp" />
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
-    <ClCompile Include="src\Utils\PlyReader.cpp" />
+    <ClCompile Include="src\Utils\PlyModelLoader.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
     <ClCompile Include="src\Utils\Settings.cpp" />
     <ClCompile Include="src\Utils\StringUtils.cpp" />
@@ -350,9 +350,7 @@
     <ClInclude Include="src\Utils\IniReader.h" />
     <ClInclude Include="src\Utils\Log.h" />
     <ClInclude Include="src\Utils\ModelLoader.h" />
-    <ClInclude Include="src\Utils\ObjModelLoader.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
-    <ClInclude Include="src\Utils\PlyReader.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
     <ClInclude Include="src\Utils\Settings.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />

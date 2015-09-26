@@ -22,7 +22,6 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
-#include "Utils/ObjModelLoader.h"
 
 using namespace Raycer;
 
@@ -211,13 +210,15 @@ void Scene::initialize()
 	auto startTime = std::chrono::high_resolution_clock::now();
 
 	std::vector<Texture*> texturesList;
-	
+
 	// MODELS
 
 	for (const ModelLoaderInfo& modelInfo : models)
 	{
 		if (StringUtils::endsWith(modelInfo.modelFilePath, ".obj"))
-			addModel(ObjModelLoader::readFile(modelInfo));
+			addModel(ModelLoader::readObjFile(modelInfo));
+		else if (StringUtils::endsWith(modelInfo.modelFilePath, ".ply"))
+			addModel(ModelLoader::readPlyFile(modelInfo));
 	}
 
 	models.clear();

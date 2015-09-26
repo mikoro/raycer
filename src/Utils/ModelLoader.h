@@ -93,4 +93,12 @@ namespace Raycer
 		std::vector<PrimitiveGroup> groups;
 		std::vector<Instance> instances;
 	};
+
+	class ModelLoader
+	{
+	public:
+
+		static ModelLoaderResult readObjFile(const ModelLoaderInfo& info);
+		static ModelLoaderResult readPlyFile(const ModelLoaderInfo& info);
+	};
 }

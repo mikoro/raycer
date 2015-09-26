@@ -4,7 +4,6 @@
 #include <random>
 
 #include "Raytracing/Scene.h"
-#include "Utils/ObjModelLoader.h"
 
 using namespace Raycer;
 
