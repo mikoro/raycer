@@ -63,6 +63,7 @@ namespace Raycer
 	public:
 
 		static const Image* getImage(const std::string& fileName);
+		static void clear();
 
 	private:
 

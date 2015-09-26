@@ -84,6 +84,8 @@ void DefaultState::update(double timeStep)
 		if (currentTestSceneNumber > Scene::TEST_SCENE_COUNT)
 			currentTestSceneNumber = Scene::TEST_SCENE_COUNT;
 
+		ImagePool::clear();
+
 		try
 		{
 			scene = Scene::createTestScene(currentTestSceneNumber);

@@ -5,7 +5,7 @@
 
 using namespace Raycer;
 
-// material preview model
+// material preview model (only triangles)
 Scene Scene::createTestScene19()
 {
 	Scene scene;
@@ -33,11 +33,8 @@ Scene Scene::createTestScene19()
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(900.0, 900.0);
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/square.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.defaultMaterialId = groundMaterial.id;
 	modelInfo.idStartOffset = 1000;
 	modelInfo.scale = Vector3(1000.0, 1000.0, 1000.0);
@@ -62,11 +59,8 @@ Scene Scene::createTestScene19()
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
 
-	modelInfo = ModelLoaderInfo();
+	modelInfo = ModelLoaderInfo(ModelLoaderInfoType::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sphere.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.defaultMaterialId = sphereMaterial.id;
 	modelInfo.idStartOffset = 2000;
 	modelInfo.scale = Vector3(1000.0, 1000.0, 1000.0);
@@ -78,11 +72,8 @@ Scene Scene::createTestScene19()
 
 	// MATPREVIEW MODEL //
 
-	modelInfo = ModelLoaderInfo();
+	modelInfo = ModelLoaderInfo(ModelLoaderInfoType::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/matpreview/matpreview.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.idStartOffset = 3000;
 
 	scene.models.push_back(modelInfo);

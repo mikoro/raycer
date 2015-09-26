@@ -107,5 +107,9 @@ Scene Scene::createTestScene14()
 	scene.materials.push_back(boxMaterial);
 	scene.primitives.boxes.push_back(box);
 
+	// LIGHTS //
+
+	scene.lights.ambientLight.intensity = 0.0;
+
 	return scene;
 }

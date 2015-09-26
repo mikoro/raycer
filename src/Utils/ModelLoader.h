@@ -18,6 +18,13 @@
 
 namespace Raycer
 {
+	/*
+	TRIANGLES: only generate visible triangles
+	GROUPS: generate invisible triangles, generate invisible primitive groups based on groups in model file, generate visible instances to primitive groups (generated IDs)
+	COMBINED_GROUP: generate invisible triangles, generate one invisible primitive group to all triangles, generate one visible instance to the primitive group (preset IDs)
+	*/
+	enum class ModelLoaderInfoType { TRIANGLES, GROUPS, COMBINED_GROUP };
+
 	struct ModelLoaderInfo
 	{
 		std::string modelFilePath;
@@ -27,16 +34,35 @@ namespace Raycer
 		Material baseMaterial;
 		bool enableGroups = false;
 		bool enableGroupsInstances = false;
-		bool enableCombinedGroup = true;
-		bool enableCombinedGroupInstance = true;
-		bool invisibleTriangles = true;
-		bool invisibleGroups = true;
-		bool invisibleCombinedGroup = true;
+		bool enableCombinedGroup = false;
+		bool enableCombinedGroupInstance = false;
+		bool invisibleTriangles = false;
+		bool invisibleGroups = false;
+		bool invisibleCombinedGroup = false;
 		bool ignoreMaterials = false;
 		int defaultMaterialId = 0;
-		int idStartOffset = 1000000;
+		int idStartOffset = 0;
 		int combinedGroupId = 0;
 		int combinedGroupInstanceId = 0;
+
+		ModelLoaderInfo() {}
+		ModelLoaderInfo(ModelLoaderInfoType type)
+		{
+			if (type == ModelLoaderInfoType::GROUPS)
+			{
+				enableGroups = true;
+				enableGroupsInstances = true;
+				invisibleGroups = true;
+				invisibleTriangles = true;
+			}
+			else if (type == ModelLoaderInfoType::COMBINED_GROUP)
+			{
+				enableCombinedGroup = true;
+				enableCombinedGroupInstance = true;
+				invisibleCombinedGroup = true;
+				invisibleTriangles = true;
+			}
+		}
 
 		template<class Archive>
 		void serialize(Archive& ar)

@@ -23,10 +23,11 @@ Scene Scene::createTestScene9()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
 	modelInfo.combinedGroupId = 1;
 	modelInfo.enableCombinedGroupInstance = false;
+	modelInfo.idStartOffset = 2;
 	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
 	scene.models.push_back(modelInfo);
@@ -38,7 +39,7 @@ Scene Scene::createTestScene9()
 	std::uniform_real_distribution<double> rotationDist(-45.0, 45.0);
 	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
 
-	int currentId = 2;
+	int currentId = 1000000;
 
 	for (int z = -200; z < 200; z += 20)
 	{

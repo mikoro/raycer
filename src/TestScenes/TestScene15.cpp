@@ -66,11 +66,12 @@ Scene Scene::createTestScene15()
 	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
 	modelInfo.defaultMaterialId = modelMaterial.id;
 	modelInfo.combinedGroupId = 6;
 	modelInfo.combinedGroupInstanceId = 7;
+	modelInfo.idStartOffset = 8;
 	modelInfo.scale = Vector3(5.0, 5.0, 5.0);
 	modelInfo.rotate = EulerAngle(-45.0, 0.0, 0.0);
 	modelInfo.translate = Vector3(5.0, 0.0, 1.0);

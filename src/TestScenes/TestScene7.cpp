@@ -47,7 +47,7 @@ Scene Scene::createTestScene7()
 
 	// MODEL BOXES //
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/cube1.obj";
 	modelInfo.defaultMaterialId = boxMaterial.id;
 

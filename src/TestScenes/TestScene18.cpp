@@ -24,11 +24,8 @@ Scene Scene::createTestScene18()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sponza/sponza.obj";
-	modelInfo.invisibleTriangles = false;
-	modelInfo.enableCombinedGroup = false;
-	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.scale = Vector3(0.01, 0.01, 0.01);
 	scene.models.push_back(modelInfo);
 

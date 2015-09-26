@@ -39,12 +39,14 @@ Scene Scene::createTestScene4()
 	modelMaterial.id = 2;
 	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.8;
 	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
+	modelMaterial.normalInterpolation = true;
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
 	modelInfo.defaultMaterialId = modelMaterial.id;
 	modelInfo.combinedGroupId = 2;
 	modelInfo.combinedGroupInstanceId = 3;
+	modelInfo.idStartOffset = 4;
 	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
 	scene.materials.push_back(modelMaterial);

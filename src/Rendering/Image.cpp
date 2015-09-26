@@ -308,3 +308,8 @@ const Image* ImagePool::getImage(const std::string& fileName)
 
 	return &imageMap[fileName];
 }
+
+void ImagePool::clear()
+{
+	imageMap.clear();
+}

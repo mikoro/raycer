@@ -62,7 +62,7 @@ Scene Scene::createTestScene10()
 	model1Material.shininess = 64.0;
 	model1Material.texcoordScale = Vector2(10.0, 10.0);
 
-	ModelLoaderInfo model1Info;
+	ModelLoaderInfo model1Info(ModelLoaderInfoType::COMBINED_GROUP);
 	model1Info.modelFilePath = "data/meshes/square.obj";
 	model1Info.defaultMaterialId = model1Material.id;
 	model1Info.combinedGroupId = 2;
@@ -100,7 +100,7 @@ Scene Scene::createTestScene10()
 	model2Material.nonShadowing = true;
 	model2Material.texcoordScale = Vector2(4.0, 4.0);
 
-	ModelLoaderInfo model2Info;
+	ModelLoaderInfo model2Info(ModelLoaderInfoType::COMBINED_GROUP);
 	model2Info.modelFilePath = "data/meshes/square.obj";
 	model2Info.defaultMaterialId = model2Material.id;
 	model2Info.combinedGroupId = 4;
@@ -132,7 +132,7 @@ Scene Scene::createTestScene10()
 	mesh3Material.shininess = 64.0;
 	mesh3Material.nonShadowing = true;
 
-	ModelLoaderInfo model3Info;
+	ModelLoaderInfo model3Info(ModelLoaderInfoType::COMBINED_GROUP);
 	model3Info.modelFilePath = "data/meshes/cube_normalmap.obj";
 	model3Info.defaultMaterialId = mesh3Material.id;
 	model3Info.combinedGroupId = 6;

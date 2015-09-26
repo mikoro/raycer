@@ -76,10 +76,11 @@ Scene Scene::createTestScene17()
 
 	// SUNFLOWER MODEL //
 
-	ModelLoaderInfo modelInfo;
+	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/sunflower/sunflower.obj";
 	modelInfo.combinedGroupId = 3;
 	modelInfo.enableCombinedGroupInstance = false;
+	modelInfo.idStartOffset = 4;
 	modelInfo.scale = Vector3(0.1, 0.1, 0.1);
 	modelInfo.rotate = EulerAngle(0.0, 90.0, 0.0);
 	modelInfo.translate = Vector3(0.0, 1.5, 0.0);
@@ -92,7 +93,7 @@ Scene Scene::createTestScene17()
 	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);
 	std::uniform_real_distribution<double> translateDist(0.0, 0.5);
 
-	int currentId = 4;
+	int currentId = 1000000;
 	double xstep = 1.0;
 
 	for (double x = 0.0; x > -400.0; x -= xstep)
