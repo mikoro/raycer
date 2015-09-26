@@ -18,12 +18,12 @@ namespace Raycer
 	{
 		bool wasFound = false;
 		double distance = std::numeric_limits<double>::max();
-		Primitive* primitive = nullptr;
-		Primitive* instancePrimitive = nullptr;
 		Vector3 position;
 		Vector3 normal;
 		ONB onb;
 		Vector2 texcoord;
 		CSGDirection direction = CSGDirection::IN;
+		Primitive* primitive = nullptr;
+		Primitive* instancePrimitive = nullptr;
 	};
 }

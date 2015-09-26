@@ -1,4 +1,4 @@
-kernel void raytrace(write_only image2d_t image,
+kernel void raytrace(
 	constant State* state,
 	constant Camera* camera,
 	constant Raytracer* raytracer,
@@ -9,7 +9,9 @@ kernel void raytrace(write_only image2d_t image,
 	constant DirectionalLight* directionalLights,
 	constant PointLight* pointLights,
 	constant Triangle* triangles,
-	constant BVHNode* bvhNodes)
+	constant BVHNode* bvhNodes,
+	write_only image2d_t outputImage,
+	read_only image2d_t texture0)
 {
 	int x = get_global_id(0);
 	int y = get_global_id(1);
@@ -27,5 +29,8 @@ kernel void raytrace(write_only image2d_t image,
 		finalColor = material->ambientReflectance;
 	}
 
-	write_imagef(image, (int2)(x, y), finalColor);
+	//const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_LINEAR;
+	//finalColor = read_imagef(texture0, sampler, (float2)((float)x / camera->imagePlaneWidth, (float)y / camera->imagePlaneHeight));
+
+	write_imagef(outputImage, (int2)(x, y), clamp(pow(finalColor, 1.0 / 2.2), 0.0, 1.0));
 }

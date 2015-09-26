@@ -33,16 +33,16 @@ namespace Raycer
 
 	private:
 
+		void createTextureImages(const Scene& scene);
 		void createBuffers();
 		void uploadFullData();
 		void uploadCameraData();
-
+		
 		CLScene clScene;
 
 		int imageBufferWidth = 0;
 		int imageBufferHeight = 0;
 
-		cl_mem outputImagePtr = nullptr;
 		cl_mem statePtr = nullptr;
 		cl_mem cameraPtr = nullptr;
 		cl_mem raytracerPtr = nullptr;
@@ -54,10 +54,13 @@ namespace Raycer
 		cl_mem pointLightsPtr = nullptr;
 		cl_mem trianglesPtr = nullptr;
 		cl_mem bvhNodesPtr = nullptr;
-
+		cl_mem outputImagePtr = nullptr;
+		
 		std::vector<cl_mem> textureImagePtrs;
 
 		cl_program raytraceProgram = nullptr;
 		cl_kernel raytraceKernel = nullptr;
+
+		int kernelArgumentIndex = 0;
 	};
 }

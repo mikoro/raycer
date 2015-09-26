@@ -17,12 +17,11 @@ namespace Raycer
 
 		Vector3 origin;
 		Vector3 direction;
-
 		Vector3 inverseDirection;
-		bool dirIsNeg[3];
 
 		double minDistance = std::numeric_limits<double>::lowest();
 		double maxDistance = std::numeric_limits<double>::max();
+
 		double time = 0.0;
 
 		bool isShadowRay = false;

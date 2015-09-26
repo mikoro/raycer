@@ -86,3 +86,8 @@ Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 	
 	return normal;
 }
+
+const Image* ImageTexture::getImage() const
+{
+	return image;
+}

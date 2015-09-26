@@ -49,6 +49,7 @@ namespace Raycer
 		Color getPixelBilinear(double u, double v) const;
 
 		std::vector<Color>& getPixelData();
+		std::vector<float> getFloatData() const;
 
 	private:
 

@@ -299,6 +299,23 @@ std::vector<Color>& Image::getPixelData()
 	return pixelData;
 }
 
+std::vector<float> Image::getFloatData() const
+{
+	std::vector<float> floatPixelData(width * height * 4);
+
+	for (int i = 0; i < (int)pixelData.size(); ++i)
+	{
+		int pixelIndex = i * 4;
+
+		floatPixelData[pixelIndex] = (float)pixelData[i].r;
+		floatPixelData[pixelIndex + 1] = (float)pixelData[i].g;
+		floatPixelData[pixelIndex + 2] = (float)pixelData[i].b;
+		floatPixelData[pixelIndex + 3] = (float)pixelData[i].a;
+	}
+
+	return floatPixelData;
+}
+
 std::map<std::string, Image> ImagePool::imageMap = std::map<std::string, Image>();
 
 const Image* ImagePool::getImage(const std::string& fileName)

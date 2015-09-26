@@ -19,6 +19,7 @@
 #include "OpenCL/CLManager.h"
 #include "OpenCL/CLStructs.h"
 #include "Raytracing/RaytracerState.h"
+#include "Raytracing/Scene.h"
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
@@ -42,7 +43,6 @@ namespace
 
 CLRaytracer::~CLRaytracer()
 {
-	releaseMemObject(outputImagePtr);
 	releaseMemObject(statePtr);
 	releaseMemObject(cameraPtr);
 	releaseMemObject(raytracerPtr);
@@ -54,6 +54,10 @@ CLRaytracer::~CLRaytracer()
 	releaseMemObject(pointLightsPtr);
 	releaseMemObject(trianglesPtr);
 	releaseMemObject(bvhNodesPtr);
+	releaseMemObject(outputImagePtr);
+
+	for (cl_mem textureImagePtr : textureImagePtrs)
+		releaseMemObject(textureImagePtr);
 
 	if (raytraceKernel != nullptr)
 	{
@@ -77,6 +81,7 @@ void CLRaytracer::initialize(const Scene& scene)
 	uploadFullData();
 
 	std::vector<std::string> sourceFiles = {
+		"data/opencl/types.cl",
 		"data/opencl/structs.cl",
 		"data/opencl/constructors.cl",
 		"data/opencl/camera.cl",
@@ -86,6 +91,23 @@ void CLRaytracer::initialize(const Scene& scene)
 
 	raytraceProgram = clManager.createProgram(sourceFiles);
 	raytraceKernel = clManager.createKernel(raytraceProgram, "raytrace");
+
+	kernelArgumentIndex = 0;
+
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
+
+	createTextureImages(scene);
 }
 
 void CLRaytracer::resizeImageBuffer(int width, int height)
@@ -144,19 +166,6 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object acquire");
 	}
 
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 0, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 1, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 2, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 3, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 4, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 5, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 6, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 10, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, 11, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
-
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 
 	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue raytrace kernel");
@@ -190,61 +199,50 @@ void CLRaytracer::createBuffers()
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
 
-	releaseMemObject(statePtr);
 	statePtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), NULL, &status);
 	CLManager::checkError(status, "Could not create state buffer");
 
-	releaseMemObject(cameraPtr);
 	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), NULL, &status);
 	CLManager::checkError(status, "Could not create camera buffer");
 
-	releaseMemObject(raytracerPtr);
 	raytracerPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Raytracer), NULL, &status);
 	CLManager::checkError(status, "Could not create raytracer buffer");
 
-	releaseMemObject(toneMapperPtr);
 	toneMapperPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::ToneMapper), NULL, &status);
 	CLManager::checkError(status, "Could not create tone mapper buffer");
 
-	releaseMemObject(simpleFogPtr);
 	simpleFogPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::SimpleFog), NULL, &status);
 	CLManager::checkError(status, "Could not create simple fog buffer");
 
 	if (clScene.materials.size() > 0)
 	{
-		releaseMemObject(materialsPtr);
 		materialsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Material) * clScene.materials.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create materials buffer");
 	}
 
-	releaseMemObject(ambientLightPtr);
 	ambientLightPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::AmbientLight), NULL, &status);
 	CLManager::checkError(status, "Could not create ambient light buffer");
 
 	if (clScene.directionalLights.size() > 0)
 	{
-		releaseMemObject(directionalLightsPtr);
 		directionalLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::DirectionalLight) * clScene.directionalLights.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create directional lights buffer");
 	}
 
 	if (clScene.pointLights.size() > 0)
 	{
-		releaseMemObject(pointLightsPtr);
 		pointLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::PointLight) * clScene.pointLights.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create point lights buffer");
 	}
 
 	if (clScene.triangles.size() > 0)
 	{
-		releaseMemObject(trianglesPtr);
 		trianglesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Triangle) * clScene.triangles.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create triangles buffer");
 	}
 
 	if (clScene.bvhNodes.size() > 0)
 	{
-		releaseMemObject(bvhNodesPtr);
 		bvhNodesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create bvh nodes buffer");
 	}
@@ -301,6 +299,8 @@ void CLRaytracer::uploadFullData()
 		status = clEnqueueWriteBuffer(clManager.commandQueue, bvhNodesPtr, CL_FALSE, 0, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), &clScene.bvhNodes[0], 0, NULL, NULL);
 		CLManager::checkError(status, "Could not write bvh nodes buffer");
 	}
+
+	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
 
 void CLRaytracer::uploadCameraData()
@@ -310,4 +310,35 @@ void CLRaytracer::uploadCameraData()
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
 	CLManager::checkError(status, "Could not write camera buffer");
+}
+
+void CLRaytracer::createTextureImages(const Scene& scene)
+{
+	CLManager& clManager = App::getCLManager();
+	cl_int status = 0;
+
+	cl_image_format imageFormat;
+	imageFormat.image_channel_data_type = CL_FLOAT;
+	imageFormat.image_channel_order = CL_RGBA;
+
+	for (const ImageTexture& texture : scene.textures.imageTextures)
+	{
+		int textureImageWidth = texture.getImage()->getWidth();
+		int textureImageHeight = texture.getImage()->getHeight();
+
+		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, NULL, &status);
+		CLManager::checkError(status, "Could not create texture image");
+
+		std::vector<float> floatPixelData = texture.getImage()->getFloatData();
+
+		size_t origin[3] = { 0, 0, 0 };
+		size_t region[3] = { (size_t)textureImageWidth, (size_t)textureImageHeight, 1 };
+
+		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, NULL, NULL);
+		CLManager::checkError(status, "Could not write texture image buffer");
+
+		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtr), "Could not set kernel argument (texture image)");
+
+		textureImagePtrs.push_back(textureImagePtr);
+	}
 }

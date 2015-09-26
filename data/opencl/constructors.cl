@@ -1,20 +1,3 @@
-Ray constructRay(float4 origin, float4 direction)
-{
-	Ray ray;
-
-	ray.origin = origin;
-	ray.direction = direction;
-	ray.inverseDirection = (float4)(1.0, 1.0, 1.0, 1.0) / direction;
-	ray.minDistance = 0.0;
-	ray.maxDistance = FLT_MAX;
-	ray.time = 0.0;
-	ray.fastOcclusion = false;
-	ray.isShadowRay = false;
-	ray.isInvalid = false;
-
-	return ray;
-}
-
 ONB constructONB()
 {
 	ONB onb;
@@ -48,6 +31,22 @@ ONB constructONBFromNormal(float4 normal)
 	return onb;
 }
 
+Ray constructRay(float4 origin, float4 direction)
+{
+	Ray ray;
+
+	ray.origin = origin;
+	ray.direction = direction;
+	ray.inverseDirection = (float4)(1.0, 1.0, 1.0, 1.0) / direction;
+	ray.minDistance = 0.0;
+	ray.maxDistance = FLT_MAX;
+	ray.time = 0.0;
+	ray.isShadowRay = false;
+	ray.fastOcclusion = false;
+
+	return ray;
+}
+
 Intersection constructIntersection()
 {
 	Intersection intersection;
@@ -55,6 +54,7 @@ Intersection constructIntersection()
 	intersection.wasFound = false;
 	intersection.distance = FLT_MAX;
 	intersection.position = (float4)(0.0, 0.0, 0.0, 0.0);
+	intersection.normal = (float4)(0.0, 0.0, 0.0, 0.0);
 	intersection.onb = constructONB();
 	intersection.texcoord = (float2)(0.0, 0.0);
 	intersection.materialIndex = 0;

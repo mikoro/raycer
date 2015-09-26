@@ -1,3 +1,5 @@
+// Structs for external data (remember to sync changes) //
+
 typedef struct State
 {
 	float time;
@@ -148,6 +150,8 @@ typedef struct BVHNode
 	int primitiveCount;
 } BVHNode;
 
+// Structs for internal data (no need to sync)  //
+
 typedef struct ONB
 {
 	float4 u;
@@ -163,9 +167,8 @@ typedef struct Ray
 	float minDistance;
 	float maxDistance;
 	float time;
-	bool fastOcclusion;
 	bool isShadowRay;
-	bool isInvalid;
+	bool fastOcclusion;
 } Ray;
 
 typedef struct Intersection
@@ -173,6 +176,7 @@ typedef struct Intersection
 	bool wasFound;
 	float distance;
 	float4 position;
+	float4 normal;
 	ONB onb;
 	float2 texcoord;
 	int materialIndex;

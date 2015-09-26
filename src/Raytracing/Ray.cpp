@@ -8,8 +8,4 @@ using namespace Raycer;
 void Ray::update()
 {
 	inverseDirection = direction.inversed();
-
-	dirIsNeg[0] = (direction.x < 0.0);
-	dirIsNeg[1] = (direction.y < 0.0);
-	dirIsNeg[2] = (direction.z < 0.0);
 }
