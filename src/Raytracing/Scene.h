@@ -81,6 +81,7 @@ namespace Raycer
 		static Scene createTestScene16();
 		static Scene createTestScene17();
 		static Scene createTestScene18();
+		static Scene createTestScene19();
 
 		static const int TEST_SCENE_COUNT = 18;
 

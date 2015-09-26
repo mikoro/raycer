@@ -24,6 +24,7 @@ namespace Raycer
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);
 		Vector3 translate = Vector3(0.0, 0.0, 0.0);
+		Material baseMaterial;
 		bool enableGroups = false;
 		bool enableGroupsInstances = false;
 		bool enableCombinedGroup = true;
@@ -44,6 +45,7 @@ namespace Raycer
 				CEREAL_NVP(scale),
 				CEREAL_NVP(rotate),
 				CEREAL_NVP(translate),
+				CEREAL_NVP(baseMaterial),
 				CEREAL_NVP(invisibleTriangles),
 				CEREAL_NVP(ignoreMaterials),
 				CEREAL_NVP(enableGroups),

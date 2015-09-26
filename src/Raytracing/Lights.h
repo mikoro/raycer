@@ -16,7 +16,7 @@ namespace Raycer
 	struct Light
 	{
 		Color color = Color::WHITE;
-		double intensity = 0.0;
+		double intensity = 1.0;
 
 		template<class Archive>
 		void serialize(Archive& ar)

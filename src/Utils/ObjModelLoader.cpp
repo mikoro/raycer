@@ -77,7 +77,7 @@ ModelLoaderResult ObjModelLoader::readFile(const ModelLoaderInfo& info)
 		if (part == "mtllib" && !info.ignoreMaterials)
 		{
 			StringUtils::readUntilSpace(line, lineIndex, part);
-			processMaterialFile(objFileDirectory, part, result, materialsMap, currentId);
+			processMaterialFile(objFileDirectory, part, info, result, materialsMap, currentId);
 			continue;
 		}
 
@@ -203,7 +203,7 @@ namespace
 	}
 }
 
-void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, ModelLoaderResult& result, std::map<std::string, int>& materialsMap, int& currentId)
+void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, int>& materialsMap, int& currentId)
 {
 	std::string absoluteMtlFilePath = getAbsolutePath(objFileDirectory, mtlFilePath);
 	App::getLog().logInfo("Reading MTL file (%s)", absoluteMtlFilePath);
@@ -212,7 +212,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 	if (!file.good())
 		throw std::runtime_error("Could not open the MTL file");
 
-	Material currentMaterial;
+	Material currentMaterial = info.baseMaterial;
 	bool materialPending = false;
 	bool hasAmbientMap = false;
 	bool hasDiffuseMap = false;
@@ -249,7 +249,7 @@ void ObjModelLoader::processMaterialFile(const std::string& objFileDirectory, co
 
 			materialPending = true;
 
-			currentMaterial = Material();
+			currentMaterial = info.baseMaterial;
 			currentMaterial.id = ++currentId;
 
 			StringUtils::readUntilSpace(line, lineIndex, part);

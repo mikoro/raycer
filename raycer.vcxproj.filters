@@ -373,6 +373,9 @@
     <ClCompile Include="src\Utils\ObjModelLoader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\TestScenes\TestScene19.cpp">
+      <Filter>TestScenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

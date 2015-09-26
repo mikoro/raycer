@@ -231,6 +231,7 @@
     <ClCompile Include="src\TestScenes\TestScene16.cpp" />
     <ClCompile Include="src\TestScenes\TestScene17.cpp" />
     <ClCompile Include="src\TestScenes\TestScene18.cpp" />
+    <ClCompile Include="src\TestScenes\TestScene19.cpp" />
     <ClCompile Include="src\TestScenes\TestScene3.cpp" />
     <ClCompile Include="src\TestScenes\TestScene2.cpp" />
     <ClCompile Include="src\TestScenes\TestScene4.cpp" />

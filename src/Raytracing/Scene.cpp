@@ -62,6 +62,7 @@ Scene Scene::createTestScene(int number)
 		case 16: return createTestScene16(); break;
 		case 17: return createTestScene17(); break;
 		case 18: return createTestScene18(); break;
+		case 19: return createTestScene19(); break;
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }

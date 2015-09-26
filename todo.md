@@ -11,4 +11,5 @@ textures
 
 misc
  - update ply reader -> ply loader
- - remove sponza1
+ - change texcoord scaling to multiply
+ 
