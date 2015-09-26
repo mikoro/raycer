@@ -24,11 +24,8 @@ namespace Raycer
 			cl_float ALIGN(4) time;
 			cl_int ALIGN(4) directionalLightCount;
 			cl_int ALIGN(4) pointLightCount;
-			cl_int ALIGN(4) spotLightCount;
-			cl_int ALIGN(4) planeCount;
-			cl_int ALIGN(4) sphereCount;
-			cl_int ALIGN(4) boxCount;
 			cl_int ALIGN(4) triangleCount;
+			cl_int ALIGN(4) bvhNodeCount;
 		};
 
 		struct Camera
@@ -49,17 +46,17 @@ namespace Raycer
 			cl_float ALIGN(4) apertureSize;
 			cl_float ALIGN(4) focalDistance;
 			cl_float ALIGN(4) aspectRatio;
+			cl_float ALIGN(4) imagePlaneDistance;
 			cl_float ALIGN(4) imagePlaneWidth;
 			cl_float ALIGN(4) imagePlaneHeight;
-			cl_float ALIGN(4) imagePlaneDistance;
 		};
 
 		struct Raytracer
 		{
 			cl_float4 ALIGN(16) backgroundColor;
 			cl_float4 ALIGN(16) offLensColor;
-			cl_int ALIGN(4) maxRayIterations;
 			cl_float ALIGN(4) rayStartOffset;
+			cl_int ALIGN(4) maxRayIterations;
 			cl_int ALIGN(4) multiSamples;
 			cl_int ALIGN(4) timeSamples;
 			cl_int ALIGN(4) cameraSamples;
@@ -89,27 +86,31 @@ namespace Raycer
 
 		struct Material
 		{
-			cl_float4 ALIGN(16) color;
 			cl_float4 ALIGN(16) ambientReflectance;
 			cl_float4 ALIGN(16) diffuseReflectance;
 			cl_float4 ALIGN(16) specularReflectance;
 			cl_float4 ALIGN(16) attenuationColor;
 			cl_float2 ALIGN(8) texcoordScale;
-			cl_float ALIGN(4) colorIntensity;
 			cl_float ALIGN(4) shininess;
+			cl_int ALIGN(4) ambientMapTextureIndex;
+			cl_int ALIGN(4) diffuseMapTextureIndex;
+			cl_int ALIGN(4) specularMapTextureIndex;
+			cl_int ALIGN(4) rayReflectanceMapTextureIndex;
+			cl_int ALIGN(4) rayTransmittanceMapTextureIndex;
+			cl_int ALIGN(4) normalMapTextureIndex;
+			cl_int ALIGN(4) maskMapTextureIndex;
+			cl_int ALIGN(4) heightMapTextureIndex;
+			cl_int ALIGN(4) normalMapType;
 			cl_int ALIGN(4) skipLighting;
 			cl_int ALIGN(4) nonShadowing;
 			cl_int ALIGN(4) normalInterpolation;
-			cl_int ALIGN(4) backfaceCulling;
 			cl_int ALIGN(4) invertNormal;
-			cl_int ALIGN(4) hasTexture;
-			cl_int ALIGN(4) textureIndex;
+			cl_int ALIGN(4) fresnelReflection;
+			cl_int ALIGN(4) enableAttenuation;
 			cl_float ALIGN(4) rayReflectance;
 			cl_float ALIGN(4) rayTransmittance;
 			cl_float ALIGN(4) refractiveIndex;
-			cl_int ALIGN(4) isFresnel;
-			cl_int ALIGN(4) enableAttenuation;
-			cl_float ALIGN(4) attenuation;
+			cl_float ALIGN(4) attenuationFactor;
 			cl_int ALIGN(4) id;
 		};
 
@@ -144,48 +145,6 @@ namespace Raycer
 			cl_int ALIGN(4) samples;
 		};
 
-		struct SpotLight
-		{
-			cl_float4 ALIGN(16) color;
-			cl_float4 ALIGN(16) position;
-			cl_float4 ALIGN(16) direction;
-			cl_float ALIGN(4) intensity;
-			cl_float ALIGN(4) distance;
-			cl_float ALIGN(4) attenuation;
-			cl_float ALIGN(4) sideAttenuation;
-			cl_float ALIGN(4) angle;
-			cl_int ALIGN(4) softShadows;
-			cl_float ALIGN(4) radius;
-			cl_int ALIGN(4) samplerType;
-			cl_int ALIGN(4) samples;
-		};
-
-		struct Plane
-		{
-			cl_float4 ALIGN(16) position;
-			cl_float4 ALIGN(16) normal;
-			cl_float4 ALIGN(16) uAxis;
-			cl_float4 ALIGN(16) vAxis;
-			cl_int ALIGN(4) invisible;
-			cl_int ALIGN(4) materialIndex;
-		};
-
-		struct Sphere
-		{
-			cl_float4 ALIGN(16) position;
-			cl_float ALIGN(4) radius;
-			cl_int ALIGN(4) invisible;
-			cl_int ALIGN(4) materialIndex;
-		};
-
-		struct Box
-		{
-			cl_float4 ALIGN(16) position;
-			cl_float4 ALIGN(16) extent;
-			cl_int ALIGN(4) invisible;
-			cl_int ALIGN(4) materialIndex;
-		};
-
 		struct Triangle
 		{
 			cl_float4 ALIGN(16) vertices[3];
@@ -194,8 +153,21 @@ namespace Raycer
 			cl_float4 ALIGN(16) tangent;
 			cl_float4 ALIGN(16) bitangent;
 			cl_float2 ALIGN(8) texcoords[3];
-			cl_int ALIGN(4) invisible;
 			cl_int ALIGN(4) materialIndex;
+		};
+
+		struct AABB
+		{
+			cl_float4 ALIGN(16) min;
+			cl_float4 ALIGN(16) max;
+		};
+
+		struct BVHNode
+		{
+			AABB ALIGN(32) aabb;
+			cl_int ALIGN(4) rightOffset;
+			cl_int ALIGN(4) startOffset;
+			cl_int ALIGN(4) primitiveCount;
 		};
 	}
 }

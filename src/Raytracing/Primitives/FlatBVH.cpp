@@ -90,24 +90,9 @@ void FlatBVH::transform(const Vector3& scale, const EulerAngle& rotate, const Ve
 	(void)translate;
 }
 
-void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo, const Scene& scene)
+void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo)
 {
 	Log& log = App::getLog();
-
-	if (hasBeenBuilt)
-	{
-		orderedPrimitives.clear();
-
-		for (int primitiveId : orderedPrimitiveIds)
-			orderedPrimitives.push_back(scene.primitivesMap.at(primitiveId));
-
-		return;
-	}
-	else
-	{
-		flatNodes.clear();
-		orderedPrimitiveIds.clear();
-	}
 
 	log.logInfo("Building BVH (primitives: %d)", primitives.size());
 
@@ -211,6 +196,8 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	hasBeenBuilt = true;
 	aabb = flatNodes[0].aabb;
 
+	orderedPrimitiveIds.clear();
+
 	for (const Primitive* primitive : orderedPrimitives)
 		orderedPrimitiveIds.push_back(primitive->id);
 
@@ -218,6 +205,16 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
+}
+
+void FlatBVH::rebuild(const Scene& scene)
+{
+	orderedPrimitives.clear();
+
+	for (int primitiveId : orderedPrimitiveIds)
+		orderedPrimitives.push_back(scene.primitivesMap.at(primitiveId));
+
+	return;
 }
 
 void FlatBVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator)

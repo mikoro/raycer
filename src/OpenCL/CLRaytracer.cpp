@@ -52,11 +52,8 @@ CLRaytracer::~CLRaytracer()
 	releaseMemObject(ambientLightPtr);
 	releaseMemObject(directionalLightsPtr);
 	releaseMemObject(pointLightsPtr);
-	releaseMemObject(spotLightsPtr);
-	releaseMemObject(planesPtr);
-	releaseMemObject(spheresPtr);
-	releaseMemObject(boxesPtr);
 	releaseMemObject(trianglesPtr);
+	releaseMemObject(bvhNodesPtr);
 }
 
 void CLRaytracer::initialize()
@@ -147,11 +144,8 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
 	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
 	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 10, sizeof(cl_mem), &spotLightsPtr), "Could not set kernel argument (spot lights)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 11, sizeof(cl_mem), &planesPtr), "Could not set kernel argument (planes)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 12, sizeof(cl_mem), &spheresPtr), "Could not set kernel argument (spheres)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 13, sizeof(cl_mem), &boxesPtr), "Could not set kernel argument (boxes)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 14, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 10, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 11, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
 
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 
@@ -186,7 +180,7 @@ void CLRaytracer::readScene(const Scene& scene)
 	Settings& settings = App::getSettings();
 	WindowRunner& windowRunner = App::getWindowRunner();
 
-	clScene.readScene(scene);
+	clScene.readSceneFull(scene);
 
 	if (settings.general.interactive)
 		clScene.state.time = (float)windowRunner.getElapsedTime();
@@ -244,39 +238,18 @@ void CLRaytracer::createBuffers()
 		CLManager::checkError(status, "Could not create point lights buffer");
 	}
 
-	if (clScene.spotLights.size() > 0)
-	{
-		releaseMemObject(spotLightsPtr);
-		spotLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::SpotLight) * clScene.spotLights.size(), NULL, &status);
-		CLManager::checkError(status, "Could not create spot lights buffer");
-	}
-
-	if (clScene.planes.size() > 0)
-	{
-		releaseMemObject(planesPtr);
-		planesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Plane) * clScene.planes.size(), NULL, &status);
-		CLManager::checkError(status, "Could not create planes buffer");
-	}
-
-	if (clScene.spheres.size() > 0)
-	{
-		releaseMemObject(spheresPtr);
-		spheresPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Sphere) * clScene.spheres.size(), NULL, &status);
-		CLManager::checkError(status, "Could not create spheres buffer");
-	}
-
-	if (clScene.boxes.size() > 0)
-	{
-		releaseMemObject(boxesPtr);
-		boxesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Box) * clScene.boxes.size(), NULL, &status);
-		CLManager::checkError(status, "Could not create boxes buffer");
-	}
-
 	if (clScene.triangles.size() > 0)
 	{
 		releaseMemObject(trianglesPtr);
 		trianglesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Triangle) * clScene.triangles.size(), NULL, &status);
 		CLManager::checkError(status, "Could not create triangles buffer");
+	}
+
+	if (clScene.bvhNodes.size() > 0)
+	{
+		releaseMemObject(bvhNodesPtr);
+		bvhNodesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), NULL, &status);
+		CLManager::checkError(status, "Could not create bvh nodes buffer");
 	}
 }
 
@@ -321,33 +294,15 @@ void CLRaytracer::uploadData()
 		CLManager::checkError(status, "Could not write point lights buffer");
 	}
 
-	if (clScene.spotLights.size() > 0)
-	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, spotLightsPtr, CL_FALSE, 0, sizeof(OpenCL::SpotLight) * clScene.spotLights.size(), &clScene.spotLights[0], 0, NULL, NULL);
-		CLManager::checkError(status, "Could not write spot lights buffer");
-	}
-
-	if (clScene.planes.size() > 0)
-	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, planesPtr, CL_FALSE, 0, sizeof(OpenCL::Plane) * clScene.planes.size(), &clScene.planes[0], 0, NULL, NULL);
-		CLManager::checkError(status, "Could not write planes buffer");
-	}
-
-	if (clScene.spheres.size() > 0)
-	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, spheresPtr, CL_FALSE, 0, sizeof(OpenCL::Sphere) * clScene.spheres.size(), &clScene.spheres[0], 0, NULL, NULL);
-		CLManager::checkError(status, "Could not write spheres buffer");
-	}
-
-	if (clScene.boxes.size() > 0)
-	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, boxesPtr, CL_FALSE, 0, sizeof(OpenCL::Box) * clScene.boxes.size(), &clScene.boxes[0], 0, NULL, NULL);
-		CLManager::checkError(status, "Could not write boxes buffer");
-	}
-
 	if (clScene.triangles.size() > 0)
 	{
 		status = clEnqueueWriteBuffer(clManager.commandQueue, trianglesPtr, CL_FALSE, 0, sizeof(OpenCL::Triangle) * clScene.triangles.size(), &clScene.triangles[0], 0, NULL, NULL);
 		CLManager::checkError(status, "Could not write triangles buffer");
+	}
+
+	if (clScene.bvhNodes.size() > 0)
+	{
+		status = clEnqueueWriteBuffer(clManager.commandQueue, bvhNodesPtr, CL_FALSE, 0, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), &clScene.bvhNodes[0], 0, NULL, NULL);
+		CLManager::checkError(status, "Could not write bvh nodes buffer");
 	}
 }

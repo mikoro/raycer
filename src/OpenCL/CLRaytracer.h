@@ -53,10 +53,7 @@ namespace Raycer
 		cl_mem ambientLightPtr = nullptr;
 		cl_mem directionalLightsPtr = nullptr;
 		cl_mem pointLightsPtr = nullptr;
-		cl_mem spotLightsPtr = nullptr;
-		cl_mem planesPtr = nullptr;
-		cl_mem spheresPtr = nullptr;
-		cl_mem boxesPtr = nullptr;
 		cl_mem trianglesPtr = nullptr;
+		cl_mem bvhNodesPtr = nullptr;
 	};
 }

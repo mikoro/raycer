@@ -359,11 +359,8 @@ void CLManager::writeStructSizes(const std::string& fileName)
 	file << tfm::format("AmbientLight: %d\n", sizeof(OpenCL::AmbientLight));
 	file << tfm::format("DirectionalLight: %d\n", sizeof(OpenCL::DirectionalLight));
 	file << tfm::format("PointLight: %d\n", sizeof(OpenCL::PointLight));
-	file << tfm::format("SpotLight: %d\n", sizeof(OpenCL::SpotLight));
-	file << tfm::format("Plane: %d\n", sizeof(OpenCL::Plane));
-	file << tfm::format("Sphere: %d\n", sizeof(OpenCL::Sphere));
-	file << tfm::format("Box: %d\n", sizeof(OpenCL::Box));
 	file << tfm::format("Triangle: %d\n", sizeof(OpenCL::Triangle));
+	file << tfm::format("BVH Node: %d\n", sizeof(OpenCL::BVHNode));
 
 	file.close();
 }

@@ -478,7 +478,11 @@ void Scene::initialize()
 
 	if (rootBVH.enabled)
 	{
-		rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo, *this);
+		if (rootBVH.bvh.hasBeenBuilt)
+			rootBVH.bvh.rebuild(*this);
+		else
+			rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo);
+
 		primitives.visible.clear();
 		primitives.visible.push_back(&rootBVH.bvh);
 	}

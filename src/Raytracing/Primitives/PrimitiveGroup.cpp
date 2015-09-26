@@ -22,7 +22,12 @@ PrimitiveGroup::PrimitiveGroup(const std::vector<Primitive*>& primitives_)
 void Raycer::PrimitiveGroup::initialize(const Scene& scene)
 {
 	if (enableBVH)
-		bvh.build(primitives, bvhBuildInfo, scene);
+	{
+		if (bvh.hasBeenBuilt)
+			bvh.rebuild(scene);
+		else
+			bvh.build(primitives, bvhBuildInfo);
+	}
 	else
 	{
 		for (Primitive* primitive : primitives)

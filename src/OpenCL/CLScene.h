@@ -17,7 +17,8 @@ namespace Raycer
 	{
 	public:
 
-		void readScene(const Scene& scene);
+		void readSceneFull(const Scene& scene);
+		void readSceneCamera(const Scene& scene);
 
 		OpenCL::State state;
 		OpenCL::Camera camera;
@@ -28,14 +29,7 @@ namespace Raycer
 		OpenCL::AmbientLight ambientLight;
 		std::vector<OpenCL::DirectionalLight> directionalLights;
 		std::vector<OpenCL::PointLight> pointLights;
-		std::vector<OpenCL::SpotLight> spotLights;
-		std::vector<OpenCL::Plane> planes;
-		std::vector<OpenCL::Sphere> spheres;
-		std::vector<OpenCL::Box> boxes;
 		std::vector<OpenCL::Triangle> triangles;
-
-	private:
-
-		int findMaterialIndex(int materialId);
+		std::vector<OpenCL::BVHNode> bvhNodes;
 	};
 }

@@ -77,11 +77,14 @@ namespace Raycer
 		AABB getAABB() const;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
 
-		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo, const Scene& scene);
+		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
+		void rebuild(const Scene& scene);
 
 		bool hasBeenBuilt = false;
 		std::vector<FlatBVHNode> flatNodes;
 		std::vector<int> orderedPrimitiveIds;
+
+		std::vector<Primitive*> orderedPrimitives;
 
 	private:
 
@@ -89,8 +92,6 @@ namespace Raycer
 		void calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
 		double calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
 		double calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry);
-
-		std::vector<Primitive*> orderedPrimitives;
 
 		friend class cereal::access;
 
