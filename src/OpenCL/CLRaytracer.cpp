@@ -108,9 +108,12 @@ void CLRaytracer::initialize(const Scene& scene)
 	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
+
+	outputImageArgumentIndex = kernelArgumentIndex++;
+	CLManager::checkError(clSetKernelArg(raytraceKernel, outputImageArgumentIndex, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 
 	createTextureImages();
+	initialized = true;
 }
 
 void CLRaytracer::resizeImageBuffer(int width, int height)
@@ -139,6 +142,9 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 		outputImagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, NULL, &status);
 		CLManager::checkError(status, "Could not create output image");
 	}
+
+	if (initialized)
+		CLManager::checkError(clSetKernelArg(raytraceKernel, outputImageArgumentIndex, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 }
 
 void CLRaytracer::releaseImageBuffer()
