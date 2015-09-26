@@ -38,7 +38,7 @@ Scene Scene::createTestScene6()
 	groundMaterial.id = 1;
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
-	groundMaterial.texcoordScale = Vector2(10.0, 10.0);
+	groundMaterial.texcoordScale = Vector2(0.1, 0.1);
 
 	Plane groundPlane;
 	groundPlane.id = 1;
@@ -110,7 +110,7 @@ Scene Scene::createTestScene6()
 	sphere3Material.id = 4;
 	sphere3Material.ambientMapTextureId = sphere3Texture.id;
 	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
-	sphere3Material.texcoordScale = Vector2(0.1, 0.1);
+	sphere3Material.texcoordScale = Vector2(10.0, 10.0);
 
 	Sphere sphere3;
 	sphere3.id = 4;
@@ -133,7 +133,6 @@ Scene Scene::createTestScene6()
 	sphere4Material.id = 5;
 	sphere4Material.ambientMapTextureId = sphere4Texture.id;
 	sphere4Material.diffuseMapTextureId = sphere4Texture.id;
-	sphere4Material.texcoordScale = Vector2(1.0, 1.0);
 
 	Sphere sphere4;
 	sphere4.id = 5;

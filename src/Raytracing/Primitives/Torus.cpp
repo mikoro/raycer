@@ -75,7 +75,7 @@ bool Torus::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 	intersection.distance = t;
 	intersection.primitive = this;
 	intersection.position = ip;
-	intersection.normal = normal;
+	intersection.normal = material->invertNormal ? -normal : normal;
 	intersection.onb = ONB::fromNormal(intersection.normal);
 
 	return true;

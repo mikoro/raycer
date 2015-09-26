@@ -32,7 +32,7 @@ Scene Scene::createTestScene2()
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.skipLighting = true;
-	groundMaterial.texcoordScale = Vector2(0.5, 0.5);
+	groundMaterial.texcoordScale = Vector2(2.0, 2.0);
 
 	Plane groundPlane;
 	groundPlane.id = 1;

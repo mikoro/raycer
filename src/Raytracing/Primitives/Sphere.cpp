@@ -57,14 +57,11 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 		Vector3 ip = ray.origin + (t * ray.direction);
 		Vector3 normal = (ip - position).normalized();
 
-		if (material->invertNormal)
-			normal = -normal;
-
 		tempIntersection.wasFound = true;
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;
 		tempIntersection.position = ip;
-		tempIntersection.normal = normal;
+		tempIntersection.normal = material->invertNormal ? -normal : normal;
 		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
 		tempIntersection.direction = direction;
 
@@ -83,8 +80,8 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 			v = (r * normal.y + 1.0) / 2.0;
 		}
 
-		u /= material->texcoordScale.x;
-		v /= material->texcoordScale.y;
+		u *= material->texcoordScale.x;
+		v *= material->texcoordScale.y;
 
 		tempIntersection.texcoord.x = u - floor(u);
 		tempIntersection.texcoord.y = v - floor(v);

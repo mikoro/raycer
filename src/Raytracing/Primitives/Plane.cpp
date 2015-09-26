@@ -62,15 +62,15 @@ bool Plane::intersect(const Ray& ray, Intersection& intersection, std::vector<In
 	intersection.distance = t;
 	intersection.primitive = this;
 	intersection.position = ip;
-	intersection.normal = normal;
-	intersection.onb = ONB::fromNormal(normal);
+	intersection.normal = material->invertNormal ? -normal : normal;
+	intersection.onb = ONB::fromNormal(intersection.normal);
 
 	// texture coordinate calculation
-	double u = uAxis.dot(ip) / material->texcoordScale.x;
-	double v = vAxis.dot(ip) / material->texcoordScale.y;
+	double u = uAxis.dot(ip) * material->texcoordScale.x;
+	double v = vAxis.dot(ip) * material->texcoordScale.y;
 
-	intersection.texcoord.x = std::abs(u - floor(u));
-	intersection.texcoord.y = std::abs(v - floor(v));
+	intersection.texcoord.x = u - floor(u);
+	intersection.texcoord.y = v - floor(v);
 
 	return true;
 }

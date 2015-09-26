@@ -89,7 +89,8 @@ bool Box::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;
 		tempIntersection.position = ray.origin + (t * ray.direction);
-		tempIntersection.normal = direction == CSGDirection::IN ? normal : -normal;
+		tempIntersection.normal = (direction == CSGDirection::IN) ? normal : -normal;
+		tempIntersection.normal = material->invertNormal ? -tempIntersection.normal : tempIntersection.normal;
 		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
 		tempIntersection.direction = direction;
 

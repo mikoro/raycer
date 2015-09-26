@@ -60,7 +60,7 @@ Scene Scene::createTestScene10()
 	model1Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	model1Material.normalMapTextureId = model1NormalTexture.id;
 	model1Material.shininess = 64.0;
-	model1Material.texcoordScale = Vector2(0.1, 0.1);
+	model1Material.texcoordScale = Vector2(10.0, 10.0);
 
 	ModelLoaderInfo model1Info;
 	model1Info.modelFilePath = "data/meshes/square.obj";
@@ -98,7 +98,7 @@ Scene Scene::createTestScene10()
 	model2Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	model2Material.shininess = 64.0;
 	model2Material.nonShadowing = true;
-	model2Material.texcoordScale = Vector2(0.25, 0.5);
+	model2Material.texcoordScale = Vector2(4.0, 4.0);
 
 	ModelLoaderInfo model2Info;
 	model2Info.modelFilePath = "data/meshes/square.obj";
@@ -130,7 +130,6 @@ Scene Scene::createTestScene10()
 	mesh3Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	mesh3Material.normalMapTextureId = model3NormalTexture.id;
 	mesh3Material.shininess = 64.0;
-	mesh3Material.texcoordScale = Vector2(1.0, 1.0);
 	mesh3Material.nonShadowing = true;
 
 	ModelLoaderInfo model3Info;

@@ -128,7 +128,7 @@ void CLScene::readScene(const Scene& scene)
 		clMaterial.skipLighting = (cl_int)material.skipLighting;
 		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
 		clMaterial.normalInterpolation = (cl_int)material.normalInterpolation;
-		clMaterial.backfaceCulling = (cl_int)material.backfaceCulling;
+		//clMaterial.backfaceCulling = (cl_int)material.backfaceCulling;
 		clMaterial.invertNormal = (cl_int)material.invertNormal;
 		clMaterial.hasTexture = (cl_int)0;
 		clMaterial.textureIndex = (cl_int)0;

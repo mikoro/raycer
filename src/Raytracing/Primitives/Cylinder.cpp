@@ -62,7 +62,7 @@ bool Cylinder::intersect(const Ray& ray, Intersection& intersection, std::vector
 		tempIntersection.distance = t;
 		tempIntersection.primitive = this;
 		tempIntersection.position = ip;
-		tempIntersection.normal = normal;
+		tempIntersection.normal = material->invertNormal ? -normal : normal;
 		tempIntersection.onb = ONB::fromNormal(tempIntersection.normal);
 		tempIntersection.direction = direction;
 

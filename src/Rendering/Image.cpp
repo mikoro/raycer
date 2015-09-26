@@ -1,6 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include <cassert>
 #include <cmath>
 #include <cstdint>
 #include <stdexcept>
@@ -258,17 +259,13 @@ int Image::getHeight() const
 
 Color Image::getPixel(int x, int y) const
 {
+	assert(x >= 0 && x < width && y >= 0 && y < height);
+
 	return pixelData[y * width + x];
 }
 
 Color Image::getPixelNearest(double u, double v) const
 {
-	// clamp values to 0.0 .. 1.0 with wrapping
-	if (u > 1.0) u = u - floor(u);
-	if (u < 0.0) u = u - floor(u);
-	if (v > 1.0) v = v - floor(v);
-	if (v < 0.0) v = v - floor(v);
-
 	int x = (int)(u * (double)(width - 1) + 0.5);
 	int y = (int)(v * (double)(height - 1) + 0.5);
 
@@ -277,12 +274,6 @@ Color Image::getPixelNearest(double u, double v) const
 
 Color Image::getPixelBilinear(double u, double v) const
 {
-	// clamp values to 0.0 .. 1.0 with wrapping
-	if (u > 1.0) u = u - floor(u);
-	if (u < 0.0) u = u - floor(u);
-	if (v > 1.0) v = v - floor(v);
-	if (v < 0.0) v = v - floor(v);
-
 	double dx = u * (double)(width - 1) - 0.5;
 	double dy = v * (double)(height - 1) - 0.5;
 	int ix = (int)dx;

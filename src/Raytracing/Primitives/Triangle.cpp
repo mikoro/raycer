@@ -95,28 +95,27 @@ bool Triangle::intersect(const Ray& ray, Intersection& intersection, std::vector
 
 	double w = 1.0 - u - v;
 
-	Vector3 finalNormal = material->normalInterpolation ? (w * normals[0] + u * normals[1] + v * normals[2]) : normal;
-	bool isBehind = ray.direction.dot(finalNormal) > 0.0;
-
-	if (material->backfaceCulling && isBehind)
-		return false;
-
-	Vector2 interpolatedTexcoord = w * texcoords[0] + u * texcoords[1] + v * texcoords[2];
+	Vector2 texcoord = (w * texcoords[0] + u * texcoords[1] + v * texcoords[2]) * material->texcoordScale;
 	Vector3 ip = ray.origin + (t * ray.direction);
+
+	texcoord.x = texcoord.x - floor(texcoord.x);
+	texcoord.y = texcoord.y - floor(texcoord.y);
 
 	if (material->maskMapTexture != nullptr)
 	{
-		if (material->maskMapTexture->getValue(interpolatedTexcoord, ip) < 0.5)
+		if (material->maskMapTexture->getValue(texcoord, ip) < 0.5)
 			return false;
 	}
+
+	Vector3 finalNormal = material->normalInterpolation ? (w * normals[0] + u * normals[1] + v * normals[2]) : normal;
 
 	intersection.wasFound = true;
 	intersection.distance = t;
 	intersection.primitive = this;
 	intersection.position = ip;
-	intersection.normal = finalNormal;
-	intersection.onb = ONB(tangent, bitangent, finalNormal);
-	intersection.texcoord = interpolatedTexcoord / material->texcoordScale;
+	intersection.normal = material->invertNormal ? -finalNormal : finalNormal;
+	intersection.onb = ONB(tangent, bitangent, intersection.normal);
+	intersection.texcoord = texcoord;
 
 	return true;
 }

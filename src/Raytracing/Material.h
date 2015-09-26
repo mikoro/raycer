@@ -20,8 +20,7 @@ namespace Raycer
 
 		bool skipLighting = false;
 		bool nonShadowing = false;
-		bool normalInterpolation = true;
-		bool backfaceCulling = false;
+		bool normalInterpolation = false;
 		bool invertNormal = false;
 		bool enableCSG = false;
 
@@ -73,7 +72,6 @@ namespace Raycer
 				CEREAL_NVP(skipLighting),
 				CEREAL_NVP(nonShadowing),
 				CEREAL_NVP(normalInterpolation),
-				CEREAL_NVP(backfaceCulling),
 				CEREAL_NVP(invertNormal),
 				CEREAL_NVP(enableCSG),
 				CEREAL_NVP(texcoordScale),
