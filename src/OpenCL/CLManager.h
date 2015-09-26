@@ -4,6 +4,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
@@ -20,7 +21,9 @@ namespace Raycer
 		~CLManager();
 
 		void initialize();
-		void loadKernels();
+
+		cl_program createProgram(const std::vector<std::string>& sourceFilePaths);
+		cl_kernel createKernel(cl_program program, const std::string& kernelName);
 
 		static void checkError(int result, const std::string& message);
 		static std::string getErrorMessage(int result);
@@ -30,8 +33,7 @@ namespace Raycer
 		cl_device_id deviceId = nullptr;
 		cl_context context = nullptr;
 		cl_command_queue commandQueue = nullptr;
-		cl_program program = nullptr;
-		cl_kernel raytraceKernel = nullptr;
+		cl_program printSizesProgram = nullptr;
 		cl_kernel printSizesKernel = nullptr;
 	};
 }

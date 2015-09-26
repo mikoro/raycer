@@ -42,7 +42,7 @@ namespace
 
 CLRaytracer::~CLRaytracer()
 {
-	releaseMemObject(imagePtr);
+	releaseMemObject(outputImagePtr);
 	releaseMemObject(statePtr);
 	releaseMemObject(cameraPtr);
 	releaseMemObject(raytracerPtr);
@@ -54,10 +54,38 @@ CLRaytracer::~CLRaytracer()
 	releaseMemObject(pointLightsPtr);
 	releaseMemObject(trianglesPtr);
 	releaseMemObject(bvhNodesPtr);
+
+	if (raytraceKernel != nullptr)
+	{
+		clReleaseKernel(raytraceKernel);
+		raytraceKernel = nullptr;
+	}
+
+	if (raytraceProgram != nullptr)
+	{
+		clReleaseProgram(raytraceProgram);
+		raytraceProgram = nullptr;
+	}
 }
 
-void CLRaytracer::initialize()
+void CLRaytracer::initialize(const Scene& scene)
 {
+	CLManager& clManager = App::getCLManager();
+
+	clScene.readSceneFull(scene);
+	createBuffers();
+	uploadFullData();
+
+	std::vector<std::string> sourceFiles = {
+		"data/opencl/structs.cl",
+		"data/opencl/constructors.cl",
+		"data/opencl/camera.cl",
+		"data/opencl/intersections.cl",
+		"data/opencl/raytrace.cl"
+	};
+
+	raytraceProgram = clManager.createProgram(sourceFiles);
+	raytraceKernel = clManager.createKernel(raytraceProgram, "raytrace");
 }
 
 void CLRaytracer::resizeImageBuffer(int width, int height)
@@ -74,10 +102,8 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 	// use OpenGL texture as an image
 	if (settings.general.interactive)
 	{
-		// 1.2 version of the function
-		//imagePtr = clCreateFromGLTexture(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
-		imagePtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
-		CLManager::checkError(status, "Could not create image from OpenGL texture");
+		outputImagePtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
+		CLManager::checkError(status, "Could not create output image from OpenGL texture");
 	}
 	else // create own image
 	{
@@ -85,30 +111,14 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 		imageFormat.image_channel_data_type = CL_FLOAT;
 		imageFormat.image_channel_order = CL_RGBA;
 
-		/*
-		cl_image_desc imageDesc;
-		imageDesc.image_type = CL_MEM_OBJECT_IMAGE2D;
-		imageDesc.image_width = imageBufferWidth;
-		imageDesc.image_height = imageBufferHeight;
-		imageDesc.image_depth = 0;
-		imageDesc.image_array_size = 0;
-		imageDesc.image_row_pitch = 0;
-		imageDesc.image_slice_pitch = 0;
-		imageDesc.num_mip_levels = 0;
-		imageDesc.num_samples = 0;
-		imageDesc.buffer = NULL;
-		*/
-
-		// 1.2 version of the function
-		//imagePtr = clCreateImage(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, &imageDesc, NULL, &status);
-		imagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, NULL, &status);
-		CLManager::checkError(status, "Could not create image");
+		outputImagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, NULL, &status);
+		CLManager::checkError(status, "Could not create output image");
 	}
 }
 
 void CLRaytracer::releaseImageBuffer()
 {
-	releaseMemObject(imagePtr);
+	releaseMemObject(outputImagePtr);
 }
 
 void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -117,42 +127,42 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 
 	Settings& settings = App::getSettings();
 	CLManager& clManager = App::getCLManager();
+	WindowRunner& windowRunner = App::getWindowRunner();
 
-	readScene(*state.scene);
+	clScene.readSceneCamera(*state.scene);
 
-	if (!buffersCreated)
-	{
-		createBuffers();
-		buffersCreated = true;
-	}
+	if (settings.general.interactive)
+		clScene.state.time = (float)windowRunner.getElapsedTime();
+	else
+		clScene.state.time = 1.0f;
 
-	uploadData();
+	uploadCameraData();
 
 	if (settings.general.interactive)
 	{
 		glFinish();
-		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &imagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object acquire");
+		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object acquire");
 	}
 
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 0, sizeof(cl_mem), &imagePtr), "Could not set kernel argument (image)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 1, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 2, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 3, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 4, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 5, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 6, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 10, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
-	CLManager::checkError(clSetKernelArg(clManager.raytraceKernel, 11, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 0, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 1, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 2, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 3, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 4, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 5, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 6, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 7, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 8, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 9, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 10, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, 11, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
 
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 
-	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, clManager.raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue main kernel");
+	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue raytrace kernel");
 
 	if (settings.general.interactive)
-		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &imagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object release");
+		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object release");
 
 	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
@@ -169,23 +179,10 @@ Image CLRaytracer::downloadImage()
 
 	std::vector<float> data(imageBufferWidth * imageBufferHeight * 4);
 
-	cl_int status = clEnqueueReadImage(clManager.commandQueue, imagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, NULL, NULL);
-	CLManager::checkError(status, "Could not read image buffer");
+	cl_int status = clEnqueueReadImage(clManager.commandQueue, outputImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, NULL, NULL);
+	CLManager::checkError(status, "Could not read output image buffer");
 
 	return Image(imageBufferWidth, imageBufferHeight, &data[0]);
-}
-
-void CLRaytracer::readScene(const Scene& scene)
-{
-	Settings& settings = App::getSettings();
-	WindowRunner& windowRunner = App::getWindowRunner();
-
-	clScene.readSceneFull(scene);
-
-	if (settings.general.interactive)
-		clScene.state.time = (float)windowRunner.getElapsedTime();
-	else
-		clScene.state.time = 1.0f;
 }
 
 void CLRaytracer::createBuffers()
@@ -253,7 +250,7 @@ void CLRaytracer::createBuffers()
 	}
 }
 
-void CLRaytracer::uploadData()
+void CLRaytracer::uploadFullData()
 {
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
@@ -261,8 +258,7 @@ void CLRaytracer::uploadData()
 	status = clEnqueueWriteBuffer(clManager.commandQueue, statePtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, NULL, NULL);
 	CLManager::checkError(status, "Could not write state buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
-	CLManager::checkError(status, "Could not write camera buffer");
+	uploadCameraData();
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, raytracerPtr, CL_FALSE, 0, sizeof(OpenCL::Raytracer), &clScene.raytracer, 0, NULL, NULL);
 	CLManager::checkError(status, "Could not write raytracer buffer");
@@ -305,4 +301,13 @@ void CLRaytracer::uploadData()
 		status = clEnqueueWriteBuffer(clManager.commandQueue, bvhNodesPtr, CL_FALSE, 0, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), &clScene.bvhNodes[0], 0, NULL, NULL);
 		CLManager::checkError(status, "Could not write bvh nodes buffer");
 	}
+}
+
+void CLRaytracer::uploadCameraData()
+{
+	CLManager& clManager = App::getCLManager();
+	cl_int status = 0;
+
+	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
+	CLManager::checkError(status, "Could not write camera buffer");
 }

@@ -90,14 +90,12 @@ void ConsoleRunner::run(RaytracerState& state)
 	if (settings.openCL.enabled && !openCLInitialized)
 	{
 		clManager.initialize();
-		clManager.loadKernels();
-
 		openCLInitialized = true;
 	}
 
 	if (settings.openCL.enabled)
 	{
-		clRaytracer.initialize();
+		clRaytracer.initialize(*state.scene);
 		clRaytracer.resizeImageBuffer(state.sceneWidth, state.sceneHeight);
 	}
 

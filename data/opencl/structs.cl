@@ -3,11 +3,8 @@ typedef struct State
 	float time;
 	int directionalLightCount;
 	int pointLightCount;
-	int spotLightCount;
-	int planeCount;
-	int sphereCount;
-	int boxCount;
 	int triangleCount;
+	int bvhNodeCount;
 } State;
 
 typedef struct Camera
@@ -28,17 +25,17 @@ typedef struct Camera
 	float apertureSize;
 	float focalDistance;
 	float aspectRatio;
+	float imagePlaneDistance;
 	float imagePlaneWidth;
 	float imagePlaneHeight;
-	float imagePlaneDistance;
 } Camera;
 
 typedef struct Raytracer
 {
 	float4 backgroundColor;
 	float4 offLensColor;
-	int maxRayIterations;
 	float rayStartOffset;
+	int maxRayIterations;
 	int multiSamples;
 	int timeSamples;
 	int cameraSamples;
@@ -68,28 +65,31 @@ typedef struct SimpleFog
 
 typedef struct Material
 {
-	float4 color;
 	float4 ambientReflectance;
 	float4 diffuseReflectance;
 	float4 specularReflectance;
 	float4 attenuationColor;
 	float2 texcoordScale;
-	float colorIntensity;
 	float shininess;
+	int ambientMapTextureIndex;
+	int diffuseMapTextureIndex;
+	int specularMapTextureIndex;
+	int rayReflectanceMapTextureIndex;
+	int rayTransmittanceMapTextureIndex;
+	int normalMapTextureIndex;
+	int maskMapTextureIndex;
+	int heightMapTextureIndex;
+	int normalMapType;
 	int skipLighting;
 	int nonShadowing;
 	int normalInterpolation;
-	int backfaceCulling;
 	int invertNormal;
-	int hasTexture;
-	int textureIndex;
+	int fresnelReflection;
+	int enableAttenuation;
 	float rayReflectance;
 	float rayTransmittance;
 	float refractiveIndex;
-	int isFresnel;
-	int enableAttenuation;
-	float attenuation;
-	int id;
+	float attenuationFactor;
 } Material;
 
 typedef struct AmbientLight
@@ -123,48 +123,6 @@ typedef struct PointLight
 	int samples;
 } PointLight;
 
-typedef struct SpotLight
-{
-	float4 color;
-	float4 position;
-	float4 direction;
-	float intensity;
-	float distance;
-	float attenuation;
-	float sideAttenuation;
-	float angle;
-	int softShadows;
-	float radius;
-	int samplerType;
-	int samples;
-} SpotLight;
-
-typedef struct Plane
-{
-	float4 position;
-	float4 normal;
-	float4 uAxis;
-	float4 vAxis;
-	int invisible;
-	int materialIndex;
-} Plane;
-
-typedef struct Sphere
-{
-	float4 position;
-	float radius;
-	int invisible;
-	int materialIndex;
-} Sphere;
-
-typedef struct Box
-{
-	float4 position;
-	float4 extent;
-	int invisible;
-	int materialIndex;
-} Box;
-
 typedef struct Triangle
 {
 	float4 vertices[3];
@@ -173,9 +131,22 @@ typedef struct Triangle
 	float4 tangent;
 	float4 bitangent;
 	float2 texcoords[3];
-	int invisible;
 	int materialIndex;
 } Triangle;
+
+typedef struct AABB
+{
+	float4 min;
+	float4 max;
+} AABB;
+
+typedef struct BVHNode
+{
+	AABB aabb;
+	int rightOffset;
+	int startOffset;
+	int primitiveCount;
+} BVHNode;
 
 typedef struct ONB
 {

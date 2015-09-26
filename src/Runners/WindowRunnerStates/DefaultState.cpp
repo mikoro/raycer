@@ -44,7 +44,7 @@ void DefaultState::initialize()
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 
 	if (settings.openCL.enabled)
-		clRaytracer.initialize();
+		clRaytracer.initialize(scene);
 
 	currentTestSceneNumber = settings.scene.testSceneNumber;
 }

@@ -25,7 +25,7 @@ namespace Raycer
 
 		~CLRaytracer();
 
-		void initialize();
+		void initialize(const Scene& scene);
 		void resizeImageBuffer(int width, int height);
 		void releaseImageBuffer();
 		void run(RaytracerState& state, std::atomic<bool>& interrupted);
@@ -33,17 +33,16 @@ namespace Raycer
 
 	private:
 
-		void readScene(const Scene& scene);
 		void createBuffers();
-		void uploadData();
+		void uploadFullData();
+		void uploadCameraData();
 
 		CLScene clScene;
-		bool buffersCreated = false;
 
 		int imageBufferWidth = 0;
 		int imageBufferHeight = 0;
 
-		cl_mem imagePtr = nullptr;
+		cl_mem outputImagePtr = nullptr;
 		cl_mem statePtr = nullptr;
 		cl_mem cameraPtr = nullptr;
 		cl_mem raytracerPtr = nullptr;
@@ -55,5 +54,10 @@ namespace Raycer
 		cl_mem pointLightsPtr = nullptr;
 		cl_mem trianglesPtr = nullptr;
 		cl_mem bvhNodesPtr = nullptr;
+
+		std::vector<cl_mem> textureImagePtrs;
+
+		cl_program raytraceProgram = nullptr;
+		cl_kernel raytraceKernel = nullptr;
 	};
 }

@@ -111,7 +111,6 @@ namespace Raycer
 			cl_float ALIGN(4) rayTransmittance;
 			cl_float ALIGN(4) refractiveIndex;
 			cl_float ALIGN(4) attenuationFactor;
-			cl_int ALIGN(4) id;
 		};
 
 		struct AmbientLight
@@ -164,7 +163,7 @@ namespace Raycer
 
 		struct BVHNode
 		{
-			AABB ALIGN(32) aabb;
+			AABB ALIGN(16) aabb;
 			cl_int ALIGN(4) rightOffset;
 			cl_int ALIGN(4) startOffset;
 			cl_int ALIGN(4) primitiveCount;

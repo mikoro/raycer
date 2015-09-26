@@ -61,16 +61,10 @@ CLManager::~CLManager()
 		printSizesKernel = nullptr;
 	}
 
-	if (raytraceKernel != nullptr)
+	if (printSizesProgram != nullptr)
 	{
-		clReleaseKernel(raytraceKernel);
-		raytraceKernel = nullptr;
-	}
-
-	if (program != nullptr)
-	{
-		clReleaseProgram(program);
-		program = nullptr;
+		clReleaseProgram(printSizesProgram);
+		printSizesProgram = nullptr;
 	}
 
 	if (commandQueue != nullptr)
@@ -185,35 +179,31 @@ void CLManager::initialize()
 	{
 		context = clCreateContext(NULL, 1, &deviceId, openCLErrorCallback, NULL, &status);
 		checkError(status, "Could not create device context");
-	}
+		}
 
 	commandQueue = clCreateCommandQueue(context, deviceId, 0, &status);
 	checkError(status, "Could not create command queue");
+
+	std::vector<std::string> sourceFiles = { "data/opencl/structs.cl", "data/opencl/printSizes.cl" };
+	printSizesProgram = createProgram(sourceFiles);
+	printSizesKernel = createKernel(printSizesProgram, "printSizes");
 }
 
-void CLManager::loadKernels()
+cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePaths)
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 
-	log.logInfo("Building OpenCL programs");
-
-	std::vector<std::string> filePaths;
-	filePaths.push_back("data/opencl/structs.cl");
-	filePaths.push_back("data/opencl/constructors.cl");
-	filePaths.push_back("data/opencl/camera.cl");
-	filePaths.push_back("data/opencl/intersections.cl");
-	filePaths.push_back("data/opencl/printSizes.cl");
-	filePaths.push_back("data/opencl/raytrace.cl");
+	log.logInfo("Building OpenCL program");
 
 	std::stringstream sourceStringSs;
 
-	for (std::string& filePath : filePaths)
+	for (const std::string& sourceFilePath : sourceFilePaths)
 	{
-		std::ifstream file(filePath);
+		std::ifstream file(sourceFilePath);
 
 		if (!file.good())
-			throw std::runtime_error("Could not open OpenCL source file");
+			throw std::runtime_error( tfm::format("Could not open OpenCL source file: %s", sourceFilePath));
 
 		sourceStringSs << file.rdbuf();
 		file.close();
@@ -225,7 +215,7 @@ void CLManager::loadKernels()
 	cl_int status = 0;
 	size_t length = 0;
 
-	program = clCreateProgramWithSource(context, 1, &sourceStringPtr, NULL, &status);
+	cl_program program = clCreateProgramWithSource(context, 1, &sourceStringPtr, NULL, &status);
 	checkError(status, "Could not read program source file");
 
 	std::string optionsString = tfm::format("%s -I%s/data/opencl", settings.openCL.options, boost::filesystem::current_path().string());
@@ -241,28 +231,17 @@ void CLManager::loadKernels()
 
 	checkError(status, "Could not build program");
 
-#if 1 && defined(_DEBUG)
-	log.logInfo("Writing OpenCL binary to opencl.bin");
+	return program;
+}
 
-	size_t binaryDataSize = 0;
-	clGetProgramInfo(program, CL_PROGRAM_BINARY_SIZES, sizeof(size_t), &binaryDataSize, NULL);
+cl_kernel CLManager::createKernel(cl_program program, const std::string& kernelName)
+{
+	cl_int status = 0;
 
-	if (binaryDataSize > 0)
-	{
-		std::vector<unsigned char> binaryData(binaryDataSize);
-		unsigned char* binaryPtr = &binaryData[0];
-		clGetProgramInfo(program, CL_PROGRAM_BINARIES, binaryDataSize, &binaryPtr, NULL);
-		std::ofstream binaryFile("opencl.bin", std::ios::binary);
-		binaryFile.write((const char*)&binaryData[0], binaryDataSize);
-		binaryFile.close();
-	}
-#endif
+	cl_kernel kernel = clCreateKernel(program, kernelName.c_str(), &status);
+	checkError(status, tfm::format("Could not create kernel: %s", kernelName));
 
-	raytraceKernel = clCreateKernel(program, "raytrace", &status);
-	checkError(status, "Could not create raytrace kernel");
-
-	printSizesKernel = clCreateKernel(program, "printSizes", &status);
-	checkError(status, "Could not create printSizes kernel");
+	return kernel;
 }
 
 void CLManager::checkError(int result, const std::string& message)
@@ -360,7 +339,8 @@ void CLManager::writeStructSizes(const std::string& fileName)
 	file << tfm::format("DirectionalLight: %d\n", sizeof(OpenCL::DirectionalLight));
 	file << tfm::format("PointLight: %d\n", sizeof(OpenCL::PointLight));
 	file << tfm::format("Triangle: %d\n", sizeof(OpenCL::Triangle));
-	file << tfm::format("BVH Node: %d\n", sizeof(OpenCL::BVHNode));
+	file << tfm::format("AABB: %d\n", sizeof(OpenCL::AABB));
+	file << tfm::format("BVHNode: %d\n", sizeof(OpenCL::BVHNode));
 
 	file.close();
 }

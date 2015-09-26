@@ -8,11 +8,8 @@ kernel void raytrace(write_only image2d_t image,
 	constant AmbientLight* ambientLight,
 	constant DirectionalLight* directionalLights,
 	constant PointLight* pointLights,
-	constant SpotLight* spotLights,
-	constant Plane* planes,
-	constant Sphere* spheres,
-	constant Box* boxes,
-	constant Triangle* triangles)
+	constant Triangle* triangles,
+	constant BVHNode* bvhNodes)
 {
 	int x = get_global_id(0);
 	int y = get_global_id(1);
@@ -21,22 +18,13 @@ kernel void raytrace(write_only image2d_t image,
 	Intersection intersection = constructIntersection();
 	float4 finalColor = raytracer->backgroundColor;
 
-	for (int i = 0; i < state->planeCount; ++i)
-		intersectPlane(&planes[i], &ray, &intersection, materials);
-
-	for (int i = 0; i < state->sphereCount; ++i)
-		intersectSphere(&spheres[i], &ray, &intersection, materials);
-
-	for (int i = 0; i < state->boxCount; ++i)
-		intersectBox(&boxes[i], &ray, &intersection, materials);
-
 	for (int i = 0; i < state->triangleCount; ++i)
 		intersectTriangle(&triangles[i], &ray, &intersection, materials);
 
 	if (intersection.wasFound)
 	{
 		constant Material* material = &materials[intersection.materialIndex];
-		finalColor = material->color * material->colorIntensity;
+		finalColor = material->ambientReflectance;
 	}
 
 	write_imagef(image, (int2)(x, y), finalColor);

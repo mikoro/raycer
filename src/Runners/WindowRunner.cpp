@@ -243,10 +243,7 @@ void WindowRunner::initialize()
 	framebuffer.enableSmoothing(settings.framebuffer.enableSmoothing);
 
 	if (settings.openCL.enabled)
-	{
 		clManager.initialize();
-		clManager.loadKernels();
-	}
 
 	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
 	pauseText.initialize(settings.window.defaultFont, 100);

@@ -45,14 +45,24 @@ namespace
 		destination.s[3] = 0.0f;
 	}
 
-	int findMaterialIndex(const std::vector<OpenCL::Material>& materials, int materialId)
+	int findMaterialIndex(const std::vector<Material>& materials, int materialId)
 	{
-		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const OpenCL::Material& material) { return material.id == materialId; });
+		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const Material& material) { return material.id == materialId; });
 
 		if (result == materials.end())
 			throw std::runtime_error(tfm::format("Could not find OpenCL material index for material id (%d)", materialId));
 
 		return (int)(result - materials.begin());
+	}
+
+	int findTextureIndex(const std::vector<ImageTexture>& textures, int textureId)
+	{
+		auto result = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture) { return texture.id == textureId; });
+
+		if (result == textures.end())
+			return -1;
+
+		return (int)(result - textures.begin());
 	}
 }
 
@@ -98,14 +108,14 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.attenuationColor, material.attenuationColor);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
 		clMaterial.shininess = (cl_float)material.shininess;
-		clMaterial.ambientMapTextureIndex = (cl_int)-1;
-		clMaterial.diffuseMapTextureIndex = (cl_int)-1;
-		clMaterial.specularMapTextureIndex = (cl_int)-1;
-		clMaterial.rayReflectanceMapTextureIndex = (cl_int)-1;
-		clMaterial.rayTransmittanceMapTextureIndex = (cl_int)-1;
-		clMaterial.normalMapTextureIndex = (cl_int)-1;
-		clMaterial.maskMapTextureIndex = (cl_int)-1;
-		clMaterial.heightMapTextureIndex = (cl_int)-1;
+		clMaterial.ambientMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
+		clMaterial.diffuseMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
+		clMaterial.specularMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId);
+		clMaterial.rayReflectanceMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId);
+		clMaterial.rayTransmittanceMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId);
+		clMaterial.normalMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId);
+		clMaterial.maskMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId);
+		clMaterial.heightMapTextureIndex = (cl_int)findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId);
 		clMaterial.normalMapType = (cl_int)-1;
 		clMaterial.skipLighting = (cl_int)material.skipLighting;
 		clMaterial.nonShadowing = (cl_int)material.nonShadowing;
@@ -117,7 +127,6 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.rayTransmittance = (cl_float)material.rayTransmittance;
 		clMaterial.refractiveIndex = (cl_float)material.refractiveIndex;
 		clMaterial.attenuationFactor = (cl_float)material.attenuationFactor;
-		clMaterial.id = (cl_int)material.id;
 
 		materials.push_back(clMaterial);
 	}
@@ -174,7 +183,7 @@ void CLScene::readSceneFull(const Scene& scene)
 	for (Primitive* primitivePtr : scene.rootBVH.bvh.orderedPrimitives)
 	{
 		Triangle* triangle = dynamic_cast<Triangle*>(primitivePtr);
-		
+
 		if (triangle == nullptr)
 			throw std::runtime_error("When using OpenCL, the root BVH must only contain triangles");
 
@@ -192,7 +201,7 @@ void CLScene::readSceneFull(const Scene& scene)
 		readVector3(clTriangle.normal, triangle->normal);
 		readVector3(clTriangle.tangent, triangle->tangent);
 		readVector3(clTriangle.bitangent, triangle->bitangent);
-		clTriangle.materialIndex = (cl_int)findMaterialIndex(materials, triangle->materialId);
+		clTriangle.materialIndex = (cl_int)findMaterialIndex(scene.materials, triangle->materialId);
 
 		triangles.push_back(clTriangle);
 	}
