@@ -10,7 +10,7 @@ using namespace Raycer;
 
 void ImageTexture::initialize()
 {
-	image = ImagePool::loadImage(imageFilePath);
+	image = ImagePool::loadImage(imageFilePath, applyGamma);
 
 	if (isBumpMap)
 	{
@@ -77,8 +77,8 @@ Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 	{
 		Color color = image->getPixelBilinear(texcoord.x, texcoord.y);
 
-		normal.x = (color.r - 0.5) * 2.0;
-		normal.y = (color.g - 0.5) * 2.0;
+		normal.x = color.r * 2.0 - 1.0;
+		normal.y = color.g * 2.0 - 1.0;
 		normal.z = color.b;
 
 		type = TextureNormalDataType::NORMAL_MAP;

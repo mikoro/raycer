@@ -45,7 +45,7 @@ Scene Scene::createTestScene10()
 	scene.materials.push_back(sphereMaterial);
 	scene.primitives.spheres.push_back(sphere);
 
-	// MODEL 1 //
+	// FLOOR MODEL //
 
 	ImageTexture model1NormalTexture;
 	model1NormalTexture.id = 2;
@@ -62,7 +62,7 @@ Scene Scene::createTestScene10()
 	model1Material.shininess = 64.0;
 	model1Material.texcoordScale = Vector2(10.0, 10.0);
 
-	ModelLoaderInfo model1Info(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo model1Info(ModelLoaderPreset::COMBINED_GROUP);
 	model1Info.modelFilePath = "data/meshes/square.obj";
 	model1Info.defaultMaterialId = model1Material.id;
 	model1Info.combinedGroupId = 2;
@@ -76,31 +76,38 @@ Scene Scene::createTestScene10()
 	scene.materials.push_back(model1Material);
 	scene.models.push_back(model1Info);
 
-	// MODEL 2 //
+	// WALL MODEL //
 
-	ImageTexture model2Texture;
-	model2Texture.id = 3;
-	model2Texture.imageFilePath = "data/images/stonewall.jpg";
-	model2Texture.intensity = 1.0;
+	ImageTexture model2DiffuseTexture;
+	model2DiffuseTexture.id = 3;
+	model2DiffuseTexture.imageFilePath = "data/images/stonewall_diffuse.png";
+	model2DiffuseTexture.intensity = 1.0;
+	model2DiffuseTexture.applyGamma = true;
+
+	ImageTexture model2SpecularTexture;
+	model2SpecularTexture.id = 4;
+	model2SpecularTexture.imageFilePath = "data/images/stonewall_specular.png";
+	model2SpecularTexture.intensity = 1.0;
+	model2SpecularTexture.applyGamma = true;
 
 	ImageTexture model2NormalTexture;
-	model2NormalTexture.id = 4;
-	model2NormalTexture.imageFilePath = "data/images/stonewall_bumpmap.jpg";
-	model2NormalTexture.isBumpMap = true;
-	model2NormalTexture.intensity = 2.0;
+	model2NormalTexture.id = 5;
+	model2NormalTexture.imageFilePath = "data/images/stonewall_normal.png";
+	model2NormalTexture.isNormalMap = true;
 
 	Material model2Material;
 	model2Material.id = 3;
-	model2Material.ambientMapTextureId = model2Texture.id;
-	model2Material.diffuseMapTextureId = model2Texture.id;
+	model2Material.ambientMapTextureId = model2DiffuseTexture.id;
+	model2Material.diffuseMapTextureId = model2DiffuseTexture.id;
+	model2Material.specularMapTextureId = model2SpecularTexture.id;
 	model2Material.normalMapTextureId = model2NormalTexture.id;
 	model2Material.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.5;
 	model2Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	model2Material.shininess = 64.0;
 	model2Material.nonShadowing = true;
-	model2Material.texcoordScale = Vector2(4.0, 4.0);
+	model2Material.texcoordScale = Vector2(4.0, 2.0);
 
-	ModelLoaderInfo model2Info(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo model2Info(ModelLoaderPreset::COMBINED_GROUP);
 	model2Info.modelFilePath = "data/meshes/square.obj";
 	model2Info.defaultMaterialId = model2Material.id;
 	model2Info.combinedGroupId = 4;
@@ -110,18 +117,18 @@ Scene Scene::createTestScene10()
 	model2Info.rotate = EulerAngle(0.0, 0.0, 0.0);
 	model2Info.translate = Vector3(-10.0, 0.0, -2.5);
 
-	scene.textures.imageTextures.push_back(model2Texture);
+	scene.textures.imageTextures.push_back(model2DiffuseTexture);
+	scene.textures.imageTextures.push_back(model2SpecularTexture);
 	scene.textures.imageTextures.push_back(model2NormalTexture);
 	scene.materials.push_back(model2Material);
 	scene.models.push_back(model2Info);
 
-	// MODEL 3 //
+	// CUBE MODEL //
 
 	ImageTexture model3NormalTexture;
-	model3NormalTexture.id = 5;
+	model3NormalTexture.id = 6;
 	model3NormalTexture.imageFilePath = "data/images/cube_normalmap.png";
 	model3NormalTexture.isNormalMap = true;
-	model3NormalTexture.intensity = 1.0;
 
 	Material mesh3Material;
 	mesh3Material.id = 4;
@@ -132,7 +139,7 @@ Scene Scene::createTestScene10()
 	mesh3Material.shininess = 64.0;
 	mesh3Material.nonShadowing = true;
 
-	ModelLoaderInfo model3Info(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo model3Info(ModelLoaderPreset::COMBINED_GROUP);
 	model3Info.modelFilePath = "data/meshes/cube_normalmap.obj";
 	model3Info.defaultMaterialId = mesh3Material.id;
 	model3Info.combinedGroupId = 6;
@@ -153,7 +160,7 @@ Scene Scene::createTestScene10()
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
-	pointLight.intensity = 0.8;
+	pointLight.intensity = 0.6;
 	pointLight.distance = 20.0;
 	pointLight.attenuation = 1.0;
 

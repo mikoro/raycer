@@ -161,6 +161,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
 				hasAmbientMap = true;
@@ -177,6 +178,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
 				hasDiffuseMap = true;
@@ -193,6 +195,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
 				hasSpecularMap = true;
@@ -210,6 +213,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
 				hasNormalMap = true;
@@ -227,6 +231,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
 				hasNormalMap = true;
@@ -243,6 +248,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
 				hasMaskMap = true;
@@ -259,6 +265,7 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
 				hasHeightMap = true;

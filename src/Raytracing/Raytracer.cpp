@@ -218,11 +218,6 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 
 	Material* material = intersection.primitive->material;
 
-	double c1 = -(ray.direction.dot(intersection.normal));
-	bool isOutside = (c1 >= 0.0);
-	double n1 = isOutside ? 1.0 : material->refractiveIndex;
-	double n2 = isOutside ? material->refractiveIndex : 1.0;
-
 	if (material->skipLighting)
 	{
 		if (material->ambientMapTexture != nullptr)
@@ -230,6 +225,8 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		else if (material->diffuseMapTexture != nullptr)
 			finalColor = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
 		
+		bool isOutside = -(ray.direction.dot(intersection.normal)) >= 0.0;
+
 		if (scene.simpleFog.enabled && isOutside)
 			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
 
@@ -261,6 +258,10 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		}
 	}
 
+	double c1 = -(ray.direction.dot(intersection.normal));
+	bool isOutside = (c1 >= 0.0);
+	double n1 = isOutside ? 1.0 : material->refractiveIndex;
+	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double fresnelReflectance = 1.0;
 	double fresnelTransmittance = 1.0;
 

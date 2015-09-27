@@ -23,7 +23,7 @@ Scene Scene::createTestScene9()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
 	modelInfo.combinedGroupId = 1;
 	modelInfo.enableCombinedGroupInstance = false;

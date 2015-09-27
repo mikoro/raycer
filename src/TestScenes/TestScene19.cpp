@@ -19,27 +19,19 @@ Scene Scene::createTestScene19()
 
 	// GROUND MODEL //
 
-// 	CheckerTexture groundTexture;
-// 	groundTexture.id = 1;
-// 	groundTexture.color1 = Color(0.2, 0.2, 0.2);
-// 	groundTexture.color2 = Color(0.4, 0.4, 0.4);
-// 	groundTexture.intensity = 1.0;
-// 	groundTexture.stripeMode = true;
-// 	groundTexture.stripeWidth = 0.02;
-
 	ImageTexture groundTexture;
 	groundTexture.id = 1;
 	groundTexture.intensity = 1.0;
 	groundTexture.imageFilePath = "data/images/wood_floor.jpg";
+	groundTexture.applyGamma = true;
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
-	//groundMaterial.texcoordScale = Vector2(900.0, 900.0);
 	groundMaterial.texcoordScale = Vector2(50.0, 50.0);
 
-	ModelLoaderInfo modelInfo(ModelLoaderInfoType::TRIANGLES);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/square.obj";
 	modelInfo.defaultMaterialId = groundMaterial.id;
 	modelInfo.idStartOffset = 1000;
@@ -65,7 +57,7 @@ Scene Scene::createTestScene19()
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
 
-	modelInfo = ModelLoaderInfo(ModelLoaderInfoType::TRIANGLES);
+	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sphere.obj";
 	modelInfo.defaultMaterialId = sphereMaterial.id;
 	modelInfo.idStartOffset = 2000;
@@ -78,7 +70,7 @@ Scene Scene::createTestScene19()
 
 	// MATPREVIEW MODEL //
 
-	modelInfo = ModelLoaderInfo(ModelLoaderInfoType::TRIANGLES);
+	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/matpreview/matpreview.obj";
 	modelInfo.idStartOffset = 3000;
 

@@ -77,6 +77,7 @@ Scene Scene::createTestScene16()
 	sphere2Texture.id = 2;
 	sphere2Texture.imageFilePath = "data/images/poolball1.jpg";
 	sphere2Texture.intensity = 0.5;
+	sphere2Texture.applyGamma = true;
 
 	Material sphere2Material;
 	sphere2Material.id = 3;
@@ -111,6 +112,7 @@ Scene Scene::createTestScene16()
 	sphere3Texture.id = 3;
 	sphere3Texture.imageFilePath = "data/images/poolball2.jpg";
 	sphere3Texture.intensity = 0.5;
+	sphere3Texture.applyGamma = true;
 
 	Material sphere3Material;
 	sphere3Material.id = 4;

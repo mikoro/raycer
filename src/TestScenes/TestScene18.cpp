@@ -24,7 +24,7 @@ Scene Scene::createTestScene18()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo(ModelLoaderInfoType::TRIANGLES);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sponza/sponza.obj";
 	modelInfo.scale = Vector3(0.01, 0.01, 0.01);
 	scene.models.push_back(modelInfo);

@@ -32,6 +32,7 @@ namespace Raycer
 		std::string imageFilePath;
 		bool isBumpMap = false;
 		bool isNormalMap = false;
+		bool applyGamma = false;
 
 	private:
 
@@ -47,7 +48,8 @@ namespace Raycer
 			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),
 				CEREAL_NVP(imageFilePath),
 				CEREAL_NVP(isBumpMap),
-				CEREAL_NVP(isNormalMap));
+				CEREAL_NVP(isNormalMap),
+				CEREAL_NVP(applyGamma));
 		}
 	};
 }

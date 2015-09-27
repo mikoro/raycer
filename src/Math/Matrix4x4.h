@@ -36,6 +36,7 @@ namespace Raycer
 		Matrix4x4();
 		Matrix4x4(const Matrix4x4& m);
 		Matrix4x4(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33);
+		Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f);
 		Matrix4x4& operator=(const Matrix4x4& m);
 
 		friend Matrix4x4 operator+(const Matrix4x4& m, const Matrix4x4& n);

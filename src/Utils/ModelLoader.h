@@ -23,7 +23,7 @@ namespace Raycer
 	GROUPS: generate invisible triangles, generate invisible primitive groups based on groups in model file, generate visible instances to primitive groups (generated IDs)
 	COMBINED_GROUP: generate invisible triangles, generate one invisible primitive group to all triangles, generate one visible instance to the primitive group (preset IDs)
 	*/
-	enum class ModelLoaderInfoType { TRIANGLES, GROUPS, COMBINED_GROUP };
+	enum class ModelLoaderPreset { TRIANGLES, GROUPS, COMBINED_GROUP };
 
 	struct ModelLoaderInfo
 	{
@@ -46,16 +46,16 @@ namespace Raycer
 		int combinedGroupInstanceId = 0;
 
 		ModelLoaderInfo() {}
-		ModelLoaderInfo(ModelLoaderInfoType type)
+		ModelLoaderInfo(ModelLoaderPreset preset)
 		{
-			if (type == ModelLoaderInfoType::GROUPS)
+			if (preset == ModelLoaderPreset::GROUPS)
 			{
 				enableGroups = true;
 				enableGroupsInstances = true;
 				invisibleGroups = true;
 				invisibleTriangles = true;
 			}
-			else if (type == ModelLoaderInfoType::COMBINED_GROUP)
+			else if (preset == ModelLoaderPreset::COMBINED_GROUP)
 			{
 				enableCombinedGroup = true;
 				enableCombinedGroupInstance = true;

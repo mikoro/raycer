@@ -110,7 +110,6 @@ void Image::load(const std::string& fileName)
 		}
 
 		stbi_image_free(loadData);
-		applyFastGamma(2.2);
 	}
 }
 
@@ -320,7 +319,7 @@ std::map<std::string, int> ImagePool::imageIndexMap = std::map<std::string, int>
 std::vector<Image> ImagePool::images = std::vector<Image>();
 bool ImagePool::initialized = false;
 
-const Image* ImagePool::loadImage(const std::string& fileName)
+const Image* ImagePool::loadImage(const std::string& fileName, bool applyGamma)
 {
 	if (!initialized)
 	{
@@ -332,6 +331,9 @@ const Image* ImagePool::loadImage(const std::string& fileName)
 	{
 		images.push_back(Image(fileName));
 		imageIndexMap[fileName] = (int)images.size() - 1;
+
+		if (applyGamma)
+			images.back().applyFastGamma(2.2);
 	}
 
 	// the limit is arbitrary, increase it if it becomes a problem

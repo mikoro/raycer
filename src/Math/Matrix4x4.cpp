@@ -37,6 +37,14 @@ Matrix4x4::Matrix4x4(double m00, double m10, double m20, double m30, double m01,
 	m[0][3] = m03; m[1][3] = m13; m[2][3] = m23; m[3][3] = m33;
 }
 
+Matrix4x4::Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f)
+{
+	m[0][0] = r.x; m[1][0] = u.x; m[2][0] = f.x; m[3][0] = 0.0;
+	m[0][1] = r.y; m[1][1] = u.y; m[2][1] = f.y; m[3][1] = 0.0;
+	m[0][2] = r.z; m[1][2] = u.z; m[2][2] = f.z; m[3][2] = 0.0;
+	m[0][3] = 0.0; m[1][3] = 0.0; m[2][3] = 0.0; m[3][3] = 1.0;
+}
+
 Matrix4x4& Matrix4x4::operator=(const Matrix4x4& n)
 {
 	std::memcpy(m, n.m, sizeof(double) * 16);

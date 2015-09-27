@@ -19,7 +19,7 @@ Scene Scene::createTestScene3()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/cornellbox.obj";
 	modelInfo.combinedGroupId = 1;
 	modelInfo.combinedGroupInstanceId = 2;

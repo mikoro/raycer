@@ -90,7 +90,7 @@ namespace Raycer
 		struct Raytracer
 		{
 			int maxRayIterations = 3;
-			double rayStartOffset = 0.000001;
+			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
 			int multiSamples = 0;

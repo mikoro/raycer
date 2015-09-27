@@ -66,7 +66,7 @@ Scene Scene::createTestScene15()
 	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
 
-	ModelLoaderInfo modelInfo(ModelLoaderInfoType::COMBINED_GROUP);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
 	modelInfo.defaultMaterialId = modelMaterial.id;
 	modelInfo.combinedGroupId = 6;
