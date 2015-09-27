@@ -1,7 +1,7 @@
 float4 getTextureColor(int textureIndex, float2 texcoord, TEX_INPUT_ARGS)
 {
 	const sampler_t sampler = CLK_NORMALIZED_COORDS_TRUE | CLK_ADDRESS_CLAMP_TO_EDGE | CLK_FILTER_LINEAR;
-	float4 color = (float4)(1.0, 0.0, 0.0, 1.0);
+	float4 color = (float4)(0.0, 0.0, 0.0, 1.0);
 
 	switch(textureIndex)
 	{

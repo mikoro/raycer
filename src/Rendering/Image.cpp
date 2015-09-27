@@ -318,14 +318,26 @@ std::vector<float> Image::getFloatData() const
 
 std::map<std::string, int> ImagePool::imageIndexMap = std::map<std::string, int>();
 std::vector<Image> ImagePool::images = std::vector<Image>();
+bool ImagePool::initialized = false;
 
 const Image* ImagePool::loadImage(const std::string& fileName)
 {
+	if (!initialized)
+	{
+		images.reserve(MAX_IMAGES);
+		initialized = true;
+	}
+
 	if (!imageIndexMap.count(fileName))
 	{
 		images.push_back(Image(fileName));
 		imageIndexMap[fileName] = (int)images.size() - 1;
 	}
+
+	// the limit is arbitrary, increase it if it becomes a problem
+	// idea is to prevent push_back from invalidating pointers
+	if (images.size() > MAX_IMAGES)
+		throw std::runtime_error("Image pool maximum size exceeded");
 
 	return &images[imageIndexMap[fileName]];
 }

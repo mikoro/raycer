@@ -32,14 +32,14 @@ Scene Scene::createTestScene18()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.05;
+	scene.lights.ambientLight.intensity = 0.02;
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
 	pointLight.intensity = 1.0;
 	pointLight.position = Vector3(0.0, 8.0, 0.0);
-	pointLight.distance = 20.0;
-	pointLight.attenuation = 2.0;
+	pointLight.distance = 15.0;
+	pointLight.attenuation = 1.0;
 
 	scene.lights.pointLights.push_back(pointLight);
 

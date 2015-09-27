@@ -76,7 +76,10 @@ CLRaytracer::~CLRaytracer()
 
 void CLRaytracer::initialize(const Scene& scene)
 {
+	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
+
+	log.logInfo("Initializing OpenCL raytracer");
 
 	clScene.readSceneFull(scene);
 	createBuffers();
@@ -87,8 +90,9 @@ void CLRaytracer::initialize(const Scene& scene)
 		"data/opencl/structs.cl",
 		"data/opencl/constructors.cl",
 		"data/opencl/camera.cl",
-		"data/opencl/intersections.cl",
 		"data/opencl/textures.cl",
+		"data/opencl/intersections.cl",
+		"data/opencl/lighting.cl",
 		"data/opencl/raytrace.cl"
 	};
 
@@ -326,6 +330,8 @@ void CLRaytracer::createTextureImages()
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
+
+	log.logInfo("Uploading texture data to the OpenCL device");
 
 	cl_image_format imageFormat;
 	imageFormat.image_channel_data_type = CL_FLOAT;

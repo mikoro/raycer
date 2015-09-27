@@ -13,6 +13,9 @@
 
 Origin (0, 0) is at the bottom left corner.
 
+ImagePool is used by ImageTextures to prevent loading the same file twice to the memory.
+It will also be uploaded as is to the OpenCL device and indexed appropriately.
+
 */
 
 namespace Raycer
@@ -72,5 +75,8 @@ namespace Raycer
 
 		static std::map<std::string, int> imageIndexMap;
 		static std::vector<Image> images;
+		static bool initialized;
+
+		static const int MAX_IMAGES = 1000;
 	};
 }

@@ -24,11 +24,11 @@ bool intersectAABB(AABB aabb, Ray ray)
 	return true;
 }
 
-bool intersectTriangle(constant Material* materials, Triangle triangle, Ray ray, Intersection* intersection)
+bool intersectTriangle(constant Material* materials, Triangle triangle, Ray ray, Intersection* intersection, TEX_INPUT_ARGS)
 {
-	constant Material* material = &materials[triangle.materialIndex];
+	Material material = materials[triangle.materialIndex];
 
-	if (ray.isShadowRay && material->nonShadowing)
+	if (ray.isShadowRay && material.nonShadowing)
 		return false;
 
 	if (ray.fastOcclusion && intersection->wasFound)
@@ -70,24 +70,24 @@ bool intersectTriangle(constant Material* materials, Triangle triangle, Ray ray,
 
 	float w = 1.0 - u - v;
 
-	float2 texcoord = (w * triangle.texcoords[0] + u * triangle.texcoords[1] + v * triangle.texcoords[2]) * material->texcoordScale;
-	float4 ip = ray.origin + (t * ray.direction);
+	float2 texcoord = (w * triangle.texcoords[0] + u * triangle.texcoords[1] + v * triangle.texcoords[2]) * material.texcoordScale;
 
 	texcoord.x = texcoord.x - floor(texcoord.x);
 	texcoord.y = texcoord.y - floor(texcoord.y);
 
-	//if (material->maskMapTexture != NULL)
-	//{
-	//	if (material->maskMapTexture->getValue(texcoord, ip) < 0.5)
-	//		return false;
-	//}
+	if (material.maskMapTextureIndex != -1)
+	{
+		if (getTextureColor(material.maskMapTextureIndex, texcoord, TEX_OUTPUT_ARGS).x < 0.5)
+			return false;
+	}
 
-	float4 finalNormal = material->normalInterpolation ? (w * triangle.normals[0] + u * triangle.normals[1] + v * triangle.normals[2]) : triangle.normal;
+	float4 finalNormal = material.normalInterpolation ? (w * triangle.normals[0] + u * triangle.normals[1] + v * triangle.normals[2]) : triangle.normal;
+	float4 ip = ray.origin + (t * ray.direction);
 
 	intersection->wasFound = true;
 	intersection->distance = t;
 	intersection->position = ip;
-	intersection->normal = material->invertNormal ? -finalNormal : finalNormal;
+	intersection->normal = material.invertNormal ? -finalNormal : finalNormal;
 	intersection->onb = constructONBFromValues(triangle.tangent, triangle.bitangent, intersection->normal);
 	intersection->texcoord = texcoord;
 	intersection->materialIndex = triangle.materialIndex;
@@ -95,7 +95,7 @@ bool intersectTriangle(constant Material* materials, Triangle triangle, Ray ray,
 	return true;
 }
 
-bool intersectBVH(constant BVHNode* nodes, constant Triangle* triangles, constant Material* materials, Ray ray, Intersection* intersection)
+bool intersectBVH(constant BVHNode* nodes, constant Triangle* triangles, constant Material* materials, Ray ray, Intersection* intersection, TEX_INPUT_ARGS)
 {
 	int stack[32];
 	int stackptr = 0;
@@ -117,7 +117,7 @@ bool intersectBVH(constant BVHNode* nodes, constant Triangle* triangles, constan
 		{
 			for (int i = 0; i < node.primitiveCount; ++i)
 			{
-				if (intersectTriangle(materials, triangles[node.startOffset + i], ray, intersection))
+				if (intersectTriangle(materials, triangles[node.startOffset + i], ray, intersection, TEX_OUTPUT_ARGS))
 				{
 					if (ray.fastOcclusion)
 						return true;

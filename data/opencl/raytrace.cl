@@ -18,21 +18,25 @@ kernel void raytrace(
 
 	Ray ray = getCameraRay(camera, x, y);
 	Intersection intersection = constructIntersection();
-	float4 finalColor = raytracer->backgroundColor;
+	float4 outputColor = raytracer->backgroundColor;
 
-	intersectBVH(nodes, triangles, materials, ray, &intersection);
-
-	if (intersection.wasFound)
+	if (intersectBVH(nodes, triangles, materials, ray, &intersection, TEX_OUTPUT_ARGS))
 	{
-		constant Material* material = &materials[intersection.materialIndex];
-
-		if (material->diffuseMapTextureIndex != -1)
-		{
-			finalColor = getTextureColor(material->diffuseMapTextureIndex, intersection.texcoord, TEX_OUTPUT_ARGS);
-		}
-		else
-			finalColor = material->diffuseReflectance;
+		outputColor = calculateLightColor(nodes,
+			triangles,
+			materials,
+			state,
+			raytracer,
+			ambientLight,
+			directionalLights,
+			pointLights,
+			ray,
+			intersection,
+			TEX_OUTPUT_ARGS);
 	}
 
-	write_imagef(outputImage, (int2)(x, y), clamp(pow(finalColor, 1.0 / 2.2), 0.0, 1.0));
+	outputColor = clamp(pow(outputColor, 1.0 / 2.2), 0.0, 1.0);
+	outputColor.w = 1.0;
+
+	write_imagef(outputImage, (int2)(x, y), outputColor);
 }

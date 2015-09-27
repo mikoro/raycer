@@ -205,7 +205,7 @@ void Scene::addModel(const ModelLoaderResult& result)
 void Scene::initialize()
 {
 	Log& log = App::getLog();
-	log.logInfo("Initializing the scene");
+	log.logInfo("Initializing scene");
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
