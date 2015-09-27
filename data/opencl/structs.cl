@@ -99,10 +99,10 @@ typedef struct AmbientLight
 	float4 color;
 	float intensity;
 	int enableOcclusion;
-	float maxDistance;
-	int samplerType;
-	int samples;
-	float distribution;
+	float maxOcclusionDistance;
+	int occlusionSamplerType;
+	int occlusionSamples;
+	float occlusionSampleDistribution;
 } AmbientLight;
 
 typedef struct DirectionalLight
@@ -117,12 +117,12 @@ typedef struct PointLight
 	float4 color;
 	float4 position;
 	float intensity;
-	float distance;
+	float maxDistance;
 	float attenuation;
-	int softShadows;
 	float radius;
-	int samplerType;
-	int samples;
+	int enableSoftShadows;
+	int softShadowSamplerType;
+	int softShadowSamples;
 } PointLight;
 
 typedef struct Triangle

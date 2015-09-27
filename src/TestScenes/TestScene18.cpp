@@ -27,18 +27,22 @@ Scene Scene::createTestScene18()
 	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sponza/sponza.obj";
 	modelInfo.scale = Vector3(0.01, 0.01, 0.01);
+	modelInfo.baseMaterial.normalInterpolation = true;
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.02;
+	scene.lights.ambientLight.intensity = 0.1;
+	scene.lights.ambientLight.enableOcclusion = false;
+	scene.lights.ambientLight.maxOcclusionDistance = 0.5;
+	scene.lights.ambientLight.occlusionSamples = 8;
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
 	pointLight.intensity = 1.0;
 	pointLight.position = Vector3(0.0, 8.0, 0.0);
-	pointLight.distance = 15.0;
+	pointLight.maxDistance = 20.0;
 	pointLight.attenuation = 1.0;
 
 	scene.lights.pointLights.push_back(pointLight);

@@ -396,7 +396,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 
 		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
-		double distanceAttenuation = std::min(1.0, distanceToLight / light.distance);
+		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 
 		lightColor += pointLightColor * distanceAttenuation * (1.0 - shadowAmount);
@@ -410,7 +410,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 
 		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
-		double distanceAttenuation = std::min(1.0, distanceToLight / light.distance);
+		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 		double sideAttenuation = light.direction.dot(-directionToLight);
 
@@ -470,9 +470,9 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 {
 	double ambientOcclusion = 0.0;
 	int permutation = randomDist(generator);
-	int n = scene.lights.ambientLight.samples;
-	double distribution = scene.lights.ambientLight.distribution;
-	Sampler* sampler = samplers[scene.lights.ambientLight.samplerType].get();
+	int n = scene.lights.ambientLight.occlusionSamples;
+	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
+	Sampler* sampler = samplers[scene.lights.ambientLight.occlusionSamplerType].get();
 
 	for (int y = 0; y < n; ++y)
 	{
@@ -487,7 +487,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			sampleRay.origin = intersection.position + sampleDirection * scene.raytracer.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
-			sampleRay.maxDistance = scene.lights.ambientLight.maxDistance;
+			sampleRay.maxDistance = scene.lights.ambientLight.maxOcclusionDistance;
 			sampleRay.update();
 
 			for (Primitive* primitive : scene.primitives.visible)
@@ -537,7 +537,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 {
 	Vector3 directionToLight = (light.position - intersection.position).normalized();
 
-	if (!light.softShadows)
+	if (!light.enableSoftShadows)
 	{
 		Ray shadowRay;
 		Intersection shadowIntersection;
@@ -567,8 +567,8 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 
 	double shadowAmount = 0.0;
 	int permutation = randomDist(generator);
-	int n = light.samples;
-	Sampler* sampler = samplers[light.samplerType].get();
+	int n = light.softShadowSamples;
+	Sampler* sampler = samplers[light.softShadowSamplerType].get();
 
 	for (int y = 0; y < n; ++y)
 	{

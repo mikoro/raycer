@@ -63,10 +63,10 @@ Scene Scene::createTestScene11()
 	pointLight.color = Color(1.0, 1.0, 1.0);
 	pointLight.intensity = 1.5;
 	pointLight.position = Vector3(10.0, 10.0, 10.0);
-	pointLight.distance = 100.0;
+	pointLight.maxDistance = 100.0;
 	pointLight.attenuation = 1.0;
-	pointLight.softShadows = true;
-	pointLight.samples = 3;
+	pointLight.enableSoftShadows = true;
+	pointLight.softShadowSamples = 3;
 	pointLight.radius = 0.5;
 
 	scene.lights.pointLights.push_back(pointLight);

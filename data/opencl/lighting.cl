@@ -135,7 +135,7 @@ float4 calculateLightColor(constant BVHNode* nodes,
 			distanceToLight,
 			TEX_OUTPUT_ARGS);
 
-		float distanceAttenuation = min(1.0, distanceToLight / pointLight.distance);
+		float distanceAttenuation = min(1.0, distanceToLight / pointLight.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, pointLight.attenuation);
 
 		lightColor += pointLightColor * distanceAttenuation * (1.0 - shadowAmount);

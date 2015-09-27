@@ -134,10 +134,10 @@ void CLScene::readSceneFull(const Scene& scene)
 	readColor(ambientLight.color, scene.lights.ambientLight.color);
 	ambientLight.intensity = (cl_float)scene.lights.ambientLight.intensity;
 	ambientLight.enableOcclusion = (cl_int)scene.lights.ambientLight.enableOcclusion;
-	ambientLight.maxDistance = (cl_float)scene.lights.ambientLight.maxDistance;
-	ambientLight.samplerType = (cl_int)scene.lights.ambientLight.samplerType;
-	ambientLight.samples = (cl_int)scene.lights.ambientLight.samples;
-	ambientLight.distribution = (cl_float)scene.lights.ambientLight.distribution;
+	ambientLight.maxOcclusionDistance = (cl_float)scene.lights.ambientLight.maxOcclusionDistance;
+	ambientLight.occlusionSamplerType = (cl_int)scene.lights.ambientLight.occlusionSamplerType;
+	ambientLight.occlusionSamples = (cl_int)scene.lights.ambientLight.occlusionSamples;
+	ambientLight.occlusionSampleDistribution = (cl_float)scene.lights.ambientLight.occlusionSampleDistribution;
 
 	directionalLights.clear();
 
@@ -163,12 +163,12 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clLight.color, light.color);
 		readVector3(clLight.position, light.position);
 		clLight.intensity = (cl_float)light.intensity;
-		clLight.distance = (cl_float)light.distance;
+		clLight.maxDistance = (cl_float)light.maxDistance;
 		clLight.attenuation = (cl_float)light.attenuation;
-		clLight.softShadows = (cl_int)light.softShadows;
 		clLight.radius = (cl_float)light.radius;
-		clLight.samplerType = (cl_int)light.samplerType;
-		clLight.samples = (cl_int)light.samples;
+		clLight.enableSoftShadows = (cl_int)light.enableSoftShadows;
+		clLight.softShadowSamplerType = (cl_int)light.softShadowSamplerType;
+		clLight.softShadowSamples = (cl_int)light.softShadowSamples;
 
 		pointLights.push_back(clLight);
 	}

@@ -118,10 +118,10 @@ namespace Raycer
 			cl_float4 ALIGN(16) color;
 			cl_float ALIGN(4) intensity;
 			cl_int ALIGN(4) enableOcclusion;
-			cl_float ALIGN(4) maxDistance;
-			cl_int ALIGN(4) samplerType;
-			cl_int ALIGN(4) samples;
-			cl_float ALIGN(4) distribution;
+			cl_float ALIGN(4) maxOcclusionDistance;
+			cl_int ALIGN(4) occlusionSamplerType;
+			cl_int ALIGN(4) occlusionSamples;
+			cl_float ALIGN(4) occlusionSampleDistribution;
 		};
 
 		struct DirectionalLight
@@ -136,12 +136,12 @@ namespace Raycer
 			cl_float4 ALIGN(16) color;
 			cl_float4 ALIGN(16) position;
 			cl_float ALIGN(4) intensity;
-			cl_float ALIGN(4) distance;
+			cl_float ALIGN(4) maxDistance;
 			cl_float ALIGN(4) attenuation;
-			cl_int ALIGN(4) softShadows;
 			cl_float ALIGN(4) radius;
-			cl_int ALIGN(4) samplerType;
-			cl_int ALIGN(4) samples;
+			cl_int ALIGN(4) enableSoftShadows;
+			cl_int ALIGN(4) softShadowSamplerType;
+			cl_int ALIGN(4) softShadowSamples;
 		};
 
 		struct Triangle

@@ -29,20 +29,20 @@ namespace Raycer
 	struct AmbientLight : public Light
 	{
 		bool enableOcclusion = false;
-		double maxDistance = 10.0;
-		SamplerType samplerType = SamplerType::CMJ;
-		int samples = 3;
-		double distribution = 1.0;
+		double maxOcclusionDistance = 1.0;
+		SamplerType occlusionSamplerType = SamplerType::CMJ;
+		int occlusionSamples = 0;
+		double occlusionSampleDistribution = 1.0;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
 				CEREAL_NVP(enableOcclusion),
-				CEREAL_NVP(maxDistance),
-				CEREAL_NVP(samplerType),
-				CEREAL_NVP(samples),
-				CEREAL_NVP(distribution));
+				CEREAL_NVP(maxOcclusionDistance),
+				CEREAL_NVP(occlusionSamplerType),
+				CEREAL_NVP(occlusionSamples),
+				CEREAL_NVP(occlusionSampleDistribution));
 		}
 	};
 
@@ -61,40 +61,40 @@ namespace Raycer
 	struct PointLight : public Light
 	{
 		Vector3 position;
-		double distance = 1000.0;
+		double maxDistance = 1000.0;
 		double attenuation = 1.0;
-		bool softShadows = false;
 		double radius = 1.0;
-		SamplerType samplerType = SamplerType::CMJ;
-		int samples = 3;
+		bool enableSoftShadows = false;
+		SamplerType softShadowSamplerType = SamplerType::CMJ;
+		int softShadowSamples = 0;
 
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
 				CEREAL_NVP(position),
-				CEREAL_NVP(distance),
+				CEREAL_NVP(maxDistance),
 				CEREAL_NVP(attenuation),
-				CEREAL_NVP(softShadows),
 				CEREAL_NVP(radius),
-				CEREAL_NVP(samplerType),
-				CEREAL_NVP(samples));
+				CEREAL_NVP(enableSoftShadows),
+				CEREAL_NVP(softShadowSamplerType),
+				CEREAL_NVP(softShadowSamples));
 		}
 	};
 
 	struct SpotLight : public PointLight
 	{
 		Vector3 direction;
-		double sideAttenuation = 1.0;
 		double angle = 45.0;
-
+		double sideAttenuation = 1.0;
+		
 		template<class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<PointLight>(this)),
 				CEREAL_NVP(direction),
-				CEREAL_NVP(sideAttenuation),
-				CEREAL_NVP(angle));
+				CEREAL_NVP(angle),
+				CEREAL_NVP(sideAttenuation));
 		}
 	};
 }
