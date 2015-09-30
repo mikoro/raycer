@@ -1,16 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <array>
-#include <cmath>
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
+#include "stdafx.h"
 
 #include "Raytracing/Camera.h"
 #include "Raytracing/Ray.h"

@@ -28,11 +28,9 @@
 
 */
 
-#include <GL/gl3w.h>
+#include "stdafx.h"
 
 #ifdef _WIN32
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
 
 static HMODULE libgl;
 
@@ -56,7 +54,6 @@ static GL3WglProc get_proc(const char *proc)
 	return res;
 }
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
-#include <Carbon/Carbon.h>
 
 CFBundleRef bundle;
 CFURLRef bundleURL;
@@ -88,8 +85,6 @@ static GL3WglProc get_proc(const char *proc)
 	return res;
 }
 #else
-#include <dlfcn.h>
-#include <GL/glx.h>
 
 static void *libgl;
 

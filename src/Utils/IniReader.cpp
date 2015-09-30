@@ -1,11 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <fstream>
-#include <regex>
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "Utils/IniReader.h"
 #include "App.h"

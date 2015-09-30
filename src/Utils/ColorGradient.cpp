@@ -1,8 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cassert>
-#include <cmath>
+#include "stdafx.h"
 
 #include "Utils/ColorGradient.h"
 

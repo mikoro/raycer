@@ -1,36 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <stdexcept>
-#include <cstddef>
-#include <fstream>
-#include <string>
-#include <vector>
-
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <stdlib.h>
-#endif
-
-#include <GL/gl3w.h>
-
-#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
-#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
-#include <OpenGL/OpenGL.h>
-#else
-#include <CL/opencl.h>
-#endif
-
-#ifdef __linux
-#include <GL/glx.h>
-#endif
-
-#include <boost/filesystem.hpp>
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "OpenCL/CLManager.h"
 #include "OpenCL/CLStructs.h"

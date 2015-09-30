@@ -7,7 +7,6 @@
 
 #include <GL/glcorearb.h>
 
-#define NOT_USING_FT_GL_NAMESPACE
 #include "freetype-gl/texture-atlas.h"
 #include "freetype-gl/texture-font.h"
 #include "freetype-gl/vertex-buffer.h"

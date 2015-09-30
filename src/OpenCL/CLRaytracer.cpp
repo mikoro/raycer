@@ -1,19 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cstddef>
-#include <stdexcept>
-#include <vector>
-
-#include <GL/gl3w.h>
-
-#define CL_USE_DEPRECATED_OPENCL_1_1_APIS
-#define CL_USE_DEPRECATED_OPENCL_2_0_APIS
-#ifdef __APPLE__
-#include <OpenCL/opencl.h>
-#else
-#include <CL/opencl.h>
-#endif
+#include "stdafx.h"
 
 #include "OpenCL/CLRaytracer.h"
 #include "OpenCL/CLManager.h"

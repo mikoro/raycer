@@ -1,8 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
-#include <vector>
+#include "stdafx.h"
 
 #include "Rendering/ToneMappers/LinearToneMapper.h"
 #include "Raytracing/Scene.h"

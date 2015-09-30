@@ -1,6 +1,7 @@
 /bin
 /build
 /data/images
+/ipch
 *.sdf
 *.opensdf
 *.suo

@@ -1,18 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cstddef>
-#include <utf8/utf8/unchecked.h>
-#include <iterator>
-#include <stdexcept>
-#include <vector>
-
-#include <GL/gl3w.h>
-
-#include "freetype-gl/mat4.h"
-#include "freetype-gl/vertex-buffer.h"
-#include "freetype-gl/texture-atlas.h"
-#include "freetype-gl/texture-font.h"
+#include "stdafx.h"
 
 #include "Rendering/Text.h"
 #include "App.h"

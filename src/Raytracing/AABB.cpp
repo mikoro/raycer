@@ -1,8 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <limits>
+#include "stdafx.h"
 
 #include "Raytracing/AABB.h"
 #include "Raytracing/Ray.h"

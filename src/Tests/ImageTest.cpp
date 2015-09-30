@@ -1,9 +1,9 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifdef RUN_UNIT_TESTS
+#include "stdafx.h"
 
-#include "catch/catch.hpp"
+#ifdef RUN_UNIT_TESTS
 
 #include "Rendering/Image.h"
 #include "Math/Color.h"

@@ -1,30 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <stdexcept>
-#include <thread>
-#include <atomic>
-#include <regex>
-#include <iostream>
-#include <fstream>
-#include <string>
-#include <cstring>
-#include <algorithm>
-#include <cassert>
-#include <cstddef>
-#include <chrono>
-#include <exception>
-#include <new>
-#include <ratio>
-
-#include <boost/array.hpp>
-#include <boost/asio.hpp>
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "Runners/NetworkRunner.h"
 #include "App.h"

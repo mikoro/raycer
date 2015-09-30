@@ -1,11 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <cassert>
-#include <chrono>
-#include <limits>
-#include <stdexcept>
+#include "stdafx.h"
 
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Scene.h"

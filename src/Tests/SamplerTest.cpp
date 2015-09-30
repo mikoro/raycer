@@ -1,16 +1,9 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include "stdafx.h"
+
 #ifdef RUN_UNIT_TESTS
-
-#include <fstream>
-#include <map>
-#include <random>
-#include <string>
-#include <utility>
-
-#include "catch/catch.hpp"
-#include "tinyformat/tinyformat.h"
 
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Samplers/RandomSampler.h"

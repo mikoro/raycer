@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
+#include "stdafx.h"
 
 #include "Raytracing/Primitives/Sphere.h"
 #include "Raytracing/Ray.h"

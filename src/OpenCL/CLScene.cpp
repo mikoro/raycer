@@ -1,10 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <stdexcept>
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "OpenCL/CLScene.h"
 #include "Raytracing/Scene.h"

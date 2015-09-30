@@ -71,6 +71,9 @@ float4 calculateLightColor(constant BVHNode* nodes,
 	if (material.ambientMapTextureIndex != -1)
 		mappedAmbientReflectance = getTextureColor(material.ambientMapTextureIndex, intersection.texcoord, TEX_OUTPUT_ARGS);
 
+	if (material.skipLighting)
+		return mappedAmbientReflectance;
+
 	if (material.diffuseMapTextureIndex != -1)
 		mappedDiffuseReflectance = getTextureColor(material.diffuseMapTextureIndex, intersection.texcoord, TEX_OUTPUT_ARGS);
 

@@ -1,17 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifdef _WIN32
-#include <windows.h>
-#else
-#include <unistd.h>
-#include <sys/types.h>
-#include <errno.h>
-#endif
-
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
-#include <tinyformat/tinyformat.h>
+#include "stdafx.h"
 
 #include "Runners/WindowRunnerStates/DefaultState.h"
 #include "App.h"

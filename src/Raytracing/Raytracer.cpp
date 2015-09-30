@@ -1,11 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <limits>
-#include <map>
+#include "stdafx.h"
 
 #include "Raytracing/Raytracer.h"
 #include "Raytracing/RaytracerState.h"
@@ -225,7 +221,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 		else if (material->diffuseMapTexture != nullptr)
 			finalColor = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
 		
-		bool isOutside = -(ray.direction.dot(intersection.normal)) >= 0.0;
+		bool isOutside = (-(ray.direction.dot(intersection.normal)) >= 0.0);
 
 		if (scene.simpleFog.enabled && isOutside)
 			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);

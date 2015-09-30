@@ -1,11 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <array>
-#include <cmath>
-#include <limits>
-#include <random>
+#include "stdafx.h"
 
 #include "Utils/CellNoise.h"
 #include "Math/Vector3.h"

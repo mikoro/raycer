@@ -1,8 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
-#include <limits>
+#include "stdafx.h"
 
 #include "Raytracing/Primitives/Triangle.h"
 #include "Raytracing/Ray.h"

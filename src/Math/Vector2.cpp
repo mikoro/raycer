@@ -1,11 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cmath>
-#include <cassert>
-#include <stdexcept>
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "Math/Vector2.h"
 #include "Math/MathUtils.h"

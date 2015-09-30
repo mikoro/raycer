@@ -1,19 +1,13 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <cassert>
-#include <cmath>
-#include <cstdint>
-#include <stdexcept>
-#include <vector>
+#include "stdafx.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #define STBI_FAILURE_USERMSG
 #include "stb/stb_image.h"
 #include "stb/stb_image_write.h"
-
-#include "tinyformat/tinyformat.h"
 
 #include "Rendering/Image.h"
 #include "App.h"

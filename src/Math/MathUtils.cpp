@@ -1,10 +1,9 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "Math/MathUtils.h"
+#include "stdafx.h"
 
-#include <algorithm>
-#include <cmath>
+#include "Math/MathUtils.h"
 
 using namespace Raycer;
 

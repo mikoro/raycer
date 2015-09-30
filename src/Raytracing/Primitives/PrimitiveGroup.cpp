@@ -1,6 +1,8 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include "stdafx.h"
+
 #include "Raytracing/Primitives/PrimitiveGroup.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"

@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
+#include "stdafx.h"
 
 #include "Raytracing/Textures/FireTexture.h"
 #include "Math/Vector2.h"

@@ -1,9 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <cmath>
-#include <random>
+#include "stdafx.h"
 
 #include "Utils/ValueNoise.h"
 

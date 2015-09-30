@@ -1,7 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <iostream>
+#include "stdafx.h"
 
 #include "Utils/Settings.h"
 #include "Utils/IniReader.h"

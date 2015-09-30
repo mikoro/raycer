@@ -1,9 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <algorithm>
-#include <cmath>
-#include <limits>
+#include "stdafx.h"
 
 #include "Raytracing/Primitives/BlinnBlob.h"
 #include "Raytracing/Ray.h"

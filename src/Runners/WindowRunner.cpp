@@ -1,20 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#include <chrono>
-#include <exception>
-#include <ratio>
-#include <stdexcept>
-#include <thread>
-#include <vector>
-
-#include <GL/gl3w.h>
-#include <GL/glcorearb.h>
-#include <GLFW/glfw3.h>
+#include "stdafx.h"
 
 #include "Runners/WindowRunner.h"
 #include "App.h"

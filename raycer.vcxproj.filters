@@ -376,6 +376,7 @@
     <ClCompile Include="src\Utils\PlyModelLoader.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -634,6 +635,7 @@
     <ClInclude Include="src\Utils\ModelLoader.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="src\stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

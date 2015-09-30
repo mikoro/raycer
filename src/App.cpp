@@ -1,15 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <exception>
-#include <iostream>
-#include <omp.h>
-#include <string>
-
-#include "tclap/CmdLine.h"
-#include "tclap/SwitchArg.h"
-#include "tclap/ValueArg.h"
-#include "tclap/ArgException.h"
+#include "stdafx.h"
 
 #include "App.h"
 #include "Utils/Log.h"
@@ -21,19 +13,6 @@
 #include "Runners/NetworkRunner.h"
 #include "Raytracing/Raytracer.h"
 #include "OpenCL/CLRaytracer.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#endif
-
-#ifdef __APPLE__
-#include "CoreFoundation/CoreFoundation.h"
-#endif
-
-#ifdef RUN_UNIT_TESTS
-#define CATCH_CONFIG_RUNNER
-#include "catch/catch.hpp"
-#endif
 
 using namespace Raycer;
 

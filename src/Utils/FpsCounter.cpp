@@ -1,10 +1,7 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include <GL/gl3w.h>
-#include <GLFW/glfw3.h>
-
-#include "tinyformat/tinyformat.h"
+#include "stdafx.h"
 
 #include "Utils/FpsCounter.h"
 

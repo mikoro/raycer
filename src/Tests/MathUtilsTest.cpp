@@ -1,12 +1,9 @@
 // Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
+#include "stdafx.h"
+
 #ifdef RUN_UNIT_TESTS
-
-#include <cmath>
-#include <limits>
-
-#include "catch/catch.hpp"
 
 #include "Math/MathUtils.h"
 
