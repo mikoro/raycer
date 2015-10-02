@@ -16,7 +16,7 @@ namespace Raycer
 	{
 	public:
 
-		int id = 0;
+		unsigned id = 0;
 
 		bool skipLighting = false;
 		bool nonShadowing = false;
@@ -27,25 +27,25 @@ namespace Raycer
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
 		Texture* ambientMapTexture = nullptr;
-		int ambientMapTextureId = 0;
+		unsigned ambientMapTextureId = 0;
 		Color ambientReflectance = Color(1.0, 1.0, 1.0);
 
 		Texture* diffuseMapTexture = nullptr;
-		int diffuseMapTextureId = 0;
+		unsigned diffuseMapTextureId = 0;
 		Color diffuseReflectance = Color(1.0, 1.0, 1.0);
 
 		Texture* specularMapTexture = nullptr;
-		int specularMapTextureId = 0;
+		unsigned specularMapTextureId = 0;
 		Color specularReflectance = Color(0.0, 0.0, 0.0);
 		double shininess = 2.0;
 
 		Texture* rayReflectanceMapTexture = nullptr;
-		int rayReflectanceMapTextureId = 0;
+		unsigned rayReflectanceMapTextureId = 0;
 		double rayReflectance = 0.0;
 		bool fresnelReflection = false;
 
 		Texture* rayTransmittanceMapTexture = nullptr;
-		int rayTransmittanceMapTextureId = 0;
+		unsigned rayTransmittanceMapTextureId = 0;
 		double rayTransmittance = 0.0;
 		double refractiveIndex = 1.0;
 		bool enableAttenuation = false;
@@ -53,13 +53,13 @@ namespace Raycer
 		Color attenuationColor = Color(0.0, 0.0, 0.0);
 
 		Texture* normalMapTexture = nullptr;
-		int normalMapTextureId = 0;
+		unsigned normalMapTextureId = 0;
 
 		Texture* maskMapTexture = nullptr;
-		int maskMapTextureId = 0;
+		unsigned maskMapTextureId = 0;
 
 		Texture* heightMapTexture = nullptr;
-		int heightMapTextureId = 0;
+		unsigned heightMapTextureId = 0;
 
 	private:
 

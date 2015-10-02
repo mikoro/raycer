@@ -29,7 +29,7 @@ namespace Raycer
 		bool enableOcclusion = false;
 		double maxOcclusionDistance = 1.0;
 		SamplerType occlusionSamplerType = SamplerType::CMJ;
-		int occlusionSamples = 0;
+		unsigned occlusionSamples = 0;
 		double occlusionSampleDistribution = 1.0;
 
 		template <class Archive>
@@ -64,7 +64,7 @@ namespace Raycer
 		double radius = 1.0;
 		bool enableSoftShadows = false;
 		SamplerType softShadowSamplerType = SamplerType::CMJ;
-		int softShadowSamples = 0;
+		unsigned softShadowSamples = 0;
 
 		template <class Archive>
 		void serialize(Archive& ar)

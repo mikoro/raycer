@@ -14,15 +14,15 @@ namespace Raycer
 		Color startColor;
 		Color endColor;
 
-		int startIndex = 0;
-		int endIndex = 0;
+		unsigned startIndex = 0;
+		unsigned endIndex = 0;
 	};
 
 	class ColorGradient
 	{
 	public:
 
-		void addSegment(const Color& start, const Color& end, int length);
+		void addSegment(const Color& start, const Color& end, unsigned length);
 
 		Color getColor(double alpha) const;
 

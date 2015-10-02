@@ -212,14 +212,14 @@ std::string Vector3::toString() const
 	return tfm::format("(%.2f, %.2f, %.2f)", x, y, z);
 }
 
-double Vector3::element(int number) const
+double Vector3::element(unsigned index) const
 {
-	switch (number)
+	switch (index)
 	{
 		case 0: return x;
 		case 1: return y;
 		case 2: return z;
-		default: throw std::runtime_error("Invalid vector element number");
+		default: throw std::runtime_error("Invalid vector element index");
 	}
 }
 

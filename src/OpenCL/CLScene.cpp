@@ -42,7 +42,7 @@ namespace
 		destination.s[3] = 0.0f;
 	}
 
-	int findMaterialIndex(const std::vector<Material>& materials, int materialId)
+	size_t findMaterialIndex(const std::vector<Material>& materials, unsigned materialId)
 	{
 		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const Material& material)
 		{
@@ -52,10 +52,10 @@ namespace
 		if (result == materials.end())
 			throw std::runtime_error(tfm::format("Could not find OpenCL material index for material id (%d)", materialId));
 
-		return int(result - materials.begin());
+		return (result - materials.begin());
 	}
 
-	int findTextureIndex(const std::vector<ImageTexture>& textures, int textureId)
+	int findTextureIndex(const std::vector<ImageTexture>& textures, unsigned textureId)
 	{
 		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture)
 		{
@@ -204,7 +204,7 @@ void CLScene::readSceneFull(const Scene& scene)
 		readVector3(clTriangle.normal, triangle->normal);
 		readVector3(clTriangle.tangent, triangle->tangent);
 		readVector3(clTriangle.bitangent, triangle->bitangent);
-		clTriangle.materialIndex = cl_int(findMaterialIndex(scene.materials, triangle->materialId));
+		clTriangle.materialIndex = cl_uint(findMaterialIndex(scene.materials, triangle->materialId));
 
 		triangles.push_back(clTriangle);
 	}

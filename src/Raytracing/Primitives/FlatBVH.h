@@ -18,9 +18,9 @@ namespace Raycer
 
 	struct BVHBuildInfo
 	{
-		size_t maxLeafSize = 5;
+		unsigned maxLeafSize = 5;
 		bool useSAH = true;
-		size_t regularSAHSplits = 0;
+		unsigned regularSAHSplits = 0;
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 
@@ -82,16 +82,16 @@ namespace Raycer
 
 		bool hasBeenBuilt = false;
 		std::vector<FlatBVHNode> flatNodes;
-		std::vector<int> orderedPrimitiveIds;
+		std::vector<unsigned> orderedPrimitiveIds;
 
 		std::vector<Primitive*> orderedPrimitives;
 
 	private:
 
-		void calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
-		void calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
-		double calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
-		double calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry);
+		void calculateSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
+		void calculateSAHSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
+		double calculateSAHScore(unsigned axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
+		double calculateMedianPoint(unsigned axis, const FlatBVHBuildEntry& buildEntry);
 
 		friend class cereal::access;
 

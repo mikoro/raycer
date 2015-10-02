@@ -57,8 +57,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] + n.m[c][r];
 
 		return result;
@@ -68,8 +68,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] - n.m[c][r];
 
 		return result;
@@ -79,8 +79,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] * s;
 
 		return result;
@@ -90,8 +90,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] * s;
 
 		return result;
@@ -101,8 +101,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[0][r] * n.m[c][0] + m.m[1][r] * n.m[c][1] + m.m[2][r] * n.m[c][2] + m.m[3][r] * n.m[c][3];
 
 		return result;
@@ -123,8 +123,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] / s;
 
 		return result;
@@ -134,8 +134,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				result.m[c][r] = -m.m[c][r];
 
 		return result;
@@ -143,8 +143,8 @@ namespace Raycer
 
 	bool operator==(const Matrix4x4& m, const Matrix4x4& n)
 	{
-		for (int c = 0; c < 4; ++c)
-			for (int r = 0; r < 4; ++r)
+		for (unsigned c = 0; c < 4; ++c)
+			for (unsigned r = 0; r < 4; ++r)
 				if (!MathUtils::almostSame(m.m[c][r], n.m[c][r]))
 					return false;
 

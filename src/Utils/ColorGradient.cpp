@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-void ColorGradient::addSegment(const Color& start, const Color& end, int length)
+void ColorGradient::addSegment(const Color& start, const Color& end, unsigned length)
 {
 	assert(length >= 1);
 
@@ -28,7 +28,7 @@ Color ColorGradient::getColor(double alpha) const
 	assert(alpha >= 0.0 && alpha <= 1.0);
 
 	Color result;
-	int index = int(ceil(alpha * totalLength));
+	unsigned index = int(ceil(alpha * totalLength));
 
 	for (const ColorGradientSegment& segment : segments)
 	{

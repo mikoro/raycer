@@ -24,12 +24,12 @@ namespace Raycer
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
-		int seed = 1;
+		unsigned seed = 1;
 		Vector3 scale = Vector3(10.0, 10.0, 10.0);
 		Color baseColor = Color(1.0, 1.0, 1.0);
 		CellNoiseDistanceType distanceType = CellNoiseDistanceType::EUCLIDEAN;
 		CellNoiseCombineType combineType = CellNoiseCombineType::D1;
-		int density = 1;
+		unsigned density = 1;
 
 	private:
 

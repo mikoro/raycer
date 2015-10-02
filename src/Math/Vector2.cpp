@@ -192,13 +192,13 @@ std::string Vector2::toString() const
 	return tfm::format("(%.2f, %.2f)", x, y);
 }
 
-double Vector2::element(int number) const
+double Vector2::element(unsigned index) const
 {
-	switch (number)
+	switch (index)
 	{
 		case 0: return x;
 		case 1: return y;
-		default: throw std::runtime_error("Invalid vector element number");
+		default: throw std::runtime_error("Invalid vector element index");
 	}
 }
 

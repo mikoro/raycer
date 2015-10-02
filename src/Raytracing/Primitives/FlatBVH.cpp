@@ -156,7 +156,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		if (flatNode.rightOffset == 0)
 			continue;
 
-		int axis;
+		unsigned axis;
 		double splitPoint;
 		actualNodeCount++;
 
@@ -212,19 +212,19 @@ void FlatBVH::rebuild(const Scene& scene)
 {
 	orderedPrimitives.clear();
 
-	for (int primitiveId : orderedPrimitiveIds)
+	for (unsigned primitiveId : orderedPrimitiveIds)
 		orderedPrimitives.push_back(scene.primitivesMap.at(primitiveId));
 
 	return;
 }
 
-void FlatBVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator)
+void FlatBVH::calculateSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator)
 {
 	if (buildInfo.axisSelection == BVHAxisSelection::LARGEST)
 		axis = nodeAABB.getLargestAxis();
 	else if (buildInfo.axisSelection == BVHAxisSelection::RANDOM)
 	{
-		std::uniform_int_distribution<int> dist(0, 2);
+		std::uniform_int_distribution<unsigned> dist(0, 2);
 		axis = dist(generator);
 	}
 	else
@@ -243,11 +243,11 @@ void FlatBVH::calculateSplit(int& axis, double& splitPoint, const AABB& nodeAABB
 		throw std::runtime_error("Unknown BVH axis split");
 }
 
-void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry)
+void FlatBVH::calculateSAHSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry)
 {
 	double lowestScore = std::numeric_limits<double>::max();
 
-	for (int tempAxis = 0; tempAxis <= 2; ++tempAxis)
+	for (unsigned tempAxis = 0; tempAxis <= 2; ++tempAxis)
 	{
 		double tempSplitPoint = nodeAABB.getCenter().element(tempAxis);
 		double score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
@@ -290,7 +290,7 @@ void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeA
 	}
 }
 
-double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry)
+double FlatBVH::calculateSAHScore(unsigned axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry)
 {
 	assert(buildEntry.end - buildEntry.start > 0);
 
@@ -325,7 +325,7 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	return score;
 }
 
-double FlatBVH::calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEntry)
+double FlatBVH::calculateMedianPoint(unsigned axis, const FlatBVHBuildEntry& buildEntry)
 {
 	std::vector<double> centerPoints;
 

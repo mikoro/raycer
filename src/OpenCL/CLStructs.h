@@ -152,7 +152,7 @@ namespace Raycer
 			cl_float4 ALIGN(16) tangent;
 			cl_float4 ALIGN(16) bitangent;
 			cl_float2 ALIGN(8) texcoords[3];
-			cl_int ALIGN(4) materialIndex;
+			cl_uint ALIGN(4) materialIndex;
 		};
 
 		struct AABB

@@ -48,7 +48,7 @@ namespace Raycer
 		Vector3 cross(const Vector3& v) const;
 		Vector3 reflect(const Vector3& normal) const;
 		std::string toString() const;
-		double element(int number) const;
+		double element(unsigned index) const;
 
 		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
 		static Vector3 abs(const Vector3& v);

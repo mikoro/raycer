@@ -29,8 +29,8 @@ namespace Raycer
 		virtual AABB getAABB() const = 0;
 		virtual void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) = 0;
 
-		int id = 0;
-		int materialId = 0;
+		unsigned id = 0;
+		unsigned materialId = 0;
 		bool invisible = false;
 		Material* material = nullptr;
 

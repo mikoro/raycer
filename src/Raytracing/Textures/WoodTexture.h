@@ -24,7 +24,7 @@ namespace Raycer
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
-		int seed = 1;
+		unsigned seed = 1;
 		Color woodColor = Color(110, 71, 11);
 		double density = 8.0;
 		double bumpiness = 4.0;
