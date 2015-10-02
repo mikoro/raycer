@@ -42,10 +42,14 @@ std::string Log::formatMessage(MessageLevel messageLevel, const std::string& mes
 
 	switch (messageLevel)
 	{
-		case MessageLevel::Debug: messageLevelName = "Debug"; break;
-		case MessageLevel::Info: messageLevelName = "Info"; break;
-		case MessageLevel::Warning: messageLevelName = "Warning"; break;
-		case MessageLevel::Error: messageLevelName = "Error"; break;
+		case MessageLevel::Debug: messageLevelName = "Debug";
+			break;
+		case MessageLevel::Info: messageLevelName = "Info";
+			break;
+		case MessageLevel::Warning: messageLevelName = "Warning";
+			break;
+		case MessageLevel::Error: messageLevelName = "Error";
+			break;
 	}
 
 	auto now = std::chrono::system_clock::now();

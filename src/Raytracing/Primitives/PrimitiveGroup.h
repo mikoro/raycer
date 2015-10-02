@@ -44,7 +44,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),

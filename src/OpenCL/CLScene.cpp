@@ -44,7 +44,10 @@ namespace
 
 	int findMaterialIndex(const std::vector<Material>& materials, int materialId)
 	{
-		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const Material& material) { return material.id == materialId; });
+		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const Material& material)
+		{
+			return material.id == materialId;
+		});
 
 		if (result == materials.end())
 			throw std::runtime_error(tfm::format("Could not find OpenCL material index for material id (%d)", materialId));
@@ -54,7 +57,10 @@ namespace
 
 	int findTextureIndex(const std::vector<ImageTexture>& textures, int textureId)
 	{
-		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture) { return texture.id == textureId; });
+		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture)
+		{
+			return texture.id == textureId;
+		});
 
 		if (it == textures.end())
 			return -1;

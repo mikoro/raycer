@@ -30,7 +30,7 @@ namespace Raycer
 		int getHeight() const;
 		Image& getImage();
 		GLuint getImageTextureId() const;
-		
+
 	private:
 
 		Image image;

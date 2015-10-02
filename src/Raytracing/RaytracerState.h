@@ -13,7 +13,8 @@ namespace Raycer
 	struct RaytracerState
 	{
 		RaytracerState() : pixelsProcessed(0)
-		{};
+		{
+		};
 
 		Image* image = nullptr;
 		Scene* scene = nullptr;

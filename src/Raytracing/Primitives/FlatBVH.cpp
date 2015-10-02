@@ -106,7 +106,12 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	int leafCount = 0;
 	int actualNodeCount = 0;
 
-	enum { ROOT = -4, UNVISITED = -3, VISITED_TWICE = -1 };
+	enum
+	{
+		ROOT = -4,
+		UNVISITED = -3,
+		VISITED_TWICE = -1
+	};
 
 	// push to stack
 	stack[stackptr].start = 0;

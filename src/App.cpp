@@ -104,7 +104,7 @@ int App::run(int argc, char** argv)
 	{
 		cmd.parse(argc, argv);
 	}
-	catch (const TCLAP::ArgException &ex)
+	catch (const TCLAP::ArgException& ex)
 	{
 		std::cerr << "Command line parsing error: " << ex.error() << " for arg " << ex.argId() << std::endl;
 		return -1;

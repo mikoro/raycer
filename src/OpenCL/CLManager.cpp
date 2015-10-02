@@ -130,10 +130,10 @@ void CLManager::initialize()
 		cl_context_properties properties[] =
 		{
 #ifdef _WIN32
-			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
-			CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-			CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
-			0
+				CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
+				CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
+				CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
+				0
 #elif __linux
 			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
 			CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
@@ -152,14 +152,14 @@ void CLManager::initialize()
 	{
 		context = clCreateContext(nullptr, 1, &deviceId, openCLErrorCallback, nullptr, &status);
 		checkError(status, "Could not create device context");
-		}
+	}
 
 	commandQueue = clCreateCommandQueue(context, deviceId, 0, &status);
 	checkError(status, "Could not create command queue");
 
-// 	std::vector<std::string> sourceFiles = { "data/opencl/structs.cl", "data/opencl/printSizes.cl" };
-// 	printSizesProgram = createProgram(sourceFiles);
-// 	printSizesKernel = createKernel(printSizesProgram, "printSizes");
+	// 	std::vector<std::string> sourceFiles = { "data/opencl/structs.cl", "data/opencl/printSizes.cl" };
+	// 	printSizesProgram = createProgram(sourceFiles);
+	// 	printSizesKernel = createKernel(printSizesProgram, "printSizes");
 }
 
 cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePaths)
@@ -176,7 +176,7 @@ cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePa
 		std::ifstream file(sourceFilePath);
 
 		if (!file.good())
-			throw std::runtime_error( tfm::format("Could not open OpenCL source file: %s", sourceFilePath));
+			throw std::runtime_error(tfm::format("Could not open OpenCL source file: %s", sourceFilePath));
 
 		sourceStringSs << file.rdbuf();
 		file.close();

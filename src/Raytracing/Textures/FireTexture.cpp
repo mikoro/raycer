@@ -27,7 +27,7 @@ Color FireTexture::getColor(const Vector2& texcoord, const Vector3& position) co
 
 	double n1 = perlinNoise.getFbmNoise(8, 2.0, 0.75, position.x * 4.0, position.y * 4.0, position.z * 4.0) / 3.0;
 	n1 = std::min(n1, 1.0);
-	
+
 	return colorGradient.getColor(n1);
 }
 

@@ -18,7 +18,7 @@ namespace Raycer
 		void readFile(const std::string& fileName);
 		std::string getValue(const std::string& sectionName, const std::string& keyName);
 
-		template<typename T>
+		template <typename T>
 		T getValue(const std::string& sectionName, const std::string& keyName);
 
 	private:
@@ -26,7 +26,7 @@ namespace Raycer
 		std::map<std::string, std::map<std::string, std::string>> sections;
 	};
 
-	template<typename T>
+	template <typename T>
 	T IniReader::getValue(const std::string& sectionName, const std::string& keyName)
 	{
 		if (sections.count(sectionName) == 0 || sections[sectionName].count(keyName) == 0)

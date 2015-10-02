@@ -140,12 +140,12 @@ Vector3& Vector3::operator/=(double s)
 
 double Vector3::length() const
 {
-	return std::sqrt(x*x + y*y + z*z);
+	return std::sqrt(x * x + y * y + z * z);
 }
 
 double Vector3::lengthSquared() const
 {
-	return (x*x + y*y + z*z);
+	return (x * x + y * y + z * z);
 }
 
 void Vector3::normalize()

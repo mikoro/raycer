@@ -106,7 +106,7 @@ Scene Scene::createTestScene1()
 	scene.materials.push_back(boxMaterial);
 	scene.primitives.boxes.push_back(box);
 	scene.primitives.instances.push_back(instance);
-	
+
 	// CYLINDER //
 
 	Material cylinderMaterial;

@@ -13,7 +13,9 @@ namespace Raycer
 	{
 	public:
 
-		virtual ~Filter() {}
+		virtual ~Filter()
+		{
+		}
 
 		virtual double getWeight(double x) = 0;
 		virtual double getWeight(double x, double y) = 0;

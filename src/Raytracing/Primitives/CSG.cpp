@@ -70,7 +70,10 @@ bool CSG::intersect(const Ray& ray, Intersection& intersection, std::vector<Inte
 		csgPoints.push_back(csgPoint);
 	}
 
-	std::sort(csgPoints.begin(), csgPoints.end(), [](const CSGPoint& p1, const CSGPoint& p2) { return p1.intersection.distance < p2.intersection.distance; });
+	std::sort(csgPoints.begin(), csgPoints.end(), [](const CSGPoint& p1, const CSGPoint& p2)
+	{
+		return p1.intersection.distance < p2.intersection.distance;
+	});
 
 	CSGDirection leftDirection = CSGDirection::OUT;
 	CSGDirection rightDirection = CSGDirection::OUT;

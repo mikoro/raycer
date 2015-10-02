@@ -98,7 +98,7 @@ bool Sphere::intersect(const Ray& ray, Intersection& intersection, std::vector<I
 		intersections.push_back(calculateIntersection(t1 - t2, CSGDirection::IN));
 		intersections.push_back(calculateIntersection(t1 + t2, CSGDirection::OUT));
 	}
-	
+
 	// default intersection
 	double t = (rayOriginIsOutside) ? (t1 - t2) : (t1 + t2);
 

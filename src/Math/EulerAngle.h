@@ -53,7 +53,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(pitch),

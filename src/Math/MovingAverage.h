@@ -9,7 +9,6 @@ namespace Raycer
 {
 	class MovingAverage
 	{
-
 	public:
 
 		MovingAverage(double alpha = 1.0, double averageValue = 0.0);
@@ -26,7 +25,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(alpha),

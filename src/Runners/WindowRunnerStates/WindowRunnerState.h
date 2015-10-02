@@ -11,7 +11,9 @@ namespace Raycer
 	{
 	public:
 
-		virtual ~WindowRunnerState() {}
+		virtual ~WindowRunnerState()
+		{
+		}
 
 		virtual void initialize() = 0;
 		virtual void pause() = 0;

@@ -41,7 +41,7 @@ namespace Raycer
 		void uploadFullData();
 		void uploadCameraData();
 		void createTextureImages();
-		
+
 		CLScene clScene;
 
 		int imageBufferWidth = 0;
@@ -59,7 +59,7 @@ namespace Raycer
 		cl_mem trianglesPtr = nullptr;
 		cl_mem bvhNodesPtr = nullptr;
 		cl_mem outputImagePtr = nullptr;
-		
+
 		std::vector<cl_mem> textureImagePtrs;
 		cl_mem dummyTextureImagePtr = nullptr;
 		const int KERNEL_TEXTURE_COUNT = 60;

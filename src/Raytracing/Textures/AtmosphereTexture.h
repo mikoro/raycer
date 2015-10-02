@@ -15,7 +15,7 @@
 namespace Raycer
 {
 	class Vector2;
-	
+
 	class AtmosphereTexture : public Texture
 	{
 	public:
@@ -46,7 +46,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("texture", cereal::base_class<Texture>(this)),

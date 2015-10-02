@@ -235,10 +235,14 @@ void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chron
 
 	switch (openCLProgressCounter2 % 4)
 	{
-		case 1: progressChar = '\\'; break;
-		case 2: progressChar = '|'; break;
-		case 3: progressChar = '/'; break;
-		default: progressChar = '-'; break;
+		case 1: progressChar = '\\';
+			break;
+		case 2: progressChar = '|';
+			break;
+		case 3: progressChar = '/';
+			break;
+		default: progressChar = '-';
+			break;
 	}
 
 	printf("[%c] ", progressChar);
@@ -248,7 +252,7 @@ void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chron
 
 std::string ConsoleRunner::humanizeNumberDecimal(double value)
 {
-	const char* prefixes[] = {"", "k", "M", "G", "T", "P", "E", "Z", "Y"};
+	const char* prefixes[] = { "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
 
 	for (int i = 0; i < 9; ++i)
 	{

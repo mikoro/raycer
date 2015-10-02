@@ -27,19 +27,19 @@ namespace Raycer
 		void logError(const std::string& message);
 		void logException(const std::exception_ptr& exception);
 
-		template<typename... Args>
+		template <typename... Args>
 		void logMessage(MessageLevel messageLevel, const std::string& message, const Args&... args);
 
-		template<typename... Args>
+		template <typename... Args>
 		void logDebug(const std::string& message, const Args&... args);
 
-		template<typename... Args>
+		template <typename... Args>
 		void logInfo(const std::string& message, const Args&... args);
 
-		template<typename... Args>
+		template <typename... Args>
 		void logWarning(const std::string& message, const Args&... args);
 
-		template<typename... Args>
+		template <typename... Args>
 		void logError(const std::string& message, const Args&... args);
 
 	private:

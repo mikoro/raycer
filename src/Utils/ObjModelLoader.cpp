@@ -272,7 +272,7 @@ namespace
 			result.materials.push_back(currentMaterial);
 	}
 
-	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup &combinedGroup, int& currentId, int currentMaterialId)
+	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, int& currentId, int currentMaterialId)
 	{
 		Log& log = App::getLog();
 

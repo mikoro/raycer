@@ -16,7 +16,12 @@ namespace Raycer
 	class Primitive;
 	class ONB;
 
-	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
+	enum class CameraProjectionType
+	{
+		PERSPECTIVE,
+		ORTHOGRAPHIC,
+		FISHEYE
+	};
 
 	struct CameraState
 	{
@@ -86,7 +91,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(position),

@@ -85,7 +85,7 @@ Vector3 ImageTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 
 		type = TextureNormalDataType::NORMAL_MAP;
 	}
-	
+
 	return normal;
 }
 

@@ -21,7 +21,7 @@ Scene Scene::createTestScene8()
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 	scene.camera.apertureSize = 1.0;
 	scene.camera.focalDistance = 30.0;
-	
+
 	// SPHERES //
 
 	Material sphereMaterial;
@@ -34,7 +34,7 @@ Scene Scene::createTestScene8()
 	double angle = -M_PI / 2.0;
 	double radius = 8.0;
 	int currentId = 1;
-	
+
 	for (int i = 0; i < 50; ++i)
 	{
 		Sphere sphere;
@@ -42,7 +42,7 @@ Scene Scene::createTestScene8()
 		sphere.materialId = sphereMaterial.id;
 		sphere.position = Vector3(cos(angle) * radius, sin(angle) * radius, i * -1.0);
 		sphere.radius = 1.0;
-		
+
 		scene.primitives.spheres.push_back(sphere);
 		angle += 0.5;
 		++currentId;
@@ -52,7 +52,7 @@ Scene Scene::createTestScene8()
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
-	
+
 	DirectionalLight directionalLight;
 	directionalLight.color = Color(1.0, 1.0, 1.0);
 	directionalLight.intensity = 1.0;

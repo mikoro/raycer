@@ -16,7 +16,7 @@ namespace Raycer
 		Color color = Color::WHITE;
 		double intensity = 1.0;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(color),
@@ -32,7 +32,7 @@ namespace Raycer
 		int occlusionSamples = 0;
 		double occlusionSampleDistribution = 1.0;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
@@ -48,7 +48,7 @@ namespace Raycer
 	{
 		Vector3 direction;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
@@ -66,7 +66,7 @@ namespace Raycer
 		SamplerType softShadowSamplerType = SamplerType::CMJ;
 		int softShadowSamples = 0;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
@@ -85,8 +85,8 @@ namespace Raycer
 		Vector3 direction;
 		double angle = 45.0;
 		double sideAttenuation = 1.0;
-		
-		template<class Archive>
+
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<PointLight>(this)),

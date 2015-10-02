@@ -220,7 +220,7 @@ Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& inte
 			finalColor = material->ambientMapTexture->getColor(intersection.texcoord, intersection.position) * material->ambientMapTexture->intensity;
 		else if (material->diffuseMapTexture != nullptr)
 			finalColor = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
-		
+
 		bool isOutside = (-(ray.direction.dot(intersection.normal)) >= 0.0);
 
 		if (scene.simpleFog.enabled && isOutside)

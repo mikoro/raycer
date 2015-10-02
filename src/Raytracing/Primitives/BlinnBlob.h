@@ -24,7 +24,7 @@ namespace Raycer
 		double blobbiness = 4.0;
 		bool isNegative = false;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(position),
@@ -53,7 +53,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),

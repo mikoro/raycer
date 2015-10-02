@@ -32,7 +32,7 @@ void IniReader::readFile(const std::string& fileName)
 
 		if (std::regex_match(line, match, commentRegex))
 			continue;
-		
+
 		if (std::regex_match(line, match, sectionRegex))
 		{
 			sectionName = match[1];

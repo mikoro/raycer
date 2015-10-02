@@ -495,7 +495,7 @@ void NetworkRunner::receiveResults()
 
 			while (!readError)
 			{
-				size_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(1024*1024)), readError);
+				size_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(1024 * 1024)), readError);
 				receiveBuffer.commit(bytes);
 			}
 

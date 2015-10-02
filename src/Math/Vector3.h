@@ -53,8 +53,8 @@ namespace Raycer
 		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
 		static Vector3 abs(const Vector3& v);
 
-		static const Vector3 RIGHT;   // [1 0 0]
-		static const Vector3 UP;      // [0 1 0]
+		static const Vector3 RIGHT; // [1 0 0]
+		static const Vector3 UP; // [0 1 0]
 		static const Vector3 FORWARD; // [0 0 1]
 		static const Vector3 ALMOST_UP;
 
@@ -66,7 +66,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(x),

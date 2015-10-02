@@ -13,7 +13,8 @@ using namespace Raycer;
 
 namespace
 {
-	typedef struct {
+	typedef struct
+	{
 		float x, y, z;
 		float s, t;
 		float r, g, b, a;
@@ -129,6 +130,6 @@ void Text::render()
 
 	glUseProgram(0);
 	glDisable(GL_BLEND);
-	
+
 	GLHelper::checkError("Could not render text");
 }

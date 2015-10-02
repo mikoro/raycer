@@ -149,12 +149,12 @@ Quaternion& Quaternion::operator/=(double s)
 
 double Quaternion::length() const
 {
-	return std::sqrt(w*w + x*x + y*y + z*z);
+	return std::sqrt(w * w + x * x + y * y + z * z);
 }
 
 double Quaternion::lengthSquared() const
 {
-	return (w*w + x*x + y*y + z*z);
+	return (w * w + x * x + y * y + z * z);
 }
 
 void Quaternion::conjugate()

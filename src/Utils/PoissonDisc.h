@@ -32,7 +32,7 @@ namespace Raycer
 			int y = 0;
 		};
 	}
-	
+
 	class PoissonDisc
 	{
 	public:

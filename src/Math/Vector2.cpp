@@ -133,12 +133,12 @@ Vector2& Vector2::operator/=(double s)
 
 double Vector2::length() const
 {
-	return std::sqrt(x*x + y*y);
+	return std::sqrt(x * x + y * y);
 }
 
 double Vector2::lengthSquared() const
 {
-	return (x*x + y*y);
+	return (x * x + y * y);
 }
 
 void Vector2::normalize()
