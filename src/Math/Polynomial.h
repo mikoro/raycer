@@ -29,6 +29,8 @@ namespace Raycer
 
 	private:
 
+		Polynomial& operator=(const Polynomial& p);
+
 		const int size = N;
 		const int degree = N - 1;
 

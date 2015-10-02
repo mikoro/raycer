@@ -33,6 +33,8 @@ namespace Raycer
 
 	private:
 
+		CLRaytracer& operator=(const CLRaytracer& v);
+
 		void createBuffers();
 		void uploadFullData();
 		void uploadCameraData();

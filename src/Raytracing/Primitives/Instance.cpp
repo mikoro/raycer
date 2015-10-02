@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "Raytracing/Primitives/Instance.h"
+#include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"

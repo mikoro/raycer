@@ -6,6 +6,7 @@
 #include "Raytracing/Primitives/BVH.h"
 #include "Raytracing/Primitives/FlatBVH.h"
 #include "Raytracing/Primitives/PrimitiveGroup.h"
+#include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
