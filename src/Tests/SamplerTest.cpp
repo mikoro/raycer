@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Samplers/RandomSampler.h"
 #include "Rendering/Samplers/RegularSampler.h"
@@ -45,7 +47,7 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		for (int x = 0; x < n; ++x)
 		{
 			double sx = sampler.second->getSample(x, n, permutation) * size.x;
-			image1.setPixel((int)(sx + 0.5), (int)(size.y / 2.0 + 0.5), Color(255, 255, 255));
+			image1.setPixel(size_t(sx + 0.5), size_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
 		for (int y = 0; y < n; ++y)
@@ -53,11 +55,11 @@ TEST_CASE("Sampler functionality", "[sampler]")
 			for (int x = 0; x < n; ++x)
 			{
 				Vector2 sample = sampler.second->getSquareSample(x, y, n, n, permutation) * size;
-				image2.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
+				image2.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
 
 				sample = sampler.second->getDiskSample(x, y, n, n, permutation);
 				sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
-				image3.setPixel((int)(sample.x + 0.5), (int)(sample.y + 0.5), Color(255, 255, 255));
+				image3.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
 
 				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n, permutation);
 				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);

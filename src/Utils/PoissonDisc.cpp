@@ -97,8 +97,8 @@ Cell2D& PoissonDisc::getGridCell2D(const Vector2& point)
 
 Vector2 PoissonDisc::getNextActivePoint2D()
 {
-	std::uniform_int_distribution<int> random(0, (int)activePoints2D.size() - 1);
-	int index = random(mt);
+	std::uniform_int_distribution<size_t> random(0, activePoints2D.size() - 1);
+	size_t index = random(mt);
 	Vector2 point = activePoints2D[index];
 	activePoints2D.erase(activePoints2D.begin() + index);
 

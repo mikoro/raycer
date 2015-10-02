@@ -84,8 +84,3 @@
 #include "tclap/SwitchArg.h"
 #include "tclap/ValueArg.h"
 #include "tclap/ArgException.h"
-
-#ifdef RUN_UNIT_TESTS
-#define CATCH_CONFIG_RUNNER
-#include "catch/catch.hpp"
-#endif

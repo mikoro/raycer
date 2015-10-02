@@ -171,7 +171,7 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
-	const size_t globalSizes[] = { size_t(imageBufferWidth), size_t(imageBufferHeight) };
+	const size_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
 
 	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue raytrace kernel");
 
@@ -189,7 +189,7 @@ Image CLRaytracer::downloadImage()
 	log.logInfo("Downloading image data from the OpenCL device");
 
 	size_t origin[3] = { 0, 0, 0 };
-	size_t region[3] = { size_t(imageBufferWidth), size_t(imageBufferHeight), 1 };
+	size_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
 
 	std::vector<float> data(imageBufferWidth * imageBufferHeight * 4);
 

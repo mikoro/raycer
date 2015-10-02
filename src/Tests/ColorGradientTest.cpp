@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Utils/ColorGradient.h"
 #include "Rendering/Image.h"
 #include "Math/Color.h"
@@ -30,7 +32,7 @@ TEST_CASE("ColorGradient functionality", "[colorgradient]")
 
 	for (int y = 0; y < 1000; ++y)
 	{
-		double alpha = (double)y / 999.0;
+		double alpha = double(y) / 999.0;
 		Color color = gradient.getColor(alpha);
 
 		for (int x = 0; x < 1000; ++x)

@@ -12,16 +12,16 @@ bool StringUtils::endsWith(const std::string& input, const std::string& end)
 	return input.rfind(end) == (input.size() - end.size());
 }
 
-bool StringUtils::readUntilSpace(const std::string& input, int& startIndex, std::string& result)
+bool StringUtils::readUntilSpace(const std::string& input, size_t& startIndex, std::string& result)
 {
 	bool nonSpaceWasFound = false;
 
 	// find first non-space character
-	for (; startIndex < (int)input.size(); ++startIndex)
+	for (; startIndex < input.size(); ++startIndex)
 	{
 		char c = input[startIndex];
 
-		if (c != ' ' && c != '\t')
+		if (c != ' ' && c != '\t' && c != '\r' && c != '\n')
 		{
 			nonSpaceWasFound = true;
 			break;
@@ -31,14 +31,14 @@ bool StringUtils::readUntilSpace(const std::string& input, int& startIndex, std:
 	if (!nonSpaceWasFound)
 		return false;
 
-	int endIndex = startIndex;
+	size_t endIndex = startIndex;
 
 	// find next space character
-	for (; endIndex < (int)input.size(); ++endIndex)
+	for (; endIndex < input.size(); ++endIndex)
 	{
 		char c = input[endIndex];
 
-		if (c == ' ' || c == '\t')
+		if (c == ' ' || c == '\t' || c == '\r' || c == '\n')
 			break;
 	}
 

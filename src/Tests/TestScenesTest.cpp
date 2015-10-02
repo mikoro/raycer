@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Raytracing/Scene.h"
 
 using namespace Raycer;
@@ -30,6 +32,8 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 	scenes.push_back(Scene::createTestScene15());
 	scenes.push_back(Scene::createTestScene16());
 	scenes.push_back(Scene::createTestScene17());
+	scenes.push_back(Scene::createTestScene18());
+	scenes.push_back(Scene::createTestScene19());
 
 	int sceneCount = 0;
 
@@ -38,7 +42,7 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 		sceneCount++;
 
 		// skip large scenes
-		if (sceneCount == 8 || sceneCount == 11)
+		if (sceneCount == 5 || sceneCount == 9 || sceneCount == 17)
 			continue;
 
 		scene.saveToFile(tfm::format("scene%d.json", sceneCount));

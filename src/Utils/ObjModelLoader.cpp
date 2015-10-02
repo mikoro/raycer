@@ -48,7 +48,7 @@ namespace
 
 		while (std::getline(file, line))
 		{
-			int lineIndex = 0;
+			size_t lineIndex = 0;
 			std::string part;
 			StringUtils::readUntilSpace(line, lineIndex, part);
 
@@ -276,17 +276,17 @@ namespace
 	{
 		Log& log = App::getLog();
 
-		std::vector<int> vertexIndices;
-		std::vector<int> normalIndices;
-		std::vector<int> texcoordIndices;
+		std::vector<size_t> vertexIndices;
+		std::vector<size_t> normalIndices;
+		std::vector<size_t> texcoordIndices;
 
 		std::string part1;
-		int lineIndex1 = 0;
+		size_t lineIndex1 = 0;
 
 		StringUtils::readUntilSpace(line, lineIndex1, part1);
 
 		// determine what indices are available from the slash count
-		int slashCount = (int)std::count(part1.begin(), part1.end(), '/');
+		size_t slashCount = std::count(part1.begin(), part1.end(), '/');
 		bool doubleSlash = (part1.find("//") != std::string::npos);
 		bool hasTexcoords = (slashCount > 0 && !doubleSlash);
 		bool hasNormals = (slashCount > 1);
@@ -298,23 +298,23 @@ namespace
 			std::replace(part1.begin(), part1.end(), '/', ' ');
 
 			std::string part2;
-			int lineIndex2 = 0;
+			size_t lineIndex2 = 0;
 
 			StringUtils::readUntilSpace(part1, lineIndex2, part2);
 			int vertexIndex = strtol(part2.c_str(), nullptr, 10);
 
 			if (vertexIndex < 0)
-				vertexIndex = (int)vertices.size() + vertexIndex;
+				vertexIndex = int(vertices.size()) + vertexIndex;
 			else
 				vertexIndex--;
 
-			if (vertexIndex < 0 || vertexIndex >= (int)vertices.size())
+			if (vertexIndex < 0 || vertexIndex >= int(vertices.size()))
 			{
 				log.logWarning("Vertex index (%s) was out of bounds", vertexIndex);
 				return;
 			}
 
-			vertexIndices.push_back(vertexIndex);
+			vertexIndices.push_back(size_t(vertexIndex));
 
 			if (hasTexcoords)
 			{
@@ -322,17 +322,17 @@ namespace
 				int texcoordIndex = strtol(part2.c_str(), nullptr, 10);
 
 				if (texcoordIndex < 0)
-					texcoordIndex = (int)texcoords.size() + texcoordIndex;
+					texcoordIndex = int(texcoords.size()) + texcoordIndex;
 				else
 					texcoordIndex--;
 
-				if (texcoordIndex < 0 || texcoordIndex >= (int)texcoords.size())
+				if (texcoordIndex < 0 || texcoordIndex >= int(texcoords.size()))
 				{
 					log.logWarning("Texcoord index (%s) was out of bounds", texcoordIndex);
 					return;
 				}
 
-				texcoordIndices.push_back(texcoordIndex);
+				texcoordIndices.push_back(size_t(texcoordIndex));
 			}
 
 			if (hasNormals)
@@ -341,17 +341,17 @@ namespace
 				int normalIndex = strtol(part2.c_str(), nullptr, 10);
 
 				if (normalIndex < 0)
-					normalIndex = (int)normals.size() + normalIndex;
+					normalIndex = int(normals.size()) + normalIndex;
 				else
 					normalIndex--;
 
-				if (normalIndex < 0 || normalIndex >= (int)normals.size())
+				if (normalIndex < 0 || normalIndex >= int(normals.size()))
 				{
 					log.logWarning("Normal index (%s) was out of bounds", normalIndex);
 					return;
 				}
 
-				normalIndices.push_back(normalIndex);
+				normalIndices.push_back(size_t(normalIndex));
 			}
 		}
 
@@ -362,7 +362,7 @@ namespace
 		}
 
 		// triangulate
-		for (int i = 2; i < (int)vertexIndices.size(); ++i)
+		for (size_t i = 2; i < vertexIndices.size(); ++i)
 		{
 			Triangle triangle;
 			triangle.id = ++currentId;
@@ -449,7 +449,7 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 
 	while (std::getline(file, line))
 	{
-		int lineIndex = 0;
+		size_t lineIndex = 0;
 		std::string part;
 		StringUtils::readUntilSpace(line, lineIndex, part);
 

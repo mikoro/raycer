@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Math/Matrix4x4.h"
 #include "Math/Vector3.h"
 #include "Math/EulerAngle.h"

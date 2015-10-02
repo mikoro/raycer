@@ -549,7 +549,7 @@ void NetworkRunner::receiveResults()
 		timer.async_wait(timerHandler);
 		acceptor.async_accept(socket, acceptHandler);
 
-		while (!interrupted && (int)imageParts.size() < imagePartCount)
+		while (!interrupted && imageParts.size() < imagePartCount)
 		{
 			io.run_one();
 

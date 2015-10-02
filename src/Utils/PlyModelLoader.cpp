@@ -59,7 +59,7 @@ namespace
 	struct PlyElement
 	{
 		std::string name;
-		int count = 0;
+		size_t count = 0;
 		std::vector<PlyProperty> properties;
 	};
 
@@ -124,7 +124,7 @@ namespace
 		return returnValue;
 	}
 
-	int readBinaryValueAsInt(std::ifstream& inputStream, PlyType type)
+	size_t readBinaryValueAsInt(std::ifstream& inputStream, PlyType type)
 	{
 		int8_t tempInt8;
 		uint8_t tempUint8;
@@ -135,18 +135,18 @@ namespace
 		float tempFloat;
 		double tempDouble;
 
-		int returnValue;
+		size_t returnValue;
 
 		switch (type)
 		{
-			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = int(tempInt8); break;
-			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = int(tempUint8); break;
-			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = int(tempInt16); break;
-			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = int(tempUint16); break;
-			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = int(tempInt32); break;
-			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = int(tempUint32); break;
-			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = int(tempFloat); break;
-			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = int(tempDouble); break;
+			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = size_t(tempInt8); break;
+			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = size_t(tempUint8); break;
+			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = size_t(tempInt16); break;
+			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = size_t(tempUint16); break;
+			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = size_t(tempInt32); break;
+			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = size_t(tempUint32); break;
+			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = size_t(tempFloat); break;
+			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = size_t(tempDouble); break;
 			default: returnValue = 0;
 		}
 
@@ -164,7 +164,7 @@ namespace
 
 		while (std::getline(inputStream, line))
 		{
-			int lineIndex = 0;
+			size_t lineIndex = 0;
 			std::string part;
 			StringUtils::readUntilSpace(line, lineIndex, part);
 
@@ -278,21 +278,21 @@ namespace
 			throw std::runtime_error("PLY file doesn't have a face element");
 	}
 
-	void readAsciiData(std::ifstream& inputStream, const PlyHeader& header, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<std::vector<int>>& faces, const Matrix4x4& transformation, const Matrix4x4& transformationInvT)
+	void readAsciiData(std::ifstream& inputStream, const PlyHeader& header, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<std::vector<size_t>>& faces, const Matrix4x4& transformation, const Matrix4x4& transformationInvT)
 	{
 		for (const PlyElement& element : header.elements)
 		{
 			if (element.name == "vertex")
 			{
-				for (int i = 0; i < element.count; ++i)
+				for (size_t i = 0; i < element.count; ++i)
 				{
 					std::string line;
-					int lineIndex = 0;
+					size_t lineIndex = 0;
 					std::string part;
 					std::getline(inputStream, line);
 					std::map<std::string, double> propertyValues;
 					
-					for (int j = 0; j < (int)element.properties.size(); ++j)
+					for (size_t j = 0; j < element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
@@ -300,9 +300,9 @@ namespace
 						if (property.dataType == PlyType::LIST)
 						{
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							int listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = strtol(part.c_str(), nullptr, 10);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 								StringUtils::readUntilSpace(line, lineIndex, part);
 
 							continue;
@@ -328,29 +328,29 @@ namespace
 
 			if (element.name == "face")
 			{
-				for (int i = 0; i < element.count; ++i)
+				for (size_t i = 0; i < element.count; ++i)
 				{
 					std::string line;
-					int lineIndex = 0;
+					size_t lineIndex = 0;
 					std::string part;
 					std::getline(inputStream, line);
 
-					for (int j = 0; j < (int)element.properties.size(); ++j)
+					for (size_t j = 0; j < element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
 						// only process lists named vertex_indices
 						if (property.dataType == PlyType::LIST && property.name == "vertex_indices")
 						{
-							std::vector<int> indices;
+							std::vector<size_t> indices;
 
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							int listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = strtol(part.c_str(), nullptr, 10);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 							{
 								StringUtils::readUntilSpace(line, lineIndex, part);
-								int index = strtol(part.c_str(), nullptr, 10);
+								size_t index = strtol(part.c_str(), nullptr, 10);
 								indices.push_back(index);
 							}
 
@@ -360,9 +360,9 @@ namespace
 						else if (property.dataType == PlyType::LIST)
 						{
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							int listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = strtol(part.c_str(), nullptr, 10);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 								StringUtils::readUntilSpace(line, lineIndex, part);
 						}
 						// ignore other properties
@@ -374,26 +374,26 @@ namespace
 		}
 	}
 
-	void readBinaryData(std::ifstream& inputStream, const PlyHeader& header, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<std::vector<int>>& faces, const Matrix4x4& transformation, const Matrix4x4& transformationInvT)
+	void readBinaryData(std::ifstream& inputStream, const PlyHeader& header, std::vector<Vector3>& vertices, std::vector<Vector2>& texcoords, std::vector<Vector3>& normals, std::vector<std::vector<size_t>>& faces, const Matrix4x4& transformation, const Matrix4x4& transformationInvT)
 	{
 		for (const PlyElement& element : header.elements)
 		{
 			if (element.name == "vertex")
 			{
-				for (int i = 0; i < element.count; ++i)
+				for (size_t i = 0; i < element.count; ++i)
 				{
 					std::map<std::string, double> propertyValues;
 
-					for (int j = 0; j < (int)element.properties.size(); ++j)
+					for (size_t j = 0; j < element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
 						// ignore and skip lists
 						if (property.dataType == PlyType::LIST)
 						{
-							int listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 								readBinaryValueAsDouble(inputStream, property.listDataType);
 
 							continue;
@@ -418,19 +418,19 @@ namespace
 
 			if (element.name == "face")
 			{
-				for (int i = 0; i < element.count; ++i)
+				for (size_t i = 0; i < element.count; ++i)
 				{
-					for (int j = 0; j < (int)element.properties.size(); ++j)
+					for (size_t j = 0; j < element.properties.size(); ++j)
 					{
 						const PlyProperty& property = element.properties.at(j);
 
 						// only process lists named vertex_indices
 						if (property.dataType == PlyType::LIST && property.name == "vertex_indices")
 						{
-							std::vector<int> indices;
-							int listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							std::vector<size_t> indices;
+							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 								indices.push_back(readBinaryValueAsInt(inputStream, property.listDataType));
 
 							faces.push_back(indices);
@@ -438,9 +438,9 @@ namespace
 						// ignore and skip other lists
 						else if (property.dataType == PlyType::LIST)
 						{
-							int listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
 
-							for (int k = 0; k < listLength; ++k)
+							for (size_t k = 0; k < listLength; ++k)
 								readBinaryValueAsInt(inputStream, property.listDataType);
 						}
 						// ignore other properties
@@ -452,13 +452,13 @@ namespace
 		}
 	}
 
-	void unpackAndTriangulate(const PlyHeader& header, const std::vector<Vector3>& vertices, const std::vector<Vector2>& texcoords, const std::vector<Vector3>& normals, const std::vector<std::vector<int>>& faces, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup)
+	void unpackAndTriangulate(const PlyHeader& header, const std::vector<Vector3>& vertices, const std::vector<Vector2>& texcoords, const std::vector<Vector3>& normals, const std::vector<std::vector<size_t>>& faces, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup)
 	{
 		Log& log = App::getLog();
 
 		int currentId = info.idStartOffset;
 
-		for (const std::vector<int>& face : faces)
+		for (const std::vector<size_t>& face : faces)
 		{
 			if (face.size() < 3)
 			{
@@ -467,7 +467,7 @@ namespace
 			}
 
 			// triangulate
-			for (int i = 2; i < (int)face.size(); ++i)
+			for (size_t i = 2; i < face.size(); ++i)
 			{
 				Triangle triangle;
 				triangle.id = ++currentId;
@@ -529,7 +529,7 @@ ModelLoaderResult ModelLoader::readPlyFile(const ModelLoaderInfo& info)
 	std::vector<Vector3> vertices;
 	std::vector<Vector2> texcoords;
 	std::vector<Vector3> normals;
-	std::vector<std::vector<int>> faces;
+	std::vector<std::vector<size_t>> faces;
 
 	Matrix4x4 scaling = Matrix4x4::scale(info.scale);
 	Matrix4x4 rotation = Matrix4x4::rotateXYZ(info.rotate);

@@ -175,9 +175,6 @@
     <ClCompile Include="src\Utils\StringUtils.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
-    <ClCompile Include="src\Tests\ObjReaderTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
@@ -194,9 +191,6 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\Tests\SamplerTest.cpp">
-      <Filter>Tests</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Tests\PlyReaderTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="src\TestScenes\TestScene1.cpp">
@@ -374,6 +368,9 @@
       <Filter>Utils</Filter>
     </ClCompile>
     <ClCompile Include="src\stdafx.cpp" />
+    <ClCompile Include="src\Tests\ModelLoaderTest.cpp">
+      <Filter>Tests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

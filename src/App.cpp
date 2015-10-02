@@ -14,6 +14,11 @@
 #include "Raytracing/Raytracer.h"
 #include "OpenCL/CLRaytracer.h"
 
+#ifdef RUN_UNIT_TESTS
+#define CATCH_CONFIG_RUNNER
+#include "catch/catch.hpp"
+#endif
+
 using namespace Raycer;
 
 int main(int argc, char** argv)

@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/Filters/BoxFilter.h"
 #include "Rendering/Filters/TentFilter.h"

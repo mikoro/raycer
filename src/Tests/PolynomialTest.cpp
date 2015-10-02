@@ -5,6 +5,8 @@
 
 #ifdef RUN_UNIT_TESTS
 
+#include "catch/catch.hpp"
+
 #include "Math/Polynomial.h"
 #include "Math/MathUtils.h"
 
