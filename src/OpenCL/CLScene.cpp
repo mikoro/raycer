@@ -52,7 +52,7 @@ namespace
 		if (result == materials.end())
 			throw std::runtime_error(tfm::format("Could not find OpenCL material index for material id (%d)", materialId));
 
-		return (int)(result - materials.begin());
+		return int(result - materials.begin());
 	}
 
 	int findTextureIndex(const std::vector<ImageTexture>& textures, int textureId)

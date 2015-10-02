@@ -19,7 +19,7 @@ namespace Raycer
 
 		void initialize() override;
 
-		Color getColor(const Vector2& texcoord, const Vector3& position) const;
+		Color getColor(const Vector2& texcoord, const Vector3& position) const override;
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 

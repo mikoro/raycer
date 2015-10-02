@@ -499,7 +499,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 		}
 	}
 
-	return 1.0 - (ambientOcclusion / (n * n));
+	return 1.0 - (ambientOcclusion / (double(n) * n));
 }
 
 double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
@@ -599,5 +599,5 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 		}
 	}
 
-	return shadowAmount / (n * n);
+	return shadowAmount / (double(n) * n);
 }

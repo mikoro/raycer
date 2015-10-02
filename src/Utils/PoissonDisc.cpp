@@ -28,7 +28,7 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 {
 	std::uniform_real_distribution<double> random(0.0, 1.0);
 
-	grid2D.cellSize = minDistance / 1.41421356237;
+	grid2D.cellSize = minDistance / M_SQRT2;
 	grid2D.width = int(ceil(width / grid2D.cellSize));
 	grid2D.height = int(ceil(height / grid2D.cellSize));
 
