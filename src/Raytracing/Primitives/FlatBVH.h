@@ -18,9 +18,9 @@ namespace Raycer
 
 	struct BVHBuildInfo
 	{
-		int maxLeafSize = 5;
+		size_t maxLeafSize = 5;
 		bool useSAH = true;
-		int regularSAHSplits = 0;
+		size_t regularSAHSplits = 0;
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 
@@ -39,8 +39,8 @@ namespace Raycer
 	{
 		AABB aabb;
 		int rightOffset;
-		int startOffset;
-		int primitiveCount;
+		size_t startOffset;
+		size_t primitiveCount;
 
 		template <class Archive>
 		void serialize(Archive& ar)
@@ -54,8 +54,8 @@ namespace Raycer
 
 	struct FlatBVHBuildEntry
 	{
-		int start;
-		int end;
+		size_t start;
+		size_t end;
 		int parent;
 	};
 

@@ -94,7 +94,7 @@ const Image* ImageTexture::getImage() const
 	return image;
 }
 
-int ImageTexture::getImagePoolIndex() const
+size_t ImageTexture::getImagePoolIndex() const
 {
 	return ImagePool::getImageIndex(imageFilePath);
 }

@@ -37,8 +37,8 @@ namespace Raycer
 		void pause();
 
 		GLFWwindow* getGlfwWindow() const;
-		int getWindowWidth() const;
-		int getWindowHeight() const;
+		size_t getWindowWidth() const;
+		size_t getWindowHeight() const;
 		const MouseInfo& getMouseInfo() const;
 		Text& getDefaultText();
 		double getElapsedTime() const;
@@ -60,8 +60,8 @@ namespace Raycer
 		void initialize();
 		void shutdown();
 
-		void windowResized(int width, int height);
-		void resizeFramebuffer(int width, int height);
+		void windowResized(size_t width, size_t height);
+		void resizeFramebuffer(size_t width, size_t height);
 
 		void mainLoop();
 		void update(double timeStep);
@@ -73,8 +73,8 @@ namespace Raycer
 		bool isPaused = false;
 		bool glfwInitialized = false;
 		GLFWwindow* glfwWindow = nullptr;
-		int windowWidth = 0;
-		int windowHeight = 0;
+		size_t windowWidth = 0;
+		size_t windowHeight = 0;
 		int previousMouseX = 0;
 		int previousMouseY = 0;
 		double startTime = 0.0;

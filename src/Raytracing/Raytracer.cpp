@@ -60,14 +60,14 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	Scene& scene = *state.scene;
 
 	#pragma omp parallel for schedule(dynamic, 1000)
-	for (int pixelIndex = 0; pixelIndex < state.pixelCount; ++pixelIndex)
+	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
 	{
 		if (interrupted)
 			continue;
 
-		int pixelOffsetIndex = pixelIndex + state.pixelOffset;
-		double x = (double)(pixelOffsetIndex % state.sceneWidth);
-		double y = (double)(pixelOffsetIndex / state.sceneWidth);
+		size_t pixelOffsetIndex = size_t(pixelIndex) + state.pixelOffset;
+		double x = double(pixelOffsetIndex % state.sceneWidth);
+		double y = double(pixelOffsetIndex / state.sceneWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
 		Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);

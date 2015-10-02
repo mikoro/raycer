@@ -16,8 +16,10 @@ void LinearToneMapper::apply(const Scene& scene, Image& image)
 	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
-	for (int i = 0; i < (int)pixelData.size(); ++i)
+	for (int ti = 0; ti < int(pixelData.size()); ++ti)
 	{
+		size_t i = size_t(ti);
+
 		pixelData[i] *= pow(2.0, scene.toneMapper.exposure);
 		pixelData[i].a = 1.0;
 

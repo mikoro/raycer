@@ -90,10 +90,8 @@ void Framebuffer::initialize()
 	GLHelper::checkError("Could not set OpenGL framebuffer parameters");
 }
 
-void Framebuffer::resize(int width, int height)
+void Framebuffer::resize(size_t width, size_t height)
 {
-	assert(width > 0 && height > 0);
-
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
 	image.resize(width, height);
@@ -109,10 +107,8 @@ void Framebuffer::resize(int width, int height)
 	clear();
 }
 
-void Framebuffer::setWindowSize(int width, int height)
+void Framebuffer::setWindowSize(size_t width, size_t height)
 {
-	assert(width > 0 && height > 0);
-
 	windowWidth = width;
 	windowHeight = height;
 
@@ -136,8 +132,8 @@ void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
 
-	int imageWidth = image.getWidth();
-	int imageHeight = image.getHeight();
+	size_t imageWidth = image.getWidth();
+	size_t imageHeight = image.getHeight();
 
 	/* Resampling pass */
 
@@ -153,19 +149,7 @@ void Framebuffer::render()
 
 	if (!settings.openCL.enabled)
 	{
-		std::vector<Color>& imagePixelData = image.getPixelData();
-
-		// convert image data from Color to float array
-		for (int i = 0; i < (int)imagePixelData.size(); ++i)
-		{
-			int pixelIndex = i * 4;
-
-			floatPixelData[pixelIndex] = float(imagePixelData[i].r);
-			floatPixelData[pixelIndex + 1] = float(imagePixelData[i].g);
-			floatPixelData[pixelIndex + 2] = float(imagePixelData[i].b);
-			floatPixelData[pixelIndex + 3] = float(imagePixelData[i].a);
-		}
-
+		image.getFloatPixelData(floatPixelData);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GLsizei(imageWidth), GLsizei(imageHeight), GL_RGBA, GL_FLOAT, &floatPixelData[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
@@ -213,12 +197,12 @@ void Framebuffer::enableSmoothing(bool state)
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 }
 
-int Framebuffer::getWidth() const
+size_t Framebuffer::getWidth() const
 {
 	return image.getWidth();
 }
 
-int Framebuffer::getHeight() const
+size_t Framebuffer::getHeight() const
 {
 	return image.getHeight();
 }

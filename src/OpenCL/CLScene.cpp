@@ -65,7 +65,7 @@ namespace
 		if (it == textures.end())
 			return -1;
 
-		return (*it).getImagePoolIndex();
+		return int((*it).getImagePoolIndex());
 	}
 }
 

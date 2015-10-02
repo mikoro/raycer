@@ -24,10 +24,10 @@ namespace Raycer
 		Scene scene;
 		Image image;
 
-		int sceneWidth;
-		int sceneHeight;
-		int pixelOffset;
-		int pixelCount;
+		size_t sceneWidth;
+		size_t sceneHeight;
+		size_t pixelOffset;
+		size_t pixelCount;
 	};
 
 	class NetworkRunner

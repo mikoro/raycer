@@ -253,20 +253,20 @@ void NetworkRunner::sendJobs()
 			sceneFile.close();
 		}
 
-		int serverCount = (int)serverEndpoints.size();
-		int width = settings.image.width;
-		int height = settings.image.height;
-		int totalPixelCount = width * height;
-		int pixelsPerServer = totalPixelCount / serverCount;
-		int pixelsForLastServer = pixelsPerServer + totalPixelCount % serverCount;
+		size_t serverCount = serverEndpoints.size();
+		size_t width = settings.image.width;
+		size_t height = settings.image.height;
+		size_t totalPixelCount = width * height;
+		size_t pixelsPerServer = totalPixelCount / serverCount;
+		size_t pixelsForLastServer = pixelsPerServer + totalPixelCount % serverCount;
 
 		io_service io;
 
-		for (int i = 0; i < (int)serverEndpoints.size(); ++i)
+		for (size_t i = 0; i < serverEndpoints.size(); ++i)
 		{
-			bool isLastServer = (i == (int)serverEndpoints.size() - 1);
-			int pixelOffset = i * pixelsPerServer;
-			int pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
+			bool isLastServer = (i == serverEndpoints.size() - 1);
+			size_t pixelOffset = i * pixelsPerServer;
+			size_t pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
 
 			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelOffset, pixelCount, sceneString);
 
@@ -461,8 +461,8 @@ namespace
 {
 	struct ImagePart
 	{
-		int pixelOffset = 0;
-		int pixelCount = 0;
+		size_t pixelOffset = 0;
+		size_t pixelCount = 0;
 		std::vector<char> pixelData;
 	};
 }
@@ -471,7 +471,7 @@ void NetworkRunner::receiveResults()
 {
 	Settings& settings = App::getSettings();
 
-	int imagePartCount = (int)serverEndpoints.size();
+	size_t imagePartCount = serverEndpoints.size();
 	std::vector<ImagePart> imageParts;
 	Image resultImage;
 
@@ -510,8 +510,8 @@ void NetworkRunner::receiveResults()
 			if (headerEndPtr == nullptr)
 				return;
 
-			int headerSize = (int)(headerEndPtr - receiveBufferPtr);
-			int dataSize = (int)receiveBuffer.size() - headerSize - 2 - 1;
+			size_t headerSize = size_t(headerEndPtr - receiveBufferPtr);
+			size_t dataSize = receiveBuffer.size() - headerSize - 2 - 1;
 
 			std::string headerString(buffers_begin(receiveBufferConst), buffers_begin(receiveBufferConst) + headerSize);
 			std::smatch match;
@@ -520,14 +520,14 @@ void NetworkRunner::receiveResults()
 			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nPixelOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
-			int pixelOffset, pixelCount;
+			size_t pixelOffset, pixelCount;
 			ss.str(match[1]);
 			ss >> pixelOffset;
 			ss.clear();
 			ss.str(match[2]);
 			ss >> pixelCount;
 
-			assert(dataSize == pixelCount * (int)sizeof(Color));
+			assert(dataSize == pixelCount * sizeof(Color));
 
 			ImagePart imagePart;
 			imagePart.pixelOffset = pixelOffset;

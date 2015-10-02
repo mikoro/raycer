@@ -181,7 +181,6 @@
     <ClCompile Include="src\Raytracing\ONB.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\BlinnBlob.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Box.cpp" />
-    <ClCompile Include="src\Raytracing\Primitives\BVH.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\CSG.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Cylinder.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\FlatBVH.cpp" />
@@ -302,7 +301,6 @@
     <ClInclude Include="src\Raytracing\ONB.h" />
     <ClInclude Include="src\Raytracing\Primitives\BlinnBlob.h" />
     <ClInclude Include="src\Raytracing\Primitives\Box.h" />
-    <ClInclude Include="src\Raytracing\Primitives\BVH.h" />
     <ClInclude Include="src\Raytracing\Primitives\CSG.h" />
     <ClInclude Include="src\Raytracing\Primitives\Cylinder.h" />
     <ClInclude Include="src\Raytracing\Primitives\FlatBVH.h" />

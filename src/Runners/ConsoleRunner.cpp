@@ -99,7 +99,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.sceneWidth, state.sceneHeight, humanizeNumberDecimal(state.pixelCount), humanizeNumberBytes(state.pixelCount * 4 * 4), state.pixelOffset);
+	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.sceneWidth, state.sceneHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelOffset);
 
 	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderFunction);
@@ -138,7 +138,7 @@ void ConsoleRunner::run(RaytracerState& state)
 		totalPixelsPerSecond = state.pixelsProcessed / (totalElapsedMilliseconds / 1000.0);
 
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
-	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(state.pixelsProcessed.load()), humanizeNumberDecimal(totalPixelsPerSecond));
+	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
 		image = clRaytracer.downloadImage();
@@ -172,7 +172,7 @@ void ConsoleRunner::openImageExternally(const std::string& fileName)
 #endif
 }
 
-void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, int totalPixelCount, int pixelsProcessed)
+void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed)
 {
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	double elapsedSeconds = duration_cast<std::chrono::milliseconds>(elapsedTime).count() / 1000.0;

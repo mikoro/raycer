@@ -24,8 +24,8 @@ bool FlatBVH::intersect(const Ray& ray, Intersection& intersection, std::vector<
 	if (ray.fastOcclusion && intersection.wasFound)
 		return true;
 
-	int stack[128];
-	int stackptr = 0;
+	size_t stack[128];
+	size_t stackptr = 0;
 	bool wasFound = false;
 
 	// push to stack
@@ -36,13 +36,13 @@ bool FlatBVH::intersect(const Ray& ray, Intersection& intersection, std::vector<
 	{
 		// pop from stack
 		stackptr--;
-		int index = stack[stackptr];
+		size_t index = stack[stackptr];
 		FlatBVHNode flatNode = flatNodes[index];
 
 		// leaf node -> intersect with all its primitives
 		if (flatNode.rightOffset == 0)
 		{
-			for (int i = 0; i < flatNode.primitiveCount; ++i)
+			for (size_t i = 0; i < flatNode.primitiveCount; ++i)
 			{
 				if (orderedPrimitives[flatNode.startOffset + i]->intersect(ray, intersection, intersections))
 				{
@@ -56,9 +56,9 @@ bool FlatBVH::intersect(const Ray& ray, Intersection& intersection, std::vector<
 		else // travel down the tree
 		{
 			// right child
-			if (flatNodes[index + flatNode.rightOffset].aabb.intersects(ray))
+			if (flatNodes[index + size_t(flatNode.rightOffset)].aabb.intersects(ray))
 			{
-				stack[stackptr] = index + flatNode.rightOffset;
+				stack[stackptr] = index + size_t(flatNode.rightOffset);
 				stackptr++;
 			}
 
@@ -101,10 +101,10 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	orderedPrimitives = primitives;
 	flatNodes.clear();
 
-	int stackptr = 0;
-	int nodeCount = 0;
-	int leafCount = 0;
-	int actualNodeCount = 0;
+	size_t stackptr = 0;
+	size_t nodeCount = 0;
+	size_t leafCount = 0;
+	size_t actualNodeCount = 0;
 
 	enum
 	{
@@ -115,7 +115,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 
 	// push to stack
 	stack[stackptr].start = 0;
-	stack[stackptr].end = (int)orderedPrimitives.size();
+	stack[stackptr].end = orderedPrimitives.size();
 	stack[stackptr].parent = ROOT;
 	stackptr++;
 
@@ -131,7 +131,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		flatNode.startOffset = buildEntry.start;
 		flatNode.primitiveCount = buildEntry.end - buildEntry.start;
 
-		for (int i = buildEntry.start; i < buildEntry.end; ++i)
+		for (size_t i = buildEntry.start; i < buildEntry.end; ++i)
 			flatNode.aabb.expand(orderedPrimitives[i]->getAABB());
 
 		// leaf node indicated by rightOffset = 0
@@ -146,10 +146,10 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		// update the parent rightOffset when visiting its right child
 		if (buildEntry.parent != ROOT)
 		{
-			flatNodes[buildEntry.parent].rightOffset++;
+			flatNodes[size_t(buildEntry.parent)].rightOffset++;
 
-			if (flatNodes[buildEntry.parent].rightOffset == VISITED_TWICE)
-				flatNodes[buildEntry.parent].rightOffset = nodeCount - 1 - buildEntry.parent;
+			if (flatNodes[size_t(buildEntry.parent)].rightOffset == VISITED_TWICE)
+				flatNodes[size_t(buildEntry.parent)].rightOffset = int(nodeCount) - 1 - buildEntry.parent;
 		}
 
 		// leaf node -> no further subdivision
@@ -165,10 +165,10 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		else
 			calculateSplit(axis, splitPoint, flatNode.aabb, buildInfo, buildEntry, generator);
 
-		int middle = buildEntry.start;
+		size_t middle = buildEntry.start;
 
 		// partition primitive range by the split point
-		for (int i = buildEntry.start; i < buildEntry.end; ++i)
+		for (size_t i = buildEntry.start; i < buildEntry.end; ++i)
 		{
 			if (orderedPrimitives[i]->getAABB().getCenter().element(axis) <= splitPoint)
 			{
@@ -184,13 +184,13 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		// push right child
 		stack[stackptr].start = middle;
 		stack[stackptr].end = buildEntry.end;
-		stack[stackptr].parent = nodeCount - 1;
+		stack[stackptr].parent = int(nodeCount) - 1;
 		stackptr++;
 
 		// push left child
 		stack[stackptr].start = buildEntry.start;
 		stack[stackptr].end = middle;
-		stack[stackptr].parent = nodeCount - 1;
+		stack[stackptr].parent = int(nodeCount) - 1;
 		stackptr++;
 	}
 
@@ -271,10 +271,10 @@ void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeA
 
 		if (buildInfo.regularSAHSplits > 0)
 		{
-			double step = nodeAABB.getExtent().element(tempAxis) / buildInfo.regularSAHSplits;
+			double step = nodeAABB.getExtent().element(tempAxis) / double(buildInfo.regularSAHSplits);
 			tempSplitPoint = nodeAABB.getMin().element(tempAxis);
 
-			for (int i = 0; i < buildInfo.regularSAHSplits - 1; ++i)
+			for (size_t i = 0; i < buildInfo.regularSAHSplits - 1; ++i)
 			{
 				tempSplitPoint += step;
 				score = calculateSAHScore(tempAxis, tempSplitPoint, nodeAABB, buildEntry);
@@ -295,10 +295,10 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	assert(buildEntry.end - buildEntry.start > 0);
 
 	AABB leftAABB, rightAABB;
-	int leftCount = 0;
-	int rightCount = 0;
+	size_t leftCount = 0;
+	size_t rightCount = 0;
 
-	for (int i = buildEntry.start; i < buildEntry.end; ++i)
+	for (size_t i = buildEntry.start; i < buildEntry.end; ++i)
 	{
 		AABB primitiveAABB = orderedPrimitives[i]->getAABB();
 
@@ -317,10 +317,10 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	double score = 0.0;
 
 	if (leftCount > 0)
-		score += (leftAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * leftCount;
+		score += (leftAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * double(leftCount);
 
 	if (rightCount > 0)
-		score += (rightAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * rightCount;
+		score += (rightAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * double(rightCount);
 
 	return score;
 }
@@ -329,11 +329,11 @@ double FlatBVH::calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEnt
 {
 	std::vector<double> centerPoints;
 
-	for (int i = buildEntry.start; i < buildEntry.end; ++i)
+	for (size_t i = buildEntry.start; i < buildEntry.end; ++i)
 		centerPoints.push_back(orderedPrimitives[i]->getAABB().getCenter().element(axis));
 
 	std::sort(centerPoints.begin(), centerPoints.end());
-	int size = (int)centerPoints.size();
+	size_t size = centerPoints.size();
 	double median;
 
 	assert(size >= 2);

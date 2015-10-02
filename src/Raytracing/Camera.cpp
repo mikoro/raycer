@@ -26,11 +26,11 @@ void Camera::initialize()
 	originalOrientation = orientation;
 }
 
-void Camera::setImagePlaneSize(int width, int height)
+void Camera::setImagePlaneSize(size_t width, size_t height)
 {
 	imagePlaneWidth = double(width - 1);
 	imagePlaneHeight = double(height - 1);
-	aspectRatio = double(height) / width;
+	aspectRatio = double(height) / double(width);
 }
 
 void Camera::reset()

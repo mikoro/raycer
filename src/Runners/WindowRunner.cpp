@@ -82,12 +82,12 @@ GLFWwindow* WindowRunner::getGlfwWindow() const
 	return glfwWindow;
 }
 
-int WindowRunner::getWindowWidth() const
+size_t WindowRunner::getWindowWidth() const
 {
 	return windowWidth;
 }
 
-int WindowRunner::getWindowHeight() const
+size_t WindowRunner::getWindowHeight() const
 {
 	return windowHeight;
 }
@@ -201,7 +201,7 @@ void WindowRunner::initialize()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	glfwWindow = glfwCreateWindow(settings.window.width, settings.window.height, "Raycer", settings.window.enableFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	glfwWindow = glfwCreateWindow(int(settings.window.width), int(settings.window.height), "Raycer", settings.window.enableFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!glfwWindow)
 		throw std::runtime_error("Could not create the window");
@@ -209,7 +209,7 @@ void WindowRunner::initialize()
 	glfwSetScrollCallback(glfwWindow, ::glfwMouseWheelScroll);
 
 	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - settings.window.width / 2), (videoMode->height / 2 - settings.window.height / 2));
+	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - int(settings.window.width) / 2), (videoMode->height / 2 - int(settings.window.height) / 2));
 	glfwMakeContextCurrent(glfwWindow);
 
 	log.logInfo("Initializing GL3W library");
@@ -249,7 +249,7 @@ void WindowRunner::shutdown()
 		glfwTerminate();
 }
 
-void WindowRunner::windowResized(int width, int height)
+void WindowRunner::windowResized(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -264,8 +264,8 @@ void WindowRunner::windowResized(int width, int height)
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	int framebufferImageWidth = int(windowWidth * settings.framebuffer.scale + 0.5);
-	int framebufferImageHeight = int(windowHeight * settings.framebuffer.scale + 0.5);
+	size_t framebufferImageWidth = size_t(windowWidth * settings.framebuffer.scale + 0.5);
+	size_t framebufferImageHeight = size_t(windowHeight * settings.framebuffer.scale + 0.5);
 	resizeFramebuffer(framebufferImageWidth, framebufferImageHeight);
 	framebuffer.setWindowSize(windowWidth, windowHeight);
 
@@ -276,7 +276,7 @@ void WindowRunner::windowResized(int width, int height)
 	}
 }
 
-void WindowRunner::resizeFramebuffer(int width, int height)
+void WindowRunner::resizeFramebuffer(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -341,8 +341,8 @@ void WindowRunner::update(double timeStep)
 	int newWindowWidth, newWindowHeight;
 	glfwGetFramebufferSize(glfwWindow, &newWindowWidth, &newWindowHeight);
 
-	if (newWindowWidth != windowWidth || newWindowHeight != windowHeight)
-		windowResized(newWindowWidth, newWindowHeight);
+	if (size_t(newWindowWidth) != windowWidth || size_t(newWindowHeight) != windowHeight)
+		windowResized(size_t(newWindowWidth), size_t(newWindowHeight));
 
 	double newMouseX, newMouseY;
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
@@ -434,7 +434,7 @@ void WindowRunner::render(double timeStep, double interpolation)
 	framebuffer.render();
 
 	if (settings.window.showInfoText)
-		defaultText.drawText(5.0, windowHeight - settings.window.defaultFontSize - 2, Color::WHITE, renderFpsCounter.getFpsString());
+		defaultText.drawText(5.0, double(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
 
 	defaultText.render();
 

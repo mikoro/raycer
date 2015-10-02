@@ -21,7 +21,7 @@ namespace
 {
 	void releaseMemObject(cl_mem* object)
 	{
-		if (object != nullptr)
+		if (*object != nullptr)
 		{
 			CLManager::checkError(clReleaseMemObject(*object), "Could not release memory object");
 			*object = nullptr;
@@ -112,7 +112,7 @@ void CLRaytracer::initialize(const Scene& scene)
 	initialized = true;
 }
 
-void CLRaytracer::resizeImageBuffer(int width, int height)
+void CLRaytracer::resizeImageBuffer(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -339,17 +339,17 @@ void CLRaytracer::createTextureImages()
 	{
 		const Image& image = images[i];
 
-		int textureImageWidth = image.getWidth();
-		int textureImageHeight = image.getHeight();
+		size_t textureImageWidth = image.getWidth();
+		size_t textureImageHeight = image.getHeight();
 
 		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, nullptr, &status);
 		CLManager::checkError(status, "Could not create texture image");
 
-		std::vector<float> floatPixelData = image.getFloatData();
+		std::vector<float> floatPixelData = image.getFloatPixelData();
 		totalBytes += floatPixelData.size() * sizeof(float);
 
 		size_t origin[3] = { 0, 0, 0 };
-		size_t region[3] = { size_t(textureImageWidth), size_t(textureImageHeight), 1 };
+		size_t region[3] = { textureImageWidth, textureImageHeight, 1 };
 
 		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, nullptr, nullptr);
 

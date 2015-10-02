@@ -19,15 +19,15 @@ namespace Raycer
 		Framebuffer();
 
 		void initialize();
-		void resize(int width, int height);
-		void setWindowSize(int width, int height);
+		void resize(size_t width, size_t height);
+		void setWindowSize(size_t width, size_t height);
 		void clear();
 		void clear(const Color& color);
 		void render();
 		void enableSmoothing(bool state);
 
-		int getWidth() const;
-		int getHeight() const;
+		size_t getWidth() const;
+		size_t getHeight() const;
 		Image& getImage();
 		GLuint getImageTextureId() const;
 
@@ -36,8 +36,8 @@ namespace Raycer
 		Image image;
 		std::vector<float> floatPixelData;
 
-		int windowWidth = 0;
-		int windowHeight = 0;
+		size_t windowWidth = 0;
+		size_t windowHeight = 0;
 
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;

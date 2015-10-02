@@ -15,12 +15,12 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 	std::vector<Color>& pixelData = image.getPixelData();
 
 	double epsilon = std::numeric_limits<double>::epsilon();
-	int pixelCount = (int)pixelData.size();
+	size_t pixelCount = pixelData.size();
 	double logSum = 0.0;
 
 	#pragma omp parallel for reduction(+:logSum)
-	for (int i = 0; i < pixelCount; ++i)
-		logSum += log(epsilon + pixelData[i].getLuminance());
+	for (int i = 0; i < int(pixelCount); ++i)
+		logSum += log(epsilon + pixelData[size_t(i)].getLuminance());
 
 	double logAvgLuminance = exp(logSum / pixelCount);
 	double scale = scene.toneMapper.key / logAvgLuminance;
@@ -28,8 +28,10 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
-	for (int i = 0; i < pixelCount; ++i)
+	for (int ti = 0; ti < int(pixelCount); ++ti)
 	{
+		size_t i = size_t(ti);
+
 		double originalLuminance = pixelData[i].getLuminance();
 		double scaledLuminance = scale * originalLuminance;
 		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance / maxLuminance2))) / (1.0 + scaledLuminance);

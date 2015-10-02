@@ -95,8 +95,8 @@ int App::run(int argc, char** argv)
 	TCLAP::SwitchArg clientSwitch("", "client", "Enable network client mode", cmd, false);
 	TCLAP::SwitchArg serverSwitch("", "server", "Enable network server mode", cmd, false);
 	TCLAP::ValueArg<std::string> sceneFileNameArg("s", "scene", "Path to the scene file", false, "", "string", cmd);
-	TCLAP::ValueArg<int> widthArg("w", "width", "Width of the output image or window", false, 0, "int", cmd);
-	TCLAP::ValueArg<int> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
+	TCLAP::ValueArg<size_t> widthArg("w", "width", "Width of the output image or window", false, 0, "int", cmd);
+	TCLAP::ValueArg<size_t> heightArg("h", "height", "Height of the output image or window", false, 0, "int", cmd);
 	TCLAP::ValueArg<std::string> outputFileNameArg("o", "output", "Path to the output image file", false, "", "string", cmd);
 	TCLAP::SwitchArg autoViewSwitch("", "view", "Open the image automatically after completion", cmd, false);
 

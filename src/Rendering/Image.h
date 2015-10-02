@@ -24,18 +24,18 @@ namespace Raycer
 	public:
 
 		Image();
-		Image(int length);
-		Image(int width, int height);
-		Image(int width, int height, float* rgbaData);
+		Image(size_t length);
+		Image(size_t width, size_t height);
+		Image(size_t width, size_t height, float* rgbaData);
 		Image(const std::string& fileName);
 
-		void load(int width, int height, float* rgbaData);
+		void load(size_t width, size_t height, float* rgbaData);
 		void load(const std::string& fileName);
 		void save(const std::string& fileName) const;
-		void resize(int length);
-		void resize(int width, int height);
-		void setPixel(int x, int y, const Color& color);
-		void setPixel(int index, const Color& color);
+		void resize(size_t length);
+		void resize(size_t width, size_t height);
+		void setPixel(size_t x, size_t y, const Color& color);
+		void setPixel(size_t index, const Color& color);
 		void clear();
 		void clear(const Color& color);
 		void applyFastGamma(double gamma);
@@ -43,20 +43,21 @@ namespace Raycer
 		void flip();
 		void fillTestPattern();
 
-		int getWidth() const;
-		int getHeight() const;
+		size_t getWidth() const;
+		size_t getHeight() const;
 
-		Color getPixel(int x, int y) const;
+		Color getPixel(size_t x, size_t y) const;
 		Color getPixelNearest(double u, double v) const;
 		Color getPixelBilinear(double u, double v) const;
 
 		std::vector<Color>& getPixelData();
-		std::vector<float> getFloatData() const;
+		std::vector<float> getFloatPixelData() const;
+		void getFloatPixelData(std::vector<float>& data) const;
 
 	private:
 
-		int width = 0;
-		int height = 0;
+		size_t width = 0;
+		size_t height = 0;
 
 		std::vector<Color> pixelData;
 	};
@@ -66,16 +67,16 @@ namespace Raycer
 	public:
 
 		static const Image* loadImage(const std::string& fileName, bool applyGamma);
-		static int getImageIndex(const std::string& fileName);
+		static size_t getImageIndex(const std::string& fileName);
 		static const std::vector<Image>& getImages();
 		static void clear();
 
 	private:
 
-		static std::map<std::string, int> imageIndexMap;
+		static std::map<std::string, size_t> imageIndexMap;
 		static std::vector<Image> images;
 		static bool initialized;
 
-		static const int MAX_IMAGES = 1000;
+		static const size_t MAX_IMAGES = 1000;
 	};
 }

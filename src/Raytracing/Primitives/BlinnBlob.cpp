@@ -88,11 +88,11 @@ bool BlinnBlob::intersect(const Ray& ray, Intersection& intersection, std::vecto
 	bool wasFound = false;
 
 	// find the position where the function becomes positive and then solve the exact root/distance
-	for (int i = 0; i < (int)distances.size(); ++i)
+	for (double distance : distances)
 	{
-		if (evaluate(distances[i]) > 0.0)
+		if (evaluate(distance) > 0.0)
 		{
-			t = Solver::findRoot(evaluate, 0.0, distances[i], solverIterations);
+			t = Solver::findRoot(evaluate, 0.0, distance, solverIterations);
 			wasFound = true;
 			break;
 		}

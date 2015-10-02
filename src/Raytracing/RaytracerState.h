@@ -19,11 +19,11 @@ namespace Raycer
 		Image* image = nullptr;
 		Scene* scene = nullptr;
 
-		int sceneWidth = 0;
-		int sceneHeight = 0;
-		int pixelOffset = 0;
-		int pixelCount = 0;
+		size_t sceneWidth = 0;
+		size_t sceneHeight = 0;
+		size_t pixelOffset = 0;
+		size_t pixelCount = 0;
 
-		std::atomic<int> pixelsProcessed;
+		std::atomic<size_t> pixelsProcessed;
 	};
 }
