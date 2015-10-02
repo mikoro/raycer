@@ -44,7 +44,10 @@ namespace Raycer
 		int combinedGroupId = 0;
 		int combinedGroupInstanceId = 0;
 
-		ModelLoaderInfo() {}
+		ModelLoaderInfo()
+		{
+		}
+
 		ModelLoaderInfo(ModelLoaderPreset preset)
 		{
 			if (preset == ModelLoaderPreset::GROUPS)
@@ -63,7 +66,7 @@ namespace Raycer
 			}
 		}
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(modelFilePath),

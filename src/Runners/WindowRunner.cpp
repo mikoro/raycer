@@ -260,12 +260,12 @@ void WindowRunner::windowResized(int width, int height)
 	windowWidth = width;
 	windowHeight = height;
 
-	glViewport(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight);
+	glViewport(0, 0, GLsizei(windowWidth), GLsizei(windowHeight));
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	int framebufferImageWidth = (int)((double)windowWidth * settings.framebuffer.scale + 0.5);
-	int framebufferImageHeight = (int)((double)windowHeight * settings.framebuffer.scale + 0.5);
+	int framebufferImageWidth = int(windowWidth * settings.framebuffer.scale + 0.5);
+	int framebufferImageHeight = int(windowHeight * settings.framebuffer.scale + 0.5);
 	resizeFramebuffer(framebufferImageWidth, framebufferImageHeight);
 	framebuffer.setWindowSize(windowWidth, windowHeight);
 
@@ -347,10 +347,10 @@ void WindowRunner::update(double timeStep)
 	double newMouseX, newMouseY;
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
 
-	mouseInfo.windowX = (int)(newMouseX + 0.5);
-	mouseInfo.windowY = (int)((double)windowHeight - newMouseY - 1.0 + 0.5);
-	mouseInfo.framebufferX = (int)(((double)mouseInfo.windowX / (double)windowWidth) * (double)framebuffer.getWidth() + 0.5);
-	mouseInfo.framebufferY = (int)(((double)mouseInfo.windowY / (double)windowHeight) * (double)framebuffer.getHeight() + 0.5);
+	mouseInfo.windowX = int(newMouseX + 0.5);
+	mouseInfo.windowY = int(windowHeight - newMouseY - 1.0 + 0.5);
+	mouseInfo.framebufferX = int((mouseInfo.windowX / double(windowWidth)) * framebuffer.getWidth() + 0.5);
+	mouseInfo.framebufferY = int((mouseInfo.windowY / double(windowHeight)) * framebuffer.getHeight() + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
@@ -374,8 +374,8 @@ void WindowRunner::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_F10))
 	{
 		double newScale = settings.framebuffer.scale * 0.5;
-		int newWidth = (int)((double)windowWidth * newScale + 0.5);
-		int newHeight = (int)((double)windowHeight * newScale + 0.5);
+		int newWidth = int(windowWidth * newScale + 0.5);
+		int newHeight = int(windowHeight * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
@@ -394,7 +394,7 @@ void WindowRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			resizeFramebuffer((int)((double)windowWidth * settings.framebuffer.scale + 0.5), (int)((double)windowHeight * settings.framebuffer.scale + 0.5));
+			resizeFramebuffer(int(windowWidth * settings.framebuffer.scale + 0.5), int(windowHeight * settings.framebuffer.scale + 0.5));
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}
@@ -434,13 +434,13 @@ void WindowRunner::render(double timeStep, double interpolation)
 	framebuffer.render();
 
 	if (settings.window.showInfoText)
-		defaultText.drawText(5.0, (double)(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
+		defaultText.drawText(5.0, windowHeight - settings.window.defaultFontSize - 2, Color::WHITE, renderFpsCounter.getFpsString());
 
 	defaultText.render();
 
 	if (isPaused)
 	{
-		pauseText.drawText((double)windowWidth / 2.0 - 200.0, (double)windowHeight / 2.0 - 40.0, Color::WHITE, "PAUSED");
+		pauseText.drawText(windowWidth / 2.0 - 200.0, windowHeight / 2.0 - 40.0, Color::WHITE, "PAUSED");
 		pauseText.render();
 	}
 
@@ -454,7 +454,7 @@ void WindowRunner::takeScreenshot() const
 {
 	std::vector<float> data(windowWidth * windowHeight * 4);
 
-	glReadPixels(0, 0, (GLsizei)windowWidth, (GLsizei)windowHeight, GL_RGBA, GL_FLOAT, &data[0]);
+	glReadPixels(0, 0, GLsizei(windowWidth), GLsizei(windowHeight), GL_RGBA, GL_FLOAT, &data[0]);
 	GLHelper::checkError("Could not read pixels from renderbuffer");
 
 	Image image(windowWidth, windowHeight, &data[0]);

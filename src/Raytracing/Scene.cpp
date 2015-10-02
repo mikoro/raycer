@@ -476,7 +476,7 @@ void Scene::initialize()
 	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("Scene initialization finished (time: %d ms)", milliseconds);
 }

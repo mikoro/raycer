@@ -76,7 +76,7 @@ void changeDirectory()
 int App::run(int argc, char** argv)
 {
 #ifdef _WIN32
-	SetConsoleCtrlHandler((PHANDLER_ROUTINE)consoleCtrlHandler, TRUE);
+	SetConsoleCtrlHandler(PHANDLER_ROUTINE(consoleCtrlHandler), TRUE);
 #endif
 
 #ifdef __APPLE__

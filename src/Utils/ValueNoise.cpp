@@ -29,13 +29,13 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	std::mt19937 gen;
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
-	int iz = (int)floor(z);
+	int ix = int(floor(x));
+	int iy = int(floor(y));
+	int iz = int(floor(z));
 
-	double tx = x - (double)ix;
-	double ty = y - (double)iy;
-	double tz = z - (double)iz;
+	double tx = x - ix;
+	double ty = y - iy;
+	double tz = z - iz;
 	double txi = 1.0 - tx;
 	double tyi = 1.0 - ty;
 	double tzi = 1.0 - tz;

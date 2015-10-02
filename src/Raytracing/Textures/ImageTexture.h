@@ -18,11 +18,11 @@ namespace Raycer
 	{
 	public:
 
-		void initialize();
+		void initialize() override;
 
-		Color getColor(const Vector2& texcoord, const Vector3& position) const;
-		double getValue(const Vector2& texcoord, const Vector3& position) const;
-		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const;
+		Color getColor(const Vector2& texcoord, const Vector3& position) const override;
+		double getValue(const Vector2& texcoord, const Vector3& position) const override;
+		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
 		const Image* getImage() const;
 		int getImagePoolIndex() const;

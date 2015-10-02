@@ -24,7 +24,7 @@ namespace Raycer
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(maxLeafSize),
@@ -42,7 +42,7 @@ namespace Raycer
 		int startOffset;
 		int primitiveCount;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(aabb),
@@ -72,10 +72,10 @@ namespace Raycer
 		friend class Scene;
 		friend class CLScene;
 
-		void initialize(const Scene& scene);
-		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
-		AABB getAABB() const;
-		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
+		void initialize(const Scene& scene) override;
+		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections) override;
+		AABB getAABB() const override;
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
 		void rebuild(const Scene& scene);
@@ -95,7 +95,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("primitive", cereal::base_class<Primitive>(this)),

@@ -14,6 +14,6 @@ namespace Raycer
 	{
 	public:
 
-		void apply(const Scene& scene, Image& image);
+		void apply(const Scene& scene, Image& image) override;
 	};
 }

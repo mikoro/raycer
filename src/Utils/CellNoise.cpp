@@ -30,9 +30,9 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::minstd_rand gen;
 
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
-	int iz = (int)floor(z);
+	int ix = int(floor(x));
+	int iy = int(floor(y));
+	int iz = int(floor(z));
 
 	Vector3 evaluationPoint(x, y, z);
 	std::array<double, CELL_NOISE_MAX_DISTANCES_COUNT> distances;
@@ -56,9 +56,9 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 				{
 					Vector3 cubePoint;
 
-					cubePoint.x = (double)cx + realDist(gen);
-					cubePoint.y = (double)cy + realDist(gen);
-					cubePoint.z = (double)cz + realDist(gen);
+					cubePoint.x = cx + realDist(gen);
+					cubePoint.y = cy + realDist(gen);
+					cubePoint.z = cz + realDist(gen);
 
 					if (it != distances.end())
 						*it++ = getDistance(distanceType, evaluationPoint, cubePoint);
@@ -89,8 +89,8 @@ double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombin
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::minstd_rand gen;
 
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
+	int ix = int(floor(x));
+	int iy = int(floor(y));
 
 	Vector3 evaluationPoint(x, y, 0.0);
 	std::array<double, CELL_NOISE_MAX_DISTANCES_COUNT> distances;
@@ -111,8 +111,8 @@ double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombin
 			{
 				Vector3 cubePoint;
 
-				cubePoint.x = (double)cx + realDist(gen);
-				cubePoint.y = (double)cy + realDist(gen);
+				cubePoint.x = cx + realDist(gen);
+				cubePoint.y = cy + realDist(gen);
 
 				if (it != distances.end())
 					*it++ = getDistance(distanceType, evaluationPoint, cubePoint);
@@ -148,9 +148,9 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, int density
 	std::uniform_int_distribution<int> intDist(0, (int)voronoiColors.size() - 1);
 	std::minstd_rand gen;
 
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
-	int iz = (int)floor(z);
+	int ix = int(floor(x));
+	int iy = int(floor(y));
+	int iz = int(floor(z));
 
 	Vector3 evaluationPoint(x, y, z);
 	double minDistance = std::numeric_limits<double>::max();
@@ -174,9 +174,9 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, int density
 				{
 					Vector3 cubePoint;
 
-					cubePoint.x = (double)cx + realDist(gen);
-					cubePoint.y = (double)cy + realDist(gen);
-					cubePoint.z = (double)cz + realDist(gen);
+					cubePoint.x = cx + realDist(gen);
+					cubePoint.y = cy + realDist(gen);
+					cubePoint.z = cz + realDist(gen);
 					int colorIndex = intDist(gen);
 
 					double distance = getDistance(distanceType, evaluationPoint, cubePoint);
@@ -206,8 +206,8 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, int densi
 	std::uniform_int_distribution<int> intDist(0, (int)voronoiColors.size() - 1);
 	std::minstd_rand gen;
 
-	int ix = (int)floor(x);
-	int iy = (int)floor(y);
+	int ix = int(floor(x));
+	int iy = int(floor(y));
 
 	Vector3 evaluationPoint(x, y, 0.0);
 	double minDistance = std::numeric_limits<double>::max();
@@ -228,8 +228,8 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, int densi
 			{
 				Vector3 cubePoint;
 
-				cubePoint.x = (double)cx + realDist(gen);
-				cubePoint.y = (double)cy + realDist(gen);
+				cubePoint.x = cx + realDist(gen);
+				cubePoint.y = cy + realDist(gen);
 				int colorIndex = intDist(gen);
 
 				double distance = getDistance(distanceType, evaluationPoint, cubePoint);

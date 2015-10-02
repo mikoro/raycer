@@ -28,10 +28,10 @@ namespace Raycer
 		PrimitiveGroup();
 		PrimitiveGroup(const std::vector<Primitive*>& primitives);
 
-		void initialize(const Scene& scene);
-		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
-		AABB getAABB() const;
-		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
+		void initialize(const Scene& scene) override;
+		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections) override;
+		AABB getAABB() const override;
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		std::vector<int> primitiveIds;
 		bool enableBVH = true;

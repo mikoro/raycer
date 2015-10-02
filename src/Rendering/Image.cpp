@@ -90,7 +90,7 @@ void Image::load(const std::string& fileName)
 	else
 	{
 		int newWidth, newHeight, components;
-		uint32_t* loadData = (uint32_t*)stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4); // RGBA
+		uint32_t* loadData = reinterpret_cast<uint32_t*>(stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4)); // RGBA
 
 		if (loadData == nullptr)
 			throw std::runtime_error(tfm::format("Could not load image file: %s", stbi_failure_reason()));
@@ -141,9 +141,9 @@ void Image::save(const std::string& fileName) const
 				int dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
 				int pixelIndex = y * width + x;
 
-				saveData[dataIndex] = (float)pixelData[pixelIndex].r;
-				saveData[dataIndex + 1] = (float)pixelData[pixelIndex].g;
-				saveData[dataIndex + 2] = (float)pixelData[pixelIndex].b;
+				saveData[dataIndex] = float(pixelData[pixelIndex].r);
+				saveData[dataIndex + 1] = float(pixelData[pixelIndex].g);
+				saveData[dataIndex + 2] = float(pixelData[pixelIndex].b);
 			}
 		}
 
@@ -233,7 +233,7 @@ void Image::fillTestPattern()
 			Color color = Color::BLACK;
 
 			if (x % 2 == 0 && y % 2 == 0)
-				color = Color::lerp(Color::RED, Color::BLUE, (double)x / (double)width);
+				color = Color::lerp(Color::RED, Color::BLUE, double(x) / width);
 
 			pixelData[y * width + x] = color;
 		}
@@ -259,20 +259,20 @@ Color Image::getPixel(int x, int y) const
 
 Color Image::getPixelNearest(double u, double v) const
 {
-	int x = (int)(u * (double)(width - 1) + 0.5);
-	int y = (int)(v * (double)(height - 1) + 0.5);
+	int x = int(u * double(width - 1) + 0.5);
+	int y = int(v * double(height - 1) + 0.5);
 
 	return getPixel(x, y);
 }
 
 Color Image::getPixelBilinear(double u, double v) const
 {
-	double dx = u * (double)(width - 1) - 0.5;
-	double dy = v * (double)(height - 1) - 0.5;
-	int ix = (int)dx;
-	int iy = (int)dy;
-	double tx2 = dx - (double)ix;
-	double ty2 = dy - (double)iy;
+	double dx = u * double(width - 1) - 0.5;
+	double dy = v * double(height - 1) - 0.5;
+	int ix = int(dx);
+	int iy = int(dy);
+	double tx2 = dx - double(ix);
+	double ty2 = dy - double(iy);
 	tx2 = MathUtils::smoothstep(tx2);
 	ty2 = MathUtils::smoothstep(ty2);
 	double tx1 = 1.0 - tx2;
@@ -300,10 +300,10 @@ std::vector<float> Image::getFloatData() const
 	{
 		int pixelIndex = i * 4;
 
-		floatPixelData[pixelIndex] = (float)pixelData[i].r;
-		floatPixelData[pixelIndex + 1] = (float)pixelData[i].g;
-		floatPixelData[pixelIndex + 2] = (float)pixelData[i].b;
-		floatPixelData[pixelIndex + 3] = (float)pixelData[i].a;
+		floatPixelData[pixelIndex] = float(pixelData[i].r);
+		floatPixelData[pixelIndex + 1] = float(pixelData[i].g);
+		floatPixelData[pixelIndex + 2] = float(pixelData[i].b);
+		floatPixelData[pixelIndex + 3] = float(pixelData[i].a);
 	}
 
 	return floatPixelData;

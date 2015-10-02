@@ -25,10 +25,10 @@ namespace Raycer
 		friend class Scene;
 		friend class CLScene;
 
-		void initialize(const Scene& scene);
-		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections);
-		AABB getAABB() const;
-		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate);
+		void initialize(const Scene& scene) override;
+		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections) override;
+		AABB getAABB() const override;
+		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		Vector3 vertices[3];
 		Vector3 normals[3];

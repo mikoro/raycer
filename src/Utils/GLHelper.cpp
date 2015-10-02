@@ -80,7 +80,7 @@ GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::st
 	glLinkProgram(program);
 
 	GLint isLinked = 0;
-	glGetProgramiv(program, GL_LINK_STATUS, (int*)&isLinked);
+	glGetProgramiv(program, GL_LINK_STATUS, &isLinked);
 
 	if (isLinked == GL_FALSE)
 	{

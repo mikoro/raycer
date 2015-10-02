@@ -203,7 +203,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		orderedPrimitiveIds.push_back(primitive->id);
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
 }
@@ -271,7 +271,7 @@ void FlatBVH::calculateSAHSplit(int& axis, double& splitPoint, const AABB& nodeA
 
 		if (buildInfo.regularSAHSplits > 0)
 		{
-			double step = nodeAABB.getExtent().element(tempAxis) / (double)buildInfo.regularSAHSplits;
+			double step = nodeAABB.getExtent().element(tempAxis) / buildInfo.regularSAHSplits;
 			tempSplitPoint = nodeAABB.getMin().element(tempAxis);
 
 			for (int i = 0; i < buildInfo.regularSAHSplits - 1; ++i)
@@ -317,10 +317,10 @@ double FlatBVH::calculateSAHScore(int axis, double splitPoint, const AABB& nodeA
 	double score = 0.0;
 
 	if (leftCount > 0)
-		score += (leftAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * (double)leftCount;
+		score += (leftAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * leftCount;
 
 	if (rightCount > 0)
-		score += (rightAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * (double)rightCount;
+		score += (rightAABB.getSurfaceArea() / nodeAABB.getSurfaceArea()) * rightCount;
 
 	return score;
 }

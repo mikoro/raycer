@@ -29,8 +29,8 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 	std::uniform_real_distribution<double> random(0.0, 1.0);
 
 	grid2D.cellSize = minDistance / 1.41421356237;
-	grid2D.width = (int)ceil((double)width / grid2D.cellSize);
-	grid2D.height = (int)ceil((double)height / grid2D.cellSize);
+	grid2D.width = int(ceil(width / grid2D.cellSize));
+	grid2D.height = int(ceil(height / grid2D.cellSize));
 
 	grid2D.grid.resize(grid2D.height);
 
@@ -40,7 +40,7 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 	points2D.clear();
 	activePoints2D.clear();
 
-	Vector2 firstPoint = Vector2(random(mt) * (double)width, random(mt) * (double)height);
+	Vector2 firstPoint = Vector2(random(mt) * width, random(mt) * height);
 
 	points2D.push_back(firstPoint);
 	activePoints2D.push_back(firstPoint);
@@ -82,8 +82,8 @@ GridIndex2D PoissonDisc::getGridIndex2D(const Vector2& point)
 {
 	GridIndex2D gridIndex;
 
-	gridIndex.x = (int)(point.x / grid2D.cellSize);
-	gridIndex.y = (int)(point.y / grid2D.cellSize);
+	gridIndex.x = int(point.x / grid2D.cellSize);
+	gridIndex.y = int(point.y / grid2D.cellSize);
 
 	return gridIndex;
 }

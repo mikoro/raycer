@@ -567,7 +567,7 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("OBJ file reading finished (time: %d ms, groups: %s, triangles: %s, materials: %s, textures: %s)", milliseconds, result.groups.size(), result.triangles.size(), result.materials.size(), result.textures.size());
 

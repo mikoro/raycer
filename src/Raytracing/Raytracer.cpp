@@ -127,7 +127,7 @@ Color Raytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoo
 	for (int i = 0; i < n; ++i)
 		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample(i, n), interrupted);
 
-	return sampledPixelColor / (double)(n);
+	return sampledPixelColor / n;
 }
 
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
@@ -184,7 +184,7 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 		}
 	}
 
-	return sampledPixelColor / (double)(n * n);
+	return sampledPixelColor / (n * n);
 }
 
 Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, int iteration, const std::atomic<bool>& interrupted)
@@ -499,7 +499,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 		}
 	}
 
-	return 1.0 - (ambientOcclusion / (double)(n * n));
+	return 1.0 - (ambientOcclusion / (n * n));
 }
 
 double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
@@ -599,5 +599,5 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 		}
 	}
 
-	return shadowAmount / (double)(n * n);
+	return shadowAmount / (n * n);
 }

@@ -101,7 +101,7 @@ namespace Raycer
 			bool visualizeDepth = false;
 			double visualizeDepthMaxDistance = 25.0;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(maxRayIterations),
@@ -131,7 +131,7 @@ namespace Raycer
 			double key = 0.18;
 			double maxLuminance = 1.0;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(type),
@@ -155,7 +155,7 @@ namespace Raycer
 			double height = 100.0;
 			double heightSteepness = 1.0;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(enabled),
@@ -175,7 +175,7 @@ namespace Raycer
 			BVHBuildInfo buildInfo;
 			FlatBVH bvh;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(enabled),
@@ -191,7 +191,7 @@ namespace Raycer
 			bool useDefaultMaterial = true;
 			Material material;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(enabled),
@@ -215,7 +215,7 @@ namespace Raycer
 			std::vector<AtmosphereTexture> atmosphereTextures;
 			std::vector<VoronoiTexture> voronoiTextures;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(colorTextures),
@@ -243,7 +243,7 @@ namespace Raycer
 			std::vector<PointLight> pointLights;
 			std::vector<SpotLight> spotLights;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(ambientLight),
@@ -272,7 +272,7 @@ namespace Raycer
 			std::vector<Primitive*> visible;
 			std::vector<Primitive*> invisible;
 
-			template<class Archive>
+			template <class Archive>
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(triangles),
@@ -297,7 +297,7 @@ namespace Raycer
 
 		friend class cereal::access;
 
-		template<class Archive>
+		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(camera),

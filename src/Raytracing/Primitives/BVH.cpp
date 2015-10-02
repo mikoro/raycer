@@ -78,7 +78,7 @@ void BVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& i
 	buildRecursive(primitives, this, info, gen, nodeCount, leafCount, 0, 0);
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
 }
@@ -118,24 +118,24 @@ void BVH::buildRecursive(const std::vector<Primitive*>& primitives, BVH* node, c
 
 	if (leftPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->left = std::unique_ptr<BVH>(new BVH());
-		buildRecursive(leftPrimitives, (BVH*)node->left.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
+		node->left = std::make_unique<BVH>();
+		buildRecursive(leftPrimitives, static_cast<BVH*>(node->left.get()), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->left = std::unique_ptr<PrimitiveGroup>(new PrimitiveGroup(leftPrimitives));
+		node->left = std::make_unique<PrimitiveGroup>(leftPrimitives);
 	}
 
 	if (rightPrimitives.size() > (size_t)info.maxLeafSize && !shouldTerminate)
 	{
-		node->right = std::unique_ptr<BVH>(new BVH());
+		node->right = std::make_unique<BVH>();
 		buildRecursive(rightPrimitives, (BVH*)node->right.get(), info, gen, nodeCount, leafCount, previousLeftSize, previousRightSize);
 	}
 	else
 	{
 		leafCount++;
-		node->right = std::unique_ptr<PrimitiveGroup>(new PrimitiveGroup(rightPrimitives));
+		node->right = std::make_unique<PrimitiveGroup>(rightPrimitives);
 	}
 }
 
@@ -198,7 +198,7 @@ void BVH::calculateSAHSplit(int& axis, double& splitPoint, const std::vector<Pri
 
 		if (info.regularSAHSplits > 0)
 		{
-			double step = node->aabb.getExtent().element(tempAxis) / (double)info.regularSAHSplits;
+			double step = node->aabb.getExtent().element(tempAxis) / info.regularSAHSplits;
 			tempSplitPoint = node->aabb.getMin().element(tempAxis);
 
 			for (int i = 0; i < info.regularSAHSplits - 1; ++i)
@@ -244,10 +244,10 @@ double BVH::calculateSAHScore(int axis, double splitPoint, const std::vector<Pri
 	double score = 0.0;
 
 	if (leftCount > 0)
-		score += (leftAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * (double)leftCount;
+		score += (leftAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * leftCount;
 
 	if (rightCount > 0)
-		score += (rightAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * (double)rightCount;
+		score += (rightAABB.getSurfaceArea() / node->aabb.getSurfaceArea()) * rightCount;
 
 	return score;
 }

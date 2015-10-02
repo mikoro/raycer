@@ -56,8 +56,8 @@ std::string Log::formatMessage(MessageLevel messageLevel, const std::string& mes
 	auto epoch = now.time_since_epoch();
 	time_t tt = system_clock::to_time_t(now);
 	tm local_tm = *localtime(&tt);
-	int seconds = (int)std::chrono::duration_cast<std::chrono::seconds>(epoch).count();
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
+	auto seconds = std::chrono::duration_cast<std::chrono::seconds>(epoch).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(epoch).count();
 	milliseconds = milliseconds - seconds * 1000;
 
 	return tfm::format("%02d:%02d:%02d.%03d [%s] %s", local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec, milliseconds, messageLevelName, message);

@@ -15,9 +15,9 @@ namespace Raycer
 
 		LanczosSincFilter(double width = 2.0);
 
-		double getWeight(double x);
-		double getWeight(double x, double y);
-		double getWeight(const Vector2& point);
-		double getWidth();
+		double getWeight(double x) override;
+		double getWeight(double x, double y) override;
+		double getWeight(const Vector2& point) override;
+		double getWidth() override;
 	};
 }

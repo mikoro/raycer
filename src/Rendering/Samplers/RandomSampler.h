@@ -19,10 +19,10 @@ namespace Raycer
 
 		RandomSampler();
 
-		double getSample(int i, int n, int permutation = 0);
-		Vector2 getSquareSample(int ix, int iy, int nx, int ny, int permutation = 0);
-		Vector2 getDiskSample(int ix, int iy, int nx, int ny, int permutation = 0);
-		Vector3 getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0);
+		double getSample(int i, int n, int permutation = 0) override;
+		Vector2 getSquareSample(int ix, int iy, int nx, int ny, int permutation = 0) override;
+		Vector2 getDiskSample(int ix, int iy, int nx, int ny, int permutation = 0) override;
+		Vector3 getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation = 0) override;
 
 	private:
 

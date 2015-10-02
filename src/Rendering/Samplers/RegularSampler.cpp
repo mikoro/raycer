@@ -13,7 +13,7 @@ double RegularSampler::getSample(int i, int n, int permutation)
 {
 	(void)permutation;
 
-	double x = ((double)i + 0.5) / (double)n;
+	double x = (double(i) + 0.5) / double(n);
 	return x;
 }
 
@@ -23,8 +23,8 @@ Vector2 RegularSampler::getSquareSample(int ix, int iy, int nx, int ny, int perm
 
 	Vector2 result;
 
-	result.x = ((double)ix + 0.5) / (double)nx;
-	result.y = ((double)iy + 0.5) / (double)ny;
+	result.x = (double(ix) + 0.5) / double(nx);
+	result.y = (double(iy) + 0.5) / double(ny);
 
 	return result;
 }

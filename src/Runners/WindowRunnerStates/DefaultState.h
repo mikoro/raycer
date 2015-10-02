@@ -15,16 +15,16 @@ namespace Raycer
 	{
 	public:
 
-		void initialize();
-		void pause();
-		void resume();
-		void shutdown();
+		void initialize() override;
+		void pause() override;
+		void resume() override;
+		void shutdown() override;
 
-		void update(double timeStep);
-		void render(double timeStep, double interpolation);
+		void update(double timeStep) override;
+		void render(double timeStep, double interpolation) override;
 
-		void windowResized(int width, int height);
-		void framebufferResized(int width, int height);
+		void windowResized(int width, int height) override;
+		void framebufferResized(int width, int height) override;
 
 	private:
 

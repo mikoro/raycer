@@ -47,7 +47,7 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 	App::getLog().logInfo("Loading font from %s", fontFileName);
 
 	atlas = ftgl::texture_atlas_new(512, 512, 1);
-	font = ftgl::texture_font_new_from_file(atlas, (float)fontSize, fontFileName.c_str());
+	font = ftgl::texture_font_new_from_file(atlas, float(fontSize), fontFileName.c_str());
 
 	if (font == nullptr)
 		throw std::runtime_error("Could not load font");
@@ -63,13 +63,13 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 
 void Text::setWindowSize(int width, int height)
 {
-	ftgl::mat4_set_orthographic(&mvp, 0, (float)width, 0, (float)height, -1, 1);
+	ftgl::mat4_set_orthographic(&mvp, 0, float(width), 0, float(height), -1, 1);
 }
 
 void Text::drawText(double x, double y, const Color& color, const std::string& text)
 {
-	float tx = (float)x;
-	float ty = (float)y;
+	float tx = float(x);
+	float ty = float(y);
 
 	std::vector<wchar_t> utf16Text;
 	utf8::unchecked::utf8to16(text.begin(), text.end(), back_inserter(utf16Text));
@@ -87,10 +87,10 @@ void Text::drawText(double x, double y, const Color& color, const std::string& t
 
 			tx += kerning;
 
-			float x0 = tx + (float)glyph->offset_x;
-			float y0 = ty + (float)glyph->offset_y;
-			float x1 = x0 + (float)glyph->width;
-			float y1 = y0 - (float)glyph->height;
+			float x0 = tx + glyph->offset_x;
+			float y0 = ty + glyph->offset_y;
+			float x1 = x0 + glyph->width;
+			float y1 = y0 - glyph->height;
 
 			float s0 = glyph->s0;
 			float t0 = glyph->t0;
@@ -100,10 +100,10 @@ void Text::drawText(double x, double y, const Color& color, const std::string& t
 			GLuint indices[6] = { 0, 1, 2, 0, 2, 3 };
 
 			vertex_t vertices[4] = {
-				{ x0, y0, 0, s0, t0, (float)color.r, (float)color.g, (float)color.b, (float)color.a },
-				{ x0, y1, 0, s0, t1, (float)color.r, (float)color.g, (float)color.b, (float)color.a },
-				{ x1, y1, 0, s1, t1, (float)color.r, (float)color.g, (float)color.b, (float)color.a },
-				{ x1, y0, 0, s1, t0, (float)color.r, (float)color.g, (float)color.b, (float)color.a } };
+				{ x0, y0, 0, s0, t0, float(color.r), float(color.g), float(color.b), float(color.a) },
+				{ x0, y1, 0, s0, t1, float(color.r), float(color.g), float(color.b), float(color.a) },
+				{ x1, y1, 0, s1, t1, float(color.r), float(color.g), float(color.b), float(color.a) },
+				{ x1, y0, 0, s1, t0, float(color.r), float(color.g), float(color.b), float(color.a) } };
 
 			ftgl::vertex_buffer_push_back(buffer, vertices, 4, indices, 6);
 			tx += glyph->advance_x;

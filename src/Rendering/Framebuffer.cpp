@@ -101,7 +101,7 @@ void Framebuffer::resize(int width, int height)
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, GLsizei(width), GLsizei(height), 0, GL_RGBA, GL_FLOAT, nullptr);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	GLHelper::checkError("Could not reserve OpenGL texture memory");
@@ -117,7 +117,7 @@ void Framebuffer::setWindowSize(int width, int height)
 	windowHeight = height;
 
 	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, GLsizei(windowWidth), GLsizei(windowHeight), 0, GL_RGBA, GL_FLOAT, nullptr);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
@@ -146,10 +146,10 @@ void Framebuffer::render()
 
 	glUseProgram(resampleProgramId);
 	glUniform1i(resampleTextureUniformId, 0);
-	glUniform1f(resampleTextureWidthUniformId, (float)imageWidth);
-	glUniform1f(resampleTextureHeightUniformId, (float)imageHeight);
-	glUniform1f(resampleTexelWidthUniformId, 1.0f / (float)imageWidth);
-	glUniform1f(resampleTexelHeightUniformId, 1.0f / (float)imageHeight);
+	glUniform1f(resampleTextureWidthUniformId, float(imageWidth));
+	glUniform1f(resampleTextureHeightUniformId, float(imageHeight));
+	glUniform1f(resampleTexelWidthUniformId, 1.0f / imageWidth);
+	glUniform1f(resampleTexelHeightUniformId, 1.0f / imageHeight);
 
 	if (!settings.openCL.enabled)
 	{
@@ -160,13 +160,13 @@ void Framebuffer::render()
 		{
 			int pixelIndex = i * 4;
 
-			floatPixelData[pixelIndex] = (float)imagePixelData[i].r;
-			floatPixelData[pixelIndex + 1] = (float)imagePixelData[i].g;
-			floatPixelData[pixelIndex + 2] = (float)imagePixelData[i].b;
-			floatPixelData[pixelIndex + 3] = (float)imagePixelData[i].a;
+			floatPixelData[pixelIndex] = float(imagePixelData[i].r);
+			floatPixelData[pixelIndex + 1] = float(imagePixelData[i].g);
+			floatPixelData[pixelIndex + 2] = float(imagePixelData[i].b);
+			floatPixelData[pixelIndex + 3] = float(imagePixelData[i].a);
 		}
 
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, (GLsizei)imageWidth, (GLsizei)imageHeight, GL_RGBA, GL_FLOAT, &floatPixelData[0]);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GLsizei(imageWidth), GLsizei(imageHeight), GL_RGBA, GL_FLOAT, &floatPixelData[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
 
@@ -183,10 +183,10 @@ void Framebuffer::render()
 
 	glUseProgram(filterProgramId);
 	glUniform1i(filterTextureUniformId, 0);
-	glUniform1f(filterTextureWidthUniformId, (float)windowWidth);
-	glUniform1f(filterTextureHeightUniformId, (float)windowHeight);
-	glUniform1f(filterTexelWidthUniformId, 1.0f / (float)windowWidth);
-	glUniform1f(filterTexelHeightUniformId, 1.0f / (float)windowHeight);
+	glUniform1f(filterTextureWidthUniformId, float(windowWidth));
+	glUniform1f(filterTextureHeightUniformId, float(windowHeight));
+	glUniform1f(filterTexelWidthUniformId, 1.0f / windowWidth);
+	glUniform1f(filterTexelHeightUniformId, 1.0f / windowHeight);
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 

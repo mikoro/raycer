@@ -159,7 +159,7 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	clScene.readSceneCamera(*state.scene);
 
 	if (settings.general.interactive)
-		clScene.state.time = (float)windowRunner.getElapsedTime();
+		clScene.state.time = cl_float(windowRunner.getElapsedTime());
 	else
 		clScene.state.time = 1.0f;
 
@@ -171,7 +171,7 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
-	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
+	const size_t globalSizes[] = { size_t(imageBufferWidth), size_t(imageBufferHeight) };
 
 	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue raytrace kernel");
 
@@ -189,7 +189,7 @@ Image CLRaytracer::downloadImage()
 	log.logInfo("Downloading image data from the OpenCL device");
 
 	size_t origin[3] = { 0, 0, 0 };
-	size_t region[3] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight, 1 };
+	size_t region[3] = { size_t(imageBufferWidth), size_t(imageBufferHeight), 1 };
 
 	std::vector<float> data(imageBufferWidth * imageBufferHeight * 4);
 
@@ -333,9 +333,9 @@ void CLRaytracer::createTextureImages()
 	CLManager::checkError(status, "Could not create dummy texture image");
 
 	const std::vector<Image>& images = ImagePool::getImages();
-	int totalBytes = 0;
+	size_t totalBytes = 0;
 
-	for (int i = 0; i < KERNEL_TEXTURE_COUNT && i < (int)images.size(); ++i)
+	for (size_t i = 0; i < KERNEL_TEXTURE_COUNT && i < images.size(); ++i)
 	{
 		const Image& image = images[i];
 
@@ -346,10 +346,10 @@ void CLRaytracer::createTextureImages()
 		CLManager::checkError(status, "Could not create texture image");
 
 		std::vector<float> floatPixelData = image.getFloatData();
-		totalBytes += (int)floatPixelData.size() * sizeof(float);
+		totalBytes += floatPixelData.size() * sizeof(float);
 
 		size_t origin[3] = { 0, 0, 0 };
-		size_t region[3] = { (size_t)textureImageWidth, (size_t)textureImageHeight, 1 };
+		size_t region[3] = { size_t(textureImageWidth), size_t(textureImageHeight), 1 };
 
 		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, nullptr, nullptr);
 
@@ -363,11 +363,11 @@ void CLRaytracer::createTextureImages()
 		textureImagePtrs.push_back(textureImagePtr);
 	}
 
-	log.logInfo("Total texture memory used: %.2f MB", (float)totalBytes / 1024.0 / 1024.0);
+	log.logInfo("Total texture memory used: %.2f MB", float(totalBytes) / 1024.0 / 1024.0);
 
-	for (int i = 0; i < (int)textureImagePtrs.size(); ++i)
+	for (size_t i = 0; i < textureImagePtrs.size(); ++i)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");
 
-	for (int i = 0; i < (KERNEL_TEXTURE_COUNT - (int)textureImagePtrs.size()); ++i)
+	for (size_t i = 0; i < (KERNEL_TEXTURE_COUNT - textureImagePtrs.size()); ++i)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &dummyTextureImagePtr), "Could not set kernel argument (dummy texture image)");
 }

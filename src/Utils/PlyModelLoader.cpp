@@ -110,14 +110,14 @@ namespace
 
 		switch (type)
 		{
-			case PlyType::INT8: inputStream.read((char*)&tempInt8, sizeof(int8_t)); returnValue = (double)tempInt8; break;
-			case PlyType::UINT8: inputStream.read((char*)&tempUint8, sizeof(uint8_t)); returnValue = (double)tempUint8; break;
-			case PlyType::INT16: inputStream.read((char*)&tempInt16, sizeof(int16_t)); returnValue = (double)tempInt16; break;
-			case PlyType::UINT16: inputStream.read((char*)&tempUint16, sizeof(uint16_t)); returnValue = (double)tempUint16; break;
-			case PlyType::INT32: inputStream.read((char*)&tempInt32, sizeof(int32_t)); returnValue = (double)tempInt32; break;
-			case PlyType::UINT32: inputStream.read((char*)&tempUint32, sizeof(uint32_t)); returnValue = (double)tempUint32; break;
-			case PlyType::FLOAT: inputStream.read((char*)&tempFloat, sizeof(float)); returnValue = (double)tempFloat; break;
-			case PlyType::DOUBLE: inputStream.read((char*)&tempDouble, sizeof(double)); returnValue = (double)tempDouble; break;
+			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = double(tempInt8); break;
+			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = double(tempUint8); break;
+			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = double(tempInt16); break;
+			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = double(tempUint16); break;
+			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = double(tempInt32); break;
+			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = double(tempUint32); break;
+			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = double(tempFloat); break;
+			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = double(tempDouble); break;
 			default: returnValue = 0.0;
 		}
 
@@ -139,14 +139,14 @@ namespace
 
 		switch (type)
 		{
-			case PlyType::INT8: inputStream.read((char*)&tempInt8, sizeof(int8_t)); returnValue = (int)tempInt8; break;
-			case PlyType::UINT8: inputStream.read((char*)&tempUint8, sizeof(uint8_t)); returnValue = (int)tempUint8; break;
-			case PlyType::INT16: inputStream.read((char*)&tempInt16, sizeof(int16_t)); returnValue = (int)tempInt16; break;
-			case PlyType::UINT16: inputStream.read((char*)&tempUint16, sizeof(uint16_t)); returnValue = (int)tempUint16; break;
-			case PlyType::INT32: inputStream.read((char*)&tempInt32, sizeof(int32_t)); returnValue = (int)tempInt32; break;
-			case PlyType::UINT32: inputStream.read((char*)&tempUint32, sizeof(uint32_t)); returnValue = (int)tempUint32; break;
-			case PlyType::FLOAT: inputStream.read((char*)&tempFloat, sizeof(float)); returnValue = (int)tempFloat; break;
-			case PlyType::DOUBLE: inputStream.read((char*)&tempDouble, sizeof(double)); returnValue = (int)tempDouble; break;
+			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = int(tempInt8); break;
+			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = int(tempUint8); break;
+			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = int(tempInt16); break;
+			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = int(tempUint16); break;
+			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = int(tempInt32); break;
+			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = int(tempUint32); break;
+			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = int(tempFloat); break;
+			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = int(tempDouble); break;
 			default: returnValue = 0;
 		}
 
@@ -562,7 +562,7 @@ ModelLoaderResult ModelLoader::readPlyFile(const ModelLoaderInfo& info)
 	}
 
 	auto elapsedTime = std::chrono::high_resolution_clock::now() - startTime;
-	int milliseconds = (int)std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
+	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("PLY file reading finished (time: %d ms, groups: %s, triangles: %s, materials: %s, textures: %s)", milliseconds, result.groups.size(), result.triangles.size(), result.materials.size(), result.textures.size());
 

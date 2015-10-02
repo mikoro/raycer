@@ -28,9 +28,9 @@ void Camera::initialize()
 
 void Camera::setImagePlaneSize(int width, int height)
 {
-	imagePlaneWidth = (double)(width - 1);
-	imagePlaneHeight = (double)(height - 1);
-	aspectRatio = (double)height / (double)width;
+	imagePlaneWidth = double(width - 1);
+	imagePlaneHeight = double(height - 1);
+	aspectRatio = double(height) / width;
 }
 
 void Camera::reset()
@@ -98,21 +98,21 @@ void Camera::update(const Scene& scene, double timeStep)
 
 		if (windowRunner.keyIsDown(GLFW_KEY_SPACE))
 		{
-			rotate.pitch -= (double)mouseInfo.deltaY / 5.0;
+			rotate.pitch -= mouseInfo.deltaY / 5.0;
 
 			if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
-				rotate.roll -= (double)mouseInfo.deltaX / 5.0;
+				rotate.roll -= mouseInfo.deltaX / 5.0;
 			else
-				rotate.yaw += (double)mouseInfo.deltaX / 5.0;
+				rotate.yaw += mouseInfo.deltaX / 5.0;
 		}
 		else
 		{
 			if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
-				translate += Vector3(forward.x, 0.0, forward.z).normalized() * (double)mouseInfo.deltaY / 100.0;
+				translate += Vector3(forward.x, 0.0, forward.z).normalized() * mouseInfo.deltaY / 100.0;
 			else
-				translate += Vector3::UP * (double)mouseInfo.deltaY / 100.0;
+				translate += Vector3::UP * mouseInfo.deltaY / 100.0;
 
-			translate += right * (double)mouseInfo.deltaX / 100.0;
+			translate += right * mouseInfo.deltaX / 100.0;
 		}
 
 		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.05);
@@ -182,10 +182,10 @@ void Camera::update(const Scene& scene, double timeStep)
 
 	if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_LEFT) || settings.camera.freeLook)
 	{
-		smoothAngularAcceleration.y -= (double)mouseInfo.deltaX * settings.camera.mouseSpeed;
-		smoothAngularAcceleration.x += (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
-		angularVelocity.y = -(double)mouseInfo.deltaX * settings.camera.mouseSpeed;
-		angularVelocity.x = (double)mouseInfo.deltaY * settings.camera.mouseSpeed;
+		smoothAngularAcceleration.y -= mouseInfo.deltaX * settings.camera.mouseSpeed;
+		smoothAngularAcceleration.x += mouseInfo.deltaY * settings.camera.mouseSpeed;
+		angularVelocity.y = -mouseInfo.deltaX * settings.camera.mouseSpeed;
+		angularVelocity.x = mouseInfo.deltaY * settings.camera.mouseSpeed;
 
 		if (!settings.camera.freeLook)
 			isMovingPrimitive = false;

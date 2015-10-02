@@ -22,7 +22,7 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 	for (int i = 0; i < pixelCount; ++i)
 		logSum += log(epsilon + pixelData[i].getLuminance());
 
-	double logAvgLuminance = exp(logSum / (double)pixelCount);
+	double logAvgLuminance = exp(logSum / pixelCount);
 	double scale = scene.toneMapper.key / logAvgLuminance;
 	double maxLuminance2 = scene.toneMapper.maxLuminance * scene.toneMapper.maxLuminance;
 	double invGamma = 1.0 / scene.toneMapper.gamma;

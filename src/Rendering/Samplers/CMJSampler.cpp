@@ -70,8 +70,8 @@ Vector2 CMJSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutat
 	int sx = permute(ix, nx, permutation * 0x68bc21eb);
 	int sy = permute(iy, ny, permutation * 0x02e5be93);
 
-	result.x = ((double)ix + ((double)sy + randomDist(generator)) / (double)ny) / (double)nx;
-	result.y = ((double)iy + ((double)sx + randomDist(generator)) / (double)nx) / (double)ny;
+	result.x = (double(ix) + (double(sy) + randomDist(generator)) / double(ny)) / double(nx);
+	result.y = (double(iy) + (double(sx) + randomDist(generator)) / double(nx)) / double(ny);
 
 	return result;
 }

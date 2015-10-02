@@ -28,14 +28,14 @@ Color ColorGradient::getColor(double alpha) const
 	assert(alpha >= 0.0 && alpha <= 1.0);
 
 	Color result;
-	int index = (int)ceil(alpha * (double)totalLength);
+	int index = int(ceil(alpha * totalLength));
 
 	for (const ColorGradientSegment& segment : segments)
 	{
 		if (index >= segment.startIndex && index <= segment.endIndex)
 		{
-			double alphaStart = (double)segment.startIndex / (double)totalLength;
-			double alphaEnd = (double)segment.endIndex / (double)totalLength;
+			double alphaStart = segment.startIndex / double(totalLength);
+			double alphaEnd = segment.endIndex / double(totalLength);
 			double segmentAlpha = (alpha - alphaStart) / (alphaEnd - alphaStart);
 
 			result = Color::lerp(segment.startColor, segment.endColor, segmentAlpha);

@@ -123,10 +123,10 @@ uint32_t Color::getRgbaValue() const
 {
 	assert(isClamped());
 
-	int r_ = (int)(r * 255.0 + 0.5);
-	int g_ = (int)(g * 255.0 + 0.5);
-	int b_ = (int)(b * 255.0 + 0.5);
-	int a_ = (int)(a * 255.0 + 0.5);
+	int r_ = static_cast<int>(r * 255.0 + 0.5);
+	int g_ = static_cast<int>(g * 255.0 + 0.5);
+	int b_ = static_cast<int>(b * 255.0 + 0.5);
+	int a_ = static_cast<int>(a * 255.0 + 0.5);
 
 	return (r_ << 24 | g_ << 16 | b_ << 8 | a_);
 }
@@ -135,10 +135,10 @@ uint32_t Color::getAbgrValue() const
 {
 	assert(isClamped());
 
-	int r_ = (int)(r * 255.0 + 0.5);
-	int g_ = (int)(g * 255.0 + 0.5);
-	int b_ = (int)(b * 255.0 + 0.5);
-	int a_ = (int)(a * 255.0 + 0.5);
+	int r_ = static_cast<int>(r * 255.0 + 0.5);
+	int g_ = static_cast<int>(g * 255.0 + 0.5);
+	int b_ = static_cast<int>(b * 255.0 + 0.5);
+	int a_ = static_cast<int>(a * 255.0 + 0.5);
 
 	return (a_ << 24 | b_ << 16 | g_ << 8 | r_);
 }

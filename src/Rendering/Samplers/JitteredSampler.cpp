@@ -20,7 +20,7 @@ double JitteredSampler::getSample(int i, int n, int permutation)
 {
 	(void)permutation;
 
-	double x = ((double)i + randomDist(generator)) / (double)n;
+	double x = (double(i) + randomDist(generator)) / double(n);
 	return x;
 }
 
@@ -30,8 +30,8 @@ Vector2 JitteredSampler::getSquareSample(int ix, int iy, int nx, int ny, int per
 
 	Vector2 result;
 
-	result.x = ((double)ix + randomDist(generator)) / (double)nx;
-	result.y = ((double)iy + randomDist(generator)) / (double)ny;
+	result.x = (double(ix) + randomDist(generator)) / double(nx);
+	result.y = (double(iy) + randomDist(generator)) / double(ny);
 
 	return result;
 }

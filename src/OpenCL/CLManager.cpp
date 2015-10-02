@@ -72,7 +72,7 @@ void CLManager::initialize()
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
 
-	if (settings.openCL.platformId > (int)platformCount - 1)
+	if (settings.openCL.platformId > int(platformCount) - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	std::vector<cl_platform_id> platformIds(platformCount);
@@ -97,7 +97,7 @@ void CLManager::initialize()
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any devices");
 
-	if (settings.openCL.deviceId > (int)deviceCount - 1)
+	if (settings.openCL.deviceId > int(deviceCount) - 1)
 		throw std::runtime_error("Invalid device id");
 
 	std::vector<cl_device_id> deviceIds(deviceCount);
@@ -130,17 +130,17 @@ void CLManager::initialize()
 		cl_context_properties properties[] =
 		{
 #ifdef _WIN32
-				CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
-				CL_WGL_HDC_KHR, (cl_context_properties)wglGetCurrentDC(),
-				CL_GL_CONTEXT_KHR, (cl_context_properties)wglGetCurrentContext(),
+				CL_CONTEXT_PLATFORM, reinterpret_cast<cl_context_properties>(platformId),
+				CL_WGL_HDC_KHR, reinterpret_cast<cl_context_properties>(wglGetCurrentDC()),
+				CL_GL_CONTEXT_KHR, reinterpret_cast<cl_context_properties>(wglGetCurrentContext()),
 				0
 #elif __linux
-			CL_CONTEXT_PLATFORM, (cl_context_properties)platformId,
-			CL_GLX_DISPLAY_KHR, (cl_context_properties)glXGetCurrentDisplay(),
-			CL_GL_CONTEXT_KHR, (cl_context_properties)glXGetCurrentContext(),
+			CL_CONTEXT_PLATFORM, reinterpret_cast<cl_context_properties>(platformId),
+			CL_GLX_DISPLAY_KHR, reinterpret_cast<cl_context_properties>(glXGetCurrentDisplay()),
+			CL_GL_CONTEXT_KHR, reinterpret_cast<cl_context_properties>(glXGetCurrentContext()),
 			0
 #elif __APPLE__
-			CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE,(cl_context_properties)CGLGetShareGroup(CGLGetCurrentContext()),
+			CL_CONTEXT_PROPERTY_USE_CGL_SHAREGROUP_APPLE, reinterpret_cast<cl_context_properties>(CGLGetShareGroup(CGLGetCurrentContext())),
 			0
 #endif
 		};
