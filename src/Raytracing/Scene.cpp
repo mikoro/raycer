@@ -31,25 +31,25 @@ Scene Scene::createTestScene(int number)
 
 	switch (number)
 	{
-		case 1: return createTestScene1(); break;
-		case 2: return createTestScene2(); break;
-		case 3: return createTestScene3(); break;
-		case 4: return createTestScene4(); break;
-		case 5: return createTestScene5(); break;
-		case 6: return createTestScene6(); break;
-		case 7: return createTestScene7(); break;
-		case 8: return createTestScene8(); break;
-		case 9: return createTestScene9(); break;
-		case 10: return createTestScene10(); break;
-		case 11: return createTestScene11(); break;
-		case 12: return createTestScene12(); break;
-		case 13: return createTestScene13(); break;
-		case 14: return createTestScene14(); break;
-		case 15: return createTestScene15(); break;
-		case 16: return createTestScene16(); break;
-		case 17: return createTestScene17(); break;
-		case 18: return createTestScene18(); break;
-		case 19: return createTestScene19(); break;
+		case 1: return createTestScene1();
+		case 2: return createTestScene2();
+		case 3: return createTestScene3();
+		case 4: return createTestScene4();
+		case 5: return createTestScene5();
+		case 6: return createTestScene6();
+		case 7: return createTestScene7();
+		case 8: return createTestScene8();
+		case 9: return createTestScene9();
+		case 10: return createTestScene10();
+		case 11: return createTestScene11();
+		case 12: return createTestScene12();
+		case 13: return createTestScene13();
+		case 14: return createTestScene14();
+		case 15: return createTestScene15();
+		case 16: return createTestScene16();
+		case 17: return createTestScene17();
+		case 18: return createTestScene18();
+		case 19: return createTestScene19();
 		default: throw std::runtime_error("Unknown test scene number");
 	}
 }

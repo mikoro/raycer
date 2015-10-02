@@ -263,19 +263,19 @@ double CellNoise::getDistance(CellNoiseDistanceType distanceType, const Vector3&
 		case CellNoiseDistanceType::EUCLIDEAN:
 		{
 			return (v1 - v2).length();
-		} break;
+		}
 
 		case CellNoiseDistanceType::EUCLIDEAN_SQUARED:
 		{
 			return (v1 - v2).lengthSquared();
-		} break;
+		}
 
 		case CellNoiseDistanceType::MANHATTAN:
 		{
 			Vector3 diff = Vector3::abs(v1 - v2);
 
 			return diff.x + diff.y + diff.z;
-		} break;
+		}
 
 		case CellNoiseDistanceType::CHEBYSHEV:
 		{
@@ -287,7 +287,7 @@ double CellNoise::getDistance(CellNoiseDistanceType distanceType, const Vector3&
 				return diff.y;
 			else
 				return diff.z;
-		} break;
+		}
 	}
 
 	return (v1 - v2).length();
@@ -297,12 +297,12 @@ double CellNoise::getCombinedValue(CellNoiseCombineType combineType, double d1, 
 {
 	switch (combineType)
 	{
-		case CellNoiseCombineType::D1: return d1; break;
-		case CellNoiseCombineType::D2: return d2; break;
-		case CellNoiseCombineType::D1_PLUS_D2: return d1 + d2; break;
-		case CellNoiseCombineType::D1_MINUS_D2: return d1 - d2; break;
-		case CellNoiseCombineType::D1_TIMES_D2: return d1 * d2; break;
-		case CellNoiseCombineType::D2_MINUS_D1: return d2 - d1; break;
+		case CellNoiseCombineType::D1: return d1;
+		case CellNoiseCombineType::D2: return d2;
+		case CellNoiseCombineType::D1_PLUS_D2: return d1 + d2;
+		case CellNoiseCombineType::D1_MINUS_D2: return d1 - d2;
+		case CellNoiseCombineType::D1_TIMES_D2: return d1 * d2;
+		case CellNoiseCombineType::D2_MINUS_D1: return d2 - d1;
 	}
 
 	return d1;

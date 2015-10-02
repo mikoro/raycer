@@ -8,6 +8,10 @@
 using namespace Raycer;
 using namespace std::chrono;
 
+Log::Log()
+{
+}
+
 Log::Log(const std::string& fileName)
 {
 	file.open(fileName, std::ios_base::out);
