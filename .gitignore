@@ -4,6 +4,8 @@
 /platform/windows/include/boost
 /platform/windows/lib/libboost*
 /ipch
+/platform/windows/include/boost
+/platform/windows/lib/libboost*
 *.sdf
 *.opensdf
 *.suo
