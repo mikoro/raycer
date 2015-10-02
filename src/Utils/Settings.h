@@ -22,9 +22,9 @@ namespace Raycer
 		struct OpenCL
 		{
 			bool enabled;
-			int platformId;
+			size_t platformId;
 			int deviceType;
-			int deviceId;
+			size_t deviceId;
 			std::string options;
 		} openCL;
 
@@ -62,7 +62,7 @@ namespace Raycer
 			bool hideCursor;
 			bool showInfoText;
 			std::string defaultFont;
-			int defaultFontSize;
+			size_t defaultFontSize;
 		} window;
 
 		struct Framebuffer

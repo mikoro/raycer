@@ -93,20 +93,20 @@ void CLRaytracer::initialize(const Scene& scene)
 
 	kernelArgumentIndex = 0;
 
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &ambientLightPtr), "Could not set kernel argument (ambient light)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &directionalLightsPtr), "Could not set kernel argument (directional lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &pointLightsPtr), "Could not set kernel argument (point lights)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &trianglesPtr), "Could not set kernel argument (triangles)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &bvhNodesPtr), "Could not set kernel argument (bvh nodes)");
 
 	outputImageArgumentIndex = kernelArgumentIndex++;
-	CLManager::checkError(clSetKernelArg(raytraceKernel, outputImageArgumentIndex, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(outputImageArgumentIndex), sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 
 	createTextureImages();
 	initialized = true;
@@ -140,7 +140,7 @@ void CLRaytracer::resizeImageBuffer(size_t width, size_t height)
 	}
 
 	if (initialized)
-		CLManager::checkError(clSetKernelArg(raytraceKernel, outputImageArgumentIndex, sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
+		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(outputImageArgumentIndex), sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 }
 
 void CLRaytracer::releaseImageBuffer()
@@ -366,8 +366,8 @@ void CLRaytracer::createTextureImages()
 	log.logInfo("Total texture memory used: %.2f MB", float(totalBytes) / 1024.0 / 1024.0);
 
 	for (size_t i = 0; i < textureImagePtrs.size(); ++i)
-		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");
+		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");
 
 	for (size_t i = 0; i < (KERNEL_TEXTURE_COUNT - textureImagePtrs.size()); ++i)
-		CLManager::checkError(clSetKernelArg(raytraceKernel, kernelArgumentIndex++, sizeof(cl_mem), &dummyTextureImagePtr), "Could not set kernel argument (dummy texture image)");
+		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &dummyTextureImagePtr), "Could not set kernel argument (dummy texture image)");
 }

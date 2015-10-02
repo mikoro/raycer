@@ -157,7 +157,6 @@ namespace
 	{
 		std::string line;
 		std::getline(inputStream, line);
-		int elementIndex = -1;
 
 		if (line.find("ply") != 0)
 			throw std::runtime_error("Not a PLY file");
@@ -194,7 +193,6 @@ namespace
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				element.count = strtol(part.c_str(), nullptr, 10);;
 				header.elements.push_back(element);
-				elementIndex++;
 			}
 			else if (part == "property")
 			{
@@ -221,7 +219,7 @@ namespace
 				}
 
 				StringUtils::readUntilSpace(line, lineIndex, property.name);
-				header.elements.at(elementIndex).properties.push_back(property);
+				header.elements.back().properties.push_back(property);
 			}
 			else if (part == "end_header")
 				return;

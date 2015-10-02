@@ -8,7 +8,7 @@
 
 namespace Raycer
 {
-	template <int N>
+	template <size_t N>
 	class Polynomial
 	{
 	public:
@@ -20,17 +20,17 @@ namespace Raycer
 
 		std::complex<double> evaluate(const std::complex<double>& x) const;
 
-		const std::complex<double>* findAllRoots(int maxIterations = 64, double changeThreshold = 0.0001);
-		const double* findAllPositiveRealRoots(int& count, int maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
-		bool findSmallestPositiveRealRoot(double& result, int maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
+		const std::complex<double>* findAllRoots(size_t maxIterations = 64, double changeThreshold = 0.0001);
+		const double* findAllPositiveRealRoots(size_t& count, size_t maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
+		bool findSmallestPositiveRealRoot(double& result, size_t maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
 
 	private:
 
 		Polynomial(const Polynomial& p);
 		Polynomial& operator=(const Polynomial& p);
 
-		const int size = N;
-		const int degree = N - 1;
+		const size_t size = N;
+		const size_t degree = N - 1;
 
 		double coefficients[N];
 		std::complex<double> roots[N - 1];

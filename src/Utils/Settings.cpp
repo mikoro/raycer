@@ -19,9 +19,9 @@ void Settings::load(const std::string& fileName)
 	general.checkCLErrors = iniReader.getValue<bool>("general", "checkCLErrors");
 
 	openCL.enabled = iniReader.getValue<bool>("openCL", "enabled");
-	openCL.platformId = iniReader.getValue<int>("openCL", "platformId");
+	openCL.platformId = iniReader.getValue<size_t>("openCL", "platformId");
 	openCL.deviceType = iniReader.getValue<int>("openCL", "deviceType");
-	openCL.deviceId = iniReader.getValue<int>("openCL", "deviceId");
+	openCL.deviceId = iniReader.getValue<size_t>("openCL", "deviceId");
 	openCL.options = iniReader.getValue("openCL", "options");
 
 	network.isClient = iniReader.getValue<bool>("network", "isClient");
@@ -47,7 +47,7 @@ void Settings::load(const std::string& fileName)
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showInfoText = iniReader.getValue<bool>("window", "showInfoText");
 	window.defaultFont = iniReader.getValue("window", "defaultFont");
-	window.defaultFontSize = iniReader.getValue<int>("window", "defaultFontSize");
+	window.defaultFontSize = iniReader.getValue<size_t>("window", "defaultFontSize");
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
 	framebuffer.enableSmoothing = iniReader.getValue<bool>("framebuffer", "enableSmoothing");

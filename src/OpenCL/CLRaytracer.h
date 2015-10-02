@@ -67,8 +67,8 @@ namespace Raycer
 		cl_program raytraceProgram = nullptr;
 		cl_kernel raytraceKernel = nullptr;
 
-		int kernelArgumentIndex = 0;
-		int outputImageArgumentIndex = 0;
+		size_t kernelArgumentIndex = 0;
+		size_t outputImageArgumentIndex = 0;
 		bool initialized = false;
 	};
 }

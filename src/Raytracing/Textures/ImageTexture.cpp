@@ -19,9 +19,9 @@ void ImageTexture::initialize()
 		bumpMapX = Image(image->getWidth(), image->getHeight());
 		bumpMapY = Image(image->getWidth(), image->getHeight());
 
-		for (int y = 0; y < image->getHeight(); ++y)
+		for (size_t y = 0; y < image->getHeight(); ++y)
 		{
-			for (int x = 0; x < image->getWidth(); ++x)
+			for (size_t x = 0; x < image->getWidth(); ++x)
 			{
 				Color current = image->getPixel(x, y);
 

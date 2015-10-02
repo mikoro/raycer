@@ -72,7 +72,7 @@ void CLManager::initialize()
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
 
-	if (settings.openCL.platformId > int(platformCount) - 1)
+	if (settings.openCL.platformId > size_t(platformCount) - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	std::vector<cl_platform_id> platformIds(platformCount);
@@ -97,7 +97,7 @@ void CLManager::initialize()
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any devices");
 
-	if (settings.openCL.deviceId > int(deviceCount) - 1)
+	if (settings.openCL.deviceId > size_t(deviceCount) - 1)
 		throw std::runtime_error("Invalid device id");
 
 	std::vector<cl_device_id> deviceIds(deviceCount);

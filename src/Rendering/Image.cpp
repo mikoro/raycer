@@ -311,7 +311,7 @@ std::vector<float> Image::getFloatPixelData() const
 
 void Image::getFloatPixelData(std::vector<float>& data) const
 {
-	if (pixelData.size() != data.size())
+	if ((pixelData.size() * 4) != data.size())
 		throw std::runtime_error("Image size mismatch");
 
 	for (size_t i = 0; i < pixelData.size(); ++i)

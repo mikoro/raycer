@@ -32,8 +32,8 @@ namespace Raycer
 
 		double fade(double t) const;
 		double lerp(double t, double a, double b) const;
-		double grad(int hash, double x, double y, double z) const;
+		double grad(size_t hash, double x, double y, double z) const;
 
-		std::vector<int> permutations;
+		std::vector<size_t> permutations;
 	};
 }

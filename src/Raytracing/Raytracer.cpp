@@ -71,7 +71,7 @@ void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 		Vector2 pixelCoordinate = Vector2(x, y);
 
 		Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
-		image.setPixel(pixelIndex, pixelColor);
+		image.setPixel(size_t(pixelIndex), pixelColor);
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)

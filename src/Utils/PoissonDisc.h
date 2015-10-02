@@ -22,14 +22,14 @@ namespace Raycer
 		{
 			std::vector<std::vector<Cell2D>> grid;
 			double cellSize = 0.0;
-			int width = 0;
-			int height = 0;
+			size_t width = 0;
+			size_t height = 0;
 		};
 
 		struct GridIndex2D
 		{
-			int x = 0;
-			int y = 0;
+			size_t x = 0;
+			size_t y = 0;
 		};
 	}
 
@@ -41,7 +41,7 @@ namespace Raycer
 		PoissonDisc(int seed);
 
 		void seed(int seed);
-		void generate2D(int width, int height, double minDistance, int iterationLimit = 30);
+		void generate2D(size_t width, size_t height, double minDistance, size_t iterationLimit = 30);
 
 		std::vector<Vector2>& getPoints2D();
 

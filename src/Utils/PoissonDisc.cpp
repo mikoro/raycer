@@ -24,13 +24,13 @@ void PoissonDisc::seed(int seed)
 	mt.seed(seed);
 }
 
-void PoissonDisc::generate2D(int width, int height, double minDistance, int iterationLimit)
+void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, size_t iterationLimit)
 {
 	std::uniform_real_distribution<double> random(0.0, 1.0);
 
 	grid2D.cellSize = minDistance / M_SQRT2;
-	grid2D.width = int(ceil(width / grid2D.cellSize));
-	grid2D.height = int(ceil(height / grid2D.cellSize));
+	grid2D.width = size_t(ceil(double(width) / grid2D.cellSize));
+	grid2D.height = size_t(ceil(double(height) / grid2D.cellSize));
 
 	grid2D.grid.resize(grid2D.height);
 
@@ -40,7 +40,7 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 	points2D.clear();
 	activePoints2D.clear();
 
-	Vector2 firstPoint = Vector2(random(mt) * width, random(mt) * height);
+	Vector2 firstPoint = Vector2(random(mt) * double(width), random(mt) * double(height));
 
 	points2D.push_back(firstPoint);
 	activePoints2D.push_back(firstPoint);
@@ -53,11 +53,11 @@ void PoissonDisc::generate2D(int width, int height, double minDistance, int iter
 	{
 		Vector2 origin = getNextActivePoint2D();
 
-		for (int i = 0; i < iterationLimit; ++i)
+		for (size_t i = 0; i < iterationLimit; ++i)
 		{
 			Vector2 point = generateNewPoint2D(origin, minDistance);
 
-			if (point.x < 0.0 || point.x > width || point.y < 0.0 || point.y > height)
+			if (point.x < 0.0 || point.x > double(width) || point.y < 0.0 || point.y > double(height))
 				continue;
 
 			if (isInNeighbourhood2D(point, minDistance))
@@ -82,8 +82,8 @@ GridIndex2D PoissonDisc::getGridIndex2D(const Vector2& point)
 {
 	GridIndex2D gridIndex;
 
-	gridIndex.x = int(point.x / grid2D.cellSize);
-	gridIndex.y = int(point.y / grid2D.cellSize);
+	gridIndex.x = size_t(point.x / grid2D.cellSize);
+	gridIndex.y = size_t(point.y / grid2D.cellSize);
 
 	return gridIndex;
 }
@@ -123,16 +123,16 @@ bool PoissonDisc::isInNeighbourhood2D(const Vector2& point, double minDistance)
 {
 	GridIndex2D gridIndex = getGridIndex2D(point);
 
-	int minx = std::max(0, gridIndex.x - 2);
-	int maxx = std::min(grid2D.width - 1, gridIndex.x + 2);
-	int miny = std::max(0, gridIndex.y - 2);
-	int maxy = std::min(grid2D.height - 1, gridIndex.y + 2);
+	size_t minx = std::max(size_t(0), gridIndex.x - 2);
+	size_t maxx = std::min(grid2D.width - 1, gridIndex.x + 2);
+	size_t miny = std::max(size_t(0), gridIndex.y - 2);
+	size_t maxy = std::min(grid2D.height - 1, gridIndex.y + 2);
 
 	double minDistance2 = minDistance * minDistance;
 
-	for (int y = miny; y <= maxy; ++y)
+	for (size_t y = miny; y <= maxy; ++y)
 	{
-		for (int x = minx; x <= maxx; ++x)
+		for (size_t x = minx; x <= maxx; ++x)
 		{
 			Cell2D& cell = grid2D.grid[y][x];
 

@@ -232,7 +232,7 @@ void WindowRunner::initialize()
 	if (settings.openCL.enabled)
 		clManager.initialize();
 
-	defaultText.initialize(settings.window.defaultFont, settings.window.defaultFontSize);
+	defaultText.initialize(settings.window.defaultFont, double(settings.window.defaultFontSize));
 	pauseText.initialize(settings.window.defaultFont, 100);
 
 	windowResized(settings.window.width, settings.window.height);
@@ -264,8 +264,8 @@ void WindowRunner::windowResized(size_t width, size_t height)
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	size_t framebufferImageWidth = size_t(windowWidth * settings.framebuffer.scale + 0.5);
-	size_t framebufferImageHeight = size_t(windowHeight * settings.framebuffer.scale + 0.5);
+	size_t framebufferImageWidth = size_t(double(windowWidth) * settings.framebuffer.scale + 0.5);
+	size_t framebufferImageHeight = size_t(double(windowHeight) * settings.framebuffer.scale + 0.5);
 	resizeFramebuffer(framebufferImageWidth, framebufferImageHeight);
 	framebuffer.setWindowSize(windowWidth, windowHeight);
 
@@ -348,7 +348,7 @@ void WindowRunner::update(double timeStep)
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
 
 	mouseInfo.windowX = int(newMouseX + 0.5);
-	mouseInfo.windowY = int(windowHeight - newMouseY - 1.0 + 0.5);
+	mouseInfo.windowY = int(double(windowHeight) - newMouseY - 1.0 + 0.5);
 	mouseInfo.framebufferX = int((mouseInfo.windowX / double(windowWidth)) * framebuffer.getWidth() + 0.5);
 	mouseInfo.framebufferY = int((mouseInfo.windowY / double(windowHeight)) * framebuffer.getHeight() + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
@@ -374,8 +374,8 @@ void WindowRunner::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_F10))
 	{
 		double newScale = settings.framebuffer.scale * 0.5;
-		int newWidth = int(windowWidth * newScale + 0.5);
-		int newHeight = int(windowHeight * newScale + 0.5);
+		size_t newWidth = size_t(double(windowWidth) * newScale + 0.5);
+		size_t newHeight = size_t(double(windowHeight) * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
@@ -394,7 +394,7 @@ void WindowRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			resizeFramebuffer(int(windowWidth * settings.framebuffer.scale + 0.5), int(windowHeight * settings.framebuffer.scale + 0.5));
+			resizeFramebuffer(size_t(double(windowWidth) * settings.framebuffer.scale + 0.5), size_t(double(windowHeight) * settings.framebuffer.scale + 0.5));
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}
@@ -440,7 +440,7 @@ void WindowRunner::render(double timeStep, double interpolation)
 
 	if (isPaused)
 	{
-		pauseText.drawText(windowWidth / 2.0 - 200.0, windowHeight / 2.0 - 40.0, Color::WHITE, "PAUSED");
+		pauseText.drawText(double(windowWidth) / 2.0 - 200.0, double(windowHeight) / 2.0 - 40.0, Color::WHITE, "PAUSED");
 		pauseText.render();
 	}
 

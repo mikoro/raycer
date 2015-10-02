@@ -181,10 +181,10 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	if (pixelsProcessed > 0)
 		msPerPixel = duration_cast<std::chrono::milliseconds>(elapsedTime).count() / double(pixelsProcessed);
 
-	auto estimatedTime = std::chrono::milliseconds(int(msPerPixel * totalPixelCount + 0.5));
+	auto estimatedTime = std::chrono::milliseconds(int(msPerPixel * double(totalPixelCount) + 0.5));
 	auto remainingTime = estimatedTime - elapsedTime;
 
-	int percentage = int((pixelsProcessed / double(totalPixelCount)) * 100.0 + 0.5);
+	int percentage = int((double(pixelsProcessed) / double(totalPixelCount)) * 100.0 + 0.5);
 	int barCount = percentage / 4;
 
 	printf("[");
@@ -201,7 +201,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	}
 
 	if (elapsedSeconds > 0.0)
-		pixelsPerSecondAverage.addMeasurement(pixelsProcessed / elapsedSeconds);
+		pixelsPerSecondAverage.addMeasurement(double(pixelsProcessed) / elapsedSeconds);
 
 	remainingTimeAverage.addMeasurement(double(duration_cast<std::chrono::seconds>(remainingTime).count()));
 
