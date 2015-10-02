@@ -70,8 +70,8 @@ void Framebuffer::initialize()
 	glBindVertexArray(vaoId);
 	glEnableVertexAttribArray(0);
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
-	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void*)(2 * sizeof(GLfloat)));
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), reinterpret_cast<void*>(2 * sizeof(GLfloat)));
 	glBindVertexArray(0);
 
 	GLHelper::checkError("Could not set OpenGL buffer parameters");
@@ -101,7 +101,7 @@ void Framebuffer::resize(int width, int height)
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)width, (GLsizei)height, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 	GLHelper::checkError("Could not reserve OpenGL texture memory");
@@ -117,7 +117,7 @@ void Framebuffer::setWindowSize(int width, int height)
 	windowHeight = height;
 
 	glBindTexture(GL_TEXTURE_2D, framebufferTextureId);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA32F, (GLsizei)windowWidth, (GLsizei)windowHeight, 0, GL_RGBA, GL_FLOAT, nullptr);
 	glGenerateMipmap(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, 0);
 }

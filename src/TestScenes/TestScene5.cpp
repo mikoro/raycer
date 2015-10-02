@@ -56,8 +56,6 @@ Scene Scene::createTestScene5()
 	std::uniform_real_distribution<double> radiusDist(1.0, 2.0);
 	std::uniform_real_distribution<double> pxDist(2.0, 3.0);
 	std::uniform_real_distribution<double> pyDist(-1.0, 1.0);
-	std::uniform_real_distribution<double> specularityDist(0.0, 1.0);
-	std::uniform_real_distribution<double> shininessDist(4.0, 64.0);
 
 	double px;
 	double py = -250.0 + radiusDist(gen);

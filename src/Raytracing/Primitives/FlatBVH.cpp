@@ -329,7 +329,7 @@ double FlatBVH::calculateMedianPoint(int axis, const FlatBVHBuildEntry& buildEnt
 
 	std::sort(centerPoints.begin(), centerPoints.end());
 	int size = (int)centerPoints.size();
-	double median = 0.0;
+	double median;
 
 	assert(size >= 2);
 

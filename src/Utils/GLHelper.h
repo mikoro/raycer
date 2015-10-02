@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 #include <GL/glcorearb.h>
 
 namespace Raycer

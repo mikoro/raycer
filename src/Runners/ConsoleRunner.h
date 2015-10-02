@@ -5,7 +5,6 @@
 
 #include <atomic>
 #include <chrono>
-#include <string>
 
 #include "Rendering/Image.h"
 #include "Math/MovingAverage.h"

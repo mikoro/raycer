@@ -28,7 +28,7 @@ bool MathUtils::almostSame(double first, double second, double threshold)
 	return false;
 }
 
-bool MathUtils::almostSame(std::complex<double> first, std::complex<double> second, double threshold)
+bool MathUtils::almostSame(const std::complex<double>& first, const std::complex<double>& second, double threshold)
 {
 	return almostSame(first.real(), second.real(), threshold) && almostSame(first.imag(), second.imag(), threshold);
 }

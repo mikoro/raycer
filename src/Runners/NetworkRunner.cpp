@@ -590,7 +590,6 @@ void NetworkRunner::receiveResults()
 ip::address_v4 NetworkRunner::getLocalAddress()
 {
 	io_service io;
-	boost::system::error_code error;
 
 	ip::tcp::resolver resolver(io);
 	ip::tcp::resolver::query query(boost::asio::ip::host_name(), "");

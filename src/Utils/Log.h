@@ -6,9 +6,6 @@
 #include <exception>
 #include <fstream>
 #include <mutex>
-#include <string>
-
-#include "tinyformat/tinyformat.h"
 
 namespace Raycer
 {

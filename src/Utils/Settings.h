@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 namespace Raycer
 {
 	class Settings

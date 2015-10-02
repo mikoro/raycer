@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <vector>
-
 #include "cereal/cereal.hpp"
 
 #include "Math/Vector3.h"

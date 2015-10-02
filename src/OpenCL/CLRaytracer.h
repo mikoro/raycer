@@ -23,6 +23,7 @@ namespace Raycer
 	{
 	public:
 
+		CLRaytracer();
 		~CLRaytracer();
 
 		void initialize(const Scene& scene);
@@ -33,7 +34,8 @@ namespace Raycer
 
 	private:
 
-		CLRaytracer& operator=(const CLRaytracer& v);
+		CLRaytracer(const CLRaytracer& c);
+		CLRaytracer& operator=(const CLRaytracer& c);
 
 		void createBuffers();
 		void uploadFullData();

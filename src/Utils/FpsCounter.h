@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "Math/MovingAverage.h"
 
 namespace Raycer

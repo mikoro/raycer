@@ -111,7 +111,7 @@ void DefaultState::update(double timeStep)
 		scene.saveToFile("scene.bin");
 
 #ifdef _WIN32
-		ShellExecuteA(NULL, "open", "raycer.exe", "-s scene.bin --non-interactive --non-test --view", NULL, SW_SHOWNORMAL);
+		ShellExecuteA(nullptr, "open", "raycer.exe", "-s scene.bin --non-interactive --non-test --view", nullptr, SW_SHOWNORMAL);
 #else
 		int pid = fork();
 

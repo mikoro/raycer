@@ -4,10 +4,7 @@
 #pragma once
 
 #include <algorithm>
-#include <cmath>
 #include <complex>
-#include <functional>
-#include <vector>
 
 namespace Raycer
 {
@@ -29,6 +26,7 @@ namespace Raycer
 
 	private:
 
+		Polynomial(const Polynomial& p);
 		Polynomial& operator=(const Polynomial& p);
 
 		const int size = N;

@@ -10,7 +10,6 @@
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
 #include "Raytracing/ONB.h"
-#include "Raytracing/Material.h"
 #include "Raytracing/Textures/Texture.h"
 #include "Math/Matrix4x4.h"
 

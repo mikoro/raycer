@@ -4,7 +4,6 @@
 #pragma once
 
 #include <map>
-#include <string>
 #include <vector>
 
 #include "cereal/cereal.hpp"
@@ -38,7 +37,6 @@
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
 #include "Math/Color.h"
-#include "Math/Vector3.h"
 #include "Utils/ModelLoader.h"
 
 namespace Raycer

@@ -155,7 +155,7 @@ void ConsoleRunner::openImageExternally(const std::string& fileName)
 	log.logInfo("Opening the image in an external viewer");
 
 #ifdef _WIN32
-	ShellExecuteA(NULL, "open", fileName.c_str(), NULL, NULL, SW_SHOWNORMAL);
+	ShellExecuteA(nullptr, "open", fileName.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
 	int pid = fork();
 

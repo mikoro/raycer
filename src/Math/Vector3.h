@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 #include "cereal/cereal.hpp"
 
 namespace Raycer

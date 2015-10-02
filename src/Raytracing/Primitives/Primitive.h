@@ -8,7 +8,6 @@
 #include "cereal/cereal.hpp"
 
 #include "Raytracing/AABB.h"
-#include "Math/Vector2.h"
 
 namespace Raycer
 {

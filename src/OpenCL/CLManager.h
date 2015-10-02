@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <string>
 #include <vector>
 
 #ifdef __APPLE__

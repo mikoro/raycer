@@ -36,7 +36,7 @@ GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::st
 	const GLchar* fragmentShaderStringPtr = fragmentShaderString.c_str();
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &vertexShaderStringPtr, 0);
+	glShaderSource(vertexShader, 1, &vertexShaderStringPtr, nullptr);
 	glCompileShader(vertexShader);
 
 	GLint isCompiled = 0;
@@ -56,7 +56,7 @@ GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::st
 	}
 
 	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderStringPtr, 0);
+	glShaderSource(fragmentShader, 1, &fragmentShaderStringPtr, nullptr);
 	glCompileShader(fragmentShader);
 	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &isCompiled);
 

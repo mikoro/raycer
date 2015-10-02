@@ -19,35 +19,39 @@ using namespace Raycer;
 
 namespace
 {
-	void releaseMemObject(cl_mem object)
+	void releaseMemObject(cl_mem* object)
 	{
 		if (object != nullptr)
 		{
-			CLManager::checkError(clReleaseMemObject(object), "Could not release memory object");
-			object = nullptr;
+			CLManager::checkError(clReleaseMemObject(*object), "Could not release memory object");
+			*object = nullptr;
 		}
 	}
 }
 
+CLRaytracer::CLRaytracer()
+{
+}
+
 CLRaytracer::~CLRaytracer()
 {
-	releaseMemObject(statePtr);
-	releaseMemObject(cameraPtr);
-	releaseMemObject(raytracerPtr);
-	releaseMemObject(toneMapperPtr);
-	releaseMemObject(simpleFogPtr);
-	releaseMemObject(materialsPtr);
-	releaseMemObject(ambientLightPtr);
-	releaseMemObject(directionalLightsPtr);
-	releaseMemObject(pointLightsPtr);
-	releaseMemObject(trianglesPtr);
-	releaseMemObject(bvhNodesPtr);
-	releaseMemObject(outputImagePtr);
+	releaseMemObject(&statePtr);
+	releaseMemObject(&cameraPtr);
+	releaseMemObject(&raytracerPtr);
+	releaseMemObject(&toneMapperPtr);
+	releaseMemObject(&simpleFogPtr);
+	releaseMemObject(&materialsPtr);
+	releaseMemObject(&ambientLightPtr);
+	releaseMemObject(&directionalLightsPtr);
+	releaseMemObject(&pointLightsPtr);
+	releaseMemObject(&trianglesPtr);
+	releaseMemObject(&bvhNodesPtr);
+	releaseMemObject(&outputImagePtr);
 
 	for (cl_mem textureImagePtr : textureImagePtrs)
-		releaseMemObject(textureImagePtr);
+		releaseMemObject(&textureImagePtr);
 
-	releaseMemObject(dummyTextureImagePtr);
+	releaseMemObject(&dummyTextureImagePtr);
 
 	if (raytraceKernel != nullptr)
 	{
@@ -131,7 +135,7 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 		imageFormat.image_channel_data_type = CL_FLOAT;
 		imageFormat.image_channel_order = CL_RGBA;
 
-		outputImagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, NULL, &status);
+		outputImagePtr = clCreateImage2D(clManager.context, CL_MEM_WRITE_ONLY, &imageFormat, imageBufferWidth, imageBufferHeight, 0, nullptr, &status);
 		CLManager::checkError(status, "Could not create output image");
 	}
 
@@ -141,7 +145,7 @@ void CLRaytracer::resizeImageBuffer(int width, int height)
 
 void CLRaytracer::releaseImageBuffer()
 {
-	releaseMemObject(outputImagePtr);
+	releaseMemObject(&outputImagePtr);
 }
 
 void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -164,15 +168,15 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	if (settings.general.interactive)
 	{
 		glFinish();
-		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object acquire");
+		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
 	const size_t globalSizes[] = { (size_t)imageBufferWidth, (size_t)imageBufferHeight };
 
-	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, NULL, &globalSizes[0], NULL, 0, NULL, NULL), "Could not enqueue raytrace kernel");
+	CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue raytrace kernel");
 	
 	if (settings.general.interactive)
-		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, NULL, NULL), "Could not enqueue OpenGL object release");
+		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object release");
 
 	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
@@ -189,7 +193,7 @@ Image CLRaytracer::downloadImage()
 
 	std::vector<float> data(imageBufferWidth * imageBufferHeight * 4);
 
-	cl_int status = clEnqueueReadImage(clManager.commandQueue, outputImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, NULL, NULL);
+	cl_int status = clEnqueueReadImage(clManager.commandQueue, outputImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &data[0], 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not read output image buffer");
 
 	return Image(imageBufferWidth, imageBufferHeight, &data[0]);
@@ -200,51 +204,51 @@ void CLRaytracer::createBuffers()
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
 
-	statePtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), NULL, &status);
+	statePtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), nullptr, &status);
 	CLManager::checkError(status, "Could not create state buffer");
 
-	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), NULL, &status);
+	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), nullptr, &status);
 	CLManager::checkError(status, "Could not create camera buffer");
 
-	raytracerPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Raytracer), NULL, &status);
+	raytracerPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Raytracer), nullptr, &status);
 	CLManager::checkError(status, "Could not create raytracer buffer");
 
-	toneMapperPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::ToneMapper), NULL, &status);
+	toneMapperPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::ToneMapper), nullptr, &status);
 	CLManager::checkError(status, "Could not create tone mapper buffer");
 
-	simpleFogPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::SimpleFog), NULL, &status);
+	simpleFogPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::SimpleFog), nullptr, &status);
 	CLManager::checkError(status, "Could not create simple fog buffer");
 
 	if (clScene.materials.size() > 0)
 	{
-		materialsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Material) * clScene.materials.size(), NULL, &status);
+		materialsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Material) * clScene.materials.size(), nullptr, &status);
 		CLManager::checkError(status, "Could not create materials buffer");
 	}
 
-	ambientLightPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::AmbientLight), NULL, &status);
+	ambientLightPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::AmbientLight), nullptr, &status);
 	CLManager::checkError(status, "Could not create ambient light buffer");
 
 	if (clScene.directionalLights.size() > 0)
 	{
-		directionalLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::DirectionalLight) * clScene.directionalLights.size(), NULL, &status);
+		directionalLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::DirectionalLight) * clScene.directionalLights.size(), nullptr, &status);
 		CLManager::checkError(status, "Could not create directional lights buffer");
 	}
 
 	if (clScene.pointLights.size() > 0)
 	{
-		pointLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::PointLight) * clScene.pointLights.size(), NULL, &status);
+		pointLightsPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::PointLight) * clScene.pointLights.size(), nullptr, &status);
 		CLManager::checkError(status, "Could not create point lights buffer");
 	}
 
 	if (clScene.triangles.size() > 0)
 	{
-		trianglesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Triangle) * clScene.triangles.size(), NULL, &status);
+		trianglesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Triangle) * clScene.triangles.size(), nullptr, &status);
 		CLManager::checkError(status, "Could not create triangles buffer");
 	}
 
 	if (clScene.bvhNodes.size() > 0)
 	{
-		bvhNodesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), NULL, &status);
+		bvhNodesPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), nullptr, &status);
 		CLManager::checkError(status, "Could not create bvh nodes buffer");
 	}
 }
@@ -252,52 +256,52 @@ void CLRaytracer::createBuffers()
 void CLRaytracer::uploadFullData()
 {
 	CLManager& clManager = App::getCLManager();
-	cl_int status = 0;
+	cl_int status;
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, statePtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, statePtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write state buffer");
 
 	uploadCameraData();
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, raytracerPtr, CL_FALSE, 0, sizeof(OpenCL::Raytracer), &clScene.raytracer, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, raytracerPtr, CL_FALSE, 0, sizeof(OpenCL::Raytracer), &clScene.raytracer, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write raytracer buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, toneMapperPtr, CL_FALSE, 0, sizeof(OpenCL::ToneMapper), &clScene.toneMapper, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, toneMapperPtr, CL_FALSE, 0, sizeof(OpenCL::ToneMapper), &clScene.toneMapper, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write tone mapper buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, simpleFogPtr, CL_FALSE, 0, sizeof(OpenCL::SimpleFog), &clScene.simpleFog, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, simpleFogPtr, CL_FALSE, 0, sizeof(OpenCL::SimpleFog), &clScene.simpleFog, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write simple fog buffer");
 
 	if (clScene.materials.size() > 0)
 	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, materialsPtr, CL_FALSE, 0, sizeof(OpenCL::Material) * clScene.materials.size(), &clScene.materials[0], 0, NULL, NULL);
+		status = clEnqueueWriteBuffer(clManager.commandQueue, materialsPtr, CL_FALSE, 0, sizeof(OpenCL::Material) * clScene.materials.size(), &clScene.materials[0], 0, nullptr, nullptr);
 		CLManager::checkError(status, "Could not write materials buffer");
 	}
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, ambientLightPtr, CL_FALSE, 0, sizeof(OpenCL::AmbientLight), &clScene.ambientLight, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, ambientLightPtr, CL_FALSE, 0, sizeof(OpenCL::AmbientLight), &clScene.ambientLight, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write ambient light buffer");
 
 	if (clScene.directionalLights.size() > 0)
 	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, directionalLightsPtr, CL_FALSE, 0, sizeof(OpenCL::DirectionalLight) * clScene.directionalLights.size(), &clScene.directionalLights[0], 0, NULL, NULL);
+		status = clEnqueueWriteBuffer(clManager.commandQueue, directionalLightsPtr, CL_FALSE, 0, sizeof(OpenCL::DirectionalLight) * clScene.directionalLights.size(), &clScene.directionalLights[0], 0, nullptr, nullptr);
 		CLManager::checkError(status, "Could not write directional lights buffer");
 	}
 
 	if (clScene.pointLights.size() > 0)
 	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, pointLightsPtr, CL_FALSE, 0, sizeof(OpenCL::PointLight) * clScene.pointLights.size(), &clScene.pointLights[0], 0, NULL, NULL);
+		status = clEnqueueWriteBuffer(clManager.commandQueue, pointLightsPtr, CL_FALSE, 0, sizeof(OpenCL::PointLight) * clScene.pointLights.size(), &clScene.pointLights[0], 0, nullptr, nullptr);
 		CLManager::checkError(status, "Could not write point lights buffer");
 	}
 
 	if (clScene.triangles.size() > 0)
 	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, trianglesPtr, CL_FALSE, 0, sizeof(OpenCL::Triangle) * clScene.triangles.size(), &clScene.triangles[0], 0, NULL, NULL);
+		status = clEnqueueWriteBuffer(clManager.commandQueue, trianglesPtr, CL_FALSE, 0, sizeof(OpenCL::Triangle) * clScene.triangles.size(), &clScene.triangles[0], 0, nullptr, nullptr);
 		CLManager::checkError(status, "Could not write triangles buffer");
 	}
 
 	if (clScene.bvhNodes.size() > 0)
 	{
-		status = clEnqueueWriteBuffer(clManager.commandQueue, bvhNodesPtr, CL_FALSE, 0, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), &clScene.bvhNodes[0], 0, NULL, NULL);
+		status = clEnqueueWriteBuffer(clManager.commandQueue, bvhNodesPtr, CL_FALSE, 0, sizeof(OpenCL::BVHNode) * clScene.bvhNodes.size(), &clScene.bvhNodes[0], 0, nullptr, nullptr);
 		CLManager::checkError(status, "Could not write bvh nodes buffer");
 	}
 
@@ -307,9 +311,9 @@ void CLRaytracer::uploadFullData()
 void CLRaytracer::uploadCameraData()
 {
 	CLManager& clManager = App::getCLManager();
-	cl_int status = 0;
+	cl_int status;
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, NULL, NULL);
+	status = clEnqueueWriteBuffer(clManager.commandQueue, cameraPtr, CL_FALSE, 0, sizeof(OpenCL::Camera), &clScene.camera, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write camera buffer");
 }
 
@@ -325,7 +329,7 @@ void CLRaytracer::createTextureImages()
 	imageFormat.image_channel_data_type = CL_FLOAT;
 	imageFormat.image_channel_order = CL_RGBA;
 
-	dummyTextureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, 1, 1, 0, NULL, &status);
+	dummyTextureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, 1, 1, 0, nullptr, &status);
 	CLManager::checkError(status, "Could not create dummy texture image");
 
 	const std::vector<Image>& images = ImagePool::getImages();
@@ -338,7 +342,7 @@ void CLRaytracer::createTextureImages()
 		int textureImageWidth = image.getWidth();
 		int textureImageHeight = image.getHeight();
 
-		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, NULL, &status);
+		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, nullptr, &status);
 		CLManager::checkError(status, "Could not create texture image");
 
 		std::vector<float> floatPixelData = image.getFloatData();
@@ -347,7 +351,7 @@ void CLRaytracer::createTextureImages()
 		size_t origin[3] = { 0, 0, 0 };
 		size_t region[3] = { (size_t)textureImageWidth, (size_t)textureImageHeight, 1 };
 
-		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, NULL, NULL);
+		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, nullptr, nullptr);
 
 		if (status == CL_MEM_OBJECT_ALLOCATION_FAILURE)
 		{

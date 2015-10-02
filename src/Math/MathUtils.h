@@ -14,7 +14,7 @@ namespace Raycer
 
 		static bool almostZero(double value, double threshold = std::numeric_limits<double>::epsilon() * 4);
 		static bool almostSame(double first, double second, double threshold = std::numeric_limits<double>::epsilon() * 4);
-		static bool almostSame(std::complex<double> first, std::complex<double> second, double threshold = std::numeric_limits<double>::epsilon() * 4);
+		static bool almostSame(const std::complex<double>& first, const std::complex<double>& second, double threshold = std::numeric_limits<double>::epsilon() * 4);
 		static double degToRad(double degrees);
 		static double radToDeg(double radians);
 		static double smoothstep(double t);

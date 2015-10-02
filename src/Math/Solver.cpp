@@ -32,7 +32,7 @@ QuadraticResult Solver::findQuadraticRoots(double a, double b, double c)
 
 // false position / regula falsi
 // https://en.wikipedia.org/wiki/False_position_method
-double Solver::findRoot(std::function<double(double)> f, double begin, double end, int iterations)
+double Solver::findRoot(const std::function<double(double)>& f, double begin, double end, int iterations)
 {
 	double x0 = 0.0;
 	double y0 = 0.0;

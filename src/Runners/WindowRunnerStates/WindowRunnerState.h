@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <cstddef>
-
 namespace Raycer
 {
 	enum class WindowRunnerStates { None, Default };

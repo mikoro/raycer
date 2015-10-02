@@ -3,8 +3,6 @@
 
 #pragma once
 
-#include <string>
-
 #include <GL/glcorearb.h>
 
 #include "freetype-gl/texture-atlas.h"

@@ -67,7 +67,7 @@ void CLManager::initialize()
 #endif
 
 	cl_uint platformCount = 0;
-	checkError(clGetPlatformIDs(0, NULL, &platformCount), "Could not get platform count");
+	checkError(clGetPlatformIDs(0, nullptr, &platformCount), "Could not get platform count");
 
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
@@ -76,23 +76,23 @@ void CLManager::initialize()
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	std::vector<cl_platform_id> platformIds(platformCount);
-	checkError(clGetPlatformIDs(platformCount, &platformIds[0], NULL), "Could not get platforms");
+	checkError(clGetPlatformIDs(platformCount, &platformIds[0], nullptr), "Could not get platforms");
 	platformId = platformIds[settings.openCL.platformId];
 
 	size_t length = 0;
-	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, NULL, &length);
+	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, nullptr, &length);
 	std::vector<char> platformName(length);
-	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, &platformName[0], NULL);
+	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, &platformName[0], nullptr);
 
-	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, 0, NULL, &length);
+	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, 0, nullptr, &length);
 	std::vector<char> platformVersion(length);
-	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, &platformVersion[0], NULL);
+	clGetPlatformInfo(platformId, CL_PLATFORM_VERSION, length, &platformVersion[0], nullptr);
 
 	log.logInfo("OpenCL platform: %s", &platformName[0]);
 	log.logInfo("OpenCL platform version: %s", &platformVersion[0]);
 
 	cl_uint deviceCount = 0;
-	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, NULL, &deviceCount), "Could not get device count");
+	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, 0, nullptr, &deviceCount), "Could not get device count");
 
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any devices");
@@ -101,16 +101,16 @@ void CLManager::initialize()
 		throw std::runtime_error("Invalid device id");
 
 	std::vector<cl_device_id> deviceIds(deviceCount);
-	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, &deviceIds[0], NULL), "Could not get devices");
+	checkError(clGetDeviceIDs(platformId, settings.openCL.deviceType, deviceCount, &deviceIds[0], nullptr), "Could not get devices");
 	deviceId = deviceIds[settings.openCL.deviceId];
 
-	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, NULL, &length);
+	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, 0, nullptr, &length);
 	std::vector<char> deviceName(length);
-	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, &deviceName[0], NULL);
+	clGetDeviceInfo(deviceId, CL_DEVICE_NAME, length, &deviceName[0], nullptr);
 
-	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, 0, NULL, &length);
+	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, 0, nullptr, &length);
 	std::vector<char> deviceVersion(length);
-	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, length, &deviceVersion[0], NULL);
+	clGetDeviceInfo(deviceId, CL_DEVICE_VERSION, length, &deviceVersion[0], nullptr);
 
 	log.logInfo("OpenCL device: %s", &deviceName[0]);
 	log.logInfo("OpenCL device version: %s", &deviceVersion[0]);
@@ -119,9 +119,9 @@ void CLManager::initialize()
 
 	if (settings.general.interactive)
 	{
-		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, 0, NULL, &length);
+		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, 0, nullptr, &length);
 		std::vector<char> extensions(length);
-		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, length, &extensions[0], NULL);
+		clGetDeviceInfo(deviceId, CL_DEVICE_EXTENSIONS, length, &extensions[0], nullptr);
 		std::string extensionsStr(&extensions[0]);
 
 		if (extensionsStr.find("_gl_sharing") == std::string::npos)
@@ -145,12 +145,12 @@ void CLManager::initialize()
 #endif
 		};
 
-		context = clCreateContext(properties, 1, &deviceId, openCLErrorCallback, NULL, &status);
+		context = clCreateContext(properties, 1, &deviceId, openCLErrorCallback, nullptr, &status);
 		checkError(status, "Could not create OpenCL-OpenGL interoperation device context");
 	}
 	else
 	{
-		context = clCreateContext(NULL, 1, &deviceId, openCLErrorCallback, NULL, &status);
+		context = clCreateContext(nullptr, 1, &deviceId, openCLErrorCallback, nullptr, &status);
 		checkError(status, "Could not create device context");
 		}
 
@@ -188,17 +188,17 @@ cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePa
 	cl_int status = 0;
 	size_t length = 0;
 
-	cl_program program = clCreateProgramWithSource(context, 1, &sourceStringPtr, NULL, &status);
+	cl_program program = clCreateProgramWithSource(context, 1, &sourceStringPtr, nullptr, &status);
 	checkError(status, "Could not read program source file");
 
 	std::string optionsString = tfm::format("%s -I%s/data/opencl", settings.openCL.options, boost::filesystem::current_path().string());
-	status = clBuildProgram(program, 1, &deviceId, optionsString.c_str(), NULL, NULL);
+	status = clBuildProgram(program, 1, &deviceId, optionsString.c_str(), nullptr, nullptr);
 
 	if (status == CL_BUILD_PROGRAM_FAILURE)
 	{
-		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, NULL, &length);
+		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, 0, nullptr, &length);
 		std::vector<char> buildLog(length);
-		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, &buildLog[0], NULL);
+		clGetProgramBuildInfo(program, deviceId, CL_PROGRAM_BUILD_LOG, length, &buildLog[0], nullptr);
 		log.logInfo("OpenCL build error:\n\n%s", &buildLog[0]);
 	}
 
