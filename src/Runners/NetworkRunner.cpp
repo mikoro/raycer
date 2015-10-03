@@ -120,12 +120,12 @@ void NetworkRunner::sendBroadcasts()
 		socket.set_option(socket_base::broadcast(true));
 
 		std::vector<ip::udp::endpoint> endpoints;
-		endpoints.push_back(ip::udp::endpoint(ip::address_v4::broadcast(), unsigned short(settings.network.broadcastPort)));
+		endpoints.push_back(ip::udp::endpoint(ip::address_v4::broadcast(), static_cast<unsigned short>(settings.network.broadcastPort)));
 
 		ip::address_v4 broadcastAddress = ip::address_v4::from_string(settings.network.broadcastAddress, error);
 
 		if (!error && broadcastAddress != ip::address_v4::broadcast())
-			endpoints.push_back(ip::udp::endpoint(broadcastAddress, unsigned short(settings.network.broadcastPort)));
+			endpoints.push_back(ip::udp::endpoint(broadcastAddress, static_cast<unsigned short>(settings.network.broadcastPort)));
 
 		std::string message = tfm::format("Raycer Server 1.0.0\nAddress: %s\nPort: %d", localAddress.to_string(), settings.network.localPort);
 		uint counter = 0;
@@ -161,7 +161,7 @@ void NetworkRunner::receiveBroadcasts()
 		ip::udp::socket socket(io, ip::udp::v4());
 		deadline_timer timer(io, boost::posix_time::milliseconds(100));
 
-		socket.bind(ip::udp::endpoint(ip::udp::v4(), unsigned short(settings.network.broadcastPort)));
+		socket.bind(ip::udp::endpoint(ip::udp::v4(), static_cast<unsigned short>(settings.network.broadcastPort)));
 		socket.set_option(ip::udp::socket::reuse_address(true));
 		socket.set_option(socket_base::broadcast(true));
 
@@ -187,7 +187,7 @@ void NetworkRunner::receiveBroadcasts()
 			ss.str(match[2]);
 			ss >> port;
 
-			ip::tcp::endpoint serverEndpoint(ip::address_v4::from_string(match[1]), unsigned short(port));
+			ip::tcp::endpoint serverEndpoint(ip::address_v4::from_string(match[1]), static_cast<unsigned short>(port));
 
 			if (std::find(serverEndpoints.begin(), serverEndpoints.end(), serverEndpoint) == serverEndpoints.end())
 			{
@@ -290,7 +290,7 @@ void NetworkRunner::receiveJobs()
 
 		io_service io;
 		ip::tcp::socket socket(io);
-		ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(localAddress, unsigned short(settings.network.localPort)));
+		ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(localAddress, static_cast<unsigned short>(settings.network.localPort)));
 		deadline_timer timer(io, boost::posix_time::milliseconds(100));
 		bool timerHasRun = false;
 
@@ -331,7 +331,7 @@ void NetworkRunner::receiveJobs()
 			ss.str(match[2]);
 			ss >> port;
 
-			job.clientEndpoint = ip::tcp::endpoint(ip::address_v4::from_string(match[1]), unsigned short(port));
+			job.clientEndpoint = ip::tcp::endpoint(ip::address_v4::from_string(match[1]), static_cast<unsigned short>(port));
 
 			ss.clear();
 			ss.str(match[3]);
@@ -481,7 +481,7 @@ void NetworkRunner::receiveResults()
 
 		io_service io;
 		ip::tcp::socket socket(io);
-		ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(localAddress, unsigned short(settings.network.localPort)));
+		ip::tcp::acceptor acceptor(io, ip::tcp::endpoint(localAddress, static_cast<unsigned short>(settings.network.localPort)));
 		deadline_timer timer(io, boost::posix_time::milliseconds(100));
 		bool timerHasRun = false;
 

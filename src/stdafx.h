@@ -48,11 +48,6 @@
 #include <GL/glx.h>
 #endif
 
-#ifdef __APPLE__
-#include <Carbon/Carbon.h>
-#include <CoreFoundation/CoreFoundation.h>
-#endif
-
 #include <GL/gl3w.h>
 #include <GL/glcorearb.h>
 #include <GLFW/glfw3.h>
@@ -86,5 +81,10 @@
 #include "tclap/SwitchArg.h"
 #include "tclap/ValueArg.h"
 #include "tclap/ArgException.h"
+
+#ifdef __APPLE__
+#include <Carbon/Carbon.h>
+#include <CoreFoundation/CoreFoundation.h>
+#endif
 
 #include "Common.h"

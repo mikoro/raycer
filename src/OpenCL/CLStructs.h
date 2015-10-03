@@ -9,6 +9,10 @@
 #include <CL/opencl.h>
 #endif
 
+#ifdef ALIGN
+#undef ALIGN
+#endif
+
 #ifdef _MSC_VER
 #define ALIGN(x) __declspec(align(x))
 #elif __GNUC__

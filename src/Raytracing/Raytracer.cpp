@@ -38,20 +38,20 @@ Raytracer::Raytracer()
 	std::random_device rd;
 	generator.seed(rd());
 
-	samplers[SamplerType::RANDOM] = std::make_unique<RandomSampler>();
-	samplers[SamplerType::REGULAR] = std::make_unique<RegularSampler>();
-	samplers[SamplerType::JITTERED] = std::make_unique<JitteredSampler>();
-	samplers[SamplerType::CMJ] = std::make_unique<CMJSampler>();
+	samplers[SamplerType::RANDOM] = std::unique_ptr<RandomSampler>(new RandomSampler());
+	samplers[SamplerType::REGULAR] = std::unique_ptr<RegularSampler>(new RegularSampler());
+	samplers[SamplerType::JITTERED] = std::unique_ptr<JitteredSampler>(new JitteredSampler());
+	samplers[SamplerType::CMJ] = std::unique_ptr<CMJSampler>(new CMJSampler());
 
-	filters[FilterType::BOX] = std::make_unique<BoxFilter>();
-	filters[FilterType::TENT] = std::make_unique<TentFilter>();
-	filters[FilterType::BELL] = std::make_unique<BellFilter>();
-	filters[FilterType::MITCHELL] = std::make_unique<MitchellFilter>();
-	filters[FilterType::GAUSSIAN] = std::make_unique<GaussianFilter>();
-	filters[FilterType::LANCZOS_SINC] = std::make_unique<LanczosSincFilter>();
+	filters[FilterType::BOX] = std::unique_ptr<BoxFilter>(new BoxFilter());
+	filters[FilterType::TENT] = std::unique_ptr<TentFilter>(new TentFilter());
+	filters[FilterType::BELL] = std::unique_ptr<BellFilter>(new BellFilter());
+	filters[FilterType::MITCHELL] = std::unique_ptr<MitchellFilter>(new MitchellFilter());
+	filters[FilterType::GAUSSIAN] = std::unique_ptr<GaussianFilter>(new GaussianFilter());
+	filters[FilterType::LANCZOS_SINC] = std::unique_ptr<LanczosSincFilter>(new LanczosSincFilter());
 
-	toneMappers[ToneMapperType::LINEAR] = std::make_unique<LinearToneMapper>();
-	toneMappers[ToneMapperType::REINHARD] = std::make_unique<ReinhardToneMapper>();
+	toneMappers[ToneMapperType::LINEAR] = std::unique_ptr<LinearToneMapper>(new LinearToneMapper());
+	toneMappers[ToneMapperType::REINHARD] = std::unique_ptr<ReinhardToneMapper>(new ReinhardToneMapper());
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
