@@ -38,7 +38,7 @@ namespace Raycer
 	struct FlatBVHNode
 	{
 		AABB aabb;
-		int rightOffset;
+		int64_t rightOffset;
 		size_t startOffset;
 		size_t primitiveCount;
 
@@ -56,7 +56,7 @@ namespace Raycer
 	{
 		size_t start;
 		size_t end;
-		int parent;
+		int64_t parent;
 	};
 
 	class Scene;
@@ -82,7 +82,7 @@ namespace Raycer
 
 		bool hasBeenBuilt = false;
 		std::vector<FlatBVHNode> flatNodes;
-		std::vector<uint> orderedPrimitiveIds;
+		std::vector<size_t> orderedPrimitiveIds;
 
 		std::vector<Primitive*> orderedPrimitives;
 

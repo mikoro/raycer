@@ -18,6 +18,18 @@ Color::Color(double r_, double g_, double b_, double a_) : r(r_), g(g_), b(b_), 
 {
 }
 
+Color::Color(int r_, int g_, int b_, int a_)
+{
+	assert(r_ >= 0 && r_ <= 255 && g_ >= 0 && g_ <= 255 && b_ >= 0 && b_ <= 255 && a_ >= 0 && a_ <= 255);
+
+	const double inv255 = 1.0 / 255.0;
+
+	r = double(r_) * inv255;
+	g = double(g_) * inv255;
+	b = double(b_) * inv255;
+	a = double(a_) * inv255;
+}
+
 Color::Color(const Color& c)
 {
 	r = c.r;
@@ -170,6 +182,8 @@ Color Color::clamped() const
 
 Color Color::fromRgbaValue(uint32_t rgba)
 {
+	const double inv255 = 1.0 / 255.0;
+
 	uint32_t r_ = (rgba >> 24);
 	uint32_t g_ = (rgba >> 16) & 0xff;
 	uint32_t b_ = (rgba >> 8) & 0xff;
@@ -177,16 +191,18 @@ Color Color::fromRgbaValue(uint32_t rgba)
 
 	Color c;
 
-	c.r = double(r_) / 255.0;
-	c.g = double(g_) / 255.0;
-	c.b = double(b_) / 255.0;
-	c.a = double(a_) / 255.0;
+	c.r = double(r_) * inv255;
+	c.g = double(g_) * inv255;
+	c.b = double(b_) * inv255;
+	c.a = double(a_) * inv255;
 
 	return c;
 }
 
 Color Color::fromAbgrValue(uint32_t abgr)
 {
+	const double inv255 = 1.0 / 255.0;
+
 	uint32_t r_ = abgr & 0xff;
 	uint32_t g_ = (abgr >> 8) & 0xff;
 	uint32_t b_ = (abgr >> 16) & 0xff;
@@ -194,10 +210,10 @@ Color Color::fromAbgrValue(uint32_t abgr)
 
 	Color c;
 
-	c.r = double(r_) / 255.0;
-	c.g = double(g_) / 255.0;
-	c.b = double(b_) / 255.0;
-	c.a = double(a_) / 255.0;
+	c.r = double(r_) * inv255;
+	c.g = double(g_) * inv255;
+	c.b = double(b_) * inv255;
+	c.a = double(a_) * inv255;
 
 	return c;
 }

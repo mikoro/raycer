@@ -124,7 +124,7 @@ namespace
 		return returnValue;
 	}
 
-	size_t readBinaryValueAsInt(std::ifstream& inputStream, PlyType type)
+	int64_t readBinaryValueAsInt(std::ifstream& inputStream, PlyType type)
 	{
 		int8_t tempInt8;
 		uint8_t tempUint8;
@@ -135,18 +135,18 @@ namespace
 		float tempFloat;
 		double tempDouble;
 
-		size_t returnValue;
+		int64_t returnValue;
 
 		switch (type)
 		{
-			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = size_t(tempInt8); break;
-			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = size_t(tempUint8); break;
-			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = size_t(tempInt16); break;
-			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = size_t(tempUint16); break;
-			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = size_t(tempInt32); break;
-			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = size_t(tempUint32); break;
-			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = size_t(tempFloat); break;
-			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = size_t(tempDouble); break;
+			case PlyType::INT8: inputStream.read(reinterpret_cast<char*>(&tempInt8), sizeof(int8_t)); returnValue = int64_t(tempInt8); break;
+			case PlyType::UINT8: inputStream.read(reinterpret_cast<char*>(&tempUint8), sizeof(uint8_t)); returnValue = int64_t(tempUint8); break;
+			case PlyType::INT16: inputStream.read(reinterpret_cast<char*>(&tempInt16), sizeof(int16_t)); returnValue = int64_t(tempInt16); break;
+			case PlyType::UINT16: inputStream.read(reinterpret_cast<char*>(&tempUint16), sizeof(uint16_t)); returnValue = int64_t(tempUint16); break;
+			case PlyType::INT32: inputStream.read(reinterpret_cast<char*>(&tempInt32), sizeof(int32_t)); returnValue = int64_t(tempInt32); break;
+			case PlyType::UINT32: inputStream.read(reinterpret_cast<char*>(&tempUint32), sizeof(uint32_t)); returnValue = int64_t(tempUint32); break;
+			case PlyType::FLOAT: inputStream.read(reinterpret_cast<char*>(&tempFloat), sizeof(float)); returnValue = int64_t(tempFloat); break;
+			case PlyType::DOUBLE: inputStream.read(reinterpret_cast<char*>(&tempDouble), sizeof(double)); returnValue = int64_t(tempDouble); break;
 			default: returnValue = 0;
 		}
 
@@ -191,7 +191,7 @@ namespace
 				PlyElement element;
 				StringUtils::readUntilSpace(line, lineIndex, element.name);
 				StringUtils::readUntilSpace(line, lineIndex, part);
-				element.count = strtol(part.c_str(), nullptr, 10);;
+				element.count = size_t(strtoull(part.c_str(), nullptr, 10));
 				header.elements.push_back(element);
 			}
 			else if (part == "property")
@@ -298,7 +298,7 @@ namespace
 						if (property.dataType == PlyType::LIST)
 						{
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							size_t listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = size_t(strtoull(part.c_str(), nullptr, 10));
 
 							for (size_t k = 0; k < listLength; ++k)
 								StringUtils::readUntilSpace(line, lineIndex, part);
@@ -343,12 +343,12 @@ namespace
 							std::vector<size_t> indices;
 
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							size_t listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = size_t(strtoull(part.c_str(), nullptr, 10));
 
 							for (size_t k = 0; k < listLength; ++k)
 							{
 								StringUtils::readUntilSpace(line, lineIndex, part);
-								size_t index = strtol(part.c_str(), nullptr, 10);
+								size_t index = size_t(strtoull(part.c_str(), nullptr, 10));
 								indices.push_back(index);
 							}
 
@@ -358,7 +358,7 @@ namespace
 						else if (property.dataType == PlyType::LIST)
 						{
 							StringUtils::readUntilSpace(line, lineIndex, part);
-							size_t listLength = strtol(part.c_str(), nullptr, 10);
+							size_t listLength = size_t(strtoull(part.c_str(), nullptr, 10));
 
 							for (size_t k = 0; k < listLength; ++k)
 								StringUtils::readUntilSpace(line, lineIndex, part);
@@ -389,7 +389,7 @@ namespace
 						// ignore and skip lists
 						if (property.dataType == PlyType::LIST)
 						{
-							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							size_t listLength = size_t(readBinaryValueAsInt(inputStream, property.listLengthType));
 
 							for (size_t k = 0; k < listLength; ++k)
 								readBinaryValueAsDouble(inputStream, property.listDataType);
@@ -426,17 +426,17 @@ namespace
 						if (property.dataType == PlyType::LIST && property.name == "vertex_indices")
 						{
 							std::vector<size_t> indices;
-							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							size_t listLength = size_t(readBinaryValueAsInt(inputStream, property.listLengthType));
 
 							for (size_t k = 0; k < listLength; ++k)
-								indices.push_back(readBinaryValueAsInt(inputStream, property.listDataType));
+								indices.push_back(size_t(readBinaryValueAsInt(inputStream, property.listDataType)));
 
 							faces.push_back(indices);
 						}
 						// ignore and skip other lists
 						else if (property.dataType == PlyType::LIST)
 						{
-							size_t listLength = readBinaryValueAsInt(inputStream, property.listLengthType);
+							size_t listLength = size_t(readBinaryValueAsInt(inputStream, property.listLengthType));
 
 							for (size_t k = 0; k < listLength; ++k)
 								readBinaryValueAsInt(inputStream, property.listDataType);
@@ -454,7 +454,7 @@ namespace
 	{
 		Log& log = App::getLog();
 
-		uint currentId = info.idStartOffset;
+		size_t currentId = info.idStartOffset;
 
 		for (const std::vector<size_t>& face : faces)
 		{

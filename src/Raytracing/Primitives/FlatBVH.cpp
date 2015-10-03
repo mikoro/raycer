@@ -149,7 +149,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 			flatNodes[size_t(buildEntry.parent)].rightOffset++;
 
 			if (flatNodes[size_t(buildEntry.parent)].rightOffset == VISITED_TWICE)
-				flatNodes[size_t(buildEntry.parent)].rightOffset = int(nodeCount) - 1 - buildEntry.parent;
+				flatNodes[size_t(buildEntry.parent)].rightOffset = int64_t(nodeCount) - 1 - buildEntry.parent;
 		}
 
 		// leaf node -> no further subdivision
@@ -184,13 +184,13 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		// push right child
 		stack[stackptr].start = middle;
 		stack[stackptr].end = buildEntry.end;
-		stack[stackptr].parent = int(nodeCount) - 1;
+		stack[stackptr].parent = int64_t(nodeCount) - 1;
 		stackptr++;
 
 		// push left child
 		stack[stackptr].start = buildEntry.start;
 		stack[stackptr].end = middle;
-		stack[stackptr].parent = int(nodeCount) - 1;
+		stack[stackptr].parent = int64_t(nodeCount) - 1;
 		stackptr++;
 	}
 
@@ -212,7 +212,7 @@ void FlatBVH::rebuild(const Scene& scene)
 {
 	orderedPrimitives.clear();
 
-	for (uint primitiveId : orderedPrimitiveIds)
+	for (size_t primitiveId : orderedPrimitiveIds)
 		orderedPrimitives.push_back(scene.primitivesMap.at(primitiveId));
 
 	return;

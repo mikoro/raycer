@@ -37,8 +37,8 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		CSGOperation operation = CSGOperation::UNION;
-		uint leftPrimitiveId = 0;
-		uint rightPrimitiveId = 0;
+		size_t leftPrimitiveId = 0;
+		size_t rightPrimitiveId = 0;
 
 	private:
 

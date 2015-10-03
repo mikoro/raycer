@@ -72,7 +72,7 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	// interpolate in z-direction
 	double c = c0 * tzi + c1 * tz;
 
-	return std::max(0.0, std::min(c, 1.0));;
+	return std::max(0.0, std::min(c, 1.0));
 }
 
 double ValueNoise::getFbmNoise(uint octaves, double lacunarity, double persistence, double x, double y, double z) const

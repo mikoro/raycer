@@ -26,7 +26,7 @@ namespace
 		return tempPathString;
 	}
 
-	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, uint>& materialsMap, uint& currentId)
+	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, size_t>& materialsMap, size_t& currentId)
 	{
 		std::string absoluteMtlFilePath = getAbsolutePath(objFileDirectory, mtlFilePath);
 		App::getLog().logInfo("Reading MTL file (%s)", absoluteMtlFilePath);
@@ -272,7 +272,7 @@ namespace
 			result.materials.push_back(currentMaterial);
 	}
 
-	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, uint& currentId, uint currentMaterialId)
+	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, size_t& currentId, size_t currentMaterialId)
 	{
 		Log& log = App::getLog();
 
@@ -301,14 +301,14 @@ namespace
 			size_t lineIndex2 = 0;
 
 			StringUtils::readUntilSpace(part1, lineIndex2, part2);
-			int vertexIndex = strtol(part2.c_str(), nullptr, 10);
+			int64_t vertexIndex = strtoll(part2.c_str(), nullptr, 10);
 
 			if (vertexIndex < 0)
-				vertexIndex = int(vertices.size()) + vertexIndex;
+				vertexIndex = int64_t(vertices.size()) + vertexIndex;
 			else
 				vertexIndex--;
 
-			if (vertexIndex < 0 || vertexIndex >= int(vertices.size()))
+			if (vertexIndex < 0 || vertexIndex >= int64_t(vertices.size()))
 			{
 				log.logWarning("Vertex index (%s) was out of bounds", vertexIndex);
 				return;
@@ -319,14 +319,14 @@ namespace
 			if (hasTexcoords)
 			{
 				StringUtils::readUntilSpace(part1, lineIndex2, part2);
-				int texcoordIndex = strtol(part2.c_str(), nullptr, 10);
+				int64_t texcoordIndex = strtoll(part2.c_str(), nullptr, 10);
 
 				if (texcoordIndex < 0)
-					texcoordIndex = int(texcoords.size()) + texcoordIndex;
+					texcoordIndex = int64_t(texcoords.size()) + texcoordIndex;
 				else
 					texcoordIndex--;
 
-				if (texcoordIndex < 0 || texcoordIndex >= int(texcoords.size()))
+				if (texcoordIndex < 0 || texcoordIndex >= int64_t(texcoords.size()))
 				{
 					log.logWarning("Texcoord index (%s) was out of bounds", texcoordIndex);
 					return;
@@ -338,14 +338,14 @@ namespace
 			if (hasNormals)
 			{
 				StringUtils::readUntilSpace(part1, lineIndex2, part2);
-				int normalIndex = strtol(part2.c_str(), nullptr, 10);
+				int64_t normalIndex = strtoll(part2.c_str(), nullptr, 10);
 
 				if (normalIndex < 0)
-					normalIndex = int(normals.size()) + normalIndex;
+					normalIndex = int64_t(normals.size()) + normalIndex;
 				else
 					normalIndex--;
 
-				if (normalIndex < 0 || normalIndex >= int(normals.size()))
+				if (normalIndex < 0 || normalIndex >= int64_t(normals.size()))
 				{
 					log.logWarning("Normal index (%s) was out of bounds", normalIndex);
 					return;
@@ -429,10 +429,10 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	combinedGroupInstance.id = info.combinedGroupInstanceId;
 	combinedGroupInstance.primitiveId = combinedGroup.id;
 
-	uint currentId = info.idStartOffset;
-	uint currentMaterialId = info.defaultMaterialId;
+	size_t currentId = info.idStartOffset;
+	size_t currentMaterialId = info.defaultMaterialId;
 
-	std::map<std::string, uint> materialsMap;
+	std::map<std::string, size_t> materialsMap;
 	std::string objFileDirectory = boost::filesystem::absolute(info.modelFilePath).parent_path().string();
 
 	Matrix4x4 scaling = Matrix4x4::scale(info.scale);

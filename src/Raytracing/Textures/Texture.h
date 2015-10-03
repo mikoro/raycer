@@ -27,7 +27,7 @@ namespace Raycer
 		virtual double getValue(const Vector2& texcoord, const Vector3& position) const = 0;
 		virtual Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const = 0;
 
-		uint id = 0;
+		size_t id = 0;
 		double intensity = 1.0;
 
 	private:
