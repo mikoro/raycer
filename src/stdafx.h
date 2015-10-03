@@ -43,14 +43,14 @@
 #include <unistd.h>
 #endif
 
+#include <GL/gl3w.h>
+#include <GL/glcorearb.h>
+#include <GLFW/glfw3.h>
+
 #ifdef __linux
 #include <dlfcn.h>
 #include <GL/glx.h>
 #endif
-
-#include <GL/gl3w.h>
-#include <GL/glcorearb.h>
-#include <GLFW/glfw3.h>
 
 #define CL_USE_DEPRECATED_OPENCL_1_1_APIS
 #define CL_USE_DEPRECATED_OPENCL_2_0_APIS

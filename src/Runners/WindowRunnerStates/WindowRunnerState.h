@@ -3,6 +3,10 @@
 
 #pragma once
 
+#ifdef None
+#undef None
+#endif
+
 namespace Raycer
 {
 	enum class WindowRunnerStates { None, Default };
