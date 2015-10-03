@@ -13,10 +13,14 @@ Download the sources and run the commands from a corresponding developer console
 
 (http://stackoverflow.com/questions/30760889/unknown-compiler-version-while-compiling-boost-with-msvc-14-0-vs-2015/30959156#30959156)
 
+	msvc:
     bootstrap.bat
-    .\b2 toolset=msvc-14.0 address-model=64
-    or
-    .\b2 toolset=intel-15.0-vc12 address-model=64
+    b2 --build-type=minimal toolset=msvc-14.0 address-model=64 stage
+    
+	intel:
+	compilervars.bat intel64 vs2015
+	bootstrap.bat
+    b2 --build-type=minimal toolset=intel address-model=64 stage
 
 ## Linux
 
