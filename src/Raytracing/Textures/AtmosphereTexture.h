@@ -26,7 +26,7 @@ namespace Raycer
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
-		unsigned seed = 1;
+		uint seed = 1;
 		Color topColor1 = Color(0.0, 0.1, 0.6);
 		Color topColor2 = Color(0.0, 0.2, 0.7);
 		Color middleColor = Color(0.0, 0.4, 0.9);

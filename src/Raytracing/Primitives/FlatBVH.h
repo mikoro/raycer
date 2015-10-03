@@ -82,16 +82,16 @@ namespace Raycer
 
 		bool hasBeenBuilt = false;
 		std::vector<FlatBVHNode> flatNodes;
-		std::vector<unsigned> orderedPrimitiveIds;
+		std::vector<uint> orderedPrimitiveIds;
 
 		std::vector<Primitive*> orderedPrimitives;
 
 	private:
 
-		void calculateSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
-		void calculateSAHSplit(unsigned& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
-		double calculateSAHScore(unsigned axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
-		double calculateMedianPoint(unsigned axis, const FlatBVHBuildEntry& buildEntry);
+		void calculateSplit(uint& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
+		void calculateSAHSplit(uint& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
+		double calculateSAHScore(uint axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
+		double calculateMedianPoint(uint axis, const FlatBVHBuildEntry& buildEntry);
 
 		friend class cereal::access;
 

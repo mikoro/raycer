@@ -25,7 +25,7 @@ Scene::Scene()
 	}
 }
 
-Scene Scene::createTestScene(unsigned number)
+Scene Scene::createTestScene(uint number)
 {
 	App::getLog().logInfo("Creating test scene number %d", number);
 
@@ -380,7 +380,7 @@ void Scene::initialize()
 
 	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
 	{
-		for (unsigned primitiveId : primitiveGroup.primitiveIds)
+		for (uint primitiveId : primitiveGroup.primitiveIds)
 		{
 			if (primitivesMap.count(primitiveId))
 				primitiveGroup.primitives.push_back(primitivesMap[primitiveId]);

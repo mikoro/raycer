@@ -90,10 +90,10 @@ void AABB::expand(const AABB& other)
 	max.z = std::max(max.z, other.max.z);
 }
 
-unsigned AABB::getLargestAxis() const
+uint AABB::getLargestAxis() const
 {
 	Vector3 extent = getExtent();
-	unsigned largest = 0;
+	uint largest = 0;
 
 	if (extent.y > extent.x)
 		largest = 1;
@@ -127,7 +127,7 @@ AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vec
 	Matrix4x4 translation2 = Matrix4x4::translate(center + translate);
 	Matrix4x4 transformation = translation2 * rotation * scaling * translation1;
 
-	for (unsigned i = 0; i < 8; ++i)
+	for (uint i = 0; i < 8; ++i)
 	{
 		corners[i] = transformation.transformPosition(corners[i]);
 

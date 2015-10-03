@@ -26,7 +26,7 @@ namespace
 		return tempPathString;
 	}
 
-	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, unsigned>& materialsMap, unsigned& currentId)
+	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, uint>& materialsMap, uint& currentId)
 	{
 		std::string absoluteMtlFilePath = getAbsolutePath(objFileDirectory, mtlFilePath);
 		App::getLog().logInfo("Reading MTL file (%s)", absoluteMtlFilePath);
@@ -272,7 +272,7 @@ namespace
 			result.materials.push_back(currentMaterial);
 	}
 
-	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, unsigned& currentId, unsigned currentMaterialId)
+	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, uint& currentId, uint currentMaterialId)
 	{
 		Log& log = App::getLog();
 
@@ -429,10 +429,10 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	combinedGroupInstance.id = info.combinedGroupInstanceId;
 	combinedGroupInstance.primitiveId = combinedGroup.id;
 
-	unsigned currentId = info.idStartOffset;
-	unsigned currentMaterialId = info.defaultMaterialId;
+	uint currentId = info.idStartOffset;
+	uint currentMaterialId = info.defaultMaterialId;
 
-	std::map<std::string, unsigned> materialsMap;
+	std::map<std::string, uint> materialsMap;
 	std::string objFileDirectory = boost::filesystem::absolute(info.modelFilePath).parent_path().string();
 
 	Matrix4x4 scaling = Matrix4x4::scale(info.scale);

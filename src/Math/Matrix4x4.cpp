@@ -57,8 +57,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] + n.m[c][r];
 
 		return result;
@@ -68,8 +68,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] - n.m[c][r];
 
 		return result;
@@ -79,8 +79,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] * s;
 
 		return result;
@@ -90,8 +90,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] * s;
 
 		return result;
@@ -101,8 +101,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[0][r] * n.m[c][0] + m.m[1][r] * n.m[c][1] + m.m[2][r] * n.m[c][2] + m.m[3][r] * n.m[c][3];
 
 		return result;
@@ -123,8 +123,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = m.m[c][r] / s;
 
 		return result;
@@ -134,8 +134,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				result.m[c][r] = -m.m[c][r];
 
 		return result;
@@ -143,8 +143,8 @@ namespace Raycer
 
 	bool operator==(const Matrix4x4& m, const Matrix4x4& n)
 	{
-		for (unsigned c = 0; c < 4; ++c)
-			for (unsigned r = 0; r < 4; ++r)
+		for (uint c = 0; c < 4; ++c)
+			for (uint r = 0; r < 4; ++r)
 				if (!MathUtils::almostSame(m.m[c][r], n.m[c][r]))
 					return false;
 
@@ -351,7 +351,7 @@ Matrix4x4 Matrix4x4::inverted() const
 
 	det = 1.0 / det;
 
-	for (unsigned i = 0; i < 16; i++)
+	for (uint i = 0; i < 16; i++)
 		out[i] = inv[i] * det;
 
 	std::memcpy(result.m, out, sizeof(double) * 16);

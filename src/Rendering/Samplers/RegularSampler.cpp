@@ -9,7 +9,7 @@
 
 using namespace Raycer;
 
-double RegularSampler::getSample(unsigned i, unsigned n, unsigned permutation)
+double RegularSampler::getSample(uint i, uint n, uint permutation)
 {
 	(void)permutation;
 
@@ -17,7 +17,7 @@ double RegularSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 	return x;
 }
 
-Vector2 RegularSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 RegularSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	(void)permutation;
 
@@ -29,12 +29,12 @@ Vector2 RegularSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, u
 	return result;
 }
 
-Vector2 RegularSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 RegularSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

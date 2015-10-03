@@ -14,19 +14,19 @@ CellNoise::CellNoise()
 	seed(rd());
 }
 
-CellNoise::CellNoise(unsigned seed_)
+CellNoise::CellNoise(uint seed_)
 {
 	seed(seed_);
 }
 
-void CellNoise::seed(unsigned seed)
+void CellNoise::seed(uint seed)
 {
 	m_seed = seed;
 }
 
-double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, unsigned density, double x, double y, double z) const
+double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y, double z) const
 {
-	std::poisson_distribution<unsigned> poissonDist(density);
+	std::poisson_distribution<uint> poissonDist(density);
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::minstd_rand gen;
 
@@ -50,9 +50,9 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 
 				gen.seed(getHashcode(cx, cy, cz));
 
-				unsigned pointCount = poissonDist(gen);
+				uint pointCount = poissonDist(gen);
 
-				for (unsigned i = 0; i < pointCount; ++i)
+				for (uint i = 0; i < pointCount; ++i)
 				{
 					Vector3 cubePoint;
 
@@ -83,9 +83,9 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 	return std::abs(d);
 }
 
-double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, unsigned density, double x, double y) const
+double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y) const
 {
-	std::poisson_distribution<unsigned> poissonDist(density);
+	std::poisson_distribution<uint> poissonDist(density);
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::minstd_rand gen;
 
@@ -105,9 +105,9 @@ double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombin
 
 			gen.seed(getHashcode(cx, cy, 0));
 
-			unsigned pointCount = poissonDist(gen);
+			uint pointCount = poissonDist(gen);
 
-			for (unsigned i = 0; i < pointCount; ++i)
+			for (uint i = 0; i < pointCount; ++i)
 			{
 				Vector3 cubePoint;
 
@@ -141,9 +141,9 @@ void CellNoise::setVoronoiColors(const std::vector<Color>& colors)
 	voronoiColors = colors;
 }
 
-Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, unsigned density, double x, double y, double z) const
+Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint density, double x, double y, double z) const
 {
-	std::poisson_distribution<unsigned> poissonDist(density);
+	std::poisson_distribution<uint> poissonDist(density);
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::uniform_int_distribution<size_t> intDist(0, voronoiColors.size() - 1);
 	std::minstd_rand gen;
@@ -168,9 +168,9 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, unsigned de
 
 				gen.seed(getHashcode(cx, cy, cz));
 
-				unsigned pointCount = poissonDist(gen);
+				uint pointCount = poissonDist(gen);
 
-				for (unsigned i = 0; i < pointCount; ++i)
+				for (uint i = 0; i < pointCount; ++i)
 				{
 					Vector3 cubePoint;
 
@@ -199,9 +199,9 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, unsigned de
 	return closestColor;
 }
 
-Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, unsigned density, double x, double y) const
+Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint density, double x, double y) const
 {
-	std::poisson_distribution<unsigned> poissonDist(density);
+	std::poisson_distribution<uint> poissonDist(density);
 	std::uniform_real_distribution<double> realDist(0.0, 1.0);
 	std::uniform_int_distribution<size_t> intDist(0, voronoiColors.size() - 1);
 	std::minstd_rand gen;
@@ -222,9 +222,9 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, unsigned 
 
 			gen.seed(getHashcode(cx, cy, 0));
 
-			unsigned pointCount = poissonDist(gen);
+			uint pointCount = poissonDist(gen);
 
-			for (unsigned i = 0; i < pointCount; ++i)
+			for (uint i = 0; i < pointCount; ++i)
 			{
 				Vector3 cubePoint;
 

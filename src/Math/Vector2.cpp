@@ -192,7 +192,7 @@ std::string Vector2::toString() const
 	return tfm::format("(%.2f, %.2f)", x, y);
 }
 
-double Vector2::element(unsigned index) const
+double Vector2::element(uint index) const
 {
 	switch (index)
 	{

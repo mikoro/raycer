@@ -16,7 +16,7 @@ RandomSampler::RandomSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double RandomSampler::getSample(unsigned i, unsigned n, unsigned permutation)
+double RandomSampler::getSample(uint i, uint n, uint permutation)
 {
 	(void)i;
 	(void)n;
@@ -25,7 +25,7 @@ double RandomSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 	return randomDist(generator);
 }
 
-Vector2 RandomSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 RandomSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	(void)ix;
 	(void)iy;
@@ -36,12 +36,12 @@ Vector2 RandomSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, un
 	return Vector2(randomDist(generator), randomDist(generator));
 }
 
-Vector2 RandomSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 RandomSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 RandomSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector3 RandomSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

@@ -187,7 +187,7 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 	return sampledPixelColor / (n * n);
 }
 
-Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, unsigned iteration, const std::atomic<bool>& interrupted)
+Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted)
 {
 	Color finalColor = scene.raytracer.backgroundColor;
 

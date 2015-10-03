@@ -47,7 +47,7 @@ namespace Raycer
 		double dot(const Vector2& v) const;
 		Vector2 reflect(const Vector2& normal) const;
 		std::string toString() const;
-		double element(unsigned index) const;
+		double element(uint index) const;
 
 		static Vector2 lerp(const Vector2& v1, const Vector2& v2, double t);
 		static Vector2 abs(const Vector2& v);

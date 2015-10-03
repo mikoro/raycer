@@ -49,7 +49,7 @@ namespace Raycer
 
 		Scene();
 
-		static Scene createTestScene(unsigned number);
+		static Scene createTestScene(uint number);
 		static Scene loadFromFile(const std::string& fileName);
 		static Scene loadFromJsonString(const std::string& text);
 		static Scene loadFromXmlString(const std::string& text);
@@ -81,19 +81,19 @@ namespace Raycer
 		static Scene createTestScene18();
 		static Scene createTestScene19();
 
-		static const unsigned TEST_SCENE_COUNT = 19;
+		static const uint TEST_SCENE_COUNT = 19;
 
 		Camera camera;
 
 		struct Raytracer
 		{
-			unsigned maxRayIterations = 3;
+			uint maxRayIterations = 3;
 			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
-			unsigned multiSamples = 0;
-			unsigned timeSamples = 0;
-			unsigned cameraSamples = 0;
+			uint multiSamples = 0;
+			uint timeSamples = 0;
+			uint cameraSamples = 0;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
@@ -289,9 +289,9 @@ namespace Raycer
 
 		} primitives;
 
-		std::map<unsigned, Primitive*> primitivesMap;
-		std::map<unsigned, Material*> materialsMap;
-		std::map<unsigned, Texture*> texturesMap;
+		std::map<uint, Primitive*> primitivesMap;
+		std::map<uint, Material*> materialsMap;
+		std::map<uint, Texture*> texturesMap;
 
 	private:
 

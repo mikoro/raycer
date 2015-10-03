@@ -29,16 +29,16 @@ namespace Raycer
 	public:
 
 		CellNoise();
-		CellNoise(unsigned seed);
+		CellNoise(uint seed);
 
-		void seed(unsigned seed);
+		void seed(uint seed);
 
-		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, unsigned density, double x, double y, double z) const;
-		double getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, unsigned density, double x, double y) const;
+		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y, double z) const;
+		double getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y) const;
 
 		void setVoronoiColors(const std::vector<Color>& colors);
-		Color getVoronoiColor(CellNoiseDistanceType distanceType, unsigned density, double x, double y, double z) const;
-		Color getVoronoiColor2D(CellNoiseDistanceType distanceType, unsigned density, double x, double y) const;
+		Color getVoronoiColor(CellNoiseDistanceType distanceType, uint density, double x, double y, double z) const;
+		Color getVoronoiColor2D(CellNoiseDistanceType distanceType, uint density, double x, double y) const;
 
 	private:
 

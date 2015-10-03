@@ -47,7 +47,7 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		std::vector<BlinnBlobDescription> blobs;
-		unsigned solverIterations = 16;
+		uint solverIterations = 16;
 
 	private:
 

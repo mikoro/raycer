@@ -11,9 +11,9 @@ using namespace Raycer;
 
 namespace
 {
-	unsigned permute(unsigned i, unsigned l, unsigned p)
+	uint permute(uint i, uint l, uint p)
 	{
-		unsigned w = l - 1;
+		uint w = l - 1;
 
 		w |= w >> 1;
 		w |= w >> 2;
@@ -54,7 +54,7 @@ CMJSampler::CMJSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample(unsigned i, unsigned n, unsigned permutation)
+double CMJSampler::getSample(uint i, uint n, uint permutation)
 {
 	(void)i;
 	(void)n;
@@ -63,12 +63,12 @@ double CMJSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 CMJSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	Vector2 result;
 
-	unsigned sx = permute(ix, nx, permutation * 0x68bc21eb);
-	unsigned sy = permute(iy, ny, permutation * 0x02e5be93);
+	uint sx = permute(ix, nx, permutation * 0x68bc21eb);
+	uint sy = permute(iy, ny, permutation * 0x02e5be93);
 
 	result.x = (double(ix) + (double(sy) + randomDist(generator)) / double(ny)) / double(nx);
 	result.y = (double(iy) + (double(sx) + randomDist(generator)) / double(nx)) / double(ny);
@@ -76,12 +76,12 @@ Vector2 CMJSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsig
 	return result;
 }
 
-Vector2 CMJSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector2 CMJSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 CMJSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
+Vector3 CMJSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

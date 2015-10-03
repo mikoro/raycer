@@ -26,12 +26,12 @@ namespace Raycer
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
-		unsigned seed = 1;
-		unsigned density = 1;
+		uint seed = 1;
+		uint density = 1;
 		Vector3 scale = Vector3(10.0, 10.0, 10.0);
 		CellNoiseDistanceType distanceType = CellNoiseDistanceType::EUCLIDEAN;
 		bool useRandomColors = true;
-		unsigned randomColorCount = 1000;
+		uint randomColorCount = 1000;
 		std::vector<Color> colors;
 
 	private:

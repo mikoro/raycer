@@ -10,16 +10,16 @@ namespace Raycer
 	public:
 
 		ValueNoise();
-		ValueNoise(unsigned seed);
+		ValueNoise(uint seed);
 
-		void seed(unsigned seed);
+		void seed(uint seed);
 		double getNoise(double x, double y, double z) const;
-		double getFbmNoise(unsigned octaves, double lacunarity, double persistence, double x, double y, double z) const;
+		double getFbmNoise(uint octaves, double lacunarity, double persistence, double x, double y, double z) const;
 
 	private:
 
 		int getHashcode(int x, int y, int z) const;
 
-		unsigned m_seed;
+		uint m_seed;
 	};
 }

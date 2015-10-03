@@ -13,12 +13,12 @@ PerlinNoise::PerlinNoise()
 	seed(rd());
 }
 
-PerlinNoise::PerlinNoise(unsigned seed_)
+PerlinNoise::PerlinNoise(uint seed_)
 {
 	seed(seed_);
 }
 
-void PerlinNoise::seed(unsigned seed)
+void PerlinNoise::seed(uint seed)
 {
 	permutations.clear();
 	permutations.resize(256);
@@ -62,13 +62,13 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 	return std::max(0.0, std::min(0.5 + n / 2.0, 1.0)); // move and clamp to 0.0-1.0 range
 }
 
-double PerlinNoise::getFbmNoise(unsigned octaves, double lacunarity, double persistence, double x, double y, double z) const
+double PerlinNoise::getFbmNoise(uint octaves, double lacunarity, double persistence, double x, double y, double z) const
 {
 	double result = 0.0;
 	double frequency = 1.0;
 	double amplitude = 1.0;
 
-	for (unsigned i = 0; i < octaves; ++i)
+	for (uint i = 0; i < octaves; ++i)
 	{
 		result += getNoise(x * frequency, y * frequency, z * frequency) * amplitude;
 		frequency *= lacunarity;

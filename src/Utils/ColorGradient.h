@@ -14,21 +14,21 @@ namespace Raycer
 		Color startColor;
 		Color endColor;
 
-		unsigned startIndex = 0;
-		unsigned endIndex = 0;
+		uint startIndex = 0;
+		uint endIndex = 0;
 	};
 
 	class ColorGradient
 	{
 	public:
 
-		void addSegment(const Color& start, const Color& end, unsigned length);
+		void addSegment(const Color& start, const Color& end, uint length);
 
 		Color getColor(double alpha) const;
 
 	private:
 
-		unsigned totalLength = 0;
+		uint totalLength = 0;
 
 		std::vector<ColorGradientSegment> segments;
 	};
