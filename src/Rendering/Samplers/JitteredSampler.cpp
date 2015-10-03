@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -16,15 +16,16 @@ JitteredSampler::JitteredSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double JitteredSampler::getSample(int i, int n, int permutation)
+double JitteredSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 {
 	(void)permutation;
 
 	double x = (double(i) + randomDist(generator)) / double(n);
+
 	return x;
 }
 
-Vector2 JitteredSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 JitteredSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	(void)permutation;
 
@@ -36,12 +37,12 @@ Vector2 JitteredSampler::getSquareSample(int ix, int iy, int nx, int ny, int per
 	return result;
 }
 
-Vector2 JitteredSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 JitteredSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 JitteredSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 JitteredSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

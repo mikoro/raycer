@@ -37,7 +37,7 @@ namespace Raycer
 		MovingAverage pixelsPerSecondAverage;
 		MovingAverage remainingTimeAverage;
 
-		int openCLProgressCounter1 = 0;
-		int openCLProgressCounter2 = 0;
+		unsigned openCLProgressCounter1 = 0;
+		unsigned openCLProgressCounter2 = 0;
 	};
 }

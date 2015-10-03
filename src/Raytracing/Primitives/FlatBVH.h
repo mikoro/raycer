@@ -18,9 +18,9 @@ namespace Raycer
 
 	struct BVHBuildInfo
 	{
-		unsigned maxLeafSize = 5;
+		size_t maxLeafSize = 5;
 		bool useSAH = true;
-		unsigned regularSAHSplits = 0;
+		size_t regularSAHSplits = 0;
 		BVHAxisSelection axisSelection = BVHAxisSelection::LARGEST;
 		BVHAxisSplit axisSplit = BVHAxisSplit::MEDIAN;
 

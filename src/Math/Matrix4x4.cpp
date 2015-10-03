@@ -351,7 +351,7 @@ Matrix4x4 Matrix4x4::inverted() const
 
 	det = 1.0 / det;
 
-	for (int i = 0; i < 16; i++)
+	for (unsigned i = 0; i < 16; i++)
 		out[i] = inv[i] * det;
 
 	std::memcpy(result.m, out, sizeof(double) * 16);

@@ -184,19 +184,19 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	auto estimatedTime = std::chrono::milliseconds(int(msPerPixel * double(totalPixelCount) + 0.5));
 	auto remainingTime = estimatedTime - elapsedTime;
 
-	int percentage = int((double(pixelsProcessed) / double(totalPixelCount)) * 100.0 + 0.5);
-	int barCount = percentage / 4;
+	unsigned percentage = int((double(pixelsProcessed) / double(totalPixelCount)) * 100.0 + 0.5);
+	unsigned barCount = percentage / 4;
 
 	printf("[");
 
-	for (int i = 0; i < barCount; ++i)
+	for (unsigned i = 0; i < barCount; ++i)
 		printf("=");
 
 	if (barCount < 25)
 	{
 		printf(">");
 
-		for (int i = 0; i < (24 - barCount); ++i)
+		for (unsigned i = 0; i < (24 - barCount); ++i)
 			printf(" ");
 	}
 
@@ -214,7 +214,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	int remainingSeconds = totalRemainingSeconds - remainingHours * 3600 - remainingMinutes * 60;
 
 	printf("] ");
-	printf("%d %% | ", percentage);
+	printf("%u %% | ", percentage);
 	printf("Remaining time: %02d:%02d:%02d | ", remainingHours, remainingMinutes, remainingSeconds);
 	printf("Pixels/s: %s", humanizeNumberDecimal(pixelsPerSecondAverage.getAverage()).c_str());
 	printf("          \r");
@@ -254,7 +254,7 @@ std::string ConsoleRunner::humanizeNumberDecimal(double value)
 {
 	const char* prefixes[] = { "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
 
-	for (int i = 0; i < 9; ++i)
+	for (unsigned i = 0; i < 9; ++i)
 	{
 		if (value < 1000.0)
 			return tfm::format("%.2f %s", value, prefixes[i]);
@@ -269,7 +269,7 @@ std::string ConsoleRunner::humanizeNumberBytes(double value)
 {
 	const char* prefixes[] = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
-	for (int i = 0; i < 9; ++i)
+	for (unsigned i = 0; i < 9; ++i)
 	{
 		if (value < 1024.0)
 			return tfm::format("%.2f %s", value, prefixes[i]);

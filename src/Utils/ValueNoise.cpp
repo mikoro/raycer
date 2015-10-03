@@ -13,12 +13,12 @@ ValueNoise::ValueNoise()
 	seed(rd());
 }
 
-ValueNoise::ValueNoise(int seed_)
+ValueNoise::ValueNoise(unsigned seed_)
 {
 	seed(seed_);
 }
 
-void ValueNoise::seed(int seed)
+void ValueNoise::seed(unsigned seed)
 {
 	m_seed = seed;
 }
@@ -75,13 +75,13 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	return std::max(0.0, std::min(c, 1.0));;
 }
 
-double ValueNoise::getFbmNoise(int octaves, double lacunarity, double persistence, double x, double y, double z) const
+double ValueNoise::getFbmNoise(unsigned octaves, double lacunarity, double persistence, double x, double y, double z) const
 {
 	double result = 0.0;
 	double frequency = 1.0;
 	double amplitude = 1.0;
 
-	for (int i = 0; i < octaves; ++i)
+	for (unsigned i = 0; i < octaves; ++i)
 	{
 		result += getNoise(x * frequency, y * frequency, z * frequency) * amplitude;
 		frequency *= lacunarity;

@@ -20,7 +20,7 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 
 	#pragma omp parallel for reduction(+:logSum)
 	for (int i = 0; i < pixelCount; ++i)
-		logSum += log(epsilon + pixelData[i].getLuminance());
+		logSum += log(epsilon + pixelData[size_t(i)].getLuminance());
 
 	double logAvgLuminance = exp(logSum / pixelCount);
 	double scale = scene.toneMapper.key / logAvgLuminance;
@@ -30,18 +30,21 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 	#pragma omp parallel for
 	for (int i = 0; i < pixelCount; ++i)
 	{
-		double originalLuminance = pixelData[i].getLuminance();
+		// fix static analysis warnings
+		size_t j = size_t(i);
+
+		double originalLuminance = pixelData[j].getLuminance();
 		double scaledLuminance = scale * originalLuminance;
 		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance / maxLuminance2))) / (1.0 + scaledLuminance);
 		double colorScale = mappedLuminance / originalLuminance;
 
-		pixelData[i] *= colorScale;
-		pixelData[i].a = 1.0;
+		pixelData[j] *= colorScale;
+		pixelData[j].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			pixelData[i] = Color::pow(pixelData[i], invGamma);
+			pixelData[j] = Color::pow(pixelData[j], invGamma);
 
 		if (scene.toneMapper.shouldClamp)
-			pixelData[i].clamp();
+			pixelData[j].clamp();
 	}
 }

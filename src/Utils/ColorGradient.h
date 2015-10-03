@@ -28,7 +28,7 @@ namespace Raycer
 
 	private:
 
-		int totalLength = 0;
+		unsigned totalLength = 0;
 
 		std::vector<ColorGradientSegment> segments;
 	};

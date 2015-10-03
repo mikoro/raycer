@@ -380,7 +380,7 @@ void Scene::initialize()
 
 	for (PrimitiveGroup& primitiveGroup : primitives.primitiveGroups)
 	{
-		for (int primitiveId : primitiveGroup.primitiveIds)
+		for (unsigned primitiveId : primitiveGroup.primitiveIds)
 		{
 			if (primitivesMap.count(primitiveId))
 				primitiveGroup.primitives.push_back(primitivesMap[primitiveId]);

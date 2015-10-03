@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -9,7 +9,7 @@
 
 using namespace Raycer;
 
-double RegularSampler::getSample(int i, int n, int permutation)
+double RegularSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 {
 	(void)permutation;
 
@@ -17,7 +17,7 @@ double RegularSampler::getSample(int i, int n, int permutation)
 	return x;
 }
 
-Vector2 RegularSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RegularSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	(void)permutation;
 
@@ -29,12 +29,12 @@ Vector2 RegularSampler::getSquareSample(int ix, int iy, int nx, int ny, int perm
 	return result;
 }
 
-Vector2 RegularSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RegularSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }

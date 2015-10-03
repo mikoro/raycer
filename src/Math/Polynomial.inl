@@ -29,7 +29,7 @@ namespace Raycer
 		std::complex<double> y(0.0, 0.0);
 
 		for (size_t i = 0; i < size; ++i)
-			y += coefficients[i] * pow(x, degree - i);
+			y += coefficients[i] * pow(x, int(degree - i)); // raising to signed power is faster
 
 		return y;
 	}
@@ -49,7 +49,7 @@ namespace Raycer
 		std::complex<double> seed(0.4, 0.9);
 
 		for (size_t i = 0; i < degree; ++i)
-			roots[i] = previousRoots[i] = pow(seed, i);
+			roots[i] = previousRoots[i] = pow(seed, int(i));
 
 		for (size_t i = 0; i < maxIterations; ++i)
 		{

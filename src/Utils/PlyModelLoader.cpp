@@ -454,7 +454,7 @@ namespace
 	{
 		Log& log = App::getLog();
 
-		int currentId = info.idStartOffset;
+		unsigned currentId = info.idStartOffset;
 
 		for (const std::vector<size_t>& face : faces)
 		{

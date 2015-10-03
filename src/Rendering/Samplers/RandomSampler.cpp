@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -16,7 +16,7 @@ RandomSampler::RandomSampler()
 	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double RandomSampler::getSample(int i, int n, int permutation)
+double RandomSampler::getSample(unsigned i, unsigned n, unsigned permutation)
 {
 	(void)i;
 	(void)n;
@@ -25,7 +25,7 @@ double RandomSampler::getSample(int i, int n, int permutation)
 	return randomDist(generator);
 }
 
-Vector2 RandomSampler::getSquareSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RandomSampler::getSquareSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	(void)ix;
 	(void)iy;
@@ -36,12 +36,12 @@ Vector2 RandomSampler::getSquareSample(int ix, int iy, int nx, int ny, int permu
 	return Vector2(randomDist(generator), randomDist(generator));
 }
 
-Vector2 RandomSampler::getDiskSample(int ix, int iy, int nx, int ny, int permutation)
+Vector2 RandomSampler::getDiskSample(unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
 }
 
-Vector3 RandomSampler::getHemisphereSample(const ONB& onb, double distribution, int ix, int iy, int nx, int ny, int permutation)
+Vector3 RandomSampler::getHemisphereSample(const ONB& onb, double distribution, unsigned ix, unsigned iy, unsigned nx, unsigned ny, unsigned permutation)
 {
 	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
 }
