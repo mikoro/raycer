@@ -24,9 +24,6 @@ namespace Raycer
 		friend class Scene;
 		friend class CLScene;
 
-		friend class Scene;
-		friend class CLScene;
-
 		void initialize(const Scene& scene) override;
 		bool intersect(const Ray& ray, Intersection& intersection, std::vector<Intersection>& intersections) override;
 		AABB getAABB() const override;
