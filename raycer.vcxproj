@@ -163,6 +163,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
+    <ClCompile Include="src\gl3w.cpp" />
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -263,7 +264,6 @@
     <ClCompile Include="src\Utils\CellNoise.cpp" />
     <ClCompile Include="src\Utils\ColorGradient.cpp" />
     <ClCompile Include="src\Utils\FpsCounter.cpp" />
-    <ClCompile Include="src\Utils\gl3w.cpp" />
     <ClCompile Include="src\Utils\GLHelper.cpp" />
     <ClCompile Include="src\Utils\IniReader.cpp" />
     <ClCompile Include="src\Utils\Log.cpp" />
@@ -277,6 +277,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\App.h" />
+    <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />

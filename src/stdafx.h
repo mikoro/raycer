@@ -1,3 +1,5 @@
+#pragma once
+
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -84,3 +86,5 @@
 #include "tclap/SwitchArg.h"
 #include "tclap/ValueArg.h"
 #include "tclap/ArgException.h"
+
+#include "Common.h"

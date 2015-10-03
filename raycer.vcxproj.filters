@@ -187,9 +187,6 @@
     <ClCompile Include="src\Raytracing\Textures\ValueNoiseTexture.cpp">
       <Filter>Raytracing\Textures</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\gl3w.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\Tests\SamplerTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
@@ -371,6 +368,7 @@
     <ClCompile Include="src\Tests\ModelLoaderTest.cpp">
       <Filter>Tests</Filter>
     </ClCompile>
+    <ClCompile Include="src\gl3w.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -627,6 +625,7 @@
       <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\stdafx.h" />
+    <ClInclude Include="src\Common.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
