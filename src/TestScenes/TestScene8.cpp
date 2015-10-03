@@ -33,7 +33,7 @@ Scene Scene::createTestScene8()
 
 	double angle = -M_PI / 2.0;
 	double radius = 8.0;
-	int currentId = 1;
+	size_t currentId = 1;
 
 	for (int i = 0; i < 50; ++i)
 	{

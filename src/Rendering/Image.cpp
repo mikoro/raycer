@@ -252,7 +252,7 @@ size_t Image::getHeight() const
 
 Color Image::getPixel(size_t x, size_t y) const
 {
-	assert(x >= 0 && x < width && y >= 0 && y < height);
+	assert(x < width && y < height);
 
 	return pixelData[y * width + x];
 }

@@ -292,7 +292,7 @@ void FlatBVH::calculateSAHSplit(uint& axis, double& splitPoint, const AABB& node
 
 double FlatBVH::calculateSAHScore(uint axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry)
 {
-	assert(buildEntry.end - buildEntry.start > 0);
+	assert(buildEntry.end != buildEntry.start);
 
 	AABB leftAABB, rightAABB;
 	size_t leftCount = 0;

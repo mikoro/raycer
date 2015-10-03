@@ -368,6 +368,6 @@ void CLRaytracer::createTextureImages()
 	for (size_t i = 0; i < textureImagePtrs.size(); ++i)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &textureImagePtrs[i]), "Could not set kernel argument (texture image)");
 
-	for (size_t i = 0; i < (KERNEL_TEXTURE_COUNT - textureImagePtrs.size()); ++i)
+	for (int64_t i = 0; i < (int64_t(KERNEL_TEXTURE_COUNT) - int64_t(textureImagePtrs.size())); ++i)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &dummyTextureImagePtr), "Could not set kernel argument (dummy texture image)");
 }

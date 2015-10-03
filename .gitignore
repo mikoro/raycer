@@ -8,6 +8,7 @@
 *.user
 *.log
 *.settings
+*.suppress
 .vs
 My*
 Thumbs.db

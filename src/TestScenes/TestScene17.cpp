@@ -94,7 +94,7 @@ Scene Scene::createTestScene17()
 	std::uniform_real_distribution<double> randomRotation(-10.0, 10.0);
 	std::uniform_real_distribution<double> randomTranslation(0.0, 0.5);
 
-	int currentId = 1000000;
+	size_t currentId = 1000000;
 	double xstep = 1.0;
 
 	for (double x = 0.0; x > -400.0; x -= xstep)
