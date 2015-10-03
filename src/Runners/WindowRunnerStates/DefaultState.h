@@ -32,6 +32,6 @@ namespace Raycer
 		Scene scene;
 
 		std::atomic<bool> interrupted;
-		int currentTestSceneNumber = 1;
+		uint currentTestSceneNumber = 1;
 	};
 }

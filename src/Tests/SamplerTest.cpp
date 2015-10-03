@@ -35,24 +35,24 @@ TEST_CASE("Sampler functionality", "[sampler]")
 
 	for (const auto &sampler : samplers)
 	{
-		int n = 32;
+		uint n = 32;
 		std::random_device rd;
-		int permutation = rd();
+		uint permutation = rd();
 		Image image1(100, 100);
 		Image image2(100, 100);
 		Image image3(100, 100);
 		Vector2 size = Vector2(99.0, 99.0);
 		std::ofstream file(tfm::format("sampler_%s_hemisphere.txt", sampler.first));
 
-		for (int x = 0; x < n; ++x)
+		for (uint x = 0; x < n; ++x)
 		{
 			double sx = sampler.second->getSample(x, n, permutation) * size.x;
 			image1.setPixel(size_t(sx + 0.5), size_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
-		for (int y = 0; y < n; ++y)
+		for (uint y = 0; y < n; ++y)
 		{
-			for (int x = 0; x < n; ++x)
+			for (uint x = 0; x < n; ++x)
 			{
 				Vector2 sample = sampler.second->getSquareSample(x, y, n, n, permutation) * size;
 				image2.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));

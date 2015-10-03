@@ -18,18 +18,6 @@ Color::Color(double r_, double g_, double b_, double a_) : r(r_), g(g_), b(b_), 
 {
 }
 
-Color::Color(int r_, int g_, int b_, int a_)
-{
-	assert(r_ >= 0 && r_ <= 255 && g_ >= 0 && g_ <= 255 && b_ >= 0 && b_ <= 255 && a_ >= 0 && a_ <= 255);
-
-	double inv255 = 1.0 / 255.0;
-
-	r = r_ * inv255;
-	g = g_ * inv255;
-	b = b_ * inv255;
-	a = a_ * inv255;
-}
-
 Color::Color(const Color& c)
 {
 	r = c.r;
@@ -123,10 +111,10 @@ uint32_t Color::getRgbaValue() const
 {
 	assert(isClamped());
 
-	int r_ = static_cast<int>(r * 255.0 + 0.5);
-	int g_ = static_cast<int>(g * 255.0 + 0.5);
-	int b_ = static_cast<int>(b * 255.0 + 0.5);
-	int a_ = static_cast<int>(a * 255.0 + 0.5);
+	uint32_t r_ = static_cast<uint32_t>(r * 255.0 + 0.5) & 0xff;
+	uint32_t g_ = static_cast<uint32_t>(g * 255.0 + 0.5) & 0xff;
+	uint32_t b_ = static_cast<uint32_t>(b * 255.0 + 0.5) & 0xff;
+	uint32_t a_ = static_cast<uint32_t>(a * 255.0 + 0.5) & 0xff;
 
 	return (r_ << 24 | g_ << 16 | b_ << 8 | a_);
 }
@@ -135,10 +123,10 @@ uint32_t Color::getAbgrValue() const
 {
 	assert(isClamped());
 
-	int r_ = static_cast<int>(r * 255.0 + 0.5);
-	int g_ = static_cast<int>(g * 255.0 + 0.5);
-	int b_ = static_cast<int>(b * 255.0 + 0.5);
-	int a_ = static_cast<int>(a * 255.0 + 0.5);
+	uint32_t r_ = static_cast<uint32_t>(r * 255.0 + 0.5) & 0xff;
+	uint32_t g_ = static_cast<uint32_t>(g * 255.0 + 0.5) & 0xff;
+	uint32_t b_ = static_cast<uint32_t>(b * 255.0 + 0.5) & 0xff;
+	uint32_t a_ = static_cast<uint32_t>(a * 255.0 + 0.5) & 0xff;
 
 	return (a_ << 24 | b_ << 16 | g_ << 8 | r_);
 }
@@ -182,38 +170,34 @@ Color Color::clamped() const
 
 Color Color::fromRgbaValue(uint32_t rgba)
 {
-	int r_ = (rgba >> 24);
-	int g_ = (rgba >> 16) & 0xff;
-	int b_ = (rgba >> 8) & 0xff;
-	int a_ = rgba & 0xff;
-
-	const double inv255 = 1.0 / 255.0;
+	uint32_t r_ = (rgba >> 24);
+	uint32_t g_ = (rgba >> 16) & 0xff;
+	uint32_t b_ = (rgba >> 8) & 0xff;
+	uint32_t a_ = rgba & 0xff;
 
 	Color c;
 
-	c.r = r_ * inv255;
-	c.g = g_ * inv255;
-	c.b = b_ * inv255;
-	c.a = a_ * inv255;
+	c.r = double(r_) / 255.0;
+	c.g = double(g_) / 255.0;
+	c.b = double(b_) / 255.0;
+	c.a = double(a_) / 255.0;
 
 	return c;
 }
 
 Color Color::fromAbgrValue(uint32_t abgr)
 {
-	int r_ = abgr & 0xff;
-	int g_ = (abgr >> 8) & 0xff;
-	int b_ = (abgr >> 16) & 0xff;
-	int a_ = (abgr >> 24);
-
-	const double inv255 = 1.0 / 255.0;
+	uint32_t r_ = abgr & 0xff;
+	uint32_t g_ = (abgr >> 8) & 0xff;
+	uint32_t b_ = (abgr >> 16) & 0xff;
+	uint32_t a_ = (abgr >> 24);
 
 	Color c;
 
-	c.r = r_ * inv255;
-	c.g = g_ * inv255;
-	c.b = b_ * inv255;
-	c.a = a_ * inv255;
+	c.r = double(r_) / 255.0;
+	c.g = double(g_) / 255.0;
+	c.b = double(b_) / 255.0;
+	c.a = double(a_) / 255.0;
 
 	return c;
 }
