@@ -18,10 +18,10 @@ void VoronoiTexture::initialize()
 	{
 		colors.clear();
 
-		std::mt19937 gen(seed);
+		std::mt19937 generator(seed);
 
 		for (uint i = 0; i < randomColorCount; ++i)
-			colors.push_back(Color::random(gen));
+			colors.push_back(Color::random(generator));
 	}
 
 	cellNoise.setVoronoiColors(colors);

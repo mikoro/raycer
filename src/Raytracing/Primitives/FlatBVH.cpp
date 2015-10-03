@@ -224,8 +224,8 @@ void FlatBVH::calculateSplit(uint& axis, double& splitPoint, const AABB& nodeAAB
 		axis = nodeAABB.getLargestAxis();
 	else if (buildInfo.axisSelection == BVHAxisSelection::RANDOM)
 	{
-		std::uniform_int_distribution<uint> dist(0, 2);
-		axis = dist(generator);
+		std::uniform_int_distribution<uint> randomAxis(0, 2);
+		axis = randomAxis(generator);
 	}
 	else
 		throw std::runtime_error("Unknown BVH axis selection");
@@ -236,8 +236,8 @@ void FlatBVH::calculateSplit(uint& axis, double& splitPoint, const AABB& nodeAAB
 		splitPoint = calculateMedianPoint(axis, buildEntry);
 	else if (buildInfo.axisSplit == BVHAxisSplit::RANDOM)
 	{
-		std::uniform_real_distribution<double> dist(nodeAABB.getMin().element(axis), nodeAABB.getMax().element(axis));
-		splitPoint = dist(generator);
+		std::uniform_real_distribution<double> randomDouble(nodeAABB.getMin().element(axis), nodeAABB.getMax().element(axis));
+		splitPoint = randomDouble(generator);
 	}
 	else
 		throw std::runtime_error("Unknown BVH axis split");

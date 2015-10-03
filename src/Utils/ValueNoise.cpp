@@ -26,8 +26,8 @@ void ValueNoise::seed(uint seed)
 double ValueNoise::getNoise(double x, double y, double z) const
 {
 	// TODO: seems to work only with mt19937 - which is too slow for this
-	std::mt19937 gen;
-	std::uniform_real_distribution<double> realDist(0.0, 1.0);
+	std::mt19937 generator;
+	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 
 	int ix = int(floor(x));
 	int iy = int(floor(y));
@@ -41,22 +41,22 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	double tzi = 1.0 - tz;
 
 	// corners of a unit cube, cxyz
-	gen.seed(getHashcode(ix, iy, iz));
-	double c000 = realDist(gen);
-	gen.seed(getHashcode(ix, iy, iz + 1));
-	double c001 = realDist(gen);
-	gen.seed(getHashcode(ix, iy + 1, iz));
-	double c010 = realDist(gen);
-	gen.seed(getHashcode(ix, iy + 1, iz + 1));
-	double c011 = realDist(gen);
-	gen.seed(getHashcode(ix + 1, iy, iz));
-	double c100 = realDist(gen);
-	gen.seed(getHashcode(ix + 1, iy, iz + 1));
-	double c101 = realDist(gen);
-	gen.seed(getHashcode(ix + 1, iy + 1, iz));
-	double c110 = realDist(gen);
-	gen.seed(getHashcode(ix + 1, iy + 1, iz + 1));
-	double c111 = realDist(gen);
+	generator.seed(getHashcode(ix, iy, iz));
+	double c000 = randomOffset(generator);
+	generator.seed(getHashcode(ix, iy, iz + 1));
+	double c001 = randomOffset(generator);
+	generator.seed(getHashcode(ix, iy + 1, iz));
+	double c010 = randomOffset(generator);
+	generator.seed(getHashcode(ix, iy + 1, iz + 1));
+	double c011 = randomOffset(generator);
+	generator.seed(getHashcode(ix + 1, iy, iz));
+	double c100 = randomOffset(generator);
+	generator.seed(getHashcode(ix + 1, iy, iz + 1));
+	double c101 = randomOffset(generator);
+	generator.seed(getHashcode(ix + 1, iy + 1, iz));
+	double c110 = randomOffset(generator);
+	generator.seed(getHashcode(ix + 1, iy + 1, iz + 1));
+	double c111 = randomOffset(generator);
 
 	// trilinear interpolation
 	// interpolate in x-direction

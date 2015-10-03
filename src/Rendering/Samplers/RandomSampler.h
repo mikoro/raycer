@@ -27,6 +27,6 @@ namespace Raycer
 	private:
 
 		std::mt19937 generator;
-		std::uniform_real_distribution<double> randomDist;
+		std::uniform_real_distribution<double> randomOffset;
 	};
 }

@@ -58,6 +58,6 @@ namespace Raycer
 		std::vector<Vector2> points2D;
 		std::vector<Vector2> activePoints2D;
 
-		std::mt19937 mt;
+		std::mt19937 generator;
 	};
 }

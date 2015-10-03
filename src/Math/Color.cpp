@@ -272,20 +272,20 @@ Color Color::fastPow(const Color& color, double power)
 Color Color::random()
 {
 	std::random_device rd;
-	std::mt19937 gen(rd());
+	std::mt19937 generator(rd());
 
-	return random(gen);
+	return Color::random(generator);
 }
 
-Color Color::random(std::mt19937& gen)
+Color Color::random(std::mt19937& generator)
 {
-	std::uniform_real_distribution<double> realDist(0.0, 1.0);
+	std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
 
 	Color c;
 
-	c.r = realDist(gen);
-	c.g = realDist(gen);
-	c.b = realDist(gen);
+	c.r = randomDouble(generator);
+	c.g = randomDouble(generator);
+	c.b = randomDouble(generator);
 	c.a = 1.0;
 
 	return c;

@@ -13,7 +13,7 @@ RandomSampler::RandomSampler()
 {
 	std::random_device rd;
 	generator.seed(rd());
-	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
+	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 double RandomSampler::getSample(uint i, uint n, uint permutation)
@@ -22,7 +22,7 @@ double RandomSampler::getSample(uint i, uint n, uint permutation)
 	(void)n;
 	(void)permutation;
 
-	return randomDist(generator);
+	return randomOffset(generator);
 }
 
 Vector2 RandomSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
@@ -33,7 +33,7 @@ Vector2 RandomSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint 
 	(void)ny;
 	(void)permutation;
 
-	return Vector2(randomDist(generator), randomDist(generator));
+	return Vector2(randomOffset(generator), randomOffset(generator));
 }
 
 Vector2 RandomSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)

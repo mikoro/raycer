@@ -50,7 +50,7 @@ namespace Raycer
 		static Color pow(const Color& color, double power);
 		static Color fastPow(const Color& color, double power);
 		static Color random();
-		static Color random(std::mt19937& gen);
+		static Color random(std::mt19937& generator);
 
 		static const Color RED;
 		static const Color GREEN;

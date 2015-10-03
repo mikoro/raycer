@@ -13,14 +13,14 @@ JitteredSampler::JitteredSampler()
 {
 	std::random_device rd;
 	generator.seed(rd());
-	randomDist = std::uniform_real_distribution<double>(0.0, 1.0);
+	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
 double JitteredSampler::getSample(uint i, uint n, uint permutation)
 {
 	(void)permutation;
 
-	double x = (double(i) + randomDist(generator)) / double(n);
+	double x = (double(i) + randomOffset(generator)) / double(n);
 
 	return x;
 }
@@ -31,8 +31,8 @@ Vector2 JitteredSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uin
 
 	Vector2 result;
 
-	result.x = (double(ix) + randomDist(generator)) / double(nx);
-	result.y = (double(iy) + randomDist(generator)) / double(ny);
+	result.x = (double(ix) + randomOffset(generator)) / double(nx);
+	result.y = (double(iy) + randomOffset(generator)) / double(ny);
 
 	return result;
 }

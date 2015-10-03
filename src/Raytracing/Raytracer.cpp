@@ -38,20 +38,20 @@ Raytracer::Raytracer()
 	std::random_device rd;
 	generator.seed(rd());
 
-	samplers[SamplerType::RANDOM] = std::make_shared<RandomSampler>();
-	samplers[SamplerType::REGULAR] = std::make_shared<RegularSampler>();
-	samplers[SamplerType::JITTERED] = std::make_shared<JitteredSampler>();
-	samplers[SamplerType::CMJ] = std::make_shared<CMJSampler>();
+	samplers[SamplerType::RANDOM] = std::make_unique<RandomSampler>();
+	samplers[SamplerType::REGULAR] = std::make_unique<RegularSampler>();
+	samplers[SamplerType::JITTERED] = std::make_unique<JitteredSampler>();
+	samplers[SamplerType::CMJ] = std::make_unique<CMJSampler>();
 
-	filters[FilterType::BOX] = std::make_shared<BoxFilter>();
-	filters[FilterType::TENT] = std::make_shared<TentFilter>();
-	filters[FilterType::BELL] = std::make_shared<BellFilter>();
-	filters[FilterType::MITCHELL] = std::make_shared<MitchellFilter>();
-	filters[FilterType::GAUSSIAN] = std::make_shared<GaussianFilter>();
-	filters[FilterType::LANCZOS_SINC] = std::make_shared<LanczosSincFilter>();
+	filters[FilterType::BOX] = std::make_unique<BoxFilter>();
+	filters[FilterType::TENT] = std::make_unique<TentFilter>();
+	filters[FilterType::BELL] = std::make_unique<BellFilter>();
+	filters[FilterType::MITCHELL] = std::make_unique<MitchellFilter>();
+	filters[FilterType::GAUSSIAN] = std::make_unique<GaussianFilter>();
+	filters[FilterType::LANCZOS_SINC] = std::make_unique<LanczosSincFilter>();
 
-	toneMappers[ToneMapperType::LINEAR] = std::make_shared<LinearToneMapper>();
-	toneMappers[ToneMapperType::REINHARD] = std::make_shared<ReinhardToneMapper>();
+	toneMappers[ToneMapperType::LINEAR] = std::make_unique<LinearToneMapper>();
+	toneMappers[ToneMapperType::REINHARD] = std::make_unique<ReinhardToneMapper>();
 }
 
 void Raytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
@@ -94,16 +94,16 @@ Color Raytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCo
 		return generateTimeSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
-	int permutation = randomDist(generator);
-	int n = scene.raytracer.multiSamples;
+	uint permutation = randomPermutation(generator);
+	uint n = scene.raytracer.multiSamples;
 	Sampler* sampler = samplers[scene.raytracer.multiSamplerType].get();
 	Filter* filter = filters[scene.raytracer.multiSamplerFilterType].get();
 	double filterWeightSum = 0.0;
 	double filterWidth = filter->getWidth();
 
-	for (int y = 0; y < n; ++y)
+	for (uint y = 0; y < n; ++y)
 	{
-		for (int x = 0; x < n; ++x)
+		for (uint x = 0; x < n; ++x)
 		{
 			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
@@ -121,21 +121,21 @@ Color Raytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoo
 		return generateCameraSamples(scene, pixelCoordinate, 0.0, interrupted);
 
 	Color sampledPixelColor;
-	int n = scene.raytracer.timeSamples;
+	uint n = scene.raytracer.timeSamples;
 	Sampler* sampler = samplers[scene.raytracer.timeSamplerType].get();
 
-	for (int i = 0; i < n; ++i)
+	for (uint i = 0; i < n; ++i)
 		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample(i, n), interrupted);
 
-	return sampledPixelColor / n;
+	return sampledPixelColor / double(n);
 }
 
 Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
 {
 	Ray ray;
-	bool isValid = scene.camera.getRay(pixelCoordinate, ray, time);
+	bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, time);
 
-	if (!isValid && scene.raytracer.cameraSamples == 0)
+	if (!isValidRay && scene.raytracer.cameraSamples == 0)
 		return scene.raytracer.offLensColor;
 
 	Intersection intersection;
@@ -144,8 +144,8 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 		return raytrace(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
-	int permutation = randomDist(generator);
-	int n = scene.raytracer.cameraSamples;
+	uint permutation = randomPermutation(generator);
+	uint n = scene.raytracer.cameraSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalDistance = scene.camera.focalDistance;
 	Sampler* sampler = samplers[scene.raytracer.cameraSamplerType].get();
@@ -155,15 +155,15 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 	Vector3 cameraRight = cameraState.right;
 	Vector3 cameraUp = cameraState.up;
 
-	for (int y = 0; y < n; ++y)
+	for (uint y = 0; y < n; ++y)
 	{
-		for (int x = 0; x < n; ++x)
+		for (uint x = 0; x < n; ++x)
 		{
 			Ray primaryRay;
 			Vector2 jitter = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
-			isValid = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
+			isValidRay = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
 
-			if (!isValid)
+			if (!isValidRay)
 			{
 				sampledPixelColor += scene.raytracer.offLensColor;
 				continue;
@@ -184,7 +184,7 @@ Color Raytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelC
 		}
 	}
 
-	return sampledPixelColor / (n * n);
+	return sampledPixelColor / (double(n) * n);
 }
 
 Color Raytracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted)
@@ -465,14 +465,14 @@ Color Raytracer::calculateSimpleFogColor(const Scene& scene, const Intersection&
 double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection)
 {
 	double ambientOcclusion = 0.0;
-	int permutation = randomDist(generator);
-	int n = scene.lights.ambientLight.occlusionSamples;
+	uint permutation = randomPermutation(generator);
+	uint n = scene.lights.ambientLight.occlusionSamples;
 	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
 	Sampler* sampler = samplers[scene.lights.ambientLight.occlusionSamplerType].get();
 
-	for (int y = 0; y < n; ++y)
+	for (uint y = 0; y < n; ++y)
 	{
-		for (int x = 0; x < n; ++x)
+		for (uint x = 0; x < n; ++x)
 		{
 			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
 
@@ -562,13 +562,13 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	Vector3 lightUp = lightRight.cross(directionToLight).normalized();
 
 	double shadowAmount = 0.0;
-	int permutation = randomDist(generator);
-	int n = light.softShadowSamples;
+	uint permutation = randomPermutation(generator);
+	uint n = light.softShadowSamples;
 	Sampler* sampler = samplers[light.softShadowSamplerType].get();
 
-	for (int y = 0; y < n; ++y)
+	for (uint y = 0; y < n; ++y)
 	{
-		for (int x = 0; x < n; ++x)
+		for (uint x = 0; x < n; ++x)
 		{
 			Vector2 jitter = sampler->getDiskSample(x, y, n, n, permutation) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;

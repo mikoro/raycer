@@ -34,10 +34,10 @@ Scene Scene::createTestScene9()
 
 	// INSTANCES //
 
-	std::mt19937 gen(1230927546);
-	std::uniform_real_distribution<double> scaleDist(0.5, 2.0);
-	std::uniform_real_distribution<double> rotationDist(-45.0, 45.0);
-	std::uniform_real_distribution<double> translateDist(-8.0, 8.0);
+	std::mt19937 generator(1230927546);
+	std::uniform_real_distribution<double> randomScale(0.5, 2.0);
+	std::uniform_real_distribution<double> randomRotation(-45.0, 45.0);
+	std::uniform_real_distribution<double> randomTranslation(-8.0, 8.0);
 
 	int currentId = 1000000;
 
@@ -49,10 +49,10 @@ Scene Scene::createTestScene9()
 			{
 				Material instanceMaterial;
 				instanceMaterial.id = currentId;
-				instanceMaterial.ambientReflectance = Color::random(gen) * 0.8;
+				instanceMaterial.ambientReflectance = Color::random(generator) * 0.8;
 				instanceMaterial.diffuseReflectance = instanceMaterial.ambientReflectance;
 
-				double scale = scaleDist(gen);
+				double scale = randomScale(generator);
 
 				Instance instance;
 				instance.id = currentId;
@@ -60,8 +60,8 @@ Scene Scene::createTestScene9()
 				instance.primitiveId = modelInfo.combinedGroupId;
 				instance.changePrimitive = true;
 				instance.scale = Vector3(scale, scale, scale);
-				instance.rotate = EulerAngle(0.0, 0.0, rotationDist(gen));
-				instance.translate = Vector3(x + translateDist(gen), y + translateDist(gen), z + translateDist(gen));
+				instance.rotate = EulerAngle(0.0, 0.0, randomRotation(generator));
+				instance.translate = Vector3(x + randomTranslation(generator), y + randomTranslation(generator), z + randomTranslation(generator));
 
 				scene.materials.push_back(instanceMaterial);
 				scene.primitives.instances.push_back(instance);

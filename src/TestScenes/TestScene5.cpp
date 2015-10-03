@@ -52,24 +52,24 @@ Scene Scene::createTestScene5()
 
 	// SPHERES //
 
-	std::mt19937 gen(8972364);
-	std::uniform_real_distribution<double> radiusDist(1.0, 2.0);
-	std::uniform_real_distribution<double> pxDist(2.0, 3.0);
-	std::uniform_real_distribution<double> pyDist(-1.0, 1.0);
+	std::mt19937 generator(8972364);
+	std::uniform_real_distribution<double> randomRadius(1.0, 2.0);
+	std::uniform_real_distribution<double> randomX(2.0, 3.0);
+	std::uniform_real_distribution<double> randomY(-1.0, 1.0);
 
 	double px;
-	double py = -250.0 + radiusDist(gen);
+	double py = -250.0 + randomY(generator);
 	int currentId = 2;
 
 	for (int y = 0; y < 100; ++y)
 	{
-		px = -200.0 + radiusDist(gen);
+		px = -200.0 + randomX(generator);
 
 		for (int x = 0; x < 100; ++x)
 		{
 			Material sphereMaterial;
 			sphereMaterial.id = currentId;
-			sphereMaterial.ambientReflectance = Color::random(gen) * 0.8;
+			sphereMaterial.ambientReflectance = Color::random(generator) * 0.8;
 			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.specularReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.shininess = 256.0;
@@ -77,14 +77,14 @@ Scene Scene::createTestScene5()
 
 			Sphere sphere;
 			sphere.id = currentId;
-			sphere.radius = radiusDist(gen);
-			sphere.position = Vector3(px, sphere.radius, py + pyDist(gen));
+			sphere.radius = randomRadius(generator);
+			sphere.position = Vector3(px, sphere.radius, py + randomY(generator));
 			sphere.materialId = sphereMaterial.id;
 
 			scene.materials.push_back(sphereMaterial);
 			scene.primitives.spheres.push_back(sphere);
 
-			px += sphere.radius + pxDist(gen);
+			px += sphere.radius + randomX(generator);
 			++currentId;
 		}
 

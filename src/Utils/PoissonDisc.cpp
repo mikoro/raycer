@@ -21,12 +21,12 @@ PoissonDisc::PoissonDisc(uint seed_)
 
 void PoissonDisc::seed(uint seed)
 {
-	mt.seed(seed);
+	generator.seed(seed);
 }
 
 void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, uint iterationLimit)
 {
-	std::uniform_real_distribution<double> random(0.0, 1.0);
+	std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
 
 	grid2D.cellSize = minDistance / M_SQRT2;
 	grid2D.width = size_t(ceil(double(width) / grid2D.cellSize));
@@ -40,7 +40,7 @@ void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, ui
 	points2D.clear();
 	activePoints2D.clear();
 
-	Vector2 firstPoint = Vector2(random(mt) * double(width), random(mt) * double(height));
+	Vector2 firstPoint = Vector2(randomDouble(generator) * double(width), randomDouble(generator) * double(height));
 
 	points2D.push_back(firstPoint);
 	activePoints2D.push_back(firstPoint);
@@ -97,8 +97,8 @@ Cell2D& PoissonDisc::getGridCell2D(const Vector2& point)
 
 Vector2 PoissonDisc::getNextActivePoint2D()
 {
-	std::uniform_int_distribution<size_t> random(0, activePoints2D.size() - 1);
-	size_t index = random(mt);
+	std::uniform_int_distribution<size_t> randomIndex(0, activePoints2D.size() - 1);
+	size_t index = randomIndex(generator);
 	Vector2 point = activePoints2D[index];
 	activePoints2D.erase(activePoints2D.begin() + index);
 
@@ -107,10 +107,10 @@ Vector2 PoissonDisc::getNextActivePoint2D()
 
 Vector2 PoissonDisc::generateNewPoint2D(const Vector2& origin, double minDistance)
 {
-	std::uniform_real_distribution<double> random(0.0, 1.0);
+	std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
 
-	double radius = minDistance * (1.0 + random(mt));
-	double angle = 2.0 * M_PI * random(mt);
+	double radius = minDistance * (1.0 + randomDouble(generator));
+	double angle = 2.0 * M_PI * randomDouble(generator);
 
 	Vector2 point;
 	point.x = origin.x + radius * cos(angle);

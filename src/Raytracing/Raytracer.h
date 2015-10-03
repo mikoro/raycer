@@ -53,11 +53,11 @@ namespace Raycer
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light);
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light);
 
-		std::map<SamplerType, std::shared_ptr<Sampler>> samplers;
-		std::map<FilterType, std::shared_ptr<Filter>> filters;
-		std::map<ToneMapperType, std::shared_ptr<ToneMapper>> toneMappers;
+		std::map<SamplerType, std::unique_ptr<Sampler>> samplers;
+		std::map<FilterType, std::unique_ptr<Filter>> filters;
+		std::map<ToneMapperType, std::unique_ptr<ToneMapper>> toneMappers;
 
 		std::mt19937 generator;
-		std::uniform_int_distribution<int> randomDist;
+		std::uniform_int_distribution<uint> randomPermutation;
 	};
 }

@@ -90,9 +90,9 @@ Scene Scene::createTestScene17()
 
 	// INSTANCES //
 
-	std::mt19937 gen(230947887);
-	std::uniform_real_distribution<double> rotationDist(-10.0, 10.0);
-	std::uniform_real_distribution<double> translateDist(0.0, 0.5);
+	std::mt19937 generator(230947887);
+	std::uniform_real_distribution<double> randomRotation(-10.0, 10.0);
+	std::uniform_real_distribution<double> randomTranslation(0.0, 0.5);
 
 	int currentId = 1000000;
 	double xstep = 1.0;
@@ -104,8 +104,8 @@ Scene Scene::createTestScene17()
 			Instance instance;
 			instance.id = currentId;
 			instance.primitiveId = modelInfo.combinedGroupId;
-			instance.translate = Vector3(x + translateDist(gen), translateDist(gen), z + translateDist(gen));
-			instance.rotate = EulerAngle(0.0, rotationDist(gen), 30.0 + rotationDist(gen));
+			instance.translate = Vector3(x + randomTranslation(generator), randomTranslation(generator), z + randomTranslation(generator));
+			instance.rotate = EulerAngle(0.0, randomRotation(generator), 30.0 + randomRotation(generator));
 
 			scene.primitives.instances.push_back(instance);
 
