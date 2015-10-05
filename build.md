@@ -1,8 +1,8 @@
 ## Windows
 
-- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.58.0/).
+- Install boost headers and binaries (http://sourceforge.net/projects/boost/files/boost-binaries/1.59.0/).
 - Adjust solution include paths to point to the boost libraries.
-- Compile with MSVC 14.0 (2015) or ICC 15.0 using VS 2015.
+- Compile with MSVC 14.0 (2015) or ICC 16.0 using VS 2015.
 - Install graphics drivers that include OpenCL DLLs.
 
 ### Boost
@@ -10,8 +10,6 @@
 If using ICC, the boost framework needs to be compiled separately. Probably a good idea to do it with MSVC too.
 
 Download the sources and run the commands from a corresponding developer console (MSVC or ICC):
-
-(http://stackoverflow.com/questions/30760889/unknown-compiler-version-while-compiling-boost-with-msvc-14-0-vs-2015/30959156#30959156)
 
 	msvc:
     bootstrap.bat
@@ -44,15 +42,16 @@ The GLFW library maybe named as *glfw* or *glfw3*. If there is a linking error, 
 
 - Install Xcode + Command Line Tools
 - Install MacPorts
-- Install gcc49 (macports) and set active
 - Install boost (macports)
-- Install GLFW (macports)
-- Install Freetype (macports)
-- Optional: Compile freetype-gl (with gcc49)
+- Install glfw (macports)
+- Install freetype (macports)
+- Install libomp (macports)
+- Optional: Compile freetype-gl
+
+Can be compiled with the Apple/clang supplied with Xcode 7.0 (OS X 10.11).
 
 Compile and run:
 
-    export CXX=g++
     make -j4
     cd bin && ./raycer
 
@@ -65,7 +64,7 @@ See remarks of the linux build.
 
 ## Framework versions
 
-- boost 1.58.0
+- boost 1.59.0
 - Freetype 2.5.5
 - GLFW 3.1.1
 - freetype-gl (github f629c1d02101c1fa757f8b8d7fe91b4d1cf90cc0)
