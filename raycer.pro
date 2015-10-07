@@ -2,22 +2,27 @@ TARGET = raycer
 TEMPLATE = app
 DESTDIR = bin
 OBJECTS_DIR = build
-CONFIG += c++11 warn_off debug
+CONFIG += c++11
 QMAKE_LIBDIR += platform/linux/lib
+QMAKE_CXXFLAGS += -fopenmp -Wno-unknown-pragmas -Wno-deprecated-declarations
 LIBS += -lstdc++ -ldl -lm -lpthread -lglfw -lGL -lOpenCL -lfreetype-gl -lfreetype -lboost_system -lboost_filesystem -lXrandr -lXi -lXcursor -lXinerama -fopenmp
 QMAKE_POST_LINK += platform/linux/post-build.sh
 
 INCLUDEPATH += include \
-			   src
+               src
 
 HEADERS += src/App.h \
+           src/Common.h \
+           src/stdafx.h \
            src/Math/AxisAngle.h \
            src/Math/Color.h \
            src/Math/EulerAngle.h \
            src/Math/MathUtils.h \
            src/Math/Matrix4x4.h \
            src/Math/MovingAverage.h \
+           src/Math/Polynomial.h \
            src/Math/Quaternion.h \
+           src/Math/Solver.h \
            src/Math/Vector2.h \
            src/Math/Vector3.h \
            src/OpenCL/CLManager.h \
@@ -46,23 +51,23 @@ HEADERS += src/App.h \
            src/Utils/GLHelper.h \
            src/Utils/IniReader.h \
            src/Utils/Log.h \
-           src/Utils/ObjReader.h \
+           src/Utils/ModelLoader.h \
            src/Utils/PerlinNoise.h \
-           src/Utils/PlyReader.h \
            src/Utils/PoissonDisc.h \
-           src/Utils/Serialization.h \
            src/Utils/Settings.h \
            src/Utils/StringUtils.h \
            src/Utils/ValueNoise.h \
+           src/Raytracing/Primitives/BlinnBlob.h \
            src/Raytracing/Primitives/Box.h \
-           src/Raytracing/Primitives/BVH.h \
+           src/Raytracing/Primitives/CSG.h \
+           src/Raytracing/Primitives/Cylinder.h \
            src/Raytracing/Primitives/FlatBVH.h \
            src/Raytracing/Primitives/Instance.h \
-           src/Raytracing/Primitives/Mesh.h \
            src/Raytracing/Primitives/Plane.h \
            src/Raytracing/Primitives/Primitive.h \
-           src/Raytracing/Primitives/PrimitiveList.h \
+           src/Raytracing/Primitives/PrimitiveGroup.h \
            src/Raytracing/Primitives/Sphere.h \
+           src/Raytracing/Primitives/Torus.h \
            src/Raytracing/Primitives/Triangle.h \
            src/Raytracing/Textures/AtmosphereTexture.h \
            src/Raytracing/Textures/CellNoiseTexture.h \
@@ -92,9 +97,11 @@ HEADERS += src/App.h \
            src/Rendering/ToneMappers/ReinhardToneMapper.h \
            src/Rendering/ToneMappers/ToneMapper.h \
            src/Runners/WindowRunnerStates/DefaultState.h \
-           src/Runners/WindowRunnerStates/WindowRunnerState.h \
-           
+           src/Runners/WindowRunnerStates/WindowRunnerState.h
+
 SOURCES += src/App.cpp \
+           src/gl3w.cpp \
+           src/stdafx.cpp \
            src/Math/AxisAngle.cpp \
            src/Math/Color.cpp \
            src/Math/EulerAngle.cpp \
@@ -102,6 +109,7 @@ SOURCES += src/App.cpp \
            src/Math/Matrix4x4.cpp \
            src/Math/MovingAverage.cpp \
            src/Math/Quaternion.cpp \
+           src/Math/Solver.cpp \
            src/Math/Vector2.cpp \
            src/Math/Vector3.cpp \
            src/OpenCL/CLManager.cpp \
@@ -125,9 +133,10 @@ SOURCES += src/App.cpp \
            src/Tests/ImageTest.cpp \
            src/Tests/MathUtilsTest.cpp \
            src/Tests/Matrix4x4Test.cpp \
-           src/Tests/ObjReaderTest.cpp \
-           src/Tests/PlyReaderTest.cpp \
+           src/Tests/ModelLoaderTest.cpp \
+           src/Tests/PolynomialTest.cpp \
            src/Tests/SamplerTest.cpp \
+           src/Tests/SolverTest.cpp \
            src/Tests/TestScenesTest.cpp \
            src/Tests/Vector3Test.cpp \
            src/TestScenes/TestScene1.cpp \
@@ -138,6 +147,9 @@ SOURCES += src/App.cpp \
            src/TestScenes/TestScene14.cpp \
            src/TestScenes/TestScene15.cpp \
            src/TestScenes/TestScene16.cpp \
+           src/TestScenes/TestScene17.cpp \
+           src/TestScenes/TestScene18.cpp \
+           src/TestScenes/TestScene19.cpp \
            src/TestScenes/TestScene2.cpp \
            src/TestScenes/TestScene3.cpp \
            src/TestScenes/TestScene4.cpp \
@@ -149,25 +161,26 @@ SOURCES += src/App.cpp \
            src/Utils/CellNoise.cpp \
            src/Utils/ColorGradient.cpp \
            src/Utils/FpsCounter.cpp \
-           src/Utils/gl3w.cpp \
            src/Utils/GLHelper.cpp \
            src/Utils/IniReader.cpp \
            src/Utils/Log.cpp \
-           src/Utils/ObjReader.cpp \
+           src/Utils/ObjModelLoader.cpp \
            src/Utils/PerlinNoise.cpp \
-           src/Utils/PlyReader.cpp \
+           src/Utils/PlyModelLoader.cpp \
            src/Utils/PoissonDisc.cpp \
            src/Utils/Settings.cpp \
            src/Utils/StringUtils.cpp \
            src/Utils/ValueNoise.cpp \
+           src/Raytracing/Primitives/BlinnBlob.cpp \
            src/Raytracing/Primitives/Box.cpp \
-           src/Raytracing/Primitives/BVH.cpp \
+           src/Raytracing/Primitives/CSG.cpp \
+           src/Raytracing/Primitives/Cylinder.cpp \
            src/Raytracing/Primitives/FlatBVH.cpp \
            src/Raytracing/Primitives/Instance.cpp \
-           src/Raytracing/Primitives/Mesh.cpp \
            src/Raytracing/Primitives/Plane.cpp \
-           src/Raytracing/Primitives/PrimitiveList.cpp \
+           src/Raytracing/Primitives/PrimitiveGroup.cpp \
            src/Raytracing/Primitives/Sphere.cpp \
+           src/Raytracing/Primitives/Torus.cpp \
            src/Raytracing/Primitives/Triangle.cpp \
            src/Raytracing/Textures/AtmosphereTexture.cpp \
            src/Raytracing/Textures/CellNoiseTexture.cpp \

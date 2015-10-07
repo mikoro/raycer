@@ -9,6 +9,7 @@
 *.log
 *.settings
 *.suppress
+*.gch
 .vs
 My*
 Thumbs.db
