@@ -1,6 +1,8 @@
 /bin
 /build
 /data/images
+/platform/windows/include/boost
+/platform/windows/lib/libboost*
 /ipch
 *.sdf
 *.opensdf
