@@ -369,14 +369,14 @@
     <ClCompile Include="src\Raytracing\Tracers\PathTracer.cpp">
       <Filter>Raytracing\Tracers</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Tracers\WhittedTracer.cpp">
-      <Filter>Raytracing\Tracers</Filter>
-    </ClCompile>
     <ClCompile Include="src\Raytracing\Tracers\Tracer.cpp">
       <Filter>Raytracing\Tracers</Filter>
     </ClCompile>
     <ClCompile Include="src\OpenCL\CLTracer.cpp">
       <Filter>OpenCL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Tracers\WhittedRaytracer.cpp">
+      <Filter>Raytracing\Tracers</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -629,9 +629,6 @@
     <ClInclude Include="src\Raytracing\Tracers\PathTracer.h">
       <Filter>Raytracing\Tracers</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Tracers\WhittedTracer.h">
-      <Filter>Raytracing\Tracers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Tracers\Tracer.h">
       <Filter>Raytracing\Tracers</Filter>
     </ClInclude>
@@ -640,6 +637,9 @@
     </ClInclude>
     <ClInclude Include="src\OpenCL\CLTracer.h">
       <Filter>OpenCL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Tracers\WhittedRaytracer.h">
+      <Filter>Raytracing\Tracers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "Raytracing/Tracers/WhittedTracer.h"
+#include "Raytracing/Tracers/WhittedRaytracer.h"
 #include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
@@ -33,7 +33,7 @@
 
 using namespace Raycer;
 
-WhittedTracer::WhittedTracer()
+WhittedRaytracer::WhittedRaytracer()
 {
 	std::random_device rd;
 	generator.seed(rd());
@@ -54,7 +54,7 @@ WhittedTracer::WhittedTracer()
 	toneMappers[ToneMapperType::REINHARD] = std::unique_ptr<ReinhardToneMapper>(new ReinhardToneMapper());
 }
 
-void WhittedTracer::run(TracerState& state, std::atomic<bool>& interrupted)
+void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 {
 	Image& image = *state.image;
 	Scene& scene = *state.scene;
@@ -88,7 +88,7 @@ void WhittedTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	}
 }
 
-Color WhittedTracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
+Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (scene.general.multiSamples == 0)
 		return generateTimeSamples(scene, pixelCoordinate, interrupted);
@@ -115,7 +115,7 @@ Color WhittedTracer::generateMultiSamples(const Scene& scene, const Vector2& pix
 	return sampledPixelColor / filterWeightSum;
 }
 
-Color WhittedTracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
+Color WhittedRaytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
 	if (scene.general.timeSamples == 0)
 		return generateCameraSamples(scene, pixelCoordinate, 0.0, interrupted);
@@ -130,7 +130,7 @@ Color WhittedTracer::generateTimeSamples(const Scene& scene, const Vector2& pixe
 	return sampledPixelColor / double(n);
 }
 
-Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
+Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
 {
 	Ray ray;
 	bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, time);
@@ -141,7 +141,7 @@ Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pi
 	Intersection intersection;
 
 	if (scene.general.cameraSamples == 0)
-		return raytrace(scene, ray, intersection, 0, interrupted);
+		return traceRay(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
 	uint permutation = randomPermutation(generator);
@@ -180,14 +180,14 @@ Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pi
 			sampleRay.time = time;
 			sampleRay.update();
 
-			sampledPixelColor += raytrace(scene, sampleRay, sampleIntersection, 0, interrupted);
+			sampledPixelColor += traceRay(scene, sampleRay, sampleIntersection, 0, interrupted);
 		}
 	}
 
 	return sampledPixelColor / (double(n) * n);
 }
 
-Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted)
+Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted)
 {
 	Color finalColor = scene.general.backgroundColor;
 
@@ -296,7 +296,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 		reflectedRay.direction = R;
 		reflectedRay.update();
 
-		reflectedColor = raytrace(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * totalReflectance;
+		reflectedColor = traceRay(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * totalReflectance;
 
 		// only attenuate if ray has traveled inside a primitive
 		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
@@ -327,7 +327,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 			refractedRay.direction = T;
 			refractedRay.update();
 
-			transmittedColor = raytrace(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * totalTransmittance;
+			transmittedColor = traceRay(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * totalTransmittance;
 
 			// only attenuate if ray has traveled inside a primitive
 			if (isOutside && refractedIntersection.wasFound && material->enableAttenuation)
@@ -352,7 +352,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 	return finalColor;
 }
 
-Color WhittedTracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount)
+Color WhittedRaytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount)
 {
 	Color lightColor;
 	Vector3 directionToCamera = -ray.direction;
@@ -421,7 +421,7 @@ Color WhittedTracer::calculateLightColor(const Scene& scene, const Ray& ray, con
 	return lightColor;
 }
 
-Color WhittedTracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess)
+Color WhittedRaytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess)
 {
 	Color phongColor;
 
@@ -444,7 +444,7 @@ Color WhittedTracer::calculatePhongShadingColor(const Vector3& normal, const Vec
 	return phongColor;
 }
 
-Color WhittedTracer::calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor)
+Color WhittedRaytracer::calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor)
 {
 	double t1 = intersection.distance / scene.simpleFog.distance;
 	t1 = std::max(0.0, std::min(t1, 1.0));
@@ -462,7 +462,7 @@ Color WhittedTracer::calculateSimpleFogColor(const Scene& scene, const Intersect
 	return Color::lerp(pixelColor, scene.simpleFog.color, t1);
 }
 
-double WhittedTracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection)
+double WhittedRaytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection)
 {
 	double ambientOcclusion = 0.0;
 	uint permutation = randomPermutation(generator);
@@ -502,7 +502,7 @@ double WhittedTracer::calculateAmbientOcclusionAmount(const Scene& scene, const 
 	return 1.0 - (ambientOcclusion / (double(n) * n));
 }
 
-double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
+double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
 {
 	Vector3 directionToLight = -light.direction;
 
@@ -529,7 +529,7 @@ double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, 
 	return 0.0;
 }
 
-double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light)
+double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light)
 {
 	Vector3 directionToLight = (light.position - intersection.position).normalized();
 
