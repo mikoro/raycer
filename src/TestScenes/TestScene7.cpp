@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@ Scene Scene::createTestScene7()
 {
 	Scene scene;
 
-	scene.raytracer.backgroundColor = Color(0.8, 0.8, 0.8);
-	scene.raytracer.maxRayIterations = 8;
-	scene.raytracer.multiSamples = 0;
+	scene.general.backgroundColor = Color(0.8, 0.8, 0.8);
+	scene.general.maxIterations = 8;
+	scene.general.multiSamples = 0;
 
 	// CAMERA //
 

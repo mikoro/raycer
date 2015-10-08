@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -12,8 +12,8 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamples = 0;
-	scene.raytracer.cameraSamples = 3;
+	scene.general.multiSamples = 0;
+	scene.general.cameraSamples = 3;
 
 	// CAMERA //
 

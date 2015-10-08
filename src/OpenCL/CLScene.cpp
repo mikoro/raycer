@@ -75,13 +75,13 @@ void CLScene::readSceneFull(const Scene& scene)
 
 	readSceneCamera(scene);
 
-	readColor(raytracer.backgroundColor, scene.raytracer.backgroundColor);
-	readColor(raytracer.offLensColor, scene.raytracer.offLensColor);
-	raytracer.rayStartOffset = cl_float(scene.raytracer.rayStartOffset);
-	raytracer.maxRayIterations = cl_int(scene.raytracer.maxRayIterations);
-	raytracer.multiSamples = cl_int(scene.raytracer.multiSamples);
-	raytracer.timeSamples = cl_int(scene.raytracer.timeSamples);
-	raytracer.cameraSamples = cl_int(scene.raytracer.cameraSamples);
+	readColor(raytracer.backgroundColor, scene.general.backgroundColor);
+	readColor(raytracer.offLensColor, scene.general.offLensColor);
+	raytracer.rayStartOffset = cl_float(scene.general.rayStartOffset);
+	raytracer.maxRayIterations = cl_int(scene.general.maxIterations);
+	raytracer.multiSamples = cl_int(scene.general.multiSamples);
+	raytracer.timeSamples = cl_int(scene.general.timeSamples);
+	raytracer.cameraSamples = cl_int(scene.general.cameraSamples);
 
 	toneMapper.type = cl_int(scene.toneMapper.type);
 	toneMapper.applyGamma = cl_int(scene.toneMapper.applyGamma);

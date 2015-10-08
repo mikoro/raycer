@@ -89,7 +89,7 @@ void ConsoleRunner::run(TracerState& state)
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			Tracer::getTracer(state.scene->raytracer.tracerType)->run(state, interrupted);
+			Tracer::getTracer(state.scene->general.tracerType)->run(state, interrupted);
 		else
 			clTracer.run(state, interrupted);
 

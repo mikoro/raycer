@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -12,9 +12,9 @@ Scene Scene::createTestScene2()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamplerType = SamplerType::CMJ;
-	scene.raytracer.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.raytracer.multiSamples = 0;
+	scene.general.multiSamplerType = SamplerType::CMJ;
+	scene.general.multiSamplerFilterType = FilterType::MITCHELL;
+	scene.general.multiSamples = 0;
 
 	// CAMERA //
 

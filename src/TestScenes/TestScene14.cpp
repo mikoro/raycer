@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -12,8 +12,8 @@ Scene Scene::createTestScene14()
 {
 	Scene scene;
 
-	scene.raytracer.maxRayIterations = 8;
-	scene.raytracer.multiSamples = 0;
+	scene.general.maxIterations = 8;
+	scene.general.multiSamples = 0;
 
 	scene.toneMapper.type = ToneMapperType::REINHARD;
 

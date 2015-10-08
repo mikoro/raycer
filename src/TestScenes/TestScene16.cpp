@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -12,8 +12,8 @@ Scene Scene::createTestScene16()
 {
 	Scene scene;
 
-	scene.raytracer.multiSamples = 0;
-	scene.raytracer.timeSamples = 3;
+	scene.general.multiSamples = 0;
+	scene.general.timeSamples = 3;
 
 	scene.simpleFog.enabled = false;
 	scene.simpleFog.distance = 20.0;

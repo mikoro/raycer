@@ -90,14 +90,14 @@ void WhittedTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 
 Color WhittedTracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	if (scene.raytracer.multiSamples == 0)
+	if (scene.general.multiSamples == 0)
 		return generateTimeSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
 	uint permutation = randomPermutation(generator);
-	uint n = scene.raytracer.multiSamples;
-	Sampler* sampler = samplers[scene.raytracer.multiSamplerType].get();
-	Filter* filter = filters[scene.raytracer.multiSamplerFilterType].get();
+	uint n = scene.general.multiSamples;
+	Sampler* sampler = samplers[scene.general.multiSamplerType].get();
+	Filter* filter = filters[scene.general.multiSamplerFilterType].get();
 	double filterWeightSum = 0.0;
 	double filterWidth = filter->getWidth();
 
@@ -117,12 +117,12 @@ Color WhittedTracer::generateMultiSamples(const Scene& scene, const Vector2& pix
 
 Color WhittedTracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
 {
-	if (scene.raytracer.timeSamples == 0)
+	if (scene.general.timeSamples == 0)
 		return generateCameraSamples(scene, pixelCoordinate, 0.0, interrupted);
 
 	Color sampledPixelColor;
-	uint n = scene.raytracer.timeSamples;
-	Sampler* sampler = samplers[scene.raytracer.timeSamplerType].get();
+	uint n = scene.general.timeSamples;
+	Sampler* sampler = samplers[scene.general.timeSamplerType].get();
 
 	for (uint i = 0; i < n; ++i)
 		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample(i, n), interrupted);
@@ -135,20 +135,20 @@ Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pi
 	Ray ray;
 	bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, time);
 
-	if (!isValidRay && scene.raytracer.cameraSamples == 0)
-		return scene.raytracer.offLensColor;
+	if (!isValidRay && scene.general.cameraSamples == 0)
+		return scene.general.offLensColor;
 
 	Intersection intersection;
 
-	if (scene.raytracer.cameraSamples == 0)
+	if (scene.general.cameraSamples == 0)
 		return raytrace(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
 	uint permutation = randomPermutation(generator);
-	uint n = scene.raytracer.cameraSamples;
+	uint n = scene.general.cameraSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalDistance = scene.camera.focalDistance;
-	Sampler* sampler = samplers[scene.raytracer.cameraSamplerType].get();
+	Sampler* sampler = samplers[scene.general.cameraSamplerType].get();
 
 	CameraState cameraState = scene.camera.getCameraState(time);
 	Vector3 cameraPosition = cameraState.position;
@@ -165,7 +165,7 @@ Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pi
 
 			if (!isValidRay)
 			{
-				sampledPixelColor += scene.raytracer.offLensColor;
+				sampledPixelColor += scene.general.offLensColor;
 				continue;
 			}
 
@@ -189,7 +189,7 @@ Color WhittedTracer::generateCameraSamples(const Scene& scene, const Vector2& pi
 
 Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted)
 {
-	Color finalColor = scene.raytracer.backgroundColor;
+	Color finalColor = scene.general.backgroundColor;
 
 	if (interrupted)
 		return finalColor;
@@ -205,9 +205,9 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 	if (!intersection.wasFound)
 		return finalColor;
 
-	if (scene.raytracer.visualizeDepth)
+	if (scene.general.visualizeDepth)
 	{
-		double depth = 1.0 - std::min(intersection.distance, scene.raytracer.visualizeDepthMaxDistance) / scene.raytracer.visualizeDepthMaxDistance;
+		double depth = 1.0 - std::min(intersection.distance, scene.general.visualizeDepthMaxDistance) / scene.general.visualizeDepthMaxDistance;
 		depth = pow(depth, 2.0);
 		return Color(depth, depth, depth);
 	}
@@ -284,7 +284,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 	Color reflectedColor;
 
 	// calculate and trace reflected ray
-	if (totalReflectance > 0.0 && iteration < scene.raytracer.maxRayIterations)
+	if (totalReflectance > 0.0 && iteration < scene.general.maxIterations)
 	{
 		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
 		R.normalize();
@@ -292,7 +292,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 		Ray reflectedRay;
 		Intersection reflectedIntersection;
 
-		reflectedRay.origin = intersection.position + R * scene.raytracer.rayStartOffset;
+		reflectedRay.origin = intersection.position + R * scene.general.rayStartOffset;
 		reflectedRay.direction = R;
 		reflectedRay.update();
 
@@ -309,7 +309,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 	Color transmittedColor;
 
 	// calculate and trace refracted ray
-	if (totalTransmittance > 0.0 && iteration < scene.raytracer.maxRayIterations)
+	if (totalTransmittance > 0.0 && iteration < scene.general.maxIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
@@ -323,7 +323,7 @@ Color WhittedTracer::raytrace(const Scene& scene, const Ray& ray, Intersection& 
 			Ray refractedRay;
 			Intersection refractedIntersection;
 
-			refractedRay.origin = intersection.position + T * scene.raytracer.rayStartOffset;
+			refractedRay.origin = intersection.position + T * scene.general.rayStartOffset;
 			refractedRay.direction = T;
 			refractedRay.update();
 
@@ -480,7 +480,7 @@ double WhittedTracer::calculateAmbientOcclusionAmount(const Scene& scene, const 
 			Intersection sampleIntersection;
 			std::vector<Intersection> sampleIntersections;
 
-			sampleRay.origin = intersection.position + sampleDirection * scene.raytracer.rayStartOffset;
+			sampleRay.origin = intersection.position + sampleDirection * scene.general.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
 			sampleRay.maxDistance = scene.lights.ambientLight.maxOcclusionDistance;
@@ -510,7 +510,7 @@ double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, 
 	Intersection shadowIntersection;
 	std::vector<Intersection> shadowIntersections;
 
-	shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
+	shadowRay.origin = intersection.position + directionToLight * scene.general.rayStartOffset;
 	shadowRay.direction = directionToLight;
 	shadowRay.isShadowRay = true;
 	shadowRay.fastOcclusion = true;
@@ -539,7 +539,7 @@ double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, 
 		Intersection shadowIntersection;
 		std::vector<Intersection> shadowIntersections;
 
-		shadowRay.origin = intersection.position + directionToLight * scene.raytracer.rayStartOffset;
+		shadowRay.origin = intersection.position + directionToLight * scene.general.rayStartOffset;
 		shadowRay.direction = directionToLight;
 		shadowRay.isShadowRay = true;
 		shadowRay.fastOcclusion = true;
@@ -578,7 +578,7 @@ double WhittedTracer::calculateShadowAmount(const Scene& scene, const Ray& ray, 
 			Intersection shadowIntersection;
 			std::vector<Intersection> shadowIntersections;
 
-			shadowRay.origin = intersection.position + newDirectionToLight * scene.raytracer.rayStartOffset;
+			shadowRay.origin = intersection.position + newDirectionToLight * scene.general.rayStartOffset;
 			shadowRay.direction = newDirectionToLight;
 			shadowRay.isShadowRay = true;
 			shadowRay.fastOcclusion = true;

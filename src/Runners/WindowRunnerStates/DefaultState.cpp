@@ -31,7 +31,7 @@ void DefaultState::initialize()
 
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
-	tracer = Tracer::getTracer(scene.raytracer.tracerType);
+	tracer = Tracer::getTracer(scene.general.tracerType);
 
 	if (settings.openCL.enabled)
 		clTracer.initialize(scene);
@@ -89,7 +89,7 @@ void DefaultState::update(double timeStep)
 		}
 
 		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
-		tracer = Tracer::getTracer(scene.raytracer.tracerType);
+		tracer = Tracer::getTracer(scene.general.tracerType);
 		// TODO: OpenCL raytracer probably needs to be reset
 	}
 
@@ -97,7 +97,7 @@ void DefaultState::update(double timeStep)
 		scene.camera.reset();
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
-		scene.raytracer.visualizeDepth = !scene.raytracer.visualizeDepth;
+		scene.general.visualizeDepth = !scene.general.visualizeDepth;
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
 	{

@@ -84,44 +84,45 @@ namespace Raycer
 
 		static const uint TEST_SCENE_COUNT = 19;
 
-		Camera camera;
-
-		struct Raytracer
+		struct General
 		{
-			uint maxRayIterations = 3;
-			double rayStartOffset = 0.00001;
-			Color backgroundColor = Color(0.0, 0.0, 0.0);
-			Color offLensColor = Color(0.0, 0.0, 0.0);
-			uint multiSamples = 0;
-			uint timeSamples = 0;
-			uint cameraSamples = 0;
 			TracerType tracerType = TracerType::WHITTED;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 			SamplerType cameraSamplerType = SamplerType::CMJ;
+			uint maxIterations = 3;
+			double rayStartOffset = 0.00001;
+			uint multiSamples = 0;
+			uint timeSamples = 0;
+			uint cameraSamples = 0;
+			Color backgroundColor = Color(0.0, 0.0, 0.0);
+			Color offLensColor = Color(0.0, 0.0, 0.0);
 			bool visualizeDepth = false;
 			double visualizeDepthMaxDistance = 25.0;
 
 			template <class Archive>
 			void serialize(Archive& ar)
 			{
-				ar(CEREAL_NVP(maxRayIterations),
-					CEREAL_NVP(rayStartOffset),
-					CEREAL_NVP(backgroundColor),
-					CEREAL_NVP(offLensColor),
-					CEREAL_NVP(multiSamples),
-					CEREAL_NVP(timeSamples),
-					CEREAL_NVP(cameraSamples),
+				ar(CEREAL_NVP(tracerType),
 					CEREAL_NVP(multiSamplerType),
 					CEREAL_NVP(multiSamplerFilterType),
 					CEREAL_NVP(timeSamplerType),
 					CEREAL_NVP(cameraSamplerType),
+					CEREAL_NVP(maxIterations),
+					CEREAL_NVP(rayStartOffset),
+					CEREAL_NVP(multiSamples),
+					CEREAL_NVP(timeSamples),
+					CEREAL_NVP(cameraSamples),
+					CEREAL_NVP(backgroundColor),
+					CEREAL_NVP(offLensColor),
 					CEREAL_NVP(visualizeDepth),
 					CEREAL_NVP(visualizeDepthMaxDistance));
 			}
 
-		} raytracer;
+		} general;
+
+		Camera camera;
 
 		struct ToneMapper
 		{
@@ -302,8 +303,8 @@ namespace Raycer
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
-			ar(CEREAL_NVP(camera),
-				CEREAL_NVP(raytracer),
+			ar(CEREAL_NVP(general),
+				CEREAL_NVP(camera),
 				CEREAL_NVP(toneMapper),
 				CEREAL_NVP(simpleFog),
 				CEREAL_NVP(rootBVH),
