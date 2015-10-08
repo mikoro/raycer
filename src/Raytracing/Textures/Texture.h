@@ -17,9 +17,7 @@ namespace Raycer
 	{
 	public:
 
-		virtual ~Texture()
-		{
-		}
+		virtual ~Texture() {}
 
 		virtual void initialize() = 0;
 

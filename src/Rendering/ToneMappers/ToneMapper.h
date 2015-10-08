@@ -14,9 +14,7 @@ namespace Raycer
 	{
 	public:
 
-		virtual ~ToneMapper()
-		{
-		}
+		virtual ~ToneMapper() {}
 
 		virtual void apply(const Scene& scene, Image& image) = 0;
 	};

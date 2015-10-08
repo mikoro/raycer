@@ -49,6 +49,9 @@
     <Filter Include="Rendering\ToneMappers">
       <UniqueIdentifier>{9d2d8593-f27e-452b-a1da-c9524e81779c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Raytracing\Tracers">
+      <UniqueIdentifier>{f4f67aec-4474-4a20-b823-5aa316780efb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -98,9 +101,6 @@
       <Filter>Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Raytracing\Camera.cpp">
-      <Filter>Raytracing</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Raytracing\Raytracer.cpp">
       <Filter>Raytracing</Filter>
     </ClCompile>
     <ClCompile Include="src\Raytracing\Scene.cpp">
@@ -209,9 +209,6 @@
       <Filter>Raytracing</Filter>
     </ClCompile>
     <ClCompile Include="src\OpenCL\CLManager.cpp">
-      <Filter>OpenCL</Filter>
-    </ClCompile>
-    <ClCompile Include="src\OpenCL\CLRaytracer.cpp">
       <Filter>OpenCL</Filter>
     </ClCompile>
     <ClCompile Include="src\OpenCL\CLScene.cpp">
@@ -369,6 +366,18 @@
       <Filter>Tests</Filter>
     </ClCompile>
     <ClCompile Include="src\gl3w.cpp" />
+    <ClCompile Include="src\Raytracing\Tracers\PathTracer.cpp">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Tracers\WhittedTracer.cpp">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Raytracing\Tracers\Tracer.cpp">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\OpenCL\CLTracer.cpp">
+      <Filter>OpenCL</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -429,9 +438,6 @@
     <ClInclude Include="src\Raytracing\Ray.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Raytracer.h">
-      <Filter>Raytracing</Filter>
-    </ClInclude>
     <ClInclude Include="src\Raytracing\Scene.h">
       <Filter>Raytracing</Filter>
     </ClInclude>
@@ -443,9 +449,6 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Image.h">
       <Filter>Rendering</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Raytracing\RaytracerState.h">
-      <Filter>Raytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\Utils\PoissonDisc.h">
       <Filter>Utils</Filter>
@@ -520,9 +523,6 @@
       <Filter>Raytracing</Filter>
     </ClInclude>
     <ClInclude Include="src\OpenCL\CLManager.h">
-      <Filter>OpenCL</Filter>
-    </ClInclude>
-    <ClInclude Include="src\OpenCL\CLRaytracer.h">
       <Filter>OpenCL</Filter>
     </ClInclude>
     <ClInclude Include="src\OpenCL\CLScene.h">
@@ -626,6 +626,21 @@
     </ClInclude>
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\Raytracing\Tracers\PathTracer.h">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Tracers\WhittedTracer.h">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Tracers\Tracer.h">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Tracers\TracerState.h">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\OpenCL\CLTracer.h">
+      <Filter>OpenCL</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

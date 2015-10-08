@@ -175,7 +175,7 @@
     <ClCompile Include="src\Math\Vector2.cpp" />
     <ClCompile Include="src\Math\Vector3.cpp" />
     <ClCompile Include="src\OpenCL\CLManager.cpp" />
-    <ClCompile Include="src\OpenCL\CLRaytracer.cpp" />
+    <ClCompile Include="src\OpenCL\CLTracer.cpp" />
     <ClCompile Include="src\OpenCL\CLScene.cpp" />
     <ClCompile Include="src\Raytracing\AABB.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
@@ -192,7 +192,6 @@
     <ClCompile Include="src\Raytracing\Primitives\Torus.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
     <ClCompile Include="src\Raytracing\Ray.cpp" />
-    <ClCompile Include="src\Raytracing\Raytracer.cpp" />
     <ClCompile Include="src\Raytracing\Scene.cpp" />
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
@@ -205,6 +204,9 @@
     <ClCompile Include="src\Raytracing\Textures\ValueNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\VoronoiTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\WoodTexture.cpp" />
+    <ClCompile Include="src\Raytracing\Tracers\PathTracer.cpp" />
+    <ClCompile Include="src\Raytracing\Tracers\Tracer.cpp" />
+    <ClCompile Include="src\Raytracing\Tracers\WhittedTracer.cpp" />
     <ClCompile Include="src\Rendering\Filters\BellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\MitchellFilter.cpp" />
@@ -290,7 +292,7 @@
     <ClInclude Include="src\Math\Vector2.h" />
     <ClInclude Include="src\Math\Vector3.h" />
     <ClInclude Include="src\OpenCL\CLManager.h" />
-    <ClInclude Include="src\OpenCL\CLRaytracer.h" />
+    <ClInclude Include="src\OpenCL\CLTracer.h" />
     <ClInclude Include="src\OpenCL\CLScene.h" />
     <ClInclude Include="src\OpenCL\CLStructs.h" />
     <ClInclude Include="src\Raytracing\AABB.h" />
@@ -312,8 +314,6 @@
     <ClInclude Include="src\Raytracing\Primitives\Torus.h" />
     <ClInclude Include="src\Raytracing\Primitives\Triangle.h" />
     <ClInclude Include="src\Raytracing\Ray.h" />
-    <ClInclude Include="src\Raytracing\Raytracer.h" />
-    <ClInclude Include="src\Raytracing\RaytracerState.h" />
     <ClInclude Include="src\Raytracing\Scene.h" />
     <ClInclude Include="src\Raytracing\Textures\AtmosphereTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\CellNoiseTexture.h" />
@@ -327,6 +327,10 @@
     <ClInclude Include="src\Raytracing\Textures\ValueNoiseTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\VoronoiTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\WoodTexture.h" />
+    <ClInclude Include="src\Raytracing\Tracers\PathTracer.h" />
+    <ClInclude Include="src\Raytracing\Tracers\TracerState.h" />
+    <ClInclude Include="src\Raytracing\Tracers\Tracer.h" />
+    <ClInclude Include="src\Raytracing\Tracers\WhittedTracer.h" />
     <ClInclude Include="src\Rendering\Filters\BellFilter.h" />
     <ClInclude Include="src\Rendering\Filters\BoxFilter.h" />
     <ClInclude Include="src\Rendering\Filters\MitchellFilter.h" />

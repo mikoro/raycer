@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -7,12 +7,11 @@
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
-#include "OpenCL/CLManager.h"
 #include "Runners/WindowRunner.h"
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
-#include "Raytracing/Raytracer.h"
-#include "OpenCL/CLRaytracer.h"
+#include "OpenCL/CLManager.h"
+#include "OpenCL/CLTracer.h"
 
 #ifdef RUN_UNIT_TESTS
 #define CATCH_CONFIG_RUNNER
@@ -217,12 +216,6 @@ Framebuffer& App::getFramebuffer()
 	return framebuffer;
 }
 
-CLManager& App::getCLManager()
-{
-	static CLManager clManager;
-	return clManager;
-}
-
 WindowRunner& App::getWindowRunner()
 {
 	static WindowRunner windowRunner;
@@ -241,14 +234,14 @@ NetworkRunner& App::getNetworkRunner()
 	return networkRunner;
 }
 
-Raytracer& App::getRaytracer()
+CLManager& App::getCLManager()
 {
-	static Raytracer raytracer;
-	return raytracer;
+	static CLManager clManager;
+	return clManager;
 }
 
-CLRaytracer& App::getCLRaytracer()
+CLTracer& App::getCLTracer()
 {
-	static CLRaytracer clRaytracer;
-	return clRaytracer;
+	static CLTracer clTracer;
+	return clTracer;
 }

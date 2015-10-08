@@ -33,6 +33,7 @@
 #include "Raytracing/Primitives/CSG.h"
 #include "Raytracing/Primitives/BlinnBlob.h"
 #include "Raytracing/Primitives/PrimitiveGroup.h"
+#include "Raytracing/Tracers/Tracer.h"
 #include "Rendering/Samplers/Sampler.h"
 #include "Rendering/Filters/Filter.h"
 #include "Rendering/ToneMappers/ToneMapper.h"
@@ -94,6 +95,7 @@ namespace Raycer
 			uint multiSamples = 0;
 			uint timeSamples = 0;
 			uint cameraSamples = 0;
+			TracerType tracerType = TracerType::WHITTED;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;

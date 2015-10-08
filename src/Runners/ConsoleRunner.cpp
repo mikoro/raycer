@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -7,13 +7,13 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "OpenCL/CLManager.h"
 #include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
-#include "Raytracing/Raytracer.h"
-#include "Raytracing/RaytracerState.h"
+#include "Raytracing/Tracers/Tracer.h"
+#include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Camera.h"
-#include "OpenCL/CLRaytracer.h"
+#include "OpenCL/CLManager.h"
+#include "OpenCL/CLTracer.h"
 
 using namespace Raycer;
 using namespace std::chrono;
@@ -40,15 +40,13 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.update(scene, 0.0);
 
-	RaytracerState state;
+	Image image(settings.image.width, settings.image.height);
+
+	TracerState state;
 	state.image = &image;
 	state.scene = &scene;
-	state.sceneWidth = settings.image.width;
-	state.sceneHeight = settings.image.height;
 	state.pixelOffset = 0;
-	state.pixelCount = state.sceneWidth * state.sceneHeight;
-
-	image.resize(state.sceneWidth, state.sceneHeight);
+	state.pixelCount = image.getLength();
 
 	run(state);
 
@@ -65,12 +63,11 @@ int ConsoleRunner::run()
 	return 0;
 }
 
-void ConsoleRunner::run(RaytracerState& state)
+void ConsoleRunner::run(TracerState& state)
 {
 	Settings& settings = App::getSettings();
 	CLManager& clManager = App::getCLManager();
-	Raytracer& raytracer = App::getRaytracer();
-	CLRaytracer& clRaytracer = App::getCLRaytracer();
+	CLTracer& clTracer = App::getCLTracer();
 
 	interrupted = false;
 
@@ -82,8 +79,8 @@ void ConsoleRunner::run(RaytracerState& state)
 
 	if (settings.openCL.enabled)
 	{
-		clRaytracer.resizeImageBuffer(state.sceneWidth, state.sceneHeight);
-		clRaytracer.initialize(*state.scene);
+		clTracer.resizeImageBuffer(state.image->getWidth(), state.image->getHeight());
+		clTracer.initialize(*state.scene);
 	}
 
 	std::atomic<bool> finished;
@@ -92,14 +89,14 @@ void ConsoleRunner::run(RaytracerState& state)
 	auto renderFunction = [&]()
 	{
 		if (!settings.openCL.enabled)
-			raytracer.run(state, interrupted);
+			Tracer::getTracer(state.scene->raytracer.tracerType)->run(state, interrupted);
 		else
-			clRaytracer.run(state, interrupted);
+			clTracer.run(state, interrupted);
 
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.sceneWidth, state.sceneHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelOffset);
+	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.image->getWidth(), state.image->getHeight(), humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelOffset);
 
 	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderFunction);
@@ -141,7 +138,7 @@ void ConsoleRunner::run(RaytracerState& state)
 	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
-		image = clRaytracer.downloadImage();
+		*state.image = clTracer.downloadImage();
 }
 
 void ConsoleRunner::interrupt()

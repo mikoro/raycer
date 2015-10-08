@@ -15,9 +15,7 @@ namespace Raycer
 	{
 	public:
 
-		virtual ~Sampler()
-		{
-		}
+		virtual ~Sampler() {}
 
 		virtual double getSample(uint i, uint n, uint permutation = 0) = 0;
 		virtual Vector2 getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0) = 0;

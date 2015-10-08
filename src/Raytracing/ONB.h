@@ -9,6 +9,7 @@ namespace Raycer
 {
 	class Matrix4x4;
 
+	// orthonormal basis
 	class ONB
 	{
 	public:

@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -6,12 +6,11 @@
 #include "Runners/WindowRunnerStates/DefaultState.h"
 #include "App.h"
 #include "Utils/Log.h"
-#include "OpenCL/CLRaytracer.h"
+#include "OpenCL/CLTracer.h"
 #include "Math/Color.h"
 #include "Math/EulerAngle.h"
 #include "Math/Vector3.h"
 #include "Raytracing/Camera.h"
-#include "Raytracing/Raytracer.h"
 #include "Rendering/Framebuffer.h"
 #include "Rendering/Text.h"
 #include "Runners/WindowRunner.h"
@@ -23,7 +22,7 @@ void DefaultState::initialize()
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	CLRaytracer& clRaytracer = App::getCLRaytracer();
+	CLTracer& clTracer = App::getCLTracer();
 
 	if (settings.scene.enableTestScenes)
 		scene = Scene::createTestScene(settings.scene.testSceneNumber);
@@ -32,9 +31,10 @@ void DefaultState::initialize()
 
 	scene.initialize();
 	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+	tracer = Tracer::getTracer(scene.raytracer.tracerType);
 
 	if (settings.openCL.enabled)
-		clRaytracer.initialize(scene);
+		clTracer.initialize(scene);
 
 	currentTestSceneNumber = settings.scene.testSceneNumber;
 }
@@ -89,6 +89,8 @@ void DefaultState::update(double timeStep)
 		}
 
 		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+		tracer = Tracer::getTracer(scene.raytracer.tracerType);
+		// TODO: OpenCL raytracer probably needs to be reset
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_R))
@@ -135,23 +137,20 @@ void DefaultState::render(double timeStep, double interpolation)
 
 	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
-	Raytracer& raytracer = App::getRaytracer();
-	CLRaytracer& clRaytracer = App::getCLRaytracer();
+	CLTracer& clTracer = App::getCLTracer();
 	WindowRunner& runner = App::getWindowRunner();
 	Text& text = runner.getDefaultText();
 
 	state.image = &framebuffer.getImage();
 	state.scene = &scene;
-	state.sceneWidth = framebuffer.getWidth();
-	state.sceneHeight = framebuffer.getHeight();
 	state.pixelOffset = 0;
-	state.pixelCount = state.sceneWidth * state.sceneHeight;
+	state.pixelCount = framebuffer.getImage().getLength();
 	state.pixelsProcessed = 0;
 
 	if (!settings.openCL.enabled)
-		raytracer.run(state, interrupted);
+		tracer->run(state, interrupted);
 	else
-		clRaytracer.run(state, interrupted);
+		clTracer.run(state, interrupted);
 
 	if (settings.window.showInfoText)
 	{

@@ -250,6 +250,11 @@ size_t Image::getHeight() const
 	return height;
 }
 
+size_t Image::getLength() const
+{
+	return width * height;
+}
+
 Color Image::getPixel(size_t x, size_t y) const
 {
 	assert(x < width && y < height);

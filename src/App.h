@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #pragma once
@@ -8,12 +8,11 @@ namespace Raycer
 	class Log;
 	class Settings;
 	class Framebuffer;
-	class CLManager;
 	class WindowRunner;
 	class ConsoleRunner;
 	class NetworkRunner;
-	class Raytracer;
-	class CLRaytracer;
+	class CLManager;
+	class CLTracer;
 
 	class App
 	{
@@ -24,11 +23,10 @@ namespace Raycer
 		static Log& getLog();
 		static Settings& getSettings();
 		static Framebuffer& getFramebuffer();
-		static CLManager& getCLManager();
 		static WindowRunner& getWindowRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();
-		static Raytracer& getRaytracer();
-		static CLRaytracer& getCLRaytracer();
+		static CLManager& getCLManager();
+		static CLTracer& getCLTracer();
 	};
 }

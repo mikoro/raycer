@@ -45,6 +45,7 @@ namespace Raycer
 
 		size_t getWidth() const;
 		size_t getHeight() const;
+		size_t getLength() const;
 
 		Color getPixel(size_t x, size_t y) const;
 		Color getPixelNearest(double u, double v) const;

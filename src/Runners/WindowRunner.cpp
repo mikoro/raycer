@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -10,7 +10,7 @@
 #include "Rendering/Framebuffer.h"
 #include "Utils/GLHelper.h"
 #include "OpenCL/CLManager.h"
-#include "OpenCL/CLRaytracer.h"
+#include "OpenCL/CLTracer.h"
 #include "Rendering/Image.h"
 #include "Runners/WindowRunnerStates/WindowRunnerState.h"
 #include "Runners/WindowRunnerStates/DefaultState.h"
@@ -280,15 +280,15 @@ void WindowRunner::resizeFramebuffer(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
-	CLRaytracer& clRaytracer = App::getCLRaytracer();
+	CLTracer& clTracer = App::getCLTracer();
 
 	if (settings.openCL.enabled)
-		clRaytracer.releaseImageBuffer();
+		clTracer.releaseImageBuffer();
 
 	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		clRaytracer.resizeImageBuffer(width, height);
+		clTracer.resizeImageBuffer(width, height);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

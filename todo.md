@@ -8,3 +8,6 @@ lighting
 
 textures
  - EWA texture filtering
+
+misc
+ - CLRaytracer reset when changing scenes

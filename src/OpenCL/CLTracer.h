@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #pragma once
@@ -17,25 +17,25 @@
 namespace Raycer
 {
 	class Scene;
-	struct RaytracerState;
+	struct TracerState;
 
-	class CLRaytracer
+	class CLTracer
 	{
 	public:
 
-		CLRaytracer();
-		~CLRaytracer();
+		CLTracer();
+		~CLTracer();
 
 		void initialize(const Scene& scene);
 		void resizeImageBuffer(size_t width, size_t height);
 		void releaseImageBuffer();
-		void run(RaytracerState& state, std::atomic<bool>& interrupted);
+		void run(TracerState& state, std::atomic<bool>& interrupted);
 		Image downloadImage();
 
 	private:
 
-		CLRaytracer(const CLRaytracer& c);
-		CLRaytracer& operator=(const CLRaytracer& c);
+		CLTracer(const CLTracer& c);
+		CLTracer& operator=(const CLTracer& c);
 
 		void createBuffers();
 		void uploadFullData();

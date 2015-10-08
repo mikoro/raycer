@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -7,7 +7,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
-#include "Raytracing/RaytracerState.h"
+#include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Camera.h"
 #include "Runners/ConsoleRunner.h"
 #include "Math/Color.h"
@@ -333,13 +333,15 @@ void NetworkRunner::receiveJobs()
 
 			job.clientEndpoint = ip::tcp::endpoint(ip::address_v4::from_string(match[1]), static_cast<unsigned short>(port));
 
+			size_t imageWidth;
 			ss.clear();
 			ss.str(match[3]);
-			ss >> job.sceneWidth;
+			ss >> imageWidth;
 
+			size_t imageHeight;
 			ss.clear();
 			ss.str(match[4]);
-			ss >> job.sceneHeight;
+			ss >> imageHeight;
 
 			ss.clear();
 			ss.str(match[5]);
@@ -349,6 +351,7 @@ void NetworkRunner::receiveJobs()
 			ss.str(match[6]);
 			ss >> job.pixelCount;
 
+			job.image.resize(imageWidth, imageHeight);
 			job.scene = Scene::loadFromJsonString(bodyString);
 
 			jobQueueMutex.lock();
@@ -409,18 +412,15 @@ void NetworkRunner::handleJobs()
 			jobQueue.pop();
 			jobQueueMutex.unlock();
 
-			RaytracerState state;
+			TracerState state;
 			state.image = &job.image;
 			state.scene = &job.scene;
-			state.sceneWidth = job.sceneWidth;
-			state.sceneHeight = job.sceneHeight;
 			state.pixelOffset = job.pixelOffset;
 			state.pixelCount = job.pixelCount;
 
 			job.scene.initialize();
-			job.scene.camera.setImagePlaneSize(state.sceneWidth, state.sceneHeight);
+			job.scene.camera.setImagePlaneSize(state.image->getWidth(), state.image->getHeight());
 			job.scene.camera.update(job.scene, 0.0);
-			job.image.resize(state.pixelCount);
 
 			App::getConsoleRunner().run(state);
 
@@ -463,7 +463,7 @@ namespace
 	{
 		size_t pixelOffset = 0;
 		size_t pixelCount = 0;
-		std::vector<char> pixelData;
+		std::vector<unsigned char> pixelData;
 	};
 }
 

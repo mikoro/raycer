@@ -1,12 +1,12 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
 
-#include "OpenCL/CLRaytracer.h"
+#include "OpenCL/CLTracer.h"
 #include "OpenCL/CLManager.h"
 #include "OpenCL/CLStructs.h"
-#include "Raytracing/RaytracerState.h"
+#include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Scene.h"
 #include "App.h"
 #include "Utils/Log.h"
@@ -29,11 +29,11 @@ namespace
 	}
 }
 
-CLRaytracer::CLRaytracer()
+CLTracer::CLTracer()
 {
 }
 
-CLRaytracer::~CLRaytracer()
+CLTracer::~CLTracer()
 {
 	releaseMemObject(&statePtr);
 	releaseMemObject(&cameraPtr);
@@ -66,7 +66,7 @@ CLRaytracer::~CLRaytracer()
 	}
 }
 
-void CLRaytracer::initialize(const Scene& scene)
+void CLTracer::initialize(const Scene& scene)
 {
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
@@ -112,7 +112,7 @@ void CLRaytracer::initialize(const Scene& scene)
 	initialized = true;
 }
 
-void CLRaytracer::resizeImageBuffer(size_t width, size_t height)
+void CLTracer::resizeImageBuffer(size_t width, size_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -143,12 +143,12 @@ void CLRaytracer::resizeImageBuffer(size_t width, size_t height)
 		CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(outputImageArgumentIndex), sizeof(cl_mem), &outputImagePtr), "Could not set kernel argument (output image)");
 }
 
-void CLRaytracer::releaseImageBuffer()
+void CLTracer::releaseImageBuffer()
 {
 	releaseMemObject(&outputImagePtr);
 }
 
-void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
+void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 {
 	(void)interrupted;
 
@@ -181,7 +181,7 @@ void CLRaytracer::run(RaytracerState& state, std::atomic<bool>& interrupted)
 	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
 
-Image CLRaytracer::downloadImage()
+Image CLTracer::downloadImage()
 {
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
@@ -199,7 +199,7 @@ Image CLRaytracer::downloadImage()
 	return Image(imageBufferWidth, imageBufferHeight, &data[0]);
 }
 
-void CLRaytracer::createBuffers()
+void CLTracer::createBuffers()
 {
 	CLManager& clManager = App::getCLManager();
 	cl_int status = 0;
@@ -253,7 +253,7 @@ void CLRaytracer::createBuffers()
 	}
 }
 
-void CLRaytracer::uploadFullData()
+void CLTracer::uploadFullData()
 {
 	CLManager& clManager = App::getCLManager();
 	cl_int status;
@@ -308,7 +308,7 @@ void CLRaytracer::uploadFullData()
 	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
 }
 
-void CLRaytracer::uploadCameraData()
+void CLTracer::uploadCameraData()
 {
 	CLManager& clManager = App::getCLManager();
 	cl_int status;
@@ -317,7 +317,7 @@ void CLRaytracer::uploadCameraData()
 	CLManager::checkError(status, "Could not write camera buffer");
 }
 
-void CLRaytracer::createTextureImages()
+void CLTracer::createTextureImages()
 {
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();

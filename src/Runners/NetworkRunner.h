@@ -24,8 +24,6 @@ namespace Raycer
 		Scene scene;
 		Image image;
 
-		size_t sceneWidth;
-		size_t sceneHeight;
 		size_t pixelOffset;
 		size_t pixelCount;
 	};
