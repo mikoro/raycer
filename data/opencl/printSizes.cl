@@ -1,8 +1,8 @@
 kernel void printSizes()
 {
 	printf("\nState: %d\n", sizeof(State));
+	printf("General: %d\n", sizeof(General));
 	printf("Camera: %d\n", sizeof(Camera));
-	printf("Raytracer: %d\n", sizeof(Raytracer));
 	printf("ToneMapper: %d\n", sizeof(ToneMapper));
 	printf("SimpleFog: %d\n", sizeof(SimpleFog));
 	printf("Material: %d\n", sizeof(Material));

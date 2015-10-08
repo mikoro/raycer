@@ -12,12 +12,12 @@
 #endif
 
 #include "OpenCL/CLScene.h"
-#include "Rendering/Image.h"
 
 namespace Raycer
 {
 	class Scene;
 	struct TracerState;
+	class Image;
 
 	class CLTracer
 	{
@@ -48,8 +48,8 @@ namespace Raycer
 		size_t imageBufferHeight = 0;
 
 		cl_mem statePtr = nullptr;
+		cl_mem generalPtr = nullptr;
 		cl_mem cameraPtr = nullptr;
-		cl_mem raytracerPtr = nullptr;
 		cl_mem toneMapperPtr = nullptr;
 		cl_mem simpleFogPtr = nullptr;
 		cl_mem materialsPtr = nullptr;

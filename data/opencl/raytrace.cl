@@ -1,7 +1,7 @@
 kernel void raytrace(
 	constant State* state,
+	constant General* general,
 	constant Camera* camera,
-	constant Raytracer* raytracer,
 	constant ToneMapper* toneMapper,
 	constant SimpleFog* simpleFog,
 	constant Material* materials,
@@ -18,7 +18,7 @@ kernel void raytrace(
 
 	Ray ray = getCameraRay(camera, x, y);
 	Intersection intersection = constructIntersection();
-	float4 outputColor = raytracer->backgroundColor;
+	float4 outputColor = general->backgroundColor;
 
 	if (intersectBVH(nodes, triangles, materials, ray, &intersection, TEX_OUTPUT_ARGS))
 	{
@@ -26,7 +26,7 @@ kernel void raytrace(
 			triangles,
 			materials,
 			state,
-			raytracer,
+			general,
 			ambientLight,
 			directionalLights,
 			pointLights,

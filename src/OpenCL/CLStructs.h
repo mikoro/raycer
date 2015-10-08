@@ -32,6 +32,19 @@ namespace Raycer
 			cl_int ALIGN(4) bvhNodeCount;
 		};
 
+		struct General
+		{
+			cl_float4 ALIGN(16) backgroundColor;
+			cl_float4 ALIGN(16) offLensColor;
+			cl_float ALIGN(4) rayStartOffset;
+			cl_int ALIGN(4) maxIterations;
+			cl_int ALIGN(4) multiSamples;
+			cl_int ALIGN(4) timeSamples;
+			cl_int ALIGN(4) cameraSamples;
+			cl_int ALIGN(4) visualizeDepth;
+			cl_float ALIGN(4) visualizeDepthMaxDistance;
+		};
+
 		struct Camera
 		{
 			cl_float4 ALIGN(16) position;
@@ -53,17 +66,6 @@ namespace Raycer
 			cl_float ALIGN(4) imagePlaneDistance;
 			cl_float ALIGN(4) imagePlaneWidth;
 			cl_float ALIGN(4) imagePlaneHeight;
-		};
-
-		struct Raytracer
-		{
-			cl_float4 ALIGN(16) backgroundColor;
-			cl_float4 ALIGN(16) offLensColor;
-			cl_float ALIGN(4) rayStartOffset;
-			cl_int ALIGN(4) maxRayIterations;
-			cl_int ALIGN(4) multiSamples;
-			cl_int ALIGN(4) timeSamples;
-			cl_int ALIGN(4) cameraSamples;
 		};
 
 		struct ToneMapper

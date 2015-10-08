@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -73,15 +73,17 @@ void CLScene::readSceneFull(const Scene& scene)
 {
 	Log& log = App::getLog();
 
-	readSceneCamera(scene);
+	readColor(general.backgroundColor, scene.general.backgroundColor);
+	readColor(general.offLensColor, scene.general.offLensColor);
+	general.rayStartOffset = cl_float(scene.general.rayStartOffset);
+	general.maxIterations = cl_int(scene.general.maxIterations);
+	general.multiSamples = cl_int(scene.general.multiSamples);
+	general.timeSamples = cl_int(scene.general.timeSamples);
+	general.cameraSamples = cl_int(scene.general.cameraSamples);
+	general.visualizeDepth = cl_int(scene.general.visualizeDepth);
+	general.visualizeDepthMaxDistance = cl_float(scene.general.visualizeDepthMaxDistance);
 
-	readColor(raytracer.backgroundColor, scene.general.backgroundColor);
-	readColor(raytracer.offLensColor, scene.general.offLensColor);
-	raytracer.rayStartOffset = cl_float(scene.general.rayStartOffset);
-	raytracer.maxRayIterations = cl_int(scene.general.maxIterations);
-	raytracer.multiSamples = cl_int(scene.general.multiSamples);
-	raytracer.timeSamples = cl_int(scene.general.timeSamples);
-	raytracer.cameraSamples = cl_int(scene.general.cameraSamples);
+	readSceneCamera(scene);
 
 	toneMapper.type = cl_int(scene.toneMapper.type);
 	toneMapper.applyGamma = cl_int(scene.toneMapper.applyGamma);

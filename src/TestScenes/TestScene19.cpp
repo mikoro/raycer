@@ -75,6 +75,7 @@ Scene Scene::createTestScene19()
 	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/matpreview/matpreview.obj";
 	modelInfo.idStartOffset = 3000;
+	modelInfo.baseMaterial.normalInterpolation = true;
 
 	scene.models.push_back(modelInfo);
 

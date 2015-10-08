@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -303,8 +303,8 @@ void CLManager::writeStructSizes(const std::string& fileName)
 	std::ofstream file(fileName);
 
 	file << tfm::format("State: %d\n", sizeof(OpenCL::State));
+	file << tfm::format("General: %d\n", sizeof(OpenCL::General));
 	file << tfm::format("Camera: %d\n", sizeof(OpenCL::Camera));
-	file << tfm::format("Raytracer: %d\n", sizeof(OpenCL::Raytracer));
 	file << tfm::format("ToneMapper: %d\n", sizeof(OpenCL::ToneMapper));
 	file << tfm::format("SimpleFog: %d\n", sizeof(OpenCL::SimpleFog));
 	file << tfm::format("Material: %d\n", sizeof(OpenCL::Material));

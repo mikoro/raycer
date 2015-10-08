@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #pragma once
@@ -21,8 +21,8 @@ namespace Raycer
 		void readSceneCamera(const Scene& scene);
 
 		OpenCL::State state;
+		OpenCL::General general;
 		OpenCL::Camera camera;
-		OpenCL::Raytracer raytracer;
 		OpenCL::ToneMapper toneMapper;
 		OpenCL::SimpleFog simpleFog;
 		std::vector<OpenCL::Material> materials;

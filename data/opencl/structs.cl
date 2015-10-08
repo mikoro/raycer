@@ -9,6 +9,19 @@ typedef struct State
 	int bvhNodeCount;
 } State;
 
+typedef struct General
+{
+	float4 backgroundColor;
+	float4 offLensColor;
+	float rayStartOffset;
+	int maxIterations;
+	int multiSamples;
+	int timeSamples;
+	int cameraSamples;
+	int visualizeDepth;
+	float visualizeDepthMaxDistance;
+} General;
+
 typedef struct Camera
 {
 	float4 position;
@@ -31,17 +44,6 @@ typedef struct Camera
 	float imagePlaneWidth;
 	float imagePlaneHeight;
 } Camera;
-
-typedef struct Raytracer
-{
-	float4 backgroundColor;
-	float4 offLensColor;
-	float rayStartOffset;
-	int maxRayIterations;
-	int multiSamples;
-	int timeSamples;
-	int cameraSamples;
-} Raytracer;
 
 typedef struct ToneMapper
 {

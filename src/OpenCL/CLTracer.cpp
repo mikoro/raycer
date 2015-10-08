@@ -36,8 +36,8 @@ CLTracer::CLTracer()
 CLTracer::~CLTracer()
 {
 	releaseMemObject(&statePtr);
+	releaseMemObject(&generalPtr);
 	releaseMemObject(&cameraPtr);
-	releaseMemObject(&raytracerPtr);
 	releaseMemObject(&toneMapperPtr);
 	releaseMemObject(&simpleFogPtr);
 	releaseMemObject(&materialsPtr);
@@ -71,7 +71,7 @@ void CLTracer::initialize(const Scene& scene)
 	Log& log = App::getLog();
 	CLManager& clManager = App::getCLManager();
 
-	log.logInfo("Initializing OpenCL raytracer");
+	log.logInfo("Initializing OpenCL tracer");
 
 	clScene.readSceneFull(scene);
 	createBuffers();
@@ -94,8 +94,8 @@ void CLTracer::initialize(const Scene& scene)
 	kernelArgumentIndex = 0;
 
 	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &statePtr), "Could not set kernel argument (state)");
+	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &generalPtr), "Could not set kernel argument (general)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &cameraPtr), "Could not set kernel argument (camera)");
-	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &raytracerPtr), "Could not set kernel argument (raytracer)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &toneMapperPtr), "Could not set kernel argument (tone mapper)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &simpleFogPtr), "Could not set kernel argument (simple fog)");
 	CLManager::checkError(clSetKernelArg(raytraceKernel, cl_uint(kernelArgumentIndex++), sizeof(cl_mem), &materialsPtr), "Could not set kernel argument (materials)");
@@ -207,11 +207,11 @@ void CLTracer::createBuffers()
 	statePtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::State), nullptr, &status);
 	CLManager::checkError(status, "Could not create state buffer");
 
+	generalPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::General), nullptr, &status);
+	CLManager::checkError(status, "Could not create general buffer");
+
 	cameraPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Camera), nullptr, &status);
 	CLManager::checkError(status, "Could not create camera buffer");
-
-	raytracerPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::Raytracer), nullptr, &status);
-	CLManager::checkError(status, "Could not create raytracer buffer");
 
 	toneMapperPtr = clCreateBuffer(clManager.context, CL_MEM_READ_ONLY, sizeof(OpenCL::ToneMapper), nullptr, &status);
 	CLManager::checkError(status, "Could not create tone mapper buffer");
@@ -261,10 +261,10 @@ void CLTracer::uploadFullData()
 	status = clEnqueueWriteBuffer(clManager.commandQueue, statePtr, CL_FALSE, 0, sizeof(OpenCL::State), &clScene.state, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write state buffer");
 
-	uploadCameraData();
+	status = clEnqueueWriteBuffer(clManager.commandQueue, generalPtr, CL_FALSE, 0, sizeof(OpenCL::General), &clScene.general, 0, nullptr, nullptr);
+	CLManager::checkError(status, "Could not write general buffer");
 
-	status = clEnqueueWriteBuffer(clManager.commandQueue, raytracerPtr, CL_FALSE, 0, sizeof(OpenCL::Raytracer), &clScene.raytracer, 0, nullptr, nullptr);
-	CLManager::checkError(status, "Could not write raytracer buffer");
+	uploadCameraData();
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, toneMapperPtr, CL_FALSE, 0, sizeof(OpenCL::ToneMapper), &clScene.toneMapper, 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write tone mapper buffer");
