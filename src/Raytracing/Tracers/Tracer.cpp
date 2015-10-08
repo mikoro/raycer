@@ -15,6 +15,6 @@ std::unique_ptr<Tracer> Tracer::getTracer(TracerType type)
 	{
 		case TracerType::WHITTED: return std::unique_ptr<Tracer>(new WhittedRaytracer());
 		case TracerType::PATH: return std::unique_ptr<Tracer>(new PathTracer());
-		default: throw std::runtime_error("Invalid tracer type");;
+		default: throw std::runtime_error("Invalid tracer type");
 	}
 }

@@ -1,4 +1,4 @@
-kernel void raytrace(
+kernel void pathtrace(
 	constant State* state,
 	constant General* general,
 	constant Camera* camera,
@@ -20,23 +20,7 @@ kernel void raytrace(
 	Intersection intersection = constructIntersection();
 	float4 outputColor = general->backgroundColor;
 
-	if (state->triangleCount > 0 && state->bvhNodeCount > 0)
-	{
-		if (intersectBVH(nodes, triangles, materials, ray, &intersection, TEX_OUTPUT_ARGS))
-		{
-			outputColor = calculateLightColor(nodes,
-				triangles,
-				materials,
-				state,
-				general,
-				ambientLight,
-				directionalLights,
-				pointLights,
-				ray,
-				intersection,
-				TEX_OUTPUT_ARGS);
-		}
-	}
+	outputColor = (float4)(0.2, 0.4, 0.6, 1.0);
 
 	outputColor = clamp(pow(outputColor, 1.0 / 2.2), 0.0, 1.0);
 	outputColor.w = 1.0;

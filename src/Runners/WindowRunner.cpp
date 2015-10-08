@@ -288,7 +288,7 @@ void WindowRunner::resizeFramebuffer(size_t width, size_t height)
 	framebuffer.resize(width, height);
 
 	if (settings.openCL.enabled)
-		clTracer.resizeImageBuffer(width, height);
+		clTracer.initializeImageBuffer(width, height);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/

@@ -79,8 +79,9 @@ void ConsoleRunner::run(TracerState& state)
 
 	if (settings.openCL.enabled)
 	{
-		clTracer.resizeImageBuffer(state.image->getWidth(), state.image->getHeight());
-		clTracer.initialize(*state.scene);
+		clTracer.initializeKernels();
+		clTracer.initializeImageBuffer(state.image->getWidth(), state.image->getHeight());
+		clTracer.initializeBuffers(*state.scene);
 	}
 
 	std::atomic<bool> finished;

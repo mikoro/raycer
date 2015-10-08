@@ -34,7 +34,10 @@ void DefaultState::initialize()
 	tracer = Tracer::getTracer(scene.general.tracerType);
 
 	if (settings.openCL.enabled)
-		clTracer.initialize(scene);
+	{
+		clTracer.initializeKernels();
+		clTracer.initializeBuffers(scene);
+	}
 
 	currentTestSceneNumber = settings.scene.testSceneNumber;
 }
@@ -54,14 +57,18 @@ void DefaultState::shutdown()
 void DefaultState::update(double timeStep)
 {
 	Log& log = App::getLog();
+	Settings& settings = App::getSettings();
 	WindowRunner& windowRunner = App::getWindowRunner();
 	Framebuffer& framebuffer = App::getFramebuffer();
+	CLTracer& clTracer = App::getCLTracer();
 
 	bool increaseTestSceneNumber = windowRunner.keyWasPressed(GLFW_KEY_F2);
 	bool decreaseTestSceneNumber = windowRunner.keyWasPressed(GLFW_KEY_F3);
 
 	if (increaseTestSceneNumber || decreaseTestSceneNumber)
 	{
+		uint previousTestSceneNumber = currentTestSceneNumber;
+
 		if (increaseTestSceneNumber)
 			currentTestSceneNumber++;
 
@@ -74,23 +81,29 @@ void DefaultState::update(double timeStep)
 		if (currentTestSceneNumber > Scene::TEST_SCENE_COUNT)
 			currentTestSceneNumber = Scene::TEST_SCENE_COUNT;
 
-		ImagePool::clear();
-
-		try
+		if (previousTestSceneNumber != currentTestSceneNumber)
 		{
-			scene = Scene::createTestScene(currentTestSceneNumber);
-			scene.initialize();
-		}
-		catch (const std::exception& ex)
-		{
-			log.logWarning("Could not create test scene: %s", ex.what());
-			scene = Scene();
-			scene.initialize();
-		}
+			ImagePool::clear();
 
-		scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
-		tracer = Tracer::getTracer(scene.general.tracerType);
-		// TODO: OpenCL raytracer probably needs to be reset
+			try
+			{
+				scene = Scene::createTestScene(currentTestSceneNumber);
+				scene.initialize();
+			}
+			catch (const std::exception& ex)
+			{
+				log.logWarning("Could not create test scene: %s", ex.what());
+
+				scene = Scene();
+				scene.initialize();
+			}
+
+			scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+			tracer = Tracer::getTracer(scene.general.tracerType);
+
+			if (settings.openCL.enabled)
+				clTracer.initializeBuffers(scene);
+		}
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_R))
