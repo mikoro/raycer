@@ -297,6 +297,11 @@ std::vector<Color>& Image::getPixelData()
 	return pixelData;
 }
 
+const std::vector<Color>& Image::getPixelDataConst() const
+{
+	return pixelData;
+}
+
 std::vector<float> Image::getFloatPixelData() const
 {
 	std::vector<float> floatPixelData(width * height * 4);

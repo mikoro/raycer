@@ -378,6 +378,9 @@
     <ClCompile Include="src\Raytracing\Tracers\WhittedRaytracer.cpp">
       <Filter>Raytracing\Tracers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\ToneMappers\PassthroughToneMapper.cpp">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -640,6 +643,9 @@
     </ClInclude>
     <ClInclude Include="src\Raytracing\Tracers\WhittedRaytracer.h">
       <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMappers\PassthroughToneMapper.h">
+      <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

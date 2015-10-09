@@ -10,17 +10,18 @@
 
 using namespace Raycer;
 
-void ReinhardToneMapper::apply(const Scene& scene, Image& image)
+void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
 {
-	std::vector<Color>& pixelData = image.getPixelData();
+	const std::vector<Color>& inputPixelData = inputImage.getPixelDataConst();
+	std::vector<Color>& outputPixelData = outputImage.getPixelData();
 
 	double epsilon = std::numeric_limits<double>::epsilon();
-	int pixelCount = int(pixelData.size());
+	int pixelCount = int(inputPixelData.size());
 	double logSum = 0.0;
 
 	#pragma omp parallel for reduction(+:logSum)
 	for (int i = 0; i < pixelCount; ++i)
-		logSum += log(epsilon + pixelData[size_t(i)].getLuminance());
+		logSum += log(epsilon + inputPixelData.at(size_t(i)).getLuminance());
 
 	double logAvgLuminance = exp(logSum / pixelCount);
 	double scale = scene.toneMapper.key / logAvgLuminance;
@@ -33,18 +34,18 @@ void ReinhardToneMapper::apply(const Scene& scene, Image& image)
 		// fix static analysis warnings
 		size_t j = size_t(i);
 
-		double originalLuminance = pixelData[j].getLuminance();
+		double originalLuminance = inputPixelData.at(j).getLuminance();
 		double scaledLuminance = scale * originalLuminance;
 		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance / maxLuminance2))) / (1.0 + scaledLuminance);
 		double colorScale = mappedLuminance / originalLuminance;
 
-		pixelData[j] *= colorScale;
-		pixelData[j].a = 1.0;
+		outputPixelData[j] = inputPixelData.at(j) * colorScale;
+		outputPixelData[j].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			pixelData[j] = Color::pow(pixelData[j], invGamma);
+			outputPixelData[j] = Color::pow(outputPixelData[j], invGamma);
 
 		if (scene.toneMapper.shouldClamp)
-			pixelData[j].clamp();
+			outputPixelData[j].clamp();
 	}
 }

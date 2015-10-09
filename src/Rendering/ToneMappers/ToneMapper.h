@@ -3,12 +3,16 @@
 
 #pragma once
 
+#ifdef PASSTHROUGH
+#undef PASSTHROUGH
+#endif
+
 namespace Raycer
 {
 	class Scene;
 	class Image;
 
-	enum class ToneMapperType { NONE, LINEAR, REINHARD };
+	enum class ToneMapperType { PASSTHROUGH, LINEAR, REINHARD };
 
 	class ToneMapper
 	{
@@ -16,6 +20,6 @@ namespace Raycer
 
 		virtual ~ToneMapper() {}
 
-		virtual void apply(const Scene& scene, Image& image) = 0;
+		virtual void apply(const Scene& scene, const Image& inputImage, Image& outputImage) = 0;
 	};
 }

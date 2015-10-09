@@ -265,10 +265,10 @@ void NetworkRunner::sendJobs()
 		for (size_t i = 0; i < serverEndpoints.size(); ++i)
 		{
 			bool isLastServer = (i == serverEndpoints.size() - 1);
-			size_t pixelOffset = i * pixelsPerServer;
+			size_t pixelStartOffset = i * pixelsPerServer;
 			size_t pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
 
-			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelOffset, pixelCount, sceneString);
+			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelStartOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelStartOffset, pixelCount, sceneString);
 
 			ip::tcp::socket socket(io);
 			socket.connect(serverEndpoints.at(i));
@@ -320,7 +320,7 @@ void NetworkRunner::receiveJobs()
 			std::smatch match;
 			std::istringstream ss;
 
-			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nAddress: (.+)\nPort: (.+)\nWidth: (.+)\nHeight: (.+)\nPixelOffset: (.+)\nPixelCount: (.+)$")))
+			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nAddress: (.+)\nPort: (.+)\nWidth: (.+)\nHeight: (.+)\nPixelStartOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
 			std::cout << "\nJob received!\n\n";
@@ -333,25 +333,22 @@ void NetworkRunner::receiveJobs()
 
 			job.clientEndpoint = ip::tcp::endpoint(ip::address_v4::from_string(match[1]), static_cast<unsigned short>(port));
 
-			size_t imageWidth;
 			ss.clear();
 			ss.str(match[3]);
-			ss >> imageWidth;
+			ss >> job.imageWidth;
 
-			size_t imageHeight;
 			ss.clear();
 			ss.str(match[4]);
-			ss >> imageHeight;
+			ss >> job.imageHeight;
 
 			ss.clear();
 			ss.str(match[5]);
-			ss >> job.pixelOffset;
+			ss >> job.pixelStartOffset;
 
 			ss.clear();
 			ss.str(match[6]);
 			ss >> job.pixelCount;
 
-			job.image.resize(imageWidth, imageHeight);
 			job.scene = Scene::loadFromJsonString(bodyString);
 
 			jobQueueMutex.lock();
@@ -413,21 +410,25 @@ void NetworkRunner::handleJobs()
 			jobQueueMutex.unlock();
 
 			TracerState state;
-			state.image = &job.image;
 			state.scene = &job.scene;
-			state.pixelOffset = job.pixelOffset;
+			state.linearImage = &job.image;
+			state.toneMappedImage = &job.image;
+			state.imageWidth = job.imageWidth;
+			state.imageHeight = job.imageHeight;
+			state.pixelStartOffset = job.pixelStartOffset;
 			state.pixelCount = job.pixelCount;
 
 			job.scene.initialize();
-			job.scene.camera.setImagePlaneSize(state.image->getWidth(), state.image->getHeight());
+			job.scene.camera.setImagePlaneSize(job.imageWidth, job.imageHeight);
 			job.scene.camera.update(job.scene, 0.0);
+			job.image.resize(state.pixelCount);
 
 			App::getConsoleRunner().run(state);
 
 			std::cout << "Sending results back...\n\n";
 
 			io_service io;
-			std::string message = tfm::format("Raycer 1.0.0\nPixelOffset: %d\nPixelCount: %d\n\n", job.pixelOffset, job.pixelCount);
+			std::string message = tfm::format("Raycer 1.0.0\nPixelStartOffset: %d\nPixelCount: %d\n\n", job.pixelStartOffset, job.pixelCount);
 
 			for (uint i = 0; i < 60 && !interrupted; ++i)
 			{
@@ -461,7 +462,7 @@ namespace
 {
 	struct ImagePart
 	{
-		size_t pixelOffset = 0;
+		size_t pixelStartOffset = 0;
 		size_t pixelCount = 0;
 		std::vector<unsigned char> pixelData;
 	};
@@ -517,12 +518,12 @@ void NetworkRunner::receiveResults()
 			std::smatch match;
 			std::istringstream ss;
 
-			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nPixelOffset: (.+)\nPixelCount: (.+)$")))
+			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nPixelStartOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
-			size_t pixelOffset, pixelCount;
+			size_t pixelStartOffset, pixelCount;
 			ss.str(match[1]);
-			ss >> pixelOffset;
+			ss >> pixelStartOffset;
 			ss.clear();
 			ss.str(match[2]);
 			ss >> pixelCount;
@@ -530,7 +531,7 @@ void NetworkRunner::receiveResults()
 			assert(dataSize == pixelCount * sizeof(Color));
 
 			ImagePart imagePart;
-			imagePart.pixelOffset = pixelOffset;
+			imagePart.pixelStartOffset = pixelStartOffset;
 			imagePart.pixelCount = pixelCount;
 			imagePart.pixelData.resize(dataSize);
 
@@ -574,7 +575,7 @@ void NetworkRunner::receiveResults()
 			return;
 
 		for (ImagePart& part : imageParts)
-			memcpy(reinterpret_cast<char*>(&resultImage.getPixelData()[0]) + part.pixelOffset * sizeof(Color), &part.pixelData[0], part.pixelCount * sizeof(Color));
+			memcpy(reinterpret_cast<char*>(&resultImage.getPixelData()[0]) + part.pixelStartOffset * sizeof(Color), &part.pixelData[0], part.pixelCount * sizeof(Color));
 
 		resultImage.save(settings.image.fileName);
 

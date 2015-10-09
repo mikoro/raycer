@@ -10,7 +10,7 @@ namespace Raycer
 	class Scene;
 	class Image;
 
-	class LinearToneMapper : public ToneMapper
+	class PassthroughToneMapper : public ToneMapper
 	{
 	public:
 

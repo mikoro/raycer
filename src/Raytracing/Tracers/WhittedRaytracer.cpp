@@ -56,8 +56,9 @@ WhittedRaytracer::WhittedRaytracer()
 
 void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 {
-	Image& image = *state.image;
 	Scene& scene = *state.scene;
+	Image& linearImage = *state.linearImage;
+	Image& toneMappedImage = *state.toneMappedImage;
 
 	#pragma omp parallel for schedule(dynamic, 1000)
 	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
@@ -65,13 +66,13 @@ void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		if (interrupted)
 			continue;
 
-		size_t pixelOffsetIndex = size_t(pixelIndex) + state.pixelOffset;
-		double x = double(pixelOffsetIndex % state.image->getWidth());
-		double y = double(pixelOffsetIndex / state.image->getWidth());
+		size_t offsetPixelIndex = size_t(pixelIndex) + state.pixelStartOffset;
+		double x = double(offsetPixelIndex % state.imageWidth);
+		double y = double(offsetPixelIndex / state.imageWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
 		Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
-		image.setPixel(size_t(pixelIndex), pixelColor);
+		linearImage.setPixel(size_t(pixelIndex), pixelColor);
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)
@@ -81,11 +82,7 @@ void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	if (!interrupted)
 		state.pixelsProcessed = state.pixelCount;
 
-	if (scene.toneMapper.type != ToneMapperType::NONE)
-	{
-		ToneMapper* toneMapper = toneMappers[scene.toneMapper.type].get();
-		toneMapper->apply(scene, image);
-	}
+	toneMappers[scene.toneMapper.type]->apply(scene, linearImage, toneMappedImage);
 }
 
 Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)

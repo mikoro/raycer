@@ -14,10 +14,14 @@ namespace Raycer
 	{
 		TracerState() : pixelsProcessed(0) {};
 
-		Image* image = nullptr;
 		Scene* scene = nullptr;
 
-		size_t pixelOffset = 0;
+		Image* linearImage = nullptr;
+		Image* toneMappedImage = nullptr;
+
+		size_t imageWidth = 0;
+		size_t imageHeight = 0;
+		size_t pixelStartOffset = 0;
 		size_t pixelCount = 0;
 
 		std::atomic<size_t> pixelsProcessed;

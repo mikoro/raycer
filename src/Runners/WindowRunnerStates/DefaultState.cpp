@@ -158,10 +158,13 @@ void DefaultState::render(double timeStep, double interpolation)
 	if (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved())
 		framebuffer.clear();
 
-	state.image = &framebuffer.getImage();
 	state.scene = &scene;
-	state.pixelOffset = 0;
-	state.pixelCount = framebuffer.getImage().getLength();
+	state.linearImage = &framebuffer.getLinearImage();
+	state.toneMappedImage = &framebuffer.getToneMappedImage();
+	state.imageWidth = framebuffer.getWidth();
+	state.imageHeight = framebuffer.getHeight();
+	state.pixelStartOffset = 0;
+	state.pixelCount = state.imageWidth * state.imageHeight;
 	state.pixelsProcessed = 0;
 
 	if (!settings.openCL.enabled)

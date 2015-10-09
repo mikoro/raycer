@@ -43,10 +43,13 @@ int ConsoleRunner::run()
 	Image image(settings.image.width, settings.image.height);
 
 	TracerState state;
-	state.image = &image;
 	state.scene = &scene;
-	state.pixelOffset = 0;
-	state.pixelCount = image.getLength();
+	state.linearImage = &image;
+	state.toneMappedImage = &image;
+	state.imageWidth = settings.image.width;
+	state.imageHeight = settings.image.height;
+	state.pixelStartOffset = 0;
+	state.pixelCount = state.imageWidth * state.imageHeight;
 
 	run(state);
 
@@ -80,7 +83,7 @@ void ConsoleRunner::run(TracerState& state)
 	if (settings.openCL.enabled)
 	{
 		clTracer.initializeKernels();
-		clTracer.initializeImageBuffer(state.image->getWidth(), state.image->getHeight());
+		clTracer.initializeImageBuffer(state.imageWidth, state.imageHeight);
 		clTracer.initializeBuffers(*state.scene);
 	}
 
@@ -97,7 +100,7 @@ void ConsoleRunner::run(TracerState& state)
 		finished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.image->getWidth(), state.image->getHeight(), humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelOffset);
+	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.imageWidth, state.imageHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelStartOffset);
 
 	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderFunction);
@@ -139,7 +142,7 @@ void ConsoleRunner::run(TracerState& state)
 	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
-		*state.image = clTracer.downloadImage();
+		*state.toneMappedImage = clTracer.downloadImage();
 }
 
 void ConsoleRunner::interrupt()

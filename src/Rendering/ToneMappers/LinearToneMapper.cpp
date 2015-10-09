@@ -10,11 +10,13 @@
 
 using namespace Raycer;
 
-void LinearToneMapper::apply(const Scene& scene, Image& image)
+void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
 {
-	std::vector<Color>& pixelData = image.getPixelData();
+	const std::vector<Color>& inputPixelData = inputImage.getPixelDataConst();
+	std::vector<Color>& outputPixelData = outputImage.getPixelData();
+
 	double invGamma = 1.0 / scene.toneMapper.gamma;
-	int pixelCount = int(pixelData.size());
+	int pixelCount = int(inputPixelData.size());
 
 	#pragma omp parallel for
 	for (int i = 0; i < pixelCount; ++i)
@@ -22,13 +24,13 @@ void LinearToneMapper::apply(const Scene& scene, Image& image)
 		// fix static analysis warnings
 		size_t j = size_t(i);
 
-		pixelData[j] *= pow(2.0, scene.toneMapper.exposure);
-		pixelData[j].a = 1.0;
+		outputPixelData[j] = inputPixelData.at(j) * pow(2.0, scene.toneMapper.exposure);
+		outputPixelData[j].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			pixelData[j] = Color::pow(pixelData[j], invGamma);
+			outputPixelData[j] = Color::pow(outputPixelData[j], invGamma);
 
 		if (scene.toneMapper.shouldClamp)
-			pixelData[j].clamp();
+			outputPixelData[j].clamp();
 	}
 }

@@ -94,7 +94,8 @@ void Framebuffer::resize(size_t width, size_t height)
 {
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
-	image.resize(width, height);
+	linearImage.resize(width, height);
+	toneMappedImage.resize(width, height);
 	floatPixelData.resize(width * height * 4);
 
 	// reserve the texture memory on the device
@@ -120,20 +121,22 @@ void Framebuffer::setWindowSize(size_t width, size_t height)
 
 void Framebuffer::clear()
 {
-	image.clear();
+	linearImage.clear();
+	toneMappedImage.clear();
 }
 
 void Framebuffer::clear(const Color& color)
 {
-	image.clear(color);
+	linearImage.clear(color);
+	toneMappedImage.clear(color);
 }
 
 void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
 
-	size_t imageWidth = image.getWidth();
-	size_t imageHeight = image.getHeight();
+	size_t imageWidth = toneMappedImage.getWidth();
+	size_t imageHeight = toneMappedImage.getHeight();
 
 	/* Resampling pass */
 
@@ -149,7 +152,7 @@ void Framebuffer::render()
 
 	if (!settings.openCL.enabled)
 	{
-		image.getFloatPixelData(floatPixelData);
+		toneMappedImage.getFloatPixelData(floatPixelData);
 		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GLsizei(imageWidth), GLsizei(imageHeight), GL_RGBA, GL_FLOAT, &floatPixelData[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
@@ -199,17 +202,22 @@ void Framebuffer::enableSmoothing(bool state)
 
 size_t Framebuffer::getWidth() const
 {
-	return image.getWidth();
+	return toneMappedImage.getWidth();
 }
 
 size_t Framebuffer::getHeight() const
 {
-	return image.getHeight();
+	return toneMappedImage.getHeight();
 }
 
-Image& Framebuffer::getImage()
+Image& Framebuffer::getLinearImage()
 {
-	return image;
+	return linearImage;
+}
+
+Image& Framebuffer::getToneMappedImage()
+{
+	return toneMappedImage;
 }
 
 GLuint Framebuffer::getImageTextureId() const
