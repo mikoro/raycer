@@ -14,6 +14,8 @@ Scene Scene::createTestScene19()
 
 	scene.general.tracerType = TracerType::PATH;
 	//scene.toneMapper.type = ToneMapperType::REINHARD;
+	scene.general.maxPathLength = 2;
+	scene.general.rayStartOffset = 0.001;
 
 	scene.rootBVH.enabled = true;
 
@@ -26,7 +28,7 @@ Scene Scene::createTestScene19()
 
 	ImageTexture groundTexture;
 	groundTexture.id = 1;
-	groundTexture.intensity = 1.0;
+	groundTexture.intensity = 1.0 / M_PI;
 	groundTexture.imageFilePath = "data/images/wood_floor.jpg";
 	groundTexture.applyGamma = true;
 
@@ -34,6 +36,7 @@ Scene Scene::createTestScene19()
 	groundMaterial.id = 1;
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
+	groundMaterial.reflectanceMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(50.0, 50.0);
 
 	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
@@ -59,6 +62,7 @@ Scene Scene::createTestScene19()
 	sphereMaterial.id = 2;
 	sphereMaterial.ambientMapTextureId = sphereTexture.id;
 	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
+	sphereMaterial.emittanceMapTextureId = sphereTexture.id;
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
 
