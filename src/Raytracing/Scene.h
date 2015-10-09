@@ -93,6 +93,7 @@ namespace Raycer
 			SamplerType cameraSamplerType = SamplerType::CMJ;
 			uint maxRayIterations = 3;
 			uint maxPathLength = 3;
+			uint pathSamples = 1;
 			uint multiSamples = 0;
 			uint timeSamples = 0;
 			uint cameraSamples = 0;
@@ -111,6 +112,8 @@ namespace Raycer
 					CEREAL_NVP(timeSamplerType),
 					CEREAL_NVP(cameraSamplerType),
 					CEREAL_NVP(maxRayIterations),
+					CEREAL_NVP(maxPathLength),
+					CEREAL_NVP(pathSamples),
 					CEREAL_NVP(multiSamples),
 					CEREAL_NVP(timeSamples),
 					CEREAL_NVP(cameraSamples),

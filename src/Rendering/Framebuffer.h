@@ -28,12 +28,14 @@ namespace Raycer
 
 		size_t getWidth() const;
 		size_t getHeight() const;
+		Image& getCumulativeImage();
 		Image& getLinearImage();
 		Image& getToneMappedImage();
 		GLuint getImageTextureId() const;
 
 	private:
 
+		Image cumulativeImage;
 		Image linearImage;
 		Image toneMappedImage;
 		std::vector<float> floatPixelData;

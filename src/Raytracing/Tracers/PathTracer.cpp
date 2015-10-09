@@ -48,8 +48,11 @@ PathTracer::PathTracer()
 void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 {
 	Scene& scene = *state.scene;
+	Image& cumulativeImage = *state.cumulativeImage;
 	Image& linearImage = *state.linearImage;
 	Image& toneMappedImage = *state.toneMappedImage;
+
+	state.cumulativeSampleCount += scene.general.pathSamples;
 
 	#pragma omp parallel for schedule(dynamic, 1000)
 	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
@@ -62,21 +65,21 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		double y = double(offsetPixelIndex / state.imageWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
-		Color sampledColor;
-		uint n = scene.general.multiSamples + 1;
+		Color newColor;
 
-		for (uint i = 0; i < n; ++i)
+		for (uint i = 0; i < scene.general.pathSamples; ++i)
 		{
 			Ray ray;
 
 			if (scene.camera.getRay(pixelCoordinate, ray, 0.0))
-				sampledColor += tracePath(scene, ray, 0, interrupted);
+				newColor += tracePath(scene, ray, 0, interrupted);
 		}
 
-		Color previousColor = linearImage.getPixel(size_t(pixelIndex));
-		Color currentColor = sampledColor / double(n);
+		Color previousColor = cumulativeImage.getPixel(size_t(pixelIndex));
+		Color currentColor = previousColor + newColor;
 
-		linearImage.setPixel(size_t(pixelIndex), (previousColor + currentColor) / 2.0);
+		cumulativeImage.setPixel(size_t(pixelIndex), currentColor);
+		linearImage.setPixel(size_t(pixelIndex), currentColor / double(state.cumulativeSampleCount));
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)

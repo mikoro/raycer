@@ -62,7 +62,8 @@ Scene Scene::createTestScene19()
 	sphereMaterial.id = 2;
 	sphereMaterial.ambientMapTextureId = sphereTexture.id;
 	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
-	sphereMaterial.emittanceMapTextureId = sphereTexture.id;
+	//sphereMaterial.emittanceMapTextureId = sphereTexture.id;
+	sphereMaterial.emittance = Color(1.0, 1.0, 1.0);
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
 

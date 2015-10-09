@@ -100,7 +100,9 @@ void DefaultState::update(double timeStep)
 
 			scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 			tracer = Tracer::getTracer(scene.general.tracerType);
+
 			framebuffer.clear();
+			state.cumulativeSampleCount = 0;
 
 			if (settings.openCL.enabled)
 				clTracer.initializeBuffers(scene);
@@ -109,6 +111,19 @@ void DefaultState::update(double timeStep)
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_R))
 		scene.camera.reset();
+
+	if (windowRunner.keyWasPressed(GLFW_KEY_F4))
+	{
+		if (scene.general.tracerType == TracerType::WHITTED)
+			scene.general.tracerType = TracerType::PATH;
+		else if (scene.general.tracerType == TracerType::PATH)
+			scene.general.tracerType = TracerType::WHITTED;
+
+		tracer = Tracer::getTracer(scene.general.tracerType);
+		
+		framebuffer.clear();
+		state.cumulativeSampleCount = 0;
+	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
 		scene.general.visualizeDepth = !scene.general.visualizeDepth;
@@ -156,9 +171,13 @@ void DefaultState::render(double timeStep, double interpolation)
 	Text& text = runner.getDefaultText();
 
 	if (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved())
+	{
 		framebuffer.clear();
+		state.cumulativeSampleCount = 0;
+	}
 
 	state.scene = &scene;
+	state.cumulativeImage = &framebuffer.getCumulativeImage();
 	state.linearImage = &framebuffer.getLinearImage();
 	state.toneMappedImage = &framebuffer.getToneMappedImage();
 	state.imageWidth = framebuffer.getWidth();

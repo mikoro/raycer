@@ -94,6 +94,7 @@ void Framebuffer::resize(size_t width, size_t height)
 {
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
+	cumulativeImage.resize(width, height);
 	linearImage.resize(width, height);
 	toneMappedImage.resize(width, height);
 	floatPixelData.resize(width * height * 4);
@@ -121,12 +122,14 @@ void Framebuffer::setWindowSize(size_t width, size_t height)
 
 void Framebuffer::clear()
 {
+	cumulativeImage.clear();
 	linearImage.clear();
 	toneMappedImage.clear();
 }
 
 void Framebuffer::clear(const Color& color)
 {
+	cumulativeImage.clear(color);
 	linearImage.clear(color);
 	toneMappedImage.clear(color);
 }
@@ -208,6 +211,11 @@ size_t Framebuffer::getWidth() const
 size_t Framebuffer::getHeight() const
 {
 	return toneMappedImage.getHeight();
+}
+
+Image& Framebuffer::getCumulativeImage()
+{
+	return cumulativeImage;
 }
 
 Image& Framebuffer::getLinearImage()
