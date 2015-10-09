@@ -43,6 +43,7 @@ namespace Raycer
 		void inverse();
 		Vector3 inversed() const;
 		bool isZero() const;
+		bool isNan() const;
 		bool isNormal() const;
 		double dot(const Vector3& v) const;
 		Vector3 cross(const Vector3& v) const;

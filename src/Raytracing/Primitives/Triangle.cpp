@@ -26,13 +26,14 @@ void Raycer::Triangle::initialize(const Scene& scene)
 
 	normal = v0tov1.cross(v0tov2).normalized();
 
+	double denominator = t0tot1.x * t0tot2.y - t0tot1.y * t0tot2.x;
+
 	// tangent space aligned to texcoords
-	if (!t0tot1.isZero() && !t0tot2.isZero())
+	if (std::abs(denominator) > std::numeric_limits<double>::epsilon())
 	{
-		double r = 1.0 / (t0tot1.x * t0tot2.y - t0tot1.y * t0tot2.x);
+		double r = 1.0 / denominator;
 		tangent = (v0tov1 * t0tot2.y - v0tov2 * t0tot1.y) * r;
 		bitangent = (v0tov2 * t0tot1.x - v0tov1 * t0tot2.x) * r;
-
 		tangent.normalize();
 		bitangent.normalize();
 	}

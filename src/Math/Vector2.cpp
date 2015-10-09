@@ -172,6 +172,11 @@ bool Vector2::isZero() const
 	return MathUtils::almostZero(x) && MathUtils::almostZero(y);
 }
 
+bool Vector2::isNan() const
+{
+	return (std::isnan(x) || std::isnan(y));
+}
+
 bool Vector2::isNormal() const
 {
 	return MathUtils::almostSame(lengthSquared(), 1.0);
