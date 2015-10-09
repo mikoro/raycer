@@ -37,7 +37,7 @@ Scene Scene::createTestScene5()
 	groundMaterial.id = 1;
 	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
-	groundMaterial.rayReflectance = 0.5;
+	groundMaterial.reflectance = 0.5;
 	groundMaterial.ambientReflectance = Color(0.1, 0.1, 0.1);
 	groundMaterial.diffuseReflectance = Color(0.1, 0.1, 0.1);
 
@@ -73,7 +73,7 @@ Scene Scene::createTestScene5()
 			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.specularReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.shininess = 256.0;
-			sphereMaterial.rayReflectance = 0.05;
+			sphereMaterial.reflectance = 0.05;
 
 			Sphere sphere;
 			sphere.id = currentId;

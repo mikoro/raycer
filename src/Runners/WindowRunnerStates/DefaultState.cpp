@@ -100,6 +100,7 @@ void DefaultState::update(double timeStep)
 
 			scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 			tracer = Tracer::getTracer(scene.general.tracerType);
+			framebuffer.clear();
 
 			if (settings.openCL.enabled)
 				clTracer.initializeBuffers(scene);
@@ -153,6 +154,9 @@ void DefaultState::render(double timeStep, double interpolation)
 	CLTracer& clTracer = App::getCLTracer();
 	WindowRunner& runner = App::getWindowRunner();
 	Text& text = runner.getDefaultText();
+
+	if (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved())
+		framebuffer.clear();
 
 	state.image = &framebuffer.getImage();
 	state.scene = &scene;

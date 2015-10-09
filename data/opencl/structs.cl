@@ -78,8 +78,8 @@ typedef struct Material
 	int ambientMapTextureIndex;
 	int diffuseMapTextureIndex;
 	int specularMapTextureIndex;
-	int rayReflectanceMapTextureIndex;
-	int rayTransmittanceMapTextureIndex;
+	int reflectanceMapTextureIndex;
+	int transmittanceMapTextureIndex;
 	int normalMapTextureIndex;
 	int maskMapTextureIndex;
 	int heightMapTextureIndex;
@@ -90,8 +90,8 @@ typedef struct Material
 	int invertNormal;
 	int fresnelReflection;
 	int enableAttenuation;
-	float rayReflectance;
-	float rayTransmittance;
+	float reflectance;
+	float transmittance;
 	float refractiveIndex;
 	float attenuationFactor;
 } Material;

@@ -101,8 +101,8 @@ namespace Raycer
 			cl_int ALIGN(4) ambientMapTextureIndex;
 			cl_int ALIGN(4) diffuseMapTextureIndex;
 			cl_int ALIGN(4) specularMapTextureIndex;
-			cl_int ALIGN(4) rayReflectanceMapTextureIndex;
-			cl_int ALIGN(4) rayTransmittanceMapTextureIndex;
+			cl_int ALIGN(4) reflectanceMapTextureIndex;
+			cl_int ALIGN(4) transmittanceMapTextureIndex;
 			cl_int ALIGN(4) normalMapTextureIndex;
 			cl_int ALIGN(4) maskMapTextureIndex;
 			cl_int ALIGN(4) heightMapTextureIndex;
@@ -113,8 +113,8 @@ namespace Raycer
 			cl_int ALIGN(4) invertNormal;
 			cl_int ALIGN(4) fresnelReflection;
 			cl_int ALIGN(4) enableAttenuation;
-			cl_float ALIGN(4) rayReflectance;
-			cl_float ALIGN(4) rayTransmittance;
+			cl_float ALIGN(4) reflectance;
+			cl_float ALIGN(4) transmittance;
 			cl_float ALIGN(4) refractiveIndex;
 			cl_float ALIGN(4) attenuationFactor;
 		};

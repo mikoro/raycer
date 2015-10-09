@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -272,14 +272,14 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 	double mappedReflectance = 1.0;
 	double mappedTransmittance = 1.0;
 
-	if (material->rayReflectanceMapTexture != nullptr)
-		mappedReflectance = material->rayReflectanceMapTexture->getValue(intersection.texcoord, intersection.position);
+	if (material->reflectanceMapTexture != nullptr)
+		mappedReflectance = material->reflectanceMapTexture->getValue(intersection.texcoord, intersection.position);
 
-	if (material->rayTransmittanceMapTexture != nullptr)
-		mappedTransmittance = material->rayTransmittanceMapTexture->getValue(intersection.texcoord, intersection.position);
+	if (material->transmittanceMapTexture != nullptr)
+		mappedTransmittance = material->transmittanceMapTexture->getValue(intersection.texcoord, intersection.position);
 
-	double totalReflectance = material->rayReflectance * mappedReflectance * fresnelReflectance;
-	double totalTransmittance = material->rayTransmittance * mappedTransmittance * fresnelTransmittance;
+	double totalReflectance = material->reflectance * mappedReflectance * fresnelReflectance;
+	double totalTransmittance = material->transmittance * mappedTransmittance * fresnelTransmittance;
 
 	Color reflectedColor;
 

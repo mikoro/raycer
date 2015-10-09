@@ -116,8 +116,8 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.ambientMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId));
 		clMaterial.diffuseMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId));
 		clMaterial.specularMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId));
-		clMaterial.rayReflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId));
-		clMaterial.rayTransmittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId));
+		clMaterial.reflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId));
+		clMaterial.transmittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.transmittanceMapTextureId));
 		clMaterial.normalMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId));
 		clMaterial.maskMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId));
 		clMaterial.heightMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId));
@@ -128,8 +128,8 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.invertNormal = cl_int(material.invertNormal);
 		clMaterial.fresnelReflection = cl_int(material.fresnelReflection);
 		clMaterial.enableAttenuation = cl_int(material.enableAttenuation);
-		clMaterial.rayReflectance = cl_float(material.rayReflectance);
-		clMaterial.rayTransmittance = cl_float(material.rayTransmittance);
+		clMaterial.reflectance = cl_float(material.reflectance);
+		clMaterial.transmittance = cl_float(material.transmittance);
 		clMaterial.refractiveIndex = cl_float(material.refractiveIndex);
 		clMaterial.attenuationFactor = cl_float(material.attenuationFactor);
 

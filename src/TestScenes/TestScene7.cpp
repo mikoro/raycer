@@ -27,7 +27,7 @@ Scene Scene::createTestScene7()
 	boxMaterial.id = 1;
 	boxMaterial.ambientReflectance = Color(0.5, 0.0, 0.0);
 	boxMaterial.diffuseReflectance = Color(0.5, 0.0, 0.0);
-	boxMaterial.rayTransmittance = 0.75;
+	boxMaterial.transmittance = 0.75;
 	boxMaterial.refractiveIndex = 1.0;
 	boxMaterial.enableAttenuation = true;
 	boxMaterial.attenuationFactor = 1.0;
@@ -71,7 +71,7 @@ Scene Scene::createTestScene7()
 	boxMaterial.id = 2;
 	boxMaterial.ambientReflectance = Color(0.1, 0.1, 0.3);
 	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
-	boxMaterial.rayReflectance = 0.75;
+	boxMaterial.reflectance = 0.75;
 	boxMaterial.nonShadowing = true;
 
 	box = Box();

@@ -39,14 +39,14 @@ namespace Raycer
 		Color specularReflectance = Color(0.0, 0.0, 0.0);
 		double shininess = 2.0;
 
-		Texture* rayReflectanceMapTexture = nullptr;
-		size_t rayReflectanceMapTextureId = 0;
-		double rayReflectance = 0.0;
+		Texture* reflectanceMapTexture = nullptr;
+		size_t reflectanceMapTextureId = 0;
+		double reflectance = 0.0;
 		bool fresnelReflection = false;
 
-		Texture* rayTransmittanceMapTexture = nullptr;
-		size_t rayTransmittanceMapTextureId = 0;
-		double rayTransmittance = 0.0;
+		Texture* transmittanceMapTexture = nullptr;
+		size_t transmittanceMapTextureId = 0;
+		double transmittance = 0.0;
 		double refractiveIndex = 1.0;
 		bool enableAttenuation = false;
 		double attenuationFactor = 1.0;
@@ -82,11 +82,11 @@ namespace Raycer
 				CEREAL_NVP(specularMapTextureId),
 				CEREAL_NVP(specularReflectance),
 				CEREAL_NVP(shininess),
-				CEREAL_NVP(rayReflectanceMapTextureId),
-				CEREAL_NVP(rayReflectance),
+				CEREAL_NVP(reflectanceMapTextureId),
+				CEREAL_NVP(reflectance),
 				CEREAL_NVP(fresnelReflection),
-				CEREAL_NVP(rayTransmittanceMapTextureId),
-				CEREAL_NVP(rayTransmittance),
+				CEREAL_NVP(transmittanceMapTextureId),
+				CEREAL_NVP(transmittance),
 				CEREAL_NVP(refractiveIndex),
 				CEREAL_NVP(enableAttenuation),
 				CEREAL_NVP(attenuationFactor),

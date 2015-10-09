@@ -232,7 +232,7 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 
 	const size_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
 
-	if (state.scene->camera.hasMoved())
+	if (state.scene->general.tracerType == TracerType::PATH && state.scene->camera.hasMoved())
 	{
 		size_t origin[3] = { 0, 0, 0 };
 		size_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
