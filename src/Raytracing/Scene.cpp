@@ -20,7 +20,7 @@ Scene::Scene()
 		boundingBoxes.material = Material();
 		boundingBoxes.material.ambientReflectance = Color(0.1, 0.1, 0.2);
 		boundingBoxes.material.diffuseReflectance = Color(0.1, 0.1, 0.2);
-		boundingBoxes.material.transmittance = 1.0;
+		boundingBoxes.material.rayTransmittance = 1.0;
 		boundingBoxes.material.nonShadowing = true;
 	}
 }
@@ -341,11 +341,11 @@ void Scene::initialize()
 		if (texturesMap.count(material.specularMapTextureId))
 			material.specularMapTexture = texturesMap[material.specularMapTextureId];
 
-		if (texturesMap.count(material.reflectanceMapTextureId))
-			material.reflectanceMapTexture = texturesMap[material.reflectanceMapTextureId];
+		if (texturesMap.count(material.rayReflectanceMapTextureId))
+			material.rayReflectanceMapTexture = texturesMap[material.rayReflectanceMapTextureId];
 
-		if (texturesMap.count(material.transmittanceMapTextureId))
-			material.transmittanceMapTexture = texturesMap[material.transmittanceMapTextureId];
+		if (texturesMap.count(material.rayTransmittanceMapTextureId))
+			material.rayTransmittanceMapTexture = texturesMap[material.rayTransmittanceMapTextureId];
 
 		if (texturesMap.count(material.normalMapTextureId))
 			material.normalMapTexture = texturesMap[material.normalMapTextureId];

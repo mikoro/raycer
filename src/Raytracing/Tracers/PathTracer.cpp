@@ -7,6 +7,7 @@
 #include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
+#include "Raytracing/Intersection.h"
 #include "Rendering/Image.h"
 #include "Rendering/Samplers/RandomSampler.h"
 #include "Rendering/Samplers/RegularSampler.h"
@@ -61,7 +62,14 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		double y = double(offsetPixelIndex / state.imageWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
-		Color pixelColor = Color::RED;
+		Color pixelColor;
+
+		Ray ray;
+		bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, 0.0);
+
+		if (isValidRay)
+			pixelColor = tracePath(scene, ray, 0, interrupted);
+
 		linearImage.setPixel(size_t(pixelIndex), pixelColor);
 
 		// progress reporting to another thread
@@ -73,4 +81,31 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 
 	toneMappers[scene.toneMapper.type]->apply(scene, linearImage, toneMappedImage);
+}
+
+Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, const std::atomic<bool>& interrupted)
+{
+	Color finalColor = Color::BLACK;
+
+	if (interrupted)
+		return finalColor;
+
+	if (iteration >= scene.general.maxIterations)
+		return finalColor;
+
+	Intersection intersection;
+	std::vector<Intersection> intersections;
+
+	for (Primitive* primitive : scene.primitives.visible)
+	{
+		intersections.clear();
+		primitive->intersect(ray, intersection, intersections);
+	}
+
+	if (!intersection.wasFound)
+		return finalColor;
+
+	//Material* material = intersection.primitive->material;
+
+	return finalColor;
 }

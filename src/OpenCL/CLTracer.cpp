@@ -65,8 +65,6 @@ void CLTracer::initializeKernels()
 
 void CLTracer::releaseKernels()
 {
-	App::getLog().logInfo("Releasing OpenCL kernels");
-
 	if (raytraceKernel != nullptr)
 	{
 		clReleaseKernel(raytraceKernel);
@@ -124,8 +122,6 @@ void CLTracer::initializeImageBuffer(size_t width, size_t height)
 
 void CLTracer::releaseImageBuffer()
 {
-	App::getLog().logInfo("Releasing OpenCL output image");
-
 	releaseMemObject(&outputImagePtr);
 }
 
@@ -185,8 +181,6 @@ void CLTracer::initializeBuffers(const Scene& scene)
 
 void CLTracer::releaseBuffers()
 {
-	App::getLog().logInfo("Releasing OpenCL buffers");
-
 	releaseMemObject(&statePtr);
 	releaseMemObject(&generalPtr);
 	releaseMemObject(&cameraPtr);
