@@ -197,6 +197,7 @@ void DefaultState::render(double timeStep, double interpolation)
 		text.drawText(5.0, double(runner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.pitch, scene.camera.orientation.yaw, scene.camera.orientation.roll));
 		text.drawText(5.0, double(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Pix: (%d, %d)", runner.getMouseInfo().framebufferX, runner.getMouseInfo().framebufferY));
 		text.drawText(5.0, double(runner.getWindowHeight() - 6 * settings.window.defaultFontSize - 6), Color(255, 255, 255, 255), tfm::format("Mov: %s", scene.camera.hasMoved()));
+		text.drawText(5.0, double(runner.getWindowHeight() - 7 * settings.window.defaultFontSize - 8), Color(255, 255, 255, 255), tfm::format("Pat: %s", state.cumulativeSampleCount));
 	}
 }
 
@@ -208,5 +209,10 @@ void DefaultState::windowResized(size_t width, size_t height)
 
 void DefaultState::framebufferResized(size_t width, size_t height)
 {
+	Framebuffer& framebuffer = App::getFramebuffer();
+
 	scene.camera.setImagePlaneSize(width, height);
+
+	framebuffer.clear();
+	state.cumulativeSampleCount = 0;
 }

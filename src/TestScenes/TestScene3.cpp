@@ -35,7 +35,7 @@ Scene Scene::createTestScene3()
 	scene.lights.ambientLight.intensity = 0.01;
 
 	PointLight pointLight;
-	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.color = Color(1.0, 0.71, 0.24);
 	pointLight.intensity = 1.0;
 	pointLight.position = Vector3(0.0, 1.9, 0.0);
 	pointLight.maxDistance = 3.0;

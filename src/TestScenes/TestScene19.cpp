@@ -13,10 +13,7 @@ Scene Scene::createTestScene19()
 	Scene scene;
 
 	scene.general.tracerType = TracerType::PATH;
-	//scene.toneMapper.type = ToneMapperType::REINHARD;
-	scene.general.maxPathLength = 2;
-	scene.general.rayStartOffset = 0.001;
-
+	
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //
@@ -62,8 +59,8 @@ Scene Scene::createTestScene19()
 	sphereMaterial.id = 2;
 	sphereMaterial.ambientMapTextureId = sphereTexture.id;
 	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
-	//sphereMaterial.emittanceMapTextureId = sphereTexture.id;
-	sphereMaterial.emittance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.emittanceMapTextureId = sphereTexture.id;
+	//sphereMaterial.emittance = Color(1.0, 1.0, 1.0);
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
 

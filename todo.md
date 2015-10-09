@@ -1,13 +1,11 @@
 tracer
- - raymarching + height map + volumetric fog
+ - height map
+ - volumetric fog
  - soft reflections
  - relativistic effects
 
 lighting
- - path tracing + materials
+ - path tracer materials
 
 textures
  - EWA texture filtering
-
-misc
- - CLRaytracer reset when changing scenes

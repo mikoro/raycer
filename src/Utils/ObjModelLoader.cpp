@@ -40,6 +40,7 @@ namespace
 		bool hasAmbientMap = false;
 		bool hasDiffuseMap = false;
 		bool hasSpecularMap = false;
+		bool hasEmittanceMap = false;
 		bool hasNormalMap = false;
 		bool hasMaskMap = false;
 		bool hasHeightMap = false;
@@ -65,6 +66,7 @@ namespace
 					hasAmbientMap = false;
 					hasDiffuseMap = false;
 					hasSpecularMap = false;
+					hasEmittanceMap = false;
 					hasNormalMap = false;
 					hasMaskMap = false;
 					hasHeightMap = false;
@@ -96,17 +98,20 @@ namespace
 				continue;
 			}
 
-			// diffuse reflectance
+			// diffuse reflectance + reflectance
 			if (part == "Kd")
 			{
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				currentMaterial.diffuseReflectance.r = StringUtils::parseDouble(part);
+				currentMaterial.reflectance.r = currentMaterial.diffuseReflectance.r;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				currentMaterial.diffuseReflectance.g = StringUtils::parseDouble(part);
+				currentMaterial.reflectance.g = currentMaterial.diffuseReflectance.g;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				currentMaterial.diffuseReflectance.b = StringUtils::parseDouble(part);
+				currentMaterial.reflectance.b = currentMaterial.diffuseReflectance.b;
 
 				continue;
 			}
@@ -122,6 +127,21 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				currentMaterial.specularReflectance.b = StringUtils::parseDouble(part);
+
+				continue;
+			}
+
+			// emittance
+			if (part == "Ke")
+			{
+				StringUtils::readUntilSpace(line, lineIndex, part);
+				currentMaterial.emittance.r = StringUtils::parseDouble(part);
+
+				StringUtils::readUntilSpace(line, lineIndex, part);
+				currentMaterial.emittance.g = StringUtils::parseDouble(part);
+
+				StringUtils::readUntilSpace(line, lineIndex, part);
+				currentMaterial.emittance.b = StringUtils::parseDouble(part);
 
 				continue;
 			}
@@ -161,12 +181,13 @@ namespace
 				continue;
 			}
 
-			// diffuse map
+			// diffuse map + reflectance map
 			if (part == "map_Kd" && !hasDiffuseMap)
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
 				currentMaterial.diffuseMapTextureId = imageTexture.id;
+				currentMaterial.reflectanceMapTextureId = imageTexture.id;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
@@ -191,6 +212,23 @@ namespace
 
 				result.textures.push_back(imageTexture);
 				hasSpecularMap = true;
+
+				continue;
+			}
+
+			// emittance map
+			if (part == "map_Ks" && !hasSpecularMap)
+			{
+				ImageTexture imageTexture;
+				imageTexture.id = ++currentId;
+				currentMaterial.emittanceMapTextureId = imageTexture.id;
+
+				StringUtils::readUntilSpace(line, lineIndex, part);
+				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
+				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
+
+				result.textures.push_back(imageTexture);
+				hasEmittanceMap = true;
 
 				continue;
 			}
