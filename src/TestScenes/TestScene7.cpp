@@ -13,7 +13,7 @@ Scene Scene::createTestScene7()
 	Scene scene;
 
 	scene.general.backgroundColor = Color(0.8, 0.8, 0.8);
-	scene.general.maxIterations = 8;
+	scene.general.maxRayIterations = 8;
 	scene.general.multiSamples = 0;
 
 	// CAMERA //

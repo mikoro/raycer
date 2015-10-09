@@ -37,7 +37,8 @@ namespace Raycer
 			cl_float4 ALIGN(16) backgroundColor;
 			cl_float4 ALIGN(16) offLensColor;
 			cl_float ALIGN(4) rayStartOffset;
-			cl_int ALIGN(4) maxIterations;
+			cl_int ALIGN(4) maxRayIterations;
+			cl_int ALIGN(4) maxPathLength;
 			cl_int ALIGN(4) multiSamples;
 			cl_int ALIGN(4) timeSamples;
 			cl_int ALIGN(4) cameraSamples;
@@ -96,6 +97,8 @@ namespace Raycer
 			cl_float4 ALIGN(16) diffuseReflectance;
 			cl_float4 ALIGN(16) specularReflectance;
 			cl_float4 ALIGN(16) attenuationColor;
+			cl_float4 ALIGN(16) reflectance;
+			cl_float4 ALIGN(16) emittance;
 			cl_float2 ALIGN(8) texcoordScale;
 			cl_float ALIGN(4) shininess;
 			cl_int ALIGN(4) ambientMapTextureIndex;
@@ -103,6 +106,8 @@ namespace Raycer
 			cl_int ALIGN(4) specularMapTextureIndex;
 			cl_int ALIGN(4) rayReflectanceMapTextureIndex;
 			cl_int ALIGN(4) rayTransmittanceMapTextureIndex;
+			cl_int ALIGN(4) reflectanceMapTextureIndex;
+			cl_int ALIGN(4) emittanceMapTextureIndex;
 			cl_int ALIGN(4) normalMapTextureIndex;
 			cl_int ALIGN(4) maskMapTextureIndex;
 			cl_int ALIGN(4) heightMapTextureIndex;

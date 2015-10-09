@@ -14,7 +14,8 @@ typedef struct General
 	float4 backgroundColor;
 	float4 offLensColor;
 	float rayStartOffset;
-	int maxIterations;
+	int maxRayIterations;
+	int maxPathLength;
 	int multiSamples;
 	int timeSamples;
 	int cameraSamples;
@@ -73,6 +74,8 @@ typedef struct Material
 	float4 diffuseReflectance;
 	float4 specularReflectance;
 	float4 attenuationColor;
+	float4 reflectance;
+	float4 emittance;
 	float2 texcoordScale;
 	float shininess;
 	int ambientMapTextureIndex;
@@ -80,6 +83,8 @@ typedef struct Material
 	int specularMapTextureIndex;
 	int rayReflectanceMapTextureIndex;
 	int rayTransmittanceMapTextureIndex;
+	int reflectanceMapTextureIndex;
+	int emittanceMapTextureIndex;
 	int normalMapTextureIndex;
 	int maskMapTextureIndex;
 	int heightMapTextureIndex;

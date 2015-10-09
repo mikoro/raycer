@@ -12,7 +12,7 @@ Scene Scene::createTestScene14()
 {
 	Scene scene;
 
-	scene.general.maxIterations = 8;
+	scene.general.maxRayIterations = 8;
 	scene.general.multiSamples = 0;
 
 	scene.toneMapper.type = ToneMapperType::REINHARD;

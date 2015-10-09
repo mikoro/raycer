@@ -52,6 +52,14 @@ namespace Raycer
 		double attenuationFactor = 1.0;
 		Color attenuationColor = Color(0.0, 0.0, 0.0);
 
+		Texture* reflectanceMapTexture = nullptr;
+		size_t reflectanceMapTextureId = 0;
+		Color reflectance = Color(0.0, 0.0, 0.0);
+
+		Texture* emittanceMapTexture = nullptr;
+		size_t emittanceMapTextureId = 0;
+		Color emittance = Color(0.0, 0.0, 0.0);
+
 		Texture* normalMapTexture = nullptr;
 		size_t normalMapTextureId = 0;
 
@@ -91,6 +99,10 @@ namespace Raycer
 				CEREAL_NVP(enableAttenuation),
 				CEREAL_NVP(attenuationFactor),
 				CEREAL_NVP(attenuationColor),
+				CEREAL_NVP(reflectanceMapTextureId),
+				CEREAL_NVP(reflectance),
+				CEREAL_NVP(emittanceMapTextureId),
+				CEREAL_NVP(emittance),
 				CEREAL_NVP(normalMapTextureId),
 				CEREAL_NVP(maskMapTextureId),
 				CEREAL_NVP(heightMapTextureId));

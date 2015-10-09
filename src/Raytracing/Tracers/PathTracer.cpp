@@ -62,15 +62,21 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		double y = double(offsetPixelIndex / state.imageWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
 
-		Color pixelColor;
+		Color sampledColor;
+		uint n = scene.general.multiSamples + 1;
 
-		Ray ray;
-		bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, 0.0);
+		for (uint i = 0; i < n; ++i)
+		{
+			Ray ray;
 
-		if (isValidRay)
-			pixelColor = tracePath(scene, ray, 0, interrupted);
+			if (scene.camera.getRay(pixelCoordinate, ray, 0.0))
+				sampledColor += tracePath(scene, ray, 0, interrupted);
+		}
 
-		linearImage.setPixel(size_t(pixelIndex), pixelColor);
+		Color previousColor = linearImage.getPixel(size_t(pixelIndex));
+		Color currentColor = sampledColor / double(n);
+
+		linearImage.setPixel(size_t(pixelIndex), (previousColor + currentColor) / 2.0);
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)
@@ -85,13 +91,11 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 
 Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, const std::atomic<bool>& interrupted)
 {
-	Color finalColor = Color::BLACK;
-
 	if (interrupted)
-		return finalColor;
+		return Color::BLACK;
 
-	if (iteration >= scene.general.maxIterations)
-		return finalColor;
+	if (iteration >= scene.general.maxPathLength)
+		return Color::BLACK;
 
 	Intersection intersection;
 	std::vector<Intersection> intersections;
@@ -103,9 +107,24 @@ Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, 
 	}
 
 	if (!intersection.wasFound)
-		return finalColor;
+		return Color::BLACK;
 
-	//Material* material = intersection.primitive->material;
+	Material* material = intersection.primitive->material;
 
-	return finalColor;
+	if (!material->emittance.isZero())
+		return material->emittance;
+
+	Sampler* sampler = samplers[SamplerType::RANDOM].get();
+	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 0.0, 0, 0, 0, 0, 0);
+
+	Ray newRay;
+	newRay.origin = intersection.position + newDirection * scene.general.rayStartOffset;
+	newRay.direction = newDirection;
+	newRay.update();
+
+	double alpha = std::abs(newDirection.dot(intersection.normal));
+	Color BRDF = 2.0 * material->reflectance * alpha;
+	Color reflected = tracePath(scene, newRay, iteration + 1, interrupted);
+
+	return BRDF * reflected;
 }

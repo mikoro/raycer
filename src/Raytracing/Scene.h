@@ -91,11 +91,12 @@ namespace Raycer
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 			SamplerType cameraSamplerType = SamplerType::CMJ;
-			uint maxIterations = 3;
-			double rayStartOffset = 0.00001;
+			uint maxRayIterations = 3;
+			uint maxPathLength = 3;
 			uint multiSamples = 0;
 			uint timeSamples = 0;
 			uint cameraSamples = 0;
+			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
 			bool visualizeDepth = false;
@@ -109,11 +110,11 @@ namespace Raycer
 					CEREAL_NVP(multiSamplerFilterType),
 					CEREAL_NVP(timeSamplerType),
 					CEREAL_NVP(cameraSamplerType),
-					CEREAL_NVP(maxIterations),
-					CEREAL_NVP(rayStartOffset),
+					CEREAL_NVP(maxRayIterations),
 					CEREAL_NVP(multiSamples),
 					CEREAL_NVP(timeSamples),
 					CEREAL_NVP(cameraSamples),
+					CEREAL_NVP(rayStartOffset),
 					CEREAL_NVP(backgroundColor),
 					CEREAL_NVP(offLensColor),
 					CEREAL_NVP(visualizeDepth),

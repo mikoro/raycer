@@ -13,7 +13,7 @@ Scene Scene::createTestScene5()
 	Scene scene;
 
 	scene.general.backgroundColor = Color(0.8, 0.8, 0.8);
-	scene.general.maxIterations = 4;
+	scene.general.maxRayIterations = 4;
 	scene.general.multiSamples = 0;
 	scene.general.cameraSamples = 0;
 

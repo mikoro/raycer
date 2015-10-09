@@ -76,7 +76,8 @@ void CLScene::readSceneFull(const Scene& scene)
 	readColor(general.backgroundColor, scene.general.backgroundColor);
 	readColor(general.offLensColor, scene.general.offLensColor);
 	general.rayStartOffset = cl_float(scene.general.rayStartOffset);
-	general.maxIterations = cl_int(scene.general.maxIterations);
+	general.maxRayIterations = cl_int(scene.general.maxRayIterations);
+	general.maxPathLength = cl_int(scene.general.maxPathLength);
 	general.multiSamples = cl_int(scene.general.multiSamples);
 	general.timeSamples = cl_int(scene.general.timeSamples);
 	general.cameraSamples = cl_int(scene.general.cameraSamples);
@@ -111,6 +112,8 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
 		readColor(clMaterial.attenuationColor, material.attenuationColor);
+		readColor(clMaterial.reflectance, material.reflectance);
+		readColor(clMaterial.emittance, material.emittance);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
 		clMaterial.shininess = cl_float(material.shininess);
 		clMaterial.ambientMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId));
@@ -118,6 +121,8 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.specularMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId));
 		clMaterial.rayReflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId));
 		clMaterial.rayTransmittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId));
+		clMaterial.reflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId));
+		clMaterial.emittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId));
 		clMaterial.normalMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId));
 		clMaterial.maskMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId));
 		clMaterial.heightMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId));

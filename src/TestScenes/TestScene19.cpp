@@ -12,7 +12,7 @@ Scene Scene::createTestScene19()
 {
 	Scene scene;
 
-	//scene.general.tracerType = TracerType::PATH;
+	scene.general.tracerType = TracerType::PATH;
 	//scene.toneMapper.type = ToneMapperType::REINHARD;
 
 	scene.rootBVH.enabled = true;

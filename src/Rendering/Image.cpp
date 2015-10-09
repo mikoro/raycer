@@ -262,6 +262,13 @@ Color Image::getPixel(size_t x, size_t y) const
 	return pixelData[y * width + x];
 }
 
+Color Image::getPixel(size_t index) const
+{
+	assert(index < width * height);
+
+	return pixelData[index];
+}
+
 Color Image::getPixelNearest(double u, double v) const
 {
 	size_t x = size_t(u * double(width - 1) + 0.5);

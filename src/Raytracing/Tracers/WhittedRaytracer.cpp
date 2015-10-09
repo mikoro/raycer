@@ -281,7 +281,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 	Color reflectedColor;
 
 	// calculate and trace reflected ray
-	if (totalReflectance > 0.0 && iteration < scene.general.maxIterations)
+	if (totalReflectance > 0.0 && iteration < scene.general.maxRayIterations)
 	{
 		Vector3 R = ray.direction + 2.0 * c1 * intersection.normal;
 		R.normalize();
@@ -306,7 +306,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 	Color transmittedColor;
 
 	// calculate and trace refracted ray
-	if (totalTransmittance > 0.0 && iteration < scene.general.maxIterations)
+	if (totalTransmittance > 0.0 && iteration < scene.general.maxRayIterations)
 	{
 		double n = n1 / n2;
 		double c2 = 1.0 - (n * n) * (1.0 - c1 * c1);
