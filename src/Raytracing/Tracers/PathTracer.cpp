@@ -139,8 +139,8 @@ Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, 
 		reflectance = material->reflectance;
 
 	double alpha = std::abs(newDirection.dot(intersection.normal));
-	Color BRDF = 2.0 * reflectance * alpha;
+	Color brdf = 2.0 * reflectance * alpha;
 	Color reflected = tracePath(scene, newRay, iteration + 1, interrupted);
 
-	return BRDF * reflected;
+	return brdf * reflected;
 }
