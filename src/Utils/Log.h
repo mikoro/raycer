@@ -7,20 +7,25 @@
 #include <fstream>
 #include <mutex>
 
+#ifdef ERROR
+#undef ERROR
+#endif
+
 namespace Raycer
 {
-	enum class MessageLevel { Debug = 0, Info = 1, Warning = 2, Error = 3 };
+	enum class LogMessageLevel { DEBUG, INFO, WARNING, ERROR };
 
 	class Log
 	{
 	public:
 
-		Log(const std::string& fileName);
-		~Log();
+		Log();
+		explicit Log(const std::string& logFilePath);
 
-		void setMinimumMessageLevel(MessageLevel value);
+		void setLogFile(const std::string& logFilePath);
+		void setMinimumMessageLevel(LogMessageLevel value);
 
-		void logMessage(MessageLevel messageLevel, const std::string& message);
+		void logMessage(LogMessageLevel messageLevel, const std::string& message);
 		void logDebug(const std::string& message);
 		void logInfo(const std::string& message);
 		void logWarning(const std::string& message);
@@ -28,7 +33,7 @@ namespace Raycer
 		void logException(const std::exception_ptr& exception);
 
 		template <typename... Args>
-		void logMessage(MessageLevel messageLevel, const std::string& message, const Args&... args);
+		void logMessage(LogMessageLevel messageLevel, const std::string& message, const Args&... args);
 
 		template <typename... Args>
 		void logDebug(const std::string& message, const Args&... args);
@@ -44,17 +49,13 @@ namespace Raycer
 
 	private:
 
-		Log();
-		Log(const Log& log);
-		Log& operator=(const Log& log);
+		void handleMessage(LogMessageLevel messageLevel, const std::string& message);
+		std::string formatMessage(LogMessageLevel messageLevel, const std::string& message);
+		void outputMessage(LogMessageLevel messageLevel, const std::string& message);
 
-		void handleMessage(MessageLevel messageLevel, const std::string& message);
-		std::string formatMessage(MessageLevel messageLevel, const std::string& message);
-		void outputMessage(const std::string& message);
-
-		std::ofstream file;
+		std::ofstream logFile;
 		std::mutex outputMutex;
-		MessageLevel minimumMessageLevel = MessageLevel::Debug;
+		LogMessageLevel minimumMessageLevel = LogMessageLevel::DEBUG;
 	};
 }
 

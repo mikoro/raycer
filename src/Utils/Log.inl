@@ -4,7 +4,7 @@
 namespace Raycer
 {
 	template <typename... Args>
-	void Log::logMessage(MessageLevel messageLevel, const std::string& message, const Args&... args)
+	void Log::logMessage(LogMessageLevel messageLevel, const std::string& message, const Args&... args)
 	{
 		handleMessage(messageLevel, tfm::format(message.c_str(), args...));
 	}
@@ -12,24 +12,24 @@ namespace Raycer
 	template <typename... Args>
 	void Log::logDebug(const std::string& message, const Args&... args)
 	{
-		logMessage(MessageLevel::Debug, message, args...);
+		logMessage(LogMessageLevel::DEBUG, message, args...);
 	}
 
 	template <typename... Args>
 	void Log::logInfo(const std::string& message, const Args&... args)
 	{
-		logMessage(MessageLevel::Info, message, args...);
+		logMessage(LogMessageLevel::INFO, message, args...);
 	}
 
 	template <typename... Args>
 	void Log::logWarning(const std::string& message, const Args&... args)
 	{
-		logMessage(MessageLevel::Warning, message, args...);
+		logMessage(LogMessageLevel::WARNING, message, args...);
 	}
 
 	template <typename... Args>
 	void Log::logError(const std::string& message, const Args&... args)
 	{
-		logMessage(MessageLevel::Error, message, args...);
+		logMessage(LogMessageLevel::ERROR, message, args...);
 	}
 }

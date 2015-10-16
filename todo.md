@@ -35,9 +35,11 @@ misc
  - implement opencl tracers with multipass/wavefront style
  - bvh on/off for editing and store original visible in scene
  - change tclap to boost program options
- - use boost timer
+ - implement timer class
  - change globals variables to constexpr
  - fix atomic variable initializations
  - alias instead of typedef
  - use make_unique (check gcc support)
  - remove freetype headers
+ - add text coloring to logger output
+ - replace private constructors with =deleted

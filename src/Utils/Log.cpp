@@ -8,48 +8,120 @@
 using namespace Raycer;
 using namespace std::chrono;
 
-Log::Log()
+namespace
+{
+	enum class ConsoleTextColor
+	{
+		DEFAULT,
+		GRAY_ON_BLACK,
+		YELLOW_ON_BLACK,
+		WHITE_ON_RED
+	};
+
+	void setConsoleTextColor(ConsoleTextColor color)
+	{
+#ifdef _WIN32
+		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
+
+		switch (color)
+		{
+			case ConsoleTextColor::DEFAULT:
+				SetConsoleTextAttribute(consoleHandle, 7 + 0 * 16);
+				break;
+
+			case ConsoleTextColor::GRAY_ON_BLACK:
+				SetConsoleTextAttribute(consoleHandle, 8 + 0 * 16);
+				break;
+
+			case ConsoleTextColor::YELLOW_ON_BLACK:
+				SetConsoleTextAttribute(consoleHandle, 14 + 0 * 16);
+				break;
+
+			case ConsoleTextColor::WHITE_ON_RED:
+				SetConsoleTextAttribute(consoleHandle, 15 + 12 * 16);
+				break;
+
+			default: break;
+		}
+#endif
+	}
+
+	void setConsoleTextColorFromMessageLevel(LogMessageLevel messageLevel)
+	{
+		switch (messageLevel)
+		{
+			case LogMessageLevel::DEBUG:
+				setConsoleTextColor(ConsoleTextColor::GRAY_ON_BLACK);
+				break;
+
+			case LogMessageLevel::INFO:
+				setConsoleTextColor(ConsoleTextColor::DEFAULT);
+				break;
+
+			case LogMessageLevel::WARNING:
+				setConsoleTextColor(ConsoleTextColor::YELLOW_ON_BLACK);
+				break;
+
+			case LogMessageLevel::ERROR:
+				setConsoleTextColor(ConsoleTextColor::WHITE_ON_RED);
+				break;
+
+			default: setConsoleTextColor(ConsoleTextColor::DEFAULT); break;
+		}
+	}
+}
+
+Raycer::Log::Log()
 {
 }
 
-Log::Log(const std::string& fileName)
+Log::Log(const std::string& logFilePath)
 {
-	file.open(fileName, std::ios_base::out);
+	setLogFile(logFilePath);
 }
 
-Log::~Log()
+void Log::setLogFile(const std::string& logFilePath)
 {
-	file.close();
+	logFile = std::ofstream(logFilePath);
 }
 
-void Log::setMinimumMessageLevel(MessageLevel value)
+void Log::setMinimumMessageLevel(LogMessageLevel value)
 {
 	minimumMessageLevel = value;
 }
 
-void Log::handleMessage(MessageLevel messageLevel, const std::string& message)
+void Log::handleMessage(LogMessageLevel messageLevel, const std::string& message)
 {
 	if (messageLevel >= minimumMessageLevel)
 	{
 		std::string formattedMessage = formatMessage(messageLevel, message);
-		outputMessage(formattedMessage);
+		outputMessage(messageLevel, formattedMessage);
 	}
 }
 
-std::string Log::formatMessage(MessageLevel messageLevel, const std::string& message)
+std::string Log::formatMessage(LogMessageLevel messageLevel, const std::string& message)
 {
-	std::string messageLevelName = "Unknown";
+	std::string messageLevelName;
 
 	switch (messageLevel)
 	{
-		case MessageLevel::Debug: messageLevelName = "Debug";
+		case LogMessageLevel::DEBUG:
+			messageLevelName = "Debug";
 			break;
-		case MessageLevel::Info: messageLevelName = "Info";
+
+		case LogMessageLevel::INFO:
+			messageLevelName = "Info";
 			break;
-		case MessageLevel::Warning: messageLevelName = "Warning";
+
+		case LogMessageLevel::WARNING:
+			messageLevelName = "Warning";
 			break;
-		case MessageLevel::Error: messageLevelName = "Error";
+
+		case LogMessageLevel::ERROR:
+			messageLevelName = "Error";
 			break;
+
+		default: messageLevelName = "Unknown"; break;
 	}
 
 	auto now = std::chrono::system_clock::now();
@@ -63,41 +135,44 @@ std::string Log::formatMessage(MessageLevel messageLevel, const std::string& mes
 	return tfm::format("%02d:%02d:%02d.%03d [%s] %s", local_tm.tm_hour, local_tm.tm_min, local_tm.tm_sec, milliseconds, messageLevelName, message);
 }
 
-void Log::outputMessage(const std::string& message)
+void Log::outputMessage(LogMessageLevel messageLevel, const std::string& message)
 {
 	std::lock_guard<std::mutex> lock(outputMutex);
-	std::cout << message << std::endl;
 
-	if (file.is_open())
+	setConsoleTextColorFromMessageLevel(messageLevel);
+	std::cout << message << std::endl;
+	setConsoleTextColor(ConsoleTextColor::DEFAULT);
+
+	if (logFile.is_open())
 	{
-		file << message << std::endl;
-		file.flush();
+		logFile << message << std::endl;
+		logFile.flush();
 	}
 }
 
-void Log::logMessage(MessageLevel messageLevel, const std::string& message)
+void Log::logMessage(LogMessageLevel messageLevel, const std::string& message)
 {
 	handleMessage(messageLevel, message);
 }
 
 void Log::logDebug(const std::string& message)
 {
-	logMessage(MessageLevel::Debug, message);
+	logMessage(LogMessageLevel::DEBUG, message);
 }
 
 void Log::logInfo(const std::string& message)
 {
-	logMessage(MessageLevel::Info, message);
+	logMessage(LogMessageLevel::INFO, message);
 }
 
 void Log::logWarning(const std::string& message)
 {
-	logMessage(MessageLevel::Warning, message);
+	logMessage(LogMessageLevel::WARNING, message);
 }
 
 void Log::logError(const std::string& message)
 {
-	logMessage(MessageLevel::Error, message);
+	logMessage(LogMessageLevel::ERROR, message);
 }
 
 void Log::logException(const std::exception_ptr& exception)
@@ -116,6 +191,6 @@ void Log::logException(const std::exception_ptr& exception)
 	}
 	catch (...)
 	{
-		logError("Unknown error!");
+		logError("Unknown exception!");
 	}
 }
