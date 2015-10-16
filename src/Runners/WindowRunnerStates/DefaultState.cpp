@@ -18,6 +18,10 @@
 
 using namespace Raycer;
 
+Raycer::DefaultState::DefaultState() : interrupted(false)
+{
+}
+
 void DefaultState::initialize()
 {
 	Settings& settings = App::getSettings();

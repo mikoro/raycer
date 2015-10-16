@@ -34,12 +34,14 @@ misc
  - integrate framebuffer to windowrunner and add film class that holds image buffers
  - implement opencl tracers with multipass/wavefront style
  - bvh on/off for editing and store original visible in scene
- - change tclap to boost program options
+ - change tclap to boost program options and move settings to root
  - implement timer class
  - change globals variables to constexpr
  - fix atomic variable initializations
  - alias instead of typedef
  - use make_unique (check gcc support)
- - remove freetype headers
+ - remove freetype headers from windows platform
  - add text coloring to logger output
  - replace private constructors with =deleted
+ - check expection propagation from threads
+ - rename default state -> tracer state

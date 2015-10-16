@@ -41,28 +41,17 @@ WindowRunner::WindowRunner()
 {
 }
 
+WindowRunner::~WindowRunner()
+{
+	if (glfwInitialized)
+		glfwTerminate();
+}
+
 int WindowRunner::run()
 {
-	try
-	{
-		initialize();
-		mainLoop();
-	}
-	catch (...)
-	{
-		App::getLog().logException(std::current_exception());
-		return -1;
-	}
-
-	try
-	{
-		shutdown();
-	}
-	catch (...)
-	{
-		App::getLog().logException(std::current_exception());
-		return -1;
-	}
+	initialize();
+	mainLoop();
+	shutdown();
 
 	return 0;
 }
@@ -244,9 +233,6 @@ void WindowRunner::initialize()
 void WindowRunner::shutdown()
 {
 	runnerStates[currentState]->shutdown();
-
-	if (glfwInitialized)
-		glfwTerminate();
 }
 
 void WindowRunner::windowResized(size_t width, size_t height)

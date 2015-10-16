@@ -17,6 +17,8 @@ namespace Raycer
 	{
 	public:
 
+		DefaultState();
+
 		void initialize() override;
 		void pause() override;
 		void resume() override;

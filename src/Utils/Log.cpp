@@ -183,11 +183,11 @@ void Log::logException(const std::exception_ptr& exception)
 	}
 	catch (const std::exception& ex)
 	{
-		logError("%s: %s", typeid(ex).name(), ex.what());
+		logError("Exception: %s: %s", typeid(ex).name(), ex.what());
 	}
 	catch (const std::string& s)
 	{
-		logError(s);
+		logError("Exception: %s", s);
 	}
 	catch (...)
 	{

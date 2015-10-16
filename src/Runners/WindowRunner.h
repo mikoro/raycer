@@ -31,6 +31,7 @@ namespace Raycer
 	public:
 
 		WindowRunner();
+		~WindowRunner();
 
 		int run();
 		void stop();

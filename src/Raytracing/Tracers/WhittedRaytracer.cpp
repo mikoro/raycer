@@ -60,24 +60,42 @@ void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	Image& linearImage = *state.linearImage;
 	Image& toneMappedImage = *state.toneMappedImage;
 
+	std::mutex ompThreadExceptionMutex;
+	std::exception_ptr ompThreadException = nullptr;
+
 	#pragma omp parallel for schedule(dynamic, 1000)
 	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
 	{
-		if (interrupted)
-			continue;
+		try
+		{
+			if (interrupted)
+				continue;
 
-		size_t offsetPixelIndex = size_t(pixelIndex) + state.pixelStartOffset;
-		double x = double(offsetPixelIndex % state.imageWidth);
-		double y = double(offsetPixelIndex / state.imageWidth);
-		Vector2 pixelCoordinate = Vector2(x, y);
+			size_t offsetPixelIndex = size_t(pixelIndex) + state.pixelStartOffset;
+			double x = double(offsetPixelIndex % state.imageWidth);
+			double y = double(offsetPixelIndex / state.imageWidth);
+			Vector2 pixelCoordinate = Vector2(x, y);
 
-		Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
-		linearImage.setPixel(size_t(pixelIndex), pixelColor);
+			Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
+			linearImage.setPixel(size_t(pixelIndex), pixelColor);
 
-		// progress reporting to another thread
-		if ((pixelIndex + 1) % 100 == 0)
-			state.pixelsProcessed += 100;
+			// progress reporting to another thread
+			if ((pixelIndex + 1) % 100 == 0)
+				state.pixelsProcessed += 100;
+		}
+		catch (...)
+		{
+			std::lock_guard<std::mutex> lock(ompThreadExceptionMutex);
+
+			if (ompThreadException == nullptr)
+				ompThreadException = std::current_exception();
+
+			interrupted = true;
+		}
 	}
+
+	if (ompThreadException != nullptr)
+		std::rethrow_exception(ompThreadException);
 
 	if (!interrupted)
 		state.pixelsProcessed = state.pixelCount;

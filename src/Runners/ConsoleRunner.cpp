@@ -87,43 +87,50 @@ void ConsoleRunner::run(TracerState& state)
 		clTracer.initializeBuffers(*state.scene);
 	}
 
-	std::atomic<bool> finished;
-	finished = false;
+	std::atomic<bool> renderThreadFinished(false);
+	std::exception_ptr renderThreadException = nullptr;
 
-	auto renderFunction = [&]()
+	auto renderThreadFunction = [&]()
 	{
-		if (!settings.openCL.enabled)
-			Tracer::getTracer(state.scene->general.tracerType)->run(state, interrupted);
-		else
-			clTracer.run(state, interrupted);
+		try
+		{
+			if (!settings.openCL.enabled)
+				Tracer::getTracer(state.scene->general.tracerType)->run(state, interrupted);
+			else
+				clTracer.run(state, interrupted);
+		}
+		catch (...)
+		{
+			renderThreadException = std::current_exception();
+		}
 
-		finished = true;
+		renderThreadFinished = true;
 	};
 
-	std::cout << tfm::format("\nStart raytracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.imageWidth, state.imageHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelStartOffset);
+	std::cout << tfm::format("\nStart tracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.imageWidth, state.imageHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelStartOffset);
 
 	auto startTime = high_resolution_clock::now();
-	std::thread renderThread(renderFunction);
+	std::thread renderThread(renderThreadFunction);
 
-	while (!finished)
+	while (!renderThreadFinished)
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
 		if (!settings.openCL.enabled)
 			printProgress(startTime, state.pixelCount, state.pixelsProcessed);
 		else
 			printProgressOpenCL(startTime);
+
+		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
 
 	renderThread.join();
+
+	if (renderThreadException != nullptr)
+		std::rethrow_exception(renderThreadException);
 
 	if (!settings.openCL.enabled)
 		printProgress(startTime, state.pixelCount, state.pixelsProcessed);
 	else
 		printProgressOpenCL(startTime);
-
-	if (settings.openCL.enabled)
-		state.pixelsProcessed = state.pixelCount;
 
 	auto elapsedTime = high_resolution_clock::now() - startTime;
 	auto totalElapsedSeconds = duration_cast<std::chrono::seconds>(elapsedTime).count();
@@ -139,7 +146,7 @@ void ConsoleRunner::run(TracerState& state)
 		totalPixelsPerSecond = state.pixelsProcessed / (totalElapsedMilliseconds / 1000.0);
 
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
-	std::cout << tfm::format("\n\nRaytracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
+	std::cout << tfm::format("\n\nTracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
 		*state.toneMappedImage = clTracer.downloadImage();

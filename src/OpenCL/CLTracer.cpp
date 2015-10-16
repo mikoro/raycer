@@ -246,6 +246,8 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueReleaseGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object release");
 
 	CLManager::checkError(clFinish(clManager.commandQueue), "Could not finish command queue");
+
+	state.pixelsProcessed = state.pixelCount;
 }
 
 Image CLTracer::downloadImage()

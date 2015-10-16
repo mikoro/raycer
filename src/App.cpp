@@ -87,7 +87,7 @@ int App::run(int argc, char** argv)
 	changeDirectory();
 #endif
 
-	TCLAP::CmdLine cmd("Raycer", ' ', "1.0.0");
+	TCLAP::CmdLine cmd("Raycer", ' ', RAYCER_VERSION);
 	TCLAP::SwitchArg interactiveSwitch("", "interactive", "View the scene interactively", cmd, false);
 	TCLAP::SwitchArg nonInteractiveSwitch("", "non-interactive", "Force non-interactive mode", cmd, false);
 	TCLAP::SwitchArg enableOpenCLSwitch("", "opencl", "Use OpenCL for raytracing", cmd, false);
@@ -114,12 +114,16 @@ int App::run(int argc, char** argv)
 		return -1;
 	}
 
+	Log& log = getLog();
+
 	try
 	{
 		Settings& settings = getSettings();
 		WindowRunner& windowRunner = getWindowRunner();
 		ConsoleRunner& consoleRunner = getConsoleRunner();
 		NetworkRunner& networkRunner = getNetworkRunner();
+
+		log.logInfo(std::string("Raycer v") + RAYCER_VERSION);
 
 		settings.load("settings.ini");
 
@@ -183,17 +187,15 @@ int App::run(int argc, char** argv)
 
 		if (settings.general.interactive)
 			return windowRunner.run();
-		else
-		{
-			if (settings.network.isClient || settings.network.isServer)
-				return networkRunner.run();
-			else
-				return consoleRunner.run();
-		}
+
+		if (settings.network.isClient || settings.network.isServer)
+			return networkRunner.run();
+		
+		return consoleRunner.run();
 	}
-	catch (const std::exception& ex)
+	catch (...)
 	{
-		std::cerr << "Error: " << ex.what() << std::endl;
+		log.logException(std::current_exception());
 		return -1;
 	}
 }
