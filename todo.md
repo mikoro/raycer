@@ -33,3 +33,11 @@ misc
  - implement non-recursive versions of raytracing and pathtracing algorithms (wavefront-style / multipass stuff)
  - integrate framebuffer to windowrunner and add film class that holds image buffers
  - implement opencl tracers with multipass/wavefront style
+ - bvh on/off for editing and store original visible in scene
+ - change tclap to boost program options
+ - use boost timer
+ - change globals variables to constexpr
+ - fix atomic variable initializations
+ - alias instead of typedef
+ - use make_unique (check gcc support)
+ - remove freetype headers
