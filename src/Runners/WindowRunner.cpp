@@ -5,8 +5,8 @@
 
 #include "Runners/WindowRunner.h"
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
-#include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
 #include "Utils/GLHelper.h"
 #include "OpenCL/CLManager.h"

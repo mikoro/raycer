@@ -9,7 +9,7 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Primitives/Primitive.h"
 #include "App.h"
-#include "Utils/Settings.h"
+#include "Settings.h"
 #include "Math/MathUtils.h"
 #include "Math/Vector2.h"
 #include "Runners/WindowRunner.h"

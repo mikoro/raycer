@@ -6,8 +6,8 @@
 #include "OpenCL/CLManager.h"
 #include "OpenCL/CLStructs.h"
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
-#include "Utils/Settings.h"
 
 using namespace Raycer;
 using namespace boost::filesystem;

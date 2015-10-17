@@ -5,6 +5,7 @@
 
 #include "Runners/WindowRunnerStates/DefaultState.h"
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
 #include "OpenCL/CLTracer.h"
 #include "Math/Color.h"
@@ -14,7 +15,6 @@
 #include "Rendering/Framebuffer.h"
 #include "Rendering/Text.h"
 #include "Runners/WindowRunner.h"
-#include "Utils/Settings.h"
 
 using namespace Raycer;
 

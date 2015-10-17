@@ -5,8 +5,8 @@
 
 #include "Utils/GLHelper.h"
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
-#include "Utils/Settings.h"
 #include "Utils/StringUtils.h"
 
 using namespace Raycer;

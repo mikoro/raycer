@@ -4,8 +4,8 @@
 #include "stdafx.h"
 
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
-#include "Utils/Settings.h"
 #include "Rendering/Framebuffer.h"
 #include "Runners/WindowRunner.h"
 #include "Runners/ConsoleRunner.h"

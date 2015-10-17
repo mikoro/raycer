@@ -5,8 +5,8 @@
 
 #include "Rendering/Framebuffer.h"
 #include "App.h"
+#include "Settings.h"
 #include "Utils/Log.h"
-#include "Utils/Settings.h"
 #include "Utils/GLHelper.h"
 
 using namespace Raycer;

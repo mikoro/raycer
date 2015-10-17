@@ -84,9 +84,6 @@
     <ClCompile Include="src\Runners\ConsoleRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
-    <ClCompile Include="src\Utils\Settings.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\Rendering\Text.cpp">
       <Filter>Rendering</Filter>
@@ -381,6 +378,7 @@
     <ClCompile Include="src\Rendering\ToneMappers\PassthroughToneMapper.cpp">
       <Filter>Rendering\ToneMappers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Settings.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -412,9 +410,6 @@
     </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
       <Filter>Runners</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Utils\Settings.h">
-      <Filter>Utils</Filter>
     </ClInclude>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Rendering\Text.h">
@@ -647,6 +642,7 @@
     <ClInclude Include="src\Rendering\ToneMappers\PassthroughToneMapper.h">
       <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Settings.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">

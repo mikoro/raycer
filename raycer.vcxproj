@@ -228,6 +228,7 @@
     <ClCompile Include="src\Runners\WindowRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />
     <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp" />
+    <ClCompile Include="src\Settings.cpp" />
     <ClCompile Include="src\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">Create</PrecompiledHeader>
@@ -274,7 +275,6 @@
     <ClCompile Include="src\Utils\PerlinNoise.cpp" />
     <ClCompile Include="src\Utils\PlyModelLoader.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
-    <ClCompile Include="src\Utils\Settings.cpp" />
     <ClCompile Include="src\Utils\StringUtils.cpp" />
     <ClCompile Include="src\Utils\ValueNoise.cpp" />
   </ItemGroup>
@@ -356,6 +356,7 @@
     <ClInclude Include="src\Runners\NetworkRunner.h" />
     <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h" />
     <ClInclude Include="src\Runners\WindowRunnerStates\WindowRunnerState.h" />
+    <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\stdafx.h" />
     <ClInclude Include="src\Utils\CellNoise.h" />
     <ClInclude Include="src\Utils\ColorGradient.h" />
@@ -366,7 +367,6 @@
     <ClInclude Include="src\Utils\ModelLoader.h" />
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
-    <ClInclude Include="src\Utils\Settings.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />
     <ClInclude Include="src\Utils\ValueNoise.h" />
   </ItemGroup>
