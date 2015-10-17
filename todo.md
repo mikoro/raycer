@@ -45,3 +45,5 @@ misc
  - replace private constructors with =deleted
  - check expection propagation from threads
  - rename default state -> tracer state
+ - move file opening and console colors to SysUtils
+ - fast file -> string in StringUtils

@@ -7,6 +7,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/StringUtils.h"
 #include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Tracers/Tracer.h"
@@ -107,7 +108,12 @@ void ConsoleRunner::run(TracerState& state)
 		renderThreadFinished = true;
 	};
 
-	std::cout << tfm::format("\nStart tracing (dimensions: %dx%d, pixels: %s, size: %s, offset: %d)\n\n", state.imageWidth, state.imageHeight, humanizeNumberDecimal(double(state.pixelCount)), humanizeNumberBytes(double(state.pixelCount * 4 * 4)), state.pixelStartOffset);
+	std::cout << tfm::format("\nStart tracing (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
+		state.imageWidth,
+		state.imageHeight,
+		state.pixelStartOffset,
+		state.pixelCount,
+		StringUtils::humanizeNumber(double(state.pixelCount * sizeof(Color)), true));
 
 	auto startTime = high_resolution_clock::now();
 	std::thread renderThread(renderThreadFunction);
@@ -146,7 +152,10 @@ void ConsoleRunner::run(TracerState& state)
 		totalPixelsPerSecond = state.pixelsProcessed / (totalElapsedMilliseconds / 1000.0);
 
 	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
-	std::cout << tfm::format("\n\nTracing %s (time: %s, pixels: %s, pixels/s: %s)\n\n", interrupted ? "interrupted" : "finished", timeString, humanizeNumberDecimal(double(state.pixelsProcessed.load())), humanizeNumberDecimal(totalPixelsPerSecond));
+	std::cout << tfm::format("\n\nTracing %s (time: %s, pixels/s: %f)\n\n",
+		interrupted ? "interrupted" : "finished",
+		timeString,
+		StringUtils::humanizeNumber(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
 		*state.toneMappedImage = clTracer.downloadImage();
@@ -224,7 +233,7 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 	printf("] ");
 	printf("%u %% | ", percentage);
 	printf("Remaining time: %02d:%02d:%02d | ", remainingHours, remainingMinutes, remainingSeconds);
-	printf("Pixels/s: %s", humanizeNumberDecimal(pixelsPerSecondAverage.getAverage()).c_str());
+	printf("Pixels/s: %s", StringUtils::humanizeNumber(pixelsPerSecondAverage.getAverage()).c_str());
 	printf("          \r");
 }
 
@@ -256,34 +265,4 @@ void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chron
 	printf("[%c] ", progressChar);
 	printf("Elapsed time: %02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
 	printf("          \r");
-}
-
-std::string ConsoleRunner::humanizeNumberDecimal(double value)
-{
-	const char* prefixes[] = { "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
-
-	for (uint i = 0; i < 9; ++i)
-	{
-		if (value < 1000.0)
-			return tfm::format("%.2f %s", value, prefixes[i]);
-		else
-			value /= 1000.0;
-	}
-
-	return tfm::format("%.2f %s", value, "Y");
-}
-
-std::string ConsoleRunner::humanizeNumberBytes(double value)
-{
-	const char* prefixes[] = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
-
-	for (uint i = 0; i < 9; ++i)
-	{
-		if (value < 1024.0)
-			return tfm::format("%.2f %s", value, prefixes[i]);
-		else
-			value /= 1024.0;
-	}
-
-	return tfm::format("%.2f %s", value, "YB");
 }

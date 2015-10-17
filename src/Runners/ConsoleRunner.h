@@ -26,8 +26,6 @@ namespace Raycer
 
 		void printProgress(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed);
 		void printProgressOpenCL(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime);
-		std::string humanizeNumberDecimal(double value);
-		std::string humanizeNumberBytes(double value);
 
 		bool openCLInitialized = false;
 		std::atomic<bool> interrupted;
