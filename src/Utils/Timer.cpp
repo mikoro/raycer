@@ -16,7 +16,7 @@ std::string TimerData::getString(bool withMilliseconds) const
 		return tfm::format("%02d:%02d:%02d", hours, minutes, seconds);
 }
 
-Timer::Timer(double targetValue_) : targetValue(targetValue_)
+Timer::Timer()
 {
 	restart();
 }
@@ -24,6 +24,8 @@ Timer::Timer(double targetValue_) : targetValue(targetValue_)
 void Timer::restart()
 {
 	startTime = sc::high_resolution_clock::now();
+	currentValue = 0.0;
+	remainingMillisecondsAverage.setAverage(0.0);
 }
 
 TimerData Timer::getElapsed() const
@@ -56,7 +58,12 @@ void Timer::updateCurrentValue(double value)
 	currentValue = value;
 }
 
-TimerData Timer::getRemaining() const
+void Timer::setAveragingAlpha(double alpha)
+{
+	remainingMillisecondsAverage.setAlpha(alpha);
+}
+
+TimerData Timer::getRemaining()
 {
 	auto elapsedTime = sc::high_resolution_clock::now() - startTime;
 	uint64_t elapsedMilliseconds = sc::duration_cast<sc::milliseconds>(elapsedTime).count();
@@ -70,7 +77,9 @@ TimerData Timer::getRemaining() const
 	if (remainingUnits < 0.0)
 		remainingUnits = 0.0;
 
-	uint64_t remainingMilliseconds = uint64_t(remainingUnits * millisecondsPerUnit + 0.5);
+	remainingMillisecondsAverage.addMeasurement(remainingUnits * millisecondsPerUnit);
+	uint64_t remainingMilliseconds = uint64_t(remainingMillisecondsAverage.getAverage() + 0.5);
+
 	TimerData timerData;
 
 	timerData.totalNanoseconds = remainingMilliseconds * 1000000;
@@ -85,4 +94,10 @@ TimerData Timer::getRemaining() const
 	timerData.milliseconds = timerData.totalMilliseconds - timerData.seconds * 1000 - timerData.minutes * 60 * 1000 - timerData.hours * 60 * 60 * 1000;
 
 	return timerData;
+}
+
+double Timer::getPercentage() const
+{
+	double percentage = (currentValue / targetValue) * 100.0;
+	return std::max(0.0, std::min(100.0, percentage));
 }

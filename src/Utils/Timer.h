@@ -5,6 +5,8 @@
 
 #include <chrono>
 
+#include "Math/MovingAverage.h"
+
 namespace Raycer
 {
 	struct TimerData
@@ -27,19 +29,24 @@ namespace Raycer
 	{
 	public:
 
-		explicit Timer(double targetValue = 0.0);
+		Timer();
 
 		void restart();
 		TimerData getElapsed() const;
 		
 		void setTargetValue(double value);
 		void updateCurrentValue(double value);
-		TimerData getRemaining() const;
+		void setAveragingAlpha(double alpha);
+		TimerData getRemaining();
+		double getPercentage() const;
 
 	private:
 
 		std::chrono::high_resolution_clock::time_point startTime;
+
 		double currentValue = 0.0;
 		double targetValue = 0.0;
+
+		MovingAverage remainingMillisecondsAverage;
 	};
 }

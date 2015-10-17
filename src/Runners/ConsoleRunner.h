@@ -4,9 +4,9 @@
 #pragma once
 
 #include <atomic>
-#include <chrono>
 
 #include "Math/MovingAverage.h"
+#include "Utils/Timer.h"
 
 namespace Raycer
 {
@@ -24,16 +24,17 @@ namespace Raycer
 
 	private:
 
-		void printProgress(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed);
-		void printProgressOpenCL(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime);
+		void printProgress(const TimerData& elapsed, const TimerData& remaining);
+		void printProgressOpenCL(const TimerData& elapsed, const TimerData& remaining);
 
 		bool openCLInitialized = false;
 		std::atomic<bool> interrupted;
 
-		MovingAverage pixelsPerSecondAverage;
-		MovingAverage remainingTimeAverage;
+		Timer timer;
 
-		uint openCLProgressCounter1 = 0;
-		uint openCLProgressCounter2 = 0;
+		MovingAverage pixelsPerSecondAverage;
+
+		uint progressCounter1 = 0;
+		uint progressCounter2 = 0;
 	};
 }

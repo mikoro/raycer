@@ -25,10 +25,10 @@ int ConsoleRunner::run()
 
 	interrupted = false;
 
-	pixelsPerSecondAverage.setAlpha(0.1);
-	pixelsPerSecondAverage.setAverage(1.0);
-	remainingTimeAverage.setAlpha(0.1);
-	remainingTimeAverage.setAverage(0.0);
+	pixelsPerSecondAverage.setAlpha(0.01);
+	pixelsPerSecondAverage.setAverage(0.0);
+	timer.setAveragingAlpha(0.01);
+	progressCounter1 = progressCounter2 = 0;
 
 	Scene scene;
 
@@ -108,22 +108,32 @@ void ConsoleRunner::run(TracerState& state)
 		renderThreadFinished = true;
 	};
 
-	std::cout << tfm::format("\nStart tracing (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
+	std::cout << tfm::format("\nTracing started (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
 		state.imageWidth,
 		state.imageHeight,
 		state.pixelStartOffset,
 		state.pixelCount,
 		StringUtils::humanizeNumber(double(state.pixelCount * sizeof(Color)), true));
 
-	auto startTime = high_resolution_clock::now();
+	timer.setTargetValue(double(state.pixelCount));
+	timer.restart();
+
 	std::thread renderThread(renderThreadFunction);
 
 	while (!renderThreadFinished)
 	{
+		timer.updateCurrentValue(double(state.pixelsProcessed));
+
+		auto elapsed = timer.getElapsed();
+		auto remaining = timer.getRemaining();
+
+		if (elapsed.totalMilliseconds > 0)
+			pixelsPerSecondAverage.addMeasurement(double(state.pixelsProcessed) / (double(elapsed.totalMilliseconds) / 1000.0));
+
 		if (!settings.openCL.enabled)
-			printProgress(startTime, state.pixelCount, state.pixelsProcessed);
+			printProgress(elapsed, remaining);
 		else
-			printProgressOpenCL(startTime);
+			printProgressOpenCL(elapsed, remaining);
 
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
@@ -133,28 +143,24 @@ void ConsoleRunner::run(TracerState& state)
 	if (renderThreadException != nullptr)
 		std::rethrow_exception(renderThreadException);
 
-	if (!settings.openCL.enabled)
-		printProgress(startTime, state.pixelCount, state.pixelsProcessed);
-	else
-		printProgressOpenCL(startTime);
+	timer.updateCurrentValue(double(state.pixelsProcessed));
 
-	auto elapsedTime = high_resolution_clock::now() - startTime;
-	auto totalElapsedSeconds = duration_cast<std::chrono::seconds>(elapsedTime).count();
-	auto totalElapsedMilliseconds = duration_cast<std::chrono::milliseconds>(elapsedTime).count();
-	auto elapsedHours = totalElapsedSeconds / 3600;
-	auto elapsedMinutes = (totalElapsedSeconds - elapsedHours * 3600) / 60;
-	auto elapsedSeconds = totalElapsedSeconds - elapsedHours * 3600 - elapsedMinutes * 60;
-	auto elapsedMilliseconds = totalElapsedMilliseconds - totalElapsedSeconds * 1000;
+	auto elapsed = timer.getElapsed();
+	auto remaining = timer.getRemaining();
+
+	if (!settings.openCL.enabled)
+		printProgress(elapsed, remaining);
+	else
+		printProgressOpenCL(elapsed, remaining);
 
 	double totalPixelsPerSecond = 0.0;
 
-	if (totalElapsedMilliseconds > 0)
-		totalPixelsPerSecond = state.pixelsProcessed / (totalElapsedMilliseconds / 1000.0);
+	if (elapsed.totalMilliseconds > 0)
+		totalPixelsPerSecond = double(state.pixelsProcessed) / (double(elapsed.totalMilliseconds) / 1000.0);
 
-	std::string timeString = tfm::format("%02d:%02d:%02d.%03d", elapsedHours, elapsedMinutes, elapsedSeconds, elapsedMilliseconds);
 	std::cout << tfm::format("\n\nTracing %s (time: %s, pixels/s: %f)\n\n",
 		interrupted ? "interrupted" : "finished",
-		timeString,
+		elapsed.getString(true),
 		StringUtils::humanizeNumber(totalPixelsPerSecond));
 
 	if (!interrupted && settings.openCL.enabled)
@@ -189,19 +195,9 @@ void ConsoleRunner::openImageExternally(const std::string& fileName)
 #endif
 }
 
-void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& startTime, size_t totalPixelCount, size_t pixelsProcessed)
+void ConsoleRunner::printProgress(const TimerData& elapsed, const TimerData& remaining)
 {
-	auto elapsedTime = high_resolution_clock::now() - startTime;
-	double elapsedSeconds = duration_cast<std::chrono::milliseconds>(elapsedTime).count() / 1000.0;
-	double msPerPixel = 0.0;
-
-	if (pixelsProcessed > 0)
-		msPerPixel = duration_cast<std::chrono::milliseconds>(elapsedTime).count() / double(pixelsProcessed);
-
-	auto estimatedTime = std::chrono::milliseconds(int(msPerPixel * double(totalPixelCount) + 0.5));
-	auto remainingTime = estimatedTime - elapsedTime;
-
-	uint percentage = int((double(pixelsProcessed) / double(totalPixelCount)) * 100.0 + 0.5);
+	uint percentage = uint(timer.getPercentage() + 0.5);
 	uint barCount = percentage / 4;
 
 	printf("[");
@@ -217,40 +213,22 @@ void ConsoleRunner::printProgress(const time_point<high_resolution_clock>& start
 			printf(" ");
 	}
 
-	if (elapsedSeconds > 0.0)
-		pixelsPerSecondAverage.addMeasurement(double(pixelsProcessed) / elapsedSeconds);
-
-	remainingTimeAverage.addMeasurement(double(duration_cast<std::chrono::seconds>(remainingTime).count()));
-
-	if (pixelsProcessed == totalPixelCount)
-		remainingTimeAverage.setAverage(0.0);
-
-	int totalRemainingSeconds = int(remainingTimeAverage.getAverage() + 0.5);
-	int remainingHours = totalRemainingSeconds / 3600;
-	int remainingMinutes = (totalRemainingSeconds - remainingHours * 3600) / 60;
-	int remainingSeconds = totalRemainingSeconds - remainingHours * 3600 - remainingMinutes * 60;
-
 	printf("] ");
 	printf("%u %% | ", percentage);
-	printf("Remaining time: %02d:%02d:%02d | ", remainingHours, remainingMinutes, remainingSeconds);
+	printf("Elapsed time: %s | ", elapsed.getString().c_str());
+	printf("Remaining time: %s | ", remaining.getString().c_str());
 	printf("Pixels/s: %s", StringUtils::humanizeNumber(pixelsPerSecondAverage.getAverage()).c_str());
 	printf("          \r");
 }
 
-void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chrono::high_resolution_clock>& startTime)
+void ConsoleRunner::printProgressOpenCL(const TimerData& elapsed, const TimerData& remaining)
 {
-	auto elapsedTime = high_resolution_clock::now() - startTime;
-	int totalElapsedSeconds = int(duration_cast<std::chrono::seconds>(elapsedTime).count());
-	int elapsedHours = totalElapsedSeconds / 3600;
-	int elapsedMinutes = (totalElapsedSeconds - elapsedHours * 3600) / 60;
-	int elapsedSeconds = totalElapsedSeconds - elapsedHours * 3600 - elapsedMinutes * 60;
-
-	if (++openCLProgressCounter1 % 5 == 0)
-		++openCLProgressCounter2;
+	if (++progressCounter1 % 5 == 0)
+		++progressCounter2;
 
 	char progressChar;
 
-	switch (openCLProgressCounter2 % 4)
+	switch (progressCounter2 % 4)
 	{
 		case 1: progressChar = '\\';
 			break;
@@ -263,6 +241,7 @@ void ConsoleRunner::printProgressOpenCL(const std::chrono::time_point<std::chron
 	}
 
 	printf("[%c] ", progressChar);
-	printf("Elapsed time: %02d:%02d:%02d", elapsedHours, elapsedMinutes, elapsedSeconds);
+	printf("Elapsed time: %s | ", elapsed.getString().c_str());
+	printf("Remaining time: %s | ", remaining.getString().c_str());
 	printf("          \r");
 }

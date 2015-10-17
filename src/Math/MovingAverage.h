@@ -11,17 +11,17 @@ namespace Raycer
 	{
 	public:
 
-		MovingAverage(double alpha = 1.0, double averageValue = 0.0);
+		MovingAverage(double alpha = 1.0, double average = 0.0);
 
-		void setAlpha(double value);
-		void setAverage(double value);
+		void setAlpha(double alpha);
+		void setAverage(double average);
 		void addMeasurement(double value);
 		double getAverage() const;
 
 	private:
 
 		double alpha;
-		double averageValue;
+		double average;
 
 		friend class cereal::access;
 
@@ -29,7 +29,7 @@ namespace Raycer
 		void serialize(Archive& ar)
 		{
 			ar(CEREAL_NVP(alpha),
-				CEREAL_NVP(averageValue));
+				CEREAL_NVP(average));
 		}
 	};
 }
