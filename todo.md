@@ -47,3 +47,4 @@ misc
  - rename default state -> tracer state
  - move file opening and console colors to SysUtils
  - fast file -> string in StringUtils
+ - add scope exit to obj loader

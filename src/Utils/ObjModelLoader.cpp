@@ -376,17 +376,19 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	std::vector<Vector3> normals;
 	std::vector<Vector2> texcoords;
 
-	std::ifstream file(info.modelFilePath);
+	FILE* file = fopen(info.modelFilePath.c_str(), "r");
 
-	if (!file.good())
+	if (file == nullptr)
 		throw std::runtime_error("Could not open the OBJ file");
 
+	char buffer[1024];
 	std::string line;
 	std::string part;
 	size_t lineIndex = 0;
 
-	while (std::getline(file, line))
+	while (fgets(buffer, sizeof(buffer), file) != nullptr)
 	{
+		line.assign(buffer);
 		part.clear();
 		lineIndex = 0;
 		StringUtils::readUntilSpace(line, lineIndex, part);
@@ -457,7 +459,7 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 			processFace(line.substr(lineIndex), vertices, normals, texcoords, info, result, combinedGroup, currentId, currentMaterialId);
 	}
 
-	file.close();
+	fclose(file);
 
 	if (info.enableCombinedGroup)
 	{
