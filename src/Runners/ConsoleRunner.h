@@ -20,8 +20,6 @@ namespace Raycer
 		void run(TracerState& state);
 		void interrupt();
 
-		static void openImageExternally(const std::string& fileName);
-
 	private:
 
 		void printProgress(const TimerData& elapsed, const TimerData& remaining);

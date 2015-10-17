@@ -6,8 +6,8 @@
 #include "Runners/ConsoleRunner.h"
 #include "App.h"
 #include "Settings.h"
-#include "Utils/Log.h"
 #include "Utils/StringUtils.h"
+#include "Utils/SysUtils.h"
 #include "Rendering/Image.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Tracers/Tracer.h"
@@ -59,7 +59,7 @@ int ConsoleRunner::run()
 		image.save(settings.image.fileName);
 
 		if (settings.image.autoView)
-			openImageExternally(settings.image.fileName);
+			SysUtils::openFileExternally(settings.image.fileName);
 	}
 	else
 		image.save("partial_result.png");
@@ -170,29 +170,6 @@ void ConsoleRunner::run(TracerState& state)
 void ConsoleRunner::interrupt()
 {
 	interrupted = true;
-}
-
-void ConsoleRunner::openImageExternally(const std::string& fileName)
-{
-	Log& log = App::getLog();
-	log.logInfo("Opening the image in an external viewer");
-
-#ifdef _WIN32
-	ShellExecuteA(nullptr, "open", fileName.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
-#else
-	int pid = fork();
-
-	if (pid == 0)
-	{
-#ifdef __linux
-		char* arg[] = { (char*)"xdg-open", (char*)fileName.c_str(), (char*)0 };
-#elif __APPLE__
-		char* arg[] = { (char*)"open", (char*)fileName.c_str(), (char*)0 };
-#endif
-		if (execvp(arg[0], arg) == -1)
-			log.logWarning("Could not open the image (%d)", errno);
-	}
-#endif
 }
 
 void ConsoleRunner::printProgress(const TimerData& elapsed, const TimerData& remaining)

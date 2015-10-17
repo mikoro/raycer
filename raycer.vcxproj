@@ -276,6 +276,7 @@
     <ClCompile Include="src\Utils\PlyModelLoader.cpp" />
     <ClCompile Include="src\Utils\PoissonDisc.cpp" />
     <ClCompile Include="src\Utils\StringUtils.cpp" />
+    <ClCompile Include="src\Utils\SysUtils.cpp" />
     <ClCompile Include="src\Utils\Timer.cpp" />
     <ClCompile Include="src\Utils\ValueNoise.cpp" />
   </ItemGroup>
@@ -369,6 +370,7 @@
     <ClInclude Include="src\Utils\PerlinNoise.h" />
     <ClInclude Include="src\Utils\PoissonDisc.h" />
     <ClInclude Include="src\Utils\StringUtils.h" />
+    <ClInclude Include="src\Utils\SysUtils.h" />
     <ClInclude Include="src\Utils\Timer.h" />
     <ClInclude Include="src\Utils\ValueNoise.h" />
   </ItemGroup>

@@ -8,6 +8,7 @@
 #include "Settings.h"
 #include "Utils/Log.h"
 #include "Utils/StringUtils.h"
+#include "Utils/SysUtils.h"
 #include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Camera.h"
 #include "Runners/ConsoleRunner.h"
@@ -568,7 +569,7 @@ void NetworkRunner::receiveResults()
 		resultImage.save(settings.image.fileName);
 
 		if (settings.image.autoView)
-			ConsoleRunner::openImageExternally(settings.image.fileName);
+			SysUtils::openFileExternally(settings.image.fileName);
 	}
 	catch (const std::exception& ex)
 	{

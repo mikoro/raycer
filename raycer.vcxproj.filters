@@ -382,6 +382,9 @@
     <ClCompile Include="src\Utils\Timer.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="src\Utils\SysUtils.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -647,6 +650,9 @@
     </ClInclude>
     <ClInclude Include="src\Settings.h" />
     <ClInclude Include="src\Utils\Timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Utils\SysUtils.h">
       <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
