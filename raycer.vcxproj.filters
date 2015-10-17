@@ -379,6 +379,9 @@
       <Filter>Rendering\ToneMappers</Filter>
     </ClCompile>
     <ClCompile Include="src\Settings.cpp" />
+    <ClCompile Include="src\Utils\Timer.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -643,6 +646,9 @@
       <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
     <ClInclude Include="src\Settings.h" />
+    <ClInclude Include="src\Utils\Timer.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
