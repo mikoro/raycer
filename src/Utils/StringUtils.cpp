@@ -12,6 +12,22 @@ bool StringUtils::endsWith(const std::string& input, const std::string& end)
 	return input.rfind(end) == (input.size() - end.size());
 }
 
+std::string StringUtils::readFileToString(const std::string& filePath)
+{
+	std::ifstream file(filePath, std::ios::in | std::ios::binary | std::ios::ate);
+
+	if (!file.good())
+		throw new std::runtime_error(tfm::format("Could not open file: %s", filePath));
+
+	auto size = file.tellg();
+	file.seekg(0, std::ios::beg);
+
+	std::vector<char> buffer(size);
+	file.read(&buffer[0], size);
+
+	return std::string(&buffer[0], size);
+}
+
 bool StringUtils::readUntilSpace(const std::string& input, size_t& startIndex, std::string& result)
 {
 	bool nonSpaceWasFound = false;

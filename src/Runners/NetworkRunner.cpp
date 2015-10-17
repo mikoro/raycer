@@ -7,6 +7,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/StringUtils.h"
 #include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Camera.h"
 #include "Runners/ConsoleRunner.h"
@@ -236,22 +237,9 @@ void NetworkRunner::sendJobs()
 		std::string sceneString;
 
 		if (settings.scene.enableTestScenes)
-		{
-			Scene scene = Scene::createTestScene(settings.scene.testSceneNumber);
-			sceneString = scene.getJsonString();
-		}
+			sceneString = Scene::createTestScene(settings.scene.testSceneNumber).getJsonString();
 		else
-		{
-			std::ifstream sceneFile(settings.scene.fileName);
-
-			if (!sceneFile.good())
-				throw std::runtime_error("Could not open the scene file");
-
-			std::stringstream ss;
-			ss << sceneFile.rdbuf();
-			sceneString = ss.str();
-			sceneFile.close();
-		}
+			sceneString = StringUtils::readFileToString(settings.scene.fileName);
 
 		size_t serverCount = serverEndpoints.size();
 		size_t width = settings.image.width;

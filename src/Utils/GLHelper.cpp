@@ -7,6 +7,7 @@
 #include "App.h"
 #include "Utils/Log.h"
 #include "Utils/Settings.h"
+#include "Utils/StringUtils.h"
 
 using namespace Raycer;
 
@@ -16,23 +17,10 @@ GLuint GLHelper::buildProgram(const std::string& vertexShaderPath, const std::st
 
 	log.logInfo("Building vertex and fragment shaders (%s, %s)", vertexShaderPath, fragmentShaderPath);
 
-	std::ifstream vertexShaderFile(vertexShaderPath);
-	std::ifstream fragmentShaderFile(fragmentShaderPath);
-
-	if (!vertexShaderFile.is_open())
-		throw std::runtime_error("Could not open vertex shader file");
-
-	if (!fragmentShaderFile.is_open())
-		throw std::runtime_error("Could not open fragment shader file");
-
-	std::stringstream vertexShaderSs;
-	vertexShaderSs << vertexShaderFile.rdbuf();
-	std::string vertexShaderString = vertexShaderSs.str();
+	std::string vertexShaderString = StringUtils::readFileToString(vertexShaderPath);
 	const GLchar* vertexShaderStringPtr = vertexShaderString.c_str();
 
-	std::stringstream fragmentShaderSs;
-	fragmentShaderSs << fragmentShaderFile.rdbuf();
-	std::string fragmentShaderString = fragmentShaderSs.str();
+	std::string fragmentShaderString = StringUtils::readFileToString(fragmentShaderPath);
 	const GLchar* fragmentShaderStringPtr = fragmentShaderString.c_str();
 
 	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
