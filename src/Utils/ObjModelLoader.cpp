@@ -26,6 +26,12 @@ namespace
 		return tempPathString;
 	}
 
+	double readDouble(const std::string& input, size_t& startIndex, std::string& result)
+	{
+		StringUtils::readUntilSpace(input, startIndex, result);
+		return StringUtils::parseDouble(result);
+	}
+
 	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, size_t>& materialsMap, size_t& currentId)
 	{
 		std::string absoluteMtlFilePath = getAbsolutePath(objFileDirectory, mtlFilePath);
@@ -37,40 +43,24 @@ namespace
 
 		Material currentMaterial = info.baseMaterial;
 		bool materialPending = false;
-		bool hasAmbientMap = false;
-		bool hasDiffuseMap = false;
-		bool hasSpecularMap = false;
-		bool hasEmittanceMap = false;
-		bool hasNormalMap = false;
-		bool hasMaskMap = false;
-		bool hasHeightMap = false;
 
 		std::string line;
+		std::string part;
+		size_t lineIndex = 0;
 
 		while (std::getline(file, line))
 		{
-			size_t lineIndex = 0;
-			std::string part;
+			part.clear();
+			lineIndex = 0;
 			StringUtils::readUntilSpace(line, lineIndex, part);
 
 			if (part.size() == 0)
 				continue;
 
-			// new material
-			if (part == "newmtl")
+			if (part == "newmtl") // new material
 			{
 				if (materialPending)
-				{
 					result.materials.push_back(currentMaterial);
-
-					hasAmbientMap = false;
-					hasDiffuseMap = false;
-					hasSpecularMap = false;
-					hasEmittanceMap = false;
-					hasNormalMap = false;
-					hasMaskMap = false;
-					hasHeightMap = false;
-				}
 
 				materialPending = true;
 
@@ -79,93 +69,40 @@ namespace
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				materialsMap[part] = currentMaterial.id;
-
-				continue;
 			}
-
-			// ambient reflectance
-			if (part == "Ka")
+			else if (part == "Ka") // ambient reflectance
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.ambientReflectance.r = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.ambientReflectance.g = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.ambientReflectance.b = StringUtils::parseDouble(part);
-
-				continue;
+				currentMaterial.ambientReflectance.r = readDouble(line, lineIndex, part);
+				currentMaterial.ambientReflectance.g = readDouble(line, lineIndex, part);
+				currentMaterial.ambientReflectance.b = readDouble(line, lineIndex, part);
 			}
-
-			// diffuse reflectance + reflectance
-			if (part == "Kd")
+			else if (part == "Kd") // diffuse reflectance + reflectance
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.r = StringUtils::parseDouble(part);
-				currentMaterial.reflectance.r = currentMaterial.diffuseReflectance.r;
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.g = StringUtils::parseDouble(part);
-				currentMaterial.reflectance.g = currentMaterial.diffuseReflectance.g;
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.b = StringUtils::parseDouble(part);
-				currentMaterial.reflectance.b = currentMaterial.diffuseReflectance.b;
-
-				continue;
+				currentMaterial.diffuseReflectance.r = currentMaterial.reflectance.r = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.g = currentMaterial.reflectance.g = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.b = currentMaterial.reflectance.b = readDouble(line, lineIndex, part);
 			}
-
-			// specular reflectance
-			if (part == "Ks")
+			else if (part == "Ks") // specular reflectance
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.specularReflectance.r = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.specularReflectance.g = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.specularReflectance.b = StringUtils::parseDouble(part);
-
-				continue;
+				currentMaterial.specularReflectance.r = readDouble(line, lineIndex, part);
+				currentMaterial.specularReflectance.g = readDouble(line, lineIndex, part);
+				currentMaterial.specularReflectance.b = readDouble(line, lineIndex, part);
 			}
-
-			// emittance
-			if (part == "Ke")
+			else if (part == "Ke") // emittance
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.emittance.r = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.emittance.g = StringUtils::parseDouble(part);
-
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.emittance.b = StringUtils::parseDouble(part);
-
-				continue;
+				currentMaterial.emittance.r = readDouble(line, lineIndex, part);
+				currentMaterial.emittance.g = readDouble(line, lineIndex, part);
+				currentMaterial.emittance.b = readDouble(line, lineIndex, part);
 			}
-
-			// shininess
-			if (part == "Ns")
+			else if (part == "Ns") // shininess
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.shininess = StringUtils::parseDouble(part);
-
-				continue;
+				currentMaterial.shininess = readDouble(line, lineIndex, part);
 			}
-
-			// refractive index
-			if (part == "Ni")
+			else if (part == "Ni") // refractive index
 			{
-				StringUtils::readUntilSpace(line, lineIndex, part);
-				currentMaterial.refractiveIndex = StringUtils::parseDouble(part);
-
-				continue;
+				currentMaterial.refractiveIndex = readDouble(line, lineIndex, part);
 			}
-
-			// ambient map
-			if (part == "map_Ka" && !hasAmbientMap)
+			else if (part == "map_Ka" && currentMaterial.ambientMapTextureId == 0) // ambient map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -176,31 +113,20 @@ namespace
 				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
-				hasAmbientMap = true;
-
-				continue;
 			}
-
-			// diffuse map + reflectance map
-			if (part == "map_Kd" && !hasDiffuseMap)
+			else if (part == "map_Kd" && currentMaterial.diffuseMapTextureId == 0) // diffuse map + reflectance map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
-				currentMaterial.diffuseMapTextureId = imageTexture.id;
-				currentMaterial.reflectanceMapTextureId = imageTexture.id;
+				currentMaterial.diffuseMapTextureId = currentMaterial.reflectanceMapTextureId = imageTexture.id;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
 				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
-				hasDiffuseMap = true;
-
-				continue;
 			}
-
-			// specular map
-			if (part == "map_Ks" && !hasSpecularMap)
+			else if (part == "map_Ks" && currentMaterial.specularMapTextureId == 0) // specular map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -211,13 +137,8 @@ namespace
 				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
-				hasSpecularMap = true;
-
-				continue;
 			}
-
-			// emittance map
-			if (part == "map_Ks" && !hasSpecularMap)
+			else if (part == "map_Ke" && currentMaterial.emittanceMapTextureId == 0) // emittance map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -228,13 +149,8 @@ namespace
 				imageTexture.applyGamma = !StringUtils::endsWith(imageTexture.imageFilePath, ".hdr");
 
 				result.textures.push_back(imageTexture);
-				hasEmittanceMap = true;
-
-				continue;
 			}
-
-			// bump map
-			if ((part == "map_bump" || part == "bump") && !hasNormalMap)
+			else if ((part == "map_bump" || part == "bump") && currentMaterial.normalMapTextureId == 0) // bump map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -246,13 +162,8 @@ namespace
 				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
-				hasNormalMap = true;
-
-				continue;
 			}
-
-			// normal map
-			if (part == "map_normal" && !hasNormalMap)
+			else if (part == "map_normal" && currentMaterial.normalMapTextureId == 0) // normal map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -264,13 +175,8 @@ namespace
 				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
-				hasNormalMap = true;
-
-				continue;
 			}
-
-			// mask map
-			if (part == "map_d" && !hasMaskMap)
+			else if (part == "map_d" && currentMaterial.maskMapTextureId == 0) // mask map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -281,13 +187,8 @@ namespace
 				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
-				hasMaskMap = true;
-
-				continue;
 			}
-
-			// height map
-			if (part == "map_height" && !hasHeightMap)
+			else if (part == "map_height" && currentMaterial.heightMapTextureId == 0) // height map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
@@ -298,9 +199,6 @@ namespace
 				imageTexture.applyGamma = false;
 
 				result.textures.push_back(imageTexture);
-				hasHeightMap = true;
-
-				continue;
 			}
 		}
 
@@ -452,11 +350,6 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 
 	auto startTime = std::chrono::high_resolution_clock::now();
 
-	std::ifstream file(info.modelFilePath);
-
-	if (!file.good())
-		throw std::runtime_error("Could not open the OBJ file");
-
 	ModelLoaderResult result;
 
 	PrimitiveGroup combinedGroup;
@@ -483,47 +376,43 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	std::vector<Vector3> normals;
 	std::vector<Vector2> texcoords;
 
+	std::ifstream file(info.modelFilePath);
+
+	if (!file.good())
+		throw std::runtime_error("Could not open the OBJ file");
+
 	std::string line;
+	std::string part;
+	size_t lineIndex = 0;
 
 	while (std::getline(file, line))
 	{
-		size_t lineIndex = 0;
-		std::string part;
+		part.clear();
+		lineIndex = 0;
 		StringUtils::readUntilSpace(line, lineIndex, part);
 
 		if (part.size() == 0)
 			continue;
 
-		// new material file
-		if (part == "mtllib" && !info.ignoreMaterials)
+		if (part == "mtllib" && !info.ignoreMaterials) // new material file
 		{
 			StringUtils::readUntilSpace(line, lineIndex, part);
 			processMaterialFile(objFileDirectory, part, info, result, materialsMap, currentId);
-			continue;
 		}
-
-		// new group
-		if (part == "g")
+		else if (part == "g" && info.enableGroups) // new group
 		{
-			if (info.enableGroups)
+			result.groups.push_back(PrimitiveGroup());
+			result.groups.back().id = ++currentId;
+			result.groups.back().invisible = info.invisibleGroups;
+
+			if (info.enableGroupsInstances)
 			{
-				result.groups.push_back(PrimitiveGroup());
-				result.groups.back().id = ++currentId;
-				result.groups.back().invisible = info.invisibleGroups;
-
-				if (info.enableGroupsInstances)
-				{
-					result.instances.push_back(Instance());
-					result.instances.back().id = ++currentId;
-					result.instances.back().primitiveId = result.groups.back().id;
-				}
+				result.instances.push_back(Instance());
+				result.instances.back().id = ++currentId;
+				result.instances.back().primitiveId = result.groups.back().id;
 			}
-
-			continue;
 		}
-
-		// select material
-		if (part == "usemtl" && !info.ignoreMaterials)
+		else if (part == "usemtl" && !info.ignoreMaterials) // select material
 		{
 			StringUtils::readUntilSpace(line, lineIndex, part);
 
@@ -534,63 +423,37 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 				log.logWarning("Could not find material named \"%s\"", part);
 				currentMaterialId = info.defaultMaterialId;
 			}
-
-			continue;
 		}
-
-		// vertex
-		if (part == "v")
+		else if (part == "v") // vertex
 		{
 			Vector3 vertex;
 
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			vertex.x = StringUtils::parseDouble(part);
-
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			vertex.y = StringUtils::parseDouble(part);
-
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			vertex.z = StringUtils::parseDouble(part);
+			vertex.x = readDouble(line, lineIndex, part);
+			vertex.y = readDouble(line, lineIndex, part);
+			vertex.z = readDouble(line, lineIndex, part);
 
 			vertices.push_back(transformation.transformPosition(vertex));
-			continue;
 		}
-
-		// normal
-		if (part == "vn")
+		else if (part == "vn") // normal
 		{
 			Vector3 normal;
 
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			normal.x = StringUtils::parseDouble(part);
-
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			normal.y = StringUtils::parseDouble(part);
-
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			normal.z = StringUtils::parseDouble(part);
+			normal.x = readDouble(line, lineIndex, part);
+			normal.y = readDouble(line, lineIndex, part);
+			normal.z = readDouble(line, lineIndex, part);
 
 			normals.push_back(transformationInvT.transformDirection(normal).normalized());
-			continue;
 		}
-
-		// texcoord
-		if (part == "vt")
+		else if (part == "vt") // texcoord
 		{
 			Vector2 texcoord;
 
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			texcoord.x = StringUtils::parseDouble(part);
-
-			StringUtils::readUntilSpace(line, lineIndex, part);
-			texcoord.y = StringUtils::parseDouble(part);
+			texcoord.x = readDouble(line, lineIndex, part);
+			texcoord.y = readDouble(line, lineIndex, part);
 
 			texcoords.push_back(texcoord);
-			continue;
 		}
-
-		// face
-		if (part == "f")
+		else if (part == "f") // face
 			processFace(line.substr(lineIndex), vertices, normals, texcoords, info, result, combinedGroup, currentId, currentMaterialId);
 	}
 
