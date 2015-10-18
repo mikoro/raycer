@@ -4,69 +4,34 @@
 #include "stdafx.h"
 
 #include "Utils/Log.h"
+#include "Utils/SysUtils.h"
 
 using namespace Raycer;
 using namespace std::chrono;
 
 namespace
 {
-	enum class ConsoleTextColor
-	{
-		DEFAULT,
-		GRAY_ON_BLACK,
-		YELLOW_ON_BLACK,
-		WHITE_ON_RED
-	};
-
-	void setConsoleTextColor(ConsoleTextColor color)
-	{
-#ifdef _WIN32
-		HANDLE consoleHandle = GetStdHandle(STD_OUTPUT_HANDLE);
-
-		switch (color)
-		{
-			case ConsoleTextColor::DEFAULT:
-				SetConsoleTextAttribute(consoleHandle, 7 + 0 * 16);
-				break;
-
-			case ConsoleTextColor::GRAY_ON_BLACK:
-				SetConsoleTextAttribute(consoleHandle, 8 + 0 * 16);
-				break;
-
-			case ConsoleTextColor::YELLOW_ON_BLACK:
-				SetConsoleTextAttribute(consoleHandle, 14 + 0 * 16);
-				break;
-
-			case ConsoleTextColor::WHITE_ON_RED:
-				SetConsoleTextAttribute(consoleHandle, 15 + 12 * 16);
-				break;
-
-			default: break;
-		}
-#endif
-	}
-
-	void setConsoleTextColorFromMessageLevel(LogMessageLevel messageLevel)
+	void setConsoleTextColor(LogMessageLevel messageLevel)
 	{
 		switch (messageLevel)
 		{
 			case LogMessageLevel::DEBUG:
-				setConsoleTextColor(ConsoleTextColor::GRAY_ON_BLACK);
+				SysUtils::setConsoleTextColor(ConsoleTextColor::GRAY_ON_BLACK);
 				break;
 
 			case LogMessageLevel::INFO:
-				setConsoleTextColor(ConsoleTextColor::DEFAULT);
+				SysUtils::setConsoleTextColor(ConsoleTextColor::DEFAULT);
 				break;
 
 			case LogMessageLevel::WARNING:
-				setConsoleTextColor(ConsoleTextColor::YELLOW_ON_BLACK);
+				SysUtils::setConsoleTextColor(ConsoleTextColor::YELLOW_ON_BLACK);
 				break;
 
 			case LogMessageLevel::ERROR:
-				setConsoleTextColor(ConsoleTextColor::WHITE_ON_RED);
+				SysUtils::setConsoleTextColor(ConsoleTextColor::WHITE_ON_RED);
 				break;
 
-			default: setConsoleTextColor(ConsoleTextColor::DEFAULT); break;
+			default: SysUtils::setConsoleTextColor(ConsoleTextColor::DEFAULT); break;
 		}
 	}
 }
@@ -139,9 +104,9 @@ void Log::outputMessage(LogMessageLevel messageLevel, const std::string& message
 {
 	std::lock_guard<std::mutex> lock(outputMutex);
 
-	setConsoleTextColorFromMessageLevel(messageLevel);
+	setConsoleTextColor(messageLevel);
 	std::cout << message << std::endl;
-	setConsoleTextColor(ConsoleTextColor::DEFAULT);
+	SysUtils::setConsoleTextColor(ConsoleTextColor::DEFAULT);
 
 	if (logFile.is_open())
 	{

@@ -25,9 +25,9 @@ int ConsoleRunner::run()
 
 	interrupted = false;
 
-	pixelsPerSecondAverage.setAlpha(0.01);
+	pixelsPerSecondAverage.setAlpha(0.05);
 	pixelsPerSecondAverage.setAverage(0.0);
-	timer.setAveragingAlpha(0.01);
+	timer.setAveragingAlpha(0.05);
 	progressCounter1 = progressCounter2 = 0;
 
 	Scene scene;
@@ -108,6 +108,8 @@ void ConsoleRunner::run(TracerState& state)
 		renderThreadFinished = true;
 	};
 
+	SysUtils::setConsoleTextColor(ConsoleTextColor::WHITE_ON_BLACK);
+
 	std::cout << tfm::format("\nTracing started (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
 		state.imageWidth,
 		state.imageHeight,
@@ -162,6 +164,8 @@ void ConsoleRunner::run(TracerState& state)
 		interrupted ? "interrupted" : "finished",
 		elapsed.getString(true),
 		StringUtils::humanizeNumber(totalPixelsPerSecond));
+
+	SysUtils::setConsoleTextColor(ConsoleTextColor::DEFAULT);
 
 	if (!interrupted && settings.openCL.enabled)
 		*state.toneMappedImage = clTracer.downloadImage();
