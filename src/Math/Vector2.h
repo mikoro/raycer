@@ -11,9 +11,7 @@ namespace Raycer
 	{
 	public:
 
-		Vector2(double x = 0.0, double y = 0.0);
-		Vector2(const Vector2& v);
-		Vector2& operator=(const Vector2& v);
+		explicit Vector2(double x = 0.0, double y = 0.0);
 
 		friend Vector2 operator+(const Vector2& v, const Vector2& w);
 		friend Vector2 operator-(const Vector2& v, const Vector2& w);

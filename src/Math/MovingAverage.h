@@ -11,7 +11,7 @@ namespace Raycer
 	{
 	public:
 
-		MovingAverage(double alpha = 1.0, double average = 0.0);
+		explicit MovingAverage(double alpha = 1.0, double average = 0.0);
 
 		void setAlpha(double alpha);
 		void setAverage(double average);

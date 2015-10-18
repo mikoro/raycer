@@ -14,7 +14,7 @@ namespace Raycer
 	public:
 
 		Polynomial();
-		Polynomial(const double* coefficients);
+		explicit Polynomial(const double* coefficients);
 
 		void setCoefficients(const double* coefficients);
 
@@ -25,9 +25,6 @@ namespace Raycer
 		bool findSmallestPositiveRealRoot(double& result, size_t maxIterations = 64, double changeThreshold = 0.0001, double imagZeroThreshold = 0.0001);
 
 	private:
-
-		Polynomial(const Polynomial& p);
-		Polynomial& operator=(const Polynomial& p);
 
 		const size_t size = N;
 		const size_t degree = N - 1;

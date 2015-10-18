@@ -21,11 +21,9 @@ namespace Raycer
 	{
 	public:
 
-		Quaternion(double w = 0.0, double x = 0.0, double y = 0.0, double z = 0.0);
-		Quaternion(const Quaternion& q);
-		Quaternion& operator=(const Quaternion& q);
+		explicit Quaternion(double w = 0.0, double x = 0.0, double y = 0.0, double z = 0.0);
+		explicit Quaternion(const AxisAngle& axisAngle);
 		Quaternion(const Vector3& axis, double angle);
-		Quaternion(const AxisAngle& axisAngle);
 
 		friend Quaternion operator+(const Quaternion& q1, const Quaternion& q2);
 		friend Quaternion operator-(const Quaternion& q1, const Quaternion& q2);

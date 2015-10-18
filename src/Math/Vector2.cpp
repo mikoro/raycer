@@ -12,20 +12,6 @@ Vector2::Vector2(double x_, double y_) : x(x_), y(y_)
 {
 }
 
-Vector2::Vector2(const Vector2& v)
-{
-	x = v.x;
-	y = v.y;
-}
-
-Vector2& Vector2::operator=(const Vector2& v)
-{
-	x = v.x;
-	y = v.y;
-
-	return *this;
-}
-
 namespace Raycer
 {
 	Vector2 operator+(const Vector2& v, const Vector2& w)

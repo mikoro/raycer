@@ -13,22 +13,6 @@ EulerAngle::EulerAngle(double pitch_, double yaw_, double roll_) : pitch(pitch_)
 {
 }
 
-EulerAngle::EulerAngle(const EulerAngle& e)
-{
-	pitch = e.pitch;
-	yaw = e.yaw;
-	roll = e.roll;
-}
-
-EulerAngle& EulerAngle::operator=(const EulerAngle& e)
-{
-	pitch = e.pitch;
-	yaw = e.yaw;
-	roll = e.roll;
-
-	return *this;
-}
-
 namespace Raycer
 {
 	EulerAngle operator+(const EulerAngle& e1, const EulerAngle& e2)

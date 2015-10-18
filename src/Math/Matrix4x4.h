@@ -7,15 +7,17 @@
 
 /*
 
-column major
+https://en.wikipedia.org/wiki/Row-major_order
 
-m[c][r]
+row major
 
+array indices:
+m[row][column]
+[00, 01, 02, 03]
+[10, 11, 12, 13]
+[20, 21, 22, 23]
+[30, 31, 32, 33]
  R   U   F   T
-[00, 10, 20, 30]
-[01, 11, 21, 31]
-[02, 12, 22, 32]
-[03, 13, 23, 33]
 
 R = [1 0 0] (x, right)
 U = [0 1 0] (y, up)
@@ -34,10 +36,8 @@ namespace Raycer
 	public:
 
 		Matrix4x4();
-		Matrix4x4(const Matrix4x4& m);
-		Matrix4x4(double m00, double m10, double m20, double m30, double m01, double m11, double m21, double m31, double m02, double m12, double m22, double m32, double m03, double m13, double m23, double m33);
-		Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f);
-		Matrix4x4& operator=(const Matrix4x4& m);
+		Matrix4x4(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23, double m30, double m31, double m32, double m33);
+		Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f, const Vector3& t);
 
 		friend Matrix4x4 operator+(const Matrix4x4& m, const Matrix4x4& n);
 		friend Matrix4x4 operator-(const Matrix4x4& m, const Matrix4x4& n);
@@ -84,7 +84,7 @@ namespace Raycer
 		static Matrix4x4 rotateZ(double degrees);
 		static Matrix4x4 rotate(const Vector3& from, const Vector3& to);
 
-		double m[4][4];
+		double m[4][4] = {0};
 
 	private:
 

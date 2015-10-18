@@ -25,9 +25,7 @@ namespace Raycer
 	{
 	public:
 
-		EulerAngle(double pitch = 0.0, double yaw = 0.0, double roll = 0.0);
-		EulerAngle(const EulerAngle& e);
-		EulerAngle& operator=(const EulerAngle& e);
+		explicit EulerAngle(double pitch = 0.0, double yaw = 0.0, double roll = 0.0);
 
 		friend EulerAngle operator+(const EulerAngle& e1, const EulerAngle& e2);
 		friend EulerAngle operator-(const EulerAngle& e1, const EulerAngle& e2);

@@ -14,18 +14,8 @@ Quaternion::Quaternion(double w_, double x_, double y_, double z_) : w(w_), x(x_
 {
 }
 
-Quaternion::Quaternion(const Quaternion& q) : w(q.w), x(q.x), y(q.y), z(q.z)
+Quaternion::Quaternion(const AxisAngle& axisAngle) : Quaternion(axisAngle.axis, axisAngle.angle)
 {
-}
-
-Quaternion& Quaternion::operator=(const Quaternion& q)
-{
-	w = q.w;
-	x = q.x;
-	y = q.y;
-	z = q.z;
-
-	return *this;
 }
 
 Quaternion::Quaternion(const Vector3& axis, double angle)
@@ -38,10 +28,6 @@ Quaternion::Quaternion(const Vector3& axis, double angle)
 	x = axis.x * sine;
 	y = axis.y * sine;
 	z = axis.z * sine;
-}
-
-Quaternion::Quaternion(const AxisAngle& axisAngle) : Quaternion(axisAngle.axis, axisAngle.angle)
-{
 }
 
 namespace Raycer

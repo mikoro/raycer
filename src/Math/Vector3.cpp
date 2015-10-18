@@ -17,22 +17,6 @@ Vector3::Vector3(double x_, double y_, double z_) : x(x_), y(y_), z(z_)
 {
 }
 
-Vector3::Vector3(const Vector3& v)
-{
-	x = v.x;
-	y = v.y;
-	z = v.z;
-}
-
-Vector3& Vector3::operator=(const Vector3& v)
-{
-	x = v.x;
-	y = v.y;
-	z = v.z;
-
-	return *this;
-}
-
 namespace Raycer
 {
 	Vector3 operator+(const Vector3& v, const Vector3& w)
