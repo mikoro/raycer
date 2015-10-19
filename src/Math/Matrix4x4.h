@@ -29,6 +29,7 @@ T = translation
 namespace Raycer
 {
 	class Vector3;
+	class Vector4;
 	class EulerAngle;
 
 	class Matrix4x4
@@ -37,14 +38,14 @@ namespace Raycer
 
 		Matrix4x4();
 		Matrix4x4(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23, double m30, double m31, double m32, double m33);
-		Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f, const Vector3& t);
+		Matrix4x4(const Vector4& r, const Vector4& u, const Vector4& f, const Vector4& t);
 
 		friend Matrix4x4 operator+(const Matrix4x4& m, const Matrix4x4& n);
 		friend Matrix4x4 operator-(const Matrix4x4& m, const Matrix4x4& n);
 		friend Matrix4x4 operator*(const Matrix4x4& m, double s);
 		friend Matrix4x4 operator*(double s, const Matrix4x4& m);
 		friend Matrix4x4 operator*(const Matrix4x4& m, const Matrix4x4& n);
-		friend Vector3 operator*(const Matrix4x4& m, const Vector3& v);
+		friend Vector4 operator*(const Matrix4x4& m, const Vector4& v);
 		friend Matrix4x4 operator/(const Matrix4x4& m, double s);
 		friend Matrix4x4 operator-(const Matrix4x4& m);
 
@@ -60,10 +61,19 @@ namespace Raycer
 		operator double*();
 		operator const double*() const;
 
+		double get(uint row, uint column) const;
+		void set(uint row, uint column, double value);
+		Vector4 getRow(uint index) const;
+		void setRow(uint index, const Vector4& v);
+		Vector4 getColumn(uint index) const;
+		void setColumn(uint index, const Vector4& v);
+
 		void transpose();
 		Matrix4x4 transposed() const;
 		void invert();
 		Matrix4x4 inverted() const;
+		bool isZero() const;
+		bool isNan() const;
 
 		Vector3 transformPosition(const Vector3& v) const;
 		Vector3 transformDirection(const Vector3& v) const;

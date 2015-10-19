@@ -101,35 +101,30 @@ namespace Raycer
 Quaternion& Quaternion::operator+=(const Quaternion& q)
 {
 	*this = *this + q;
-
 	return *this;
 }
 
 Quaternion& Quaternion::operator-=(const Quaternion& q)
 {
 	*this = *this - q;
-
 	return *this;
 }
 
 Quaternion& Quaternion::operator*=(const Quaternion& q)
 {
 	*this = *this * q;
-
 	return *this;
 }
 
 Quaternion& Quaternion::operator*=(double s)
 {
 	*this = *this * s;
-
 	return *this;
 }
 
 Quaternion& Quaternion::operator/=(double s)
 {
 	*this = *this / s;
-
 	return *this;
 }
 
@@ -167,7 +162,7 @@ Quaternion Quaternion::normalized() const
 
 bool Quaternion::isZero() const
 {
-	return MathUtils::almostZero(w) && MathUtils::almostZero(x) && MathUtils::almostZero(y) && MathUtils::almostZero(z);
+	return (w == 0.0 && x == 0.0 && y == 0.0 && z == 0.0);
 }
 
 bool Quaternion::isNormal() const

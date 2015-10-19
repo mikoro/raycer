@@ -4,9 +4,10 @@
 #include "stdafx.h"
 
 #include "Math/Matrix4x4.h"
-#include "Math/MathUtils.h"
 #include "Math/Vector3.h"
+#include "Math/Vector4.h"
 #include "Math/EulerAngle.h"
+#include "Math/MathUtils.h"
 
 using namespace Raycer;
 
@@ -30,12 +31,12 @@ Matrix4x4::Matrix4x4(double m00, double m01, double m02, double m03, double m10,
 	m[3][0] = m30; m[3][1] = m31; m[3][2] = m32; m[3][3] = m33;
 }
 
-Matrix4x4::Matrix4x4(const Vector3& r, const Vector3& u, const Vector3& f, const Vector3& t)
+Matrix4x4::Matrix4x4(const Vector4& r, const Vector4& u, const Vector4& f, const Vector4& t)
 {
 	m[0][0] = r.x; m[0][1] = u.x; m[0][2] = f.x; m[0][3] = t.x;
 	m[1][0] = r.y; m[1][1] = u.y; m[1][2] = f.y; m[1][3] = t.y;
 	m[2][0] = r.z; m[2][1] = u.z; m[2][2] = f.z; m[2][3] = t.z;
-	m[3][0] = 0.0; m[3][1] = 0.0; m[3][2] = 0.0; m[3][3] = 1.0;
+	m[3][0] = r.w; m[3][1] = u.w; m[3][2] = f.w; m[3][3] = t.w;
 }
 
 namespace Raycer
@@ -95,9 +96,16 @@ namespace Raycer
 		return result;
 	}
 
-	Vector3 operator*(const Matrix4x4& m, const Vector3& v)
+	Vector4 operator*(const Matrix4x4& m, const Vector4& v)
 	{
-		return m.transformPosition(v);
+		Vector4 result;
+
+		result.x = m.m[0][0] * v.x + m.m[0][1] * v.y + m.m[0][2] * v.z + m.m[0][3] * v.w;
+		result.y = m.m[1][0] * v.x + m.m[1][1] * v.y + m.m[1][2] * v.z + m.m[1][3] * v.w;
+		result.z = m.m[2][0] * v.x + m.m[2][1] * v.y + m.m[2][2] * v.z + m.m[2][3] * v.w;
+		result.w = m.m[3][0] * v.x + m.m[3][1] * v.y + m.m[3][2] * v.z + m.m[3][3] * v.w;
+
+		return result;
 	}
 
 	Matrix4x4 operator/(const Matrix4x4& m, double s)
@@ -178,6 +186,50 @@ Matrix4x4::operator const double*() const
 	return &m[0][0];
 }
 
+double Matrix4x4::get(uint row, uint column) const
+{
+	assert(row <= 3 && column <= 3);
+	return m[row][column];
+}
+
+void Matrix4x4::set(uint row, uint column, double value)
+{
+	assert(row <= 3 && column <= 3);
+	m[row][column] = value;
+}
+
+Vector4 Matrix4x4::getRow(uint index) const
+{
+	assert(index <= 3);
+	return Vector4(m[index][0], m[index][1], m[index][2], m[index][3]);
+}
+
+void Matrix4x4::setRow(uint index, const Vector4& v)
+{
+	assert(index <= 3);
+
+	m[index][0] = v.x;
+	m[index][1] = v.y;
+	m[index][2] = v.z;
+	m[index][3] = v.w;
+}
+
+Vector4 Matrix4x4::getColumn(uint index) const
+{
+	assert(index <= 3);
+	return Vector4(m[0][index], m[1][index], m[2][index], m[3][index]);
+}
+
+void Matrix4x4::setColumn(uint index, const Vector4& v)
+{
+	assert(index <= 3);
+
+	m[0][index] = v.x;
+	m[1][index] = v.y;
+	m[2][index] = v.z;
+	m[3][index] = v.w;
+}
+
 void Matrix4x4::transpose()
 {
 	*this = transposed();
@@ -235,6 +287,34 @@ Matrix4x4 Matrix4x4::inverted() const
 
 	std::memcpy(result.m, out, sizeof(double) * 16);
 	return result;
+}
+
+bool Matrix4x4::isZero() const
+{
+	for (uint r = 0; r <= 3; ++r)
+	{
+		for (uint c = 0; c <= 3; ++c)
+		{
+			if (m[r][c] != 0.0)
+				return false;
+		}
+	}
+
+	return true;
+}
+
+bool Matrix4x4::isNan() const
+{
+	for (uint r = 0; r <= 3; ++r)
+	{
+		for (uint c = 0; c <= 3; ++c)
+		{
+			if (std::isnan(m[r][c]))
+				return true;
+		}
+	}
+
+	return false;
 }
 
 Vector3 Matrix4x4::transformPosition(const Vector3& v) const

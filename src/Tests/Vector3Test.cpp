@@ -72,9 +72,9 @@ TEST_CASE("Vector3 functionality", "[vector3]")
 
 	REQUIRE(v7 == v9);
 	REQUIRE(v7 == Vector3(1.0, 1.0 / 2.0, 1.0 / 3.0));
-	REQUIRE(v8.element(0) == 2.0);
-	REQUIRE(v8.element(1) == 3.0);
-	REQUIRE(v8.element(2) == 4.0);
+	REQUIRE(v8.get(0) == 2.0);
+	REQUIRE(v8.get(1) == 3.0);
+	REQUIRE(v8.get(2) == 4.0);
 }
 
 #endif

@@ -7,11 +7,14 @@
 
 namespace Raycer
 {
+	class Vector4;
+
 	class Vector3
 	{
 	public:
 
 		explicit Vector3(double x = 0.0, double y = 0.0, double z = 0.0);
+		explicit Vector3(const Vector4& v);
 
 		friend Vector3 operator+(const Vector3& v, const Vector3& w);
 		friend Vector3 operator-(const Vector3& v, const Vector3& w);
@@ -34,6 +37,8 @@ namespace Raycer
 		Vector3& operator/=(const Vector3& v);
 		Vector3& operator/=(double s);
 
+		double get(uint index) const;
+		void set(uint index, double value);
 		double length() const;
 		double lengthSquared() const;
 		void normalize();
@@ -47,14 +52,14 @@ namespace Raycer
 		Vector3 cross(const Vector3& v) const;
 		Vector3 reflect(const Vector3& normal) const;
 		std::string toString() const;
-		double element(uint index) const;
+		Vector4 toVector4(double w = 0.0) const;
 
 		static Vector3 lerp(const Vector3& v1, const Vector3& v2, double t);
 		static Vector3 abs(const Vector3& v);
 
-		static const Vector3 RIGHT; // [1 0 0]
-		static const Vector3 UP; // [0 1 0]
-		static const Vector3 FORWARD; // [0 0 1]
+		static const Vector3 RIGHT;
+		static const Vector3 UP;
+		static const Vector3 FORWARD;
 		static const Vector3 ALMOST_UP;
 
 		double x;

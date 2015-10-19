@@ -82,7 +82,7 @@ TEST_CASE("Matrix4x4 functionality", "[matrix4x4]")
 		1012.0, 1054.0, 1096.0, 1138.0,
 		2110.0, 2144.0, 2178.0, 2212.0));
 
-	REQUIRE((m4 * v1) == Vector3(68.0, 32.0, 22.0));
+	REQUIRE((m4.transformPosition(v1)) == Vector3(68.0, 32.0, 22.0));
 
 	REQUIRE((-m1) == Matrix4x4(
 		-1.0, -2.0, -3.0, -4.0,
@@ -159,7 +159,7 @@ TEST_CASE("Matrix4x4 functionality", "[matrix4x4]")
 	Vector3 from(0.0, 22.0, 0.0);
 	Vector3 to(0.0, 0.0, 1.0);
 	rotation = Matrix4x4::rotate(from.normalized(), to.normalized());
-	from = rotation * from;
+	from = rotation.transformPosition(from);
 
 	REQUIRE(from == Vector3(0.0, 0.0, 22.0));
 }

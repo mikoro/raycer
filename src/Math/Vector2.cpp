@@ -78,43 +78,57 @@ namespace Raycer
 Vector2& Vector2::operator+=(const Vector2& v)
 {
 	*this = *this + v;
-
 	return *this;
 }
 
 Vector2& Vector2::operator-=(const Vector2& v)
 {
 	*this = *this - v;
-
 	return *this;
 }
 
 Vector2& Vector2::operator*=(const Vector2& v)
 {
 	*this = *this * v;
-
 	return *this;
 }
 
 Vector2& Vector2::operator*=(double s)
 {
 	*this = *this * s;
-
 	return *this;
 }
 
 Vector2& Vector2::operator/=(const Vector2& v)
 {
 	*this = *this / v;
-
 	return *this;
 }
 
 Vector2& Vector2::operator/=(double s)
 {
 	*this = *this / s;
-
 	return *this;
+}
+
+double Vector2::get(uint index) const
+{
+	switch (index)
+	{
+		case 0: return x;
+		case 1: return y;
+		default: throw std::runtime_error("Invalid vector element index");
+	}
+}
+
+void Vector2::set(uint index, double value)
+{
+	switch (index)
+	{
+		case 0: x = value;
+		case 1: y = value;
+		default: throw std::runtime_error("Invalid vector element index");
+	}
 }
 
 double Vector2::length() const
@@ -183,20 +197,9 @@ std::string Vector2::toString() const
 	return tfm::format("(%.2f, %.2f)", x, y);
 }
 
-double Vector2::element(uint index) const
-{
-	switch (index)
-	{
-		case 0: return x;
-		case 1: return y;
-		default: throw std::runtime_error("Invalid vector element index");
-	}
-}
-
 Vector2 Vector2::lerp(const Vector2& v1, const Vector2& v2, double t)
 {
 	assert(t >= 0.0 && t <= 1.0);
-
 	return v1 * (1.0 - t) + v2 * t;
 }
 

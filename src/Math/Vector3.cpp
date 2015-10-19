@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "Math/Vector3.h"
+#include "Math/Vector4.h"
 #include "Math/MathUtils.h"
 
 using namespace Raycer;
@@ -14,6 +15,10 @@ const Vector3 Vector3::FORWARD = Vector3(0.0, 0.0, 1.0);
 const Vector3 Vector3::ALMOST_UP = Vector3(0.0001, 1.0, 0.0001);
 
 Vector3::Vector3(double x_, double y_, double z_) : x(x_), y(y_), z(z_)
+{
+}
+
+Vector3::Vector3(const Vector4& v) : x(v.x), y(v.y), z(v.z)
 {
 }
 
@@ -83,43 +88,59 @@ namespace Raycer
 Vector3& Vector3::operator+=(const Vector3& v)
 {
 	*this = *this + v;
-
 	return *this;
 }
 
 Vector3& Vector3::operator-=(const Vector3& v)
 {
 	*this = *this - v;
-
 	return *this;
 }
 
 Vector3& Vector3::operator*=(const Vector3& v)
 {
 	*this = *this * v;
-
 	return *this;
 }
 
 Vector3& Vector3::operator*=(double s)
 {
 	*this = *this * s;
-
 	return *this;
 }
 
 Vector3& Vector3::operator/=(const Vector3& v)
 {
 	*this = *this / v;
-
 	return *this;
 }
 
 Vector3& Vector3::operator/=(double s)
 {
 	*this = *this / s;
-
 	return *this;
+}
+
+double Vector3::get(uint index) const
+{
+	switch (index)
+	{
+		case 0: return x;
+		case 1: return y;
+		case 2: return z;
+		default: throw std::runtime_error("Invalid vector element index");
+	}
+}
+
+void Vector3::set(uint index, double value)
+{
+	switch (index)
+	{
+		case 0: x = value;
+		case 1: y = value;
+		case 2: z = value;
+		default: throw std::runtime_error("Invalid vector element index");
+	}
 }
 
 double Vector3::length() const
@@ -201,21 +222,14 @@ std::string Vector3::toString() const
 	return tfm::format("(%.2f, %.2f, %.2f)", x, y, z);
 }
 
-double Vector3::element(uint index) const
+Vector4 Vector3::toVector4(double w_) const
 {
-	switch (index)
-	{
-		case 0: return x;
-		case 1: return y;
-		case 2: return z;
-		default: throw std::runtime_error("Invalid vector element index");
-	}
+	return Vector4(x, y, z, w_);
 }
 
 Vector3 Vector3::lerp(const Vector3& v1, const Vector3& v2, double t)
 {
 	assert(t >= 0.0 && t <= 1.0);
-
 	return v1 * (1.0 - t) + v2 * t;
 }
 
