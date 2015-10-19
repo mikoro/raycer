@@ -15,6 +15,7 @@ namespace Raycer
 
 		Polynomial();
 		explicit Polynomial(const double* coefficients);
+		Polynomial& operator=(const Polynomial &other) = delete;
 
 		void setCoefficients(const double* coefficients);
 

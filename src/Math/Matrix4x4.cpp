@@ -21,6 +21,7 @@ const Matrix4x4 Matrix4x4::ZERO = Matrix4x4();
 
 Matrix4x4::Matrix4x4()
 {
+	std::memset(m, 0, sizeof(double) * 16);
 }
 
 Matrix4x4::Matrix4x4(double m00, double m01, double m02, double m03, double m10, double m11, double m12, double m13, double m20, double m21, double m22, double m23, double m30, double m31, double m32, double m33)
