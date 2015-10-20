@@ -392,12 +392,12 @@ Matrix4x4 Matrix4x4::rotateZYX(double pitch, double yaw, double roll)
 	return rotateZ(roll) * rotateY(yaw) * rotateX(pitch);
 }
 
-Matrix4x4 Matrix4x4::rotateX(double degrees)
+Matrix4x4 Matrix4x4::rotateX(double angle)
 {
 	Matrix4x4 result = IDENTITY;
 
-	double sine = sin(MathUtils::degToRad(degrees));
-	double cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(angle));
+	double cosine = cos(MathUtils::degToRad(angle));
 
 	result.m[1][1] = cosine;
 	result.m[1][2] = -sine;
@@ -407,12 +407,12 @@ Matrix4x4 Matrix4x4::rotateX(double degrees)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateY(double degrees)
+Matrix4x4 Matrix4x4::rotateY(double angle)
 {
 	Matrix4x4 result = IDENTITY;
 
-	double sine = sin(MathUtils::degToRad(degrees));
-	double cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(angle));
+	double cosine = cos(MathUtils::degToRad(angle));
 
 	result.m[0][0] = cosine;
 	result.m[0][2] = sine;
@@ -422,12 +422,12 @@ Matrix4x4 Matrix4x4::rotateY(double degrees)
 	return result;
 }
 
-Matrix4x4 Matrix4x4::rotateZ(double degrees)
+Matrix4x4 Matrix4x4::rotateZ(double angle)
 {
 	Matrix4x4 result = IDENTITY;
 
-	double sine = sin(MathUtils::degToRad(degrees));
-	double cosine = cos(MathUtils::degToRad(degrees));
+	double sine = sin(MathUtils::degToRad(angle));
+	double cosine = cos(MathUtils::degToRad(angle));
 
 	result.m[0][0] = cosine;
 	result.m[0][1] = -sine;
@@ -444,7 +444,7 @@ Matrix4x4 Matrix4x4::rotate(const Vector3& from, const Vector3& to)
 	double s = v.length();
 	double c = from.dot(to);
 
-	Matrix4x4 vx = Matrix4x4(
+	Matrix4x4 vx(
 		0.0, -v.z, v.y, 0.0,
 		v.z, 0.0, -v.x, 0.0,
 		-v.y, v.x, 0.0, 0.0,

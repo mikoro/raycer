@@ -89,9 +89,9 @@ namespace Raycer
 		static Matrix4x4 rotateZYX(const EulerAngle& e);
 		static Matrix4x4 rotateXYZ(double pitch, double yaw, double roll);
 		static Matrix4x4 rotateZYX(double pitch, double yaw, double roll);
-		static Matrix4x4 rotateX(double degrees);
-		static Matrix4x4 rotateY(double degrees);
-		static Matrix4x4 rotateZ(double degrees);
+		static Matrix4x4 rotateX(double angle);
+		static Matrix4x4 rotateY(double angle);
+		static Matrix4x4 rotateZ(double angle);
 		static Matrix4x4 rotate(const Vector3& from, const Vector3& to);
 
 		double m[4][4];

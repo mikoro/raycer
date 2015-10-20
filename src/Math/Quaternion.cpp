@@ -4,8 +4,9 @@
 #include "stdafx.h"
 
 #include "Math/Quaternion.h"
-#include "Math/Vector3.h"
 #include "Math/AxisAngle.h"
+#include "Math/Matrix4x4.h"
+#include "Math/Vector3.h"
 #include "Math/MathUtils.h"
 
 using namespace Raycer;
@@ -20,6 +21,8 @@ Quaternion::Quaternion(const AxisAngle& axisAngle) : Quaternion(axisAngle.axis, 
 
 Quaternion::Quaternion(const Vector3& axis, double angle)
 {
+	assert(axis.isNormal());
+
 	double radiansPer2 = MathUtils::degToRad(angle) / 2.0;
 	double cosine = cos(radiansPer2);
 	double sine = sin(radiansPer2);
@@ -52,19 +55,6 @@ namespace Raycer
 		r.z = q1.w * q2.z + q1.x * q2.y - q1.y * q2.x + q1.z * q2.w;
 
 		return r;
-	}
-
-	Vector3 operator*(const Quaternion& q, const Vector3& v)
-	{
-		Quaternion p(0.0, v.x, v.y, v.z);
-		Quaternion r = q * p * q.conjugated();
-
-		return Vector3(r.x, r.y, r.z);
-	}
-
-	Vector3 operator*(const Vector3& v, const Quaternion& q)
-	{
-		return q * v;
 	}
 
 	Quaternion operator*(const Quaternion& q, double s)
@@ -128,6 +118,12 @@ Quaternion& Quaternion::operator/=(double s)
 	return *this;
 }
 
+Vector3 Quaternion::rotate(const Vector3& v) const
+{
+	Vector3 r(x, y, z);
+	return v + 2.0 * r.cross(r.cross(v) + w * v);
+}
+
 double Quaternion::length() const
 {
 	return std::sqrt(w * w + x * x + y * y + z * z);
@@ -165,31 +161,80 @@ bool Quaternion::isZero() const
 	return (w == 0.0 && x == 0.0 && y == 0.0 && z == 0.0);
 }
 
+bool Quaternion::isNan() const
+{
+	return (std::isnan(w) || std::isnan(x) || std::isnan(y) || std::isnan(z));
+}
+
 bool Quaternion::isNormal() const
 {
 	return MathUtils::almostSame(lengthSquared(), 1.0);
 }
 
+double Quaternion::dot(const Quaternion& q) const
+{
+	return (w * q.w) + (x * q.x) + (y * q.y) + (z * q.z);
+}
+
 AxisAngle Quaternion::toAxisAngle() const
 {
-	AxisAngle a;
+	assert(isNormal());
 
-	double cosine = w;
-	double sine = 1.0 - cosine * cosine;
+	AxisAngle aa;
 
-	a.angle = MathUtils::radToDeg(acos(cosine) * 2.0);
-	a.axis.x = x / sine;
-	a.axis.y = y / sine;
-	a.axis.z = z / sine;
+	aa.angle = MathUtils::radToDeg(2.0 * acos(w));
+	double sine2 = 1.0 - w * w;
 
-	return a;
+	if (sine2 < std::numeric_limits<double>::epsilon())
+	{
+		aa.axis.x = 1.0;
+		aa.axis.y = 0.0;
+		aa.axis.z = 0.0;
+	}
+	else
+	{
+		double invSine = 1.0 / sqrt(sine2);
+
+		aa.axis.x = x * invSine;
+		aa.axis.y = y * invSine;
+		aa.axis.z = z * invSine;
+	}
+
+	return aa;
+}
+
+Matrix4x4 Quaternion::toMatrix4x4() const
+{
+	assert(isNormal());
+
+	Matrix4x4 result(
+		1.0 - 2.0 * y * y - 2.0 * z * z, 2.0 * x * y - 2.0 * w * z, 2.0 * x * z + 2.0 * w * y, 0.0,
+		2.0 * x * y + 2.0 * w * z, 1.0 - 2.0 * x * x - 2.0 * z * z, 2.0 * y * z + 2.0 * w * x, 0.0,
+		2.0 * x * z - 2.0 * w * y, 2.0 * y * z - 2.0 * w * x, 1.0 - 2.0 * x * x - 2.0 * y * y, 0.0,
+		0.0, 0.0, 0.0, 1.0);
+
+	return result;
+}
+
+Quaternion Quaternion::lerp(const Quaternion& q1, const Quaternion& q2, double t)
+{
+	assert(t >= 0.0 && t <= 1.0);
+	return q1 * (1.0 - t) + q2 * t;
 }
 
 Quaternion Quaternion::slerp(const Quaternion& q1, const Quaternion& q2, double t)
 {
-	(void)q1;
-	(void)q2;
-	(void)t;
+	assert(t >= 0.0 && t <= 1.0);
 
-	return Quaternion();
+	double cosine = q1.dot(q2) / (q1.length() * q2.length());
+	double theta = acos(cosine);
+	double sinTheta = sin(theta);
+
+	if (sinTheta < std::numeric_limits<double>::epsilon())
+		return lerp(q1, q2, t);
+	
+	Quaternion tq1 = (cosine < 0.0) ? -q1 : q1;
+	Quaternion q = sin((1.0 - t) * theta) * tq1 + sin(t * theta) * q2;
+
+	return q / sinTheta;
 }

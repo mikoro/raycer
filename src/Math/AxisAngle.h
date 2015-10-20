@@ -9,11 +9,15 @@
 
 namespace Raycer
 {
+	class Matrix4x4;
+
 	class AxisAngle
 	{
 	public:
 
 		explicit AxisAngle(const Vector3& axis = Vector3::UP, double angle = 0.0);
+
+		Matrix4x4 toMatrix4x4() const;
 
 		Vector3 axis;
 		double angle; // degrees

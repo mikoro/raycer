@@ -14,8 +14,9 @@ q = w + xi + yj + zk
 
 namespace Raycer
 {
-	class Vector3;
 	class AxisAngle;
+	class Matrix4x4;
+	class Vector3;
 
 	class Quaternion
 	{
@@ -28,8 +29,6 @@ namespace Raycer
 		friend Quaternion operator+(const Quaternion& q1, const Quaternion& q2);
 		friend Quaternion operator-(const Quaternion& q1, const Quaternion& q2);
 		friend Quaternion operator*(const Quaternion& q1, const Quaternion& q2);
-		friend Vector3 operator*(const Quaternion& q, const Vector3& v);
-		friend Vector3 operator*(const Vector3& v, const Quaternion& q);
 		friend Quaternion operator*(const Quaternion& q, double s);
 		friend Quaternion operator*(double s, const Quaternion& q);
 		friend Quaternion operator/(const Quaternion& q, double s);
@@ -44,6 +43,7 @@ namespace Raycer
 		Quaternion& operator*=(double s);
 		Quaternion& operator/=(double s);
 
+		Vector3 rotate(const Vector3& v) const;
 		double length() const;
 		double lengthSquared() const;
 		void conjugate();
@@ -51,9 +51,13 @@ namespace Raycer
 		void normalize();
 		Quaternion normalized() const;
 		bool isZero() const;
+		bool isNan() const;
 		bool isNormal() const;
+		double dot(const Quaternion& q) const;
 		AxisAngle toAxisAngle() const;
+		Matrix4x4 toMatrix4x4() const;
 
+		static Quaternion lerp(const Quaternion& q1, const Quaternion& q2, double t);
 		static Quaternion slerp(const Quaternion& q1, const Quaternion& q2, double t);
 
 		double w;

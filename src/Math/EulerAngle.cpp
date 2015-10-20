@@ -44,14 +44,12 @@ namespace Raycer
 EulerAngle& EulerAngle::operator+=(const EulerAngle& e)
 {
 	*this = *this + e;
-
 	return *this;
 }
 
 EulerAngle& EulerAngle::operator-=(const EulerAngle& e)
 {
 	*this = *this - e;
-
 	return *this;
 }
 
@@ -80,6 +78,7 @@ Vector3 EulerAngle::getDirection() const
 {
 	Vector3 result;
 
+	// is [0 0 -1] when angles are zero
 	result.x = -sin(MathUtils::degToRad(yaw)) * cos(MathUtils::degToRad(pitch));
 	result.y = sin(MathUtils::degToRad(pitch));
 	result.z = -cos(MathUtils::degToRad(yaw)) * cos(MathUtils::degToRad(pitch));

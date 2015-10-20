@@ -43,9 +43,9 @@ namespace Raycer
 
 		static EulerAngle lerp(const EulerAngle& e1, const EulerAngle& e2, double t);
 
-		double pitch;
-		double yaw;
-		double roll;
+		double pitch; // x-axis
+		double yaw; // y-axis
+		double roll; // z-axis
 
 	private:
 
