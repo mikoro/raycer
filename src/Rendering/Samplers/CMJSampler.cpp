@@ -75,13 +75,3 @@ Vector2 CMJSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint per
 
 	return result;
 }
-
-Vector2 CMJSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
-}
-
-Vector3 CMJSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
-}

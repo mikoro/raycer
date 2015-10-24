@@ -28,13 +28,3 @@ Vector2 RegularSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint
 
 	return result;
 }
-
-Vector2 RegularSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
-}
-
-Vector3 RegularSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
-}

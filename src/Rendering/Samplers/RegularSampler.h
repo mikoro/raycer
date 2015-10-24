@@ -17,7 +17,5 @@ namespace Raycer
 
 		double getSample(uint i, uint n, uint permutation = 0) override;
 		Vector2 getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0) override;
-		Vector2 getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0) override;
-		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation = 0) override;
 	};
 }

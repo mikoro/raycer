@@ -35,13 +35,3 @@ Vector2 RandomSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint 
 
 	return Vector2(randomOffset(generator), randomOffset(generator));
 }
-
-Vector2 RandomSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
-}
-
-Vector3 RandomSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
-}

@@ -10,8 +10,9 @@
 
 using namespace Raycer;
 
-Vector2 Sampler::mapToDisk(const Vector2& point)
+Vector2 Sampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
+	Vector2 point = getSquareSample(ix, iy, nx, ny, permutation);
 	Vector2 result;
 
 	// square to disk polar mapping
@@ -24,8 +25,10 @@ Vector2 Sampler::mapToDisk(const Vector2& point)
 	return result;
 }
 
-Vector3 Sampler::mapToHemisphere(const ONB& onb, double distribution, const Vector2& point)
+Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
 {
+	Vector2 point = getSquareSample(ix, iy, nx, ny, permutation);
+
 	// square to hemisphere mapping with cosine distribution
 	double phi = 2.0 * M_PI * point.x;
 	double cos_phi = cos(phi);

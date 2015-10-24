@@ -36,13 +36,3 @@ Vector2 JitteredSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uin
 
 	return result;
 }
-
-Vector2 JitteredSampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToDisk(getSquareSample(ix, iy, nx, ny, permutation));
-}
-
-Vector3 JitteredSampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
-{
-	return Sampler::mapToHemisphere(onb, distribution, getSquareSample(ix, iy, nx, ny, permutation));
-}
