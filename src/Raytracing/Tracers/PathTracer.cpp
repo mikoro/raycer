@@ -60,7 +60,7 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		if (interrupted)
 			continue;
 
-		size_t offsetPixelIndex = size_t(pixelIndex) + state.pixelStartOffset;
+		uint64_t offsetPixelIndex = uint64_t(pixelIndex) + state.pixelStartOffset;
 		double x = double(offsetPixelIndex % state.imageWidth);
 		double y = double(offsetPixelIndex / state.imageWidth);
 		Vector2 pixelCoordinate = Vector2(x, y);
@@ -75,11 +75,11 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 				newColor += tracePath(scene, ray, 0, interrupted);
 		}
 
-		Color previousColor = cumulativeImage.getPixel(size_t(pixelIndex));
+		Color previousColor = cumulativeImage.getPixel(uint64_t(pixelIndex));
 		Color currentColor = previousColor + newColor;
 
-		cumulativeImage.setPixel(size_t(pixelIndex), currentColor);
-		linearImage.setPixel(size_t(pixelIndex), currentColor / double(state.cumulativeSampleCount));
+		cumulativeImage.setPixel(uint64_t(pixelIndex), currentColor);
+		linearImage.setPixel(uint64_t(pixelIndex), currentColor / double(state.cumulativeSampleCount));
 
 		// progress reporting to another thread
 		if ((pixelIndex + 1) % 100 == 0)

@@ -29,7 +29,7 @@ namespace Raycer
 		void initializeKernels();
 		void releaseKernels();
 
-		void initializeImageBuffer(size_t width, size_t height);
+		void initializeImageBuffer(uint64_t width, uint64_t height);
 		void releaseImageBuffer();
 
 		void initializeBuffers(const Scene& scene);
@@ -50,8 +50,8 @@ namespace Raycer
 
 		CLScene clScene;
 
-		size_t imageBufferWidth = 0;
-		size_t imageBufferHeight = 0;
+		uint64_t imageBufferWidth = 0;
+		uint64_t imageBufferHeight = 0;
 
 		cl_mem statePtr = nullptr;
 		cl_mem generalPtr = nullptr;
@@ -68,14 +68,14 @@ namespace Raycer
 
 		std::vector<cl_mem> textureImagePtrs;
 		cl_mem dummyTextureImagePtr = nullptr;
-		const size_t KERNEL_TEXTURE_COUNT = 60;
+		const uint64_t KERNEL_TEXTURE_COUNT = 60;
 
 		cl_program program = nullptr;
 		cl_kernel raytraceKernel = nullptr;
 		cl_kernel pathtraceKernel = nullptr;
 
-		size_t kernelArgumentIndex = 0;
-		size_t outputImageArgumentIndex = 0;
+		uint64_t kernelArgumentIndex = 0;
+		uint64_t outputImageArgumentIndex = 0;
 		bool buffersInitialized = false;
 	};
 }

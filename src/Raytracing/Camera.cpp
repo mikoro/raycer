@@ -26,7 +26,7 @@ void Camera::initialize()
 	originalOrientation = orientation;
 }
 
-void Camera::setImagePlaneSize(size_t width, size_t height)
+void Camera::setImagePlaneSize(uint64_t width, uint64_t height)
 {
 	imagePlaneWidth = double(width - 1);
 	imagePlaneHeight = double(height - 1);

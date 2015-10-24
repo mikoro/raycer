@@ -39,10 +39,10 @@ namespace Raycer
 		bool invisibleGroups = false;
 		bool invisibleCombinedGroup = false;
 		bool ignoreMaterials = false;
-		size_t defaultMaterialId = 0;
-		size_t idStartOffset = 0;
-		size_t combinedGroupId = 0;
-		size_t combinedGroupInstanceId = 0;
+		uint64_t defaultMaterialId = 0;
+		uint64_t idStartOffset = 0;
+		uint64_t combinedGroupId = 0;
+		uint64_t combinedGroupInstanceId = 0;
 
 		ModelLoaderInfo() {}
 		ModelLoaderInfo(ModelLoaderPreset preset)

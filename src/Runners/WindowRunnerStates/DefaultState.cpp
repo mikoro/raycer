@@ -206,13 +206,13 @@ void DefaultState::render(double timeStep, double interpolation)
 	}
 }
 
-void DefaultState::windowResized(size_t width, size_t height)
+void DefaultState::windowResized(uint64_t width, uint64_t height)
 {
 	(void)width;
 	(void)height;
 }
 
-void DefaultState::framebufferResized(size_t width, size_t height)
+void DefaultState::framebufferResized(uint64_t width, uint64_t height)
 {
 	Framebuffer& framebuffer = App::getFramebuffer();
 

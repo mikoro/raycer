@@ -17,7 +17,7 @@ Returns distance to closest neighbour (non-normalized) 0.0 - inf
 
 namespace Raycer
 {
-	const size_t CELL_NOISE_MAX_DISTANCES_COUNT = 100;
+	const uint64_t CELL_NOISE_MAX_DISTANCES_COUNT = 100;
 
 	enum class CellNoiseDistanceType { EUCLIDEAN, EUCLIDEAN_SQUARED, MANHATTAN, CHEBYSHEV };
 	enum class CellNoiseCombineType { D1, D2, D1_PLUS_D2, D1_MINUS_D2, D1_TIMES_D2, D2_MINUS_D1 };

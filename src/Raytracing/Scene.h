@@ -296,9 +296,9 @@ namespace Raycer
 
 		} primitives;
 
-		std::map<size_t, Primitive*> primitivesMap;
-		std::map<size_t, Material*> materialsMap;
-		std::map<size_t, Texture*> texturesMap;
+		std::map<uint64_t, Primitive*> primitivesMap;
+		std::map<uint64_t, Material*> materialsMap;
+		std::map<uint64_t, Texture*> texturesMap;
 
 	private:
 

@@ -22,16 +22,16 @@ namespace Raycer
 	public:
 
 		static const Image* loadImage(const std::string& fileName, bool applyGamma);
-		static size_t getImageIndex(const std::string& fileName);
+		static uint64_t getImageIndex(const std::string& fileName);
 		static const std::vector<Image>& getImages();
 		static void clear();
 
 	private:
 
-		static std::map<std::string, size_t> imageIndexMap;
+		static std::map<std::string, uint64_t> imageIndexMap;
 		static std::vector<Image> images;
 		static bool initialized;
 
-		static const size_t MAX_IMAGES = 1000;
+		static const uint64_t MAX_IMAGES = 1000;
 	};
 }

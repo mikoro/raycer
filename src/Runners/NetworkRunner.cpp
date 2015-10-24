@@ -173,7 +173,7 @@ void NetworkRunner::receiveBroadcasts()
 		ip::udp::endpoint ignoredEndpoint;
 		bool timerHasRun = false;
 
-		auto receiveHandler = [&](const boost::system::error_code& error, size_t bytes)
+		auto receiveHandler = [&](const boost::system::error_code& error, uint64_t bytes)
 		{
 			if (error || bytes == 0)
 				return;
@@ -242,20 +242,20 @@ void NetworkRunner::sendJobs()
 		else
 			sceneString = StringUtils::readFileToString(settings.scene.fileName);
 
-		size_t serverCount = serverEndpoints.size();
-		size_t width = settings.image.width;
-		size_t height = settings.image.height;
-		size_t totalPixelCount = width * height;
-		size_t pixelsPerServer = totalPixelCount / serverCount;
-		size_t pixelsForLastServer = pixelsPerServer + totalPixelCount % serverCount;
+		uint64_t serverCount = serverEndpoints.size();
+		uint64_t width = settings.image.width;
+		uint64_t height = settings.image.height;
+		uint64_t totalPixelCount = width * height;
+		uint64_t pixelsPerServer = totalPixelCount / serverCount;
+		uint64_t pixelsForLastServer = pixelsPerServer + totalPixelCount % serverCount;
 
 		io_service io;
 
-		for (size_t i = 0; i < serverEndpoints.size(); ++i)
+		for (uint64_t i = 0; i < serverEndpoints.size(); ++i)
 		{
 			bool isLastServer = (i == serverEndpoints.size() - 1);
-			size_t pixelStartOffset = i * pixelsPerServer;
-			size_t pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
+			uint64_t pixelStartOffset = i * pixelsPerServer;
+			uint64_t pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
 
 			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelStartOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelStartOffset, pixelCount, sceneString);
 
@@ -293,13 +293,13 @@ void NetworkRunner::receiveJobs()
 
 			while (!readError)
 			{
-				size_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(512)), readError);
+				uint64_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(512)), readError);
 				receiveBuffer.commit(bytes);
 			}
 
 			streambuf::const_buffers_type receiveBufferConst = receiveBuffer.data();
 			std::string receivedString(buffers_begin(receiveBufferConst), buffers_begin(receiveBufferConst) + receiveBuffer.size());
-			size_t headerEndIndex = receivedString.find("\n\n");
+			uint64_t headerEndIndex = receivedString.find("\n\n");
 
 			if (headerEndIndex == std::string::npos)
 				return;
@@ -451,8 +451,8 @@ namespace
 {
 	struct ImagePart
 	{
-		size_t pixelStartOffset = 0;
-		size_t pixelCount = 0;
+		uint64_t pixelStartOffset = 0;
+		uint64_t pixelCount = 0;
 		std::vector<unsigned char> pixelData;
 	};
 }
@@ -461,7 +461,7 @@ void NetworkRunner::receiveResults()
 {
 	Settings& settings = App::getSettings();
 
-	size_t imagePartCount = serverEndpoints.size();
+	uint64_t imagePartCount = serverEndpoints.size();
 	std::vector<ImagePart> imageParts;
 	Image resultImage;
 
@@ -485,7 +485,7 @@ void NetworkRunner::receiveResults()
 
 			while (!readError)
 			{
-				size_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(1024 * 1024)), readError);
+				uint64_t bytes = socket.read_some(boost::asio::buffer(receiveBuffer.prepare(1024 * 1024)), readError);
 				receiveBuffer.commit(bytes);
 			}
 
@@ -500,8 +500,8 @@ void NetworkRunner::receiveResults()
 			if (headerEndPtr == nullptr)
 				return;
 
-			size_t headerSize = size_t(headerEndPtr - receiveBufferPtr);
-			size_t dataSize = receiveBuffer.size() - headerSize - 2 - 1;
+			uint64_t headerSize = uint64_t(headerEndPtr - receiveBufferPtr);
+			uint64_t dataSize = receiveBuffer.size() - headerSize - 2 - 1;
 
 			std::string headerString(buffers_begin(receiveBufferConst), buffers_begin(receiveBufferConst) + headerSize);
 			std::smatch match;
@@ -510,7 +510,7 @@ void NetworkRunner::receiveResults()
 			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nPixelStartOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
-			size_t pixelStartOffset, pixelCount;
+			uint64_t pixelStartOffset, pixelCount;
 			ss.str(match[1]);
 			ss >> pixelStartOffset;
 			ss.clear();

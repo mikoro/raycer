@@ -61,7 +61,7 @@ void Text::initialize(const std::string& fontFileName, double fontSize)
 	ftgl::mat4_set_identity(&mvp);
 }
 
-void Text::setWindowSize(size_t width, size_t height)
+void Text::setWindowSize(uint64_t width, uint64_t height)
 {
 	ftgl::mat4_set_orthographic(&mvp, 0, float(width), 0, float(height), -1, 1);
 }
@@ -74,7 +74,7 @@ void Text::drawText(double x, double y, const Color& color, const std::string& t
 	std::vector<wchar_t> utf16Text;
 	utf8::unchecked::utf8to16(text.begin(), text.end(), back_inserter(utf16Text));
 
-	for (size_t i = 0; i < utf16Text.size(); ++i)
+	for (uint64_t i = 0; i < utf16Text.size(); ++i)
 	{
 		ftgl::texture_glyph_t* glyph = ftgl::texture_font_get_glyph(font, utf16Text[i]);
 

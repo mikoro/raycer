@@ -25,15 +25,15 @@ void PerlinNoise::seed(uint32_t seed)
 	std::iota(permutations.begin(), permutations.end(), 0);
 	std::mt19937 mt(seed);
 	std::shuffle(permutations.begin(), permutations.end(), mt);
-	std::vector<size_t> duplicate = permutations;
+	std::vector<uint64_t> duplicate = permutations;
 	permutations.insert(permutations.end(), duplicate.begin(), duplicate.end());
 }
 
 double PerlinNoise::getNoise(double x, double y, double z) const
 {
-	size_t X = size_t(floor(x)) & 255;
-	size_t Y = size_t(floor(y)) & 255;
-	size_t Z = size_t(floor(z)) & 255;
+	uint64_t X = uint64_t(floor(x)) & 255;
+	uint64_t Y = uint64_t(floor(y)) & 255;
+	uint64_t Z = uint64_t(floor(z)) & 255;
 
 	x -= floor(x);
 	y -= floor(y);
@@ -43,12 +43,12 @@ double PerlinNoise::getNoise(double x, double y, double z) const
 	double v = fade(y);
 	double w = fade(z);
 
-	size_t A = permutations[X] + Y;
-	size_t AA = permutations[A] + Z;
-	size_t AB = permutations[A + 1] + Z;
-	size_t B = permutations[X + 1] + Y;
-	size_t BA = permutations[B] + Z;
-	size_t BB = permutations[B + 1] + Z;
+	uint64_t A = permutations[X] + Y;
+	uint64_t AA = permutations[A] + Z;
+	uint64_t AB = permutations[A + 1] + Z;
+	uint64_t B = permutations[X + 1] + Y;
+	uint64_t BA = permutations[B] + Z;
+	uint64_t BB = permutations[B + 1] + Z;
 
 	double n = lerp(w, lerp(v, lerp(u, grad(permutations[AA], x, y, z),
 		grad(permutations[BA], x - 1, y, z)),
@@ -88,9 +88,9 @@ double PerlinNoise::lerp(double t, double a, double b) const
 	return a + t * (b - a);
 }
 
-double PerlinNoise::grad(size_t hash, double x, double y, double z) const
+double PerlinNoise::grad(uint64_t hash, double x, double y, double z) const
 {
-	size_t h = hash & 15;
+	uint64_t h = hash & 15;
 	double u = (h < 8) ? x : y;
 	double v = (h < 4) ? y : ((h == 12 || h == 14) ? x : z);
 

@@ -22,9 +22,9 @@ namespace Raycer
 		struct OpenCL
 		{
 			bool enabled;
-			size_t platformId;
+			uint64_t platformId;
 			uint64_t deviceType;
-			size_t deviceId;
+			uint64_t deviceId;
 			std::string options;
 		} openCL;
 
@@ -47,22 +47,22 @@ namespace Raycer
 
 		struct Image
 		{
-			size_t width;
-			size_t height;
+			uint64_t width;
+			uint64_t height;
 			std::string fileName;
 			bool autoView;
 		} image;
 
 		struct Window
 		{
-			size_t width;
-			size_t height;
+			uint64_t width;
+			uint64_t height;
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
 			bool showInfoText;
 			std::string defaultFont;
-			size_t defaultFontSize;
+			uint64_t defaultFontSize;
 		} window;
 
 		struct Framebuffer

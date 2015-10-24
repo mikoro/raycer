@@ -5,30 +5,30 @@
 
 namespace Raycer
 {
-	template <size_t N>
+	template <uint64_t N>
 	Polynomial<N>::Polynomial()
 	{
 	}
 
-	template <size_t N>
+	template <uint64_t N>
 	Polynomial<N>::Polynomial(const double* coefficients_)
 	{
 		setCoefficients(coefficients_);
 	}
 
-	template <size_t N>
+	template <uint64_t N>
 	void Polynomial<N>::setCoefficients(const double* coefficients_)
 	{
-		for (size_t i = 0; i < size; ++i)
+		for (uint64_t i = 0; i < size; ++i)
 			coefficients[i] = coefficients_[i];
 	}
 
-	template <size_t N>
+	template <uint64_t N>
 	std::complex<double> Polynomial<N>::evaluate(const std::complex<double>& x) const
 	{
 		std::complex<double> y(0.0, 0.0);
 
-		for (size_t i = 0; i < size; ++i)
+		for (uint64_t i = 0; i < size; ++i)
 			y += coefficients[i] * pow(x, int32_t(degree - i)); // raising to signed power is faster
 
 		return y;
@@ -36,30 +36,30 @@ namespace Raycer
 
 	// Durand-Kerner algorithm
 	// https://en.wikipedia.org/wiki/Durand%E2%80%93Kerner_method
-	template <size_t N>
-	const std::complex<double>* Polynomial<N>::findAllRoots(size_t maxIterations, double changeThreshold)
+	template <uint64_t N>
+	const std::complex<double>* Polynomial<N>::findAllRoots(uint64_t maxIterations, double changeThreshold)
 	{
 		// normalize (so that highest degree coeff is one)
 		double denominator = coefficients[0];
 
-		for (size_t i = 0; i < size; ++i)
+		for (uint64_t i = 0; i < size; ++i)
 			coefficients[i] /= denominator;
 
 		// seed roots with distributed complex values
 		std::complex<double> seed(0.4, 0.9);
 
-		for (size_t i = 0; i < degree; ++i)
+		for (uint64_t i = 0; i < degree; ++i)
 			roots[i] = previousRoots[i] = pow(seed, int32_t(i));
 
-		for (size_t i = 0; i < maxIterations; ++i)
+		for (uint64_t i = 0; i < maxIterations; ++i)
 		{
-			for (size_t j = 0; j < degree; ++j)
+			for (uint64_t j = 0; j < degree; ++j)
 			{
 				// numerator
 				std::complex<double> temp = evaluate(roots[j]);
 
 				// denominators
-				for (size_t k = 0; k < degree; ++k)
+				for (uint64_t k = 0; k < degree; ++k)
 				{
 					if (k == j)
 						continue;
@@ -76,7 +76,7 @@ namespace Raycer
 			{
 				bool notChanged = true;
 
-				for (size_t j = 0; j < degree; ++j)
+				for (uint64_t j = 0; j < degree; ++j)
 				{
 					if (!MathUtils::almostSame(roots[j], previousRoots[j], changeThreshold))
 					{
@@ -89,20 +89,20 @@ namespace Raycer
 					break;
 			}
 
-			for (size_t j = 0; j < degree; ++j)
+			for (uint64_t j = 0; j < degree; ++j)
 				previousRoots[j] = roots[j];
 		}
 
 		return roots;
 	}
 
-	template <size_t N>
-	const double* Polynomial<N>::findAllPositiveRealRoots(size_t& count, size_t maxIterations, double changeThreshold, double imagZeroThreshold)
+	template <uint64_t N>
+	const double* Polynomial<N>::findAllPositiveRealRoots(uint64_t& count, uint64_t maxIterations, double changeThreshold, double imagZeroThreshold)
 	{
 		findAllRoots(maxIterations, changeThreshold);
 		count = 0;
 
-		for (size_t i = 0; i < degree; ++i)
+		for (uint64_t i = 0; i < degree; ++i)
 		{
 			if (MathUtils::almostZero(roots[i].imag(), imagZeroThreshold) && roots[i].real() > 0.0)
 			{
@@ -114,10 +114,10 @@ namespace Raycer
 		return positiveRealRoots;
 	}
 
-	template <size_t N>
-	bool Polynomial<N>::findSmallestPositiveRealRoot(double& result, size_t maxIterations, double changeThreshold, double imagZeroThreshold)
+	template <uint64_t N>
+	bool Polynomial<N>::findSmallestPositiveRealRoot(double& result, uint64_t maxIterations, double changeThreshold, double imagZeroThreshold)
 	{
-		size_t count;
+		uint64_t count;
 		findAllPositiveRealRoots(count, maxIterations, changeThreshold, imagZeroThreshold);
 
 		if (count == 0)

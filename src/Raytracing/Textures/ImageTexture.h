@@ -25,7 +25,7 @@ namespace Raycer
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
 		const Image* getImage() const;
-		size_t getImagePoolIndex() const;
+		uint64_t getImagePoolIndex() const;
 
 		std::string imageFilePath;
 		bool isBumpMap = false;

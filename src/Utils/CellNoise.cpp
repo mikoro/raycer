@@ -68,7 +68,7 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 	}
 
 	std::sort(distances.begin(), it);
-	size_t size = it - distances.begin();
+	uint64_t size = it - distances.begin();
 
 	double d1 = 0.0;
 	double d2 = 0.0;
@@ -121,7 +121,7 @@ double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombin
 	}
 
 	std::sort(distances.begin(), it);
-	size_t size = it - distances.begin();
+	uint64_t size = it - distances.begin();
 
 	double d1 = 0.0;
 	double d2 = 0.0;
@@ -145,7 +145,7 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint32_t de
 {
 	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
-	std::uniform_int_distribution<size_t> randomColorIndex(0, voronoiColors.size() - 1);
+	std::uniform_int_distribution<uint64_t> randomColorIndex(0, voronoiColors.size() - 1);
 	std::minstd_rand generator;
 
 	int64_t ix = int64_t(floor(x));
@@ -154,7 +154,7 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint32_t de
 
 	Vector3 evaluationPoint(x, y, z);
 	double minDistance = std::numeric_limits<double>::max();
-	size_t closestColorIndex = std::numeric_limits<size_t>::max();
+	uint64_t closestColorIndex = std::numeric_limits<uint64_t>::max();
 
 	for (int64_t dz = -1; dz <= 1; ++dz)
 	{
@@ -178,7 +178,7 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint32_t de
 					cubePoint.y = cy + randomOffset(generator);
 					cubePoint.z = cz + randomOffset(generator);
 
-					size_t colorIndex = randomColorIndex(generator);
+					uint64_t colorIndex = randomColorIndex(generator);
 
 					double distance = getDistance(distanceType, evaluationPoint, cubePoint);
 
@@ -204,7 +204,7 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint32_t 
 {
 	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
-	std::uniform_int_distribution<size_t> randomColorIndex(0, voronoiColors.size() - 1);
+	std::uniform_int_distribution<uint64_t> randomColorIndex(0, voronoiColors.size() - 1);
 	std::minstd_rand generator;
 
 	int64_t ix = int64_t(floor(x));
@@ -212,7 +212,7 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint32_t 
 
 	Vector3 evaluationPoint(x, y, 0.0);
 	double minDistance = std::numeric_limits<double>::max();
-	size_t closestColorIndex = std::numeric_limits<size_t>::max();
+	uint64_t closestColorIndex = std::numeric_limits<uint64_t>::max();
 
 	for (int64_t dy = -1; dy <= 1; ++dy)
 	{
@@ -232,7 +232,7 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint32_t 
 				cubePoint.x = cx + randomOffset(generator);
 				cubePoint.y = cy + randomOffset(generator);
 
-				size_t colorIndex = randomColorIndex(generator);
+				uint64_t colorIndex = randomColorIndex(generator);
 
 				double distance = getDistance(distanceType, evaluationPoint, cubePoint);
 

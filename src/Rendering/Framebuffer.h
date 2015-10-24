@@ -19,15 +19,15 @@ namespace Raycer
 		Framebuffer();
 
 		void initialize();
-		void resize(size_t width, size_t height);
-		void setWindowSize(size_t width, size_t height);
+		void resize(uint64_t width, uint64_t height);
+		void setWindowSize(uint64_t width, uint64_t height);
 		void clear();
 		void clear(const Color& color);
 		void render();
 		void enableSmoothing(bool state);
 
-		size_t getWidth() const;
-		size_t getHeight() const;
+		uint64_t getWidth() const;
+		uint64_t getHeight() const;
 		Image& getCumulativeImage();
 		Image& getLinearImage();
 		Image& getToneMappedImage();
@@ -39,8 +39,8 @@ namespace Raycer
 		Image linearImage;
 		Image toneMappedImage;
 
-		size_t windowWidth = 0;
-		size_t windowHeight = 0;
+		uint64_t windowWidth = 0;
+		uint64_t windowHeight = 0;
 
 		GLuint vaoId = 0;
 		GLuint vertexBufferId = 0;

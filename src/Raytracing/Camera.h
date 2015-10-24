@@ -41,7 +41,7 @@ namespace Raycer
 		Camera();
 
 		void initialize();
-		void setImagePlaneSize(size_t width, size_t height);
+		void setImagePlaneSize(uint64_t width, uint64_t height);
 		void update(const Scene& scene, double timeStep);
 		void reset();
 		bool hasMoved() const;

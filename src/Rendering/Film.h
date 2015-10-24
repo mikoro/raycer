@@ -31,9 +31,9 @@ namespace Raycer
 	public:
 
 		Film();
-		Film(size_t width, size_t height);
+		Film(uint64_t width, uint64_t height);
 
-		void resize(size_t width, size_t height);
+		void resize(uint64_t width, uint64_t height);
 		void clear();
 		void resetSampleCounts();
 		bool getRay(uint64_t x, uint64_t y, const Camera& camera, Ray& ray);
@@ -49,8 +49,8 @@ namespace Raycer
 
 	private:
 
-		size_t width = 0;
-		size_t height = 0;
+		uint64_t width = 0;
+		uint64_t height = 0;
 		uint64_t sampleCountSqrt = 1;
 
 		std::unique_ptr<Sampler> sampler = nullptr;

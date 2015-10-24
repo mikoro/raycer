@@ -71,13 +71,13 @@ void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 			if (interrupted)
 				continue;
 
-			size_t offsetPixelIndex = size_t(pixelIndex) + state.pixelStartOffset;
+			uint64_t offsetPixelIndex = uint64_t(pixelIndex) + state.pixelStartOffset;
 			double x = double(offsetPixelIndex % state.imageWidth);
 			double y = double(offsetPixelIndex / state.imageWidth);
 			Vector2 pixelCoordinate = Vector2(x, y);
 
 			Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
-			linearImage.setPixel(size_t(pixelIndex), pixelColor);
+			linearImage.setPixel(uint64_t(pixelIndex), pixelColor);
 
 			// progress reporting to another thread
 			if ((pixelIndex + 1) % 100 == 0)

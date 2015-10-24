@@ -30,7 +30,7 @@ namespace Raycer
 		AABB getAABB() const override;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
-		size_t primitiveId = 0;
+		uint64_t primitiveId = 0;
 
 		Vector3 scale = Vector3(1.0, 1.0, 1.0);
 		EulerAngle rotate = EulerAngle(0.0, 0.0, 0.0);

@@ -24,13 +24,13 @@ void PoissonDisc::seed(uint32_t seed)
 	generator.seed(seed);
 }
 
-void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, uint64_t iterationLimit)
+void PoissonDisc::generate2D(uint64_t width, uint64_t height, double minDistance, uint64_t iterationLimit)
 {
 	std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
 
 	grid2D.cellSize = minDistance / M_SQRT2;
-	grid2D.width = size_t(ceil(double(width) / grid2D.cellSize));
-	grid2D.height = size_t(ceil(double(height) / grid2D.cellSize));
+	grid2D.width = uint64_t(ceil(double(width) / grid2D.cellSize));
+	grid2D.height = uint64_t(ceil(double(height) / grid2D.cellSize));
 
 	grid2D.grid.resize(grid2D.height);
 
@@ -82,8 +82,8 @@ GridIndex2D PoissonDisc::getGridIndex2D(const Vector2& point)
 {
 	GridIndex2D gridIndex;
 
-	gridIndex.x = size_t(point.x / grid2D.cellSize);
-	gridIndex.y = size_t(point.y / grid2D.cellSize);
+	gridIndex.x = uint64_t(point.x / grid2D.cellSize);
+	gridIndex.y = uint64_t(point.y / grid2D.cellSize);
 
 	return gridIndex;
 }
@@ -97,8 +97,8 @@ Cell2D& PoissonDisc::getGridCell2D(const Vector2& point)
 
 Vector2 PoissonDisc::getNextActivePoint2D()
 {
-	std::uniform_int_distribution<size_t> randomIndex(0, activePoints2D.size() - 1);
-	size_t index = randomIndex(generator);
+	std::uniform_int_distribution<uint64_t> randomIndex(0, activePoints2D.size() - 1);
+	uint64_t index = randomIndex(generator);
 	Vector2 point = activePoints2D[index];
 	activePoints2D.erase(activePoints2D.begin() + index);
 
@@ -123,16 +123,16 @@ bool PoissonDisc::isInNeighbourhood2D(const Vector2& point, double minDistance)
 {
 	GridIndex2D gridIndex = getGridIndex2D(point);
 
-	size_t minx = std::max(size_t(0), gridIndex.x - 2);
-	size_t maxx = std::min(grid2D.width - 1, gridIndex.x + 2);
-	size_t miny = std::max(size_t(0), gridIndex.y - 2);
-	size_t maxy = std::min(grid2D.height - 1, gridIndex.y + 2);
+	uint64_t minx = std::max(uint64_t(0), gridIndex.x - 2);
+	uint64_t maxx = std::min(grid2D.width - 1, gridIndex.x + 2);
+	uint64_t miny = std::max(uint64_t(0), gridIndex.y - 2);
+	uint64_t maxy = std::min(grid2D.height - 1, gridIndex.y + 2);
 
 	double minDistance2 = minDistance * minDistance;
 
-	for (size_t y = miny; y <= maxy; ++y)
+	for (uint64_t y = miny; y <= maxy; ++y)
 	{
-		for (size_t x = minx; x <= maxx; ++x)
+		for (uint64_t x = minx; x <= maxx; ++x)
 		{
 			Cell2D& cell = grid2D.grid[y][x];
 

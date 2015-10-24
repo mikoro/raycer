@@ -33,7 +33,7 @@ namespace Raycer
 		AABB getAABB() const override;
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
-		std::vector<size_t> primitiveIds;
+		std::vector<uint64_t> primitiveIds;
 		bool enableBVH = true;
 		BVHBuildInfo bvhBuildInfo;
 		FlatBVH bvh;

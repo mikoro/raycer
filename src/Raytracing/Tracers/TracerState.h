@@ -20,13 +20,13 @@ namespace Raycer
 		Image* linearImage = nullptr;
 		Image* toneMappedImage = nullptr;
 
-		size_t imageWidth = 0;
-		size_t imageHeight = 0;
-		size_t pixelStartOffset = 0;
-		size_t pixelCount = 0;
+		uint64_t imageWidth = 0;
+		uint64_t imageHeight = 0;
+		uint64_t pixelStartOffset = 0;
+		uint64_t pixelCount = 0;
 
-		size_t cumulativeSampleCount = 0;
+		uint64_t cumulativeSampleCount = 0;
 
-		std::atomic<size_t> pixelsProcessed;
+		std::atomic<uint64_t> pixelsProcessed;
 	};
 }

@@ -19,9 +19,9 @@ void Settings::load(const std::string& fileName)
 	general.checkCLErrors = iniReader.getValue<bool>("general", "checkCLErrors");
 
 	openCL.enabled = iniReader.getValue<bool>("openCL", "enabled");
-	openCL.platformId = iniReader.getValue<size_t>("openCL", "platformId");
+	openCL.platformId = iniReader.getValue<uint64_t>("openCL", "platformId");
 	openCL.deviceType = iniReader.getValue<uint64_t>("openCL", "deviceType");
-	openCL.deviceId = iniReader.getValue<size_t>("openCL", "deviceId");
+	openCL.deviceId = iniReader.getValue<uint64_t>("openCL", "deviceId");
 	openCL.options = iniReader.getValue("openCL", "options");
 
 	network.isClient = iniReader.getValue<bool>("network", "isClient");
@@ -33,21 +33,21 @@ void Settings::load(const std::string& fileName)
 
 	scene.fileName = iniReader.getValue("scene", "fileName");
 	scene.enableTestScenes = iniReader.getValue<bool>("scene", "enableTestScenes");
-	scene.testSceneNumber = iniReader.getValue<int>("scene", "testSceneNumber");
+	scene.testSceneNumber = iniReader.getValue<uint64_t>("scene", "testSceneNumber");
 
-	image.width = iniReader.getValue<size_t>("image", "width");
-	image.height = iniReader.getValue<size_t>("image", "height");
+	image.width = iniReader.getValue<uint64_t>("image", "width");
+	image.height = iniReader.getValue<uint64_t>("image", "height");
 	image.fileName = iniReader.getValue("image", "fileName");
 	image.autoView = iniReader.getValue<bool>("image", "autoView");
 
-	window.width = iniReader.getValue<size_t>("window", "width");
-	window.height = iniReader.getValue<size_t>("window", "height");
+	window.width = iniReader.getValue<uint64_t>("window", "width");
+	window.height = iniReader.getValue<uint64_t>("window", "height");
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showInfoText = iniReader.getValue<bool>("window", "showInfoText");
 	window.defaultFont = iniReader.getValue("window", "defaultFont");
-	window.defaultFontSize = iniReader.getValue<size_t>("window", "defaultFontSize");
+	window.defaultFontSize = iniReader.getValue<uint64_t>("window", "defaultFontSize");
 
 	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
 	framebuffer.enableSmoothing = iniReader.getValue<bool>("framebuffer", "enableSmoothing");

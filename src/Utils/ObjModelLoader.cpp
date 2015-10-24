@@ -26,13 +26,13 @@ namespace
 		return tempPathString;
 	}
 
-	double readDouble(const std::string& input, size_t& startIndex, std::string& result)
+	double readDouble(const std::string& input, uint64_t& startIndex, std::string& result)
 	{
 		StringUtils::readUntilSpace(input, startIndex, result);
 		return StringUtils::parseDouble(result);
 	}
 
-	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, size_t>& materialsMap, size_t& currentId)
+	void processMaterialFile(const std::string& objFileDirectory, const std::string& mtlFilePath, const ModelLoaderInfo& info, ModelLoaderResult& result, std::map<std::string, uint64_t>& materialsMap, uint64_t& currentId)
 	{
 		std::string absoluteMtlFilePath = getAbsolutePath(objFileDirectory, mtlFilePath);
 		App::getLog().logInfo("Reading MTL file (%s)", absoluteMtlFilePath);
@@ -46,7 +46,7 @@ namespace
 
 		std::string line;
 		std::string part;
-		size_t lineIndex = 0;
+		uint64_t lineIndex = 0;
 
 		while (std::getline(file, line))
 		{
@@ -208,21 +208,21 @@ namespace
 			result.materials.push_back(currentMaterial);
 	}
 
-	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, size_t& currentId, size_t currentMaterialId)
+	void processFace(const std::string& line, std::vector<Vector3>& vertices, std::vector<Vector3>& normals, std::vector<Vector2>& texcoords, const ModelLoaderInfo& info, ModelLoaderResult& result, PrimitiveGroup& combinedGroup, uint64_t& currentId, uint64_t currentMaterialId)
 	{
 		Log& log = App::getLog();
 
-		std::vector<size_t> vertexIndices;
-		std::vector<size_t> normalIndices;
-		std::vector<size_t> texcoordIndices;
+		std::vector<uint64_t> vertexIndices;
+		std::vector<uint64_t> normalIndices;
+		std::vector<uint64_t> texcoordIndices;
 
 		std::string part1;
-		size_t lineIndex1 = 0;
+		uint64_t lineIndex1 = 0;
 
 		StringUtils::readUntilSpace(line, lineIndex1, part1);
 
 		// determine what indices are available from the slash count
-		size_t slashCount = std::count(part1.begin(), part1.end(), '/');
+		uint64_t slashCount = std::count(part1.begin(), part1.end(), '/');
 		bool doubleSlash = (part1.find("//") != std::string::npos);
 		bool hasTexcoords = (slashCount > 0 && !doubleSlash);
 		bool hasNormals = (slashCount > 1);
@@ -234,7 +234,7 @@ namespace
 			std::replace(part1.begin(), part1.end(), '/', ' ');
 
 			std::string part2;
-			size_t lineIndex2 = 0;
+			uint64_t lineIndex2 = 0;
 
 			StringUtils::readUntilSpace(part1, lineIndex2, part2);
 			int64_t vertexIndex = strtoll(part2.c_str(), nullptr, 10);
@@ -250,7 +250,7 @@ namespace
 				return;
 			}
 
-			vertexIndices.push_back(size_t(vertexIndex));
+			vertexIndices.push_back(uint64_t(vertexIndex));
 
 			if (hasTexcoords)
 			{
@@ -268,7 +268,7 @@ namespace
 					return;
 				}
 
-				texcoordIndices.push_back(size_t(texcoordIndex));
+				texcoordIndices.push_back(uint64_t(texcoordIndex));
 			}
 
 			if (hasNormals)
@@ -287,7 +287,7 @@ namespace
 					return;
 				}
 
-				normalIndices.push_back(size_t(normalIndex));
+				normalIndices.push_back(uint64_t(normalIndex));
 			}
 		}
 
@@ -298,7 +298,7 @@ namespace
 		}
 
 		// triangulate
-		for (size_t i = 2; i < vertexIndices.size(); ++i)
+		for (uint64_t i = 2; i < vertexIndices.size(); ++i)
 		{
 			Triangle triangle;
 			triangle.id = ++currentId;
@@ -360,10 +360,10 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	combinedGroupInstance.id = info.combinedGroupInstanceId;
 	combinedGroupInstance.primitiveId = combinedGroup.id;
 
-	size_t currentId = info.idStartOffset;
-	size_t currentMaterialId = info.defaultMaterialId;
+	uint64_t currentId = info.idStartOffset;
+	uint64_t currentMaterialId = info.defaultMaterialId;
 
-	std::map<std::string, size_t> materialsMap;
+	std::map<std::string, uint64_t> materialsMap;
 	std::string objFileDirectory = boost::filesystem::absolute(info.modelFilePath).parent_path().string();
 
 	Matrix4x4 scaling = Matrix4x4::scale(info.scale);
@@ -384,7 +384,7 @@ ModelLoaderResult ModelLoader::readObjFile(const ModelLoaderInfo& info)
 	char buffer[1024];
 	std::string line;
 	std::string part;
-	size_t lineIndex = 0;
+	uint64_t lineIndex = 0;
 
 	while (fgets(buffer, sizeof(buffer), file) != nullptr)
 	{

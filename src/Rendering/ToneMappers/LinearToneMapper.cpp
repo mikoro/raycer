@@ -21,7 +21,7 @@ void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image&
 	for (int64_t i = 0; i < int64_t(inputPixelData.size()); ++i)
 	{
 		// fix static analysis warnings
-		size_t j = size_t(i);
+		uint64_t j = uint64_t(i);
 
 		outputPixelData[j] = (inputPixelData.at(j).toColor() * pow(2.0, scene.toneMapper.exposure)).toColorf();
 		outputPixelData[j].a = 1.0;

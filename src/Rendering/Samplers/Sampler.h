@@ -51,8 +51,8 @@ namespace Raycer
 
 		uint64_t permutation = 0;
 
-		size_t currentSampleIndex1D = 0;
-		size_t currentSampleIndex2D = 0;
+		uint64_t currentSampleIndex1D = 0;
+		uint64_t currentSampleIndex2D = 0;
 
 		std::vector<double> samples1D;
 		std::vector<Vector2> samples2D;

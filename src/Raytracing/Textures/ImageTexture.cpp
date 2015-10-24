@@ -20,9 +20,9 @@ void ImageTexture::initialize()
 		bumpMapX = Image(image->getWidth(), image->getHeight());
 		bumpMapY = Image(image->getWidth(), image->getHeight());
 
-		for (size_t y = 0; y < image->getHeight(); ++y)
+		for (uint64_t y = 0; y < image->getHeight(); ++y)
 		{
-			for (size_t x = 0; x < image->getWidth(); ++x)
+			for (uint64_t x = 0; x < image->getWidth(); ++x)
 			{
 				Color current = image->getPixel(x, y);
 
@@ -95,7 +95,7 @@ const Image* ImageTexture::getImage() const
 	return image;
 }
 
-size_t ImageTexture::getImagePoolIndex() const
+uint64_t ImageTexture::getImagePoolIndex() const
 {
 	return ImagePool::getImageIndex(imageFilePath);
 }

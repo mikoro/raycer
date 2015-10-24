@@ -49,7 +49,7 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		for (uint64_t x = 0; x < n; ++x)
 		{
 			double sx = sampler.second->getSample1D(x, n) * size.x;
-			image1.setPixel(size_t(sx + 0.5), size_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
+			image1.setPixel(uint64_t(sx + 0.5), uint64_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
 		for (uint64_t y = 0; y < n; ++y)
@@ -57,11 +57,11 @@ TEST_CASE("Sampler functionality", "[sampler]")
 			for (uint64_t x = 0; x < n; ++x)
 			{
 				Vector2 sample = sampler.second->getSample2D(x, y, n, n) * size;
-				image2.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
+				image2.setPixel(uint64_t(sample.x + 0.5), uint64_t(sample.y + 0.5), Color(255, 255, 255));
 
 				sample = sampler.second->getDiskSample(x, y, n, n);
 				sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
-				image3.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
+				image3.setPixel(uint64_t(sample.x + 0.5), uint64_t(sample.y + 0.5), Color(255, 255, 255));
 
 				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n);
 				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);

@@ -25,7 +25,7 @@ namespace Raycer
 		virtual void update(double timeStep) = 0;
 		virtual void render(double timeStep, double interpolation) = 0;
 
-		virtual void windowResized(size_t width, size_t height) = 0;
-		virtual void framebufferResized(size_t width, size_t height) = 0;
+		virtual void windowResized(uint64_t width, uint64_t height) = 0;
+		virtual void framebufferResized(uint64_t width, uint64_t height) = 0;
 	};
 }

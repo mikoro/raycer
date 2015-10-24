@@ -28,7 +28,7 @@ std::string StringUtils::readFileToString(const std::string& filePath)
 	return std::string(&buffer[0], size);
 }
 
-bool StringUtils::readUntilSpace(const std::string& input, size_t& startIndex, std::string& result)
+bool StringUtils::readUntilSpace(const std::string& input, uint64_t& startIndex, std::string& result)
 {
 	bool nonSpaceWasFound = false;
 
@@ -47,7 +47,7 @@ bool StringUtils::readUntilSpace(const std::string& input, size_t& startIndex, s
 	if (!nonSpaceWasFound)
 		return false;
 
-	size_t endIndex = startIndex;
+	uint64_t endIndex = startIndex;
 
 	// find next space character
 	for (; endIndex < input.size(); ++endIndex)

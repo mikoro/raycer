@@ -39,7 +39,7 @@ Scene Scene::createTestScene9()
 	std::uniform_real_distribution<double> randomRotation(-45.0, 45.0);
 	std::uniform_real_distribution<double> randomTranslation(-8.0, 8.0);
 
-	size_t currentId = 1000000;
+	uint64_t currentId = 1000000;
 
 	for (int64_t z = -200; z < 200; z += 20)
 	{

@@ -59,7 +59,7 @@ Scene Scene::createTestScene5()
 
 	double px;
 	double py = -250.0 + randomY(generator);
-	size_t currentId = 2;
+	uint64_t currentId = 2;
 
 	for (uint64_t y = 0; y < 100; ++y)
 	{

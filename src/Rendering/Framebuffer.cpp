@@ -90,7 +90,7 @@ void Framebuffer::initialize()
 	GLHelper::checkError("Could not set OpenGL framebuffer parameters");
 }
 
-void Framebuffer::resize(size_t width, size_t height)
+void Framebuffer::resize(uint64_t width, uint64_t height)
 {
 	App::getLog().logInfo("Resizing framebuffer to %sx%s", width, height);
 
@@ -108,7 +108,7 @@ void Framebuffer::resize(size_t width, size_t height)
 	clear();
 }
 
-void Framebuffer::setWindowSize(size_t width, size_t height)
+void Framebuffer::setWindowSize(uint64_t width, uint64_t height)
 {
 	windowWidth = width;
 	windowHeight = height;
@@ -137,8 +137,8 @@ void Framebuffer::render()
 {
 	Settings& settings = App::getSettings();
 
-	size_t imageWidth = toneMappedImage.getWidth();
-	size_t imageHeight = toneMappedImage.getHeight();
+	uint64_t imageWidth = toneMappedImage.getWidth();
+	uint64_t imageHeight = toneMappedImage.getHeight();
 
 	/* Resampling pass */
 
@@ -201,12 +201,12 @@ void Framebuffer::enableSmoothing(bool state)
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 }
 
-size_t Framebuffer::getWidth() const
+uint64_t Framebuffer::getWidth() const
 {
 	return toneMappedImage.getWidth();
 }
 
-size_t Framebuffer::getHeight() const
+uint64_t Framebuffer::getHeight() const
 {
 	return toneMappedImage.getHeight();
 }

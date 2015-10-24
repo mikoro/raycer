@@ -27,8 +27,8 @@ namespace Raycer
 		void update(double timeStep) override;
 		void render(double timeStep, double interpolation) override;
 
-		void windowResized(size_t width, size_t height) override;
-		void framebufferResized(size_t width, size_t height) override;
+		void windowResized(uint64_t width, uint64_t height) override;
+		void framebufferResized(uint64_t width, uint64_t height) override;
 
 	private:
 

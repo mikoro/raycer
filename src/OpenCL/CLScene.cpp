@@ -42,7 +42,7 @@ namespace
 		destination.s[3] = 0.0f;
 	}
 
-	size_t findMaterialIndex(const std::vector<Material>& materials, size_t materialId)
+	uint64_t findMaterialIndex(const std::vector<Material>& materials, uint64_t materialId)
 	{
 		auto result = std::find_if(materials.begin(), materials.end(), [materialId](const Material& material)
 		{
@@ -55,7 +55,7 @@ namespace
 		return (result - materials.begin());
 	}
 
-	cl_int findTextureIndex(const std::vector<ImageTexture>& textures, size_t textureId)
+	cl_int findTextureIndex(const std::vector<ImageTexture>& textures, uint64_t textureId)
 	{
 		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture)
 		{

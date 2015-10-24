@@ -14,7 +14,7 @@ using namespace boost::filesystem;
 
 namespace
 {
-	void CL_CALLBACK openCLErrorCallback(const char* message, const void* privateInfo, size_t cb, void* userData)
+	void CL_CALLBACK openCLErrorCallback(const char* message, const void* privateInfo, uint64_t cb, void* userData)
 	{
 		(void)privateInfo;
 		(void)cb;
@@ -72,14 +72,14 @@ void CLManager::initialize()
 	if (platformCount == 0)
 		throw std::runtime_error("Could not find any OpenCL platforms");
 
-	if (settings.openCL.platformId > size_t(platformCount) - 1)
+	if (settings.openCL.platformId > uint64_t(platformCount) - 1)
 		throw std::runtime_error("Invalid OpenCL platform id");
 
 	std::vector<cl_platform_id> platformIds(platformCount);
 	checkError(clGetPlatformIDs(platformCount, &platformIds[0], nullptr), "Could not get platforms");
 	platformId = platformIds[settings.openCL.platformId];
 
-	size_t length = 0;
+	uint64_t length = 0;
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, nullptr, &length);
 	std::vector<char> platformName(length);
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, &platformName[0], nullptr);
@@ -97,7 +97,7 @@ void CLManager::initialize()
 	if (deviceCount == 0)
 		throw std::runtime_error("Could not find any devices");
 
-	if (settings.openCL.deviceId > size_t(deviceCount) - 1)
+	if (settings.openCL.deviceId > uint64_t(deviceCount) - 1)
 		throw std::runtime_error("Invalid device id");
 
 	std::vector<cl_device_id> deviceIds(deviceCount);
@@ -186,7 +186,7 @@ cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePa
 	const char* sourceStringPtr = sourceString.c_str();
 
 	cl_int status = 0;
-	size_t length = 0;
+	uint64_t length = 0;
 
 	cl_program program = clCreateProgramWithSource(context, 1, &sourceStringPtr, nullptr, &status);
 	checkError(status, "Could not read program source file");

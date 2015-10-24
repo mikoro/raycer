@@ -8,7 +8,7 @@
 
 using namespace Raycer;
 
-std::map<std::string, size_t> ImagePool::imageIndexMap = std::map<std::string, size_t>();
+std::map<std::string, uint64_t> ImagePool::imageIndexMap = std::map<std::string, uint64_t>();
 std::vector<Image> ImagePool::images = std::vector<Image>();
 bool ImagePool::initialized = false;
 
@@ -37,7 +37,7 @@ const Image* ImagePool::loadImage(const std::string& fileName, bool applyGamma)
 	return &images[imageIndexMap[fileName]];
 }
 
-size_t ImagePool::getImageIndex(const std::string& fileName)
+uint64_t ImagePool::getImageIndex(const std::string& fileName)
 {
 	return imageIndexMap[fileName];
 }

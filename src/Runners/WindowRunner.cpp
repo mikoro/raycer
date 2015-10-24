@@ -71,12 +71,12 @@ GLFWwindow* WindowRunner::getGlfwWindow() const
 	return glfwWindow;
 }
 
-size_t WindowRunner::getWindowWidth() const
+uint64_t WindowRunner::getWindowWidth() const
 {
 	return windowWidth;
 }
 
-size_t WindowRunner::getWindowHeight() const
+uint64_t WindowRunner::getWindowHeight() const
 {
 	return windowHeight;
 }
@@ -235,7 +235,7 @@ void WindowRunner::shutdown()
 	runnerStates[currentState]->shutdown();
 }
 
-void WindowRunner::windowResized(size_t width, size_t height)
+void WindowRunner::windowResized(uint64_t width, uint64_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -250,8 +250,8 @@ void WindowRunner::windowResized(size_t width, size_t height)
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	size_t framebufferImageWidth = size_t(double(windowWidth) * settings.framebuffer.scale + 0.5);
-	size_t framebufferImageHeight = size_t(double(windowHeight) * settings.framebuffer.scale + 0.5);
+	uint64_t framebufferImageWidth = uint64_t(double(windowWidth) * settings.framebuffer.scale + 0.5);
+	uint64_t framebufferImageHeight = uint64_t(double(windowHeight) * settings.framebuffer.scale + 0.5);
 	resizeFramebuffer(framebufferImageWidth, framebufferImageHeight);
 	framebuffer.setWindowSize(windowWidth, windowHeight);
 
@@ -262,7 +262,7 @@ void WindowRunner::windowResized(size_t width, size_t height)
 	}
 }
 
-void WindowRunner::resizeFramebuffer(size_t width, size_t height)
+void WindowRunner::resizeFramebuffer(uint64_t width, uint64_t height)
 {
 	Settings& settings = App::getSettings();
 	Framebuffer& framebuffer = App::getFramebuffer();
@@ -327,8 +327,8 @@ void WindowRunner::update(double timeStep)
 	int32_t newWindowWidth, newWindowHeight;
 	glfwGetFramebufferSize(glfwWindow, &newWindowWidth, &newWindowHeight);
 
-	if (size_t(newWindowWidth) != windowWidth || size_t(newWindowHeight) != windowHeight)
-		windowResized(size_t(newWindowWidth), size_t(newWindowHeight));
+	if (uint64_t(newWindowWidth) != windowWidth || uint64_t(newWindowHeight) != windowHeight)
+		windowResized(uint64_t(newWindowWidth), uint64_t(newWindowHeight));
 
 	double newMouseX, newMouseY;
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
@@ -360,8 +360,8 @@ void WindowRunner::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_F10))
 	{
 		double newScale = settings.framebuffer.scale * 0.5;
-		size_t newWidth = size_t(double(windowWidth) * newScale + 0.5);
-		size_t newHeight = size_t(double(windowHeight) * newScale + 0.5);
+		uint64_t newWidth = uint64_t(double(windowWidth) * newScale + 0.5);
+		uint64_t newHeight = uint64_t(double(windowHeight) * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
@@ -380,7 +380,7 @@ void WindowRunner::update(double timeStep)
 			if (settings.framebuffer.scale > 1.0)
 				settings.framebuffer.scale = 1.0;
 
-			resizeFramebuffer(size_t(double(windowWidth) * settings.framebuffer.scale + 0.5), size_t(double(windowHeight) * settings.framebuffer.scale + 0.5));
+			resizeFramebuffer(uint64_t(double(windowWidth) * settings.framebuffer.scale + 0.5), uint64_t(double(windowHeight) * settings.framebuffer.scale + 0.5));
 			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
 		}
 	}

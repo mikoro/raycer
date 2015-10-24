@@ -61,7 +61,7 @@ double MathUtils::fastPow(double a, double b)
 		uint32_t x[2];
 	} u = {a};
 
-	u.x[1] = static_cast<int>(b * (u.x[1] - 1072632447) + 1072632447);
+	u.x[1] = static_cast<uint32_t>(b * (u.x[1] - 1072632447) + 1072632447);
 	u.x[0] = 0;
 
 	return u.d;

@@ -22,17 +22,17 @@ Image::Image()
 {
 }
 
-Image::Image(size_t length_)
+Image::Image(uint64_t length_)
 {
 	resize(length_);
 }
 
-Image::Image(size_t width_, size_t height_)
+Image::Image(uint64_t width_, uint64_t height_)
 {
 	resize(width_, height_);
 }
 
-Image::Image(size_t width_, size_t height_, float* rgbaData)
+Image::Image(uint64_t width_, uint64_t height_, float* rgbaData)
 {
 	load(width_, height_, rgbaData);
 }
@@ -42,13 +42,13 @@ Image::Image(const std::string& fileName)
 	load(fileName);
 }
 
-void Image::load(size_t width_, size_t height_, float* rgbaData)
+void Image::load(uint64_t width_, uint64_t height_, float* rgbaData)
 {
 	resize(width_, height_);
 
-	for (size_t i = 0; i < pixelData.size(); ++i)
+	for (uint64_t i = 0; i < pixelData.size(); ++i)
 	{
-		size_t dataIndex = i * 4;
+		uint64_t dataIndex = i * 4;
 
 		pixelData[i].r = rgbaData[dataIndex];
 		pixelData[i].g = rgbaData[dataIndex + 1];
@@ -69,14 +69,14 @@ void Image::load(const std::string& fileName)
 		if (loadData == nullptr)
 			throw std::runtime_error(tfm::format("Could not load HDR image file: %s", stbi_failure_reason()));
 
-		resize(size_t(newWidth), size_t(newHeight));
+		resize(uint64_t(newWidth), uint64_t(newHeight));
 
-		for (size_t y = 0; y < height; ++y)
+		for (uint64_t y = 0; y < height; ++y)
 		{
-			for (size_t x = 0; x < width; ++x)
+			for (uint64_t x = 0; x < width; ++x)
 			{
-				size_t pixelIndex = y * width + x;
-				size_t dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
+				uint64_t pixelIndex = y * width + x;
+				uint64_t dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
 
 				pixelData[pixelIndex].r = loadData[dataIndex];
 				pixelData[pixelIndex].g = loadData[dataIndex + 1];
@@ -95,11 +95,11 @@ void Image::load(const std::string& fileName)
 		if (loadData == nullptr)
 			throw std::runtime_error(tfm::format("Could not load image file: %s", stbi_failure_reason()));
 
-		resize(size_t(newWidth), size_t(newHeight));
+		resize(uint64_t(newWidth), uint64_t(newHeight));
 
-		for (size_t y = 0; y < height; ++y)
+		for (uint64_t y = 0; y < height; ++y)
 		{
-			for (size_t x = 0; x < width; ++x)
+			for (uint64_t x = 0; x < width; ++x)
 				pixelData[y * width + x] = Color::fromAbgrValue(loadData[(height - 1 - y) * width + x]).toColorf(); // flip vertically
 		}
 
@@ -117,9 +117,9 @@ void Image::save(const std::string& fileName) const
 	{
 		std::vector<uint32_t> saveData(pixelData.size());
 
-		for (size_t y = 0; y < height; ++y)
+		for (uint64_t y = 0; y < height; ++y)
 		{
-			for (size_t x = 0; x < width; ++x)
+			for (uint64_t x = 0; x < width; ++x)
 				saveData[(height - 1 - y) * width + x] = pixelData[y * width + x].toColor().getAbgrValue(); // flip vertically
 		}
 
@@ -134,12 +134,12 @@ void Image::save(const std::string& fileName) const
 	{
 		std::vector<float> saveData(pixelData.size() * 3);
 
-		for (size_t y = 0; y < height; ++y)
+		for (uint64_t y = 0; y < height; ++y)
 		{
-			for (size_t x = 0; x < width; ++x)
+			for (uint64_t x = 0; x < width; ++x)
 			{
-				size_t dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
-				size_t pixelIndex = y * width + x;
+				uint64_t dataIndex = (height - 1 - y) * width * 3 + x * 3; // flip vertically
+				uint64_t pixelIndex = y * width + x;
 
 				saveData[dataIndex] = pixelData[pixelIndex].r;
 				saveData[dataIndex + 1] = pixelData[pixelIndex].g;
@@ -156,12 +156,12 @@ void Image::save(const std::string& fileName) const
 		throw std::runtime_error(tfm::format("Could not save the image: %s", stbi_failure_reason()));
 }
 
-void Image::resize(size_t length_)
+void Image::resize(uint64_t length_)
 {
 	resize(length_, 1);
 }
 
-void Image::resize(size_t width_, size_t height_)
+void Image::resize(uint64_t width_, uint64_t height_)
 {
 	width = width_;
 	height = height_;
@@ -170,12 +170,12 @@ void Image::resize(size_t width_, size_t height_)
 	clear();
 }
 
-void Image::setPixel(size_t x, size_t y, const Color& color)
+void Image::setPixel(uint64_t x, uint64_t y, const Color& color)
 {
 	pixelData[y * width + x] = color.toColorf();
 }
 
-void Image::setPixel(size_t index, const Color& color)
+void Image::setPixel(uint64_t index, const Color& color)
 {
 	pixelData[index] = color.toColorf();
 }
@@ -215,9 +215,9 @@ void Image::flip()
 {
 	Image tempImage(width, height);
 
-	for (size_t y = 0; y < height; ++y)
+	for (uint64_t y = 0; y < height; ++y)
 	{
-		for (size_t x = 0; x < width; ++x)
+		for (uint64_t x = 0; x < width; ++x)
 			tempImage.pixelData[(height - 1 - y) * width + x] = pixelData[y * width + x];
 	}
 
@@ -226,9 +226,9 @@ void Image::flip()
 
 void Image::fillTestPattern()
 {
-	for (size_t y = 0; y < height; ++y)
+	for (uint64_t y = 0; y < height; ++y)
 	{
-		for (size_t x = 0; x < width; ++x)
+		for (uint64_t x = 0; x < width; ++x)
 		{
 			Color color = Color::BLACK;
 
@@ -240,28 +240,28 @@ void Image::fillTestPattern()
 	}
 }
 
-size_t Image::getWidth() const
+uint64_t Image::getWidth() const
 {
 	return width;
 }
 
-size_t Image::getHeight() const
+uint64_t Image::getHeight() const
 {
 	return height;
 }
 
-size_t Image::getLength() const
+uint64_t Image::getLength() const
 {
 	return width * height;
 }
 
-Color Image::getPixel(size_t x, size_t y) const
+Color Image::getPixel(uint64_t x, uint64_t y) const
 {
 	assert(x < width && y < height);
 	return pixelData[y * width + x].toColor();
 }
 
-Color Image::getPixel(size_t index) const
+Color Image::getPixel(uint64_t index) const
 {
 	assert(index < width * height);
 	return pixelData[index].toColor();
@@ -269,8 +269,8 @@ Color Image::getPixel(size_t index) const
 
 Color Image::getPixelNearest(double u, double v) const
 {
-	size_t x = size_t(u * double(width - 1) + 0.5);
-	size_t y = size_t(v * double(height - 1) + 0.5);
+	uint64_t x = uint64_t(u * double(width - 1) + 0.5);
+	uint64_t y = uint64_t(v * double(height - 1) + 0.5);
 
 	return getPixel(x, y);
 }
@@ -279,8 +279,8 @@ Color Image::getPixelBilinear(double u, double v) const
 {
 	double dx = u * double(width - 1) - 0.5;
 	double dy = v * double(height - 1) - 0.5;
-	size_t ix = size_t(dx);
-	size_t iy = size_t(dy);
+	uint64_t ix = uint64_t(dx);
+	uint64_t iy = uint64_t(dy);
 	double tx2 = dx - double(ix);
 	double ty2 = dy - double(iy);
 	tx2 = MathUtils::smoothstep(tx2);
