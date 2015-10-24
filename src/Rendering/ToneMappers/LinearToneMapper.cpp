@@ -12,8 +12,8 @@ using namespace Raycer;
 
 void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
 {
-	const std::vector<Color>& inputPixelData = inputImage.getPixelDataConst();
-	std::vector<Color>& outputPixelData = outputImage.getPixelData();
+	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
+	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
 	double invGamma = 1.0 / scene.toneMapper.gamma;
 	int pixelCount = int(inputPixelData.size());
@@ -24,13 +24,13 @@ void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image&
 		// fix static analysis warnings
 		size_t j = size_t(i);
 
-		outputPixelData[j] = inputPixelData.at(j) * pow(2.0, scene.toneMapper.exposure);
+		outputPixelData[j] = (inputPixelData.at(j).toColor() * pow(2.0, scene.toneMapper.exposure)).toColorf();
 		outputPixelData[j].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			outputPixelData[j] = Color::pow(outputPixelData[j], invGamma);
+			outputPixelData[j] = Color::pow(outputPixelData[j].toColor(), invGamma).toColorf();
 
 		if (scene.toneMapper.shouldClamp)
-			outputPixelData[j].clamp();
+			outputPixelData[j].toColor().clamp().toColorf();
 	}
 }

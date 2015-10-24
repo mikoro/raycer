@@ -38,3 +38,4 @@ misc
  - replace private constructors with =deleted
  - rename default state -> tracer state
  - add scope exit to obj loader and consolerunner text color
+ - replace align macro with alignas

@@ -14,11 +14,9 @@ void PassthroughToneMapper::apply(const Scene& scene, const Image& inputImage, I
 {
 	(void)scene;
 
-	const std::vector<Color>& inputPixelData = inputImage.getPixelDataConst();
-	std::vector<Color>& outputPixelData = outputImage.getPixelData();
+	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
+	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
-	int pixelCount = int(inputPixelData.size());
-
-	for (size_t i = 0; i < pixelCount; ++i)
+	for (size_t i = 0; i < inputPixelData.size(); ++i)
 		outputPixelData[i] = inputPixelData.at(i);
 }

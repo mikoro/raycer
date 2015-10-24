@@ -38,7 +38,6 @@ namespace Raycer
 		Image cumulativeImage;
 		Image linearImage;
 		Image toneMappedImage;
-		std::vector<float> floatPixelData;
 
 		size_t windowWidth = 0;
 		size_t windowHeight = 0;

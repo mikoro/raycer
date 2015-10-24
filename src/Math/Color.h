@@ -10,6 +10,8 @@
 
 namespace Raycer
 {
+	class Colorf;
+
 	class Color
 	{
 	public:
@@ -38,8 +40,9 @@ namespace Raycer
 		bool isTransparent() const;
 		bool isZero() const;
 		bool isClamped() const;
-		void clamp();
+		Color& clamp();
 		Color clamped() const;
+		Colorf toColorf() const;
 
 		static Color fromRgbaValue(uint32_t rgba);
 		static Color fromAbgrValue(uint32_t abgr);
@@ -74,4 +77,33 @@ namespace Raycer
 				CEREAL_NVP(a));
 		}
 	};
+
+	class Colorf
+	{
+	public:
+
+		explicit Colorf(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 1.0f);
+
+		Color toColor() const;
+
+		float r;
+		float g;
+		float b;
+		float a;
+
+	private:
+
+		friend class cereal::access;
+
+		template <class Archive>
+		void serialize(Archive& ar)
+		{
+			ar(CEREAL_NVP(r),
+				CEREAL_NVP(g),
+				CEREAL_NVP(b),
+				CEREAL_NVP(a));
+		}
+	};
+
+	using AlignedColorfVector = std::vector<Colorf, boost::alignment::aligned_allocator<Colorf, CACHE_LINE_SIZE>>;
 }

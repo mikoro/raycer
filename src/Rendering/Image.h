@@ -52,17 +52,15 @@ namespace Raycer
 		Color getPixelNearest(double u, double v) const;
 		Color getPixelBilinear(double u, double v) const;
 
-		std::vector<Color>& getPixelData();
-		const std::vector<Color>& getPixelDataConst() const;
-		std::vector<float> getFloatPixelData() const;
-		void getFloatPixelData(std::vector<float>& data) const;
+		AlignedColorfVector& getPixelData();
+		const AlignedColorfVector& getPixelDataConst() const;
 
 	private:
 
 		size_t width = 0;
 		size_t height = 0;
 
-		std::vector<Color> pixelData;
+		AlignedColorfVector pixelData;
 	};
 
 	class ImagePool

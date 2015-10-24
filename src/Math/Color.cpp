@@ -145,9 +145,10 @@ bool Color::isClamped() const
 	return r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0;
 }
 
-void Color::clamp()
+Color& Color::clamp()
 {
 	*this = clamped();
+	return *this;
 }
 
 Color Color::clamped() const
@@ -160,6 +161,11 @@ Color Color::clamped() const
 	c.a = std::max(0.0, std::min(a, 1.0));
 
 	return c;
+}
+
+Colorf Color::toColorf() const
+{
+	return Colorf{float(r), float(g), float(b), float(a)};
 }
 
 Color Color::fromRgbaValue(uint32_t rgba)
@@ -271,4 +277,13 @@ Color Color::random(std::mt19937& generator)
 	c.a = 1.0;
 
 	return c;
+}
+
+Colorf::Colorf(float r_, float g_, float b_, float a_) : r(r_), g(g_), b(b_), a(a_)
+{
+}
+
+Color Colorf::toColor() const
+{
+	return Color(r, g, b, a);
 }

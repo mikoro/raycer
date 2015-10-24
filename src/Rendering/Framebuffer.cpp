@@ -97,7 +97,6 @@ void Framebuffer::resize(size_t width, size_t height)
 	cumulativeImage.resize(width, height);
 	linearImage.resize(width, height);
 	toneMappedImage.resize(width, height);
-	floatPixelData.resize(width * height * 4);
 
 	// reserve the texture memory on the device
 	glBindTexture(GL_TEXTURE_2D, imageTextureId);
@@ -155,8 +154,7 @@ void Framebuffer::render()
 
 	if (!settings.openCL.enabled)
 	{
-		toneMappedImage.getFloatPixelData(floatPixelData);
-		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GLsizei(imageWidth), GLsizei(imageHeight), GL_RGBA, GL_FLOAT, &floatPixelData[0]);
+		glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, GLsizei(imageWidth), GLsizei(imageHeight), GL_RGBA, GL_FLOAT, &toneMappedImage.getPixelDataConst()[0]);
 		GLHelper::checkError("Could not upload OpenGL texture data");
 	}
 

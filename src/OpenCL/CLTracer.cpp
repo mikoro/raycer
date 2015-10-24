@@ -408,19 +408,15 @@ void CLTracer::createTextureImages()
 	{
 		const Image& image = images[i];
 
-		size_t textureImageWidth = image.getWidth();
-		size_t textureImageHeight = image.getHeight();
-
-		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, textureImageWidth, textureImageHeight, 0, nullptr, &status);
+		cl_mem textureImagePtr = clCreateImage2D(clManager.context, CL_MEM_READ_ONLY, &imageFormat, image.getWidth(), image.getHeight(), 0, nullptr, &status);
 		CLManager::checkError(status, "Could not create texture image");
 
-		std::vector<float> floatPixelData = image.getFloatPixelData();
-		totalBytes += floatPixelData.size() * sizeof(float);
+		totalBytes += image.getLength() * sizeof(float);
 
 		size_t origin[3] = { 0, 0, 0 };
-		size_t region[3] = { textureImageWidth, textureImageHeight, 1 };
+		size_t region[3] = { image.getWidth(), image.getHeight(), 1 };
 
-		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &floatPixelData[0], 0, nullptr, nullptr);
+		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &image.getPixelDataConst()[0], 0, nullptr, nullptr);
 
 		if (status == CL_MEM_OBJECT_ALLOCATION_FAILURE)
 		{

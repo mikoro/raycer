@@ -28,6 +28,7 @@
 
 #include <omp.h>
 
+#include <boost/align/aligned_allocator.hpp>
 #include <boost/asio.hpp>
 #include <boost/array.hpp>
 #include <boost/filesystem.hpp>
