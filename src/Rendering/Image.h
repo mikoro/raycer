@@ -3,7 +3,6 @@
 
 #pragma once
 
-#include <map>
 #include <vector>
 
 #include "Math/Color.h"
@@ -11,9 +10,6 @@
 /*
 
 Origin (0, 0) is at the bottom left corner.
-
-ImagePool is used by ImageTextures to prevent loading the same file twice to the memory.
-It will also be uploaded as is to the OpenCL device and indexed appropriately.
 
 */
 
@@ -61,23 +57,5 @@ namespace Raycer
 		size_t height = 0;
 
 		AlignedColorfVector pixelData;
-	};
-
-	class ImagePool
-	{
-	public:
-
-		static const Image* loadImage(const std::string& fileName, bool applyGamma);
-		static size_t getImageIndex(const std::string& fileName);
-		static const std::vector<Image>& getImages();
-		static void clear();
-
-	private:
-
-		static std::map<std::string, size_t> imageIndexMap;
-		static std::vector<Image> images;
-		static bool initialized;
-
-		static const size_t MAX_IMAGES = 1000;
 	};
 }

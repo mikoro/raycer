@@ -14,6 +14,7 @@
 #include "Raytracing/Camera.h"
 #include "Rendering/Framebuffer.h"
 #include "Rendering/Text.h"
+#include "Rendering/ImagePool.h"
 #include "Runners/WindowRunner.h"
 
 using namespace Raycer;

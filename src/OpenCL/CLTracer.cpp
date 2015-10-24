@@ -13,6 +13,7 @@
 #include "Utils/Log.h"
 #include "Rendering/Framebuffer.h"
 #include "Rendering/Image.h"
+#include "Rendering/ImagePool.h"
 #include "Runners/WindowRunner.h"
 
 using namespace Raycer;
