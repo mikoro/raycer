@@ -3,9 +3,21 @@
 
 #pragma once
 
+#include <vector>
+
+#include "Math/Vector2.h"
+
+/*
+
+Most samplers work both in procedual and pre-generated fashion.
+getSample generates a new sample on the fly
+generateSamples fills internal buffer with getSample
+getNextSample loops through the internal buffer
+
+*/
+
 namespace Raycer
 {
-	class Vector2;
 	class Vector3;
 	class ONB;
 
@@ -15,12 +27,34 @@ namespace Raycer
 	{
 	public:
 
+		Sampler();
 		virtual ~Sampler() {}
 
-		virtual double getSample(uint i, uint n, uint permutation = 0) = 0;
-		virtual Vector2 getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0) = 0;
-		
-		Vector2 getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0);
-		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation = 0);
+		void setPermutation(uint permutation);
+
+		virtual double getSample1D(uint i, uint n) = 0;
+		virtual Vector2 getSample2D(uint ix, uint iy, uint nx, uint ny) = 0;
+		Vector2 getDiskSample(uint ix, uint iy, uint nx, uint ny);
+		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny);
+
+		virtual void generateSamples1D(uint sampleCount);
+		virtual void generateSamples2D(uint sampleCountSqrt);
+
+		bool getNextSample1D(double& result);
+		bool getNextSample2D(Vector2& result);
+		bool getNextDiskSample(Vector2& result);
+		bool getNextHemisphereSample(const ONB& onb, double distribution, Vector3& result);
+
+		static std::unique_ptr<Sampler> getSampler(SamplerType type);
+
+	protected:
+
+		uint permutation = 0;
+
+		size_t currentSampleIndex1D = 0;
+		size_t currentSampleIndex2D = 0;
+
+		std::vector<double> samples1D;
+		std::vector<Vector2> samples2D;
 	};
 }

@@ -5,7 +5,6 @@
 
 #include "Rendering/Samplers/CMJSampler.h"
 #include "Math/Vector2.h"
-#include "Math/Vector3.h"
 
 using namespace Raycer;
 
@@ -54,16 +53,15 @@ CMJSampler::CMJSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample(uint i, uint n, uint permutation)
+double CMJSampler::getSample1D(uint i, uint n)
 {
 	(void)i;
 	(void)n;
-	(void)permutation;
 
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
+Vector2 CMJSampler::getSample2D(uint ix, uint iy, uint nx, uint ny)
 {
 	Vector2 result;
 

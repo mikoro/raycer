@@ -4,41 +4,149 @@
 #include "stdafx.h"
 
 #include "Rendering/Samplers/Sampler.h"
+#include "Rendering/Samplers/RandomSampler.h"
+#include "Rendering/Samplers/RegularSampler.h"
+#include "Rendering/Samplers/JitteredSampler.h"
+#include "Rendering/Samplers/CMJSampler.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Raytracing/ONB.h"
 
 using namespace Raycer;
 
-Vector2 Sampler::getDiskSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
+namespace
 {
-	Vector2 point = getSquareSample(ix, iy, nx, ny, permutation);
-	Vector2 result;
+	Vector2 mapToDisk(const Vector2& point)
+	{
+		Vector2 result;
 
-	// square to disk polar mapping
-	double theta = 2.0 * M_PI * point.x;
-	double r = sqrt(point.y);
+		// square to disk polar mapping
+		double theta = 2.0 * M_PI * point.x;
+		double r = sqrt(point.y);
 
-	result.x = r * cos(theta);
-	result.y = r * sin(theta);
+		result.x = r * cos(theta);
+		result.y = r * sin(theta);
 
-	return result;
+		return result;
+	}
+
+	Vector3 mapToHemisphere(const ONB& onb, double distribution, const Vector2& point)
+	{
+		// square to hemisphere mapping with cosine distribution
+		double phi = 2.0 * M_PI * point.x;
+		double cos_phi = cos(phi);
+		double sin_phi = sin(phi);
+		double cos_theta = pow(1.0 - point.y, 1.0 / (distribution + 1.0));
+		double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+
+		double u = sin_theta * cos_phi;
+		double v = sin_theta * sin_phi;
+		double w = cos_theta;
+
+		return u * onb.u + v * onb.v + w * onb.w;
+	}
 }
 
-Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny, uint permutation)
+Sampler::Sampler()
 {
-	Vector2 point = getSquareSample(ix, iy, nx, ny, permutation);
+	std::random_device rd;
+	permutation = rd();
+}
 
-	// square to hemisphere mapping with cosine distribution
-	double phi = 2.0 * M_PI * point.x;
-	double cos_phi = cos(phi);
-	double sin_phi = sin(phi);
-	double cos_theta = pow(1.0 - point.y, 1.0 / (distribution + 1.0));
-	double sin_theta = sqrt(1.0 - cos_theta * cos_theta);
+void Sampler::setPermutation(uint permutation_)
+{
+	permutation = permutation_;
+}
 
-	double u = sin_theta * cos_phi;
-	double v = sin_theta * sin_phi;
-	double w = cos_theta;
+Vector2 Sampler::getDiskSample(uint ix, uint iy, uint nx, uint ny)
+{
+	Vector2 point = getSample2D(ix, iy, nx, ny);
+	return mapToDisk(point);
+}
 
-	return u * onb.u + v * onb.v + w * onb.w;
+Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny)
+{
+	Vector2 point = getSample2D(ix, iy, nx, ny);
+	return mapToHemisphere(onb, distribution, point);
+}
+
+void Sampler::generateSamples1D(uint sampleCount)
+{
+	samples1D.resize(sampleCount);
+
+	for (uint x = 0; x < sampleCount; ++x)
+		samples1D[sampleCount] = getSample1D(x, sampleCount);
+
+	currentSampleIndex1D = 0;
+}
+
+void Sampler::generateSamples2D(uint sampleCountSqrt)
+{
+	samples2D.resize(sampleCountSqrt * sampleCountSqrt);
+
+	for (uint y = 0; y < sampleCountSqrt; ++y)
+	{
+		for (uint x = 0; x < sampleCountSqrt; ++x)
+		{
+			samples2D[y * sampleCountSqrt + x] = getSample2D(x, y, sampleCountSqrt, sampleCountSqrt);
+		}
+	}
+
+	currentSampleIndex2D = 0;
+}
+
+bool Sampler::getNextSample1D(double& result)
+{
+	result = samples1D[currentSampleIndex1D];
+
+	if (++currentSampleIndex1D < samples1D.size())
+		return true;
+
+	currentSampleIndex1D = 0;
+	return false;
+}
+
+bool Sampler::getNextSample2D(Vector2& result)
+{
+	result = samples2D[currentSampleIndex1D];
+
+	if (++currentSampleIndex2D < samples2D.size())
+		return true;
+
+	currentSampleIndex2D = 0;
+	return false;
+}
+
+bool Sampler::getNextDiskSample(Vector2& result)
+{
+	result = mapToDisk(samples2D[currentSampleIndex1D]);
+
+	if (++currentSampleIndex2D < samples2D.size())
+		return true;
+
+	currentSampleIndex2D = 0;
+	return false;
+}
+
+bool Sampler::getNextHemisphereSample(const ONB& onb, double distribution, Vector3& result)
+{
+	result = mapToHemisphere(onb, distribution, samples2D[currentSampleIndex1D]);
+
+	if (++currentSampleIndex2D < samples2D.size())
+		return true;
+
+	currentSampleIndex2D = 0;
+	return false;
+}
+
+std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
+{
+	switch (type)
+	{
+		case SamplerType::RANDOM: return std::make_unique<RandomSampler>();
+		case SamplerType::REGULAR: return std::make_unique<RegularSampler>();
+		case SamplerType::JITTERED: return std::make_unique<JitteredSampler>();
+		case SamplerType::CMJ: return std::make_unique<CMJSampler>();
+		default: throw new std::runtime_error("Unknown sampler type");
+	}
 }

@@ -15,7 +15,7 @@ namespace Raycer
 	{
 	public:
 
-		double getSample(uint i, uint n, uint permutation = 0) override;
-		Vector2 getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation = 0) override;
+		double getSample1D(uint i, uint n) override;
+		Vector2 getSample2D(uint ix, uint iy, uint nx, uint ny) override;
 	};
 }

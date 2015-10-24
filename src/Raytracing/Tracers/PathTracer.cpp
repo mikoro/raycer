@@ -124,7 +124,7 @@ Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, 
 		return emittance;
 
 	Sampler* sampler = samplers[SamplerType::RANDOM].get();
-	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 0.0, 0, 0, 0, 0, 0);
+	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 0.0, 0, 0, 0, 0);
 
 	Ray newRay;
 	newRay.origin = intersection.position + newDirection * scene.general.rayStartOffset;

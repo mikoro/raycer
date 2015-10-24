@@ -5,7 +5,6 @@
 
 #include "Rendering/Samplers/JitteredSampler.h"
 #include "Math/Vector2.h"
-#include "Math/Vector3.h"
 
 using namespace Raycer;
 
@@ -16,19 +15,13 @@ JitteredSampler::JitteredSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double JitteredSampler::getSample(uint i, uint n, uint permutation)
+double JitteredSampler::getSample1D(uint i, uint n)
 {
-	(void)permutation;
-
-	double x = (double(i) + randomOffset(generator)) / double(n);
-
-	return x;
+	return (double(i) + randomOffset(generator)) / double(n);
 }
 
-Vector2 JitteredSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
+Vector2 JitteredSampler::getSample2D(uint ix, uint iy, uint nx, uint ny)
 {
-	(void)permutation;
-
 	Vector2 result;
 
 	result.x = (double(ix) + randomOffset(generator)) / double(nx);

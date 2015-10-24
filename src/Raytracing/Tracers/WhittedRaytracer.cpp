@@ -109,9 +109,11 @@ Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& 
 		return generateTimeSamples(scene, pixelCoordinate, interrupted);
 
 	Color sampledPixelColor;
-	uint permutation = randomPermutation(generator);
 	uint n = scene.general.multiSamples;
+
 	Sampler* sampler = samplers[scene.general.multiSamplerType].get();
+	sampler->setPermutation(randomPermutation(generator));
+
 	Filter* filter = filters[scene.general.multiSamplerFilterType].get();
 	double filterWeightSum = 0.0;
 	double filterWidth = filter->getWidth();
@@ -120,7 +122,7 @@ Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& 
 	{
 		for (uint x = 0; x < n; ++x)
 		{
-			Vector2 sampleOffset = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
+			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
 			double filterWeight = filter->getWeight(sampleOffset);
 			sampledPixelColor += generateTimeSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;
@@ -137,10 +139,12 @@ Color WhittedRaytracer::generateTimeSamples(const Scene& scene, const Vector2& p
 
 	Color sampledPixelColor;
 	uint n = scene.general.timeSamples;
+
 	Sampler* sampler = samplers[scene.general.timeSamplerType].get();
+	sampler->setPermutation(randomPermutation(generator));
 
 	for (uint i = 0; i < n; ++i)
-		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample(i, n), interrupted);
+		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample1D(i, n), interrupted);
 
 	return sampledPixelColor / double(n);
 }
@@ -159,23 +163,24 @@ Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2&
 		return traceRay(scene, ray, intersection, 0, interrupted);
 
 	Color sampledPixelColor;
-	uint permutation = randomPermutation(generator);
 	uint n = scene.general.cameraSamples;
 	double apertureSize = scene.camera.apertureSize;
 	double focalDistance = scene.camera.focalDistance;
-	Sampler* sampler = samplers[scene.general.cameraSamplerType].get();
 
 	CameraState cameraState = scene.camera.getCameraState(time);
 	Vector3 cameraPosition = cameraState.position;
 	Vector3 cameraRight = cameraState.right;
 	Vector3 cameraUp = cameraState.up;
 
+	Sampler* sampler = samplers[scene.general.cameraSamplerType].get();
+	sampler->setPermutation(randomPermutation(generator));
+
 	for (uint y = 0; y < n; ++y)
 	{
 		for (uint x = 0; x < n; ++x)
 		{
 			Ray primaryRay;
-			Vector2 jitter = (sampler->getSquareSample(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
+			Vector2 jitter = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0;
 			isValidRay = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
 
 			if (!isValidRay)
@@ -185,7 +190,7 @@ Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2&
 			}
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalDistance;
-			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n, permutation);
+			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
@@ -480,16 +485,17 @@ Color WhittedRaytracer::calculateSimpleFogColor(const Scene& scene, const Inters
 double WhittedRaytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection)
 {
 	double ambientOcclusion = 0.0;
-	uint permutation = randomPermutation(generator);
 	uint n = scene.lights.ambientLight.occlusionSamples;
 	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
+
 	Sampler* sampler = samplers[scene.lights.ambientLight.occlusionSamplerType].get();
+	sampler->setPermutation(randomPermutation(generator));
 
 	for (uint y = 0; y < n; ++y)
 	{
 		for (uint x = 0; x < n; ++x)
 		{
-			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
+			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
@@ -577,15 +583,16 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 	Vector3 lightUp = lightRight.cross(directionToLight).normalized();
 
 	double shadowAmount = 0.0;
-	uint permutation = randomPermutation(generator);
 	uint n = light.softShadowSamples;
+
 	Sampler* sampler = samplers[light.softShadowSamplerType].get();
+	sampler->setPermutation(randomPermutation(generator));
 
 	for (uint y = 0; y < n; ++y)
 	{
 		for (uint x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getDiskSample(x, y, n, n, permutation) * light.radius;
+			Vector2 jitter = sampler->getDiskSample(x, y, n, n) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

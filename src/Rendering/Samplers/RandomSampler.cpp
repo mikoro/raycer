@@ -5,7 +5,6 @@
 
 #include "Rendering/Samplers/RandomSampler.h"
 #include "Math/Vector2.h"
-#include "Math/Vector3.h"
 
 using namespace Raycer;
 
@@ -16,22 +15,20 @@ RandomSampler::RandomSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double RandomSampler::getSample(uint i, uint n, uint permutation)
+double RandomSampler::getSample1D(uint i, uint n)
 {
 	(void)i;
 	(void)n;
-	(void)permutation;
 
 	return randomOffset(generator);
 }
 
-Vector2 RandomSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
+Vector2 RandomSampler::getSample2D(uint ix, uint iy, uint nx, uint ny)
 {
 	(void)ix;
 	(void)iy;
 	(void)nx;
 	(void)ny;
-	(void)permutation;
 
 	return Vector2(randomOffset(generator), randomOffset(generator));
 }

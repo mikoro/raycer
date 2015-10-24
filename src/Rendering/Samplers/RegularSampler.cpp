@@ -5,22 +5,16 @@
 
 #include "Rendering/Samplers/RegularSampler.h"
 #include "Math/Vector2.h"
-#include "Math/Vector3.h"
 
 using namespace Raycer;
 
-double RegularSampler::getSample(uint i, uint n, uint permutation)
+double RegularSampler::getSample1D(uint i, uint n)
 {
-	(void)permutation;
-
-	double x = (double(i) + 0.5) / double(n);
-	return x;
+	return (double(i) + 0.5) / double(n);
 }
 
-Vector2 RegularSampler::getSquareSample(uint ix, uint iy, uint nx, uint ny, uint permutation)
+Vector2 RegularSampler::getSample2D(uint ix, uint iy, uint nx, uint ny)
 {
-	(void)permutation;
-
 	Vector2 result;
 
 	result.x = (double(ix) + 0.5) / double(nx);
