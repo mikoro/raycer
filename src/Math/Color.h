@@ -17,7 +17,7 @@ namespace Raycer
 	public:
 
 		explicit Color(double r = 0.0, double g = 0.0, double b = 0.0, double a = 1.0);
-		explicit Color(int r, int g, int b, int a = 255);
+		explicit Color(int32_t r, int32_t g, int32_t b, int32_t a = 255);
 
 		friend Color operator+(const Color& c1, const Color& c2);
 		friend Color operator-(const Color& c1, const Color& c2);

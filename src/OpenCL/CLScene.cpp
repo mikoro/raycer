@@ -55,7 +55,7 @@ namespace
 		return (result - materials.begin());
 	}
 
-	int findTextureIndex(const std::vector<ImageTexture>& textures, size_t textureId)
+	cl_int findTextureIndex(const std::vector<ImageTexture>& textures, size_t textureId)
 	{
 		auto it = std::find_if(textures.begin(), textures.end(), [textureId](const ImageTexture& texture)
 		{
@@ -65,7 +65,7 @@ namespace
 		if (it == textures.end())
 			return -1;
 
-		return int((*it).getImagePoolIndex());
+		return cl_int((*it).getImagePoolIndex());
 	}
 }
 
@@ -116,16 +116,16 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.emittance, material.emittance);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
 		clMaterial.shininess = cl_float(material.shininess);
-		clMaterial.ambientMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId));
-		clMaterial.diffuseMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId));
-		clMaterial.specularMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId));
-		clMaterial.rayReflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId));
-		clMaterial.rayTransmittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId));
-		clMaterial.reflectanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId));
-		clMaterial.emittanceMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId));
-		clMaterial.normalMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId));
-		clMaterial.maskMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId));
-		clMaterial.heightMapTextureIndex = cl_int(findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId));
+		clMaterial.ambientMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
+		clMaterial.diffuseMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
+		clMaterial.specularMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId);
+		clMaterial.rayReflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId);
+		clMaterial.rayTransmittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId);
+		clMaterial.reflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId);
+		clMaterial.emittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId);
+		clMaterial.normalMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId);
+		clMaterial.maskMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId);
+		clMaterial.heightMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId);
 		clMaterial.normalMapType = cl_int(-1);
 		clMaterial.skipLighting = cl_int(material.skipLighting);
 		clMaterial.nonShadowing = cl_int(material.nonShadowing);

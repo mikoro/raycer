@@ -35,7 +35,7 @@ Scene Scene::createTestScene8()
 	double radius = 8.0;
 	size_t currentId = 1;
 
-	for (int i = 0; i < 50; ++i)
+	for (uint64_t i = 0; i < 50; ++i)
 	{
 		Sphere sphere;
 		sphere.id = currentId;

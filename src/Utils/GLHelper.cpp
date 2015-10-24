@@ -97,13 +97,13 @@ void GLHelper::checkError(const std::string& message)
 {
 	Settings& settings = App::getSettings();
 
-	int result = glGetError();
+	int32_t result = glGetError();
 
 	if (result != GL_NO_ERROR && settings.general.checkGLErrors)
 		throw std::runtime_error(tfm::format("OpenGL error: %s: %s", message, getErrorMessage(result)));
 }
 
-std::string GLHelper::getErrorMessage(int result)
+std::string GLHelper::getErrorMessage(int32_t result)
 {
 	switch (result)
 	{

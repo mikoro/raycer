@@ -63,7 +63,7 @@ void Image::load(const std::string& fileName)
 
 	if (stbi_is_hdr(fileName.c_str()))
 	{
-		int newWidth, newHeight, components;
+		int32_t newWidth, newHeight, components;
 		float* loadData = stbi_loadf(fileName.c_str(), &newWidth, &newHeight, &components, 3); // RGB
 
 		if (loadData == nullptr)
@@ -89,7 +89,7 @@ void Image::load(const std::string& fileName)
 	}
 	else
 	{
-		int newWidth, newHeight, components;
+		int32_t newWidth, newHeight, components;
 		uint32_t* loadData = reinterpret_cast<uint32_t*>(stbi_load(fileName.c_str(), &newWidth, &newHeight, &components, 4)); // RGBA
 
 		if (loadData == nullptr)
@@ -111,7 +111,7 @@ void Image::save(const std::string& fileName) const
 {
 	App::getLog().logInfo("Saving image to %s", fileName);
 
-	int result = 0;
+	int32_t result = 0;
 
 	if (StringUtils::endsWith(fileName, ".png") || StringUtils::endsWith(fileName, ".bmp") || StringUtils::endsWith(fileName, ".tga"))
 	{
@@ -124,11 +124,11 @@ void Image::save(const std::string& fileName) const
 		}
 
 		if (StringUtils::endsWith(fileName, ".png"))
-			result = stbi_write_png(fileName.c_str(), int(width), int(height), 4, &saveData[0], int(width * sizeof(uint32_t)));
+			result = stbi_write_png(fileName.c_str(), int32_t(width), int32_t(height), 4, &saveData[0], int32_t(width * sizeof(uint32_t)));
 		else if (StringUtils::endsWith(fileName, ".bmp"))
-			result = stbi_write_bmp(fileName.c_str(), int(width), int(height), 4, &saveData[0]);
+			result = stbi_write_bmp(fileName.c_str(), int32_t(width), int32_t(height), 4, &saveData[0]);
 		else if (StringUtils::endsWith(fileName, ".tga"))
-			result = stbi_write_tga(fileName.c_str(), int(width), int(height), 4, &saveData[0]);
+			result = stbi_write_tga(fileName.c_str(), int32_t(width), int32_t(height), 4, &saveData[0]);
 	}
 	else if (StringUtils::endsWith(fileName, ".hdr"))
 	{
@@ -147,7 +147,7 @@ void Image::save(const std::string& fileName) const
 			}
 		}
 
-		result = stbi_write_hdr(fileName.c_str(), int(width), int(height), 3, &saveData[0]);
+		result = stbi_write_hdr(fileName.c_str(), int32_t(width), int32_t(height), 3, &saveData[0]);
 	}
 	else
 		throw std::runtime_error("Could not save the image (non-supported format)");

@@ -61,11 +61,11 @@ Scene Scene::createTestScene5()
 	double py = -250.0 + randomY(generator);
 	size_t currentId = 2;
 
-	for (int y = 0; y < 100; ++y)
+	for (uint64_t y = 0; y < 100; ++y)
 	{
 		px = -200.0 + randomX(generator);
 
-		for (int x = 0; x < 100; ++x)
+		for (uint64_t x = 0; x < 100; ++x)
 		{
 			Material sphereMaterial;
 			sphereMaterial.id = currentId;

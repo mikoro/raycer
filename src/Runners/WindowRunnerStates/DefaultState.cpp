@@ -149,7 +149,7 @@ void DefaultState::update(double timeStep)
 #ifdef _WIN32
 		ShellExecuteA(nullptr, "open", "raycer.exe", "-s scene.bin --non-interactive --non-test --view", nullptr, SW_SHOWNORMAL);
 #else
-		int pid = fork();
+		int32_t pid = fork();
 
 		if (pid == 0)
 		{

@@ -63,8 +63,8 @@ void Camera::update(const Scene& scene, double timeStep)
 		if (!isMovingPrimitive)
 		{
 			Vector2 pixelCoordinate;
-			pixelCoordinate.x = mouseInfo.framebufferX;
-			pixelCoordinate.y = mouseInfo.framebufferY;
+			pixelCoordinate.x = double(mouseInfo.framebufferX);
+			pixelCoordinate.y = double(mouseInfo.framebufferY);
 
 			Ray ray;
 			bool isValid = getRay(pixelCoordinate, ray, 0.0);
@@ -108,11 +108,11 @@ void Camera::update(const Scene& scene, double timeStep)
 		else
 		{
 			if (windowRunner.mouseIsDown(GLFW_MOUSE_BUTTON_MIDDLE))
-				translate += Vector3(forward.x, 0.0, forward.z).normalized() * mouseInfo.deltaY / 100.0;
+				translate += Vector3(forward.x, 0.0, forward.z).normalized() * double(mouseInfo.deltaY) / 100.0;
 			else
-				translate += Vector3::UP * mouseInfo.deltaY / 100.0;
+				translate += Vector3::UP * double(mouseInfo.deltaY) / 100.0;
 
-			translate += right * mouseInfo.deltaX / 100.0;
+			translate += right * double(mouseInfo.deltaX) / 100.0;
 		}
 
 		scale *= (1.0 + windowRunner.getMouseWheelScroll() * 0.05);

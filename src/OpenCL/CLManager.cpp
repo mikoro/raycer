@@ -217,7 +217,7 @@ cl_kernel CLManager::createKernel(cl_program program, const std::string& kernelN
 	return kernel;
 }
 
-void CLManager::checkError(int result, const std::string& message)
+void CLManager::checkError(cl_int result, const std::string& message)
 {
 	Settings& settings = App::getSettings();
 
@@ -225,7 +225,7 @@ void CLManager::checkError(int result, const std::string& message)
 		throw std::runtime_error(tfm::format("OpenCL error: %s: %s", message, getErrorMessage(result)));
 }
 
-std::string CLManager::getErrorMessage(int result)
+std::string CLManager::getErrorMessage(cl_int result)
 {
 	switch (result)
 	{

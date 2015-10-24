@@ -16,12 +16,12 @@ namespace Raycer
 {
 	struct MouseInfo
 	{
-		int windowX = 0;
-		int windowY = 0;
-		int framebufferX = 0;
-		int framebufferY = 0;
-		int deltaX = 0;
-		int deltaY = 0;
+		int64_t windowX = 0;
+		int64_t windowY = 0;
+		int64_t framebufferX = 0;
+		int64_t framebufferY = 0;
+		int64_t deltaX = 0;
+		int64_t deltaY = 0;
 		double scrollY = 0.0;
 		bool hasScrolled = false;
 	};
@@ -45,10 +45,10 @@ namespace Raycer
 		double getElapsedTime() const;
 		double getFps() const;
 
-		bool keyIsDown(int key);
-		bool mouseIsDown(int button);
-		bool keyWasPressed(int key);
-		bool mouseWasPressed(int button);
+		bool keyIsDown(int32_t key);
+		bool mouseIsDown(int32_t button);
+		bool keyWasPressed(int32_t key);
+		bool mouseWasPressed(int32_t button);
 		double getMouseWheelScroll();
 
 		void changeState(WindowRunnerStates newState);
@@ -76,12 +76,12 @@ namespace Raycer
 		GLFWwindow* glfwWindow = nullptr;
 		size_t windowWidth = 0;
 		size_t windowHeight = 0;
-		int previousMouseX = 0;
-		int previousMouseY = 0;
+		int64_t previousMouseX = 0;
+		int64_t previousMouseY = 0;
 		double startTime = 0.0;
 		MouseInfo mouseInfo;
-		std::map<int, bool> keyStates;
-		std::map<int, bool> mouseStates;
+		std::map<int32_t, bool> keyStates;
+		std::map<int32_t, bool> mouseStates;
 		std::map<WindowRunnerStates, std::shared_ptr<WindowRunnerState>> runnerStates;
 		WindowRunnerStates currentState = WindowRunnerStates::None;
 		Text defaultText;

@@ -20,7 +20,7 @@ using namespace Raycer;
 
 namespace
 {
-	void glfwErrorCallback(int error, const char* description)
+	void glfwErrorCallback(int32_t error, const char* description)
 	{
 		App::getLog().logError("GLFW error (%s): %s", error, description);
 	}
@@ -101,17 +101,17 @@ double WindowRunner::getFps() const
 	return renderFpsCounter.getFps();
 }
 
-bool WindowRunner::keyIsDown(int key)
+bool WindowRunner::keyIsDown(int32_t key)
 {
 	return (glfwGetKey(glfwWindow, key) == GLFW_PRESS);
 }
 
-bool WindowRunner::mouseIsDown(int button)
+bool WindowRunner::mouseIsDown(int32_t button)
 {
 	return (glfwGetMouseButton(glfwWindow, button) == GLFW_PRESS);
 }
 
-bool WindowRunner::keyWasPressed(int key)
+bool WindowRunner::keyWasPressed(int32_t key)
 {
 	if (keyIsDown(key))
 	{
@@ -127,7 +127,7 @@ bool WindowRunner::keyWasPressed(int key)
 	return false;
 }
 
-bool WindowRunner::mouseWasPressed(int button)
+bool WindowRunner::mouseWasPressed(int32_t button)
 {
 	if (mouseIsDown(button))
 	{
@@ -190,7 +190,7 @@ void WindowRunner::initialize()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-	glfwWindow = glfwCreateWindow(int(settings.window.width), int(settings.window.height), "Raycer", settings.window.enableFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
+	glfwWindow = glfwCreateWindow(int32_t(settings.window.width), int32_t(settings.window.height), "Raycer", settings.window.enableFullscreen ? glfwGetPrimaryMonitor() : nullptr, nullptr);
 
 	if (!glfwWindow)
 		throw std::runtime_error("Could not create the window");
@@ -198,12 +198,12 @@ void WindowRunner::initialize()
 	glfwSetScrollCallback(glfwWindow, ::glfwMouseWheelScroll);
 
 	const GLFWvidmode* videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - int(settings.window.width) / 2), (videoMode->height / 2 - int(settings.window.height) / 2));
+	glfwSetWindowPos(glfwWindow, (videoMode->width / 2 - int32_t(settings.window.width) / 2), (videoMode->height / 2 - int32_t(settings.window.height) / 2));
 	glfwMakeContextCurrent(glfwWindow);
 
 	log.logInfo("Initializing GL3W library");
 
-	int result = gl3wInit();
+	int32_t result = gl3wInit();
 
 	if (result == -1)
 		throw std::runtime_error("Could not initialize GL3W library");
@@ -324,7 +324,7 @@ void WindowRunner::update(double timeStep)
 
 	glfwPollEvents();
 
-	int newWindowWidth, newWindowHeight;
+	int32_t newWindowWidth, newWindowHeight;
 	glfwGetFramebufferSize(glfwWindow, &newWindowWidth, &newWindowHeight);
 
 	if (size_t(newWindowWidth) != windowWidth || size_t(newWindowHeight) != windowHeight)
@@ -333,10 +333,10 @@ void WindowRunner::update(double timeStep)
 	double newMouseX, newMouseY;
 	glfwGetCursorPos(glfwWindow, &newMouseX, &newMouseY);
 
-	mouseInfo.windowX = int(newMouseX + 0.5);
-	mouseInfo.windowY = int(double(windowHeight) - newMouseY - 1.0 + 0.5);
-	mouseInfo.framebufferX = int((mouseInfo.windowX / double(windowWidth)) * framebuffer.getWidth() + 0.5);
-	mouseInfo.framebufferY = int((mouseInfo.windowY / double(windowHeight)) * framebuffer.getHeight() + 0.5);
+	mouseInfo.windowX = int64_t(newMouseX + 0.5);
+	mouseInfo.windowY = int64_t(double(windowHeight) - newMouseY - 1.0 + 0.5);
+	mouseInfo.framebufferX = int64_t((mouseInfo.windowX / double(windowWidth)) * framebuffer.getWidth() + 0.5);
+	mouseInfo.framebufferY = int64_t((mouseInfo.windowY / double(windowHeight)) * framebuffer.getHeight() + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;

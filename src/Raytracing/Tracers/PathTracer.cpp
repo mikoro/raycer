@@ -55,7 +55,7 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	state.cumulativeSampleCount += scene.general.pathSamples;
 
 	#pragma omp parallel for schedule(dynamic, 1000)
-	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
+	for (int64_t pixelIndex = 0; pixelIndex < int64_t(state.pixelCount); ++pixelIndex)
 	{
 		if (interrupted)
 			continue;

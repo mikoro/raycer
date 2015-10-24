@@ -17,7 +17,7 @@ void SysUtils::openFileExternally(const std::string& filePath)
 #ifdef _WIN32
 	ShellExecuteA(nullptr, "open", filePath.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
 #else
-	int pid = fork();
+	int32_t pid = fork();
 
 	if (pid == 0)
 	{

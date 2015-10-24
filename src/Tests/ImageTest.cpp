@@ -16,9 +16,9 @@ TEST_CASE("Image functionality", "[image]")
 {
 	Image image(100, 100);
 
-	for (int y = 0; y < 100; ++y)
+	for (uint64_t y = 0; y < 100; ++y)
 	{
-		for (int x = 0; x < 100; ++x)
+		for (uint64_t x = 0; x < 100; ++x)
 		{
 			if (y < 50)
 				image.setPixel(x, y, Color(10, 100, 200, 255));

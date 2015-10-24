@@ -16,10 +16,9 @@ void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image&
 	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
 	double invGamma = 1.0 / scene.toneMapper.gamma;
-	int pixelCount = int(inputPixelData.size());
-
+	
 	#pragma omp parallel for
-	for (int i = 0; i < pixelCount; ++i)
+	for (int64_t i = 0; i < int64_t(inputPixelData.size()); ++i)
 	{
 		// fix static analysis warnings
 		size_t j = size_t(i);

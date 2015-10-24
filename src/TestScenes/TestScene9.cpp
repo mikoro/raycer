@@ -41,11 +41,11 @@ Scene Scene::createTestScene9()
 
 	size_t currentId = 1000000;
 
-	for (int z = -200; z < 200; z += 20)
+	for (int64_t z = -200; z < 200; z += 20)
 	{
-		for (int y = -200; y < 200; y += 20)
+		for (int64_t y = -200; y < 200; y += 20)
 		{
-			for (int x = -200; x < 200; x += 20)
+			for (int64_t x = -200; x < 200; x += 20)
 			{
 				Material instanceMaterial;
 				instanceMaterial.id = currentId;
@@ -61,7 +61,7 @@ Scene Scene::createTestScene9()
 				instance.changePrimitive = true;
 				instance.scale = Vector3(scale, scale, scale);
 				instance.rotate = EulerAngle(0.0, 0.0, randomRotation(generator));
-				instance.translate = Vector3(x + randomTranslation(generator), y + randomTranslation(generator), z + randomTranslation(generator));
+				instance.translate = Vector3(double(x) + randomTranslation(generator), double(y) + randomTranslation(generator), double(z) + randomTranslation(generator));
 
 				scene.materials.push_back(instanceMaterial);
 				scene.primitives.instances.push_back(instance);

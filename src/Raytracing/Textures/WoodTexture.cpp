@@ -22,7 +22,7 @@ Color WoodTexture::getColor(const Vector2& texcoord, const Vector3& position) co
 	// large scale pattern with sharp edges
 	double n1 = perlinNoise.getFbmNoise(8, 2.0, 0.3, position.x * 2.0, position.y * 0.1, position.z * 2.0);
 	n1 *= density;
-	n1 -= int(n1);
+	n1 -= int64_t(n1);
 	n1 += 0.4;
 	n1 = std::min(n1, 1.0);
 

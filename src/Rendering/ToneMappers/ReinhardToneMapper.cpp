@@ -16,20 +16,20 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
 	double epsilon = std::numeric_limits<double>::epsilon();
-	int pixelCount = int(inputPixelData.size());
+	int64_t pixelCount = int64_t(inputPixelData.size());
 	double logSum = 0.0;
 
 	#pragma omp parallel for reduction(+:logSum)
-	for (int i = 0; i < pixelCount; ++i)
+	for (int64_t i = 0; i < pixelCount; ++i)
 		logSum += log(epsilon + inputPixelData.at(size_t(i)).toColor().getLuminance());
 
-	double logAvgLuminance = exp(logSum / pixelCount);
+	double logAvgLuminance = exp(logSum / double(pixelCount));
 	double scale = scene.toneMapper.key / logAvgLuminance;
 	double maxLuminance2 = scene.toneMapper.maxLuminance * scene.toneMapper.maxLuminance;
 	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
-	for (int i = 0; i < pixelCount; ++i)
+	for (int64_t i = 0; i < pixelCount; ++i)
 	{
 		// fix static analysis warnings
 		size_t j = size_t(i);

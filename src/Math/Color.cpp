@@ -18,7 +18,7 @@ Color::Color(double r_, double g_, double b_, double a_) : r(r_), g(g_), b(b_), 
 {
 }
 
-Color::Color(int r_, int g_, int b_, int a_)
+Color::Color(int32_t r_, int32_t g_, int32_t b_, int32_t a_)
 {
 	assert(r_ >= 0 && r_ <= 255 && g_ >= 0 && g_ <= 255 && b_ >= 0 && b_ <= 255 && a_ >= 0 && a_ <= 255);
 

@@ -64,7 +64,7 @@ void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	std::exception_ptr ompThreadException = nullptr;
 
 	#pragma omp parallel for schedule(dynamic, 1000)
-	for (int pixelIndex = 0; pixelIndex < int(state.pixelCount); ++pixelIndex)
+	for (int64_t pixelIndex = 0; pixelIndex < int64_t(state.pixelCount); ++pixelIndex)
 	{
 		try
 		{

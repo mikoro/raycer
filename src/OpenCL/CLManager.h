@@ -24,8 +24,8 @@ namespace Raycer
 		cl_program createProgram(const std::vector<std::string>& sourceFilePaths);
 		cl_kernel createKernel(cl_program program, const std::string& kernelName);
 
-		static void checkError(int result, const std::string& message);
-		static std::string getErrorMessage(int result);
+		static void checkError(cl_int result, const std::string& message);
+		static std::string getErrorMessage(cl_int result);
 		static void writeStructSizes(const std::string& fileName);
 
 		cl_platform_id platformId = nullptr;
