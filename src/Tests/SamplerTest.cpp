@@ -35,33 +35,35 @@ TEST_CASE("Sampler functionality", "[sampler]")
 
 	for (const auto &sampler : samplers)
 	{
-		uint n = 32;
+		uint64_t n = 32;
 		std::random_device rd;
-		uint permutation = rd();
+		uint64_t permutation = rd();
 		Image image1(100, 100);
 		Image image2(100, 100);
 		Image image3(100, 100);
 		Vector2 size = Vector2(99.0, 99.0);
 		std::ofstream file(tfm::format("sampler_%s_hemisphere.txt", sampler.first));
 
-		for (uint x = 0; x < n; ++x)
+		sampler.second->setPermutation(permutation);
+
+		for (uint64_t x = 0; x < n; ++x)
 		{
-			double sx = sampler.second->getSample(x, n, permutation) * size.x;
+			double sx = sampler.second->getSample1D(x, n) * size.x;
 			image1.setPixel(size_t(sx + 0.5), size_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
-		for (uint y = 0; y < n; ++y)
+		for (uint64_t y = 0; y < n; ++y)
 		{
-			for (uint x = 0; x < n; ++x)
+			for (uint64_t x = 0; x < n; ++x)
 			{
-				Vector2 sample = sampler.second->getSquareSample(x, y, n, n, permutation) * size;
+				Vector2 sample = sampler.second->getSample2D(x, y, n, n) * size;
 				image2.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
 
-				sample = sampler.second->getDiskSample(x, y, n, n, permutation);
+				sample = sampler.second->getDiskSample(x, y, n, n);
 				sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
 				image3.setPixel(size_t(sample.x + 0.5), size_t(sample.y + 0.5), Color(255, 255, 255));
 
-				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n, permutation);
+				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n);
 				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);
 			}
 		}

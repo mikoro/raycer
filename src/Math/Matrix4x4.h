@@ -61,12 +61,12 @@ namespace Raycer
 		operator double*();
 		operator const double*() const;
 
-		double get(uint row, uint column) const;
-		void set(uint row, uint column, double value);
-		Vector4 getRow(uint index) const;
-		void setRow(uint index, const Vector4& v);
-		Vector4 getColumn(uint index) const;
-		void setColumn(uint index, const Vector4& v);
+		double get(uint64_t row, uint64_t column) const;
+		void set(uint64_t row, uint64_t column, double value);
+		Vector4 getRow(uint64_t index) const;
+		void setRow(uint64_t index, const Vector4& v);
+		Vector4 getColumn(uint64_t index) const;
+		void setColumn(uint64_t index, const Vector4& v);
 
 		void transpose();
 		Matrix4x4 transposed() const;

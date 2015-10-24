@@ -116,7 +116,7 @@ Vector4& Vector4::operator/=(double s)
 	return *this;
 }
 
-double Vector4::get(uint index) const
+double Vector4::get(uint64_t index) const
 {
 	switch (index)
 	{
@@ -128,7 +128,7 @@ double Vector4::get(uint index) const
 	}
 }
 
-void Vector4::set(uint index, double value)
+void Vector4::set(uint64_t index, double value)
 {
 	switch (index)
 	{

@@ -37,8 +37,8 @@ namespace Raycer
 		Vector3& operator/=(const Vector3& v);
 		Vector3& operator/=(double s);
 
-		double get(uint index) const;
-		void set(uint index, double value);
+		double get(uint64_t index) const;
+		void set(uint64_t index, double value);
 		double length() const;
 		double lengthSquared() const;
 		void normalize();

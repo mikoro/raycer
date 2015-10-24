@@ -15,12 +15,12 @@ JitteredSampler::JitteredSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double JitteredSampler::getSample1D(uint x, uint n)
+double JitteredSampler::getSample1D(uint64_t x, uint64_t n)
 {
 	return (double(x) + randomOffset(generator)) / double(n);
 }
 
-Vector2 JitteredSampler::getSample2D(uint x, uint y, uint nx, uint ny)
+Vector2 JitteredSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
 	Vector2 result;
 

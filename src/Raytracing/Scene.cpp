@@ -25,7 +25,7 @@ Scene::Scene()
 	}
 }
 
-Scene Scene::createTestScene(uint number)
+Scene Scene::createTestScene(uint64_t number)
 {
 	App::getLog().logInfo("Creating test scene number %d", number);
 

@@ -32,7 +32,7 @@ namespace Raycer
 
 		MovingAverage pixelsPerSecondAverage;
 
-		uint progressCounter1 = 0;
-		uint progressCounter2 = 0;
+		uint64_t progressCounter1 = 0;
+		uint64_t progressCounter2 = 0;
 	};
 }

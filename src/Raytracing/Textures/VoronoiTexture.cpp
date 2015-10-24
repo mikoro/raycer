@@ -20,7 +20,7 @@ void VoronoiTexture::initialize()
 
 		std::mt19937 generator(seed);
 
-		for (uint i = 0; i < randomColorCount; ++i)
+		for (uint64_t i = 0; i < randomColorCount; ++i)
 			colors.push_back(Color::random(generator));
 	}
 

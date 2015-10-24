@@ -92,9 +92,9 @@ int App::run(int argc, char** argv)
 	TCLAP::SwitchArg nonInteractiveSwitch("", "non-interactive", "Force non-interactive mode", cmd, false);
 	TCLAP::SwitchArg enableOpenCLSwitch("", "opencl", "Use OpenCL for raytracing", cmd, false);
 	TCLAP::ValueArg<size_t> clPlatformIdArg("", "cl-platform", "OpenCL platform to use", false, 0, "int", cmd);
-	TCLAP::ValueArg<uint> clDeviceTypeArg("", "cl-device-type", "OpenCL device type to use", false, 0, "int", cmd);
+	TCLAP::ValueArg<uint64_t> clDeviceTypeArg("", "cl-device-type", "OpenCL device type to use", false, 0, "int", cmd);
 	TCLAP::ValueArg<size_t> clDeviceIdArg("", "cl-device", "OpenCL device to use", false, 0, "int", cmd);
-	TCLAP::ValueArg<uint> testSceneArg("", "test", "Select one of the test scenes", false, 0, "int", cmd);
+	TCLAP::ValueArg<uint64_t> testSceneArg("", "test", "Select one of the test scenes", false, 0, "int", cmd);
 	TCLAP::SwitchArg nonTestSceneSwitch("", "non-test", "Force test scene mode off", cmd, false);
 	TCLAP::SwitchArg clientSwitch("", "client", "Enable network client mode", cmd, false);
 	TCLAP::SwitchArg serverSwitch("", "server", "Enable network server mode", cmd, false);

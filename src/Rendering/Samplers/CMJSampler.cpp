@@ -10,9 +10,9 @@ using namespace Raycer;
 
 namespace
 {
-	uint permute(uint i, uint l, uint p)
+	uint64_t permute(uint64_t i, uint64_t l, uint64_t p)
 	{
-		uint w = l - 1;
+		uint64_t w = l - 1;
 
 		w |= w >> 1;
 		w |= w >> 2;
@@ -53,7 +53,7 @@ CMJSampler::CMJSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample1D(uint x, uint n)
+double CMJSampler::getSample1D(uint64_t x, uint64_t n)
 {
 	(void)x;
 	(void)n;
@@ -61,12 +61,12 @@ double CMJSampler::getSample1D(uint x, uint n)
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSample2D(uint x, uint y, uint nx, uint ny)
+Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
 	Vector2 result;
 
-	uint sx = permute(x, nx, permutation * 0x68bc21eb);
-	uint sy = permute(y, ny, permutation * 0x02e5be93);
+	uint64_t sx = permute(x, nx, permutation * 0x68bc21eb);
+	uint64_t sy = permute(y, ny, permutation * 0x02e5be93);
 
 	result.x = (double(x) + (double(sy) + randomOffset(generator)) / double(ny)) / double(nx);
 	result.y = (double(y) + (double(sx) + randomOffset(generator)) / double(nx)) / double(ny);

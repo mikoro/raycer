@@ -21,9 +21,9 @@ namespace Raycer
 	{
 		Color cumulativeColor;
 		double filterWeightSum = 0.0;
-		uint samplesLeft = 1;
-		uint sampleX = 0;
-		uint sampleY = 0;
+		uint64_t samplesLeft = 1;
+		uint64_t sampleX = 0;
+		uint64_t sampleY = 0;
 	};
 
 	class Film
@@ -36,10 +36,10 @@ namespace Raycer
 		void resize(size_t width, size_t height);
 		void clear();
 		void resetSampleCounts();
-		bool getRay(uint x, uint y, const Camera& camera, Ray& ray);
+		bool getRay(uint64_t x, uint64_t y, const Camera& camera, Ray& ray);
 		void applyToneMap();
 
-		void setSampleCount(uint sampleCountSqrt);
+		void setSampleCount(uint64_t sampleCountSqrt);
 		void setSampler(std::unique_ptr<Sampler> sampler);
 		void setFilter(std::unique_ptr<Filter> filter);
 		void setToneMapper(std::unique_ptr<ToneMapper> toneMapper);
@@ -51,7 +51,7 @@ namespace Raycer
 
 		size_t width = 0;
 		size_t height = 0;
-		uint sampleCountSqrt = 1;
+		uint64_t sampleCountSqrt = 1;
 
 		std::unique_ptr<Sampler> sampler = nullptr;
 		std::unique_ptr<Filter> filter = nullptr;

@@ -178,24 +178,24 @@ void ConsoleRunner::interrupt()
 
 void ConsoleRunner::printProgress(const TimerData& elapsed, const TimerData& remaining)
 {
-	uint percentage = uint(timer.getPercentage() + 0.5);
-	uint barCount = percentage / 4;
+	uint64_t percentage = uint64_t(timer.getPercentage() + 0.5);
+	uint64_t barCount = percentage / 4;
 
 	printf("[");
 
-	for (uint i = 0; i < barCount; ++i)
+	for (uint64_t i = 0; i < barCount; ++i)
 		printf("=");
 
 	if (barCount < 25)
 	{
 		printf(">");
 
-		for (uint i = 0; i < (24 - barCount); ++i)
+		for (uint64_t i = 0; i < (24 - barCount); ++i)
 			printf(" ");
 	}
 
 	printf("] ");
-	printf("%u %% | ", percentage);
+	printf("%llu %% | ", percentage);
 	printf("Elapsed time: %s | ", elapsed.getString().c_str());
 	printf("Remaining time: %s | ", remaining.getString().c_str());
 	printf("Pixels/s: %s", StringUtils::humanizeNumber(pixelsPerSecondAverage.getAverage()).c_str());

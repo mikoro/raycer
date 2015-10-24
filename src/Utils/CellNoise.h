@@ -29,25 +29,25 @@ namespace Raycer
 	public:
 
 		CellNoise();
-		CellNoise(uint seed);
+		CellNoise(uint32_t seed);
 
-		void seed(uint seed);
+		void seed(uint32_t seed);
 
-		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y, double z) const;
-		double getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y) const;
+		double getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint32_t density, double x, double y, double z) const;
+		double getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint32_t density, double x, double y) const;
 
 		void setVoronoiColors(const std::vector<Color>& colors);
-		Color getVoronoiColor(CellNoiseDistanceType distanceType, uint density, double x, double y, double z) const;
-		Color getVoronoiColor2D(CellNoiseDistanceType distanceType, uint density, double x, double y) const;
+		Color getVoronoiColor(CellNoiseDistanceType distanceType, uint32_t density, double x, double y, double z) const;
+		Color getVoronoiColor2D(CellNoiseDistanceType distanceType, uint32_t density, double x, double y) const;
 
 	private:
 
-		int getHashcode(int x, int y, int z) const;
+		uint32_t getHashcode(int64_t x, int64_t y, int64_t z) const;
 
 		double getDistance(CellNoiseDistanceType distanceType, const Vector3& v1, const Vector3& v2) const;
 		double getCombinedValue(CellNoiseCombineType combineType, double d1, double d2) const;
 
-		int m_seed;
+		uint32_t m_seed;
 		std::vector<Color> voronoiColors;
 	};
 }

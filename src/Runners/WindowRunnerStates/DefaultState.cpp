@@ -72,7 +72,7 @@ void DefaultState::update(double timeStep)
 
 	if (increaseTestSceneNumber || decreaseTestSceneNumber)
 	{
-		uint previousTestSceneNumber = currentTestSceneNumber;
+		uint64_t previousTestSceneNumber = currentTestSceneNumber;
 
 		if (increaseTestSceneNumber)
 			currentTestSceneNumber++;

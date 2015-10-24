@@ -22,11 +22,11 @@ namespace Raycer
 	public:
 
 		PerlinNoise();
-		PerlinNoise(uint seed);
+		PerlinNoise(uint32_t seed);
 
-		void seed(uint seed);
+		void seed(uint32_t seed);
 		double getNoise(double x, double y, double z) const;
-		double getFbmNoise(uint octaves, double lacunarity, double persistence, double x, double y, double z) const;
+		double getFbmNoise(uint64_t octaves, double lacunarity, double persistence, double x, double y, double z) const;
 
 	private:
 

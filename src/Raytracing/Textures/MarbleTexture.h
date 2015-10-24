@@ -24,7 +24,7 @@ namespace Raycer
 		double getValue(const Vector2& texcoord, const Vector3& position) const override;
 		Vector3 getNormalData(const Vector2& texcoord, const Vector3& position, TextureNormalDataType& type) const override;
 
-		uint seed = 1;
+		uint32_t seed = 1;
 		Color marbleColor = Color(255, 252, 240);
 		Color streakColor = Color(0, 33, 71);
 		double density = 10.0;

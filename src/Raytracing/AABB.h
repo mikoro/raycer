@@ -24,7 +24,7 @@ namespace Raycer
 
 		bool intersects(const Ray& ray) const;
 		void expand(const AABB& other);
-		uint getLargestAxis() const;
+		uint64_t getLargestAxis() const;
 		AABB transformed(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) const;
 
 		Vector3 getMin() const;

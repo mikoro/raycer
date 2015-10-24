@@ -50,7 +50,7 @@ namespace Raycer
 
 		Scene();
 
-		static Scene createTestScene(uint number);
+		static Scene createTestScene(uint64_t number);
 		static Scene loadFromFile(const std::string& fileName);
 		static Scene loadFromJsonString(const std::string& text);
 		static Scene loadFromXmlString(const std::string& text);
@@ -82,7 +82,7 @@ namespace Raycer
 		static Scene createTestScene18();
 		static Scene createTestScene19();
 
-		static const uint TEST_SCENE_COUNT = 19;
+		static const uint64_t TEST_SCENE_COUNT = 19;
 
 		struct General
 		{
@@ -91,12 +91,12 @@ namespace Raycer
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
 			SamplerType cameraSamplerType = SamplerType::CMJ;
-			uint maxRayIterations = 3;
-			uint maxPathLength = 3;
-			uint pathSamples = 1;
-			uint multiSamples = 0;
-			uint timeSamples = 0;
-			uint cameraSamples = 0;
+			uint64_t maxRayIterations = 3;
+			uint64_t maxPathLength = 3;
+			uint64_t pathSamples = 1;
+			uint64_t multiSamples = 0;
+			uint64_t timeSamples = 0;
+			uint64_t cameraSamples = 0;
 			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);

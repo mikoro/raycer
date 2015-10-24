@@ -130,7 +130,7 @@ void NetworkRunner::sendBroadcasts()
 			endpoints.push_back(ip::udp::endpoint(broadcastAddress, static_cast<unsigned short>(settings.network.broadcastPort)));
 
 		std::string message = tfm::format("Raycer Server 1.0.0\nAddress: %s\nPort: %d", localAddress.to_string(), settings.network.localPort);
-		uint counter = 0;
+		uint64_t counter = 0;
 
 		while (!interrupted)
 		{
@@ -185,7 +185,7 @@ void NetworkRunner::receiveBroadcasts()
 			if (!std::regex_match(message, match, std::regex("^Raycer Server 1.0.0\nAddress: (.+)\nPort: (.+)$")))
 				return;
 
-			uint port;
+			uint64_t port;
 			ss.str(match[2]);
 			ss >> port;
 
@@ -316,7 +316,7 @@ void NetworkRunner::receiveJobs()
 
 			ServerJob job;
 
-			uint port;
+			uint64_t port;
 			ss.str(match[2]);
 			ss >> port;
 
@@ -419,7 +419,7 @@ void NetworkRunner::handleJobs()
 			io_service io;
 			std::string message = tfm::format("Raycer 1.0.0\nPixelStartOffset: %d\nPixelCount: %d\n\n", job.pixelStartOffset, job.pixelCount);
 
-			for (uint i = 0; i < 60 && !interrupted; ++i)
+			for (uint64_t i = 0; i < 60 && !interrupted; ++i)
 			{
 				try
 				{

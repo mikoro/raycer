@@ -14,17 +14,17 @@ PoissonDisc::PoissonDisc()
 	seed(rd());
 }
 
-PoissonDisc::PoissonDisc(uint seed_)
+PoissonDisc::PoissonDisc(uint32_t seed_)
 {
 	seed(seed_);
 }
 
-void PoissonDisc::seed(uint seed)
+void PoissonDisc::seed(uint32_t seed)
 {
 	generator.seed(seed);
 }
 
-void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, uint iterationLimit)
+void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, uint64_t iterationLimit)
 {
 	std::uniform_real_distribution<double> randomDouble(0.0, 1.0);
 
@@ -53,7 +53,7 @@ void PoissonDisc::generate2D(size_t width, size_t height, double minDistance, ui
 	{
 		Vector2 origin = getNextActivePoint2D();
 
-		for (uint i = 0; i < iterationLimit; ++i)
+		for (uint64_t i = 0; i < iterationLimit; ++i)
 		{
 			Vector2 point = generateNewPoint2D(origin, minDistance);
 

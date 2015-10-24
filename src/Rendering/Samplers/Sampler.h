@@ -30,15 +30,15 @@ namespace Raycer
 		Sampler();
 		virtual ~Sampler() {}
 
-		void setPermutation(uint permutation);
+		void setPermutation(uint64_t permutation);
 
-		virtual double getSample1D(uint x, uint n) = 0;
-		virtual Vector2 getSample2D(uint x, uint y, uint nx, uint ny) = 0;
-		Vector2 getDiskSample(uint x, uint y, uint nx, uint ny);
-		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint x, uint y, uint nx, uint ny);
+		virtual double getSample1D(uint64_t x, uint64_t n) = 0;
+		virtual Vector2 getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny) = 0;
+		Vector2 getDiskSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny);
+		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny);
 
-		virtual void generateSamples1D(uint sampleCount);
-		virtual void generateSamples2D(uint sampleCountSqrt);
+		virtual void generateSamples1D(uint64_t sampleCount);
+		virtual void generateSamples2D(uint64_t sampleCountSqrt);
 
 		bool getNextSample1D(double& result);
 		bool getNextSample2D(Vector2& result);
@@ -49,7 +49,7 @@ namespace Raycer
 
 	protected:
 
-		uint permutation = 0;
+		uint64_t permutation = 0;
 
 		size_t currentSampleIndex1D = 0;
 		size_t currentSampleIndex2D = 0;

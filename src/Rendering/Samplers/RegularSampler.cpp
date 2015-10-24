@@ -8,12 +8,12 @@
 
 using namespace Raycer;
 
-double RegularSampler::getSample1D(uint x, uint n)
+double RegularSampler::getSample1D(uint64_t x, uint64_t n)
 {
 	return (double(x) + 0.5) / double(n);
 }
 
-Vector2 RegularSampler::getSample2D(uint x, uint y, uint nx, uint ny)
+Vector2 RegularSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
 	Vector2 result;
 

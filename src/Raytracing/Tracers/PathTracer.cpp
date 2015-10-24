@@ -67,7 +67,7 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 
 		Color newColor;
 
-		for (uint i = 0; i < scene.general.pathSamples; ++i)
+		for (uint64_t i = 0; i < scene.general.pathSamples; ++i)
 		{
 			Ray ray;
 
@@ -92,7 +92,7 @@ void PathTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 	toneMappers[scene.toneMapper.type]->apply(scene, linearImage, toneMappedImage);
 }
 
-Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, const std::atomic<bool>& interrupted)
+Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint64_t iteration, const std::atomic<bool>& interrupted)
 {
 	if (interrupted)
 		return Color::BLACK;

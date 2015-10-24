@@ -15,7 +15,7 @@ RandomSampler::RandomSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double RandomSampler::getSample1D(uint x, uint n)
+double RandomSampler::getSample1D(uint64_t x, uint64_t n)
 {
 	(void)x;
 	(void)n;
@@ -23,7 +23,7 @@ double RandomSampler::getSample1D(uint x, uint n)
 	return randomOffset(generator);
 }
 
-Vector2 RandomSampler::getSample2D(uint x, uint y, uint nx, uint ny)
+Vector2 RandomSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
 	(void)x;
 	(void)y;

@@ -35,7 +35,7 @@ TEST_CASE("TestScenes functionality", "[testscenes]")
 	scenes.push_back(Scene::createTestScene18());
 	scenes.push_back(Scene::createTestScene19());
 
-	uint sceneCount = 0;
+	uint64_t sceneCount = 0;
 
 	for (const Scene& scene : scenes)
 	{

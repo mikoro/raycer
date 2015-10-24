@@ -40,10 +40,10 @@ TEST_CASE("Filter functionality", "[filter]")
 		std::ofstream file2(tfm::format("filter_%s_2D.txt", filter.first));
 
 		double extent = 8.0;
-		uint steps = 1000;
+		uint64_t steps = 1000;
 		double stepSize = extent / steps;
 
-		for (uint i = 0; i < steps; ++i)
+		for (uint64_t i = 0; i < steps; ++i)
 		{
 			double x = -(extent / 2.0) + i * stepSize;
 			file1 << tfm::format("%f %f\n", x, filter.second->getWeight(x));
@@ -52,9 +52,9 @@ TEST_CASE("Filter functionality", "[filter]")
 		steps = 40;
 		stepSize = extent / steps;
 
-		for (uint i = 0; i < steps; ++i)
+		for (uint64_t i = 0; i < steps; ++i)
 		{
-			for (uint j = 0; j < steps; ++j)
+			for (uint64_t j = 0; j < steps; ++j)
 			{
 				double x = -(extent / 2.0) + j * stepSize;
 				double y = -(extent / 2.0) + i * stepSize;

@@ -19,8 +19,8 @@ namespace Raycer
 
 		RandomSampler();
 
-		double getSample1D(uint x, uint n) override;
-		Vector2 getSample2D(uint x, uint y, uint nx, uint ny) override;
+		double getSample1D(uint64_t x, uint64_t n) override;
+		Vector2 getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny) override;
 
 	private:
 

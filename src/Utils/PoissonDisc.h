@@ -38,10 +38,10 @@ namespace Raycer
 	public:
 
 		PoissonDisc();
-		PoissonDisc(uint seed);
+		PoissonDisc(uint32_t seed);
 
-		void seed(uint seed);
-		void generate2D(size_t width, size_t height, double minDistance, uint iterationLimit = 30);
+		void seed(uint32_t seed);
+		void generate2D(size_t width, size_t height, double minDistance, uint64_t iterationLimit = 30);
 
 		std::vector<Vector2>& getPoints2D();
 

@@ -29,13 +29,13 @@ namespace Raycer
 
 	private:
 
-		Color tracePath(const Scene& scene, const Ray& ray, uint iteration, const std::atomic<bool>& interrupted);
+		Color tracePath(const Scene& scene, const Ray& ray, uint64_t iteration, const std::atomic<bool>& interrupted);
 
 		std::map<SamplerType, std::unique_ptr<Sampler>> samplers;
 		std::map<FilterType, std::unique_ptr<Filter>> filters;
 		std::map<ToneMapperType, std::unique_ptr<ToneMapper>> toneMappers;
 
 		std::mt19937 generator;
-		std::uniform_int_distribution<uint> randomPermutation;
+		std::uniform_int_distribution<uint64_t> randomPermutation;
 	};
 }

@@ -37,6 +37,6 @@ namespace Raycer
 		std::unique_ptr<Tracer> tracer;
 
 		std::atomic<bool> interrupted;
-		uint currentTestSceneNumber = 1;
+		uint64_t currentTestSceneNumber = 1;
 	};
 }

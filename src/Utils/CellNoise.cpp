@@ -14,45 +14,45 @@ CellNoise::CellNoise()
 	seed(rd());
 }
 
-CellNoise::CellNoise(uint seed_)
+CellNoise::CellNoise(uint32_t seed_)
 {
 	seed(seed_);
 }
 
-void CellNoise::seed(uint seed)
+void CellNoise::seed(uint32_t seed)
 {
 	m_seed = seed;
 }
 
-double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y, double z) const
+double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint32_t density, double x, double y, double z) const
 {
-	std::poisson_distribution<uint> randomCount(density);
+	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 	std::minstd_rand generator;
 
-	int ix = int(floor(x));
-	int iy = int(floor(y));
-	int iz = int(floor(z));
+	int64_t ix = int64_t(floor(x));
+	int64_t iy = int64_t(floor(y));
+	int64_t iz = int64_t(floor(z));
 
 	Vector3 evaluationPoint(x, y, z);
 	std::array<double, CELL_NOISE_MAX_DISTANCES_COUNT> distances;
 	auto it = distances.begin();
 
-	for (int dz = -1; dz <= 1; ++dz)
+	for (int64_t dz = -1; dz <= 1; ++dz)
 	{
-		for (int dy = -1; dy <= 1; ++dy)
+		for (int64_t dy = -1; dy <= 1; ++dy)
 		{
-			for (int dx = -1; dx <= 1; ++dx)
+			for (int64_t dx = -1; dx <= 1; ++dx)
 			{
-				int cx = ix + dx;
-				int cy = iy + dy;
-				int cz = iz + dz;
+				int64_t cx = ix + dx;
+				int64_t cy = iy + dy;
+				int64_t cz = iz + dz;
 
 				generator.seed(getHashcode(cx, cy, cz));
 
-				uint pointCount = randomCount(generator);
+				uint64_t pointCount = randomCount(generator);
 
-				for (uint i = 0; i < pointCount; ++i)
+				for (uint64_t i = 0; i < pointCount; ++i)
 				{
 					Vector3 cubePoint;
 
@@ -83,31 +83,31 @@ double CellNoise::getNoise(CellNoiseDistanceType distanceType, CellNoiseCombineT
 	return std::abs(d);
 }
 
-double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint density, double x, double y) const
+double CellNoise::getNoise2D(CellNoiseDistanceType distanceType, CellNoiseCombineType combineType, uint32_t density, double x, double y) const
 {
-	std::poisson_distribution<uint> randomCount(density);
+	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 	std::minstd_rand generator;
 
-	int ix = int(floor(x));
-	int iy = int(floor(y));
+	int64_t ix = int64_t(floor(x));
+	int64_t iy = int64_t(floor(y));
 
 	Vector3 evaluationPoint(x, y, 0.0);
 	std::array<double, CELL_NOISE_MAX_DISTANCES_COUNT> distances;
 	auto it = distances.begin();
 
-	for (int dy = -1; dy <= 1; ++dy)
+	for (int64_t dy = -1; dy <= 1; ++dy)
 	{
-		for (int dx = -1; dx <= 1; ++dx)
+		for (int64_t dx = -1; dx <= 1; ++dx)
 		{
-			int cx = ix + dx;
-			int cy = iy + dy;
+			int64_t cx = ix + dx;
+			int64_t cy = iy + dy;
 
 			generator.seed(getHashcode(cx, cy, 0));
 
-			uint pointCount = randomCount(generator);
+			uint64_t pointCount = randomCount(generator);
 
-			for (uint i = 0; i < pointCount; ++i)
+			for (uint64_t i = 0; i < pointCount; ++i)
 			{
 				Vector3 cubePoint;
 
@@ -141,36 +141,36 @@ void CellNoise::setVoronoiColors(const std::vector<Color>& colors)
 	voronoiColors = colors;
 }
 
-Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint density, double x, double y, double z) const
+Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint32_t density, double x, double y, double z) const
 {
-	std::poisson_distribution<uint> randomCount(density);
+	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 	std::uniform_int_distribution<size_t> randomColorIndex(0, voronoiColors.size() - 1);
 	std::minstd_rand generator;
 
-	int ix = int(floor(x));
-	int iy = int(floor(y));
-	int iz = int(floor(z));
+	int64_t ix = int64_t(floor(x));
+	int64_t iy = int64_t(floor(y));
+	int64_t iz = int64_t(floor(z));
 
 	Vector3 evaluationPoint(x, y, z);
 	double minDistance = std::numeric_limits<double>::max();
 	size_t closestColorIndex = std::numeric_limits<size_t>::max();
 
-	for (int dz = -1; dz <= 1; ++dz)
+	for (int64_t dz = -1; dz <= 1; ++dz)
 	{
-		for (int dy = -1; dy <= 1; ++dy)
+		for (int64_t dy = -1; dy <= 1; ++dy)
 		{
-			for (int dx = -1; dx <= 1; ++dx)
+			for (int64_t dx = -1; dx <= 1; ++dx)
 			{
-				int cx = ix + dx;
-				int cy = iy + dy;
-				int cz = iz + dz;
+				int64_t cx = ix + dx;
+				int64_t cy = iy + dy;
+				int64_t cz = iz + dz;
 
 				generator.seed(getHashcode(cx, cy, cz));
 
-				uint pointCount = randomCount(generator);
+				uint64_t pointCount = randomCount(generator);
 
-				for (uint i = 0; i < pointCount; ++i)
+				for (uint64_t i = 0; i < pointCount; ++i)
 				{
 					Vector3 cubePoint;
 
@@ -200,32 +200,32 @@ Color CellNoise::getVoronoiColor(CellNoiseDistanceType distanceType, uint densit
 	return closestColor;
 }
 
-Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint density, double x, double y) const
+Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint32_t density, double x, double y) const
 {
-	std::poisson_distribution<uint> randomCount(density);
+	std::poisson_distribution<uint64_t> randomCount(density);
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 	std::uniform_int_distribution<size_t> randomColorIndex(0, voronoiColors.size() - 1);
 	std::minstd_rand generator;
 
-	int ix = int(floor(x));
-	int iy = int(floor(y));
+	int64_t ix = int64_t(floor(x));
+	int64_t iy = int64_t(floor(y));
 
 	Vector3 evaluationPoint(x, y, 0.0);
 	double minDistance = std::numeric_limits<double>::max();
 	size_t closestColorIndex = std::numeric_limits<size_t>::max();
 
-	for (int dy = -1; dy <= 1; ++dy)
+	for (int64_t dy = -1; dy <= 1; ++dy)
 	{
-		for (int dx = -1; dx <= 1; ++dx)
+		for (int64_t dx = -1; dx <= 1; ++dx)
 		{
-			int cx = ix + dx;
-			int cy = iy + dy;
+			int64_t cx = ix + dx;
+			int64_t cy = iy + dy;
 
 			generator.seed(getHashcode(cx, cy, 0));
 
-			uint pointCount = randomCount(generator);
+			uint64_t pointCount = randomCount(generator);
 
-			for (uint i = 0; i < pointCount; ++i)
+			for (uint64_t i = 0; i < pointCount; ++i)
 			{
 				Vector3 cubePoint;
 
@@ -253,9 +253,9 @@ Color CellNoise::getVoronoiColor2D(CellNoiseDistanceType distanceType, uint dens
 	return closestColor;
 }
 
-int CellNoise::getHashcode(int x, int y, int z) const
+uint32_t CellNoise::getHashcode(int64_t x, int64_t y, int64_t z) const
 {
-	return (m_seed * 16381) + (x * 17389) + (y * 18313) + (z * 19423);
+	return uint32_t((m_seed * 16381) + (x * 17389) + (y * 18313) + (z * 19423));
 }
 
 double CellNoise::getDistance(CellNoiseDistanceType distanceType, const Vector3& v1, const Vector3& v2) const

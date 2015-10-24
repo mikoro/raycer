@@ -14,22 +14,22 @@ void Settings::load(const std::string& fileName)
 	iniReader.readFile(fileName);
 
 	general.interactive = iniReader.getValue<bool>("general", "interactive");
-	general.maxThreadCount = iniReader.getValue<uint>("general", "maxThreadCount");
+	general.maxThreadCount = iniReader.getValue<int32_t>("general", "maxThreadCount");
 	general.checkGLErrors = iniReader.getValue<bool>("general", "checkGLErrors");
 	general.checkCLErrors = iniReader.getValue<bool>("general", "checkCLErrors");
 
 	openCL.enabled = iniReader.getValue<bool>("openCL", "enabled");
 	openCL.platformId = iniReader.getValue<size_t>("openCL", "platformId");
-	openCL.deviceType = iniReader.getValue<uint>("openCL", "deviceType");
+	openCL.deviceType = iniReader.getValue<uint64_t>("openCL", "deviceType");
 	openCL.deviceId = iniReader.getValue<size_t>("openCL", "deviceId");
 	openCL.options = iniReader.getValue("openCL", "options");
 
 	network.isClient = iniReader.getValue<bool>("network", "isClient");
 	network.isServer = iniReader.getValue<bool>("network", "isServer");
 	network.localAddress = iniReader.getValue("network", "localAddress");
-	network.localPort = iniReader.getValue<uint>("network", "localPort");
+	network.localPort = iniReader.getValue<uint64_t>("network", "localPort");
 	network.broadcastAddress = iniReader.getValue("network", "broadcastAddress");
-	network.broadcastPort = iniReader.getValue<uint>("network", "broadcastPort");
+	network.broadcastPort = iniReader.getValue<uint64_t>("network", "broadcastPort");
 
 	scene.fileName = iniReader.getValue("scene", "fileName");
 	scene.enableTestScenes = iniReader.getValue<bool>("scene", "enableTestScenes");

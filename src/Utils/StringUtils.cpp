@@ -107,7 +107,7 @@ std::string StringUtils::humanizeNumber(double value, bool usePowerOfTwo)
 	const char* prefixes[] = { "", "k", "M", "G", "T", "P", "E", "Z", "Y" };
 	const double divider = usePowerOfTwo ? 1024.0 : 1000.0;
 
-	for (uint i = 0; i < 9; ++i)
+	for (uint64_t i = 0; i < 9; ++i)
 	{
 		if (value < divider)
 			return tfm::format("%.2f %s", value, prefixes[i]);

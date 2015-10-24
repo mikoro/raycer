@@ -46,8 +46,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][c] + n.m[r][c];
 
 		return result;
@@ -57,8 +57,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][c] - n.m[r][c];
 
 		return result;
@@ -68,8 +68,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][c] * s;
 
 		return result;
@@ -79,8 +79,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][c] * s;
 
 		return result;
@@ -90,8 +90,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][0] * n.m[0][c] + m.m[r][1] * n.m[1][c] + m.m[r][2] * n.m[2][c] + m.m[r][3] * n.m[3][c];
 
 		return result;
@@ -113,8 +113,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = m.m[r][c] / s;
 
 		return result;
@@ -124,8 +124,8 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				result.m[r][c] = -m.m[r][c];
 
 		return result;
@@ -133,8 +133,8 @@ namespace Raycer
 
 	bool operator==(const Matrix4x4& m, const Matrix4x4& n)
 	{
-		for (uint r = 0; r <= 3; ++r)
-			for (uint c = 0; c <= 3; ++c)
+		for (uint64_t r = 0; r <= 3; ++r)
+			for (uint64_t c = 0; c <= 3; ++c)
 				if (!MathUtils::almostSame(m.m[r][c], n.m[r][c]))
 					return false;
 
@@ -187,25 +187,25 @@ Matrix4x4::operator const double*() const
 	return &m[0][0];
 }
 
-double Matrix4x4::get(uint row, uint column) const
+double Matrix4x4::get(uint64_t row, uint64_t column) const
 {
 	assert(row <= 3 && column <= 3);
 	return m[row][column];
 }
 
-void Matrix4x4::set(uint row, uint column, double value)
+void Matrix4x4::set(uint64_t row, uint64_t column, double value)
 {
 	assert(row <= 3 && column <= 3);
 	m[row][column] = value;
 }
 
-Vector4 Matrix4x4::getRow(uint index) const
+Vector4 Matrix4x4::getRow(uint64_t index) const
 {
 	assert(index <= 3);
 	return Vector4(m[index][0], m[index][1], m[index][2], m[index][3]);
 }
 
-void Matrix4x4::setRow(uint index, const Vector4& v)
+void Matrix4x4::setRow(uint64_t index, const Vector4& v)
 {
 	assert(index <= 3);
 
@@ -215,13 +215,13 @@ void Matrix4x4::setRow(uint index, const Vector4& v)
 	m[index][3] = v.w;
 }
 
-Vector4 Matrix4x4::getColumn(uint index) const
+Vector4 Matrix4x4::getColumn(uint64_t index) const
 {
 	assert(index <= 3);
 	return Vector4(m[0][index], m[1][index], m[2][index], m[3][index]);
 }
 
-void Matrix4x4::setColumn(uint index, const Vector4& v)
+void Matrix4x4::setColumn(uint64_t index, const Vector4& v)
 {
 	assert(index <= 3);
 
@@ -240,8 +240,8 @@ Matrix4x4 Matrix4x4::transposed() const
 {
 	Matrix4x4 result;
 
-	for (uint r = 0; r <= 3; ++r)
-		for (uint c = 0; c <= 3; ++c)
+	for (uint64_t r = 0; r <= 3; ++r)
+		for (uint64_t c = 0; c <= 3; ++c)
 			result.m[r][c] = m[c][r];
 
 	return result;
@@ -283,7 +283,7 @@ Matrix4x4 Matrix4x4::inverted() const
 
 	det = 1.0 / det;
 
-	for (uint i = 0; i < 16; i++)
+	for (uint64_t i = 0; i < 16; i++)
 		out[i] = inv[i] * det;
 
 	std::memcpy(result.m, out, sizeof(double) * 16);
@@ -292,9 +292,9 @@ Matrix4x4 Matrix4x4::inverted() const
 
 bool Matrix4x4::isZero() const
 {
-	for (uint r = 0; r <= 3; ++r)
+	for (uint64_t r = 0; r <= 3; ++r)
 	{
-		for (uint c = 0; c <= 3; ++c)
+		for (uint64_t c = 0; c <= 3; ++c)
 		{
 			if (m[r][c] != 0.0)
 				return false;
@@ -306,9 +306,9 @@ bool Matrix4x4::isZero() const
 
 bool Matrix4x4::isNan() const
 {
-	for (uint r = 0; r <= 3; ++r)
+	for (uint64_t r = 0; r <= 3; ++r)
 	{
-		for (uint c = 0; c <= 3; ++c)
+		for (uint64_t c = 0; c <= 3; ++c)
 		{
 			if (std::isnan(m[r][c]))
 				return true;

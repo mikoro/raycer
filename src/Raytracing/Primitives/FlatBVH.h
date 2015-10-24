@@ -88,10 +88,10 @@ namespace Raycer
 
 	private:
 
-		void calculateSplit(uint& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
-		void calculateSAHSplit(uint& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
-		double calculateSAHScore(uint axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
-		double calculateMedianPoint(uint axis, const FlatBVHBuildEntry& buildEntry);
+		void calculateSplit(uint64_t& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry, std::mt19937& generator);
+		void calculateSAHSplit(uint64_t& axis, double& splitPoint, const AABB& nodeAABB, const BVHBuildInfo& buildInfo, const FlatBVHBuildEntry& buildEntry);
+		double calculateSAHScore(uint64_t axis, double splitPoint, const AABB& nodeAABB, const FlatBVHBuildEntry& buildEntry);
+		double calculateMedianPoint(uint64_t axis, const FlatBVHBuildEntry& buildEntry);
 
 		friend class cereal::access;
 

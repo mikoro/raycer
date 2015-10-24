@@ -14,7 +14,7 @@ namespace Raycer
 		struct General
 		{
 			bool interactive;
-			uint maxThreadCount;
+			int32_t maxThreadCount;
 			bool checkGLErrors;
 			bool checkCLErrors;
 		} general;
@@ -23,7 +23,7 @@ namespace Raycer
 		{
 			bool enabled;
 			size_t platformId;
-			uint deviceType;
+			uint64_t deviceType;
 			size_t deviceId;
 			std::string options;
 		} openCL;
@@ -33,16 +33,16 @@ namespace Raycer
 			bool isClient;
 			bool isServer;
 			std::string localAddress;
-			uint localPort;
+			uint64_t localPort;
 			std::string broadcastAddress;
-			uint broadcastPort;
+			uint64_t broadcastPort;
 		} network;
 
 		struct Scene
 		{
 			std::string fileName;
 			bool enableTestScenes;
-			uint testSceneNumber;
+			uint64_t testSceneNumber;
 		} scene;
 
 		struct Image

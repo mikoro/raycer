@@ -13,12 +13,12 @@ ValueNoise::ValueNoise()
 	seed(rd());
 }
 
-ValueNoise::ValueNoise(uint seed_)
+ValueNoise::ValueNoise(uint32_t seed_)
 {
 	seed(seed_);
 }
 
-void ValueNoise::seed(uint seed)
+void ValueNoise::seed(uint32_t seed)
 {
 	m_seed = seed;
 }
@@ -29,9 +29,9 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	std::mt19937 generator;
 	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 
-	int ix = int(floor(x));
-	int iy = int(floor(y));
-	int iz = int(floor(z));
+	int64_t ix = int64_t(floor(x));
+	int64_t iy = int64_t(floor(y));
+	int64_t iz = int64_t(floor(z));
 
 	double tx = x - ix;
 	double ty = y - iy;
@@ -75,13 +75,13 @@ double ValueNoise::getNoise(double x, double y, double z) const
 	return std::max(0.0, std::min(c, 1.0));
 }
 
-double ValueNoise::getFbmNoise(uint octaves, double lacunarity, double persistence, double x, double y, double z) const
+double ValueNoise::getFbmNoise(uint64_t octaves, double lacunarity, double persistence, double x, double y, double z) const
 {
 	double result = 0.0;
 	double frequency = 1.0;
 	double amplitude = 1.0;
 
-	for (uint i = 0; i < octaves; ++i)
+	for (uint64_t i = 0; i < octaves; ++i)
 	{
 		result += getNoise(x * frequency, y * frequency, z * frequency) * amplitude;
 		frequency *= lacunarity;
@@ -91,7 +91,7 @@ double ValueNoise::getFbmNoise(uint octaves, double lacunarity, double persisten
 	return result;
 }
 
-int ValueNoise::getHashcode(int x, int y, int z) const
+uint32_t ValueNoise::getHashcode(int64_t x, int64_t y, int64_t z) const
 {
-	return (m_seed * 16381) + (x * 17389) + (y * 18313) + (z * 19423);
+	return uint32_t((m_seed * 16381) + (x * 17389) + (y * 18313) + (z * 19423));
 }

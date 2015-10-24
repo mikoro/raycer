@@ -44,7 +44,7 @@ namespace Raycer
 		Color generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted);
 		Color generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted);
 
-		Color traceRay(const Scene& scene, const Ray& ray, Intersection& intersection, uint iteration, const std::atomic<bool>& interrupted);
+		Color traceRay(const Scene& scene, const Ray& ray, Intersection& intersection, uint64_t iteration, const std::atomic<bool>& interrupted);
 
 		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount);
 		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess);
@@ -59,6 +59,6 @@ namespace Raycer
 		std::map<ToneMapperType, std::unique_ptr<ToneMapper>> toneMappers;
 
 		std::mt19937 generator;
-		std::uniform_int_distribution<uint> randomPermutation;
+		std::uniform_int_distribution<uint64_t> randomPermutation;
 	};
 }

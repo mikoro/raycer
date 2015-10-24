@@ -121,7 +121,7 @@ Vector3& Vector3::operator/=(double s)
 	return *this;
 }
 
-double Vector3::get(uint index) const
+double Vector3::get(uint64_t index) const
 {
 	switch (index)
 	{
@@ -132,7 +132,7 @@ double Vector3::get(uint index) const
 	}
 }
 
-void Vector3::set(uint index, double value)
+void Vector3::set(uint64_t index, double value)
 {
 	switch (index)
 	{
