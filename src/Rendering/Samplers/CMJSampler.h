@@ -20,8 +20,8 @@ namespace Raycer
 
 		CMJSampler();
 
-		double getSample1D(uint i, uint n) override;
-		Vector2 getSample2D(uint ix, uint iy, uint nx, uint ny) override;
+		double getSample1D(uint x, uint n) override;
+		Vector2 getSample2D(uint x, uint y, uint nx, uint ny) override;
 
 	private:
 

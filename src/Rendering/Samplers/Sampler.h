@@ -9,9 +9,9 @@
 
 /*
 
-Most samplers work both in procedual and pre-generated fashion.
+Samplers work in procedual and/or pre-generated fashion.
 getSample generates a new sample on the fly
-generateSamples fills internal buffer with getSample
+generateSamples fills internal buffer with getSample or some other way
 getNextSample loops through the internal buffer
 
 */
@@ -32,10 +32,10 @@ namespace Raycer
 
 		void setPermutation(uint permutation);
 
-		virtual double getSample1D(uint i, uint n) = 0;
-		virtual Vector2 getSample2D(uint ix, uint iy, uint nx, uint ny) = 0;
-		Vector2 getDiskSample(uint ix, uint iy, uint nx, uint ny);
-		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny);
+		virtual double getSample1D(uint x, uint n) = 0;
+		virtual Vector2 getSample2D(uint x, uint y, uint nx, uint ny) = 0;
+		Vector2 getDiskSample(uint x, uint y, uint nx, uint ny);
+		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint x, uint y, uint nx, uint ny);
 
 		virtual void generateSamples1D(uint sampleCount);
 		virtual void generateSamples2D(uint sampleCountSqrt);

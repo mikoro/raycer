@@ -53,23 +53,23 @@ CMJSampler::CMJSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample1D(uint i, uint n)
+double CMJSampler::getSample1D(uint x, uint n)
 {
-	(void)i;
+	(void)x;
 	(void)n;
 
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSample2D(uint ix, uint iy, uint nx, uint ny)
+Vector2 CMJSampler::getSample2D(uint x, uint y, uint nx, uint ny)
 {
 	Vector2 result;
 
-	uint sx = permute(ix, nx, permutation * 0x68bc21eb);
-	uint sy = permute(iy, ny, permutation * 0x02e5be93);
+	uint sx = permute(x, nx, permutation * 0x68bc21eb);
+	uint sy = permute(y, ny, permutation * 0x02e5be93);
 
-	result.x = (double(ix) + (double(sy) + randomOffset(generator)) / double(ny)) / double(nx);
-	result.y = (double(iy) + (double(sx) + randomOffset(generator)) / double(nx)) / double(ny);
+	result.x = (double(x) + (double(sy) + randomOffset(generator)) / double(ny)) / double(nx);
+	result.y = (double(y) + (double(sx) + randomOffset(generator)) / double(nx)) / double(ny);
 
 	return result;
 }

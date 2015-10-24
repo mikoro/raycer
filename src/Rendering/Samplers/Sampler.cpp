@@ -58,15 +58,15 @@ void Sampler::setPermutation(uint permutation_)
 	permutation = permutation_;
 }
 
-Vector2 Sampler::getDiskSample(uint ix, uint iy, uint nx, uint ny)
+Vector2 Sampler::getDiskSample(uint x, uint y, uint nx, uint ny)
 {
-	Vector2 point = getSample2D(ix, iy, nx, ny);
+	Vector2 point = getSample2D(x, y, nx, ny);
 	return mapToDisk(point);
 }
 
-Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint ix, uint iy, uint nx, uint ny)
+Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint x, uint y, uint nx, uint ny)
 {
-	Vector2 point = getSample2D(ix, iy, nx, ny);
+	Vector2 point = getSample2D(x, y, nx, ny);
 	return mapToHemisphere(onb, distribution, point);
 }
 
