@@ -129,7 +129,7 @@ Color PathTracer::tracePath(const Scene& scene, const Ray& ray, uint iteration, 
 	Ray newRay;
 	newRay.origin = intersection.position + newDirection * scene.general.rayStartOffset;
 	newRay.direction = newDirection;
-	newRay.update();
+	newRay.precalculate();
 
 	Color reflectance;
 

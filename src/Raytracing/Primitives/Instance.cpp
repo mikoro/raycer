@@ -1,4 +1,4 @@
-// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
+﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
 #include "stdafx.h"
@@ -73,7 +73,7 @@ bool Instance::internalIntersect(const Ray& ray, Intersection& intersection, std
 	instanceRay.time = ray.time;
 	instanceRay.fastOcclusion = ray.fastOcclusion;
 	instanceRay.isShadowRay = ray.isShadowRay;
-	instanceRay.update();
+	instanceRay.precalculate();
 
 	bool wasFound = primitive->intersect(instanceRay, instanceIntersection, instanceIntersections);
 

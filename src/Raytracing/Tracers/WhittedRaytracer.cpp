@@ -193,7 +193,7 @@ Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2&
 			sampleRay.origin = cameraPosition + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
 			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
 			sampleRay.time = time;
-			sampleRay.update();
+			sampleRay.precalculate();
 
 			sampledPixelColor += traceRay(scene, sampleRay, sampleIntersection, 0, interrupted);
 		}
@@ -309,7 +309,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 
 		reflectedRay.origin = intersection.position + R * scene.general.rayStartOffset;
 		reflectedRay.direction = R;
-		reflectedRay.update();
+		reflectedRay.precalculate();
 
 		reflectedColor = traceRay(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * totalReflectance;
 
@@ -340,7 +340,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 
 			refractedRay.origin = intersection.position + T * scene.general.rayStartOffset;
 			refractedRay.direction = T;
-			refractedRay.update();
+			refractedRay.precalculate();
 
 			transmittedColor = traceRay(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * totalTransmittance;
 
@@ -499,7 +499,7 @@ double WhittedRaytracer::calculateAmbientOcclusionAmount(const Scene& scene, con
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
 			sampleRay.maxDistance = scene.lights.ambientLight.maxOcclusionDistance;
-			sampleRay.update();
+			sampleRay.precalculate();
 
 			for (Primitive* primitive : scene.primitives.visible)
 			{
@@ -531,7 +531,7 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 	shadowRay.fastOcclusion = true;
 	shadowRay.maxDistance = std::numeric_limits<double>::max();
 	shadowRay.time = ray.time;
-	shadowRay.update();
+	shadowRay.precalculate();
 
 	for (Primitive* primitive : scene.primitives.visible)
 	{
@@ -560,7 +560,7 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 		shadowRay.fastOcclusion = true;
 		shadowRay.maxDistance = (light.position - intersection.position).length();
 		shadowRay.time = ray.time;
-		shadowRay.update();
+		shadowRay.precalculate();
 
 		for (Primitive* primitive : scene.primitives.visible)
 		{
@@ -599,7 +599,7 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 			shadowRay.fastOcclusion = true;
 			shadowRay.maxDistance = (newLightPosition - intersection.position).length();
 			shadowRay.time = ray.time;
-			shadowRay.update();
+			shadowRay.precalculate();
 
 			for (Primitive* primitive : scene.primitives.visible)
 			{

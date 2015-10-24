@@ -289,23 +289,22 @@ CameraState Camera::getCameraState(double time) const
 {
 	if (!isTimeVariant)
 		return cameraState;
-	else
-	{
-		CameraState newCameraState;
-		ONB onb = ONB::fromNormal((orientation + time * rotateInTime).getDirection());
+	
+	CameraState newCameraState;
+	ONB onb = ONB::fromNormal((orientation + time * rotateInTime).getDirection());
 
-		newCameraState.position = position + time * translateInTime;
-		newCameraState.forward = onb.w;
-		newCameraState.right = onb.u;
-		newCameraState.up = onb.v;
-		newCameraState.imagePlaneCenter = newCameraState.position + (newCameraState.forward * imagePlaneDistance);
+	newCameraState.position = position + time * translateInTime;
+	newCameraState.forward = onb.w;
+	newCameraState.right = onb.u;
+	newCameraState.up = onb.v;
+	newCameraState.imagePlaneCenter = newCameraState.position + (newCameraState.forward * imagePlaneDistance);
 
-		return newCameraState;
-	}
+	return newCameraState;
 }
 
 bool Camera::getRay(const Vector2& pixelCoordinate, Ray& ray, double time) const
 {
+	ray = Ray();
 	ray.time = time;
 
 	CameraState currentCameraState = getCameraState(time);
@@ -368,7 +367,6 @@ bool Camera::getRay(const Vector2& pixelCoordinate, Ray& ray, double time) const
 		default: break;
 	}
 
-	ray.update();
-
+	ray.precalculate();
 	return true;
 }

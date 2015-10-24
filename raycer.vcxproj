@@ -208,6 +208,7 @@
     <ClCompile Include="src\Raytracing\Tracers\PathTracer.cpp" />
     <ClCompile Include="src\Raytracing\Tracers\Tracer.cpp" />
     <ClCompile Include="src\Raytracing\Tracers\WhittedRaytracer.cpp" />
+    <ClCompile Include="src\Rendering\Film.cpp" />
     <ClCompile Include="src\Rendering\Filters\BellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\MitchellFilter.cpp" />
@@ -337,6 +338,7 @@
     <ClInclude Include="src\Raytracing\Tracers\TracerState.h" />
     <ClInclude Include="src\Raytracing\Tracers\Tracer.h" />
     <ClInclude Include="src\Raytracing\Tracers\WhittedRaytracer.h" />
+    <ClInclude Include="src\Rendering\Film.h" />
     <ClInclude Include="src\Rendering\Filters\BellFilter.h" />
     <ClInclude Include="src\Rendering\Filters\BoxFilter.h" />
     <ClInclude Include="src\Rendering\Filters\MitchellFilter.h" />

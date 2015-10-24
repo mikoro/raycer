@@ -17,11 +17,6 @@ misc
  - run clang-modernize
  - move random gens to thread locals + remove local gens from everywhere
  - check all shared data usage between threads
- - modernize matrix class + check column-row ordering
- - add quaternion <-> matrix conversion stuff
- - add quaternion interpolation
- - add vector4 and update matrix to calculate correct stuff
- - change from doubles to float
  - add scripts to linux to run clang stuff
  - add spline curve class
  - add camera movement with splines
@@ -39,3 +34,4 @@ misc
  - rename default state -> tracer state
  - add scope exit to obj loader and consolerunner text color
  - replace align macro with alignas
+ - sizeof(Color) -> colorf, check networkrunner image stuff

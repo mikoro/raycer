@@ -391,6 +391,9 @@
     <ClCompile Include="src\Rendering\ImagePool.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Film.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -665,6 +668,9 @@
       <Filter>Math</Filter>
     </ClInclude>
     <ClInclude Include="src\Rendering\ImagePool.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Film.h">
       <Filter>Rendering</Filter>
     </ClInclude>
   </ItemGroup>

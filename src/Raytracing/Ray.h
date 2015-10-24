@@ -13,7 +13,7 @@ namespace Raycer
 	{
 	public:
 
-		void update();
+		void precalculate();
 
 		Vector3 origin;
 		Vector3 direction;
