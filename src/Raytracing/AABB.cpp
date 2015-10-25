@@ -127,17 +127,17 @@ AABB AABB::transformed(const Vector3& scale, const EulerAngle& rotate, const Vec
 	Matrix4x4 translation2 = Matrix4x4::translate(center + translate);
 	Matrix4x4 transformation = translation2 * rotation * scaling * translation1;
 
-	for (uint64_t i = 0; i < 8; ++i)
+	for (auto & corner : corners)
 	{
-		corners[i] = transformation.transformPosition(corners[i]);
+		corner = transformation.transformPosition(corner);
 
-		newMin.x = std::min(newMin.x, corners[i].x);
-		newMin.y = std::min(newMin.y, corners[i].y);
-		newMin.z = std::min(newMin.z, corners[i].z);
+		newMin.x = std::min(newMin.x, corner.x);
+		newMin.y = std::min(newMin.y, corner.y);
+		newMin.z = std::min(newMin.z, corner.z);
 
-		newMax.x = std::max(newMax.x, corners[i].x);
-		newMax.y = std::max(newMax.y, corners[i].y);
-		newMax.z = std::max(newMax.z, corners[i].z);
+		newMax.x = std::max(newMax.x, corner.x);
+		newMax.y = std::max(newMax.y, corner.y);
+		newMax.z = std::max(newMax.z, corner.z);
 	}
 
 	return AABB::createFromMinMax(newMin, newMax);

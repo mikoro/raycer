@@ -177,7 +177,7 @@ void DefaultState::update(double timeStep)
 
 		if (pid == 0)
 		{
-			char* arg[] = { (char*)"raycer", (char*)"-s scene.bin", (char*)"--non-interactive", (char*)"--non-test", (char*)"--view", (char*)0 };
+			char* arg[] = { (char*)"raycer", (char*)"-s scene.bin", (char*)"--non-interactive", (char*)"--non-test", (char*)"--view", (char*)nullptr };
 
 			if (execvp(arg[0], arg) == -1)
 				App::getLog().logWarning("Could not launch external rendering (%d) (try adding raycer to PATH)", errno);

@@ -290,10 +290,8 @@ namespace
 					std::getline(inputStream, line);
 					std::map<std::string, double> propertyValues;
 					
-					for (uint64_t j = 0; j < element.properties.size(); ++j)
+                    for (auto& property : element.properties)
 					{
-						const PlyProperty& property = element.properties.at(j);
-
 						// ignore and skip lists
 						if (property.dataType == PlyType::LIST)
 						{
@@ -333,10 +331,8 @@ namespace
 					std::string part;
 					std::getline(inputStream, line);
 
-					for (uint64_t j = 0; j < element.properties.size(); ++j)
+                    for (auto& property : element.properties)
 					{
-						const PlyProperty& property = element.properties.at(j);
-
 						// only process lists named vertex_indices
 						if (property.dataType == PlyType::LIST && property.name == "vertex_indices")
 						{
@@ -382,10 +378,8 @@ namespace
 				{
 					std::map<std::string, double> propertyValues;
 
-					for (uint64_t j = 0; j < element.properties.size(); ++j)
+                    for (auto& property : element.properties)
 					{
-						const PlyProperty& property = element.properties.at(j);
-
 						// ignore and skip lists
 						if (property.dataType == PlyType::LIST)
 						{
@@ -418,10 +412,8 @@ namespace
 			{
 				for (uint64_t i = 0; i < element.count; ++i)
 				{
-					for (uint64_t j = 0; j < element.properties.size(); ++j)
+                    for (auto& property : element.properties)
 					{
-						const PlyProperty& property = element.properties.at(j);
-
 						// only process lists named vertex_indices
 						if (property.dataType == PlyType::LIST && property.name == "vertex_indices")
 						{

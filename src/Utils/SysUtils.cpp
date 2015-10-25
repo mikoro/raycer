@@ -22,9 +22,9 @@ void SysUtils::openFileExternally(const std::string& filePath)
 	if (pid == 0)
 	{
 #ifdef __linux
-		char* arg[] = { (char*)"xdg-open", (char*)filePath.c_str(), (char*)0 };
+		char* arg[] = { (char*)"xdg-open", (char*)filePath.c_str(), (char*)nullptr };
 #elif __APPLE__
-		char* arg[] = { (char*)"open", (char*)filePath.c_str(), (char*)0 };
+        char* arg[] = { (char*)"open", (char*)filePath.c_str(), (char*)nullptr };
 #endif
 		if (execvp(arg[0], arg) == -1)
 			log.logWarning("Could not open file externally (%d)", errno);
