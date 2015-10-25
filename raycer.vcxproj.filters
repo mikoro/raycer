@@ -397,6 +397,9 @@
     <ClCompile Include="src\Rendering\Samplers\PoissonDiscSampler.cpp">
       <Filter>Rendering\Samplers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Filters\Filter.cpp">
+      <Filter>Rendering\Filters</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">

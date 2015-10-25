@@ -4,34 +4,34 @@
 #include "stdafx.h"
 
 #include "Rendering/Filters/BoxFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
-BoxFilter::BoxFilter(double width_)
+BoxFilter::BoxFilter(double radiusX_, double radiusY_)
 {
-	width = width_;
+	setRadius(radiusX_, radiusY_);
 }
 
-double BoxFilter::getWeight(double x)
+void BoxFilter::setRadius(double radiusX_, double radiusY_)
 {
-	if (std::abs(x) <= width)
-		return 1.0;
+	radiusX = radiusX_;
+	radiusY = radiusY_;
+	weightX = 1.0 / (2.0 * radiusX);
+	weightY = 1.0 / (2.0 * radiusY);
+}
+
+double BoxFilter::getWeightX(double x)
+{
+	if (x >= -radiusX && x < radiusX)
+		return weightX;
 	else
 		return 0.0;
 }
 
-double BoxFilter::getWeight(double x, double y)
+double BoxFilter::getWeightY(double y)
 {
-	return getWeight(x) * getWeight(y);
-}
-
-double BoxFilter::getWeight(const Vector2& point)
-{
-	return getWeight(point.x) * getWeight(point.y);
-}
-
-double BoxFilter::getWidth()
-{
-	return width;
+	if (y >= -radiusY && y < radiusY)
+		return weightY;
+	else
+		return 0.0;
 }

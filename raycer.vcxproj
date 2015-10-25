@@ -211,6 +211,7 @@
     <ClCompile Include="src\Rendering\Film.cpp" />
     <ClCompile Include="src\Rendering\Filters\BellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\BoxFilter.cpp" />
+    <ClCompile Include="src\Rendering\Filters\Filter.cpp" />
     <ClCompile Include="src\Rendering\Filters\MitchellFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\GaussianFilter.cpp" />
     <ClCompile Include="src\Rendering\Filters\LanczosSincFilter.cpp" />

@@ -13,11 +13,9 @@ namespace Raycer
 	{
 	public:
 
-		BellFilter(double width = 1.5);
+		BellFilter();
 
-		double getWeight(double x) override;
-		double getWeight(double x, double y) override;
-		double getWeight(const Vector2& point) override;
-		double getWidth() override;
+		double getWeightX(double x) override;
+		double getWeightY(double y) override;
 	};
 }

@@ -7,7 +7,7 @@ namespace Raycer
 {
 	class Vector2;
 
-	enum class FilterType { BOX, TENT, BELL, MITCHELL, GAUSSIAN, LANCZOS_SINC };
+	enum class FilterType { BOX, TENT, BELL, GAUSSIAN, MITCHELL, LANCZOS_SINC };
 
 	class Filter
 	{
@@ -15,13 +15,21 @@ namespace Raycer
 
 		virtual ~Filter() {}
 
-		virtual double getWeight(double x) = 0;
-		virtual double getWeight(double x, double y) = 0;
-		virtual double getWeight(const Vector2& point) = 0;
-		virtual double getWidth() = 0;
+		virtual double getWeightX(double x) = 0;
+		virtual double getWeightY(double y) = 0;
+
+		double getWeight(double x, double y);
+		double getWeight(const Vector2& point);
+		
+		double getRadiusX() const;
+		double getRadiusY() const;
+		Vector2 getRadius() const;
+
+		static std::unique_ptr<Filter> getFilter(FilterType type);
 
 	protected:
 
-		double width = 1.0;
+		double radiusX = 0.0;
+		double radiusY = 0.0;
 	};
 }

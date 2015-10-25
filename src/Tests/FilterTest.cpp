@@ -11,8 +11,8 @@
 #include "Rendering/Filters/BoxFilter.h"
 #include "Rendering/Filters/TentFilter.h"
 #include "Rendering/Filters/BellFilter.h"
-#include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
+#include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
 
 using namespace Raycer;
@@ -22,31 +22,36 @@ TEST_CASE("Filter functionality", "[filter]")
 	BoxFilter boxFilter;
 	TentFilter tentFilter;
 	BellFilter bellFilter;
-	MitchellFilter mitchellFilter;
 	GaussianFilter gaussianFilter;
-	LanczosSincFilter lanczosFilter;
+	MitchellFilter mitchellFilter;
+	LanczosSincFilter lanczosSincFilter;
 
 	std::map<std::string, Filter*> filters;
 	filters["box"] = &boxFilter;
 	filters["tent"] = &tentFilter;
 	filters["bell"] = &bellFilter;
-	filters["mitchell"] = &mitchellFilter;
 	filters["gaussian"] = &gaussianFilter;
-	filters["lanczos"] = &lanczosFilter;
+	filters["mitchell"] = &mitchellFilter;
+	filters["lanczos_sinc"] = &lanczosSincFilter;
+
+	boxFilter.setRadius(2.0, 2.0);
+	tentFilter.setRadius(2.0, 2.0);
+	gaussianFilter.setStandardDeviations(0.1, 0.1);
+	lanczosSincFilter.setRadius(6, 6);
 
 	for (const auto &filter : filters)
 	{
 		std::ofstream file1(tfm::format("filter_%s_1D.txt", filter.first));
 		std::ofstream file2(tfm::format("filter_%s_2D.txt", filter.first));
 
-		double extent = 8.0;
+		double extent = 12.0;
 		uint64_t steps = 1000;
 		double stepSize = extent / steps;
 
 		for (uint64_t i = 0; i < steps; ++i)
 		{
 			double x = -(extent / 2.0) + i * stepSize;
-			file1 << tfm::format("%f %f\n", x, filter.second->getWeight(x));
+			file1 << tfm::format("%f %f\n", x, filter.second->getWeightX(x));
 		}
 
 		steps = 40;

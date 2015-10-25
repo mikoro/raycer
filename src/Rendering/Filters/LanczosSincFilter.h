@@ -13,11 +13,11 @@ namespace Raycer
 	{
 	public:
 
-		LanczosSincFilter(double width = 2.0);
+		explicit LanczosSincFilter(uint64_t radiusX = 2, uint64_t radiusY = 2);
 
-		double getWeight(double x) override;
-		double getWeight(double x, double y) override;
-		double getWeight(const Vector2& point) override;
-		double getWidth() override;
+		void setRadius(uint64_t radiusX, uint64_t radiusY);
+
+		double getWeightX(double x) override;
+		double getWeightY(double y) override;
 	};
 }

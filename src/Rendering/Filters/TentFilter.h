@@ -13,11 +13,16 @@ namespace Raycer
 	{
 	public:
 
-		TentFilter(double width = 1.0);
+		explicit TentFilter(double radiusX = 1.0, double radiusY = 1.0);
 
-		double getWeight(double x) override;
-		double getWeight(double x, double y) override;
-		double getWeight(const Vector2& point) override;
-		double getWidth() override;
+		void setRadius(double radiusX, double radiusY);
+
+		double getWeightX(double x) override;
+		double getWeightY(double y) override;
+
+	private:
+
+		double radiusXInv = 0.0;
+		double radiusYInv = 0.0;
 	};
 }

@@ -4,7 +4,6 @@
 #include "stdafx.h"
 
 #include "Rendering/Filters/LanczosSincFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
@@ -14,37 +13,38 @@ namespace
 	{
 		return sin(M_PI * x) / (M_PI * x);
 	}
+
+	double calculateWeight(double s, double size)
+	{
+		s = std::abs(s);
+
+		if (s == 0.0)
+			return 1.0;
+
+		if (s > size)
+			return 0.0;
+
+		return sinc(s) * sinc(s / size);
+	}
 }
 
-LanczosSincFilter::LanczosSincFilter(double width_)
+LanczosSincFilter::LanczosSincFilter(uint64_t radiusX_, uint64_t radiusY_)
 {
-	width = width_;
+	setRadius(radiusX_, radiusY_);
 }
 
-double LanczosSincFilter::getWeight(double x)
+void LanczosSincFilter::setRadius(uint64_t radiusX_, uint64_t radiusY_)
 {
-	x = std::abs(x);
-
-	if (x == 0.0)
-		return 1.0;
-
-	if (x > width)
-		return 0.0;
-
-	return sinc(x) * sinc(x / width);
+	radiusX = double(radiusX_);
+	radiusY = double(radiusY_);
 }
 
-double LanczosSincFilter::getWeight(double x, double y)
+double LanczosSincFilter::getWeightX(double x)
 {
-	return getWeight(x) * getWeight(y);
+	return calculateWeight(x, radiusX);
 }
 
-double LanczosSincFilter::getWeight(const Vector2& point)
+double LanczosSincFilter::getWeightY(double y)
 {
-	return getWeight(point.x) * getWeight(point.y);
-}
-
-double LanczosSincFilter::getWidth()
-{
-	return width;
+	return calculateWeight(y, radiusY);
 }

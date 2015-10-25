@@ -4,31 +4,41 @@
 #include "stdafx.h"
 
 #include "Rendering/Filters/TentFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
-TentFilter::TentFilter(double width_)
+namespace
 {
-	width = width_;
+	double calculateWeight(double s)
+	{
+		s = std::abs(s);
+
+		if (s < 1.0)
+			return 1.0 - s;
+		else
+			return 0.0;
+	}
 }
 
-double TentFilter::getWeight(double x)
+TentFilter::TentFilter(double radiusX_, double radiusY_)
 {
-	return std::max(0.0, 1.0 - std::abs(x) / width);
+	setRadius(radiusX_, radiusY_);
 }
 
-double TentFilter::getWeight(double x, double y)
+void TentFilter::setRadius(double radiusX_, double radiusY_)
 {
-	return getWeight(x) * getWeight(y);
+	radiusX = radiusX_;
+	radiusY = radiusY_;
+	radiusXInv = 1.0 / radiusX;
+	radiusYInv = 1.0 / radiusY;
 }
 
-double TentFilter::getWeight(const Vector2& point)
+double TentFilter::getWeightX(double x)
 {
-	return getWeight(point.x) * getWeight(point.y);
+	return calculateWeight(x * radiusXInv) * radiusXInv;
 }
 
-double TentFilter::getWidth()
+double TentFilter::getWeightY(double y)
 {
-	return width;
+	return calculateWeight(y * radiusYInv) * radiusYInv;
 }

@@ -4,34 +4,30 @@
 #include "stdafx.h"
 
 #include "Rendering/Filters/GaussianFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
-GaussianFilter::GaussianFilter(double width_, double alpha_)
+GaussianFilter::GaussianFilter(double stdDevX, double stdDevY)
 {
-	width = width_;
-	alpha = alpha_;
+	setStandardDeviations(stdDevX, stdDevY);
 }
 
-double GaussianFilter::getWeight(double x)
+void GaussianFilter::setStandardDeviations(double stdDevX, double stdDevY)
 {
-	x = std::abs(x);
-
-	return std::max(0.0, exp(-alpha * x * x) - exp(-alpha * width * width));
+	alphaX = 1.0 / (sqrt(2.0 * M_PI) * stdDevX);
+	alphaY = 1.0 / (sqrt(2.0 * M_PI) * stdDevY);
+	betaX = -1.0 / (2.0 * stdDevX * stdDevX);
+	betaY = -1.0 / (2.0 * stdDevY * stdDevY);
+	radiusX = (7.43384 * stdDevX) / 2.0; // from full width at thousandth of maximum
+	radiusY = (7.43384 * stdDevY) / 2.0;
 }
 
-double GaussianFilter::getWeight(double x, double y)
+double GaussianFilter::getWeightX(double x)
 {
-	return getWeight(x) * getWeight(y);
+	return alphaX * exp(x * x * betaX);
 }
 
-double GaussianFilter::getWeight(const Vector2& point)
+double GaussianFilter::getWeightY(double y)
 {
-	return getWeight(point.x) * getWeight(point.y);
-}
-
-double GaussianFilter::getWidth()
-{
-	return width;
+	return alphaY * exp(y * y * betaY);
 }

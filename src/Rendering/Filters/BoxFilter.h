@@ -13,11 +13,16 @@ namespace Raycer
 	{
 	public:
 
-		BoxFilter(double width = 1.0);
+		explicit BoxFilter(double radiusX = 0.5, double radiusY = 0.5);
 
-		double getWeight(double x) override;
-		double getWeight(double x, double y) override;
-		double getWeight(const Vector2& point) override;
-		double getWidth() override;
+		void setRadius(double radiusX, double radiusY);
+
+		double getWeightX(double x) override;
+		double getWeightY(double y) override;
+
+	private:
+
+		double weightX = 0.0;
+		double weightY = 0.0;
 	};
 }

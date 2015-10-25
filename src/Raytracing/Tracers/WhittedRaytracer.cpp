@@ -116,13 +116,13 @@ Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& 
 
 	Filter* filter = filters[scene.general.multiSamplerFilterType].get();
 	double filterWeightSum = 0.0;
-	double filterWidth = filter->getWidth();
+	Vector2 filterRadius = filter->getRadius();
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0 * filterWidth;
+			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0 * filterRadius;
 			double filterWeight = filter->getWeight(sampleOffset);
 			sampledPixelColor += generateTimeSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
 			filterWeightSum += filterWeight;

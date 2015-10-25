@@ -4,38 +4,36 @@
 #include "stdafx.h"
 
 #include "Rendering/Filters/BellFilter.h"
-#include "Math/Vector2.h"
 
 using namespace Raycer;
 
-BellFilter::BellFilter(double width_)
+namespace
 {
-	width = width_;
+	double calculateWeight(double s)
+	{
+		s = std::abs(s);
+
+		if (s < 0.5)
+			return 0.75 - (s * s);
+		else if (s <= 1.5)
+			return 0.5 * pow(s - 1.5, 2.0);
+		else
+			return 0.0;
+	}
 }
 
-double BellFilter::getWeight(double x)
+BellFilter::BellFilter()
 {
-	x = std::abs(x) / (width / 1.5);
-
-	if (x < 0.5)
-		return 0.75 - (x * x);
-	else if (x <= 1.5)
-		return 0.5 * pow(x - 1.5, 2.0);
-	else
-		return 0.0;
+	radiusX = 1.5;
+	radiusY = 1.5;
 }
 
-double BellFilter::getWeight(double x, double y)
+double BellFilter::getWeightX(double x)
 {
-	return getWeight(x) * getWeight(y);
+	return calculateWeight(x);
 }
 
-double BellFilter::getWeight(const Vector2& point)
+double BellFilter::getWeightY(double y)
 {
-	return getWeight(point.x) * getWeight(point.y);
-}
-
-double BellFilter::getWidth()
-{
-	return width;
+	return calculateWeight(y);
 }
