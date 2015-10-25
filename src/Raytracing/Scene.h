@@ -136,7 +136,8 @@ namespace Raycer
 			double gamma = 2.2;
 			double exposure = 0.0;
 			double key = 0.18;
-			double maxLuminance = 1.0;
+			bool enableAveraging = false;
+			double averageAlpha = 0.1;
 
 			template <class Archive>
 			void serialize(Archive& ar)
@@ -147,7 +148,8 @@ namespace Raycer
 					CEREAL_NVP(gamma),
 					CEREAL_NVP(exposure),
 					CEREAL_NVP(key),
-					CEREAL_NVP(maxLuminance));
+					CEREAL_NVP(enableAveraging),
+					CEREAL_NVP(averageAlpha));
 			}
 
 		} toneMapper;

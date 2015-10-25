@@ -161,6 +161,22 @@ void DefaultState::update(double timeStep)
 #endif
 	}
 
+	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
+	{
+		if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
+		{
+			scene.toneMapper.exposure -= 2.0 * timeStep;
+			scene.toneMapper.key -= 0.5 * timeStep;
+		}
+		else if (windowRunner.keyIsDown(GLFW_KEY_PAGE_UP))
+		{
+			scene.toneMapper.exposure += 2.0 * timeStep;
+			scene.toneMapper.key += 0.5 * timeStep;
+		}
+
+		scene.toneMapper.key = std::max(0.0, scene.toneMapper.key);
+	}
+
 	scene.camera.update(scene, timeStep);
 }
 

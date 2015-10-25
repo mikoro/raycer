@@ -4,6 +4,7 @@
 #pragma once
 
 #include "Rendering/ToneMappers/ToneMapper.h"
+#include "Math/MovingAverage.h"
 
 // https://www.cs.utah.edu/~reinhard/cdrom/tonemap.pdf
 
@@ -16,6 +17,12 @@ namespace Raycer
 	{
 	public:
 
+		ReinhardToneMapper();
+
 		void apply(const Scene& scene, const Image& inputImage, Image& outputImage) override;
+
+	private:
+
+		MovingAverage maxLuminanceAverage;
 	};
 }

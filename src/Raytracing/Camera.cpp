@@ -131,24 +131,27 @@ void Camera::update(const Scene& scene, double timeStep)
 			projectionType = CameraProjectionType::PERSPECTIVE;
 	}
 
-	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
+	if (!windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) && !windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
 	{
-		if (projectionType == CameraProjectionType::PERSPECTIVE)
-			fov -= 50.0 * timeStep;
-		else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
-			orthoSize -= 10.0 * timeStep;
-		else if (projectionType == CameraProjectionType::FISHEYE)
-			fishEyeAngle -= 50.0 * timeStep;
-	}
+		if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
+		{
+			if (projectionType == CameraProjectionType::PERSPECTIVE)
+				fov -= 50.0 * timeStep;
+			else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
+				orthoSize -= 10.0 * timeStep;
+			else if (projectionType == CameraProjectionType::FISHEYE)
+				fishEyeAngle -= 50.0 * timeStep;
+		}
 
-	if (windowRunner.keyIsDown(GLFW_KEY_PAGE_UP))
-	{
-		if (projectionType == CameraProjectionType::PERSPECTIVE)
-			fov += 50.0 * timeStep;
-		else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
-			orthoSize += 10.0 * timeStep;
-		else if (projectionType == CameraProjectionType::FISHEYE)
-			fishEyeAngle += 50.0 * timeStep;
+		if (windowRunner.keyIsDown(GLFW_KEY_PAGE_UP))
+		{
+			if (projectionType == CameraProjectionType::PERSPECTIVE)
+				fov += 50.0 * timeStep;
+			else if (projectionType == CameraProjectionType::ORTHOGRAPHIC)
+				orthoSize += 10.0 * timeStep;
+			else if (projectionType == CameraProjectionType::FISHEYE)
+				fishEyeAngle += 50.0 * timeStep;
+		}
 	}
 
 	fov = std::max(1.0, std::min(fov, 180.0));

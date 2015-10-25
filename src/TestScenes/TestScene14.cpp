@@ -16,6 +16,8 @@ Scene Scene::createTestScene14()
 	scene.general.multiSamples = 0;
 
 	scene.toneMapper.type = ToneMapperType::REINHARD;
+	scene.toneMapper.enableAveraging = true;
+	scene.toneMapper.averageAlpha = 0.1;
 
 	// CAMERA //
 

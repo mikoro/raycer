@@ -10,6 +10,11 @@
 
 using namespace Raycer;
 
+ReinhardToneMapper::ReinhardToneMapper()
+{
+	maxLuminanceAverage.setAverage(1.0);
+}
+
 void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
 {
 	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
@@ -18,23 +23,51 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	const double epsilon = std::numeric_limits<double>::epsilon();
 	const int64_t pixelCount = int64_t(inputPixelData.size());
 	double luminanceLogSum = 0.0;
-	//double maxLuminance = 0.0;
+	double maxLuminance = 1.0;
+	double maxLuminancePrivate;
 
-	#pragma omp parallel for reduction(+:luminanceLogSum)
-	for (int64_t i = 0; i < pixelCount; ++i)
-		luminanceLogSum += log(epsilon + inputPixelData.at(uint64_t(i)).toColor().getLuminance());
+	#pragma omp parallel reduction(+ : luminanceLogSum) private(maxLuminancePrivate)
+	{
+		maxLuminancePrivate = 0.0;
 
-	double luminanceLogAvg = exp(luminanceLogSum / double(pixelCount));
-	double scale = scene.toneMapper.key / luminanceLogAvg;
-	double maxLuminance2 = scene.toneMapper.maxLuminance * scene.toneMapper.maxLuminance;
-	double invGamma = 1.0 / scene.toneMapper.gamma;
+		#pragma omp for
+		for (int64_t i = 0; i < pixelCount; ++i)
+		{
+			double luminance = inputPixelData.at(i).toColor().getLuminance();
+			luminanceLogSum += log(epsilon + luminance);
 
+			if (luminance > maxLuminancePrivate)
+				maxLuminancePrivate = luminance;
+		}
+
+		if (maxLuminancePrivate > maxLuminance)
+		{
+			#pragma omp critical
+			{
+				if (maxLuminancePrivate > maxLuminance)
+					maxLuminance = maxLuminancePrivate;
+			}
+		}
+	}
+
+	if (scene.toneMapper.enableAveraging)
+	{
+		maxLuminanceAverage.setAlpha(scene.toneMapper.averageAlpha);
+		maxLuminanceAverage.addMeasurement(maxLuminance);
+		maxLuminance = maxLuminanceAverage.getAverage();
+	}
+
+	const double luminanceLogAvg = exp(luminanceLogSum / double(pixelCount));
+	const double scale = scene.toneMapper.key / luminanceLogAvg;
+	const double maxLuminance2Inv = 1.0 / (maxLuminance * maxLuminance);
+	const double invGamma = 1.0 / scene.toneMapper.gamma;
+	
 	#pragma omp parallel for
 	for (int64_t i = 0; i < pixelCount; ++i)
 	{
 		double originalLuminance = inputPixelData.at(i).toColor().getLuminance();
 		double scaledLuminance = scale * originalLuminance;
-		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance / maxLuminance2))) / (1.0 + scaledLuminance);
+		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance * maxLuminance2Inv))) / (1.0 + scaledLuminance);
 		double colorScale = mappedLuminance / originalLuminance;
 
 		outputPixelData[i] = (inputPixelData.at(i).toColor() * colorScale).toColorf();

@@ -92,7 +92,7 @@ void CLScene::readSceneFull(const Scene& scene)
 	toneMapper.gamma = cl_float(scene.toneMapper.gamma);
 	toneMapper.exposure = cl_float(scene.toneMapper.exposure);
 	toneMapper.key = cl_float(scene.toneMapper.key);
-	toneMapper.maxLuminance = cl_float(scene.toneMapper.maxLuminance);
+	//toneMapper.maxLuminance = cl_float(scene.toneMapper.maxLuminance);
 
 	readColor(simpleFog.color, scene.simpleFog.color);
 	simpleFog.enabled = cl_int(scene.simpleFog.enabled);
