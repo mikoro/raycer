@@ -170,6 +170,7 @@
     <ClCompile Include="src\Math\Matrix4x4.cpp" />
     <ClCompile Include="src\Math\MathUtils.cpp" />
     <ClCompile Include="src\Math\MovingAverage.cpp" />
+    <ClCompile Include="src\Math\ONB.cpp" />
     <ClCompile Include="src\Math\Quaternion.cpp" />
     <ClCompile Include="src\Math\Solver.cpp" />
     <ClCompile Include="src\Math\Vector2.cpp" />
@@ -180,7 +181,6 @@
     <ClCompile Include="src\OpenCL\CLScene.cpp" />
     <ClCompile Include="src\Raytracing\AABB.cpp" />
     <ClCompile Include="src\Raytracing\Camera.cpp" />
-    <ClCompile Include="src\Raytracing\ONB.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\BlinnBlob.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Box.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\CSG.cpp" />
@@ -295,6 +295,7 @@
     <ClInclude Include="src\Math\Matrix4x4.h" />
     <ClInclude Include="src\Math\MathUtils.h" />
     <ClInclude Include="src\Math\MovingAverage.h" />
+    <ClInclude Include="src\Math\ONB.h" />
     <ClInclude Include="src\Math\Polynomial.h" />
     <ClInclude Include="src\Math\Quaternion.h" />
     <ClInclude Include="src\Math\Solver.h" />
@@ -310,7 +311,6 @@
     <ClInclude Include="src\Raytracing\Intersection.h" />
     <ClInclude Include="src\Raytracing\Lights.h" />
     <ClInclude Include="src\Raytracing\Material.h" />
-    <ClInclude Include="src\Raytracing\ONB.h" />
     <ClInclude Include="src\Raytracing\Primitives\BlinnBlob.h" />
     <ClInclude Include="src\Raytracing\Primitives\Box.h" />
     <ClInclude Include="src\Raytracing\Primitives\CSG.h" />

@@ -11,7 +11,7 @@
 #include "Rendering/Samplers/PoissonDiscSampler.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
-#include "Raytracing/ONB.h"
+#include "Math/ONB.h"
 
 using namespace Raycer;
 

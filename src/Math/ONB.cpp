@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "Raytracing/ONB.h"
+#include "Math/ONB.h"
 #include "Math/Matrix4x4.h"
 
 using namespace Raycer;
@@ -14,11 +14,8 @@ ONB::ONB()
 {
 }
 
-ONB::ONB(const Vector3& u_, const Vector3& v_, const Vector3& w_)
+ONB::ONB(const Vector3& u_, const Vector3& v_, const Vector3& w_) : u(u_), v(v_), w(w_)
 {
-	u = u_;
-	v = v_;
-	w = w_;
 }
 
 ONB ONB::transformed(const Matrix4x4& tranformation) const
@@ -34,9 +31,9 @@ ONB ONB::transformed(const Matrix4x4& tranformation) const
 
 ONB ONB::fromNormal(const Vector3& normal)
 {
-	Vector3 u_ = normal.cross(Vector3::ALMOST_UP).normalized();
-	Vector3 v_ = u_.cross(normal).normalized();
-	Vector3 w_ = normal;
+	Vector3 u = normal.cross(Vector3::ALMOST_UP).normalized();
+	Vector3 v = u.cross(normal).normalized();
+	Vector3 w = normal;
 
-	return ONB(u_, v_, w_);
+	return ONB(u, v, w);
 }

@@ -7,7 +7,7 @@
 
 #include "Math/Vector3.h"
 #include "Math/Vector2.h"
-#include "Raytracing/ONB.h"
+#include "Math/ONB.h"
 #include "Raytracing/Primitives/CSG.h"
 
 namespace Raycer

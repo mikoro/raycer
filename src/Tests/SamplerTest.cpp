@@ -14,7 +14,7 @@
 #include "Rendering/Samplers/CMJSampler.h"
 #include "Rendering/Samplers/PoissonDiscSampler.h"
 #include "Rendering/Image.h"
-#include "Raytracing/ONB.h"
+#include "Math/ONB.h"
 #include "Math/Color.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"

@@ -9,7 +9,7 @@
 #include "Raytracing/Intersection.h"
 #include "Raytracing/AABB.h"
 #include "Raytracing/Material.h"
-#include "Raytracing/ONB.h"
+#include "Math/ONB.h"
 #include "Math/EulerAngle.h"
 
 using namespace Raycer;
