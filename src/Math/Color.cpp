@@ -57,6 +57,11 @@ namespace Raycer
 		return Color(c.r * s, c.g * s, c.b * s, c.a * s);
 	}
 
+	Color operator/(const Color& c1, const Color& c2)
+	{
+		return Color(c1.r / c2.r, c1.g / c2.g, c1.b / c2.b, c1.a / c2.a);
+	}
+
 	Color operator/(const Color& c, double s)
 	{
 		double invS = 1.0 / s;

@@ -130,6 +130,30 @@ void DefaultState::update(double timeStep)
 		state.cumulativeSampleCount = 0;
 	}
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_F5))
+	{
+		if (scene.toneMapper.type == ToneMapperType::PASSTHROUGH)
+		{
+			scene.toneMapper.type = ToneMapperType::LINEAR;
+			log.logInfo("Selected linear tone mapper");
+		}
+		else if (scene.toneMapper.type == ToneMapperType::LINEAR)
+		{
+			scene.toneMapper.type = ToneMapperType::SIMPLE;
+			log.logInfo("Selected simple tone mapper");
+		}
+		else if (scene.toneMapper.type == ToneMapperType::SIMPLE)
+		{
+			scene.toneMapper.type = ToneMapperType::REINHARD;
+			log.logInfo("Selected reinhard tone mapper");
+		}
+		else if (scene.toneMapper.type == ToneMapperType::REINHARD)
+		{
+			scene.toneMapper.type = ToneMapperType::PASSTHROUGH;
+			log.logInfo("Selected passthrough tone mapper");
+		}
+	}
+
 	if (windowRunner.keyWasPressed(GLFW_KEY_F6))
 		scene.general.visualizeDepth = !scene.general.visualizeDepth;
 

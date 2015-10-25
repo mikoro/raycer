@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 
-#include "Rendering/ToneMappers/LinearToneMapper.h"
+#include "Rendering/ToneMappers/SimpleToneMapper.h"
 #include "Raytracing/Scene.h"
 #include "Rendering/Image.h"
 #include "Math/Color.h"
@@ -11,18 +11,19 @@
 
 using namespace Raycer;
 
-void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
+void SimpleToneMapper::apply(const Scene& scene, const Image& inputImage, Image& outputImage)
 {
 	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
 	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
 	const double invGamma = 1.0 / scene.toneMapper.gamma;
-	
+
 	#pragma omp parallel for
 	for (int64_t i = 0; i < int64_t(inputPixelData.size()); ++i)
 	{
 		Color inputColor = inputPixelData.at(i).toColor();
 		Color outputColor = inputColor * MathUtils::fastPow(2.0, scene.toneMapper.exposure);
+		outputColor = (outputColor / (Color(1.0, 1.0, 1.0, 1.0) + outputColor));
 
 		if (scene.toneMapper.applyGamma)
 			outputColor = Color::fastPow(outputColor, invGamma);

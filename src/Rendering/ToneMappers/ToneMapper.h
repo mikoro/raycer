@@ -12,7 +12,7 @@ namespace Raycer
 	class Scene;
 	class Image;
 
-	enum class ToneMapperType { PASSTHROUGH, LINEAR, REINHARD };
+	enum class ToneMapperType { PASSTHROUGH, LINEAR, SIMPLE, REINHARD };
 
 	class ToneMapper
 	{

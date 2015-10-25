@@ -24,6 +24,7 @@ namespace Raycer
 		friend Color operator*(const Color& c1, const Color& c2);
 		friend Color operator*(const Color& c, double s);
 		friend Color operator*(double s, const Color& c);
+		friend Color operator/(const Color& c1, const Color& c2);
 		friend Color operator/(const Color& c, double s);
 
 		friend bool operator==(const Color& c1, const Color& c2);

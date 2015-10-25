@@ -403,6 +403,9 @@
     <ClCompile Include="src\Math\ONB.cpp">
       <Filter>Math</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\ToneMappers\SimpleToneMapper.cpp">
+      <Filter>Rendering\ToneMappers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -684,6 +687,9 @@
     </ClInclude>
     <ClInclude Include="src\Math\ONB.h">
       <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\ToneMappers\SimpleToneMapper.h">
+      <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

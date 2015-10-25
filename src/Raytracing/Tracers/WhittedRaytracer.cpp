@@ -28,7 +28,9 @@
 #include "Rendering/Filters/MitchellFilter.h"
 #include "Rendering/Filters/GaussianFilter.h"
 #include "Rendering/Filters/LanczosSincFilter.h"
+#include "Rendering/ToneMappers/PassthroughToneMapper.h"
 #include "Rendering/ToneMappers/LinearToneMapper.h"
+#include "Rendering/ToneMappers/SimpleToneMapper.h"
 #include "Rendering/ToneMappers/ReinhardToneMapper.h"
 
 using namespace Raycer;
@@ -50,7 +52,9 @@ WhittedRaytracer::WhittedRaytracer()
 	filters[FilterType::GAUSSIAN] = std::unique_ptr<GaussianFilter>(new GaussianFilter());
 	filters[FilterType::LANCZOS_SINC] = std::unique_ptr<LanczosSincFilter>(new LanczosSincFilter());
 
+	toneMappers[ToneMapperType::PASSTHROUGH] = std::unique_ptr<PassthroughToneMapper>(new PassthroughToneMapper());
 	toneMappers[ToneMapperType::LINEAR] = std::unique_ptr<LinearToneMapper>(new LinearToneMapper());
+	toneMappers[ToneMapperType::SIMPLE] = std::unique_ptr<SimpleToneMapper>(new SimpleToneMapper());
 	toneMappers[ToneMapperType::REINHARD] = std::unique_ptr<ReinhardToneMapper>(new ReinhardToneMapper());
 }
 

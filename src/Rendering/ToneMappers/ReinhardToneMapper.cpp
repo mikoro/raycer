@@ -26,7 +26,7 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	double maxLuminance = 1.0;
 	double maxLuminancePrivate;
 
-	#pragma omp parallel reduction(+ : luminanceLogSum) private(maxLuminancePrivate)
+	#pragma omp parallel reduction(+:luminanceLogSum) private(maxLuminancePrivate)
 	{
 		maxLuminancePrivate = 0.0;
 
@@ -58,25 +58,29 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	}
 
 	const double luminanceLogAvg = exp(luminanceLogSum / double(pixelCount));
-	const double scale = scene.toneMapper.key / luminanceLogAvg;
+	const double luminanceScale = scene.toneMapper.key / luminanceLogAvg;
 	const double maxLuminance2Inv = 1.0 / (maxLuminance * maxLuminance);
 	const double invGamma = 1.0 / scene.toneMapper.gamma;
 	
 	#pragma omp parallel for
 	for (int64_t i = 0; i < pixelCount; ++i)
 	{
-		double originalLuminance = inputPixelData.at(i).toColor().getLuminance();
-		double scaledLuminance = scale * originalLuminance;
+		Color inputColor = inputPixelData.at(i).toColor();
+
+		double originalLuminance = inputColor.getLuminance();
+		double scaledLuminance = luminanceScale * originalLuminance;
 		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance * maxLuminance2Inv))) / (1.0 + scaledLuminance);
 		double colorScale = mappedLuminance / originalLuminance;
 
-		outputPixelData[i] = (inputPixelData.at(i).toColor() * colorScale).toColorf();
-		outputPixelData[i].a = 1.0;
+		Color outputColor = inputColor * colorScale;
 
 		if (scene.toneMapper.applyGamma)
-			outputPixelData[i] = Color::fastPow(outputPixelData[i].toColor(), invGamma).toColorf();
+			outputColor = Color::fastPow(outputColor, invGamma);
 
 		if (scene.toneMapper.shouldClamp)
-			outputPixelData[i].toColor().clamp().toColorf();
+			outputColor.clamp();
+
+		outputColor.a = 1.0;
+		outputPixelData[i] = outputColor.toColorf();
 	}
 }
