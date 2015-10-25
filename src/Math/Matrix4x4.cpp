@@ -113,9 +113,11 @@ namespace Raycer
 	{
 		Matrix4x4 result;
 
+		double invS = 1.0 / s;
+
 		for (uint64_t r = 0; r <= 3; ++r)
 			for (uint64_t c = 0; c <= 3; ++c)
-				result.m[r][c] = m.m[r][c] / s;
+				result.m[r][c] = m.m[r][c] * invS;
 
 		return result;
 	}

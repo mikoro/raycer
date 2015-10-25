@@ -56,7 +56,8 @@ namespace Raycer
 
 	Vector3 operator/(const Vector3& v, double s)
 	{
-		return Vector3(v.x / s, v.y / s, v.z / s);
+		double invS = 1.0 / s;
+		return Vector3(v.x * invS, v.y * invS, v.z * invS);
 	}
 
 	Vector3 operator-(const Vector3& v)

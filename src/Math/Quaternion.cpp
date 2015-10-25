@@ -69,7 +69,8 @@ namespace Raycer
 
 	Quaternion operator/(const Quaternion& q, double s)
 	{
-		return Quaternion(q.w / s, q.x / s, q.y / s, q.z / s);
+		double invS = 1.0 / s;
+		return Quaternion(q.w * invS, q.x * invS, q.y * invS, q.z * invS);
 	}
 
 	Quaternion operator-(const Quaternion& q)

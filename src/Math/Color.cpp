@@ -59,7 +59,8 @@ namespace Raycer
 
 	Color operator/(const Color& c, double s)
 	{
-		return Color(c.r / s, c.g / s, c.b / s, c.a / s);
+		double invS = 1.0 / s;
+		return Color(c.r * invS, c.g * invS, c.b * invS, c.a * invS);
 	}
 
 	bool operator==(const Color& c1, const Color& c2)
@@ -76,28 +77,24 @@ namespace Raycer
 Color& Color::operator+=(const Color& c)
 {
 	*this = *this + c;
-
 	return *this;
 }
 
 Color& Color::operator-=(const Color& c)
 {
 	*this = *this - c;
-
 	return *this;
 }
 
 Color& Color::operator*=(double s)
 {
 	*this = *this * s;
-
 	return *this;
 }
 
 Color& Color::operator/=(double s)
 {
 	*this = *this / s;
-
 	return *this;
 }
 

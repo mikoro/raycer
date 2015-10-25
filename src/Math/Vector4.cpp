@@ -51,7 +51,8 @@ namespace Raycer
 
 	Vector4 operator/(const Vector4& v, double s)
 	{
-		return Vector4(v.x / s, v.y / s, v.z / s, v.w / s);
+		double invS = 1.0 / s;
+		return Vector4(v.x * invS, v.y * invS, v.z * invS, v.w * invS);
 	}
 
 	Vector4 operator-(const Vector4& v)

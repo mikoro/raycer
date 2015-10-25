@@ -46,7 +46,8 @@ namespace Raycer
 
 	Vector2 operator/(const Vector2& v, double s)
 	{
-		return Vector2(v.x / s, v.y / s);
+		double invS = 1.0 / s;
+		return Vector2(v.x * invS, v.y * invS);
 	}
 
 	Vector2 operator-(const Vector2& v)
