@@ -12,6 +12,7 @@
 *.settings
 *.suppress
 *.gch
+*.plist
 .vs
 My*
 Thumbs.db
