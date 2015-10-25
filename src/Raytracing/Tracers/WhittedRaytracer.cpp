@@ -190,12 +190,12 @@ Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2&
 			}
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalDistance;
-			Vector2 diskCoordinate = sampler->getDiskSample(x, y, n, n);
+			Vector2 discCoordinate = sampler->getDiscSample(x, y, n, n);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
 
-			sampleRay.origin = cameraPosition + ((diskCoordinate.x * apertureSize) * cameraRight + (diskCoordinate.y * apertureSize) * cameraUp);
+			sampleRay.origin = cameraPosition + ((discCoordinate.x * apertureSize) * cameraRight + (discCoordinate.y * apertureSize) * cameraUp);
 			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
 			sampleRay.time = time;
 			sampleRay.precalculate();
@@ -592,7 +592,7 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getDiskSample(x, y, n, n) * light.radius;
+			Vector2 jitter = sampler->getDiscSample(x, y, n, n) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

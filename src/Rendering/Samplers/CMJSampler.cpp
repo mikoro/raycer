@@ -58,11 +58,14 @@ double CMJSampler::getSample1D(uint64_t x, uint64_t n)
 	(void)x;
 	(void)n;
 
+	assert(x < n);
 	return 0.0;
 }
 
 Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
+	assert(x < nx && y < ny);
+
 	Vector2 result;
 
 	uint64_t sx = permute(x, nx, permutation * 0x68bc21eb);

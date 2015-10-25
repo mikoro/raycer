@@ -12,6 +12,7 @@
 #include "Rendering/Samplers/RegularSampler.h"
 #include "Rendering/Samplers/JitteredSampler.h"
 #include "Rendering/Samplers/CMJSampler.h"
+#include "Rendering/Samplers/PoissonDiscSampler.h"
 #include "Rendering/Image.h"
 #include "Raytracing/ONB.h"
 #include "Math/Color.h"
@@ -26,51 +27,62 @@ TEST_CASE("Sampler functionality", "[sampler]")
 	RegularSampler regularSampler;
 	JitteredSampler jitteredSampler;
 	CMJSampler cmjSampler;
+	PoissonDiscSampler poissonDiscSampler;
 
 	std::map<std::string, Sampler*> samplers;
 	samplers["random"] = &randomSampler;
 	samplers["regular"] = &regularSampler;
 	samplers["jittered"] = &jitteredSampler;
 	samplers["cmj"] = &cmjSampler;
+	samplers["poisson_disc"] = &poissonDiscSampler;
 
 	for (const auto &sampler : samplers)
 	{
-		uint64_t n = 32;
-		std::random_device rd;
-		uint64_t permutation = rd();
+		uint64_t sampleCount = 32;
+		Vector2 size = Vector2(99.0, 99.0);
+
 		Image image1(100, 100);
 		Image image2(100, 100);
 		Image image3(100, 100);
-		Vector2 size = Vector2(99.0, 99.0);
+		
 		std::ofstream file(tfm::format("sampler_%s_hemisphere.txt", sampler.first));
 
-		sampler.second->setPermutation(permutation);
+		std::random_device rd;
+		sampler.second->setPermutation(rd());
+		sampler.second->generateSamples1D(sampleCount);
+		sampler.second->generateSamples2D(sampleCount);
 
-		for (uint64_t x = 0; x < n; ++x)
+		double sample1D;
+
+		while (sampler.second->getNextSample1D(sample1D))
 		{
-			double sx = sampler.second->getSample1D(x, n) * size.x;
-			image1.setPixel(uint64_t(sx + 0.5), uint64_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
+			sample1D *= size.x;
+			image1.setPixel(uint64_t(sample1D + 0.5), uint64_t(size.y / 2.0 + 0.5), Color(255, 255, 255));
 		}
 
-		for (uint64_t y = 0; y < n; ++y)
+		Vector2 sample2D;
+
+		while (sampler.second->getNextSample2D(sample2D))
 		{
-			for (uint64_t x = 0; x < n; ++x)
-			{
-				Vector2 sample = sampler.second->getSample2D(x, y, n, n) * size;
-				image2.setPixel(uint64_t(sample.x + 0.5), uint64_t(sample.y + 0.5), Color(255, 255, 255));
-
-				sample = sampler.second->getDiskSample(x, y, n, n);
-				sample = (sample / 2.0 + Vector2(0.5, 0.5)) * size;
-				image3.setPixel(uint64_t(sample.x + 0.5), uint64_t(sample.y + 0.5), Color(255, 255, 255));
-
-				Vector3 hemiSample = sampler.second->getHemisphereSample(ONB::UP, 1.0, x, y, n, n);
-				file << tfm::format("%f %f %f\n", hemiSample.x, hemiSample.y, hemiSample.z);
-			}
+			sample2D *= size;
+			image2.setPixel(uint64_t(sample2D.x + 0.5), uint64_t(sample2D.y + 0.5), Color(255, 255, 255));
 		}
+
+		while (sampler.second->getNextDiscSample(sample2D))
+		{
+			sample2D = (sample2D / 2.0 + Vector2(0.5, 0.5)) * size;
+			image3.setPixel(uint64_t(sample2D.x + 0.5), uint64_t(sample2D.y + 0.5), Color(255, 255, 255));
+		}
+
+		Vector3 sample3D;
+
+		while (sampler.second->getNextHemisphereSample(ONB::UP, 1.0, sample3D))
+			file << tfm::format("%f %f %f\n", sample3D.x, sample3D.y, sample3D.z);
 
 		image1.save(tfm::format("sampler_%s_1D.png", sampler.first));
 		image2.save(tfm::format("sampler_%s_2D.png", sampler.first));
-		image3.save(tfm::format("sampler_%s_disk.png", sampler.first));
+		image3.save(tfm::format("sampler_%s_disc.png", sampler.first));
+
 		file.close();
 	}
 }

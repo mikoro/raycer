@@ -21,7 +21,7 @@ namespace Raycer
 	class Vector3;
 	class ONB;
 
-	enum class SamplerType { RANDOM, REGULAR, JITTERED, CMJ };
+	enum class SamplerType { RANDOM, REGULAR, JITTERED, CMJ, POISSON_DISC };
 
 	class Sampler
 	{
@@ -34,7 +34,7 @@ namespace Raycer
 
 		virtual double getSample1D(uint64_t x, uint64_t n) = 0;
 		virtual Vector2 getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny) = 0;
-		Vector2 getDiskSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny);
+		Vector2 getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny);
 		Vector3 getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny);
 
 		virtual void generateSamples1D(uint64_t sampleCount);
@@ -42,7 +42,7 @@ namespace Raycer
 
 		bool getNextSample1D(double& result);
 		bool getNextSample2D(Vector2& result);
-		bool getNextDiskSample(Vector2& result);
+		bool getNextDiscSample(Vector2& result);
 		bool getNextHemisphereSample(const ONB& onb, double distribution, Vector3& result);
 
 		static std::unique_ptr<Sampler> getSampler(SamplerType type);
@@ -51,8 +51,8 @@ namespace Raycer
 
 		uint64_t permutation = 0;
 
-		uint64_t currentSampleIndex1D = 0;
-		uint64_t currentSampleIndex2D = 0;
+		uint64_t nextSampleIndex1D = 0;
+		uint64_t nextSampleIndex2D = 0;
 
 		std::vector<double> samples1D;
 		std::vector<Vector2> samples2D;

@@ -220,6 +220,7 @@
     <ClCompile Include="src\Rendering\ImagePool.cpp" />
     <ClCompile Include="src\Rendering\Samplers\CMJSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\JitteredSampler.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\PoissonDiscSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\RandomSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\RegularSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\Sampler.cpp" />
@@ -351,6 +352,7 @@
     <ClInclude Include="src\Rendering\ImagePool.h" />
     <ClInclude Include="src\Rendering\Samplers\CMJSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\JitteredSampler.h" />
+    <ClInclude Include="src\Rendering\Samplers\PoissonDiscSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\RandomSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\RegularSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\Sampler.h" />

@@ -9,10 +9,6 @@
 
 namespace Raycer
 {
-	class Vector2;
-	class Vector3;
-	class ONB;
-
 	class RandomSampler : public Sampler
 	{
 	public:

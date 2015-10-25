@@ -394,6 +394,9 @@
     <ClCompile Include="src\Rendering\Film.cpp">
       <Filter>Rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\PoissonDiscSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -672,6 +675,9 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Film.h">
       <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\PoissonDiscSampler.h">
+      <Filter>Rendering\Samplers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

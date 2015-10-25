@@ -20,6 +20,7 @@ double RandomSampler::getSample1D(uint64_t x, uint64_t n)
 	(void)x;
 	(void)n;
 
+	assert(x < n);
 	return randomOffset(generator);
 }
 
@@ -30,5 +31,6 @@ Vector2 RandomSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t
 	(void)nx;
 	(void)ny;
 
+	assert(x < nx && y < ny);
 	return Vector2(randomOffset(generator), randomOffset(generator));
 }

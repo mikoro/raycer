@@ -8,6 +8,7 @@
 #include "Rendering/Samplers/RegularSampler.h"
 #include "Rendering/Samplers/JitteredSampler.h"
 #include "Rendering/Samplers/CMJSampler.h"
+#include "Rendering/Samplers/PoissonDiscSampler.h"
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Raytracing/ONB.h"
@@ -16,11 +17,11 @@ using namespace Raycer;
 
 namespace
 {
-	Vector2 mapToDisk(const Vector2& point)
+	Vector2 mapToDisc(const Vector2& point)
 	{
 		Vector2 result;
 
-		// square to disk polar mapping
+		// square to disc polar mapping
 		double theta = 2.0 * M_PI * point.x;
 		double r = sqrt(point.y);
 
@@ -58,10 +59,10 @@ void Sampler::setPermutation(uint64_t permutation_)
 	permutation = permutation_;
 }
 
-Vector2 Sampler::getDiskSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector2 Sampler::getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
 	Vector2 point = getSample2D(x, y, nx, ny);
-	return mapToDisk(point);
+	return mapToDisc(point);
 }
 
 Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
@@ -74,10 +75,10 @@ void Sampler::generateSamples1D(uint64_t sampleCount)
 {
 	samples1D.resize(sampleCount);
 
-	for (uint64_t x = 0; x < sampleCount; ++x)
-		samples1D[sampleCount] = getSample1D(x, sampleCount);
+	for (uint64_t i = 0; i < sampleCount; ++i)
+		samples1D[i] = getSample1D(i, sampleCount);
 
-	currentSampleIndex1D = 0;
+	nextSampleIndex1D = 0;
 }
 
 void Sampler::generateSamples2D(uint64_t sampleCountSqrt)
@@ -92,51 +93,55 @@ void Sampler::generateSamples2D(uint64_t sampleCountSqrt)
 		}
 	}
 
-	currentSampleIndex2D = 0;
+	nextSampleIndex2D = 0;
 }
 
 bool Sampler::getNextSample1D(double& result)
 {
-	result = samples1D[currentSampleIndex1D];
+	if (nextSampleIndex1D >= samples1D.size())
+	{
+		nextSampleIndex1D = 0;
+		return false;
+	}
 
-	if (++currentSampleIndex1D < samples1D.size())
-		return true;
-
-	currentSampleIndex1D = 0;
-	return false;
+	result = samples1D[nextSampleIndex1D++];
+	return true;
 }
 
 bool Sampler::getNextSample2D(Vector2& result)
 {
-	result = samples2D[currentSampleIndex1D];
+	if (nextSampleIndex2D >= samples2D.size())
+	{
+		nextSampleIndex2D = 0;
+		return false;
+	}
 
-	if (++currentSampleIndex2D < samples2D.size())
-		return true;
-
-	currentSampleIndex2D = 0;
-	return false;
+	result = samples2D[nextSampleIndex2D++];
+	return true;
 }
 
-bool Sampler::getNextDiskSample(Vector2& result)
+bool Sampler::getNextDiscSample(Vector2& result)
 {
-	result = mapToDisk(samples2D[currentSampleIndex1D]);
+	if (nextSampleIndex2D >= samples2D.size())
+	{
+		nextSampleIndex2D = 0;
+		return false;
+	}
 
-	if (++currentSampleIndex2D < samples2D.size())
-		return true;
-
-	currentSampleIndex2D = 0;
-	return false;
+	result = mapToDisc(samples2D[nextSampleIndex2D++]);
+	return true;
 }
 
 bool Sampler::getNextHemisphereSample(const ONB& onb, double distribution, Vector3& result)
 {
-	result = mapToHemisphere(onb, distribution, samples2D[currentSampleIndex1D]);
+	if (nextSampleIndex2D >= samples2D.size())
+	{
+		nextSampleIndex2D = 0;
+		return false;
+	}
 
-	if (++currentSampleIndex2D < samples2D.size())
-		return true;
-
-	currentSampleIndex2D = 0;
-	return false;
+	result = mapToHemisphere(onb, distribution, samples2D[nextSampleIndex2D++]);
+	return true;
 }
 
 std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
@@ -147,6 +152,7 @@ std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
 		case SamplerType::REGULAR: return std::make_unique<RegularSampler>();
 		case SamplerType::JITTERED: return std::make_unique<JitteredSampler>();
 		case SamplerType::CMJ: return std::make_unique<CMJSampler>();
+		case SamplerType::POISSON_DISC: return std::make_unique<PoissonDiscSampler>();
 		default: throw new std::runtime_error("Unknown sampler type");
 	}
 }

@@ -10,11 +10,14 @@ using namespace Raycer;
 
 double RegularSampler::getSample1D(uint64_t x, uint64_t n)
 {
+	assert(x < n);
 	return (double(x) + 0.5) / double(n);
 }
 
 Vector2 RegularSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
 {
+	assert(x < nx && y < ny);
+
 	Vector2 result;
 
 	result.x = (double(x) + 0.5) / double(nx);

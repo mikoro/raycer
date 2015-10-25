@@ -10,53 +10,44 @@
 
 namespace Raycer
 {
-	namespace Poisson
+	struct PoissonDiscCell
 	{
-		struct Cell2D
-		{
-			Vector2 point;
-			bool hasPoint = false;
-		};
+		Vector2 point;
+		bool hasPoint = false;
+	};
 
-		struct Grid2D
-		{
-			std::vector<std::vector<Cell2D>> grid;
-			double cellSize = 0.0;
-			uint64_t width = 0;
-			uint64_t height = 0;
-		};
-
-		struct GridIndex2D
-		{
-			uint64_t x = 0;
-			uint64_t y = 0;
-		};
-	}
+	struct PoissonDiscCellIndex
+	{
+		uint64_t x = 0;
+		uint64_t y = 0;
+	};
 
 	class PoissonDisc
 	{
 	public:
 
 		PoissonDisc();
-		PoissonDisc(uint32_t seed);
+		explicit PoissonDisc(uint32_t seed);
 
 		void seed(uint32_t seed);
-		void generate2D(uint64_t width, uint64_t height, double minDistance, uint64_t iterationLimit = 30);
-
-		std::vector<Vector2>& getPoints2D();
+		std::vector<Vector2> generate(uint64_t width, uint64_t height, double minDistance, uint64_t iterationLimit = 30, bool normalize = false);
 
 	private:
 
-		Poisson::GridIndex2D getGridIndex2D(const Vector2& point);
-		Poisson::Cell2D& getGridCell2D(const Vector2& point);
-		Vector2 getNextActivePoint2D();
-		Vector2 generateNewPoint2D(const Vector2& origin, double minDistance);
-		bool isInNeighbourhood2D(const Vector2& point, double minDistance);
+		PoissonDiscCellIndex getCellIndex(const Vector2& point);
+		PoissonDiscCell& getCell(const Vector2& point);
+		Vector2 getNextPointToProcess();
+		Vector2 generateNewPoint(const Vector2& origin);
+		bool isTooCloseToOthers(const Vector2& point);
 
-		Poisson::Grid2D grid2D;
+		std::vector<std::vector<PoissonDiscCell>> grid;
+		uint64_t gridWidth = 0;
+		uint64_t gridHeight = 0;
+		double cellSize = 0.0;
+		double minDistance = 0.0;
 
-		std::vector<Vector2> points2D;
-		std::vector<Vector2> activePoints2D;
+		std::vector<Vector2> points;
+		std::vector<Vector2> pointsToProcess;
 
 		std::mt19937 generator;
 	};
