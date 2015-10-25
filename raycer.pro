@@ -13,6 +13,7 @@ INCLUDEPATH += include \
 
 HEADERS += src/App.h \
            src/Common.h \
+           src/Settings.h \
            src/stdafx.h \
            src/Math/AxisAngle.h \
            src/Math/Color.h \
@@ -20,27 +21,28 @@ HEADERS += src/App.h \
            src/Math/MathUtils.h \
            src/Math/Matrix4x4.h \
            src/Math/MovingAverage.h \
+           src/Math/ONB.h \
            src/Math/Polynomial.h \
            src/Math/Quaternion.h \
            src/Math/Solver.h \
            src/Math/Vector2.h \
            src/Math/Vector3.h \
+           src/Math/Vector4.h \
            src/OpenCL/CLManager.h \
-           src/OpenCL/CLRaytracer.h \
            src/OpenCL/CLScene.h \
            src/OpenCL/CLStructs.h \
+           src/OpenCL/CLTracer.h \
            src/Raytracing/AABB.h \
            src/Raytracing/Camera.h \
            src/Raytracing/Intersection.h \
            src/Raytracing/Lights.h \
            src/Raytracing/Material.h \
-           src/Raytracing/ONB.h \
            src/Raytracing/Ray.h \
-           src/Raytracing/Raytracer.h \
-           src/Raytracing/RaytracerState.h \
            src/Raytracing/Scene.h \
+           src/Rendering/Film.h \
            src/Rendering/Framebuffer.h \
            src/Rendering/Image.h \
+           src/Rendering/ImagePool.h \
            src/Rendering/Text.h \
            src/Runners/ConsoleRunner.h \
            src/Runners/NetworkRunner.h \
@@ -54,8 +56,9 @@ HEADERS += src/App.h \
            src/Utils/ModelLoader.h \
            src/Utils/PerlinNoise.h \
            src/Utils/PoissonDisc.h \
-           src/Utils/Settings.h \
            src/Utils/StringUtils.h \
+           src/Utils/SysUtils.h \
+           src/Utils/Timer.h \
            src/Utils/ValueNoise.h \
            src/Raytracing/Primitives/BlinnBlob.h \
            src/Raytracing/Primitives/Box.h \
@@ -81,6 +84,10 @@ HEADERS += src/App.h \
            src/Raytracing/Textures/ValueNoiseTexture.h \
            src/Raytracing/Textures/VoronoiTexture.h \
            src/Raytracing/Textures/WoodTexture.h \
+           src/Raytracing/Tracers/PathTracer.h \
+           src/Raytracing/Tracers/Tracer.h \
+           src/Raytracing/Tracers/TracerState.h \
+           src/Raytracing/Tracers/WhittedRaytracer.h \
            src/Rendering/Filters/BellFilter.h \
            src/Rendering/Filters/BoxFilter.h \
            src/Rendering/Filters/Filter.h \
@@ -90,17 +97,21 @@ HEADERS += src/App.h \
            src/Rendering/Filters/TentFilter.h \
            src/Rendering/Samplers/CMJSampler.h \
            src/Rendering/Samplers/JitteredSampler.h \
+           src/Rendering/Samplers/PoissonDiscSampler.h \
            src/Rendering/Samplers/RandomSampler.h \
            src/Rendering/Samplers/RegularSampler.h \
            src/Rendering/Samplers/Sampler.h \
            src/Rendering/ToneMappers/LinearToneMapper.h \
+           src/Rendering/ToneMappers/PassthroughToneMapper.h \
            src/Rendering/ToneMappers/ReinhardToneMapper.h \
+           src/Rendering/ToneMappers/SimpleToneMapper.h \
            src/Rendering/ToneMappers/ToneMapper.h \
            src/Runners/WindowRunnerStates/DefaultState.h \
            src/Runners/WindowRunnerStates/WindowRunnerState.h
 
 SOURCES += src/App.cpp \
            src/gl3w.cpp \
+           src/Settings.cpp \
            src/stdafx.cpp \
            src/Math/AxisAngle.cpp \
            src/Math/Color.cpp \
@@ -108,21 +119,23 @@ SOURCES += src/App.cpp \
            src/Math/MathUtils.cpp \
            src/Math/Matrix4x4.cpp \
            src/Math/MovingAverage.cpp \
+           src/Math/ONB.cpp \
            src/Math/Quaternion.cpp \
            src/Math/Solver.cpp \
            src/Math/Vector2.cpp \
            src/Math/Vector3.cpp \
+           src/Math/Vector4.cpp \
            src/OpenCL/CLManager.cpp \
-           src/OpenCL/CLRaytracer.cpp \
            src/OpenCL/CLScene.cpp \
+           src/OpenCL/CLTracer.cpp \
            src/Raytracing/AABB.cpp \
            src/Raytracing/Camera.cpp \
-           src/Raytracing/ONB.cpp \
            src/Raytracing/Ray.cpp \
-           src/Raytracing/Raytracer.cpp \
            src/Raytracing/Scene.cpp \
+           src/Rendering/Film.cpp \
            src/Rendering/Framebuffer.cpp \
            src/Rendering/Image.cpp \
+           src/Rendering/ImagePool.cpp \
            src/Rendering/Text.cpp \
            src/Runners/ConsoleRunner.cpp \
            src/Runners/NetworkRunner.cpp \
@@ -168,8 +181,9 @@ SOURCES += src/App.cpp \
            src/Utils/PerlinNoise.cpp \
            src/Utils/PlyModelLoader.cpp \
            src/Utils/PoissonDisc.cpp \
-           src/Utils/Settings.cpp \
            src/Utils/StringUtils.cpp \
+           src/Utils/SysUtils.cpp \
+           src/Utils/Timer.cpp \
            src/Utils/ValueNoise.cpp \
            src/Raytracing/Primitives/BlinnBlob.cpp \
            src/Raytracing/Primitives/Box.cpp \
@@ -193,17 +207,25 @@ SOURCES += src/App.cpp \
            src/Raytracing/Textures/ValueNoiseTexture.cpp \
            src/Raytracing/Textures/VoronoiTexture.cpp \
            src/Raytracing/Textures/WoodTexture.cpp \
+           src/Raytracing/Tracers/PathTracer.cpp \
+           src/Raytracing/Tracers/Tracer.cpp \
+           src/Raytracing/Tracers/WhittedRaytracer.cpp \
            src/Rendering/Filters/BellFilter.cpp \
            src/Rendering/Filters/BoxFilter.cpp \
+           src/Rendering/Filters/Filter.cpp \
            src/Rendering/Filters/GaussianFilter.cpp \
            src/Rendering/Filters/LanczosSincFilter.cpp \
            src/Rendering/Filters/MitchellFilter.cpp \
            src/Rendering/Filters/TentFilter.cpp \
            src/Rendering/Samplers/CMJSampler.cpp \
            src/Rendering/Samplers/JitteredSampler.cpp \
+           src/Rendering/Samplers/PoissonDiscSampler.cpp \
            src/Rendering/Samplers/RandomSampler.cpp \
            src/Rendering/Samplers/RegularSampler.cpp \
            src/Rendering/Samplers/Sampler.cpp \
            src/Rendering/ToneMappers/LinearToneMapper.cpp \
+           src/Rendering/ToneMappers/PassthroughToneMapper.cpp \
            src/Rendering/ToneMappers/ReinhardToneMapper.cpp \
+           src/Rendering/ToneMappers/SimpleToneMapper.cpp \
+           src/Rendering/ToneMappers/ToneMapper.cpp \
            src/Runners/WindowRunnerStates/DefaultState.cpp

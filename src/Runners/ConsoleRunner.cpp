@@ -181,25 +181,25 @@ void ConsoleRunner::printProgress(const TimerData& elapsed, const TimerData& rem
 	uint64_t percentage = uint64_t(timer.getPercentage() + 0.5);
 	uint64_t barCount = percentage / 4;
 
-	printf("[");
+    tfm::printf("[");
 
 	for (uint64_t i = 0; i < barCount; ++i)
-		printf("=");
+        tfm::printf("=");
 
 	if (barCount < 25)
 	{
-		printf(">");
+        tfm::printf(">");
 
 		for (uint64_t i = 0; i < (24 - barCount); ++i)
-			printf(" ");
+            tfm::printf(" ");
 	}
 
-	printf("] ");
-	printf("%llu %% | ", percentage);
-	printf("Elapsed time: %s | ", elapsed.getString().c_str());
-	printf("Remaining time: %s | ", remaining.getString().c_str());
-	printf("Pixels/s: %s", StringUtils::humanizeNumber(pixelsPerSecondAverage.getAverage()).c_str());
-	printf("          \r");
+    tfm::printf("] ");
+    tfm::printf("%d %% | ", percentage);
+    tfm::printf("Elapsed time: %s | ", elapsed.getString());
+    tfm::printf("Remaining time: %s | ", remaining.getString());
+    tfm::printf("Pixels/s: %s", StringUtils::humanizeNumber(pixelsPerSecondAverage.getAverage()));
+    tfm::printf("          \r");
 }
 
 void ConsoleRunner::printProgressOpenCL(const TimerData& elapsed, const TimerData& remaining)
@@ -221,8 +221,8 @@ void ConsoleRunner::printProgressOpenCL(const TimerData& elapsed, const TimerDat
 			break;
 	}
 
-	printf("[%c] ", progressChar);
-	printf("Elapsed time: %s | ", elapsed.getString().c_str());
-	printf("Remaining time: %s | ", remaining.getString().c_str());
-	printf("          \r");
+    tfm::printf("[%c] ", progressChar);
+    tfm::printf("Elapsed time: %s | ", elapsed.getString());
+    tfm::printf("Remaining time: %s | ", remaining.getString());
+    tfm::printf("          \r");
 }

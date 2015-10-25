@@ -3,7 +3,7 @@ rwildcard = $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2)$(filter $(subst
 UNAME := $(shell uname -s | tr "[:upper:]" "[:lower:]")
 SOURCES := $(call rwildcard, src/, *.cpp)
 OBJS := $(subst src/,build/,$(SOURCES:.cpp=.o))
-CFLAGS = -isystem include -Isrc -std=c++11 -Wpedantic -Wall -Wextra -Werror -Ofast -fopenmp -Wno-deprecated-declarations
+CFLAGS = -isystem include -Isrc -std=c++14 -Wpedantic -Wall -Wextra -Werror -Ofast -fopenmp -Wno-deprecated-declarations
 LDFLAGS = 
 TARGET = raycer
 

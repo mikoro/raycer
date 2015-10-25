@@ -3,10 +3,13 @@
 
 #pragma once
 
+#include <boost/align/aligned_allocator.hpp>
 #include <cstdint>
 #include <random>
 
 #include "cereal/cereal.hpp"
+
+#include "Common.h"
 
 namespace Raycer
 {
