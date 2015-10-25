@@ -15,37 +15,35 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
 	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
-	double epsilon = std::numeric_limits<double>::epsilon();
-	int64_t pixelCount = int64_t(inputPixelData.size());
-	double logSum = 0.0;
+	const double epsilon = std::numeric_limits<double>::epsilon();
+	const int64_t pixelCount = int64_t(inputPixelData.size());
+	double luminanceLogSum = 0.0;
+	//double maxLuminance = 0.0;
 
-	#pragma omp parallel for reduction(+:logSum)
+	#pragma omp parallel for reduction(+:luminanceLogSum)
 	for (int64_t i = 0; i < pixelCount; ++i)
-		logSum += log(epsilon + inputPixelData.at(uint64_t(i)).toColor().getLuminance());
+		luminanceLogSum += log(epsilon + inputPixelData.at(uint64_t(i)).toColor().getLuminance());
 
-	double logAvgLuminance = exp(logSum / double(pixelCount));
-	double scale = scene.toneMapper.key / logAvgLuminance;
+	double luminanceLogAvg = exp(luminanceLogSum / double(pixelCount));
+	double scale = scene.toneMapper.key / luminanceLogAvg;
 	double maxLuminance2 = scene.toneMapper.maxLuminance * scene.toneMapper.maxLuminance;
 	double invGamma = 1.0 / scene.toneMapper.gamma;
 
 	#pragma omp parallel for
 	for (int64_t i = 0; i < pixelCount; ++i)
 	{
-		// fix static analysis warnings
-		uint64_t j = uint64_t(i);
-
-		double originalLuminance = inputPixelData.at(j).toColor().getLuminance();
+		double originalLuminance = inputPixelData.at(i).toColor().getLuminance();
 		double scaledLuminance = scale * originalLuminance;
 		double mappedLuminance = (scaledLuminance * (1.0 + (scaledLuminance / maxLuminance2))) / (1.0 + scaledLuminance);
 		double colorScale = mappedLuminance / originalLuminance;
 
-		outputPixelData[j] = (inputPixelData.at(j).toColor() * colorScale).toColorf();
-		outputPixelData[j].a = 1.0;
+		outputPixelData[i] = (inputPixelData.at(i).toColor() * colorScale).toColorf();
+		outputPixelData[i].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			outputPixelData[j] = Color::pow(outputPixelData[j].toColor(), invGamma).toColorf();
+			outputPixelData[i] = Color::fastPow(outputPixelData[i].toColor(), invGamma).toColorf();
 
 		if (scene.toneMapper.shouldClamp)
-			outputPixelData[j].toColor().clamp().toColorf();
+			outputPixelData[i].toColor().clamp().toColorf();
 	}
 }

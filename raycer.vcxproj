@@ -229,6 +229,7 @@
     <ClCompile Include="src\Rendering\ToneMappers\LinearToneMapper.cpp" />
     <ClCompile Include="src\Rendering\ToneMappers\PassthroughToneMapper.cpp" />
     <ClCompile Include="src\Rendering\ToneMappers\ReinhardToneMapper.cpp" />
+    <ClCompile Include="src\Rendering\ToneMappers\ToneMapper.cpp" />
     <ClCompile Include="src\Runners\ConsoleRunner.cpp" />
     <ClCompile Include="src\Runners\WindowRunner.cpp" />
     <ClCompile Include="src\Runners\NetworkRunner.cpp" />

@@ -5,6 +5,8 @@
 
 #include "Rendering/ToneMappers/ToneMapper.h"
 
+// https://www.cs.utah.edu/~reinhard/cdrom/tonemap.pdf
+
 namespace Raycer
 {
 	class Scene;

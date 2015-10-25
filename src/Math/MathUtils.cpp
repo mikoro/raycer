@@ -58,10 +58,10 @@ double MathUtils::fastPow(double a, double b)
 	union
 	{
 		double d;
-		uint32_t x[2];
+		int32_t x[2];
 	} u = {a};
 
-	u.x[1] = static_cast<uint32_t>(b * (u.x[1] - 1072632447) + 1072632447);
+	u.x[1] = static_cast<int32_t>(b * (u.x[1] - 1072632447) + 1072632447);
 	u.x[0] = 0;
 
 	return u.d;

@@ -20,16 +20,13 @@ void LinearToneMapper::apply(const Scene& scene, const Image& inputImage, Image&
 	#pragma omp parallel for
 	for (int64_t i = 0; i < int64_t(inputPixelData.size()); ++i)
 	{
-		// fix static analysis warnings
-		uint64_t j = uint64_t(i);
-
-		outputPixelData[j] = (inputPixelData.at(j).toColor() * pow(2.0, scene.toneMapper.exposure)).toColorf();
-		outputPixelData[j].a = 1.0;
+		outputPixelData[i] = (inputPixelData.at(i).toColor() * pow(2.0, scene.toneMapper.exposure)).toColorf();
+		outputPixelData[i].a = 1.0;
 
 		if (scene.toneMapper.applyGamma)
-			outputPixelData[j] = Color::pow(outputPixelData[j].toColor(), invGamma).toColorf();
+			outputPixelData[i] = Color::fastPow(outputPixelData[i].toColor(), invGamma).toColorf();
 
 		if (scene.toneMapper.shouldClamp)
-			outputPixelData[j].toColor().clamp().toColorf();
+			outputPixelData[i].toColor().clamp().toColorf();
 	}
 }
