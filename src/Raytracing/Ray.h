@@ -5,6 +5,7 @@
 
 #include <limits>
 
+#include "Math/Vector2.h"
 #include "Math/Vector3.h"
 
 namespace Raycer
@@ -18,6 +19,7 @@ namespace Raycer
 		Vector3 origin;
 		Vector3 direction;
 		Vector3 inverseDirection;
+		Vector2 sampleOffset;
 
 		double minDistance = std::numeric_limits<double>::lowest();
 		double maxDistance = std::numeric_limits<double>::max();

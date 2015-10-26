@@ -16,12 +16,7 @@ namespace Raycer
 	class Primitive;
 	class ONB;
 
-	enum class CameraProjectionType
-	{
-		PERSPECTIVE,
-		ORTHOGRAPHIC,
-		FISHEYE
-	};
+	enum class CameraProjectionType { PERSPECTIVE, ORTHOGRAPHIC, FISHEYE };
 
 	struct CameraState
 	{

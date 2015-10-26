@@ -144,6 +144,12 @@ bool Sampler::getNextHemisphereSample(const ONB& onb, double distribution, Vecto
 	return true;
 }
 
+void Sampler::reset()
+{
+	nextSampleIndex1D = 0;
+	nextSampleIndex2D = 0;
+}
+
 std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
 {
 	switch (type)

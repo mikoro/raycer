@@ -22,6 +22,6 @@ namespace Raycer
 
 		virtual void apply(const Scene& scene, const Image& inputImage, Image& outputImage) = 0;
 
-		static std::unique_ptr<ToneMapper> getSampler(ToneMapperType type);
+		static std::unique_ptr<ToneMapper> getToneMapper(ToneMapperType type);
 	};
 }

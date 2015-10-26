@@ -16,48 +16,41 @@ namespace Raycer
 {
 	class Camera;
 	class Ray;
+	class Scene;
 
 	struct FilmPixel
 	{
-		Color cumulativeColor;
+		Color cumulativeColor = Color(0.0, 0.0, 0.0, 0.0);
 		double filterWeightSum = 0.0;
-		uint64_t samplesLeft = 1;
-		uint64_t sampleX = 0;
-		uint64_t sampleY = 0;
+		std::unique_ptr<Sampler> sampler = nullptr;
 	};
 
 	class Film
 	{
 	public:
 
-		Film();
-		Film(uint64_t width, uint64_t height);
-
 		void resize(uint64_t width, uint64_t height);
+		void setSampler(SamplerType type, uint64_t sampleCountSqrt);
+		void setFilter(FilterType type);
+		void setToneMapper(ToneMapperType type);
+
 		void clear();
-		void resetSampleCounts();
-		bool getRay(uint64_t x, uint64_t y, const Camera& camera, Ray& ray);
-		void applyToneMap();
+		bool getNextRay(uint64_t x, uint64_t y, const Camera& camera, Ray& ray, double time);
+		void addSample(uint64_t x, uint64_t y, const Vector2& sampleOffset, const Color& color);
+		void generateOutputImage(const Scene& scene);
 
-		void setSampleCount(uint64_t sampleCountSqrt);
-		void setSampler(std::unique_ptr<Sampler> sampler);
-		void setFilter(std::unique_ptr<Filter> filter);
-		void setToneMapper(std::unique_ptr<ToneMapper> toneMapper);
-
-		const std::vector<FilmPixel>& getFilmPixels() const;
-		const Image& getOutputImage() const;
+		const Image& getToneMappedImage() const;
 
 	private:
 
 		uint64_t width = 0;
 		uint64_t height = 0;
-		uint64_t sampleCountSqrt = 1;
 
-		std::unique_ptr<Sampler> sampler = nullptr;
 		std::unique_ptr<Filter> filter = nullptr;
 		std::unique_ptr<ToneMapper> toneMapper = nullptr;
 
 		std::vector<FilmPixel> filmPixels;
-		Image outputImage;
+		Image linearImage;
+		Image toneMappedImage;
 	};
 }

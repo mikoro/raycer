@@ -11,7 +11,7 @@
 
 using namespace Raycer;
 
-std::unique_ptr<ToneMapper> ToneMapper::getSampler(ToneMapperType type)
+std::unique_ptr<ToneMapper> ToneMapper::getToneMapper(ToneMapperType type)
 {
 	switch (type)
 	{
