@@ -39,23 +39,25 @@ void Film::resize(uint64_t length)
 
 void Film::clear()
 {
-	for (auto& filmPixel : filmPixels)
-	{
-		filmPixel.cumulativeColor = Color(0.0, 0.0, 0.0, 0.0);
-		filmPixel.filterWeightSum = 0.0;
-	}
+	std::memset(&filmPixels[0], 0, filmPixels.size() * sizeof(FilmPixel));
 }
 
 void Film::addSample(uint64_t x, uint64_t y, const Color& color, double filterWeight)
 {
-	FilmPixel& filmPixel = filmPixels[y * width + x];
+	addSample(y * width + x, color, filterWeight);
+}
+
+void Film::addSample(uint64_t index, const Color& color, double filterWeight)
+{
+	FilmPixel& filmPixel = filmPixels[index];
 	filmPixel.cumulativeColor += color * filterWeight;
 	filmPixel.filterWeightSum += filterWeight;
 }
 
 void Film::generateToneMappedImage(const Scene& scene)
 {
-	for (uint64_t i = 0; i < filmPixels.size(); ++i)
+	#pragma omp parallel for
+	for (int64_t i = 0; i < int64_t(filmPixels.size()); ++i)
 		linearImage.setPixel(i, filmPixels[i].cumulativeColor / filmPixels[i].filterWeightSum);
 
 	ToneMapper* toneMapper = toneMappers[scene.toneMapper.type].get();

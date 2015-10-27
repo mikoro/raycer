@@ -4,6 +4,7 @@
 #include "stdafx.h"
 
 #include "Rendering/Samplers/Sampler.h"
+#include "Rendering/Samplers/CenterSampler.h"
 #include "Rendering/Samplers/RandomSampler.h"
 #include "Rendering/Samplers/RegularSampler.h"
 #include "Rendering/Samplers/JitteredSampler.h"
@@ -14,6 +15,20 @@
 #include "Math/ONB.h"
 
 using namespace Raycer;
+
+std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
+{
+	switch (type)
+	{
+		case SamplerType::CENTER: return std::make_unique<CenterSampler>();
+		case SamplerType::RANDOM: return std::make_unique<RandomSampler>();
+		case SamplerType::REGULAR: return std::make_unique<RegularSampler>();
+		case SamplerType::JITTERED: return std::make_unique<JitteredSampler>();
+		case SamplerType::CMJ: return std::make_unique<CMJSampler>();
+		case SamplerType::POISSON_DISC: return std::make_unique<PoissonDiscSampler>();
+		default: throw new std::runtime_error("Unknown sampler type");
+	}
+}
 
 namespace
 {
@@ -141,17 +156,4 @@ void Sampler::reset()
 {
 	nextSampleIndex1D = 0;
 	nextSampleIndex2D = 0;
-}
-
-std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
-{
-	switch (type)
-	{
-		case SamplerType::RANDOM: return std::make_unique<RandomSampler>();
-		case SamplerType::REGULAR: return std::make_unique<RegularSampler>();
-		case SamplerType::JITTERED: return std::make_unique<JitteredSampler>();
-		case SamplerType::CMJ: return std::make_unique<CMJSampler>();
-		case SamplerType::POISSON_DISC: return std::make_unique<PoissonDiscSampler>();
-		default: throw new std::runtime_error("Unknown sampler type");
-	}
 }

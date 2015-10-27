@@ -232,9 +232,6 @@ void DefaultState::render(double timeStep, double interpolation)
 	CLTracer& clTracer = App::getCLTracer();
 	Text& text = windowRunner.getDefaultText();
 
-	if (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved())
-		sampleCount = 0;
-
 	TracerState state;
 	state.scene = &scene;
 	state.film = &film;
@@ -242,6 +239,14 @@ void DefaultState::render(double timeStep, double interpolation)
 	state.filmHeight = film.getHeight();
 	state.pixelStartOffset = 0;
 	state.pixelCount = state.filmWidth * state.filmHeight;
+
+	if (scene.general.tracerType == TracerType::RAY || (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved()))
+	{
+		film.clear();
+		sampleCount = 0;
+	}
+
+	++sampleCount;
 
 	if (!settings.openCL.enabled)
 	{

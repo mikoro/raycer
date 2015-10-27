@@ -30,6 +30,7 @@ namespace Raycer
 		void resize(uint64_t length);
 		void clear();
 		void addSample(uint64_t x, uint64_t y, const Color& color, double filterWeight);
+		void addSample(uint64_t index, const Color& color, double filterWeight);
 		
 		void generateToneMappedImage(const Scene& scene);
 		void setToneMappedImage(const Image& other);

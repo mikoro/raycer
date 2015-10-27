@@ -21,7 +21,7 @@ namespace Raycer
 	class Vector3;
 	class ONB;
 
-	enum class SamplerType { RANDOM, REGULAR, JITTERED, CMJ, POISSON_DISC };
+	enum class SamplerType { CENTER, RANDOM, REGULAR, JITTERED, CMJ, POISSON_DISC };
 
 	class Sampler
 	{

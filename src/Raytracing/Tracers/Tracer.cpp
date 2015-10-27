@@ -13,6 +13,7 @@
 #include "Settings.h"
 #include "TracerState.h"
 #include "Rendering/Film.h"
+#include "Rendering/Samplers/CenterSampler.h"
 #include "Rendering/Samplers/RandomSampler.h"
 #include "Rendering/Samplers/RegularSampler.h"
 #include "Rendering/Samplers/JitteredSampler.h"
@@ -39,6 +40,7 @@ std::unique_ptr<Tracer> Tracer::getTracer(TracerType type)
 
 Tracer::Tracer()
 {
+	samplers[SamplerType::CENTER] = std::make_unique<CenterSampler>();
 	samplers[SamplerType::RANDOM] = std::make_unique<RandomSampler>();
 	samplers[SamplerType::REGULAR] = std::make_unique<RegularSampler>();
 	samplers[SamplerType::JITTERED] = std::make_unique<JitteredSampler>();
@@ -81,11 +83,12 @@ void Tracer::run(TracerState& state, std::atomic<bool>& interrupted)
 				continue;
 
 			uint64_t offsetPixelIndex = uint64_t(pixelIndex) + state.pixelStartOffset;
-			uint64_t x = offsetPixelIndex % state.filmWidth;
-			uint64_t y = offsetPixelIndex / state.filmWidth;
-			
+			double x = double(offsetPixelIndex % state.filmWidth);
+			double y = double(offsetPixelIndex / state.filmWidth);
+			Vector2 pixelCoordinate = Vector2(x, y);
 			std::mt19937& generator = generators[omp_get_thread_num()];
-			generateMultiSamples(*state.scene, x, y, *state.film, generator, interrupted);
+
+			generateMultiSamples(*state.scene, *state.film, pixelCoordinate, uint64_t(pixelIndex), generator, interrupted);
 			
 			// progress reporting to another thread
 			if ((pixelIndex + 1) % 100 == 0)
@@ -109,7 +112,7 @@ void Tracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		state.pixelsProcessed = state.pixelCount;
 }
 
-void Tracer::generateMultiSamples(const Scene& scene, uint64_t x, uint64_t y, Film& film, std::mt19937& generator, const std::atomic<bool>& interrupted)
+void Tracer::generateMultiSamples(const Scene& scene, Film& film, const Vector2& pixelCoordinate, uint64_t pixelIndex, std::mt19937& generator, const std::atomic<bool>& interrupted)
 {
 	assert(scene.general.multiSamples >= 1);
 
@@ -118,8 +121,6 @@ void Tracer::generateMultiSamples(const Scene& scene, uint64_t x, uint64_t y, Fi
 
 	std::uniform_int_distribution<uint64_t> randomPermutation;
 	uint64_t permutation = randomPermutation(generator);
-
-	Vector2 pixelCoordinate = Vector2(double(x), double(y));
 	uint64_t n = scene.general.multiSamples;
 
 	for (uint64_t sy = 0; sy < n; ++sy)
@@ -128,10 +129,9 @@ void Tracer::generateMultiSamples(const Scene& scene, uint64_t x, uint64_t y, Fi
 		{
 			Vector2 sampleOffset = sampler->getSample2D(sx, sy, n, n, permutation);
 			sampleOffset = (sampleOffset - Vector2(0.5, 0.5)) * 2.0 * filter->getRadius();
-			//double filterWeight = filter->getWeight(sampleOffset);
+			double filterWeight = filter->getWeight(sampleOffset);
 			Color sampledPixelColor = generateTimeSamples(scene, pixelCoordinate + sampleOffset, generator, interrupted);
-			//film.addSample(x, y, sampledPixelColor, filterWeight);
-			film.addSample(x, y, Color::RED, 1);
+			film.addSample(pixelIndex, sampledPixelColor, filterWeight);
 		}
 	}
 }

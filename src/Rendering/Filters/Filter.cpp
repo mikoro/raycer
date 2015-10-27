@@ -14,6 +14,20 @@
 
 using namespace Raycer;
 
+std::unique_ptr<Filter> Filter::getFilter(FilterType type)
+{
+	switch (type)
+	{
+		case FilterType::BOX: return std::make_unique<BoxFilter>();
+		case FilterType::TENT: return std::make_unique<TentFilter>();
+		case FilterType::BELL: return std::make_unique<BellFilter>();
+		case FilterType::GAUSSIAN: return std::make_unique<GaussianFilter>();
+		case FilterType::MITCHELL: return std::make_unique<MitchellFilter>();
+		case FilterType::LANCZOS_SINC: return std::make_unique<LanczosSincFilter>();
+		default: throw new std::runtime_error("Unknown filter type");
+	}
+}
+
 double Filter::getWeight(double x, double y)
 {
 	return getWeightX(x) * getWeightY(y);
@@ -37,18 +51,4 @@ double Filter::getRadiusY() const
 Vector2 Filter::getRadius() const
 {
 	return Vector2(radiusX, radiusY);
-}
-
-std::unique_ptr<Filter> Filter::getFilter(FilterType type)
-{
-	switch (type)
-	{
-		case FilterType::BOX: return std::make_unique<BoxFilter>();
-		case FilterType::TENT: return std::make_unique<TentFilter>();
-		case FilterType::BELL: return std::make_unique<BellFilter>();
-		case FilterType::GAUSSIAN: return std::make_unique<GaussianFilter>();
-		case FilterType::MITCHELL: return std::make_unique<MitchellFilter>();
-		case FilterType::LANCZOS_SINC: return std::make_unique<LanczosSincFilter>();
-		default: throw new std::runtime_error("Unknown filter type");
-	}
 }

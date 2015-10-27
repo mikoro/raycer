@@ -219,6 +219,7 @@
     <ClCompile Include="src\Rendering\Filters\TentFilter.cpp" />
     <ClCompile Include="src\Rendering\Image.cpp" />
     <ClCompile Include="src\Rendering\ImagePool.cpp" />
+    <ClCompile Include="src\Rendering\Samplers\CenterSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\CMJSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\JitteredSampler.cpp" />
     <ClCompile Include="src\Rendering\Samplers\PoissonDiscSampler.cpp" />
@@ -353,6 +354,7 @@
     <ClInclude Include="src\Rendering\Filters\TentFilter.h" />
     <ClInclude Include="src\Rendering\Image.h" />
     <ClInclude Include="src\Rendering\ImagePool.h" />
+    <ClInclude Include="src\Rendering\Samplers\CenterSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\CMJSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\JitteredSampler.h" />
     <ClInclude Include="src\Rendering\Samplers\PoissonDiscSampler.h" />

@@ -406,6 +406,9 @@
     <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp">
       <Filter>Runners\WindowRunnerStates</Filter>
     </ClCompile>
+    <ClCompile Include="src\Rendering\Samplers\CenterSampler.cpp">
+      <Filter>Rendering\Samplers</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -690,6 +693,9 @@
     </ClInclude>
     <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h">
       <Filter>Runners\WindowRunnerStates</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\Samplers\CenterSampler.h">
+      <Filter>Rendering\Samplers</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
