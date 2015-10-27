@@ -223,12 +223,12 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
-	const uint64_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
+	const size_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
 
 	if (state.scene->general.tracerType == TracerType::PATH && state.scene->camera.hasMoved())
 	{
-		uint64_t origin[3] = { 0, 0, 0 };
-		uint64_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
+		size_t origin[3] = { 0, 0, 0 };
+		size_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
 		float fillColor[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
 		
 		clEnqueueFillImage(clManager.commandQueue, outputImagePtr, fillColor, origin, region, 0, nullptr, nullptr);
@@ -256,8 +256,8 @@ Image CLTracer::downloadImage()
 
 	log.logInfo("Downloading image data from the OpenCL device");
 
-	uint64_t origin[3] = { 0, 0, 0 };
-	uint64_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
+	size_t origin[3] = { 0, 0, 0 };
+	size_t region[3] = { imageBufferWidth, imageBufferHeight, 1 };
 
 	std::vector<float> data(imageBufferWidth * imageBufferHeight * 4);
 
@@ -412,8 +412,8 @@ void CLTracer::createTextureImages()
 
 		totalBytes += image.getLength() * sizeof(float);
 
-		uint64_t origin[3] = { 0, 0, 0 };
-		uint64_t region[3] = { image.getWidth(), image.getHeight(), 1 };
+		size_t origin[3] = { 0, 0, 0 };
+		size_t region[3] = { image.getWidth(), image.getHeight(), 1 };
 
 		status = clEnqueueWriteImage(clManager.commandQueue, textureImagePtr, CL_TRUE, &origin[0], &region[0], 0, 0, &image.getPixelDataConst()[0], 0, nullptr, nullptr);
 

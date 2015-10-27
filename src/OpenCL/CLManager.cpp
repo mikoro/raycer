@@ -14,7 +14,7 @@ using namespace boost::filesystem;
 
 namespace
 {
-	void CL_CALLBACK openCLErrorCallback(const char* message, const void* privateInfo, uint64_t cb, void* userData)
+	void CL_CALLBACK openCLErrorCallback(const char* message, const void* privateInfo, size_t cb, void* userData)
 	{
 		(void)privateInfo;
 		(void)cb;
@@ -79,7 +79,7 @@ void CLManager::initialize()
 	checkError(clGetPlatformIDs(platformCount, &platformIds[0], nullptr), "Could not get platforms");
 	platformId = platformIds[settings.openCL.platformId];
 
-	uint64_t length = 0;
+	size_t length = 0;
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, 0, nullptr, &length);
 	std::vector<char> platformName(length);
 	clGetPlatformInfo(platformId, CL_PLATFORM_NAME, length, &platformName[0], nullptr);
@@ -186,7 +186,7 @@ cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePa
 	const char* sourceStringPtr = sourceString.c_str();
 
 	cl_int status = 0;
-	uint64_t length = 0;
+	size_t length = 0;
 
 	cl_program program = clCreateProgramWithSource(context, 1, &sourceStringPtr, nullptr, &status);
 	checkError(status, "Could not read program source file");
