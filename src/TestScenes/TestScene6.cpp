@@ -12,8 +12,6 @@ Scene Scene::createTestScene6()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 0;
-
 	scene.rootBVH.enabled = true;
 
 	scene.simpleFog.enabled = true;

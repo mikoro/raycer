@@ -307,7 +307,6 @@ CameraState Camera::getCameraState(double time) const
 
 bool Camera::getRay(const Vector2& pixelCoordinate, Ray& ray, double time) const
 {
-	ray = Ray();
 	ray.time = time;
 
 	CameraState currentCameraState = getCameraState(time);

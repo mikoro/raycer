@@ -12,10 +12,6 @@ Scene Scene::createTestScene2()
 {
 	Scene scene;
 
-	scene.general.multiSamplerType = SamplerType::CMJ;
-	scene.general.multiSamplerFilterType = FilterType::MITCHELL;
-	scene.general.multiSamples = 0;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 0.5, 0.0);

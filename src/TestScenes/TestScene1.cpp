@@ -12,8 +12,6 @@ Scene Scene::createTestScene1()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 1;
-
 	scene.rootBVH.enabled = true;
 	scene.rootBVH.buildInfo.maxLeafSize = 1;
 

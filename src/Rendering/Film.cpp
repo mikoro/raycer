@@ -9,6 +9,8 @@
 #include "Rendering/ToneMappers/SimpleToneMapper.h"
 #include "Rendering/ToneMappers/ReinhardToneMapper.h"
 #include "Raytracing/Scene.h"
+#include "App.h"
+#include "Utils/Log.h"
 
 using namespace Raycer;
 
@@ -24,6 +26,8 @@ void Film::resize(uint64_t width_, uint64_t height_)
 {
 	width = width_;
 	height = height_;
+
+	App::getLog().logInfo("Resizing film to %sx%s", width, height);
 
 	filmPixels.resize(width * height);
 	linearImage.resize(width, height);

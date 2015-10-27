@@ -13,8 +13,7 @@ Scene Scene::createTestScene14()
 	Scene scene;
 
 	scene.general.maxRayIterations = 8;
-	scene.general.multiSamples = 0;
-
+	
 	scene.toneMapper.type = ToneMapperType::REINHARD;
 	scene.toneMapper.enableAveraging = true;
 	scene.toneMapper.averageAlpha = 0.1;

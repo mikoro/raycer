@@ -12,7 +12,6 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 0;
 	scene.general.cameraSamples = 3;
 
 	// CAMERA //

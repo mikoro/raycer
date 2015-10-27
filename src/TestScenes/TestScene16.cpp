@@ -12,7 +12,6 @@ Scene Scene::createTestScene16()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 0;
 	scene.general.timeSamples = 3;
 
 	scene.simpleFog.enabled = false;

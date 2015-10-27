@@ -12,9 +12,6 @@ Scene Scene::createTestScene18()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 0;
-	scene.general.cameraSamples = 0;
-
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //

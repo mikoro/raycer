@@ -12,8 +12,6 @@ Scene Scene::createTestScene11()
 {
 	Scene scene;
 
-	scene.general.multiSamples = 0;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.44, 7.05, 7.33);
