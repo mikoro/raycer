@@ -286,8 +286,8 @@ void DefaultState::resizeFilm()
 	uint64_t filmWidth = uint64_t(double(windowRunner.getWindowWidth()) * settings.framebuffer.scale + 0.5);
 	uint64_t filmHeight = uint64_t(double(windowRunner.getWindowHeight()) * settings.framebuffer.scale + 0.5);
 
-	filmWidth = std::max(1ull, filmWidth);
-	filmHeight = std::max(1ull, filmHeight);
+    filmWidth = std::max(uint64_t(1), filmWidth);
+    filmHeight = std::max(uint64_t(1), filmHeight);
 
 	if (settings.openCL.enabled)
 		clTracer.releaseImageBuffer();
