@@ -63,41 +63,41 @@ namespace
 	}
 }
 
-Vector2 Sampler::getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
+Vector2 Sampler::getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation, std::mt19937& generator)
 {
-	Vector2 point = getSample2D(x, y, nx, ny, permutation);
+	Vector2 point = getSample2D(x, y, nx, ny, permutation, generator);
 	return mapToDisc(point);
 }
 
-Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
+Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation, std::mt19937& generator)
 {
-	Vector2 point = getSample2D(x, y, nx, ny, permutation);
+	Vector2 point = getSample2D(x, y, nx, ny, permutation, generator);
 	return mapToHemisphere(onb, distribution, point);
 }
 
-void Sampler::generateSamples1D(uint64_t sampleCount)
+void Sampler::generateSamples1D(uint64_t sampleCount, std::mt19937& generator)
 {
 	samples1D.resize(sampleCount);
-	std::random_device rd;
-	uint64_t permutation = uint64_t(rd());
+	std::uniform_int_distribution<uint64_t> randomPermutation;
+	uint64_t permutation = randomPermutation(generator);
 
 	for (uint64_t i = 0; i < sampleCount; ++i)
-		samples1D[i] = getSample1D(i, sampleCount, permutation);
+		samples1D[i] = getSample1D(i, sampleCount, permutation, generator);
 
 	nextSampleIndex1D = 0;
 }
 
-void Sampler::generateSamples2D(uint64_t sampleCountSqrt)
+void Sampler::generateSamples2D(uint64_t sampleCountSqrt, std::mt19937& generator)
 {
 	samples2D.resize(sampleCountSqrt * sampleCountSqrt);
-	std::random_device rd;
-	uint64_t permutation = uint64_t(rd());
+	std::uniform_int_distribution<uint64_t> randomPermutation;
+	uint64_t permutation = randomPermutation(generator);
 
 	for (uint64_t y = 0; y < sampleCountSqrt; ++y)
 	{
 		for (uint64_t x = 0; x < sampleCountSqrt; ++x)
 		{
-			samples2D[y * sampleCountSqrt + x] = getSample2D(x, y, sampleCountSqrt, sampleCountSqrt, permutation);
+			samples2D[y * sampleCountSqrt + x] = getSample2D(x, y, sampleCountSqrt, sampleCountSqrt, permutation, generator);
 		}
 	}
 

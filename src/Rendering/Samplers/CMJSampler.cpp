@@ -46,31 +46,26 @@ namespace
 	}
 }
 
-CMJSampler::CMJSampler()
-{
-	std::random_device rd;
-	generator.seed(rd());
-	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
-}
-
-double CMJSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation)
+double CMJSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation, std::mt19937& generator)
 {
 	(void)x;
 	(void)n;
 	(void)permutation;
+	(void)generator;
 
 	assert(x < n);
 
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
+Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation, std::mt19937& generator)
 {
 	(void)permutation;
 
 	assert(x < nx && y < ny);
 
 	Vector2 result;
+	std::uniform_real_distribution<double> randomOffset(0.0, 1.0);
 
 	uint64_t sx = permute(x, nx, permutation * 0x68bc21eb);
 	uint64_t sy = permute(y, ny, permutation * 0x02e5be93);

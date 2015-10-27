@@ -127,7 +127,7 @@ void Tracer::generateMultiSamples(const Scene& scene, Film& film, const Vector2&
 	{
 		for (uint64_t sx = 0; sx < n; ++sx)
 		{
-			Vector2 sampleOffset = sampler->getSample2D(sx, sy, n, n, permutation);
+			Vector2 sampleOffset = sampler->getSample2D(sx, sy, n, n, permutation, generator);
 			sampleOffset = (sampleOffset - Vector2(0.5, 0.5)) * 2.0 * filter->getRadius();
 			double filterWeight = filter->getWeight(sampleOffset);
 			Color sampledPixelColor = generateTimeSamples(scene, pixelCoordinate + sampleOffset, generator, interrupted);
@@ -188,7 +188,7 @@ Color Tracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoor
 		for (uint64_t x = 0; x < n; ++x)
 		{
 			Ray primaryRay;
-			Vector2 jitter = (sampler->getSample2D(x, y, n, n, permutation) - Vector2(0.5, 0.5)) * 2.0;
+			Vector2 jitter = (sampler->getSample2D(x, y, n, n, permutation, generator) - Vector2(0.5, 0.5)) * 2.0;
 			isValidRay = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
 
 			if (!isValidRay)
@@ -198,7 +198,7 @@ Color Tracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoor
 			}
 
 			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalDistance;
-			Vector2 discCoordinate = sampler->getDiscSample(x, y, n, n, permutation);
+			Vector2 discCoordinate = sampler->getDiscSample(x, y, n, n, permutation, generator);
 
 			Ray sampleRay;
 			sampleRay.origin = cameraPosition + ((discCoordinate.x * apertureSize) * cameraRight + (discCoordinate.y * apertureSize) * cameraUp);

@@ -313,7 +313,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
+			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation, generator);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
@@ -411,7 +411,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getDiscSample(x, y, n, n, permutation) * light.radius;
+			Vector2 jitter = sampler->getDiscSample(x, y, n, n, permutation, generator) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

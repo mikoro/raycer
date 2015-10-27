@@ -47,7 +47,7 @@ Color PathTracer::traceRecursive(const Scene& scene, const Ray& ray, uint64_t it
 		return emittance;
 
 	Sampler* sampler = samplers[SamplerType::RANDOM].get();
-	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 0.0, 0, 0, 0, 0);
+	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 0.0, 0, 0, 0, 0, 0, generator);
 
 	Ray newRay;
 	newRay.origin = intersection.position + newDirection * scene.general.rayStartOffset;
