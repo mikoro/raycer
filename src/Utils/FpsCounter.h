@@ -13,8 +13,8 @@ namespace Raycer
 
 		FpsCounter();
 
-		void count();
-		void update(double timeStep);
+		void tick();
+		void update();
 		double getFps() const;
 		std::string getFpsString() const;
 

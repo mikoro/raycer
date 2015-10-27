@@ -7,9 +7,10 @@
 #include <memory>
 
 #include "Runners/WindowRunnerStates/WindowRunnerState.h"
-#include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Tracers/Tracer.h"
 #include "Raytracing/Scene.h"
+#include "Rendering/Film.h"
+#include "Rendering/FilmRenderer.h"
 
 namespace Raycer
 {
@@ -28,15 +29,19 @@ namespace Raycer
 		void render(double timeStep, double interpolation) override;
 
 		void windowResized(uint64_t width, uint64_t height) override;
-		void framebufferResized(uint64_t width, uint64_t height) override;
 
 	private:
 
-		TracerState state;
+		void resizeFilm();
+
 		Scene scene;
+		Film film;
+		FilmRenderer filmRenderer;
+
 		std::unique_ptr<Tracer> tracer;
 
 		std::atomic<bool> interrupted;
 		uint64_t currentTestSceneNumber = 1;
+		uint64_t sampleCount = 0;
 	};
 }

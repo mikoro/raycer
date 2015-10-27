@@ -63,8 +63,8 @@ void Camera::update(const Scene& scene, double timeStep)
 		if (!isMovingPrimitive)
 		{
 			Vector2 pixelCoordinate;
-			pixelCoordinate.x = double(mouseInfo.framebufferX);
-			pixelCoordinate.y = double(mouseInfo.framebufferY);
+			pixelCoordinate.x = double(mouseInfo.scaledX);
+			pixelCoordinate.y = double(mouseInfo.scaledY);
 
 			Ray ray;
 			bool isValid = getRay(pixelCoordinate, ray, 0.0);

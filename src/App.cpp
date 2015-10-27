@@ -6,7 +6,6 @@
 #include "App.h"
 #include "Settings.h"
 #include "Utils/Log.h"
-#include "Rendering/Framebuffer.h"
 #include "Runners/WindowRunner.h"
 #include "Runners/ConsoleRunner.h"
 #include "Runners/NetworkRunner.h"
@@ -183,8 +182,6 @@ int App::run(int argc, char** argv)
 		if (autoViewSwitch.isSet())
 			settings.image.autoView = true;
 
-		omp_set_num_threads(settings.general.maxThreadCount);
-
 		if (settings.general.interactive)
 			return windowRunner.run();
 
@@ -210,12 +207,6 @@ Settings& App::getSettings()
 {
 	static Settings settings;
 	return settings;
-}
-
-Framebuffer& App::getFramebuffer()
-{
-	static Framebuffer framebuffer;
-	return framebuffer;
 }
 
 WindowRunner& App::getWindowRunner()

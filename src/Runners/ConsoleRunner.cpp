@@ -8,7 +8,7 @@
 #include "Settings.h"
 #include "Utils/StringUtils.h"
 #include "Utils/SysUtils.h"
-#include "Rendering/Image.h"
+#include "Rendering/Film.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Tracers/Tracer.h"
 #include "Raytracing/Tracers/TracerState.h"
@@ -41,28 +41,28 @@ int ConsoleRunner::run()
 	scene.camera.setImagePlaneSize(settings.image.width, settings.image.height);
 	scene.camera.update(scene, 0.0);
 
-	Image image(settings.image.width, settings.image.height);
+	Film film;
+	film.resize(settings.image.width, settings.image.height);
 
 	TracerState state;
 	state.scene = &scene;
-	state.linearImage = &image;
-	state.toneMappedImage = &image;
-	state.imageWidth = settings.image.width;
-	state.imageHeight = settings.image.height;
+	state.film = &film;
+	state.filmWidth = settings.image.width;
+	state.filmHeight = settings.image.height;
 	state.pixelStartOffset = 0;
-	state.pixelCount = state.imageWidth * state.imageHeight;
+	state.pixelCount = state.filmWidth * state.filmHeight;
 
 	run(state);
 
 	if (!interrupted)
 	{
-		image.save(settings.image.fileName);
+		film.getToneMappedImage().save(settings.image.fileName);
 
 		if (settings.image.autoView)
 			SysUtils::openFileExternally(settings.image.fileName);
 	}
 	else
-		image.save("partial_result.png");
+		film.getToneMappedImage().save("partial_result.png");
 
 	return 0;
 }
@@ -84,7 +84,7 @@ void ConsoleRunner::run(TracerState& state)
 	if (settings.openCL.enabled)
 	{
 		clTracer.initializeKernels();
-		clTracer.initializeImageBuffer(state.imageWidth, state.imageHeight);
+		clTracer.initializeImageBuffer(state.filmWidth, state.filmHeight, 0);
 		clTracer.initializeBuffers(*state.scene);
 	}
 
@@ -111,8 +111,8 @@ void ConsoleRunner::run(TracerState& state)
 	SysUtils::setConsoleTextColor(ConsoleTextColor::WHITE_ON_BLACK);
 
 	std::cout << tfm::format("\nTracing started (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
-		state.imageWidth,
-		state.imageHeight,
+		state.filmWidth,
+		state.filmHeight,
 		state.pixelStartOffset,
 		state.pixelCount,
 		StringUtils::humanizeNumber(double(state.pixelCount * sizeof(Color)), true));
@@ -167,8 +167,10 @@ void ConsoleRunner::run(TracerState& state)
 
 	SysUtils::setConsoleTextColor(ConsoleTextColor::DEFAULT);
 
-	if (!interrupted && settings.openCL.enabled)
-		*state.toneMappedImage = clTracer.downloadImage();
+	if (!settings.openCL.enabled)
+		state.film->generateToneMappedImage(*state.scene);
+	else
+		state.film->setToneMappedImage(clTracer.downloadImage());
 }
 
 void ConsoleRunner::interrupt()

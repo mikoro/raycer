@@ -48,35 +48,26 @@ namespace
 	}
 }
 
-Sampler::Sampler()
+Vector2 Sampler::getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
-	std::random_device rd;
-	permutation = rd();
-}
-
-void Sampler::setPermutation(uint64_t permutation_)
-{
-	permutation = permutation_;
-}
-
-Vector2 Sampler::getDiscSample(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
-{
-	Vector2 point = getSample2D(x, y, nx, ny);
+	Vector2 point = getSample2D(x, y, nx, ny, permutation);
 	return mapToDisc(point);
 }
 
-Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector3 Sampler::getHemisphereSample(const ONB& onb, double distribution, uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
-	Vector2 point = getSample2D(x, y, nx, ny);
+	Vector2 point = getSample2D(x, y, nx, ny, permutation);
 	return mapToHemisphere(onb, distribution, point);
 }
 
 void Sampler::generateSamples1D(uint64_t sampleCount)
 {
 	samples1D.resize(sampleCount);
+	std::random_device rd;
+	uint64_t permutation = uint64_t(rd());
 
 	for (uint64_t i = 0; i < sampleCount; ++i)
-		samples1D[i] = getSample1D(i, sampleCount);
+		samples1D[i] = getSample1D(i, sampleCount, permutation);
 
 	nextSampleIndex1D = 0;
 }
@@ -84,12 +75,14 @@ void Sampler::generateSamples1D(uint64_t sampleCount)
 void Sampler::generateSamples2D(uint64_t sampleCountSqrt)
 {
 	samples2D.resize(sampleCountSqrt * sampleCountSqrt);
+	std::random_device rd;
+	uint64_t permutation = uint64_t(rd());
 
 	for (uint64_t y = 0; y < sampleCountSqrt; ++y)
 	{
 		for (uint64_t x = 0; x < sampleCountSqrt; ++x)
 		{
-			samples2D[y * sampleCountSqrt + x] = getSample2D(x, y, sampleCountSqrt, sampleCountSqrt);
+			samples2D[y * sampleCountSqrt + x] = getSample2D(x, y, sampleCountSqrt, sampleCountSqrt, permutation);
 		}
 	}
 

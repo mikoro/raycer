@@ -29,7 +29,7 @@ namespace Raycer
 		void initializeKernels();
 		void releaseKernels();
 
-		void initializeImageBuffer(uint64_t width, uint64_t height);
+		void initializeImageBuffer(uint64_t width, uint64_t height, uint64_t imageTextureId);
 		void releaseImageBuffer();
 
 		void initializeBuffers(const Scene& scene);

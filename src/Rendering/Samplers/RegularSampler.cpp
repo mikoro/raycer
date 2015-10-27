@@ -8,14 +8,19 @@
 
 using namespace Raycer;
 
-double RegularSampler::getSample1D(uint64_t x, uint64_t n)
+double RegularSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation)
 {
+	(void)permutation;
+
 	assert(x < n);
+
 	return (double(x) + 0.5) / double(n);
 }
 
-Vector2 RegularSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector2 RegularSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
+	(void)permutation;
+
 	assert(x < nx && y < ny);
 
 	Vector2 result;

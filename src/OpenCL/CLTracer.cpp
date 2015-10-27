@@ -11,7 +11,6 @@
 #include "App.h"
 #include "Settings.h"
 #include "Utils/Log.h"
-#include "Rendering/Framebuffer.h"
 #include "Rendering/Image.h"
 #include "Rendering/ImagePool.h"
 #include "Runners/WindowRunner.h"
@@ -85,10 +84,9 @@ void CLTracer::releaseKernels()
 	}
 }
 
-void CLTracer::initializeImageBuffer(uint64_t width, uint64_t height)
+void CLTracer::initializeImageBuffer(uint64_t width, uint64_t height, uint64_t imageTextureId)
 {
 	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
 	CLManager& clManager = App::getCLManager();
 
 	App::getLog().logInfo("Initializing OpenCL output image");
@@ -101,7 +99,7 @@ void CLTracer::initializeImageBuffer(uint64_t width, uint64_t height)
 	// use OpenGL texture as an image
 	if (settings.general.interactive)
 	{
-		outputImagePtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, framebuffer.getImageTextureId(), &status);
+		outputImagePtr = clCreateFromGLTexture2D(clManager.context, CL_MEM_WRITE_ONLY, GL_TEXTURE_2D, 0, GLuint(imageTextureId), &status);
 		CLManager::checkError(status, "Could not create output image from OpenGL texture");
 	}
 	else // create own image
@@ -236,7 +234,7 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		clEnqueueFillImage(clManager.commandQueue, outputImagePtr, fillColor, origin, region, 0, nullptr, nullptr);
 	}
 
-	if (state.scene->general.tracerType == TracerType::WHITTED)
+	if (state.scene->general.tracerType == TracerType::RAY)
 		CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue raytrace kernel");
 	else if (state.scene->general.tracerType == TracerType::PATH)
 		CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, pathtraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue pathtrace kernel");

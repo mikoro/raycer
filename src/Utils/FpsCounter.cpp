@@ -15,7 +15,7 @@ FpsCounter::FpsCounter()
 	averageFrameTime.setAverage(1.0 / 30.0);
 }
 
-void FpsCounter::count()
+void FpsCounter::tick()
 {
 	double currentTime = glfwGetTime();
 	frameTime = currentTime - lastTime;
@@ -26,10 +26,8 @@ void FpsCounter::count()
 		frameTime = 2 * averageFrameTime.getAverage();
 }
 
-void FpsCounter::update(double timeStep)
+void FpsCounter::update()
 {
-	(void)timeStep;
-
 	averageFrameTime.addMeasurement(frameTime);
 }
 

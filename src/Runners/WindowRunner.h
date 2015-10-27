@@ -18,8 +18,8 @@ namespace Raycer
 	{
 		int64_t windowX = 0;
 		int64_t windowY = 0;
-		int64_t framebufferX = 0;
-		int64_t framebufferY = 0;
+		int64_t scaledX = 0;
+		int64_t scaledY = 0;
 		int64_t deltaX = 0;
 		int64_t deltaY = 0;
 		double scrollY = 0.0;
@@ -55,14 +55,10 @@ namespace Raycer
 
 	private:
 
-		WindowRunner(const WindowRunner& windowRunner);
-		WindowRunner& operator=(const WindowRunner& windowRunner);
-
 		void initialize();
 		void shutdown();
 
 		void windowResized(uint64_t width, uint64_t height);
-		void resizeFramebuffer(uint64_t width, uint64_t height);
 
 		void mainLoop();
 		void update(double timeStep);
@@ -73,20 +69,26 @@ namespace Raycer
 		bool shouldRun = true;
 		bool isPaused = false;
 		bool glfwInitialized = false;
+
+		double startTime = 0.0;
+
 		GLFWwindow* glfwWindow = nullptr;
 		uint64_t windowWidth = 0;
 		uint64_t windowHeight = 0;
+
+		MouseInfo mouseInfo;
 		int64_t previousMouseX = 0;
 		int64_t previousMouseY = 0;
-		double startTime = 0.0;
-		MouseInfo mouseInfo;
+
 		std::map<int32_t, bool> keyStates;
 		std::map<int32_t, bool> mouseStates;
-		std::map<WindowRunnerStates, std::shared_ptr<WindowRunnerState>> runnerStates;
-		WindowRunnerStates currentState = WindowRunnerStates::None;
+
+		std::map<WindowRunnerStates, std::unique_ptr<WindowRunnerState>> runnerStates;
+		WindowRunnerStates currentState = WindowRunnerStates::NONE;
+
 		Text defaultText;
 		Text pauseText;
-		FpsCounter updateFpsCounter;
-		FpsCounter renderFpsCounter;
+
+		FpsCounter fpsCounter;
 	};
 }

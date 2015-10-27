@@ -4,14 +4,9 @@
 #pragma once
 
 #include <atomic>
-#include <map>
-#include <memory>
 #include <random>
 
 #include "Raytracing/Tracers/Tracer.h"
-#include "Rendering/Samplers/Sampler.h"
-#include "Rendering/Filters/Filter.h"
-#include "Rendering/ToneMappers/ToneMapper.h"
 
 namespace Raycer
 {
@@ -21,21 +16,12 @@ namespace Raycer
 	
 	class PathTracer : public Tracer
 	{
-	public:
+	protected:
 
-		PathTracer();
-
-		void run(TracerState& state, std::atomic<bool>& interrupted) override;
+		Color trace(const Scene& scene, const Ray& ray, std::mt19937& generator, const std::atomic<bool>& interrupted) override;
 
 	private:
 
-		Color tracePath(const Scene& scene, const Ray& ray, uint64_t iteration, const std::atomic<bool>& interrupted);
-
-		std::map<SamplerType, std::unique_ptr<Sampler>> samplers;
-		std::map<FilterType, std::unique_ptr<Filter>> filters;
-		std::map<ToneMapperType, std::unique_ptr<ToneMapper>> toneMappers;
-
-		std::mt19937 generator;
-		std::uniform_int_distribution<uint64_t> randomPermutation;
+		Color traceRecursive(const Scene& scene, const Ray& ray, uint64_t iteration, std::mt19937& generator, const std::atomic<bool>& interrupted);
 	};
 }

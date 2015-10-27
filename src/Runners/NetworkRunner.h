@@ -11,7 +11,6 @@
 #include <boost/asio.hpp>
 
 #include "Raytracing/Scene.h"
-#include "Rendering/Image.h"
 
 namespace ba = boost::asio;
 
@@ -22,10 +21,9 @@ namespace Raycer
 		ba::ip::tcp::endpoint clientEndpoint;
 
 		Scene scene;
-		Image image;
 
-		uint64_t imageWidth = 0;
-		uint64_t imageHeight = 0;
+		uint64_t filmWidth = 0;
+		uint64_t filmHeight = 0;
 		uint64_t pixelStartOffset = 0;
 		uint64_t pixelCount = 0;
 	};

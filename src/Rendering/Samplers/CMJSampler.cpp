@@ -53,17 +53,21 @@ CMJSampler::CMJSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double CMJSampler::getSample1D(uint64_t x, uint64_t n)
+double CMJSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation)
 {
 	(void)x;
 	(void)n;
+	(void)permutation;
 
 	assert(x < n);
+
 	return 0.0;
 }
 
-Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector2 CMJSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
+	(void)permutation;
+
 	assert(x < nx && y < ny);
 
 	Vector2 result;

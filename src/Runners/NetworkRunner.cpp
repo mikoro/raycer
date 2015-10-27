@@ -11,6 +11,7 @@
 #include "Utils/SysUtils.h"
 #include "Raytracing/Tracers/TracerState.h"
 #include "Raytracing/Camera.h"
+#include "Rendering/Film.h"
 #include "Runners/ConsoleRunner.h"
 #include "Math/Color.h"
 
@@ -243,9 +244,9 @@ void NetworkRunner::sendJobs()
 			sceneString = StringUtils::readFileToString(settings.scene.fileName);
 
 		uint64_t serverCount = serverEndpoints.size();
-		uint64_t width = settings.image.width;
-		uint64_t height = settings.image.height;
-		uint64_t totalPixelCount = width * height;
+		uint64_t filmWidth = settings.image.width;
+		uint64_t filmHeight = settings.image.height;
+		uint64_t totalPixelCount = filmWidth * filmHeight;
 		uint64_t pixelsPerServer = totalPixelCount / serverCount;
 		uint64_t pixelsForLastServer = pixelsPerServer + totalPixelCount % serverCount;
 
@@ -257,7 +258,7 @@ void NetworkRunner::sendJobs()
 			uint64_t pixelStartOffset = i * pixelsPerServer;
 			uint64_t pixelCount = isLastServer ? pixelsForLastServer : pixelsPerServer;
 
-			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nWidth: %d\nHeight: %d\nPixelStartOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, width, height, pixelStartOffset, pixelCount, sceneString);
+			std::string message = tfm::format("Raycer 1.0.0\nAddress: %s\nPort: %d\nFilmWidth: %d\nFilmHeight: %d\nPixelStartOffset: %d\nPixelCount: %d\n\n%s", localAddress.to_string(), settings.network.localPort, filmWidth, filmHeight, pixelStartOffset, pixelCount, sceneString);
 
 			ip::tcp::socket socket(io);
 			socket.connect(serverEndpoints.at(i));
@@ -309,7 +310,7 @@ void NetworkRunner::receiveJobs()
 			std::smatch match;
 			std::istringstream ss;
 
-			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nAddress: (.+)\nPort: (.+)\nWidth: (.+)\nHeight: (.+)\nPixelStartOffset: (.+)\nPixelCount: (.+)$")))
+			if (!std::regex_match(headerString, match, std::regex("^Raycer 1.0.0\nAddress: (.+)\nPort: (.+)\nFilmWidth: (.+)\nFilmHeight: (.+)\nPixelStartOffset: (.+)\nPixelCount: (.+)$")))
 				return;
 
 			std::cout << "\nJob received!\n\n";
@@ -324,11 +325,11 @@ void NetworkRunner::receiveJobs()
 
 			ss.clear();
 			ss.str(match[3]);
-			ss >> job.imageWidth;
+			ss >> job.filmWidth;
 
 			ss.clear();
 			ss.str(match[4]);
-			ss >> job.imageHeight;
+			ss >> job.filmHeight;
 
 			ss.clear();
 			ss.str(match[5]);
@@ -398,21 +399,22 @@ void NetworkRunner::handleJobs()
 			jobQueue.pop();
 			jobQueueMutex.unlock();
 
+			Film film;
 			TracerState state;
 			state.scene = &job.scene;
-			state.linearImage = &job.image;
-			state.toneMappedImage = &job.image;
-			state.imageWidth = job.imageWidth;
-			state.imageHeight = job.imageHeight;
+			state.film = &film;
+			state.filmWidth = job.filmWidth;
+			state.filmHeight = job.filmHeight;
 			state.pixelStartOffset = job.pixelStartOffset;
 			state.pixelCount = job.pixelCount;
 
 			job.scene.initialize();
-			job.scene.camera.setImagePlaneSize(job.imageWidth, job.imageHeight);
+			job.scene.camera.setImagePlaneSize(job.filmWidth, job.filmHeight);
 			job.scene.camera.update(job.scene, 0.0);
-			job.image.resize(state.pixelCount);
+			film.resize(state.pixelCount);
 
 			App::getConsoleRunner().run(state);
+			film.generateToneMappedImage(job.scene);
 
 			std::cout << "Sending results back...\n\n";
 
@@ -426,7 +428,7 @@ void NetworkRunner::handleJobs()
 					ip::tcp::socket socket(io);
 					socket.connect(job.clientEndpoint);
 					boost::asio::write(socket, boost::asio::buffer(message));
-					boost::asio::write(socket, boost::asio::buffer(&job.image.getPixelData()[0], job.image.getPixelData().size() * sizeof(Color)));
+					boost::asio::write(socket, boost::asio::buffer(&film.getToneMappedImage().getPixelDataConst()[0], film.getToneMappedImage().getPixelDataConst().size() * sizeof(Colorf)));
 					socket.close();
 
 					break;
@@ -453,7 +455,7 @@ namespace
 	{
 		uint64_t pixelStartOffset = 0;
 		uint64_t pixelCount = 0;
-		std::vector<unsigned char> pixelData;
+		std::vector<uint8_t> pixelData;
 	};
 }
 
@@ -517,7 +519,7 @@ void NetworkRunner::receiveResults()
 			ss.str(match[2]);
 			ss >> pixelCount;
 
-			assert(dataSize == pixelCount * sizeof(Color));
+			assert(dataSize == pixelCount * sizeof(Colorf));
 
 			ImagePart imagePart;
 			imagePart.pixelStartOffset = pixelStartOffset;
@@ -564,7 +566,7 @@ void NetworkRunner::receiveResults()
 			return;
 
 		for (ImagePart& part : imageParts)
-			memcpy(reinterpret_cast<char*>(&resultImage.getPixelData()[0]) + part.pixelStartOffset * sizeof(Color), &part.pixelData[0], part.pixelCount * sizeof(Color));
+			memcpy(reinterpret_cast<uint8_t*>(&resultImage.getPixelData()[0]) + part.pixelStartOffset * sizeof(Colorf), &part.pixelData[0], part.pixelCount * sizeof(Colorf));
 
 		resultImage.save(settings.image.fileName);
 

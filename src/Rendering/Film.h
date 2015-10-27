@@ -7,50 +7,46 @@
 #include <vector>
 
 #include "Math/Color.h"
-#include "Samplers/Sampler.h"
-#include "Filters/Filter.h"
-#include "ToneMappers/ToneMapper.h"
 #include "Rendering/Image.h"
+#include "ToneMappers/ToneMapper.h"
 
 namespace Raycer
 {
-	class Camera;
-	class Ray;
 	class Scene;
 
 	struct FilmPixel
 	{
 		Color cumulativeColor = Color(0.0, 0.0, 0.0, 0.0);
 		double filterWeightSum = 0.0;
-		std::unique_ptr<Sampler> sampler = nullptr;
 	};
 
 	class Film
 	{
 	public:
 
+		Film();
+
 		void resize(uint64_t width, uint64_t height);
-		void setSampler(SamplerType type, uint64_t sampleCountSqrt);
-		void setFilter(FilterType type);
-		void setToneMapper(ToneMapperType type);
-
+		void resize(uint64_t length);
 		void clear();
-		bool getNextRay(uint64_t x, uint64_t y, const Camera& camera, Ray& ray, double time);
-		void addSample(uint64_t x, uint64_t y, const Vector2& sampleOffset, const Color& color);
-		void generateOutputImage(const Scene& scene);
-
+		void addSample(uint64_t x, uint64_t y, const Color& color, double filterWeight);
+		
+		void generateToneMappedImage(const Scene& scene);
+		void setToneMappedImage(const Image& other);
 		const Image& getToneMappedImage() const;
+
+		uint64_t getWidth() const;
+		uint64_t getHeight() const;
 
 	private:
 
 		uint64_t width = 0;
 		uint64_t height = 0;
 
-		std::unique_ptr<Filter> filter = nullptr;
-		std::unique_ptr<ToneMapper> toneMapper = nullptr;
-
 		std::vector<FilmPixel> filmPixels;
 		Image linearImage;
 		Image toneMappedImage;
+
+		std::map<ToneMapperType, std::unique_ptr<ToneMapper>> toneMappers;
 	};
 }

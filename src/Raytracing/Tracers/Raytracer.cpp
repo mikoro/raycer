@@ -3,13 +3,11 @@
 
 #include "stdafx.h"
 
-#include "Raytracing/Tracers/WhittedRaytracer.h"
-#include "Raytracing/Tracers/TracerState.h"
+#include "Raytracing/Tracers/Raytracer.h"
 #include "Raytracing/Scene.h"
 #include "Raytracing/Ray.h"
 #include "Raytracing/Intersection.h"
 #include "Raytracing/Material.h"
-#include "Raytracing/Camera.h"
 #include "Raytracing/Lights.h"
 #include "Raytracing/Primitives/Primitive.h"
 #include "Raytracing/Textures/Texture.h"
@@ -17,201 +15,16 @@
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 #include "Math/ONB.h"
-#include "Rendering/Image.h"
-#include "Rendering/Samplers/RandomSampler.h"
-#include "Rendering/Samplers/RegularSampler.h"
-#include "Rendering/Samplers/JitteredSampler.h"
-#include "Rendering/Samplers/CMJSampler.h"
-#include "Rendering/Filters/BoxFilter.h"
-#include "Rendering/Filters/TentFilter.h"
-#include "Rendering/Filters/BellFilter.h"
-#include "Rendering/Filters/MitchellFilter.h"
-#include "Rendering/Filters/GaussianFilter.h"
-#include "Rendering/Filters/LanczosSincFilter.h"
-#include "Rendering/ToneMappers/PassthroughToneMapper.h"
-#include "Rendering/ToneMappers/LinearToneMapper.h"
-#include "Rendering/ToneMappers/SimpleToneMapper.h"
-#include "Rendering/ToneMappers/ReinhardToneMapper.h"
 
 using namespace Raycer;
 
-WhittedRaytracer::WhittedRaytracer()
+Color Raytracer::trace(const Scene& scene, const Ray& ray, std::mt19937& generator, const std::atomic<bool>& interrupted)
 {
-	std::random_device rd;
-	generator.seed(rd());
-
-	samplers[SamplerType::RANDOM] = std::unique_ptr<RandomSampler>(new RandomSampler());
-	samplers[SamplerType::REGULAR] = std::unique_ptr<RegularSampler>(new RegularSampler());
-	samplers[SamplerType::JITTERED] = std::unique_ptr<JitteredSampler>(new JitteredSampler());
-	samplers[SamplerType::CMJ] = std::unique_ptr<CMJSampler>(new CMJSampler());
-
-	filters[FilterType::BOX] = std::unique_ptr<BoxFilter>(new BoxFilter());
-	filters[FilterType::TENT] = std::unique_ptr<TentFilter>(new TentFilter());
-	filters[FilterType::BELL] = std::unique_ptr<BellFilter>(new BellFilter());
-	filters[FilterType::MITCHELL] = std::unique_ptr<MitchellFilter>(new MitchellFilter());
-	filters[FilterType::GAUSSIAN] = std::unique_ptr<GaussianFilter>(new GaussianFilter());
-	filters[FilterType::LANCZOS_SINC] = std::unique_ptr<LanczosSincFilter>(new LanczosSincFilter());
-
-	toneMappers[ToneMapperType::PASSTHROUGH] = std::unique_ptr<PassthroughToneMapper>(new PassthroughToneMapper());
-	toneMappers[ToneMapperType::LINEAR] = std::unique_ptr<LinearToneMapper>(new LinearToneMapper());
-	toneMappers[ToneMapperType::SIMPLE] = std::unique_ptr<SimpleToneMapper>(new SimpleToneMapper());
-	toneMappers[ToneMapperType::REINHARD] = std::unique_ptr<ReinhardToneMapper>(new ReinhardToneMapper());
-}
-
-void WhittedRaytracer::run(TracerState& state, std::atomic<bool>& interrupted)
-{
-	Scene& scene = *state.scene;
-	Image& linearImage = *state.linearImage;
-	Image& toneMappedImage = *state.toneMappedImage;
-
-	std::mutex ompThreadExceptionMutex;
-	std::exception_ptr ompThreadException = nullptr;
-
-	#pragma omp parallel for schedule(dynamic, 1000)
-	for (int64_t pixelIndex = 0; pixelIndex < int64_t(state.pixelCount); ++pixelIndex)
-	{
-		try
-		{
-			if (interrupted)
-				continue;
-
-			uint64_t offsetPixelIndex = uint64_t(pixelIndex) + state.pixelStartOffset;
-			double x = double(offsetPixelIndex % state.imageWidth);
-			double y = double(offsetPixelIndex / state.imageWidth);
-			Vector2 pixelCoordinate = Vector2(x, y);
-
-			Color pixelColor = generateMultiSamples(scene, pixelCoordinate, interrupted);
-			linearImage.setPixel(uint64_t(pixelIndex), pixelColor);
-
-			// progress reporting to another thread
-			if ((pixelIndex + 1) % 100 == 0)
-				state.pixelsProcessed += 100;
-		}
-		catch (...)
-		{
-			std::lock_guard<std::mutex> lock(ompThreadExceptionMutex);
-
-			if (ompThreadException == nullptr)
-				ompThreadException = std::current_exception();
-
-			interrupted = true;
-		}
-	}
-
-	if (ompThreadException != nullptr)
-		std::rethrow_exception(ompThreadException);
-
-	if (!interrupted)
-		state.pixelsProcessed = state.pixelCount;
-
-	toneMappers[scene.toneMapper.type]->apply(scene, linearImage, toneMappedImage);
-}
-
-Color WhittedRaytracer::generateMultiSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
-{
-	if (scene.general.multiSamples == 0)
-		return generateTimeSamples(scene, pixelCoordinate, interrupted);
-
-	Color sampledPixelColor;
-	uint64_t n = scene.general.multiSamples;
-
-	Sampler* sampler = samplers[scene.general.multiSamplerType].get();
-	sampler->setPermutation(randomPermutation(generator));
-
-	Filter* filter = filters[scene.general.multiSamplerFilterType].get();
-	double filterWeightSum = 0.0;
-	Vector2 filterRadius = filter->getRadius();
-
-	for (uint64_t y = 0; y < n; ++y)
-	{
-		for (uint64_t x = 0; x < n; ++x)
-		{
-			Vector2 sampleOffset = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0 * filterRadius;
-			double filterWeight = filter->getWeight(sampleOffset);
-			sampledPixelColor += generateTimeSamples(scene, pixelCoordinate + sampleOffset, interrupted) * filterWeight;
-			filterWeightSum += filterWeight;
-		}
-	}
-
-	return sampledPixelColor / filterWeightSum;
-}
-
-Color WhittedRaytracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordinate, const std::atomic<bool>& interrupted)
-{
-	if (scene.general.timeSamples == 0)
-		return generateCameraSamples(scene, pixelCoordinate, 0.0, interrupted);
-
-	Color sampledPixelColor;
-	uint64_t n = scene.general.timeSamples;
-
-	Sampler* sampler = samplers[scene.general.timeSamplerType].get();
-	sampler->setPermutation(randomPermutation(generator));
-
-	for (uint64_t i = 0; i < n; ++i)
-		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample1D(i, n), interrupted);
-
-	return sampledPixelColor / double(n);
-}
-
-Color WhittedRaytracer::generateCameraSamples(const Scene& scene, const Vector2& pixelCoordinate, double time, const std::atomic<bool>& interrupted)
-{
-	Ray ray;
-	bool isValidRay = scene.camera.getRay(pixelCoordinate, ray, time);
-
-	if (!isValidRay && scene.general.cameraSamples == 0)
-		return scene.general.offLensColor;
-
 	Intersection intersection;
-
-	if (scene.general.cameraSamples == 0)
-		return traceRay(scene, ray, intersection, 0, interrupted);
-
-	Color sampledPixelColor;
-	uint64_t n = scene.general.cameraSamples;
-	double apertureSize = scene.camera.apertureSize;
-	double focalDistance = scene.camera.focalDistance;
-
-	CameraState cameraState = scene.camera.getCameraState(time);
-	Vector3 cameraPosition = cameraState.position;
-	Vector3 cameraRight = cameraState.right;
-	Vector3 cameraUp = cameraState.up;
-
-	Sampler* sampler = samplers[scene.general.cameraSamplerType].get();
-	sampler->setPermutation(randomPermutation(generator));
-
-	for (uint64_t y = 0; y < n; ++y)
-	{
-		for (uint64_t x = 0; x < n; ++x)
-		{
-			Ray primaryRay;
-			Vector2 jitter = (sampler->getSample2D(x, y, n, n) - Vector2(0.5, 0.5)) * 2.0;
-			isValidRay = scene.camera.getRay(pixelCoordinate + jitter, primaryRay, time);
-
-			if (!isValidRay)
-			{
-				sampledPixelColor += scene.general.offLensColor;
-				continue;
-			}
-
-			Vector3 focalPoint = primaryRay.origin + primaryRay.direction * focalDistance;
-			Vector2 discCoordinate = sampler->getDiscSample(x, y, n, n);
-
-			Ray sampleRay;
-			Intersection sampleIntersection;
-
-			sampleRay.origin = cameraPosition + ((discCoordinate.x * apertureSize) * cameraRight + (discCoordinate.y * apertureSize) * cameraUp);
-			sampleRay.direction = (focalPoint - sampleRay.origin).normalized();
-			sampleRay.time = time;
-			sampleRay.precalculate();
-
-			sampledPixelColor += traceRay(scene, sampleRay, sampleIntersection, 0, interrupted);
-		}
-	}
-
-	return sampledPixelColor / (double(n) * n);
+	return traceRecursive(scene, ray, intersection, 0, generator, interrupted);
 }
 
-Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersection& intersection, uint64_t iteration, const std::atomic<bool>& interrupted)
+Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection& intersection, uint64_t iteration, std::mt19937& generator, const std::atomic<bool>& interrupted)
 {
 	Color finalColor = scene.general.backgroundColor;
 
@@ -320,7 +133,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 		reflectedRay.direction = R;
 		reflectedRay.precalculate();
 
-		reflectedColor = traceRay(scene, reflectedRay, reflectedIntersection, iteration + 1, interrupted) * totalReflectance;
+		reflectedColor = traceRecursive(scene, reflectedRay, reflectedIntersection, iteration + 1, generator, interrupted) * totalReflectance;
 
 		// only attenuate if ray has traveled inside a primitive
 		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
@@ -351,7 +164,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 			refractedRay.direction = T;
 			refractedRay.precalculate();
 
-			transmittedColor = traceRay(scene, refractedRay, refractedIntersection, iteration + 1, interrupted) * totalTransmittance;
+			transmittedColor = traceRecursive(scene, refractedRay, refractedIntersection, iteration + 1, generator, interrupted) * totalTransmittance;
 
 			// only attenuate if ray has traveled inside a primitive
 			if (isOutside && refractedIntersection.wasFound && material->enableAttenuation)
@@ -365,9 +178,9 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 	double ambientOcclusionAmount = 1.0;
 
 	if (scene.lights.ambientLight.enableOcclusion)
-		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection);
+		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection, generator);
 
-	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount);
+	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount, generator);
 	finalColor = lightColor + reflectedColor + transmittedColor;
 
 	if (scene.simpleFog.enabled && isOutside)
@@ -376,7 +189,7 @@ Color WhittedRaytracer::traceRay(const Scene& scene, const Ray& ray, Intersectio
 	return finalColor;
 }
 
-Color WhittedRaytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount)
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount, std::mt19937& generator)
 {
 	Color lightColor;
 	Vector3 directionToCamera = -ray.direction;
@@ -415,7 +228,7 @@ Color WhittedRaytracer::calculateLightColor(const Scene& scene, const Ray& ray, 
 		directionToLight.normalize();
 
 		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
-		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
+		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 
@@ -429,7 +242,7 @@ Color WhittedRaytracer::calculateLightColor(const Scene& scene, const Ray& ray, 
 		directionToLight.normalize();
 
 		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
-		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
+		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 		double sideAttenuation = light.direction.dot(-directionToLight);
@@ -445,7 +258,7 @@ Color WhittedRaytracer::calculateLightColor(const Scene& scene, const Ray& ray, 
 	return lightColor;
 }
 
-Color WhittedRaytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess)
+Color Raytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess)
 {
 	Color phongColor;
 
@@ -468,7 +281,7 @@ Color WhittedRaytracer::calculatePhongShadingColor(const Vector3& normal, const 
 	return phongColor;
 }
 
-Color WhittedRaytracer::calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor)
+Color Raytracer::calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor)
 {
 	double t1 = intersection.distance / scene.simpleFog.distance;
 	t1 = std::max(0.0, std::min(t1, 1.0));
@@ -486,20 +299,21 @@ Color WhittedRaytracer::calculateSimpleFogColor(const Scene& scene, const Inters
 	return Color::lerp(pixelColor, scene.simpleFog.color, t1);
 }
 
-double WhittedRaytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection)
+double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection, std::mt19937& generator)
 {
-	double ambientOcclusion = 0.0;
-	uint64_t n = scene.lights.ambientLight.occlusionSamples;
-	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
-
 	Sampler* sampler = samplers[scene.lights.ambientLight.occlusionSamplerType].get();
-	sampler->setPermutation(randomPermutation(generator));
+	std::uniform_int_distribution<uint64_t> randomPermutation;
+	uint64_t permutation = randomPermutation(generator);
+
+	double ambientOcclusion = 0.0;
+	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
+	uint64_t n = scene.lights.ambientLight.occlusionSamples;
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n);
+			Vector3 sampleDirection = sampler->getHemisphereSample(intersection.onb, distribution, x, y, n, n, permutation);
 
 			Ray sampleRay;
 			Intersection sampleIntersection;
@@ -527,7 +341,7 @@ double WhittedRaytracer::calculateAmbientOcclusionAmount(const Scene& scene, con
 	return 1.0 - (ambientOcclusion / (double(n) * n));
 }
 
-double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
+double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light)
 {
 	Vector3 directionToLight = -light.direction;
 
@@ -554,7 +368,7 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 	return 0.0;
 }
 
-double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light)
+double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light, std::mt19937& generator)
 {
 	Vector3 directionToLight = (light.position - intersection.position).normalized();
 
@@ -586,17 +400,18 @@ double WhittedRaytracer::calculateShadowAmount(const Scene& scene, const Ray& ra
 	Vector3 lightRight = directionToLight.cross(Vector3::ALMOST_UP).normalized();
 	Vector3 lightUp = lightRight.cross(directionToLight).normalized();
 
+	Sampler* sampler = samplers[light.softShadowSamplerType].get();
+	std::uniform_int_distribution<uint64_t> randomPermutation;
+	uint64_t permutation = randomPermutation(generator);
+
 	double shadowAmount = 0.0;
 	uint64_t n = light.softShadowSamples;
-
-	Sampler* sampler = samplers[light.softShadowSamplerType].get();
-	sampler->setPermutation(randomPermutation(generator));
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getDiscSample(x, y, n, n) * light.radius;
+			Vector2 jitter = sampler->getDiscSample(x, y, n, n, permutation) * light.radius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

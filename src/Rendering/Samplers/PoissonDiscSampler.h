@@ -11,8 +11,8 @@ namespace Raycer
 	{
 	public:
 
-		double getSample1D(uint64_t x, uint64_t n) override;
-		Vector2 getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny) override;
+		double getSample1D(uint64_t x, uint64_t n, uint64_t permutation = 0) override;
+		Vector2 getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation = 0) override;
 
 		void generateSamples2D(uint64_t sampleCountSqrt) override;
 	};

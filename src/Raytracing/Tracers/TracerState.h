@@ -7,25 +7,20 @@
 
 namespace Raycer
 {
-	class Image;
 	class Scene;
+	class Film;
 
 	struct TracerState
 	{
 		TracerState() : pixelsProcessed(0) {};
 
 		Scene* scene = nullptr;
-
-		Image* cumulativeImage = nullptr;
-		Image* linearImage = nullptr;
-		Image* toneMappedImage = nullptr;
-
-		uint64_t imageWidth = 0;
-		uint64_t imageHeight = 0;
+		Film* film = nullptr;
+		
+		uint64_t filmWidth = 0;
+		uint64_t filmHeight = 0;
 		uint64_t pixelStartOffset = 0;
 		uint64_t pixelCount = 0;
-
-		uint64_t cumulativeSampleCount = 0;
 
 		std::atomic<uint64_t> pixelsProcessed;
 	};

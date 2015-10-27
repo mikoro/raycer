@@ -9,23 +9,27 @@
 
 using namespace Raycer;
 
-double PoissonDiscSampler::getSample1D(uint64_t x, uint64_t n)
+double PoissonDiscSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation)
 {
 	(void)x;
 	(void)n;
+	(void)permutation;
 
 	assert(x < n);
+
 	return 0.0;
 }
 
-Vector2 PoissonDiscSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector2 PoissonDiscSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
 	(void)x;
 	(void)y;
 	(void)nx;
 	(void)ny;
+	(void)permutation;
 
 	assert(x < nx && y < ny);
+
 	return Vector2();
 }
 

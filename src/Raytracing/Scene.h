@@ -86,7 +86,7 @@ namespace Raycer
 
 		struct General
 		{
-			TracerType tracerType = TracerType::WHITTED;
+			TracerType tracerType = TracerType::RAY;
 			SamplerType multiSamplerType = SamplerType::CMJ;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
 			SamplerType timeSamplerType = SamplerType::JITTERED;
@@ -94,8 +94,8 @@ namespace Raycer
 			uint64_t maxRayIterations = 3;
 			uint64_t maxPathLength = 3;
 			uint64_t pathSamples = 1;
-			uint64_t multiSamples = 0;
-			uint64_t timeSamples = 0;
+			uint64_t multiSamples = 1;
+			uint64_t timeSamples = 1;
 			uint64_t cameraSamples = 0;
 			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);

@@ -78,9 +78,6 @@
     <ClCompile Include="src\Math\Vector2.cpp">
       <Filter>Math</Filter>
     </ClCompile>
-    <ClCompile Include="src\Rendering\Framebuffer.cpp">
-      <Filter>Rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\Runners\ConsoleRunner.cpp">
       <Filter>Runners</Filter>
     </ClCompile>
@@ -216,9 +213,6 @@
     </ClCompile>
     <ClCompile Include="src\Runners\WindowRunner.cpp">
       <Filter>Runners</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp">
-      <Filter>Runners\WindowRunnerStates</Filter>
     </ClCompile>
     <ClCompile Include="src\Math\Color.cpp">
       <Filter>Math</Filter>
@@ -369,9 +363,6 @@
     <ClCompile Include="src\OpenCL\CLTracer.cpp">
       <Filter>OpenCL</Filter>
     </ClCompile>
-    <ClCompile Include="src\Raytracing\Tracers\WhittedRaytracer.cpp">
-      <Filter>Raytracing\Tracers</Filter>
-    </ClCompile>
     <ClCompile Include="src\Rendering\ToneMappers\PassthroughToneMapper.cpp">
       <Filter>Rendering\ToneMappers</Filter>
     </ClCompile>
@@ -406,6 +397,15 @@
     <ClCompile Include="src\Rendering\ToneMappers\SimpleToneMapper.cpp">
       <Filter>Rendering\ToneMappers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Tracers\Raytracer.cpp">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Rendering\FilmRenderer.cpp">
+      <Filter>Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Runners\WindowRunnerStates\DefaultState.cpp">
+      <Filter>Runners\WindowRunnerStates</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -431,9 +431,6 @@
     </ClInclude>
     <ClInclude Include="src\Math\Vector2.h">
       <Filter>Math</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Rendering\Framebuffer.h">
-      <Filter>Rendering</Filter>
     </ClInclude>
     <ClInclude Include="src\Runners\ConsoleRunner.h">
       <Filter>Runners</Filter>
@@ -562,9 +559,6 @@
     <ClInclude Include="src\Runners\WindowRunner.h">
       <Filter>Runners</Filter>
     </ClInclude>
-    <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h">
-      <Filter>Runners\WindowRunnerStates</Filter>
-    </ClInclude>
     <ClInclude Include="src\Runners\WindowRunnerStates\WindowRunnerState.h">
       <Filter>Runners\WindowRunnerStates</Filter>
     </ClInclude>
@@ -660,9 +654,6 @@
     <ClInclude Include="src\OpenCL\CLTracer.h">
       <Filter>OpenCL</Filter>
     </ClInclude>
-    <ClInclude Include="src\Raytracing\Tracers\WhittedRaytracer.h">
-      <Filter>Raytracing\Tracers</Filter>
-    </ClInclude>
     <ClInclude Include="src\Rendering\ToneMappers\PassthroughToneMapper.h">
       <Filter>Rendering\ToneMappers</Filter>
     </ClInclude>
@@ -690,6 +681,15 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\ToneMappers\SimpleToneMapper.h">
       <Filter>Rendering\ToneMappers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Tracers\Raytracer.h">
+      <Filter>Raytracing\Tracers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Rendering\FilmRenderer.h">
+      <Filter>Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Runners\WindowRunnerStates\DefaultState.h">
+      <Filter>Runners\WindowRunnerStates</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -15,22 +15,26 @@ RandomSampler::RandomSampler()
 	randomOffset = std::uniform_real_distribution<double>(0.0, 1.0);
 }
 
-double RandomSampler::getSample1D(uint64_t x, uint64_t n)
+double RandomSampler::getSample1D(uint64_t x, uint64_t n, uint64_t permutation)
 {
 	(void)x;
 	(void)n;
+	(void)permutation;
 
 	assert(x < n);
+
 	return randomOffset(generator);
 }
 
-Vector2 RandomSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny)
+Vector2 RandomSampler::getSample2D(uint64_t x, uint64_t y, uint64_t nx, uint64_t ny, uint64_t permutation)
 {
 	(void)x;
 	(void)y;
 	(void)nx;
 	(void)ny;
+	(void)permutation;
 
 	assert(x < nx && y < ny);
+
 	return Vector2(randomOffset(generator), randomOffset(generator));
 }

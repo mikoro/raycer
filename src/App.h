@@ -7,7 +7,6 @@ namespace Raycer
 {
 	class Log;
 	class Settings;
-	class Framebuffer;
 	class WindowRunner;
 	class ConsoleRunner;
 	class NetworkRunner;
@@ -22,7 +21,6 @@ namespace Raycer
 
 		static Log& getLog();
 		static Settings& getSettings();
-		static Framebuffer& getFramebuffer();
 		static WindowRunner& getWindowRunner();
 		static ConsoleRunner& getConsoleRunner();
 		static NetworkRunner& getNetworkRunner();

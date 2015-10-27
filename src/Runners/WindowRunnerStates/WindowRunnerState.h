@@ -3,13 +3,9 @@
 
 #pragma once
 
-#ifdef None
-#undef None
-#endif
-
 namespace Raycer
 {
-	enum class WindowRunnerStates { None, Default };
+	enum class WindowRunnerStates { NONE, DEFAULT };
 
 	class WindowRunnerState
 	{
@@ -26,6 +22,5 @@ namespace Raycer
 		virtual void render(double timeStep, double interpolation) = 0;
 
 		virtual void windowResized(uint64_t width, uint64_t height) = 0;
-		virtual void framebufferResized(uint64_t width, uint64_t height) = 0;
 	};
 }

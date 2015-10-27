@@ -12,21 +12,18 @@
 #include "Math/EulerAngle.h"
 #include "Math/Vector3.h"
 #include "Raytracing/Camera.h"
-#include "Rendering/Framebuffer.h"
+#include "Raytracing/Tracers/TracerState.h"
 #include "Rendering/Text.h"
 #include "Rendering/ImagePool.h"
 #include "Runners/WindowRunner.h"
 
 using namespace Raycer;
 
-Raycer::DefaultState::DefaultState() : interrupted(false)
-{
-}
+DefaultState::DefaultState() : interrupted(false) {}
 
 void DefaultState::initialize()
 {
 	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
 	CLTracer& clTracer = App::getCLTracer();
 
 	if (settings.scene.enableTestScenes)
@@ -34,8 +31,10 @@ void DefaultState::initialize()
 	else
 		scene = Scene::loadFromFile(settings.scene.fileName);
 
+	filmRenderer.initialize();
+	windowResized(settings.window.width, settings.window.height);
+
 	scene.initialize();
-	scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
 	tracer = Tracer::getTracer(scene.general.tracerType);
 
 	if (settings.openCL.enabled)
@@ -64,7 +63,6 @@ void DefaultState::update(double timeStep)
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
 	WindowRunner& windowRunner = App::getWindowRunner();
-	Framebuffer& framebuffer = App::getFramebuffer();
 	CLTracer& clTracer = App::getCLTracer();
 
 	bool increaseTestSceneNumber = windowRunner.keyWasPressed(GLFW_KEY_F2);
@@ -103,11 +101,8 @@ void DefaultState::update(double timeStep)
 				scene.initialize();
 			}
 
-			scene.camera.setImagePlaneSize(framebuffer.getWidth(), framebuffer.getHeight());
+			scene.camera.setImagePlaneSize(film.getWidth(), film.getHeight());
 			tracer = Tracer::getTracer(scene.general.tracerType);
-
-			framebuffer.clear();
-			state.cumulativeSampleCount = 0;
 
 			if (settings.openCL.enabled)
 				clTracer.initializeBuffers(scene);
@@ -119,15 +114,12 @@ void DefaultState::update(double timeStep)
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F4))
 	{
-		if (scene.general.tracerType == TracerType::WHITTED)
+		if (scene.general.tracerType == TracerType::RAY)
 			scene.general.tracerType = TracerType::PATH;
 		else if (scene.general.tracerType == TracerType::PATH)
-			scene.general.tracerType = TracerType::WHITTED;
+			scene.general.tracerType = TracerType::RAY;
 
 		tracer = Tracer::getTracer(scene.general.tracerType);
-		
-		framebuffer.clear();
-		state.cumulativeSampleCount = 0;
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F5))
@@ -185,6 +177,32 @@ void DefaultState::update(double timeStep)
 #endif
 	}
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_F10))
+	{
+		double newScale = settings.framebuffer.scale * 0.5;
+		uint64_t newWidth = uint64_t(double(windowRunner.getWindowWidth()) * newScale + 0.5);
+		uint64_t newHeight = uint64_t(double(windowRunner.getWindowHeight()) * newScale + 0.5);
+
+		if (newWidth >= 2 && newHeight >= 2)
+		{
+			settings.framebuffer.scale = newScale;
+			resizeFilm();
+		}
+	}
+
+	if (windowRunner.keyWasPressed(GLFW_KEY_F11))
+	{
+		if (settings.framebuffer.scale < 1.0)
+		{
+			settings.framebuffer.scale *= 2.0;
+
+			if (settings.framebuffer.scale > 1.0)
+				settings.framebuffer.scale = 1.0;
+
+			resizeFilm();
+		}
+	}
+
 	if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
 	{
 		if (windowRunner.keyIsDown(GLFW_KEY_PAGE_DOWN))
@@ -209,55 +227,71 @@ void DefaultState::render(double timeStep, double interpolation)
 	(void)timeStep;
 	(void)interpolation;
 
-	Framebuffer& framebuffer = App::getFramebuffer();
 	Settings& settings = App::getSettings();
+	WindowRunner& windowRunner = App::getWindowRunner();
 	CLTracer& clTracer = App::getCLTracer();
-	WindowRunner& runner = App::getWindowRunner();
-	Text& text = runner.getDefaultText();
+	Text& text = windowRunner.getDefaultText();
 
 	if (scene.general.tracerType == TracerType::PATH && scene.camera.hasMoved())
-	{
-		framebuffer.clear();
-		state.cumulativeSampleCount = 0;
-	}
+		sampleCount = 0;
 
+	TracerState state;
 	state.scene = &scene;
-	state.cumulativeImage = &framebuffer.getCumulativeImage();
-	state.linearImage = &framebuffer.getLinearImage();
-	state.toneMappedImage = &framebuffer.getToneMappedImage();
-	state.imageWidth = framebuffer.getWidth();
-	state.imageHeight = framebuffer.getHeight();
+	state.film = &film;
+	state.filmWidth = film.getWidth();
+	state.filmHeight = film.getHeight();
 	state.pixelStartOffset = 0;
-	state.pixelCount = state.imageWidth * state.imageHeight;
-	state.pixelsProcessed = 0;
+	state.pixelCount = state.filmWidth * state.filmHeight;
 
 	if (!settings.openCL.enabled)
+	{
 		tracer->run(state, interrupted);
+		film.generateToneMappedImage(scene);
+		filmRenderer.uploadFilmData(film);
+	}
 	else
 		clTracer.run(state, interrupted);
 
+	filmRenderer.render();
+
 	if (settings.window.showInfoText)
 	{
-		text.drawText(5.0, double(runner.getWindowHeight() - 3 * settings.window.defaultFontSize), Color(255, 255, 255, 255), tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z));
-		text.drawText(5.0, double(runner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.pitch, scene.camera.orientation.yaw, scene.camera.orientation.roll));
-		text.drawText(5.0, double(runner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Pix: (%d, %d)", runner.getMouseInfo().framebufferX, runner.getMouseInfo().framebufferY));
-		text.drawText(5.0, double(runner.getWindowHeight() - 6 * settings.window.defaultFontSize - 6), Color(255, 255, 255, 255), tfm::format("Mov: %s", scene.camera.hasMoved()));
-		text.drawText(5.0, double(runner.getWindowHeight() - 7 * settings.window.defaultFontSize - 8), Color(255, 255, 255, 255), tfm::format("Pat: %s", state.cumulativeSampleCount));
+		text.drawText(5.0, double(windowRunner.getWindowHeight() - 3 * settings.window.defaultFontSize), Color(255, 255, 255, 255), tfm::format("Pos: (%.2f, %.2f, %.2f)", scene.camera.position.x, scene.camera.position.y, scene.camera.position.z));
+		text.drawText(5.0, double(windowRunner.getWindowHeight() - 4 * settings.window.defaultFontSize - 2), Color(255, 255, 255, 255), tfm::format("Rot: (%.2f, %.2f, %.2f)", scene.camera.orientation.pitch, scene.camera.orientation.yaw, scene.camera.orientation.roll));
+		text.drawText(5.0, double(windowRunner.getWindowHeight() - 5 * settings.window.defaultFontSize - 4), Color(255, 255, 255, 255), tfm::format("Pix: (%d, %d)", windowRunner.getMouseInfo().scaledX, windowRunner.getMouseInfo().scaledY));
+		text.drawText(5.0, double(windowRunner.getWindowHeight() - 6 * settings.window.defaultFontSize - 6), Color(255, 255, 255, 255), tfm::format("Mov: %s", scene.camera.hasMoved()));
+
+		if (scene.general.tracerType == TracerType::PATH)
+			text.drawText(5.0, double(windowRunner.getWindowHeight() - 7 * settings.window.defaultFontSize - 8), Color(255, 255, 255, 255), tfm::format("Sam: %s", sampleCount));
 	}
 }
 
 void DefaultState::windowResized(uint64_t width, uint64_t height)
 {
-	(void)width;
-	(void)height;
+	filmRenderer.setWindowSize(width, height);
+	resizeFilm();
 }
 
-void DefaultState::framebufferResized(uint64_t width, uint64_t height)
+void DefaultState::resizeFilm()
 {
-	Framebuffer& framebuffer = App::getFramebuffer();
+	Settings& settings = App::getSettings();
+	WindowRunner& windowRunner = App::getWindowRunner();
+	CLTracer& clTracer = App::getCLTracer();
 
-	scene.camera.setImagePlaneSize(width, height);
+	uint64_t filmWidth = uint64_t(double(windowRunner.getWindowWidth()) * settings.framebuffer.scale + 0.5);
+	uint64_t filmHeight = uint64_t(double(windowRunner.getWindowHeight()) * settings.framebuffer.scale + 0.5);
 
-	framebuffer.clear();
-	state.cumulativeSampleCount = 0;
+	filmWidth = std::max(1ull, filmWidth);
+	filmHeight = std::max(1ull, filmHeight);
+
+	if (settings.openCL.enabled)
+		clTracer.releaseImageBuffer();
+
+	film.resize(filmWidth, filmHeight);
+
+	if (settings.openCL.enabled)
+		clTracer.initializeImageBuffer(filmWidth, filmHeight, filmRenderer.getFilmTextureId());
+
+	filmRenderer.setFilmSize(filmWidth, filmHeight);
+	scene.camera.setImagePlaneSize(filmWidth, filmHeight);
 }

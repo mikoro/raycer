@@ -35,3 +35,4 @@ misc
  - add scope exit to obj loader and consolerunner text color
  - replace align macro with alignas
  - sizeof(Color) -> colorf, check networkrunner image stuff
+ - check if camera dof needs jitter

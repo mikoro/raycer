@@ -7,10 +7,8 @@
 #include "App.h"
 #include "Settings.h"
 #include "Utils/Log.h"
-#include "Rendering/Framebuffer.h"
 #include "Utils/GLHelper.h"
 #include "OpenCL/CLManager.h"
-#include "OpenCL/CLTracer.h"
 #include "Rendering/Image.h"
 #include "Runners/WindowRunnerStates/WindowRunnerState.h"
 #include "Runners/WindowRunnerStates/DefaultState.h"
@@ -98,7 +96,7 @@ double WindowRunner::getElapsedTime() const
 
 double WindowRunner::getFps() const
 {
-	return renderFpsCounter.getFps();
+	return fpsCounter.getFps();
 }
 
 bool WindowRunner::keyIsDown(int32_t key)
@@ -156,11 +154,10 @@ double WindowRunner::getMouseWheelScroll()
 
 void WindowRunner::changeState(WindowRunnerStates newState)
 {
-	if (currentState != WindowRunnerStates::None)
+	if (currentState != WindowRunnerStates::NONE)
 		runnerStates[currentState]->shutdown();
 
 	currentState = newState;
-
 	runnerStates[currentState]->initialize();
 }
 
@@ -168,7 +165,6 @@ void WindowRunner::initialize()
 {
 	Log& log = App::getLog();
 	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
 	CLManager& clManager = App::getCLManager();
 
 	mouseInfoPtr = &mouseInfo;
@@ -215,9 +211,6 @@ void WindowRunner::initialize()
 	if (settings.window.hideCursor)
 		glfwSetInputMode(glfwWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-	framebuffer.initialize();
-	framebuffer.enableSmoothing(settings.framebuffer.enableSmoothing);
-
 	if (settings.openCL.enabled)
 		clManager.initialize();
 
@@ -226,20 +219,18 @@ void WindowRunner::initialize()
 
 	windowResized(settings.window.width, settings.window.height);
 
-	runnerStates[WindowRunnerStates::Default] = std::make_shared<DefaultState>();
-	changeState(WindowRunnerStates::Default);
+	runnerStates[WindowRunnerStates::DEFAULT] = std::make_unique<DefaultState>();
+	changeState(WindowRunnerStates::DEFAULT);
 }
 
 void WindowRunner::shutdown()
 {
-	runnerStates[currentState]->shutdown();
+	if (currentState != WindowRunnerStates::NONE)
+		runnerStates[currentState]->shutdown();
 }
 
 void WindowRunner::windowResized(uint64_t width, uint64_t height)
 {
-	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
-
 	if (width == 0 || height == 0)
 		return;
 
@@ -250,31 +241,8 @@ void WindowRunner::windowResized(uint64_t width, uint64_t height)
 	defaultText.setWindowSize(windowWidth, windowHeight);
 	pauseText.setWindowSize(windowWidth, windowHeight);
 
-	uint64_t framebufferImageWidth = uint64_t(double(windowWidth) * settings.framebuffer.scale + 0.5);
-	uint64_t framebufferImageHeight = uint64_t(double(windowHeight) * settings.framebuffer.scale + 0.5);
-	resizeFramebuffer(framebufferImageWidth, framebufferImageHeight);
-	framebuffer.setWindowSize(windowWidth, windowHeight);
-
-	if (currentState != WindowRunnerStates::None)
-	{
+	if (currentState != WindowRunnerStates::NONE)
 		runnerStates[currentState]->windowResized(windowWidth, windowHeight);
-		runnerStates[currentState]->framebufferResized(framebufferImageWidth, framebufferImageHeight);
-	}
-}
-
-void WindowRunner::resizeFramebuffer(uint64_t width, uint64_t height)
-{
-	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
-	CLTracer& clTracer = App::getCLTracer();
-
-	if (settings.openCL.enabled)
-		clTracer.releaseImageBuffer();
-
-	framebuffer.resize(width, height);
-
-	if (settings.openCL.enabled)
-		clTracer.initializeImageBuffer(width, height);
 }
 
 // http://gafferongames.com/game-physics/fix-your-timestep/
@@ -316,12 +284,8 @@ void WindowRunner::mainLoop()
 void WindowRunner::update(double timeStep)
 {
 	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
-
-	updateFpsCounter.count();
-	updateFpsCounter.update(timeStep);
-	renderFpsCounter.update(timeStep);
-
+	
+	fpsCounter.update();
 	glfwPollEvents();
 
 	int32_t newWindowWidth, newWindowHeight;
@@ -335,8 +299,8 @@ void WindowRunner::update(double timeStep)
 
 	mouseInfo.windowX = int64_t(newMouseX + 0.5);
 	mouseInfo.windowY = int64_t(double(windowHeight) - newMouseY - 1.0 + 0.5);
-	mouseInfo.framebufferX = int64_t((mouseInfo.windowX / double(windowWidth)) * framebuffer.getWidth() + 0.5);
-	mouseInfo.framebufferY = int64_t((mouseInfo.windowY / double(windowHeight)) * framebuffer.getHeight() + 0.5);
+	mouseInfo.scaledX = int64_t((mouseInfo.windowX / double(windowWidth)) * (double(windowWidth) * settings.framebuffer.scale) + 0.5);
+	mouseInfo.scaledY = int64_t((mouseInfo.windowY / double(windowHeight)) * (double(windowHeight) * settings.framebuffer.scale) + 0.5);
 	mouseInfo.deltaX = mouseInfo.windowX - previousMouseX;
 	mouseInfo.deltaY = mouseInfo.windowY - previousMouseY;
 	previousMouseX = mouseInfo.windowX;
@@ -351,44 +315,10 @@ void WindowRunner::update(double timeStep)
 	if (keyWasPressed(GLFW_KEY_F1))
 		settings.window.showInfoText = !settings.window.showInfoText;
 
-	if (keyWasPressed(GLFW_KEY_F9))
-	{
-		settings.framebuffer.enableSmoothing = !settings.framebuffer.enableSmoothing;
-		framebuffer.enableSmoothing(settings.framebuffer.enableSmoothing);
-	}
-
-	if (keyWasPressed(GLFW_KEY_F10))
-	{
-		double newScale = settings.framebuffer.scale * 0.5;
-		uint64_t newWidth = uint64_t(double(windowWidth) * newScale + 0.5);
-		uint64_t newHeight = uint64_t(double(windowHeight) * newScale + 0.5);
-
-		if (newWidth >= 2 && newHeight >= 2)
-		{
-			settings.framebuffer.scale = newScale;
-			resizeFramebuffer(newWidth, newHeight);
-			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
-		}
-	}
-
-	if (keyWasPressed(GLFW_KEY_F11))
-	{
-		if (settings.framebuffer.scale < 1.0)
-		{
-			settings.framebuffer.scale *= 2.0;
-
-			if (settings.framebuffer.scale > 1.0)
-				settings.framebuffer.scale = 1.0;
-
-			resizeFramebuffer(uint64_t(double(windowWidth) * settings.framebuffer.scale + 0.5), uint64_t(double(windowHeight) * settings.framebuffer.scale + 0.5));
-			runnerStates[currentState]->framebufferResized(framebuffer.getWidth(), framebuffer.getHeight());
-		}
-	}
-
 	if (keyWasPressed(GLFW_KEY_P))
 		isPaused = !isPaused;
 
-	if (currentState != WindowRunnerStates::None)
+	if (currentState != WindowRunnerStates::NONE)
 	{
 		if (!isPaused)
 			runnerStates[currentState]->update(timeStep);
@@ -400,14 +330,13 @@ void WindowRunner::update(double timeStep)
 void WindowRunner::render(double timeStep, double interpolation)
 {
 	Settings& settings = App::getSettings();
-	Framebuffer& framebuffer = App::getFramebuffer();
 
-	renderFpsCounter.count();
+	fpsCounter.tick();
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	if (currentState != WindowRunnerStates::None)
+	if (currentState != WindowRunnerStates::NONE)
 	{
 		if (!isPaused)
 			runnerStates[currentState]->render(timeStep, interpolation);
@@ -417,10 +346,8 @@ void WindowRunner::render(double timeStep, double interpolation)
 	else
 		throw std::runtime_error("Runner state has not been set");
 
-	framebuffer.render();
-
 	if (settings.window.showInfoText)
-		defaultText.drawText(5.0, double(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, renderFpsCounter.getFpsString());
+		defaultText.drawText(5.0, double(windowHeight - settings.window.defaultFontSize - 2), Color::WHITE, fpsCounter.getFpsString());
 
 	defaultText.render();
 
