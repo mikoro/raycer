@@ -140,18 +140,13 @@ Color Tracer::generateTimeSamples(const Scene& scene, const Vector2& pixelCoordi
 {
 	assert(scene.general.timeSamples >= 1);
 
+	Sampler* sampler = samplers[scene.general.timeSamplerType].get();
+
 	Color sampledPixelColor;
 	uint64_t n = scene.general.timeSamples;
 
 	for (uint64_t i = 0; i < n; ++i)
-	{
-		double time = 0.0;
-
-		if (n > 1)
-			time = double(i) * (1.0 / double(n - 1));
-
-		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, time, generator, interrupted);
-	}
+		sampledPixelColor += generateCameraSamples(scene, pixelCoordinate, sampler->getSample1D(i, n, 0, generator), generator, interrupted);
 
 	return sampledPixelColor / double(n);
 }

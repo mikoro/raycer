@@ -12,12 +12,7 @@ textures
 
 misc
  - convert to using cl c++ wrapper
- - point light distance attenuation
- - check path tracers pixel averaging
- - run clang-modernize
- - move random gens to thread locals + remove local gens from everywhere
  - check all shared data usage between threads
- - add scripts to linux to run clang stuff
  - add spline curve class
  - add camera movement with splines
  - add support to for ispc compiler
@@ -27,10 +22,13 @@ misc
  - implement opencl tracers with multipass/wavefront style
  - bvh on/off for editing and store original visible in scene
  - change tclap to boost program options and move settings to root
- - use make_unique (check gcc support)
  - remove freetype headers from windows platform
  - replace private constructors with =deleted
  - add scope exit to obj loader and consolerunner text color
  - replace align macro with alignas
  - sizeof(Color) -> colorf, check networkrunner image stuff
  - check if camera dof needs jitter
+ - normal mapping toggle on/off
+ - fast preview with "dot product lighting"
+ - fix path tracer asserts
+ 

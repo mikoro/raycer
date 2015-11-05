@@ -89,6 +89,7 @@ namespace Raycer
 			TracerType tracerType = TracerType::RAY;
 			SamplerType multiSamplerType = SamplerType::CENTER;
 			FilterType multiSamplerFilterType = FilterType::MITCHELL;
+			SamplerType timeSamplerType = SamplerType::JITTERED;
 			SamplerType cameraSamplerType = SamplerType::CMJ;
 			uint64_t maxRayIterations = 3;
 			uint64_t maxPathLength = 3;
@@ -108,6 +109,7 @@ namespace Raycer
 				ar(CEREAL_NVP(tracerType),
 					CEREAL_NVP(multiSamplerType),
 					CEREAL_NVP(multiSamplerFilterType),
+					CEREAL_NVP(timeSamplerType),
 					CEREAL_NVP(cameraSamplerType),
 					CEREAL_NVP(maxRayIterations),
 					CEREAL_NVP(maxPathLength),
