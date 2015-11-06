@@ -48,9 +48,10 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		std::ofstream file(tfm::format("sampler_%s_hemisphere.txt", sampler.first));
 
 		std::random_device rd;
-		sampler.second->setPermutation(rd());
-		sampler.second->generateSamples1D(sampleCount);
-		sampler.second->generateSamples2D(sampleCount);
+		std::mt19937 generator(rd());
+
+		sampler.second->generateSamples1D(sampleCount, generator);
+		sampler.second->generateSamples2D(sampleCount, generator);
 
 		double sample1D;
 

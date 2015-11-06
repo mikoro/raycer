@@ -120,6 +120,7 @@ void DefaultState::update(double timeStep)
 			scene.general.tracerType = TracerType::RAY;
 
 		tracer = Tracer::getTracer(scene.general.tracerType);
+		film.clear();
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F5))
