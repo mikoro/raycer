@@ -102,6 +102,7 @@ namespace Raycer
 			Color offLensColor = Color(0.0, 0.0, 0.0);
 			bool visualizeDepth = false;
 			double visualizeDepthMaxDistance = 25.0;
+			bool enableNormalMapping = true;
 
 			template <class Archive>
 			void serialize(Archive& ar)
@@ -121,7 +122,8 @@ namespace Raycer
 					CEREAL_NVP(backgroundColor),
 					CEREAL_NVP(offLensColor),
 					CEREAL_NVP(visualizeDepth),
-					CEREAL_NVP(visualizeDepthMaxDistance));
+					CEREAL_NVP(visualizeDepthMaxDistance),
+					CEREAL_NVP(enableNormalMapping));
 			}
 
 		} general;

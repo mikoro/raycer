@@ -106,12 +106,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	uint64_t leafCount = 0;
 	uint64_t actualNodeCount = 0;
 
-	enum
-	{
-		ROOT = -4,
-		UNVISITED = -3,
-		VISITED_TWICE = -1
-	};
+	enum { ROOT = -4, UNVISITED = -3, VISITED_TWICE = -1 };
 
 	// push to stack
 	stack[stackptr].start = 0;
@@ -134,7 +129,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 		for (uint64_t i = buildEntry.start; i < buildEntry.end; ++i)
 			flatNode.aabb.expand(orderedPrimitives[i]->getAABB());
 
-		// leaf node indicated by rightOffset = 0
+		// leaf node indicated by rightOffset == 0
 		if (flatNode.primitiveCount <= buildInfo.maxLeafSize)
 		{
 			flatNode.rightOffset = 0;

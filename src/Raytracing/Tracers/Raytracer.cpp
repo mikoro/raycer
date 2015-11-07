@@ -66,7 +66,7 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 		return finalColor;
 	}
 
-	if (material->normalMapTexture != nullptr)
+	if (scene.general.enableNormalMapping && material->normalMapTexture != nullptr)
 	{
 		TextureNormalDataType normalType = TextureNormalDataType::NONE;
 		Vector3 normalData = material->normalMapTexture->getNormalData(intersection.texcoord, intersection.position, normalType);

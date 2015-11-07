@@ -112,6 +112,9 @@ void DefaultState::update(double timeStep)
 	if (windowRunner.keyWasPressed(GLFW_KEY_R))
 		scene.camera.reset();
 
+	if (windowRunner.keyWasPressed(GLFW_KEY_N))
+		scene.general.enableNormalMapping = !scene.general.enableNormalMapping;
+
 	if (windowRunner.keyWasPressed(GLFW_KEY_F4))
 	{
 		if (scene.general.tracerType == TracerType::RAY)
