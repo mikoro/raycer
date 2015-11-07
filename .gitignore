@@ -13,6 +13,7 @@
 *.suppress
 *.gch
 *.plist
+*.exe
 .vs
 My*
 Thumbs.db
