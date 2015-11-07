@@ -61,6 +61,7 @@ namespace Raycer
 
 		void addModel(const ModelLoaderResult& result);
 		void initialize();
+		void rebuildRootBVH();
 
 		static Scene createTestScene1();
 		static Scene createTestScene2();
@@ -282,6 +283,7 @@ namespace Raycer
 			std::vector<Box> boundingBoxes;
 			std::vector<Primitive*> visible;
 			std::vector<Primitive*> invisible;
+			std::vector<Primitive*> visibleOriginal;
 
 			template <class Archive>
 			void serialize(Archive& ar)

@@ -78,7 +78,7 @@ namespace Raycer
 		void transform(const Vector3& scale, const EulerAngle& rotate, const Vector3& translate) override;
 
 		void build(const std::vector<Primitive*>& primitives, const BVHBuildInfo& buildInfo);
-		void rebuild(const Scene& scene);
+		void restore(const Scene& scene);
 
 		bool hasBeenBuilt = false;
 		std::vector<FlatBVHNode> flatNodes;

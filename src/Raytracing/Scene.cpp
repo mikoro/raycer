@@ -470,10 +470,12 @@ void Scene::initialize()
 
 	// ROOT BVH
 
+	primitives.visibleOriginal = primitives.visible;
+
 	if (rootBVH.enabled)
 	{
 		if (rootBVH.bvh.hasBeenBuilt)
-			rootBVH.bvh.rebuild(*this);
+			rootBVH.bvh.restore(*this);
 		else
 			rootBVH.bvh.build(primitives.visible, rootBVH.buildInfo);
 
@@ -485,4 +487,15 @@ void Scene::initialize()
 	auto milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count();
 
 	log.logInfo("Scene initialization finished (time: %d ms)", milliseconds);
+}
+
+void Scene::rebuildRootBVH()
+{
+	if (!rootBVH.enabled)
+		return;
+
+	rootBVH.bvh.build(primitives.visibleOriginal, rootBVH.buildInfo);
+
+	primitives.visible.clear();
+	primitives.visible.push_back(&rootBVH.bvh);
 }

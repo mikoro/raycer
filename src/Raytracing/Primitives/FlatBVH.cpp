@@ -203,7 +203,7 @@ void FlatBVH::build(const std::vector<Primitive*>& primitives, const BVHBuildInf
 	log.logInfo("BVH building finished (time: %d ms, nodes: %d, leafs: %d)", milliseconds, nodeCount, leafCount);
 }
 
-void FlatBVH::rebuild(const Scene& scene)
+void FlatBVH::restore(const Scene& scene)
 {
 	orderedPrimitives.clear();
 

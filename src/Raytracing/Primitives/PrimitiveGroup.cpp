@@ -26,7 +26,7 @@ void Raycer::PrimitiveGroup::initialize(const Scene& scene)
 	if (enableBVH)
 	{
 		if (bvh.hasBeenBuilt)
-			bvh.rebuild(scene);
+			bvh.restore(scene);
 		else
 			bvh.build(primitives, bvhBuildInfo);
 	}
