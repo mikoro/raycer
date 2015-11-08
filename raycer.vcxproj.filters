@@ -52,6 +52,9 @@
     <Filter Include="Raytracing\Tracers">
       <UniqueIdentifier>{f4f67aec-4474-4a20-b823-5aa316780efb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ISPC">
+      <UniqueIdentifier>{34331d5d-9eb8-4e43-af35-ff6640e8cb60}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Utils\FpsCounter.cpp">
@@ -703,6 +706,9 @@
     <ClInclude Include="src\Raytracing\Textures\ColorGradientTexture.h">
       <Filter>Raytracing\Textures</Filter>
     </ClInclude>
+    <ClInclude Include="src\ISPC\test_ispc.h">
+      <Filter>ISPC</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="platform\windows\raycer.rc">
@@ -734,5 +740,10 @@
     <None Include="src\Math\Polynomial.inl">
       <Filter>Math</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="src\ISPC\test_ispc.c">
+      <Filter>ISPC</Filter>
+    </CustomBuild>
   </ItemGroup>
 </Project>

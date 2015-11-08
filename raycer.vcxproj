@@ -18,6 +18,8 @@
     <ProjectGuid>{42FB9D22-D754-4BBA-8DF4-041B231BF702}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>raycer</RootNamespace>
+    <ISPC_compiler>platform\windows\bin\ispc.exe</ISPC_compiler>
+    <ISPC_targets>avx</ISPC_targets>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -133,8 +135,6 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;_USE_MATH_DEFINES;NOMINMAX;_WIN32_WINNT=0x0601;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <SDLCheck>
-      </SDLCheck>
       <OpenMPSupport>true</OpenMPSupport>
       <CompileAs>CompileAsCpp</CompileAs>
       <OpenMP>GenerateParallelCode</OpenMP>
@@ -164,6 +164,12 @@
   <ItemGroup>
     <ClCompile Include="src\App.cpp" />
     <ClCompile Include="src\gl3w.cpp" />
+    <CustomBuild Include="src\ISPC\test_ispc.c">
+      <Message>%(Filename).c (ISPC)</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'!='Release|x64'">$(ISPC_compiler) -O0 %(RelativeDir)\%(Filename).c -o $(IntDir)\%(Filename).obj -h %(RelativeDir)\%(Filename).h --target=$(ISPC_targets) -g</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ISPC_compiler) -O2 %(RelativeDir)\%(Filename).c -o $(IntDir)\%(Filename).obj -h %(RelativeDir)\%(Filename).h --target=$(ISPC_targets)</Command>
+      <Outputs>$(IntDir)\%(Filename).obj</Outputs>
+    </CustomBuild>
     <ClCompile Include="src\Math\AxisAngle.cpp" />
     <ClCompile Include="src\Math\Color.cpp" />
     <ClCompile Include="src\Math\EulerAngle.cpp" />
@@ -296,6 +302,7 @@
   <ItemGroup>
     <ClInclude Include="src\App.h" />
     <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\ISPC\test_ispc.h" />
     <ClInclude Include="src\Math\AxisAngle.h" />
     <ClInclude Include="src\Math\Color.h" />
     <ClInclude Include="src\Math\EulerAngle.h" />
