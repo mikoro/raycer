@@ -110,12 +110,13 @@ void ConsoleRunner::run(TracerState& state)
 
 	SysUtils::setConsoleTextColor(ConsoleTextColor::WHITE_ON_BLACK);
 
-	std::cout << tfm::format("\nTracing started (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB)\n\n",
+	std::cout << tfm::format("\nTracing started (dimensions: %dx%d, offset: %d, pixels: %d, size: %fB, threads: %d)\n\n",
 		state.filmWidth,
 		state.filmHeight,
 		state.pixelStartOffset,
 		state.pixelCount,
-		StringUtils::humanizeNumber(double(state.pixelCount * sizeof(Color)), true));
+		StringUtils::humanizeNumber(double(state.pixelCount * sizeof(Color)), true),
+		settings.general.maxThreadCount);
 
 	timer.setTargetValue(double(state.pixelCount));
 	timer.restart();

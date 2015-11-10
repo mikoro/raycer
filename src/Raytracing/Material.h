@@ -7,6 +7,7 @@
 
 #include "Math/Color.h"
 #include "Math/Vector2.h"
+#include "Rendering/Samplers/Sampler.h"
 
 namespace Raycer
 {
@@ -44,6 +45,7 @@ namespace Raycer
 		uint64_t rayReflectanceMapTextureId = 0;
 		double rayReflectance = 0.0;
 		bool fresnelReflection = false;
+		SamplerType rayReflectanceGlossinessSamplerType = SamplerType::CMJ;
 		uint64_t rayReflectanceGlossinessSamplesSqrt = 0;
 		double rayReflectanceGlossiness = 1.0;
 
@@ -54,6 +56,7 @@ namespace Raycer
 		bool enableAttenuation = false;
 		double attenuationFactor = 1.0;
 		Color attenuationColor = Color(0.0, 0.0, 0.0);
+		SamplerType rayTransmittanceGlossinessSamplerType = SamplerType::CMJ;
 		uint64_t rayTransmittanceGlossinessSamplesSqrt = 0;
 		double rayTransmittanceGlossiness = 1.0;
 
@@ -90,6 +93,7 @@ namespace Raycer
 				CEREAL_NVP(rayReflectanceMapTextureId),
 				CEREAL_NVP(rayReflectance),
 				CEREAL_NVP(fresnelReflection),
+				CEREAL_NVP(rayReflectanceGlossinessSamplerType),
 				CEREAL_NVP(rayReflectanceGlossinessSamplesSqrt),
 				CEREAL_NVP(rayReflectanceGlossiness),
 				CEREAL_NVP(rayTransmittanceMapTextureId),
@@ -98,6 +102,7 @@ namespace Raycer
 				CEREAL_NVP(enableAttenuation),
 				CEREAL_NVP(attenuationFactor),
 				CEREAL_NVP(attenuationColor),
+				CEREAL_NVP(rayTransmittanceGlossinessSamplerType),
 				CEREAL_NVP(rayTransmittanceGlossinessSamplesSqrt),
 				CEREAL_NVP(rayTransmittanceGlossiness),
 				CEREAL_NVP(normalMapTextureId),
