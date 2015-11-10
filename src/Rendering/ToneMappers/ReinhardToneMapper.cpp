@@ -20,7 +20,7 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 	const AlignedColorfVector& inputPixelData = inputImage.getPixelDataConst();
 	AlignedColorfVector& outputPixelData = outputImage.getPixelData();
 
-	const double epsilon = std::numeric_limits<double>::epsilon();
+	const double epsilon = 0.01;
 	const int64_t pixelCount = int64_t(inputPixelData.size());
 	double luminanceLogSum = 0.0;
 	double maxLuminance = 1.0;

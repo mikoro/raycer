@@ -51,8 +51,8 @@ Scene Scene::createTestScene14()
 
 	sphereMaterial = Material();
 	sphereMaterial.id = 2;
-	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
-	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.0;
+	sphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.0;
 	sphereMaterial.rayReflectance = 1.0;
 	sphereMaterial.rayTransmittance = 1.0;
 	sphereMaterial.refractiveIndex = 1.5;
@@ -71,8 +71,8 @@ Scene Scene::createTestScene14()
 
 	sphereMaterial = Material();
 	sphereMaterial.id = 3;
-	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
-	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.0;
+	sphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.0;
 	sphereMaterial.rayReflectance = 1.0;
 	sphereMaterial.rayTransmittance = 1.0;
 	sphereMaterial.refractiveIndex = 1.5;
@@ -91,8 +91,8 @@ Scene Scene::createTestScene14()
 
 	Material boxMaterial;
 	boxMaterial.id = 4;
-	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
-	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
+	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.0;
+	boxMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.0;
 	boxMaterial.rayReflectance = 1.0;
 	boxMaterial.rayTransmittance = 1.0;
 	boxMaterial.refractiveIndex = 1.5;

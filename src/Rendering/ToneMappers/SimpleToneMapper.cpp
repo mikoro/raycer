@@ -23,7 +23,7 @@ void SimpleToneMapper::apply(const Scene& scene, const Image& inputImage, Image&
 	{
 		Color inputColor = inputPixelData.at(i).toColor();
 		Color outputColor = inputColor * MathUtils::fastPow(2.0, scene.toneMapper.exposure);
-		outputColor = (outputColor / (Color(1.0, 1.0, 1.0, 1.0) + outputColor));
+		outputColor = outputColor / (Color(1.0, 1.0, 1.0, 1.0) + outputColor);
 
 		if (scene.toneMapper.applyGamma)
 			outputColor = Color::fastPow(outputColor, invGamma);

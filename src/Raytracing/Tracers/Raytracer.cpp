@@ -59,10 +59,10 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 
 		if (scene.simpleFog.enabled)
 		{
-			if (-ray.direction.dot(intersection.normal) >= 0.0) // is outside
+			if (ray.direction.dot(intersection.normal) < 0.0) // is outside
 				finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
 		}
-			
+		
 		return finalColor;
 	}
 
@@ -70,29 +70,23 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 		calculateNormalMapping(intersection);
 
 	double rayReflectance, rayTransmittance;
-	calculateRayReflectanceAndTransmittance(ray, intersection, rayReflectance, rayTransmittance);
+	Color reflectedColor, transmittedColor;
 
-	Color reflectedColor;
+	calculateRayReflectanceAndTransmittance(ray, intersection, rayReflectance, rayTransmittance);
 
 	if (rayReflectance > 0.0 && iteration < scene.general.maxRayIterations)
 		reflectedColor = calculateReflectedColor(scene, ray, intersection, rayReflectance, iteration, generator, interrupted);
 
-	Color transmittedColor;
-
 	if (rayTransmittance > 0.0 && iteration < scene.general.maxRayIterations)
-		transmittedColor = calculateReflectedColor(scene, ray, intersection, rayTransmittance, iteration, generator, interrupted);
+		transmittedColor = calculateTransmittedColor(scene, ray, intersection, rayTransmittance, iteration, generator, interrupted);
 
-	double ambientOcclusionAmount = 1.0;
+	Color lightColor = calculateLightColor(scene, ray, intersection, generator);
 
-	if (scene.lights.ambientLight.enableAmbientOcclusion)
-		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection, generator);
-
-	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount, generator);
 	finalColor = lightColor + reflectedColor + transmittedColor;
 
 	if (scene.simpleFog.enabled)
 	{
-		if (-ray.direction.dot(intersection.normal) >= 0.0) // is outside
+		if (ray.direction.dot(intersection.normal) < 0.0) // is outside
 			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
 	}
 
@@ -134,8 +128,8 @@ void Raytracer::calculateRayReflectanceAndTransmittance(const Ray& ray, const In
 
 	if (material->fresnelReflection)
 	{
-		double cosine = -ray.direction.dot(intersection.normal);
-		bool isOutside = cosine >= 0.0;
+		double cosine = ray.direction.dot(intersection.normal);
+		bool isOutside = cosine < 0.0;
 		double n1 = isOutside ? 1.0 : material->refractiveIndex;
 		double n2 = isOutside ? material->refractiveIndex : 1.0;
 		double rf0 = (n2 - n1) / (n2 + n1);
@@ -165,7 +159,7 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 	reflectionDirection.normalize();
 
 	Color reflectedColor;
-	bool isOutside = -ray.direction.dot(intersection.normal) >= 0.0;
+	bool isOutside = ray.direction.dot(intersection.normal) < 0.0;
 
 	if (material->rayReflectanceGlossinessSamplesSqrt == 0)
 	{
@@ -202,6 +196,10 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 		{
 			Vector3 sampleDirection = sampler->getHemisphereSample(reflectionOnb, distribution, x, y, n, n, permutation, generator);
 
+			// prevent sample rays from crossing the primitive surface
+			if (isOutside && sampleDirection.dot(intersection.normal) < 0.0 || !isOutside && sampleDirection.dot(intersection.normal) > 0.0)
+				sampleDirection = sampleDirection.reflect(reflectionDirection);
+
 			Ray sampleRay;
 			Intersection sampleIntersection;
 
@@ -229,8 +227,8 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 {
 	const Material* material = intersection.primitive->material;
 
-	double cosine1 = -ray.direction.dot(intersection.normal);
-	bool isOutside = cosine1 >= 0.0;
+	double cosine1 = ray.direction.dot(intersection.normal);
+	bool isOutside = cosine1 < 0.0;
 	double n1 = isOutside ? 1.0 : material->refractiveIndex;
 	double n2 = isOutside ? material->refractiveIndex : 1.0;
 	double n3 = n1 / n2;
@@ -280,6 +278,10 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 		{
 			Vector3 sampleDirection = sampler->getHemisphereSample(transmissionOnb, distribution, x, y, n, n, permutation, generator);
 
+			// prevent sample rays from crossing the primitive surface
+			if (isOutside && sampleDirection.dot(intersection.normal) > 0.0 || !isOutside && sampleDirection.dot(intersection.normal) < 0.0)
+				sampleDirection = sampleDirection.reflect(transmissionDirection);
+
 			Ray sampleRay;
 			Intersection sampleIntersection;
 
@@ -303,7 +305,7 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 	return transmittedColor / (double(n) * double(n));
 }
 
-Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, double ambientOcclusionAmount, std::mt19937& generator)
+Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, std::mt19937& generator)
 {
 	Color lightColor;
 	Vector3 directionToCamera = -ray.direction;
@@ -325,6 +327,11 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 	Color finalAmbientReflectance = material->ambientReflectance * mappedAmbientReflectance;
 	Color finalDiffuseReflectance = material->diffuseReflectance * mappedDiffuseReflectance;
 	Color finalSpecularReflectance = material->specularReflectance * mappedSpecularReflectance;
+
+	double ambientOcclusionAmount = 1.0;
+
+	if (scene.lights.ambientLight.enableAmbientOcclusion)
+		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection, generator);
 
 	lightColor += scene.lights.ambientLight.color * scene.lights.ambientLight.intensity * ambientOcclusionAmount * finalAmbientReflectance;
 

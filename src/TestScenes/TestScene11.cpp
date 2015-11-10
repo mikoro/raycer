@@ -12,6 +12,8 @@ Scene Scene::createTestScene11()
 {
 	Scene scene;
 
+	scene.toneMapper.type = ToneMapperType::SIMPLE;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.44, 7.05, 7.33);
@@ -21,8 +23,11 @@ Scene Scene::createTestScene11()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
-	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
-	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.0;
+	groundMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.5;
+	groundMaterial.rayReflectance = 1.0;
+	//groundMaterial.rayReflectanceGlossinessSamplesSqrt = 3;
+	groundMaterial.rayReflectanceGlossiness = 100.0;
 
 	Plane groundPlane;
 	groundPlane.id = 1;
@@ -54,6 +59,25 @@ Scene Scene::createTestScene11()
 	box.extent = Vector3(2.0, 1.0, 5.0);
 	scene.primitives.boxes.push_back(box);
 
+	// SPHERES //
+
+	Material sphereMaterial;
+	sphereMaterial.id = 10;
+	sphereMaterial.ambientReflectance = Color(0.0, 1.0, 0.0) * 0.0;
+	sphereMaterial.diffuseReflectance = Color(0.0, 1.0, 0.0) * 0.0;
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayReflectanceGlossinessSamplesSqrt = 3;
+	sphereMaterial.rayReflectanceGlossiness = 100.0;
+
+	Sphere sphere;
+	sphere.id = 10;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(3.0, 1.0, 3.0);
+	sphere.radius = 1.0;
+
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+	
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
@@ -61,11 +85,11 @@ Scene Scene::createTestScene11()
 
 	PointLight pointLight;
 	pointLight.color = Color(1.0, 1.0, 1.0);
-	pointLight.intensity = 1.5;
+	pointLight.intensity = 2.0;
 	pointLight.position = Vector3(10.0, 10.0, 10.0);
 	pointLight.maxDistance = 100.0;
 	pointLight.attenuation = 1.0;
-	pointLight.enableAreaLight = true;
+	//pointLight.enableAreaLight = true;
 	pointLight.areaLightSamplesSqrt = 3;
 	pointLight.areaLightRadius = 0.5;
 
