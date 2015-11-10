@@ -76,11 +76,11 @@ namespace
 				currentMaterial.ambientReflectance.g = readDouble(line, lineIndex, part);
 				currentMaterial.ambientReflectance.b = readDouble(line, lineIndex, part);
 			}
-			else if (part == "Kd") // diffuse reflectance + reflectance
+			else if (part == "Kd") // diffuse reflectance
 			{
-				currentMaterial.diffuseReflectance.r = currentMaterial.reflectance.r = readDouble(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.g = currentMaterial.reflectance.g = readDouble(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.b = currentMaterial.reflectance.b = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.r = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.g = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.b = readDouble(line, lineIndex, part);
 			}
 			else if (part == "Ks") // specular reflectance
 			{
@@ -90,13 +90,14 @@ namespace
 			}
 			else if (part == "Ke") // emittance
 			{
-				currentMaterial.emittance.r = readDouble(line, lineIndex, part);
-				currentMaterial.emittance.g = readDouble(line, lineIndex, part);
-				currentMaterial.emittance.b = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseIsEmissive = true;
+				currentMaterial.diffuseReflectance.r = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.g = readDouble(line, lineIndex, part);
+				currentMaterial.diffuseReflectance.b = readDouble(line, lineIndex, part);
 			}
 			else if (part == "Ns") // shininess
 			{
-				currentMaterial.shininess = readDouble(line, lineIndex, part);
+				currentMaterial.specularShininess = readDouble(line, lineIndex, part);
 			}
 			else if (part == "Ni") // refractive index
 			{
@@ -118,7 +119,7 @@ namespace
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
-				currentMaterial.diffuseMapTextureId = currentMaterial.reflectanceMapTextureId = imageTexture.id;
+				currentMaterial.diffuseMapTextureId = imageTexture.id;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
@@ -138,11 +139,12 @@ namespace
 
 				result.textures.push_back(imageTexture);
 			}
-			else if (part == "map_Ke" && currentMaterial.emittanceMapTextureId == 0) // emittance map
+			else if (part == "map_Ke" && currentMaterial.diffuseMapTextureId == 0) // emittance map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
-				currentMaterial.emittanceMapTextureId = imageTexture.id;
+				currentMaterial.diffuseMapTextureId = imageTexture.id;
+				currentMaterial.diffuseIsEmissive = true;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);

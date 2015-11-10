@@ -53,7 +53,7 @@ Scene Scene::createTestScene16()
 	sphere1Material.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.5;
 	sphere1Material.diffuseReflectance = sphere1Material.ambientReflectance;
 	sphere1Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere1Material.shininess = 128.0;
+	sphere1Material.specularShininess = 128.0;
 
 	Sphere sphere1;
 	sphere1.id = 2;
@@ -85,7 +85,7 @@ Scene Scene::createTestScene16()
 	sphere2Material.ambientMapTextureId = sphere2Texture.id;
 	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
 	sphere2Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere2Material.shininess = 128.0;
+	sphere2Material.specularShininess = 128.0;
 
 	Sphere sphere2;
 	sphere2.id = 4;
@@ -120,7 +120,7 @@ Scene Scene::createTestScene16()
 	sphere3Material.ambientMapTextureId = sphere3Texture.id;
 	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
 	sphere3Material.specularReflectance = Color(0.8, 0.8, 0.8);
-	sphere3Material.shininess = 128.0;
+	sphere3Material.specularShininess = 128.0;
 
 	Sphere sphere3;
 	sphere3.id = 6;

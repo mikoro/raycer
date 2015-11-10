@@ -32,7 +32,7 @@ Scene Scene::createTestScene10()
 	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 	sphereMaterial.specularReflectance = Color(1.0, 1.0, 1.0);
 	sphereMaterial.normalMapTextureId = sphereNormalTexture.id;
-	sphereMaterial.shininess = 64.0;
+	sphereMaterial.specularShininess = 64.0;
 	sphereMaterial.nonShadowing = true;
 
 	Sphere sphere;
@@ -59,7 +59,7 @@ Scene Scene::createTestScene10()
 	model1Material.diffuseReflectance = model1Material.ambientReflectance;
 	model1Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	model1Material.normalMapTextureId = model1NormalTexture.id;
-	model1Material.shininess = 64.0;
+	model1Material.specularShininess = 64.0;
 	model1Material.texcoordScale = Vector2(10.0, 10.0);
 
 	ModelLoaderInfo model1Info(ModelLoaderPreset::COMBINED_GROUP);
@@ -103,7 +103,7 @@ Scene Scene::createTestScene10()
 	model2Material.normalMapTextureId = model2NormalTexture.id;
 	model2Material.diffuseReflectance = Color(1.0, 1.0, 1.0) * 0.5;
 	model2Material.specularReflectance = Color(1.0, 1.0, 1.0);
-	model2Material.shininess = 64.0;
+	model2Material.specularShininess = 64.0;
 	model2Material.nonShadowing = true;
 	model2Material.texcoordScale = Vector2(4.0, 2.0);
 
@@ -136,7 +136,7 @@ Scene Scene::createTestScene10()
 	mesh3Material.diffuseReflectance = mesh3Material.ambientReflectance;
 	mesh3Material.specularReflectance = Color(1.0, 1.0, 1.0);
 	mesh3Material.normalMapTextureId = model3NormalTexture.id;
-	mesh3Material.shininess = 64.0;
+	mesh3Material.specularShininess = 64.0;
 	mesh3Material.nonShadowing = true;
 
 	ModelLoaderInfo model3Info(ModelLoaderPreset::COMBINED_GROUP);

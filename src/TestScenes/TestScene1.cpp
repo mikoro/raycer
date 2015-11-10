@@ -26,8 +26,7 @@ Scene Scene::createTestScene1()
 	groundMaterial.id = 1;
 	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0) * 0.3;
 	groundMaterial.diffuseReflectance = groundMaterial.ambientReflectance;
-	groundMaterial.reflectance = groundMaterial.ambientReflectance;
-
+	
 	Plane groundPlane;
 	groundPlane.id = 1;
 	groundPlane.materialId = groundMaterial.id;
@@ -43,7 +42,6 @@ Scene Scene::createTestScene1()
 	triangleMaterial.id = 2;
 	triangleMaterial.ambientReflectance = Color(1.0, 0.0, 0.0) * 0.5;
 	triangleMaterial.diffuseReflectance = triangleMaterial.ambientReflectance;
-	triangleMaterial.reflectance = triangleMaterial.ambientReflectance;
 
 	Triangle triangle;
 	triangle.id = 2;
@@ -70,7 +68,6 @@ Scene Scene::createTestScene1()
 	sphereMaterial.id = 3;
 	sphereMaterial.ambientReflectance = Color(0.0, 1.0, 0.0) * 0.5;
 	sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
-	sphereMaterial.reflectance = sphereMaterial.ambientReflectance;
 
 	Sphere sphere;
 	sphere.id = 3;
@@ -92,7 +89,6 @@ Scene Scene::createTestScene1()
 	boxMaterial.id = 4;
 	boxMaterial.ambientReflectance = Color(0.0, 0.0, 1.0) * 0.5;
 	boxMaterial.diffuseReflectance = boxMaterial.ambientReflectance;
-	boxMaterial.reflectance = boxMaterial.ambientReflectance;
 
 	Box box;
 	box.id = 4;
@@ -115,7 +111,6 @@ Scene Scene::createTestScene1()
 	cylinderMaterial.id = 5;
 	cylinderMaterial.ambientReflectance = Color(1.0, 1.0, 0.0) * 0.5;
 	cylinderMaterial.diffuseReflectance = cylinderMaterial.ambientReflectance;
-	cylinderMaterial.reflectance = cylinderMaterial.ambientReflectance;
 
 	Cylinder cylinder;
 	cylinder.id = 5;
@@ -139,7 +134,6 @@ Scene Scene::createTestScene1()
 	torusMaterial.id = 6;
 	torusMaterial.ambientReflectance = Color(0.0, 1.0, 1.0) * 0.5;
 	torusMaterial.diffuseReflectance = torusMaterial.ambientReflectance;
-	torusMaterial.reflectance = torusMaterial.ambientReflectance;
 
 	Torus torus;
 	torus.id = 6;
@@ -163,7 +157,6 @@ Scene Scene::createTestScene1()
 	blobMaterial.id = 7;
 	blobMaterial.ambientReflectance = Color(1.0, 0.0, 1.0) * 0.5;
 	blobMaterial.diffuseReflectance = blobMaterial.ambientReflectance;
-	blobMaterial.reflectance = blobMaterial.ambientReflectance;
 
 	BlinnBlob blob;
 	blob.id = 7;
@@ -195,8 +188,9 @@ Scene Scene::createTestScene1()
 
 	Material lightSphereMaterial;
 	lightSphereMaterial.id = 8;
-	lightSphereMaterial.emittance = Color(1.0, 1.0, 1.0) * 2.0;
+	lightSphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 2.0;
 	lightSphereMaterial.nonShadowing = true;
+	lightSphereMaterial.diffuseIsEmissive = true;
 
 	Sphere lightSphere;
 	lightSphere.id = 8;

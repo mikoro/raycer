@@ -32,7 +32,6 @@ Scene Scene::createTestScene19()
 	groundMaterial.id = 1;
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
-	groundMaterial.reflectanceMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(50.0, 50.0);
 
 	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
@@ -58,7 +57,6 @@ Scene Scene::createTestScene19()
 	sphereMaterial.id = 2;
 	sphereMaterial.ambientMapTextureId = sphereTexture.id;
 	sphereMaterial.diffuseMapTextureId = sphereTexture.id;
-	sphereMaterial.emittanceMapTextureId = sphereTexture.id;
 	//sphereMaterial.emittance = Color(1.0, 1.0, 1.0);
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;

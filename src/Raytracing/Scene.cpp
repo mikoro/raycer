@@ -347,12 +347,6 @@ void Scene::initialize()
 		if (texturesMap.count(material.rayTransmittanceMapTextureId))
 			material.rayTransmittanceMapTexture = texturesMap[material.rayTransmittanceMapTextureId];
 
-		if (texturesMap.count(material.reflectanceMapTextureId))
-			material.reflectanceMapTexture = texturesMap[material.reflectanceMapTextureId];
-
-		if (texturesMap.count(material.emittanceMapTextureId))
-			material.emittanceMapTexture = texturesMap[material.emittanceMapTextureId];
-
 		if (texturesMap.count(material.normalMapTextureId))
 			material.normalMapTexture = texturesMap[material.normalMapTextureId];
 

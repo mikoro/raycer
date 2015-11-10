@@ -177,7 +177,7 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 
 	double ambientOcclusionAmount = 1.0;
 
-	if (scene.lights.ambientLight.enableOcclusion)
+	if (scene.lights.ambientLight.enableAmbientOcclusion)
 		ambientOcclusionAmount = calculateAmbientOcclusionAmount(scene, intersection, generator);
 
 	Color lightColor = calculateLightColor(scene, ray, intersection, ambientOcclusionAmount, generator);
@@ -216,7 +216,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 
 	for (const DirectionalLight& light : scene.lights.directionalLights)
 	{
-		Color directionalLightColor = calculatePhongShadingColor(intersection.normal, -light.direction, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
+		Color directionalLightColor = calculatePhongShadingColor(intersection.normal, -light.direction, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->specularShininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light);
 		lightColor += directionalLightColor * (1.0 - shadowAmount);
 	}
@@ -227,7 +227,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		double distanceToLight = directionToLight.length();
 		directionToLight.normalize();
 
-		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
+		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->specularShininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
@@ -241,7 +241,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		double distanceToLight = directionToLight.length();
 		directionToLight.normalize();
 
-		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->shininess);
+		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->specularShininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
 		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
@@ -301,13 +301,13 @@ Color Raytracer::calculateSimpleFogColor(const Scene& scene, const Intersection&
 
 double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection, std::mt19937& generator)
 {
-	Sampler* sampler = samplers[scene.lights.ambientLight.occlusionSamplerType].get();
+	Sampler* sampler = samplers[scene.lights.ambientLight.ambientOcclusionSamplerType].get();
 	std::uniform_int_distribution<uint64_t> randomPermutation;
 	uint64_t permutation = randomPermutation(generator);
 
 	double ambientOcclusion = 0.0;
-	double distribution = scene.lights.ambientLight.occlusionSampleDistribution;
-	uint64_t n = scene.lights.ambientLight.occlusionSamples;
+	double distribution = scene.lights.ambientLight.ambientOcclusionSampleDistribution;
+	uint64_t n = scene.lights.ambientLight.ambientOcclusionSamplesSqrt;
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
@@ -322,7 +322,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			sampleRay.origin = intersection.position + sampleDirection * scene.general.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
-			sampleRay.maxDistance = scene.lights.ambientLight.maxOcclusionDistance;
+			sampleRay.maxDistance = scene.lights.ambientLight.maxAmbientOcclusionSampleDistance;
 			sampleRay.precalculate();
 
 			for (Primitive* primitive : scene.primitives.visible)
@@ -372,7 +372,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 {
 	Vector3 directionToLight = (light.position - intersection.position).normalized();
 
-	if (!light.enableSoftShadows)
+	if (!light.enableAreaLight)
 	{
 		Ray shadowRay;
 		Intersection shadowIntersection;
@@ -400,18 +400,18 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	Vector3 lightRight = directionToLight.cross(Vector3::ALMOST_UP).normalized();
 	Vector3 lightUp = lightRight.cross(directionToLight).normalized();
 
-	Sampler* sampler = samplers[light.softShadowSamplerType].get();
+	Sampler* sampler = samplers[light.areaLightSamplerType].get();
 	std::uniform_int_distribution<uint64_t> randomPermutation;
 	uint64_t permutation = randomPermutation(generator);
 
 	double shadowAmount = 0.0;
-	uint64_t n = light.softShadowSamples;
+	uint64_t n = light.areaLightSamplesSqrt;
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
 		for (uint64_t x = 0; x < n; ++x)
 		{
-			Vector2 jitter = sampler->getDiscSample(x, y, n, n, permutation, generator) * light.radius;
+			Vector2 jitter = sampler->getDiscSample(x, y, n, n, permutation, generator) * light.areaLightRadius;
 			Vector3 newLightPosition = light.position + jitter.x * lightRight + jitter.y * lightUp;
 			Vector3 newDirectionToLight = (newLightPosition - intersection.position).normalized();
 

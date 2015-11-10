@@ -76,8 +76,8 @@ TEST_CASE("Sampler functionality", "[sampler]")
 		}
 
 		Vector3 sample3D;
-
-		while (sampler.second->getNextHemisphereSample(ONB::UP, 1.0, sample3D))
+		
+		while (sampler.second->getNextHemisphereSample(ONB::UP, 1000.0, sample3D))
 			file << tfm::format("%f %f %f\n", sample3D.x, sample3D.y, sample3D.z);
 
 		image1.save(tfm::format("sampler_%s_1D.png", sampler.first));

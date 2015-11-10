@@ -26,21 +26,21 @@ namespace Raycer
 
 	struct AmbientLight : public Light
 	{
-		bool enableOcclusion = false;
-		double maxOcclusionDistance = 1.0;
-		SamplerType occlusionSamplerType = SamplerType::CMJ;
-		uint64_t occlusionSamples = 0;
-		double occlusionSampleDistribution = 1.0;
+		bool enableAmbientOcclusion = false;
+		SamplerType ambientOcclusionSamplerType = SamplerType::CMJ;
+		uint64_t ambientOcclusionSamplesSqrt = 0;
+		double maxAmbientOcclusionSampleDistance = 1.0;
+		double ambientOcclusionSampleDistribution = 1.0;
 
 		template <class Archive>
 		void serialize(Archive& ar)
 		{
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
-				CEREAL_NVP(enableOcclusion),
-				CEREAL_NVP(maxOcclusionDistance),
-				CEREAL_NVP(occlusionSamplerType),
-				CEREAL_NVP(occlusionSamples),
-				CEREAL_NVP(occlusionSampleDistribution));
+				CEREAL_NVP(enableAmbientOcclusion),
+				CEREAL_NVP(ambientOcclusionSamplerType),
+				CEREAL_NVP(ambientOcclusionSamplesSqrt),
+				CEREAL_NVP(maxAmbientOcclusionSampleDistance),
+				CEREAL_NVP(ambientOcclusionSampleDistribution));
 		}
 	};
 
@@ -61,10 +61,10 @@ namespace Raycer
 		Vector3 position;
 		double maxDistance = 1000.0;
 		double attenuation = 1.0;
-		double radius = 1.0;
-		bool enableSoftShadows = false;
-		SamplerType softShadowSamplerType = SamplerType::CMJ;
-		uint64_t softShadowSamples = 0;
+		bool enableAreaLight = false;
+		SamplerType areaLightSamplerType = SamplerType::CMJ;
+		uint64_t areaLightSamplesSqrt = 0;
+		double areaLightRadius = 1.0;
 
 		template <class Archive>
 		void serialize(Archive& ar)
@@ -73,10 +73,10 @@ namespace Raycer
 				CEREAL_NVP(position),
 				CEREAL_NVP(maxDistance),
 				CEREAL_NVP(attenuation),
-				CEREAL_NVP(radius),
-				CEREAL_NVP(enableSoftShadows),
-				CEREAL_NVP(softShadowSamplerType),
-				CEREAL_NVP(softShadowSamples));
+				CEREAL_NVP(enableAreaLight),
+				CEREAL_NVP(areaLightSamplerType),
+				CEREAL_NVP(areaLightSamplesSqrt),
+				CEREAL_NVP(areaLightRadius));
 		}
 	};
 

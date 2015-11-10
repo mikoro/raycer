@@ -95,9 +95,9 @@ namespace Raycer
 			uint64_t maxRayIterations = 3;
 			uint64_t maxPathLength = 3;
 			uint64_t pathSamples = 1;
-			uint64_t multiSamples = 1;
+			uint64_t multiSamplesSqrt = 1;
 			uint64_t timeSamples = 1;
-			uint64_t cameraSamples = 0;
+			uint64_t cameraSamplesSqrt = 0;
 			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
@@ -116,9 +116,9 @@ namespace Raycer
 					CEREAL_NVP(maxRayIterations),
 					CEREAL_NVP(maxPathLength),
 					CEREAL_NVP(pathSamples),
-					CEREAL_NVP(multiSamples),
+					CEREAL_NVP(multiSamplesSqrt),
 					CEREAL_NVP(timeSamples),
-					CEREAL_NVP(cameraSamples),
+					CEREAL_NVP(cameraSamplesSqrt),
 					CEREAL_NVP(rayStartOffset),
 					CEREAL_NVP(backgroundColor),
 					CEREAL_NVP(offLensColor),

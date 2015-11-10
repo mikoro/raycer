@@ -78,9 +78,9 @@ void CLScene::readSceneFull(const Scene& scene)
 	general.rayStartOffset = cl_float(scene.general.rayStartOffset);
 	general.maxRayIterations = cl_int(scene.general.maxRayIterations);
 	general.maxPathLength = cl_int(scene.general.maxPathLength);
-	general.multiSamples = cl_int(scene.general.multiSamples);
+	//general.multiSamples = cl_int(scene.general.multiSamples);
 	general.timeSamples = cl_int(scene.general.timeSamples);
-	general.cameraSamples = cl_int(scene.general.cameraSamples);
+	//general.cameraSamples = cl_int(scene.general.cameraSamples);
 	general.visualizeDepth = cl_int(scene.general.visualizeDepth);
 	general.visualizeDepthMaxDistance = cl_float(scene.general.visualizeDepthMaxDistance);
 
@@ -112,17 +112,17 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
 		readColor(clMaterial.attenuationColor, material.attenuationColor);
-		readColor(clMaterial.reflectance, material.reflectance);
-		readColor(clMaterial.emittance, material.emittance);
+		//readColor(clMaterial.reflectance, material.reflectance);
+		//readColor(clMaterial.emittance, material.emittance);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
-		clMaterial.shininess = cl_float(material.shininess);
+		//clMaterial.shininess = cl_float(material.shininess);
 		clMaterial.ambientMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
 		clMaterial.diffuseMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
 		clMaterial.specularMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId);
 		clMaterial.rayReflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId);
 		clMaterial.rayTransmittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId);
-		clMaterial.reflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId);
-		clMaterial.emittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId);
+		//clMaterial.reflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId);
+		//clMaterial.emittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId);
 		clMaterial.normalMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId);
 		clMaterial.maskMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId);
 		clMaterial.heightMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId);
@@ -143,11 +143,11 @@ void CLScene::readSceneFull(const Scene& scene)
 
 	readColor(ambientLight.color, scene.lights.ambientLight.color);
 	ambientLight.intensity = cl_float(scene.lights.ambientLight.intensity);
-	ambientLight.enableOcclusion = cl_int(scene.lights.ambientLight.enableOcclusion);
-	ambientLight.maxOcclusionDistance = cl_float(scene.lights.ambientLight.maxOcclusionDistance);
-	ambientLight.occlusionSamplerType = cl_int(scene.lights.ambientLight.occlusionSamplerType);
-	ambientLight.occlusionSamples = cl_int(scene.lights.ambientLight.occlusionSamples);
-	ambientLight.occlusionSampleDistribution = cl_float(scene.lights.ambientLight.occlusionSampleDistribution);
+	//ambientLight.enableOcclusion = cl_int(scene.lights.ambientLight.enableOcclusion);
+	//ambientLight.maxOcclusionDistance = cl_float(scene.lights.ambientLight.maxOcclusionDistance);
+	//ambientLight.occlusionSamplerType = cl_int(scene.lights.ambientLight.occlusionSamplerType);
+	//ambientLight.occlusionSamples = cl_int(scene.lights.ambientLight.occlusionSamples);
+	//ambientLight.occlusionSampleDistribution = cl_float(scene.lights.ambientLight.occlusionSampleDistribution);
 
 	directionalLights.clear();
 
@@ -175,10 +175,10 @@ void CLScene::readSceneFull(const Scene& scene)
 		clLight.intensity = cl_float(light.intensity);
 		clLight.maxDistance = cl_float(light.maxDistance);
 		clLight.attenuation = cl_float(light.attenuation);
-		clLight.radius = cl_float(light.radius);
-		clLight.enableSoftShadows = cl_int(light.enableSoftShadows);
-		clLight.softShadowSamplerType = cl_int(light.softShadowSamplerType);
-		clLight.softShadowSamples = cl_int(light.softShadowSamples);
+		//clLight.radius = cl_float(light.radius);
+		//clLight.enableSoftShadows = cl_int(light.enableSoftShadows);
+		//clLight.softShadowSamplerType = cl_int(light.softShadowSamplerType);
+		//clLight.softShadowSamples = cl_int(light.softShadowSamples);
 
 		pointLights.push_back(clLight);
 	}

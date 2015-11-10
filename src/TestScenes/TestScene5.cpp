@@ -70,7 +70,7 @@ Scene Scene::createTestScene5()
 			sphereMaterial.ambientReflectance = Color::random(generator) * 0.8;
 			sphereMaterial.diffuseReflectance = sphereMaterial.ambientReflectance;
 			sphereMaterial.specularReflectance = sphereMaterial.ambientReflectance;
-			sphereMaterial.shininess = 256.0;
+			sphereMaterial.specularShininess = 256.0;
 			sphereMaterial.rayReflectance = 0.05;
 
 			Sphere sphere;
