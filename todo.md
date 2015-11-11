@@ -1,7 +1,6 @@
 tracer
  - height map
  - volumetric fog
- - soft reflections
  - relativistic effects
 
 lighting
@@ -20,7 +19,6 @@ misc
  - implement QBVH travelsal and SIMD triangle intersect with ispc
  - implement non-recursive versions of raytracing and pathtracing algorithms (wavefront-style / multipass stuff)
  - implement opencl tracers with multipass/wavefront style
- - bvh on/off for editing and store original visible in scene
  - change tclap to boost program options and move settings to root
  - remove freetype headers from windows platform
  - replace private constructors with =deleted
@@ -28,7 +26,5 @@ misc
  - replace align macro with alignas
  - sizeof(Color) -> colorf, check networkrunner image stuff
  - check if camera dof needs jitter
- - normal mapping toggle on/off
  - fast preview with "dot product lighting"
- - fix path tracer asserts
- 
+ - replace pow with fastPow
