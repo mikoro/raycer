@@ -35,7 +35,6 @@ Vector3 ColorTexture::getNormalData(const Vector2& texcoord, const Vector3& posi
 	(void)texcoord;
 	(void)position;
 
-	type = TextureNormalDataType::NORMAL_MAP;
-
+	type = TextureNormalDataType::NONE;
 	return Vector3(0.0, 0.0, 0.0);
 }

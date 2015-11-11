@@ -409,6 +409,9 @@
     <ClCompile Include="src\Rendering\Samplers\CenterSampler.cpp">
       <Filter>Rendering\Samplers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Raytracing\Textures\ColorGradientTexture.cpp">
+      <Filter>Raytracing\Textures</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Utils\FpsCounter.h">
@@ -696,6 +699,9 @@
     </ClInclude>
     <ClInclude Include="src\Rendering\Samplers\CenterSampler.h">
       <Filter>Rendering\Samplers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Raytracing\Textures\ColorGradientTexture.h">
+      <Filter>Raytracing\Textures</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

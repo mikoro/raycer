@@ -66,7 +66,6 @@ Vector3 AtmosphereTexture::getNormalData(const Vector2& texcoord, const Vector3&
 	(void)texcoord;
 	(void)position;
 
-	type = TextureNormalDataType::NORMAL_MAP;
-
+	type = TextureNormalDataType::NONE;
 	return Vector3(0.0, 0.0, 0.0);
 }

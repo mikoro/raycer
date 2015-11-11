@@ -197,6 +197,7 @@
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CheckerTexture.cpp" />
+    <ClCompile Include="src\Raytracing\Textures\ColorGradientTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\ColorTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\FireTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\ImageTexture.cpp" />
@@ -330,6 +331,7 @@
     <ClInclude Include="src\Raytracing\Textures\AtmosphereTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\CellNoiseTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\CheckerTexture.h" />
+    <ClInclude Include="src\Raytracing\Textures\ColorGradientTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\ColorTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\FireTexture.h" />
     <ClInclude Include="src\Raytracing\Textures\ImageTexture.h" />

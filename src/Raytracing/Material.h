@@ -29,11 +29,11 @@ namespace Raycer
 
 		Texture* ambientMapTexture = nullptr;
 		uint64_t ambientMapTextureId = 0;
-		Color ambientReflectance = Color(1.0, 1.0, 1.0);
+		Color ambientReflectance = Color(0.0, 0.0, 0.0);
 
 		Texture* diffuseMapTexture = nullptr;
 		uint64_t diffuseMapTextureId = 0;
-		Color diffuseReflectance = Color(1.0, 1.0, 1.0);
+		Color diffuseReflectance = Color(0.0, 0.0, 0.0);
 		bool diffuseIsEmissive = false;
 
 		Texture* specularMapTexture = nullptr;

@@ -216,6 +216,9 @@ void Scene::initialize()
 	for (ColorTexture& texture : textures.colorTextures)
 		texturesList.push_back(&texture);
 
+	for (ColorGradientTexture& texture : textures.colorGradientTextures)
+		texturesList.push_back(&texture);
+
 	for (CheckerTexture& texture : textures.checkerTextures)
 		texturesList.push_back(&texture);
 

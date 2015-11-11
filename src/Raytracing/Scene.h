@@ -10,6 +10,7 @@
 
 #include "Raytracing/Camera.h"
 #include "Raytracing/Textures/ColorTexture.h"
+#include "Raytracing/Textures/ColorGradientTexture.h"
 #include "Raytracing/Textures/CheckerTexture.h"
 #include "Raytracing/Textures/ImageTexture.h"
 #include "Raytracing/Textures/PerlinNoiseTexture.h"
@@ -216,6 +217,7 @@ namespace Raycer
 		struct Textures
 		{
 			std::vector<ColorTexture> colorTextures;
+			std::vector<ColorGradientTexture> colorGradientTextures;
 			std::vector<CheckerTexture> checkerTextures;
 			std::vector<ImageTexture> imageTextures;
 			std::vector<PerlinNoiseTexture> perlinNoiseTextures;
@@ -231,6 +233,7 @@ namespace Raycer
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(colorTextures),
+					CEREAL_NVP(colorGradientTextures),
 					CEREAL_NVP(checkerTextures),
 					CEREAL_NVP(imageTextures),
 					CEREAL_NVP(perlinNoiseTextures),

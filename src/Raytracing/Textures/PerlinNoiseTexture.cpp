@@ -44,6 +44,5 @@ Vector3 PerlinNoiseTexture::getNormalData(const Vector2& texcoord, const Vector3
 	double dfz = (fz - f) / epsilon;
 
 	type = TextureNormalDataType::GRADIENT;
-
 	return Vector3(dfx, dfy, dfz);
 }

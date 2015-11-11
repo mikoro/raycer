@@ -41,7 +41,6 @@ Vector3 MarbleTexture::getNormalData(const Vector2& texcoord, const Vector3& pos
 	(void)texcoord;
 	(void)position;
 
-	type = TextureNormalDataType::NORMAL_MAP;
-
+	type = TextureNormalDataType::NONE;
 	return Vector3(0.0, 0.0, 0.0);
 }
