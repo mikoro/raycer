@@ -7,6 +7,7 @@
 #include "Math/Vector2.h"
 #include "Math/Vector3.h"
 #include "Math/Color.h"
+#include "Math/MathUtils.h"
 
 using namespace Raycer;
 
@@ -45,7 +46,7 @@ Color AtmosphereTexture::getColor(const Vector2& texcoord, const Vector3& positi
 
 		if (d > 0.0)
 		{
-			d = pow(d, sunSize);
+			d = MathUtils::fastPow(d, sunSize);
 			skyColor += d * sunColor;
 		}
 	}
