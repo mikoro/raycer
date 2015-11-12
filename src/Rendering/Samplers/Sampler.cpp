@@ -27,7 +27,7 @@ std::unique_ptr<Sampler> Sampler::getSampler(SamplerType type)
 		case SamplerType::JITTERED: return std::make_unique<JitteredSampler>();
 		case SamplerType::CMJ: return std::make_unique<CMJSampler>();
 		case SamplerType::POISSON_DISC: return std::make_unique<PoissonDiscSampler>();
-		default: throw new std::runtime_error("Unknown sampler type");
+		default: throw std::runtime_error("Unknown sampler type");
 	}
 }
 

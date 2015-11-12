@@ -34,7 +34,7 @@ namespace Raycer
 
 	private:
 
-		const Image* image;
+		const Image* image = nullptr;
 		Image bumpMapX;
 		Image bumpMapY;
 

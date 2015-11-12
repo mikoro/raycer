@@ -19,6 +19,6 @@ std::unique_ptr<ToneMapper> ToneMapper::getToneMapper(ToneMapperType type)
 		case ToneMapperType::LINEAR: return std::make_unique<LinearToneMapper>();
 		case ToneMapperType::SIMPLE: return std::make_unique<SimpleToneMapper>();
 		case ToneMapperType::REINHARD: return std::make_unique<ReinhardToneMapper>();
-		default: throw new std::runtime_error("Unknown tone mapper type");
+		default: throw std::runtime_error("Unknown tone mapper type");
 	}
 }

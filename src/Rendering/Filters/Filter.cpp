@@ -24,7 +24,7 @@ std::unique_ptr<Filter> Filter::getFilter(FilterType type)
 		case FilterType::GAUSSIAN: return std::make_unique<GaussianFilter>();
 		case FilterType::MITCHELL: return std::make_unique<MitchellFilter>();
 		case FilterType::LANCZOS_SINC: return std::make_unique<LanczosSincFilter>();
-		default: throw new std::runtime_error("Unknown filter type");
+		default: throw std::runtime_error("Unknown filter type");
 	}
 }
 

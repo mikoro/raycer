@@ -17,7 +17,7 @@ std::string StringUtils::readFileToString(const std::string& filePath)
 	std::ifstream file(filePath, std::ios::in | std::ios::binary | std::ios::ate);
 
 	if (!file.good())
-		throw new std::runtime_error(tfm::format("Could not open file: %s", filePath));
+		throw std::runtime_error(tfm::format("Could not open file: %s", filePath));
 
 	auto size = file.tellg();
 	file.seekg(0, std::ios::beg);
