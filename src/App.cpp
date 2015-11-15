@@ -157,14 +157,12 @@ int App::run(int argc, char** argv)
 		{
 			settings.network.isClient = true;
 			settings.network.isServer = false;
-			settings.general.interactive = false;
 		}
 
 		if (serverSwitch.isSet())
 		{
 			settings.network.isServer = true;
 			settings.network.isClient = false;
-			settings.general.interactive = false;
 		}
 
 		if (sceneFileNameArg.isSet())
@@ -181,6 +179,12 @@ int App::run(int argc, char** argv)
 
 		if (autoViewSwitch.isSet())
 			settings.image.autoView = true;
+
+		if (settings.network.isClient && settings.network.isServer)
+			throw std::runtime_error("Could not be both a server and a client at the same time");
+
+		if (settings.network.isClient || settings.network.isServer)
+			settings.general.interactive = false;
 
 		if (settings.general.interactive)
 			return windowRunner.run();
