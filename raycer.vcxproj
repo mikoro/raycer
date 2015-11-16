@@ -52,25 +52,25 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc-12;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc-12\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc-12;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc-12\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc;$(IncludePath)</IncludePath>
+    <IncludePath>src;include;platform\windows\include;platform\windows\include\freetype;D:\boost_1_59_0-msvc-12;$(IncludePath)</IncludePath>
     <GenerateManifest>false</GenerateManifest>
-    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc\stage\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>platform\windows\lib;D:\boost_1_59_0-msvc-12\lib64-msvc-12.0;$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
     <IntDir>$(SolutionDir)build\$(Configuration)\</IntDir>
   </PropertyGroup>
@@ -89,6 +89,7 @@
       <FloatingPointExceptions>true</FloatingPointExceptions>
       <AdditionalOptions>/bigobj /Zm200 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableSpecificWarnings>4313</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -115,6 +116,7 @@
       <FloatingPointExceptions>true</FloatingPointExceptions>
       <AdditionalOptions>/bigobj /Zm200 %(AdditionalOptions)</AdditionalOptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <DisableSpecificWarnings>4313</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -149,6 +151,7 @@
       <FloatingPointExceptions>false</FloatingPointExceptions>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <AdditionalOptions>/bigobj /Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4313</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
