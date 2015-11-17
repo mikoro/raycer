@@ -3,6 +3,11 @@
 
 #include "stdafx.h"
 
+#include "tclap/CmdLine.h"
+#include "tclap/SwitchArg.h"
+#include "tclap/ValueArg.h"
+#include "tclap/ArgException.h"
+
 #include "App.h"
 #include "Settings.h"
 #include "Utils/Log.h"

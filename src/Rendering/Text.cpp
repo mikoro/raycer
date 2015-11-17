@@ -3,6 +3,13 @@
 
 #include "stdafx.h"
 
+#include "freetype-gl/mat4.h"
+#include "freetype-gl/vertex-buffer.h"
+#include "freetype-gl/texture-atlas.h"
+#include "freetype-gl/texture-font.h"
+
+#include "utf8/utf8/unchecked.h"
+
 #include "Rendering/Text.h"
 #include "App.h"
 #include "Utils/Log.h"

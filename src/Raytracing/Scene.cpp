@@ -1,7 +1,17 @@
 ﻿// Copyright © 2015 Mikko Ronkainen <firstname@mikkoronkainen.com>
 // License: MIT, see the LICENSE file.
 
-#include "stdafx.h"
+// when using precompiled headers with this file, the deserialization of XML files will crash in release mode
+//#include "stdafx.h"
+
+#include "tinyformat/tinyformat.h"
+
+#include "cereal/cereal.hpp"
+#include "cereal/archives/json.hpp"
+#include "cereal/archives/xml.hpp"
+#include "cereal/archives/binary.hpp"
+#include "cereal/types/vector.hpp"
+#include "cereal/types/string.hpp"
 
 #include "Raytracing/Scene.h"
 #include "Raytracing/Primitives/Primitive.h"

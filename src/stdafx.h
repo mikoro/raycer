@@ -63,25 +63,6 @@
 
 #include "tinyformat/tinyformat.h"
 
-#include "utf8/utf8/unchecked.h"
-
-#include "cereal/cereal.hpp"
-#include "cereal/archives/json.hpp"
-#include "cereal/archives/xml.hpp"
-#include "cereal/archives/binary.hpp"
-#include "cereal/types/vector.hpp"
-#include "cereal/types/string.hpp"
-
-#include "freetype-gl/mat4.h"
-#include "freetype-gl/vertex-buffer.h"
-#include "freetype-gl/texture-atlas.h"
-#include "freetype-gl/texture-font.h"
-
-#include "tclap/CmdLine.h"
-#include "tclap/SwitchArg.h"
-#include "tclap/ValueArg.h"
-#include "tclap/ArgException.h"
-
 #ifdef __APPLE__
 #include <Carbon/Carbon.h>
 #include <CoreFoundation/CoreFoundation.h>

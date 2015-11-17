@@ -193,7 +193,11 @@
     <ClCompile Include="src\Raytracing\Primitives\Torus.cpp" />
     <ClCompile Include="src\Raytracing\Primitives\Triangle.cpp" />
     <ClCompile Include="src\Raytracing\Ray.cpp" />
-    <ClCompile Include="src\Raytracing\Scene.cpp" />
+    <ClCompile Include="src\Raytracing\Scene.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugTest|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="src\Raytracing\Textures\AtmosphereTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CellNoiseTexture.cpp" />
     <ClCompile Include="src\Raytracing\Textures\CheckerTexture.cpp" />
