@@ -34,8 +34,8 @@ void FilmRenderer::initialize()
 
 	GLHelper::checkError("Could not set OpenGL texture parameters");
 
-	resampleProgramId = GLHelper::buildProgram(settings.framebuffer.resampleVertexShader, settings.framebuffer.resampleFragmentShader);
-	filterProgramId = GLHelper::buildProgram(settings.framebuffer.filterVertexShader, settings.framebuffer.filterFragmentShader);
+	resampleProgramId = GLHelper::buildProgram(settings.window.resampleVertexShader, settings.window.resampleFragmentShader);
+	filterProgramId = GLHelper::buildProgram(settings.window.filterVertexShader, settings.window.filterFragmentShader);
 
 	resampleTextureUniformId = glGetUniformLocation(resampleProgramId, "texture0");
 	resampleTextureWidthUniformId = glGetUniformLocation(resampleProgramId, "textureWidth");

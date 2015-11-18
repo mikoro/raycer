@@ -42,19 +42,17 @@ void Settings::load(const std::string& fileName)
 
 	window.width = iniReader.getValue<uint64_t>("window", "width");
 	window.height = iniReader.getValue<uint64_t>("window", "height");
+	window.renderScale = iniReader.getValue<double>("window", "renderScale");
 	window.enableFullscreen = iniReader.getValue<bool>("window", "enableFullscreen");
 	window.enableVsync = iniReader.getValue<bool>("window", "enableVsync");
 	window.hideCursor = iniReader.getValue<bool>("window", "hideCursor");
 	window.showInfoText = iniReader.getValue<bool>("window", "showInfoText");
 	window.defaultFont = iniReader.getValue("window", "defaultFont");
 	window.defaultFontSize = iniReader.getValue<uint64_t>("window", "defaultFontSize");
-
-	framebuffer.scale = iniReader.getValue<double>("framebuffer", "scale");
-	framebuffer.enableSmoothing = iniReader.getValue<bool>("framebuffer", "enableSmoothing");
-	framebuffer.resampleVertexShader = iniReader.getValue("framebuffer", "resampleVertexShader");
-	framebuffer.resampleFragmentShader = iniReader.getValue("framebuffer", "resampleFragmentShader");
-	framebuffer.filterVertexShader = iniReader.getValue("framebuffer", "filterVertexShader");
-	framebuffer.filterFragmentShader = iniReader.getValue("framebuffer", "filterFragmentShader");
+	window.resampleVertexShader = iniReader.getValue("window", "resampleVertexShader");
+	window.resampleFragmentShader = iniReader.getValue("window", "resampleFragmentShader");
+	window.filterVertexShader = iniReader.getValue("window", "filterVertexShader");
+	window.filterFragmentShader = iniReader.getValue("window", "filterFragmentShader");
 
 	camera.freeLook = iniReader.getValue<bool>("camera", "freeLook");
 	camera.smoothMovement = iniReader.getValue<bool>("camera", "smoothMovement");

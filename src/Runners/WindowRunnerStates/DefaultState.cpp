@@ -158,10 +158,15 @@ void DefaultState::update(double timeStep)
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F7))
 	{
-		if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL) || windowRunner.keyIsDown(GLFW_KEY_RIGHT_CONTROL))
-			scene.saveToFile("scene.xml");
+		if (windowRunner.keyIsDown(GLFW_KEY_LEFT_CONTROL))
+		{
+			if (windowRunner.keyIsDown(GLFW_KEY_LEFT_SHIFT))
+				scene.saveToFile("scene.bin");
+			else
+				scene.saveToFile("scene.json");
+		}
 		else
-			scene.saveToFile("scene.bin");
+			scene.saveToFile("scene.xml");
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F8))
@@ -186,25 +191,25 @@ void DefaultState::update(double timeStep)
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F10))
 	{
-		double newScale = settings.framebuffer.scale * 0.5;
+		double newScale = settings.window.renderScale * 0.5;
 		uint64_t newWidth = uint64_t(double(windowRunner.getWindowWidth()) * newScale + 0.5);
 		uint64_t newHeight = uint64_t(double(windowRunner.getWindowHeight()) * newScale + 0.5);
 
 		if (newWidth >= 2 && newHeight >= 2)
 		{
-			settings.framebuffer.scale = newScale;
+			settings.window.renderScale = newScale;
 			resizeFilm();
 		}
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F11))
 	{
-		if (settings.framebuffer.scale < 1.0)
+		if (settings.window.renderScale < 1.0)
 		{
-			settings.framebuffer.scale *= 2.0;
+			settings.window.renderScale *= 2.0;
 
-			if (settings.framebuffer.scale > 1.0)
-				settings.framebuffer.scale = 1.0;
+			if (settings.window.renderScale > 1.0)
+				settings.window.renderScale = 1.0;
 
 			resizeFilm();
 		}
@@ -294,8 +299,8 @@ void DefaultState::resizeFilm()
 	WindowRunner& windowRunner = App::getWindowRunner();
 	CLTracer& clTracer = App::getCLTracer();
 
-	uint64_t filmWidth = uint64_t(double(windowRunner.getWindowWidth()) * settings.framebuffer.scale + 0.5);
-	uint64_t filmHeight = uint64_t(double(windowRunner.getWindowHeight()) * settings.framebuffer.scale + 0.5);
+	uint64_t filmWidth = uint64_t(double(windowRunner.getWindowWidth()) * settings.window.renderScale + 0.5);
+	uint64_t filmHeight = uint64_t(double(windowRunner.getWindowHeight()) * settings.window.renderScale + 0.5);
 
     filmWidth = std::max(uint64_t(1), filmWidth);
     filmHeight = std::max(uint64_t(1), filmHeight);

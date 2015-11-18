@@ -57,23 +57,18 @@ namespace Raycer
 		{
 			uint64_t width;
 			uint64_t height;
+			double renderScale;
 			bool enableFullscreen;
 			bool enableVsync;
 			bool hideCursor;
 			bool showInfoText;
 			std::string defaultFont;
 			uint64_t defaultFontSize;
-		} window;
-
-		struct Framebuffer
-		{
-			double scale;
-			bool enableSmoothing;
 			std::string resampleVertexShader;
 			std::string resampleFragmentShader;
 			std::string filterVertexShader;
 			std::string filterFragmentShader;
-		} framebuffer;
+		} window;
 
 		struct Camera
 		{
