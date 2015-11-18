@@ -46,7 +46,7 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 	if (scene.general.visualizeDepth)
 	{
 		double depth = 1.0 - std::min(intersection.distance, scene.general.visualizeDepthMaxDistance) / scene.general.visualizeDepthMaxDistance;
-		depth = MathUtils::fastPow(depth, 2.0);
+		depth = pow(depth, 2.0);
 		return Color(depth, depth, depth);
 	}
 
@@ -134,7 +134,7 @@ void Raytracer::calculateRayReflectanceAndTransmittance(const Ray& ray, const In
 		double n2 = isOutside ? material->refractiveIndex : 1.0;
 		double rf0 = (n2 - n1) / (n2 + n1);
 		rf0 = rf0 * rf0;
-		fresnelReflectance = rf0 + (1.0 - rf0) * MathUtils::fastPow(1.0 - std::abs(cosine), 5.0);
+		fresnelReflectance = rf0 + (1.0 - rf0) * pow(1.0 - std::abs(cosine), 5.0);
 		fresnelTransmittance = 1.0 - fresnelReflectance;
 	}
 
@@ -351,7 +351,7 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		Color pointLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->specularShininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
-		distanceAttenuation = 1.0 - MathUtils::fastPow(distanceAttenuation, light.attenuation);
+		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 
 		lightColor += pointLightColor * distanceAttenuation * (1.0 - shadowAmount);
 	}
@@ -365,13 +365,13 @@ Color Raytracer::calculateLightColor(const Scene& scene, const Ray& ray, const I
 		Color spotLightColor = calculatePhongShadingColor(intersection.normal, directionToLight, directionToCamera, light, finalDiffuseReflectance, finalSpecularReflectance, material->specularShininess);
 		double shadowAmount = calculateShadowAmount(scene, ray, intersection, light, generator);
 		double distanceAttenuation = std::min(1.0, distanceToLight / light.maxDistance);
-		distanceAttenuation = 1.0 - MathUtils::fastPow(distanceAttenuation, light.attenuation);
+		distanceAttenuation = 1.0 - pow(distanceAttenuation, light.attenuation);
 		double sideAttenuation = light.direction.dot(-directionToLight);
 
 		if (sideAttenuation > 0.0)
 		{
 			sideAttenuation = std::min(1.0, (1.0 - sideAttenuation) / (light.angle / 180.0));
-			sideAttenuation = 1.0 - MathUtils::fastPow(sideAttenuation, light.sideAttenuation);
+			sideAttenuation = 1.0 - pow(sideAttenuation, light.sideAttenuation);
 			lightColor += spotLightColor * distanceAttenuation * sideAttenuation * (1.0 - shadowAmount);
 		}
 	}
@@ -406,13 +406,13 @@ Color Raytracer::calculateSimpleFogColor(const Scene& scene, const Intersection&
 {
 	double t1 = intersection.distance / scene.simpleFog.distance;
 	t1 = std::max(0.0, std::min(t1, 1.0));
-	t1 = MathUtils::fastPow(t1, scene.simpleFog.steepness);
+	t1 = pow(t1, scene.simpleFog.steepness);
 
 	if (scene.simpleFog.heightDispersion && intersection.position.y > 0.0)
 	{
 		double t2 = intersection.position.y / scene.simpleFog.height;
 		t2 = std::max(0.0, std::min(t2, 1.0));
-		t2 = MathUtils::fastPow(t2, scene.simpleFog.heightSteepness);
+		t2 = pow(t2, scene.simpleFog.heightSteepness);
 		t2 = 1.0 - t2;
 		t1 *= t2;
 	}

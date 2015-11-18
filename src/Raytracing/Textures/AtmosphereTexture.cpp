@@ -46,7 +46,7 @@ Color AtmosphereTexture::getColor(const Vector2& texcoord, const Vector3& positi
 
 		if (d > 0.0)
 		{
-			d = MathUtils::fastPow(d, sunSize);
+			d = pow(d, sunSize);
 			skyColor += d * sunColor;
 		}
 	}
