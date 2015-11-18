@@ -29,6 +29,8 @@ Scene Scene::createTestScene13()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(2.0, 2.0);
@@ -51,6 +53,8 @@ Scene Scene::createTestScene13()
 
 	Material marbleMaterial;
 	marbleMaterial.id = 2;
+	marbleMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	marbleMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	marbleMaterial.ambientMapTextureId = marbleMaterial.id;
 	marbleMaterial.diffuseMapTextureId = marbleMaterial.id;
 	marbleMaterial.enableCSG = true;
@@ -61,6 +65,8 @@ Scene Scene::createTestScene13()
 
 	Material woodMaterial;
 	woodMaterial.id = 3;
+	woodMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	woodMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	woodMaterial.ambientMapTextureId = woodMaterial.id;
 	woodMaterial.diffuseMapTextureId = woodMaterial.id;
 	woodMaterial.enableCSG = true;
@@ -71,6 +77,8 @@ Scene Scene::createTestScene13()
 
 	Material fireMaterial;
 	fireMaterial.id = 4;
+	fireMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	fireMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	fireMaterial.ambientMapTextureId = fireMaterial.id;
 	fireMaterial.diffuseMapTextureId = fireMaterial.id;
 	fireMaterial.enableCSG = true;

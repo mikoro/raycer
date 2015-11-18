@@ -37,6 +37,8 @@ Scene Scene::createTestScene6()
 
 	Material groundMaterial;
 	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(0.1, 0.1);
@@ -61,6 +63,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere1Material;
 	sphere1Material.id = 2;
+	sphere1Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere1Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere1Material.ambientMapTextureId = sphere1Texture.id;
 	sphere1Material.diffuseMapTextureId = sphere1Texture.id;
 	sphere1Material.skipLighting = true;
@@ -86,6 +90,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere2Material;
 	sphere2Material.id = 3;
+	sphere2Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere2Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere2Material.ambientMapTextureId = sphere2Texture.id;
 	sphere2Material.diffuseMapTextureId = sphere2Texture.id;
 
@@ -109,6 +115,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere3Material;
 	sphere3Material.id = 4;
+	sphere3Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere3Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere3Material.ambientMapTextureId = sphere3Texture.id;
 	sphere3Material.diffuseMapTextureId = sphere3Texture.id;
 	sphere3Material.texcoordScale = Vector2(10.0, 10.0);
@@ -133,6 +141,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere4Material;
 	sphere4Material.id = 5;
+	sphere4Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere4Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere4Material.ambientMapTextureId = sphere4Texture.id;
 	sphere4Material.diffuseMapTextureId = sphere4Texture.id;
 
@@ -154,6 +164,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere5Material;
 	sphere5Material.id = 6;
+	sphere5Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere5Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere5Material.ambientMapTextureId = sphere5Texture.id;
 	sphere5Material.diffuseMapTextureId = sphere5Texture.id;
 
@@ -175,6 +187,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere6Material;
 	sphere6Material.id = 7;
+	sphere6Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere6Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere6Material.ambientMapTextureId = sphere6Texture.id;
 	sphere6Material.diffuseMapTextureId = sphere6Texture.id;
 
@@ -196,6 +210,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere7Material;
 	sphere7Material.id = 8;
+	sphere7Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere7Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere7Material.ambientMapTextureId = sphere7Texture.id;
 	sphere7Material.diffuseMapTextureId = sphere7Texture.id;
 
@@ -217,6 +233,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere8Material;
 	sphere8Material.id = 9;
+	sphere8Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere8Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere8Material.ambientMapTextureId = sphere8Texture.id;
 	sphere8Material.diffuseMapTextureId = sphere8Texture.id;
 
@@ -238,6 +256,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere9Material;
 	sphere9Material.id = 10;
+	sphere9Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere9Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere9Material.ambientMapTextureId = sphere9Texture.id;
 	sphere9Material.diffuseMapTextureId = sphere9Texture.id;
 
@@ -260,6 +280,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere10Material;
 	sphere10Material.id = 11;
+	sphere10Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere10Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere10Material.ambientMapTextureId = sphere10Texture.id;
 	sphere10Material.diffuseMapTextureId = sphere10Texture.id;
 
@@ -282,6 +304,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere11Material;
 	sphere11Material.id = 12;
+	sphere11Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere11Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere11Material.ambientMapTextureId = sphere11Texture.id;
 	sphere11Material.diffuseMapTextureId = sphere11Texture.id;
 
@@ -306,6 +330,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere12Material;
 	sphere12Material.id = 13;
+	sphere12Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere12Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere12Material.ambientMapTextureId = sphere12Texture.id;
 	sphere12Material.diffuseMapTextureId = sphere12Texture.id;
 
@@ -330,6 +356,8 @@ Scene Scene::createTestScene6()
 
 	Material sphere13Material;
 	sphere13Material.id = 14;
+	sphere13Material.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphere13Material.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	sphere13Material.ambientMapTextureId = sphere13Texture.id;
 	sphere13Material.diffuseMapTextureId = sphere13Texture.id;
 

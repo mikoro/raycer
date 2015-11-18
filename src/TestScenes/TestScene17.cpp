@@ -57,6 +57,8 @@ Scene Scene::createTestScene17()
 
 	Material groundMaterial;
 	groundMaterial.id = 2;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
 	groundMaterial.ambientMapTextureId = groundTexture.id;
 	groundMaterial.diffuseMapTextureId = groundTexture.id;
 	groundMaterial.texcoordScale = Vector2(0.2, 0.2);
