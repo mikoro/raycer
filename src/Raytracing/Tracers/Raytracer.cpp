@@ -395,7 +395,7 @@ Color Raytracer::calculatePhongShadingColor(const Vector3& normal, const Vector3
 			double specularAmount = reflectionDirection.dot(directionToCamera);
 
 			if (specularAmount > 0.0)
-				phongColor += light.color * light.intensity * MathUtils::fastPow(specularAmount, shininess) * specularReflectance;
+				phongColor += light.color * light.intensity * pow(specularAmount, shininess) * specularReflectance;
 		}
 	}
 
