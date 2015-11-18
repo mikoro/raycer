@@ -27,4 +27,4 @@ misc
  - sizeof(Color) -> colorf, check networkrunner image stuff
  - check if camera dof needs jitter
  - fast preview with "dot product lighting"
- - replace pow with fastPow
+ - rename settings (remove framebuffer)

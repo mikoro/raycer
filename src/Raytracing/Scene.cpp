@@ -354,6 +354,9 @@ void Scene::initialize()
 		if (texturesMap.count(material.specularMapTextureId))
 			material.specularMapTexture = texturesMap[material.specularMapTextureId];
 
+		if (texturesMap.count(material.emittanceMapTextureId))
+			material.emittanceMapTexture = texturesMap[material.emittanceMapTextureId];
+
 		if (texturesMap.count(material.rayReflectanceMapTextureId))
 			material.rayReflectanceMapTexture = texturesMap[material.rayReflectanceMapTextureId];
 

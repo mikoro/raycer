@@ -19,7 +19,7 @@ namespace Raycer
 		void setWindowSize(uint64_t width, uint64_t height);
 		void uploadFilmData(const Film& film);
 		void render();
-		
+
 		GLuint getFilmTextureId() const;
 
 	private:

@@ -188,10 +188,9 @@ Scene Scene::createTestScene1()
 
 	Material lightSphereMaterial;
 	lightSphereMaterial.id = 8;
-	lightSphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 2.0;
+	lightSphereMaterial.emittance = Color(1.0, 1.0, 1.0) * 2.0;
 	lightSphereMaterial.nonShadowing = true;
-	lightSphereMaterial.diffuseIsEmissive = true;
-
+	
 	Sphere lightSphere;
 	lightSphere.id = 8;
 	lightSphere.invisible = true;

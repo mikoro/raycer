@@ -34,12 +34,15 @@ namespace Raycer
 		Texture* diffuseMapTexture = nullptr;
 		uint64_t diffuseMapTextureId = 0;
 		Color diffuseReflectance = Color(0.0, 0.0, 0.0);
-		bool diffuseIsEmissive = false;
 
 		Texture* specularMapTexture = nullptr;
 		uint64_t specularMapTextureId = 0;
 		Color specularReflectance = Color(0.0, 0.0, 0.0);
 		double specularShininess = 2.0;
+
+		Texture* emittanceMapTexture = nullptr;
+		uint64_t emittanceMapTextureId = 0;
+		Color emittance = Color(0.0, 0.0, 0.0);
 
 		Texture* rayReflectanceMapTexture = nullptr;
 		uint64_t rayReflectanceMapTextureId = 0;
@@ -90,6 +93,8 @@ namespace Raycer
 				CEREAL_NVP(specularMapTextureId),
 				CEREAL_NVP(specularReflectance),
 				CEREAL_NVP(specularShininess),
+				CEREAL_NVP(emittanceMapTextureId),
+				CEREAL_NVP(emittance),
 				CEREAL_NVP(rayReflectanceMapTextureId),
 				CEREAL_NVP(rayReflectance),
 				CEREAL_NVP(fresnelReflection),

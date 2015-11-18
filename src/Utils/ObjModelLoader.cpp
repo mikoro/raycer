@@ -90,10 +90,9 @@ namespace
 			}
 			else if (part == "Ke") // emittance
 			{
-				currentMaterial.diffuseIsEmissive = true;
-				currentMaterial.diffuseReflectance.r = readDouble(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.g = readDouble(line, lineIndex, part);
-				currentMaterial.diffuseReflectance.b = readDouble(line, lineIndex, part);
+				currentMaterial.emittance.r = readDouble(line, lineIndex, part);
+				currentMaterial.emittance.g = readDouble(line, lineIndex, part);
+				currentMaterial.emittance.b = readDouble(line, lineIndex, part);
 			}
 			else if (part == "Ns") // shininess
 			{
@@ -139,12 +138,11 @@ namespace
 
 				result.textures.push_back(imageTexture);
 			}
-			else if (part == "map_Ke" && currentMaterial.diffuseMapTextureId == 0) // emittance map
+			else if (part == "map_Ke" && currentMaterial.emittanceMapTextureId == 0) // emittance map
 			{
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
-				currentMaterial.diffuseMapTextureId = imageTexture.id;
-				currentMaterial.diffuseIsEmissive = true;
+				currentMaterial.emittanceMapTextureId = imageTexture.id;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
