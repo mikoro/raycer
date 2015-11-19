@@ -223,8 +223,6 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
-	const size_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
-
 	if (state.scene->general.tracerType == TracerType::PATH && state.scene->camera.hasMoved())
 	{
 		size_t origin[3] = { 0, 0, 0 };
@@ -233,6 +231,8 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		
 		clEnqueueFillImage(clManager.commandQueue, outputImagePtr, fillColor, origin, region, 0, nullptr, nullptr);
 	}
+
+	const size_t globalSizes[] = { imageBufferWidth, imageBufferHeight };
 
 	if (state.scene->general.tracerType == TracerType::RAY)
 		CLManager::checkError(clEnqueueNDRangeKernel(clManager.commandQueue, raytraceKernel, 2, nullptr, &globalSizes[0], nullptr, 0, nullptr, nullptr), "Could not enqueue raytrace kernel");

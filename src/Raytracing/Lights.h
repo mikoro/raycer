@@ -29,7 +29,7 @@ namespace Raycer
 		bool enableAmbientOcclusion = false;
 		SamplerType ambientOcclusionSamplerType = SamplerType::CMJ;
 		uint64_t ambientOcclusionSampleCountSqrt = 0;
-		double maxAmbientOcclusionSampleDistance = 1.0;
+		double ambientOcclusionMaxSampleDistance = 1.0;
 		double ambientOcclusionSampleDistribution = 1.0;
 
 		template <class Archive>
@@ -39,7 +39,7 @@ namespace Raycer
 				CEREAL_NVP(enableAmbientOcclusion),
 				CEREAL_NVP(ambientOcclusionSamplerType),
 				CEREAL_NVP(ambientOcclusionSampleCountSqrt),
-				CEREAL_NVP(maxAmbientOcclusionSampleDistance),
+				CEREAL_NVP(ambientOcclusionMaxSampleDistance),
 				CEREAL_NVP(ambientOcclusionSampleDistribution));
 		}
 	};

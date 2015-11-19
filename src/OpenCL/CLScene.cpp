@@ -78,11 +78,12 @@ void CLScene::readSceneFull(const Scene& scene)
 	general.rayStartOffset = cl_float(scene.general.rayStartOffset);
 	general.maxRayIterations = cl_int(scene.general.maxRayIterations);
 	general.maxPathLength = cl_int(scene.general.maxPathLength);
-	//general.multiSamples = cl_int(scene.general.multiSamples);
-	//general.timeSamples = cl_int(scene.general.timeSamples);
-	//general.cameraSamples = cl_int(scene.general.cameraSamples);
+	general.multiSampleCountSqrt = cl_int(scene.general.multiSampleCountSqrt);
+	general.timeSampleCount = cl_int(scene.general.timeSampleCount);
+	general.cameraSampleCountSqrt = cl_int(scene.general.cameraSampleCountSqrt);
 	general.visualizeDepth = cl_int(scene.general.visualizeDepth);
 	general.visualizeDepthMaxDistance = cl_float(scene.general.visualizeDepthMaxDistance);
+	general.enableNormalMapping = cl_int(scene.general.enableNormalMapping);
 
 	readSceneCamera(scene);
 
@@ -92,7 +93,8 @@ void CLScene::readSceneFull(const Scene& scene)
 	toneMapper.gamma = cl_float(scene.toneMapper.gamma);
 	toneMapper.exposure = cl_float(scene.toneMapper.exposure);
 	toneMapper.key = cl_float(scene.toneMapper.key);
-	//toneMapper.maxLuminance = cl_float(scene.toneMapper.maxLuminance);
+	toneMapper.enableAveraging = cl_int(scene.toneMapper.enableAveraging);
+	toneMapper.averagingAlpha = cl_float(scene.toneMapper.averagingAlpha);
 
 	readColor(simpleFog.color, scene.simpleFog.color);
 	simpleFog.enabled = cl_int(scene.simpleFog.enabled);
@@ -111,43 +113,43 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.ambientReflectance, material.ambientReflectance);
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
-		//readColor(clMaterial.attenuationColor, material.attenuationColor);
-		//readColor(clMaterial.reflectance, material.reflectance);
-		//readColor(clMaterial.emittance, material.emittance);
+		readColor(clMaterial.emittance, material.emittance);
+		readColor(clMaterial.rayTransmissionAttenuationColor, material.rayTransmissionAttenuationColor);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
-		//clMaterial.shininess = cl_float(material.shininess);
-		clMaterial.ambientMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
-		clMaterial.diffuseMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
-		clMaterial.specularMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId);
-		clMaterial.rayReflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId);
-		clMaterial.rayTransmittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId);
-		//clMaterial.reflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.reflectanceMapTextureId);
-		//clMaterial.emittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId);
-		clMaterial.normalMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId);
-		clMaterial.maskMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId);
-		clMaterial.heightMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId);
-		clMaterial.normalMapType = cl_int(-1);
 		clMaterial.skipLighting = cl_int(material.skipLighting);
 		clMaterial.nonShadowing = cl_int(material.nonShadowing);
 		clMaterial.normalInterpolation = cl_int(material.normalInterpolation);
 		clMaterial.invertNormal = cl_int(material.invertNormal);
+		clMaterial.ambientMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
+		clMaterial.diffuseMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
+		clMaterial.specularShininess = cl_float(material.specularShininess);
+		clMaterial.specularMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.specularMapTextureId);
+		clMaterial.emittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.emittanceMapTextureId);
 		clMaterial.fresnelReflection = cl_int(material.fresnelReflection);
-		//clMaterial.enableAttenuation = cl_int(material.enableAttenuation);
-		clMaterial.rayReflectance = cl_float(material.rayReflectance);
-		clMaterial.rayTransmittance = cl_float(material.rayTransmittance);
 		clMaterial.refractiveIndex = cl_float(material.refractiveIndex);
-		//clMaterial.attenuationFactor = cl_float(material.attenuationFactor);
-
+		clMaterial.rayReflectance = cl_float(material.rayReflectance);
+		clMaterial.rayReflectanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayReflectanceMapTextureId);
+		clMaterial.rayReflectanceGlossinessSampleCountSqrt = cl_int(material.rayReflectanceGlossinessSampleCountSqrt);
+		clMaterial.rayReflectanceGlossiness = cl_float(material.rayReflectanceGlossiness);
+		clMaterial.rayTransmittance = cl_float(material.rayTransmittance);
+		clMaterial.rayTransmittanceMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.rayTransmittanceMapTextureId);
+		clMaterial.rayTransmittanceGlossinessSampleCountSqrt = cl_int(material.rayTransmittanceGlossinessSampleCountSqrt);
+		clMaterial.rayTransmittanceGlossiness = cl_float(material.rayTransmittanceGlossiness);
+		clMaterial.enableRayTransmissionAttenuation = cl_int(material.enableRayTransmissionAttenuation);
+		clMaterial.rayTransmissionAttenuationFactor = cl_float(material.rayTransmissionAttenuationFactor);
+		clMaterial.normalMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.normalMapTextureId);
+		clMaterial.maskMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.maskMapTextureId);
+		clMaterial.heightMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.heightMapTextureId);
+		
 		materials.push_back(clMaterial);
 	}
 
 	readColor(ambientLight.color, scene.lights.ambientLight.color);
 	ambientLight.intensity = cl_float(scene.lights.ambientLight.intensity);
-	//ambientLight.enableOcclusion = cl_int(scene.lights.ambientLight.enableOcclusion);
-	//ambientLight.maxOcclusionDistance = cl_float(scene.lights.ambientLight.maxOcclusionDistance);
-	//ambientLight.occlusionSamplerType = cl_int(scene.lights.ambientLight.occlusionSamplerType);
-	//ambientLight.occlusionSamples = cl_int(scene.lights.ambientLight.occlusionSamples);
-	//ambientLight.occlusionSampleDistribution = cl_float(scene.lights.ambientLight.occlusionSampleDistribution);
+	ambientLight.enableAmbientOcclusion = cl_int(scene.lights.ambientLight.enableAmbientOcclusion);
+	ambientLight.ambientOcclusionSampleCountSqrt = cl_int(scene.lights.ambientLight.ambientOcclusionSampleCountSqrt);
+	ambientLight.ambientOcclusionMaxSampleDistance = cl_float(scene.lights.ambientLight.ambientOcclusionMaxSampleDistance);
+	ambientLight.ambientOcclusionSampleDistribution = cl_float(scene.lights.ambientLight.ambientOcclusionSampleDistribution);
 
 	directionalLights.clear();
 
@@ -175,10 +177,9 @@ void CLScene::readSceneFull(const Scene& scene)
 		clLight.intensity = cl_float(light.intensity);
 		clLight.maxDistance = cl_float(light.maxDistance);
 		clLight.attenuation = cl_float(light.attenuation);
-		//clLight.radius = cl_float(light.radius);
-		//clLight.enableSoftShadows = cl_int(light.enableSoftShadows);
-		//clLight.softShadowSamplerType = cl_int(light.softShadowSamplerType);
-		//clLight.softShadowSamples = cl_int(light.softShadowSamples);
+		clLight.enableAreaLight = cl_int(light.enableAreaLight);
+		clLight.areaLightSampleCountSqrt = cl_int(light.areaLightSampleCountSqrt);
+		clLight.areaLightRadius = cl_float(light.areaLightRadius);
 
 		pointLights.push_back(clLight);
 	}

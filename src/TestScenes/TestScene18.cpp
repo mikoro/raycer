@@ -34,7 +34,7 @@ Scene Scene::createTestScene18()
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
 	scene.lights.ambientLight.intensity = 0.1;
 	scene.lights.ambientLight.enableAmbientOcclusion = false;
-	scene.lights.ambientLight.maxAmbientOcclusionSampleDistance = 0.5;
+	scene.lights.ambientLight.ambientOcclusionMaxSampleDistance = 0.5;
 	scene.lights.ambientLight.ambientOcclusionSampleCountSqrt = 8;
 
 	PointLight pointLight;

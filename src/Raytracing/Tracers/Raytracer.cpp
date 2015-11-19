@@ -442,7 +442,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 			sampleRay.origin = intersection.position + sampleDirection * scene.general.rayStartOffset;
 			sampleRay.direction = sampleDirection;
 			sampleRay.fastOcclusion = true;
-			sampleRay.maxDistance = scene.lights.ambientLight.maxAmbientOcclusionSampleDistance;
+			sampleRay.maxDistance = scene.lights.ambientLight.ambientOcclusionMaxSampleDistance;
 			sampleRay.precalculate();
 
 			for (Primitive* primitive : scene.primitives.visible)

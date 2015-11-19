@@ -39,11 +39,12 @@ namespace Raycer
 			cl_float ALIGN(4) rayStartOffset;
 			cl_int ALIGN(4) maxRayIterations;
 			cl_int ALIGN(4) maxPathLength;
-			cl_int ALIGN(4) multiSamples;
-			cl_int ALIGN(4) timeSamples;
-			cl_int ALIGN(4) cameraSamples;
+			cl_int ALIGN(4) multiSampleCountSqrt;
+			cl_int ALIGN(4) timeSampleCount;
+			cl_int ALIGN(4) cameraSampleCountSqrt;
 			cl_int ALIGN(4) visualizeDepth;
 			cl_float ALIGN(4) visualizeDepthMaxDistance;
+			cl_int ALIGN(4) enableNormalMapping;
 		};
 
 		struct Camera
@@ -77,7 +78,8 @@ namespace Raycer
 			cl_float ALIGN(4) gamma;
 			cl_float ALIGN(4) exposure;
 			cl_float ALIGN(4) key;
-			cl_float ALIGN(4) maxLuminance;
+			cl_int ALIGN(4) enableAveraging;
+			cl_float ALIGN(4) averagingAlpha;
 		};
 
 		struct SimpleFog
@@ -96,43 +98,43 @@ namespace Raycer
 			cl_float4 ALIGN(16) ambientReflectance;
 			cl_float4 ALIGN(16) diffuseReflectance;
 			cl_float4 ALIGN(16) specularReflectance;
-			cl_float4 ALIGN(16) attenuationColor;
-			cl_float4 ALIGN(16) reflectance;
 			cl_float4 ALIGN(16) emittance;
+			cl_float4 ALIGN(16) rayTransmissionAttenuationColor;
 			cl_float2 ALIGN(8) texcoordScale;
-			cl_float ALIGN(4) shininess;
-			cl_int ALIGN(4) ambientMapTextureIndex;
-			cl_int ALIGN(4) diffuseMapTextureIndex;
-			cl_int ALIGN(4) specularMapTextureIndex;
-			cl_int ALIGN(4) rayReflectanceMapTextureIndex;
-			cl_int ALIGN(4) rayTransmittanceMapTextureIndex;
-			cl_int ALIGN(4) reflectanceMapTextureIndex;
-			cl_int ALIGN(4) emittanceMapTextureIndex;
-			cl_int ALIGN(4) normalMapTextureIndex;
-			cl_int ALIGN(4) maskMapTextureIndex;
-			cl_int ALIGN(4) heightMapTextureIndex;
-			cl_int ALIGN(4) normalMapType;
 			cl_int ALIGN(4) skipLighting;
 			cl_int ALIGN(4) nonShadowing;
 			cl_int ALIGN(4) normalInterpolation;
 			cl_int ALIGN(4) invertNormal;
+			cl_int ALIGN(4) ambientMapTextureIndex;
+			cl_int ALIGN(4) diffuseMapTextureIndex;
+			cl_float ALIGN(4) specularShininess;
+			cl_int ALIGN(4) specularMapTextureIndex;
+			cl_int ALIGN(4) emittanceMapTextureIndex;
 			cl_int ALIGN(4) fresnelReflection;
-			cl_int ALIGN(4) enableAttenuation;
-			cl_float ALIGN(4) rayReflectance;
-			cl_float ALIGN(4) rayTransmittance;
 			cl_float ALIGN(4) refractiveIndex;
-			cl_float ALIGN(4) attenuationFactor;
+			cl_float ALIGN(4) rayReflectance;
+			cl_int ALIGN(4) rayReflectanceMapTextureIndex;
+			cl_int ALIGN(4) rayReflectanceGlossinessSampleCountSqrt;
+			cl_float ALIGN(4) rayReflectanceGlossiness;
+			cl_float ALIGN(4) rayTransmittance;
+			cl_int ALIGN(4) rayTransmittanceMapTextureIndex;
+			cl_int ALIGN(4) rayTransmittanceGlossinessSampleCountSqrt;
+			cl_float ALIGN(4) rayTransmittanceGlossiness;
+			cl_int ALIGN(4) enableRayTransmissionAttenuation;
+			cl_float ALIGN(4) rayTransmissionAttenuationFactor;
+			cl_int ALIGN(4) normalMapTextureIndex;
+			cl_int ALIGN(4) maskMapTextureIndex;
+			cl_int ALIGN(4) heightMapTextureIndex;
 		};
 
 		struct AmbientLight
 		{
 			cl_float4 ALIGN(16) color;
 			cl_float ALIGN(4) intensity;
-			cl_int ALIGN(4) enableOcclusion;
-			cl_float ALIGN(4) maxOcclusionDistance;
-			cl_int ALIGN(4) occlusionSamplerType;
-			cl_int ALIGN(4) occlusionSamples;
-			cl_float ALIGN(4) occlusionSampleDistribution;
+			cl_int ALIGN(4) enableAmbientOcclusion;
+			cl_int ALIGN(4) ambientOcclusionSampleCountSqrt;
+			cl_float ALIGN(4) ambientOcclusionMaxSampleDistance;
+			cl_float ALIGN(4) ambientOcclusionSampleDistribution;
 		};
 
 		struct DirectionalLight
@@ -149,10 +151,9 @@ namespace Raycer
 			cl_float ALIGN(4) intensity;
 			cl_float ALIGN(4) maxDistance;
 			cl_float ALIGN(4) attenuation;
-			cl_float ALIGN(4) radius;
-			cl_int ALIGN(4) enableSoftShadows;
-			cl_int ALIGN(4) softShadowSamplerType;
-			cl_int ALIGN(4) softShadowSamples;
+			cl_int ALIGN(4) enableAreaLight;
+			cl_int ALIGN(4) areaLightSampleCountSqrt;
+			cl_float ALIGN(4) areaLightRadius;
 		};
 
 		struct Triangle

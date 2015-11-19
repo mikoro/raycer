@@ -16,11 +16,12 @@ typedef struct General
 	float rayStartOffset;
 	int maxRayIterations;
 	int maxPathLength;
-	int multiSamples;
-	int timeSamples;
-	int cameraSamples;
+	int multiSampleCountSqrt;
+	int timeSampleCount;
+	int cameraSampleCountSqrt;
 	int visualizeDepth;
 	float visualizeDepthMaxDistance;
+	int enableNormalMapping;
 } General;
 
 typedef struct Camera
@@ -54,7 +55,8 @@ typedef struct ToneMapper
 	float gamma;
 	float exposure;
 	float key;
-	float maxLuminance;
+	int enableAveraging;
+	float averagingAlpha;
 } ToneMapper;
 
 typedef struct SimpleFog
@@ -73,43 +75,43 @@ typedef struct Material
 	float4 ambientReflectance;
 	float4 diffuseReflectance;
 	float4 specularReflectance;
-	float4 attenuationColor;
-	float4 reflectance;
 	float4 emittance;
+	float4 rayTransmissionAttenuationColor;
 	float2 texcoordScale;
-	float shininess;
-	int ambientMapTextureIndex;
-	int diffuseMapTextureIndex;
-	int specularMapTextureIndex;
-	int rayReflectanceMapTextureIndex;
-	int rayTransmittanceMapTextureIndex;
-	int reflectanceMapTextureIndex;
-	int emittanceMapTextureIndex;
-	int normalMapTextureIndex;
-	int maskMapTextureIndex;
-	int heightMapTextureIndex;
-	int normalMapType;
 	int skipLighting;
 	int nonShadowing;
 	int normalInterpolation;
 	int invertNormal;
+	int ambientMapTextureIndex;
+	int diffuseMapTextureIndex;
+	float specularShininess;
+	int specularMapTextureIndex;
+	int emittanceMapTextureIndex;
 	int fresnelReflection;
-	int enableAttenuation;
-	float rayReflectance;
-	float rayTransmittance;
 	float refractiveIndex;
-	float attenuationFactor;
+	float rayReflectance;
+	int rayReflectanceMapTextureIndex;
+	int rayReflectanceGlossinessSampleCountSqrt;
+	float rayReflectanceGlossiness;
+	float rayTransmittance;
+	int rayTransmittanceMapTextureIndex;
+	int rayTransmittanceGlossinessSampleCountSqrt;
+	float rayTransmittanceGlossiness;
+	int enableRayTransmissionAttenuation;
+	float rayTransmissionAttenuationFactor;
+	int normalMapTextureIndex;
+	int maskMapTextureIndex;
+	int heightMapTextureIndex;
 } Material;
 
 typedef struct AmbientLight
 {
 	float4 color;
 	float intensity;
-	int enableOcclusion;
-	float maxOcclusionDistance;
-	int occlusionSamplerType;
-	int occlusionSamples;
-	float occlusionSampleDistribution;
+	int enableAmbientOcclusion;
+	int ambientOcclusionSampleCountSqrt;
+	float ambientOcclusionMaxSampleDistance;
+	float ambientOcclusionSampleDistribution;
 } AmbientLight;
 
 typedef struct DirectionalLight
@@ -126,10 +128,9 @@ typedef struct PointLight
 	float intensity;
 	float maxDistance;
 	float attenuation;
-	float radius;
-	int enableSoftShadows;
-	int softShadowSamplerType;
-	int softShadowSamples;
+	int enableAreaLight;
+	int areaLightSampleCountSqrt;
+	float areaLightRadius;
 } PointLight;
 
 typedef struct Triangle

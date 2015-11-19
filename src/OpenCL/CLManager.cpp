@@ -157,9 +157,9 @@ void CLManager::initialize()
 	commandQueue = clCreateCommandQueue(context, deviceId, 0, &status);
 	checkError(status, "Could not create command queue");
 
-	// 	std::vector<std::string> sourceFiles = { "data/opencl/structs.cl", "data/opencl/printSizes.cl" };
-	// 	printSizesProgram = createProgram(sourceFiles);
-	// 	printSizesKernel = createKernel(printSizesProgram, "printSizes");
+	// std::vector<std::string> sourceFiles = { "data/opencl/structs.cl", "data/opencl/printSizes.cl" };
+	// printSizesProgram = createProgram(sourceFiles);
+	// printSizesKernel = createKernel(printSizesProgram, "printSizes");
 }
 
 cl_program CLManager::createProgram(const std::vector<std::string>& sourceFilePaths)

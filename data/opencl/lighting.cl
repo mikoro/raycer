@@ -5,7 +5,7 @@ float4 calculatePhongShadingColor(float4 normal,
 	float lightIntensity,
 	float4 diffuseReflectance,
 	float4 specularReflectance,
-	float shininess)
+	float specularShininess)
 {
 	float4 phongShadingColor = (float4)(0.0, 0.0, 0.0, 0.0);
 
@@ -19,7 +19,7 @@ float4 calculatePhongShadingColor(float4 normal,
 		float specularAmount = dot(reflectionDirection, directionToCamera);
 
 		if (specularAmount > 0.0)
-			phongShadingColor += lightColor * lightIntensity * pow(specularAmount, shininess) * specularReflectance;
+			phongShadingColor += lightColor * lightIntensity * pow(specularAmount, specularShininess) * specularReflectance;
 	}
 
 	return phongShadingColor;
@@ -98,7 +98,7 @@ float4 calculateLightColor(constant BVHNode* nodes,
 			directionalLight.intensity,
 			finalDiffuseReflectance,
 			finalSpecularReflectance,
-			material.shininess);
+			material.specularShininess);
 
 		float shadowAmount = calculateShadowAmount(nodes,
 			triangles,
@@ -127,7 +127,7 @@ float4 calculateLightColor(constant BVHNode* nodes,
 			pointLight.intensity,
 			finalDiffuseReflectance,
 			finalSpecularReflectance,
-			material.shininess);
+			material.specularShininess);
 
 		float shadowAmount = calculateShadowAmount(nodes,
 			triangles,
