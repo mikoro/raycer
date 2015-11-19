@@ -78,6 +78,7 @@ void CLScene::readSceneFull(const Scene& scene)
 	general.rayStartOffset = cl_float(scene.general.rayStartOffset);
 	general.maxRayIterations = cl_int(scene.general.maxRayIterations);
 	general.maxPathLength = cl_int(scene.general.maxPathLength);
+	general.pathSampleCount = cl_int(scene.general.pathSampleCount);
 	general.multiSampleCountSqrt = cl_int(scene.general.multiSampleCountSqrt);
 	general.timeSampleCount = cl_int(scene.general.timeSampleCount);
 	general.cameraSampleCountSqrt = cl_int(scene.general.cameraSampleCountSqrt);

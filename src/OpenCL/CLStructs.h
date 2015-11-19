@@ -39,6 +39,7 @@ namespace Raycer
 			cl_float ALIGN(4) rayStartOffset;
 			cl_int ALIGN(4) maxRayIterations;
 			cl_int ALIGN(4) maxPathLength;
+			cl_int ALIGN(4) pathSampleCount;
 			cl_int ALIGN(4) multiSampleCountSqrt;
 			cl_int ALIGN(4) timeSampleCount;
 			cl_int ALIGN(4) cameraSampleCountSqrt;

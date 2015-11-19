@@ -258,7 +258,7 @@ void DefaultState::render(double timeStep, double interpolation)
 		sampleCount = 0;
 	}
 
-	++sampleCount;
+	sampleCount += scene.general.pathSampleCount;
 
 	if (!settings.openCL.enabled)
 	{

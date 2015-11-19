@@ -16,6 +16,7 @@ typedef struct General
 	float rayStartOffset;
 	int maxRayIterations;
 	int maxPathLength;
+	int pathSampleCount;
 	int multiSampleCountSqrt;
 	int timeSampleCount;
 	int cameraSampleCountSqrt;
