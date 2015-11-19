@@ -12,7 +12,7 @@ Scene Scene::createTestScene19()
 {
 	Scene scene;
 
-	scene.general.tracerType = TracerType::PATH;
+	scene.general.tracerType = TracerType::RAY;
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //

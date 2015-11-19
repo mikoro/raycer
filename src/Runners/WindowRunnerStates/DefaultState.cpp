@@ -309,10 +309,9 @@ void DefaultState::resizeFilm()
 		clTracer.releaseImageBuffer();
 
 	film.resize(filmWidth, filmHeight);
+	filmRenderer.setFilmSize(filmWidth, filmHeight);
+	scene.camera.setImagePlaneSize(filmWidth, filmHeight);
 
 	if (settings.openCL.enabled)
 		clTracer.initializeImageBuffer(filmWidth, filmHeight, filmRenderer.getFilmTextureId());
-
-	filmRenderer.setFilmSize(filmWidth, filmHeight);
-	scene.camera.setImagePlaneSize(filmWidth, filmHeight);
 }
