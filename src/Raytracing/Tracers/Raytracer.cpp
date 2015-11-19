@@ -196,7 +196,7 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 			Vector3 sampleDirection = sampler->getHemisphereSample(reflectionOnb, distribution, x, y, n, n, permutation, generator);
 
 			// prevent sample rays from crossing the primitive surface
-			if (isOutside && sampleDirection.dot(intersection.normal) < 0.0 || !isOutside && sampleDirection.dot(intersection.normal) > 0.0)
+			if ((isOutside && sampleDirection.dot(intersection.normal) < 0.0) || (!isOutside && sampleDirection.dot(intersection.normal) > 0.0))
 				sampleDirection = sampleDirection.reflect(reflectionDirection);
 
 			Ray sampleRay;
@@ -278,7 +278,7 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 			Vector3 sampleDirection = sampler->getHemisphereSample(transmissionOnb, distribution, x, y, n, n, permutation, generator);
 
 			// prevent sample rays from crossing the primitive surface
-			if (isOutside && sampleDirection.dot(intersection.normal) > 0.0 || !isOutside && sampleDirection.dot(intersection.normal) < 0.0)
+			if ((isOutside && sampleDirection.dot(intersection.normal) > 0.0) || (!isOutside && sampleDirection.dot(intersection.normal) < 0.0))
 				sampleDirection = sampleDirection.reflect(transmissionDirection);
 
 			Ray sampleRay;
