@@ -84,7 +84,7 @@ Scene Scene::createTestScene11()
 	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
 	boxMaterial.rayTransmittance = 1.0;
 	boxMaterial.refractiveIndex = 1.5;
-	boxMaterial.rayTransmittanceGlossinessSamplesSqrt = 3;
+	boxMaterial.rayTransmittanceGlossinessSampleCountSqrt = 3;
 	boxMaterial.rayTransmittanceGlossiness = 1000.0;
 	box.id = 10;
 	box.invisible = true;
@@ -138,7 +138,7 @@ Scene Scene::createTestScene11()
 	sphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 1.0;
 	sphereMaterial.diffuseMapTextureId = groundTexture.id;
 	sphereMaterial.rayReflectance = 0.0;
-	sphereMaterial.rayReflectanceGlossinessSamplesSqrt = 3;
+	sphereMaterial.rayReflectanceGlossinessSampleCountSqrt = 3;
 	sphereMaterial.rayReflectanceGlossiness = 100.0;
 
 	sphere = Sphere();
@@ -162,7 +162,7 @@ Scene Scene::createTestScene11()
 	pointLight.maxDistance = 1000.0;
 	pointLight.attenuation = 2.0;
 	//pointLight.enableAreaLight = true;
-	pointLight.areaLightSamplesSqrt = 3;
+	pointLight.areaLightSampleCountSqrt = 3;
 	pointLight.areaLightRadius = 0.5;
 
 	scene.lights.pointLights.push_back(pointLight);

@@ -144,7 +144,17 @@ bool Color::isZero() const
 
 bool Color::isClamped() const
 {
-	return r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0;
+	return (r >= 0.0 && r <= 1.0 && g >= 0.0 && g <= 1.0 && b >= 0.0 && b <= 1.0 && a >= 0.0 && a <= 1.0);
+}
+
+bool Color::isNan() const
+{
+	return (std::isnan(r) || std::isnan(g) || std::isnan(b) || std::isnan(a));
+}
+
+bool Color::isNegative() const
+{
+	return (r < 0.0 || g < 0.0 || b < 0.0 || a < 0.0);
 }
 
 Color& Color::clamp()

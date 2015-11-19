@@ -28,7 +28,7 @@ namespace Raycer
 	{
 		bool enableAmbientOcclusion = false;
 		SamplerType ambientOcclusionSamplerType = SamplerType::CMJ;
-		uint64_t ambientOcclusionSamplesSqrt = 0;
+		uint64_t ambientOcclusionSampleCountSqrt = 0;
 		double maxAmbientOcclusionSampleDistance = 1.0;
 		double ambientOcclusionSampleDistribution = 1.0;
 
@@ -38,7 +38,7 @@ namespace Raycer
 			ar(cereal::make_nvp("light", cereal::base_class<Light>(this)),
 				CEREAL_NVP(enableAmbientOcclusion),
 				CEREAL_NVP(ambientOcclusionSamplerType),
-				CEREAL_NVP(ambientOcclusionSamplesSqrt),
+				CEREAL_NVP(ambientOcclusionSampleCountSqrt),
 				CEREAL_NVP(maxAmbientOcclusionSampleDistance),
 				CEREAL_NVP(ambientOcclusionSampleDistribution));
 		}
@@ -63,7 +63,7 @@ namespace Raycer
 		double attenuation = 1.0;
 		bool enableAreaLight = false;
 		SamplerType areaLightSamplerType = SamplerType::CMJ;
-		uint64_t areaLightSamplesSqrt = 0;
+		uint64_t areaLightSampleCountSqrt = 0;
 		double areaLightRadius = 1.0;
 
 		template <class Archive>
@@ -75,7 +75,7 @@ namespace Raycer
 				CEREAL_NVP(attenuation),
 				CEREAL_NVP(enableAreaLight),
 				CEREAL_NVP(areaLightSamplerType),
-				CEREAL_NVP(areaLightSamplesSqrt),
+				CEREAL_NVP(areaLightSampleCountSqrt),
 				CEREAL_NVP(areaLightRadius));
 		}
 	};

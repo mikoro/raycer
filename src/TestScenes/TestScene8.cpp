@@ -12,7 +12,7 @@ Scene Scene::createTestScene8()
 {
 	Scene scene;
 
-	scene.general.cameraSamplesSqrt = 3;
+	scene.general.cameraSampleCountSqrt = 3;
 
 	// CAMERA //
 

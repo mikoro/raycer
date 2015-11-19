@@ -44,6 +44,8 @@ namespace Raycer
 		bool isTransparent() const;
 		bool isZero() const;
 		bool isClamped() const;
+		bool isNan() const;
+		bool isNegative() const;
 		Color& clamp();
 		Color clamped() const;
 		Colorf toColorf() const;

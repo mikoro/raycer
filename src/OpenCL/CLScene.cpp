@@ -79,7 +79,7 @@ void CLScene::readSceneFull(const Scene& scene)
 	general.maxRayIterations = cl_int(scene.general.maxRayIterations);
 	general.maxPathLength = cl_int(scene.general.maxPathLength);
 	//general.multiSamples = cl_int(scene.general.multiSamples);
-	general.timeSamples = cl_int(scene.general.timeSamples);
+	//general.timeSamples = cl_int(scene.general.timeSamples);
 	//general.cameraSamples = cl_int(scene.general.cameraSamples);
 	general.visualizeDepth = cl_int(scene.general.visualizeDepth);
 	general.visualizeDepthMaxDistance = cl_float(scene.general.visualizeDepthMaxDistance);
@@ -111,7 +111,7 @@ void CLScene::readSceneFull(const Scene& scene)
 		readColor(clMaterial.ambientReflectance, material.ambientReflectance);
 		readColor(clMaterial.diffuseReflectance, material.diffuseReflectance);
 		readColor(clMaterial.specularReflectance, material.specularReflectance);
-		readColor(clMaterial.attenuationColor, material.attenuationColor);
+		//readColor(clMaterial.attenuationColor, material.attenuationColor);
 		//readColor(clMaterial.reflectance, material.reflectance);
 		//readColor(clMaterial.emittance, material.emittance);
 		readVector2(clMaterial.texcoordScale, material.texcoordScale);
@@ -132,11 +132,11 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.normalInterpolation = cl_int(material.normalInterpolation);
 		clMaterial.invertNormal = cl_int(material.invertNormal);
 		clMaterial.fresnelReflection = cl_int(material.fresnelReflection);
-		clMaterial.enableAttenuation = cl_int(material.enableAttenuation);
+		//clMaterial.enableAttenuation = cl_int(material.enableAttenuation);
 		clMaterial.rayReflectance = cl_float(material.rayReflectance);
 		clMaterial.rayTransmittance = cl_float(material.rayTransmittance);
 		clMaterial.refractiveIndex = cl_float(material.refractiveIndex);
-		clMaterial.attenuationFactor = cl_float(material.attenuationFactor);
+		//clMaterial.attenuationFactor = cl_float(material.attenuationFactor);
 
 		materials.push_back(clMaterial);
 	}

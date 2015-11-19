@@ -15,7 +15,6 @@
 #include "Math/Vector3.h"
 #include "Math/Color.h"
 #include "Math/ONB.h"
-#include "Math/MathUtils.h"
 
 using namespace Raycer;
 
@@ -161,7 +160,7 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 	Color reflectedColor;
 	bool isOutside = ray.direction.dot(intersection.normal) < 0.0;
 
-	if (material->rayReflectanceGlossinessSamplesSqrt == 0)
+	if (material->rayReflectanceGlossinessSampleCountSqrt == 0)
 	{
 		Ray reflectedRay;
 		Intersection reflectedIntersection;
@@ -173,10 +172,10 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 		reflectedColor = traceRecursive(scene, reflectedRay, reflectedIntersection, iteration + 1, generator, interrupted) * rayReflectance;
 
 		// only attenuate if ray has traveled inside a primitive
-		if (!isOutside && reflectedIntersection.wasFound && material->enableAttenuation)
+		if (!isOutside && reflectedIntersection.wasFound && material->enableRayTransmissionAttenuation)
 		{
-			double a = exp(-material->attenuationFactor * reflectedIntersection.distance);
-			reflectedColor = Color::lerp(material->attenuationColor, reflectedColor, a);
+			double a = exp(-material->rayTransmissionAttenuationFactor * reflectedIntersection.distance);
+			reflectedColor = Color::lerp(material->rayTransmissionAttenuationColor, reflectedColor, a);
 		}
 
 		return reflectedColor;
@@ -187,7 +186,7 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 	uint64_t permutation = randomPermutation(generator);
 
 	ONB reflectionOnb = ONB::fromNormal(reflectionDirection);
-	uint64_t n = material->rayReflectanceGlossinessSamplesSqrt;
+	uint64_t n = material->rayReflectanceGlossinessSampleCountSqrt;
 	double distribution = material->rayReflectanceGlossiness;
 
 	for (uint64_t y = 0; y < n; ++y)
@@ -210,10 +209,10 @@ Color Raytracer::calculateReflectedColor(const Scene& scene, const Ray& ray, con
 			Color sampleColor = traceRecursive(scene, sampleRay, sampleIntersection, iteration + 1, generator, interrupted) * rayReflectance;
 
 			// only attenuate if ray has traveled inside a primitive
-			if (!isOutside && sampleIntersection.wasFound && material->enableAttenuation)
+			if (!isOutside && sampleIntersection.wasFound && material->enableRayTransmissionAttenuation)
 			{
-				double a = exp(-material->attenuationFactor * sampleIntersection.distance);
-				sampleColor = Color::lerp(material->attenuationColor, sampleColor, a);
+				double a = exp(-material->rayTransmissionAttenuationFactor * sampleIntersection.distance);
+				sampleColor = Color::lerp(material->rayTransmissionAttenuationColor, sampleColor, a);
 			}
 
 			reflectedColor += sampleColor;
@@ -243,7 +242,7 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 	Vector3 transmissionDirection = ray.direction * n3 + (std::abs(cosine1) * n3 - sqrt(cosine2)) * intersection.normal;
 	transmissionDirection.normalize();
 
-	if (material->rayTransmittanceGlossinessSamplesSqrt == 0)
+	if (material->rayTransmittanceGlossinessSampleCountSqrt == 0)
 	{
 		Ray transmittedRay;
 		Intersection transmittedIntersection;
@@ -255,10 +254,10 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 		transmittedColor = traceRecursive(scene, transmittedRay, transmittedIntersection, iteration + 1, generator, interrupted) * rayTransmittance;
 
 		// only attenuate if ray has traveled inside a primitive
-		if (isOutside && transmittedIntersection.wasFound && material->enableAttenuation)
+		if (isOutside && transmittedIntersection.wasFound && material->enableRayTransmissionAttenuation)
 		{
-			double a = exp(-material->attenuationFactor * transmittedIntersection.distance);
-			transmittedColor = Color::lerp(material->attenuationColor, transmittedColor, a);
+			double a = exp(-material->rayTransmissionAttenuationFactor * transmittedIntersection.distance);
+			transmittedColor = Color::lerp(material->rayTransmissionAttenuationColor, transmittedColor, a);
 		}
 
 		return transmittedColor;
@@ -269,7 +268,7 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 	uint64_t permutation = randomPermutation(generator);
 
 	ONB transmissionOnb = ONB::fromNormal(transmissionDirection);
-	uint64_t n = material->rayTransmittanceGlossinessSamplesSqrt;
+	uint64_t n = material->rayTransmittanceGlossinessSampleCountSqrt;
 	double distribution = material->rayTransmittanceGlossiness;
 
 	for (uint64_t y = 0; y < n; ++y)
@@ -292,10 +291,10 @@ Color Raytracer::calculateTransmittedColor(const Scene& scene, const Ray& ray, c
 			Color sampleColor = traceRecursive(scene, sampleRay, sampleIntersection, iteration + 1, generator, interrupted) * rayTransmittance;
 
 			// only attenuate if ray has traveled inside a primitive
-			if (!isOutside && sampleIntersection.wasFound && material->enableAttenuation)
+			if (!isOutside && sampleIntersection.wasFound && material->enableRayTransmissionAttenuation)
 			{
-				double a = exp(-material->attenuationFactor * sampleIntersection.distance);
-				sampleColor = Color::lerp(material->attenuationColor, sampleColor, a);
+				double a = exp(-material->rayTransmissionAttenuationFactor * sampleIntersection.distance);
+				sampleColor = Color::lerp(material->rayTransmissionAttenuationColor, sampleColor, a);
 			}
 
 			transmittedColor += sampleColor;
@@ -428,7 +427,7 @@ double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Inte
 
 	double ambientOcclusion = 0.0;
 	double distribution = scene.lights.ambientLight.ambientOcclusionSampleDistribution;
-	uint64_t n = scene.lights.ambientLight.ambientOcclusionSamplesSqrt;
+	uint64_t n = scene.lights.ambientLight.ambientOcclusionSampleCountSqrt;
 
 	for (uint64_t y = 0; y < n; ++y)
 	{
@@ -526,7 +525,7 @@ double Raytracer::calculateShadowAmount(const Scene& scene, const Ray& ray, cons
 	uint64_t permutation = randomPermutation(generator);
 
 	double shadowAmount = 0.0;
-	uint64_t n = light.areaLightSamplesSqrt;
+	uint64_t n = light.areaLightSampleCountSqrt;
 
 	for (uint64_t y = 0; y < n; ++y)
 	{

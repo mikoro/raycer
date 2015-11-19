@@ -52,7 +52,7 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 
 	if (scene.toneMapper.enableAveraging)
 	{
-		maxLuminanceAverage.setAlpha(scene.toneMapper.averageAlpha);
+		maxLuminanceAverage.setAlpha(scene.toneMapper.averagingAlpha);
 		maxLuminanceAverage.addMeasurement(maxLuminance);
 		maxLuminance = maxLuminanceAverage.getAverage();
 	}
@@ -74,11 +74,11 @@ void ReinhardToneMapper::apply(const Scene& scene, const Image& inputImage, Imag
 
 		Color outputColor = inputColor * colorScale;
 
-		if (scene.toneMapper.applyGamma)
-			outputColor = Color::fastPow(outputColor, invGamma);
-
 		if (scene.toneMapper.shouldClamp)
 			outputColor.clamp();
+
+		if (scene.toneMapper.applyGamma)
+			outputColor = Color::fastPow(outputColor, invGamma);
 
 		outputColor.a = 1.0;
 		outputPixelData[i] = outputColor.toColorf();

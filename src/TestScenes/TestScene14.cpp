@@ -16,7 +16,7 @@ Scene Scene::createTestScene14()
 	
 	scene.toneMapper.type = ToneMapperType::REINHARD;
 	scene.toneMapper.enableAveraging = true;
-	scene.toneMapper.averageAlpha = 0.1;
+	scene.toneMapper.averagingAlpha = 0.1;
 
 	// CAMERA //
 
@@ -97,9 +97,9 @@ Scene Scene::createTestScene14()
 	boxMaterial.rayTransmittance = 1.0;
 	boxMaterial.refractiveIndex = 1.5;
 	boxMaterial.fresnelReflection = true;
-	boxMaterial.enableAttenuation = true;
-	boxMaterial.attenuationFactor = 0.4;
-	boxMaterial.attenuationColor = Color(0.0, 0.0, 0.0);
+	boxMaterial.enableRayTransmissionAttenuation = true;
+	boxMaterial.rayTransmissionAttenuationFactor = 0.4;
+	boxMaterial.rayTransmissionAttenuationColor = Color(0.0, 0.0, 0.0);
 
 	Box box;
 	box.id = 4;

@@ -89,19 +89,18 @@ namespace Raycer
 		struct General
 		{
 			TracerType tracerType = TracerType::RAY;
-			SamplerType multiSamplerType = SamplerType::CENTER;
-			FilterType multiSamplerFilterType = FilterType::MITCHELL;
-			SamplerType timeSamplerType = SamplerType::JITTERED;
-			SamplerType cameraSamplerType = SamplerType::CMJ;
 			uint64_t maxRayIterations = 3;
 			uint64_t maxPathLength = 3;
-			uint64_t pathSamples = 1;
-			uint64_t multiSamplesSqrt = 1;
-			uint64_t timeSamples = 1;
-			uint64_t cameraSamplesSqrt = 0;
 			double rayStartOffset = 0.00001;
 			Color backgroundColor = Color(0.0, 0.0, 0.0);
 			Color offLensColor = Color(0.0, 0.0, 0.0);
+			SamplerType multiSamplerType = SamplerType::CMJ;
+			FilterType multiSamplerFilterType = FilterType::MITCHELL;
+			uint64_t multiSampleCountSqrt = 1;
+			SamplerType timeSamplerType = SamplerType::JITTERED;
+			uint64_t timeSampleCount = 1;
+			SamplerType cameraSamplerType = SamplerType::CMJ;
+			uint64_t cameraSampleCountSqrt = 1;
 			bool visualizeDepth = false;
 			double visualizeDepthMaxDistance = 25.0;
 			bool enableNormalMapping = true;
@@ -110,19 +109,18 @@ namespace Raycer
 			void serialize(Archive& ar)
 			{
 				ar(CEREAL_NVP(tracerType),
-					CEREAL_NVP(multiSamplerType),
-					CEREAL_NVP(multiSamplerFilterType),
-					CEREAL_NVP(timeSamplerType),
-					CEREAL_NVP(cameraSamplerType),
 					CEREAL_NVP(maxRayIterations),
 					CEREAL_NVP(maxPathLength),
-					CEREAL_NVP(pathSamples),
-					CEREAL_NVP(multiSamplesSqrt),
-					CEREAL_NVP(timeSamples),
-					CEREAL_NVP(cameraSamplesSqrt),
 					CEREAL_NVP(rayStartOffset),
 					CEREAL_NVP(backgroundColor),
 					CEREAL_NVP(offLensColor),
+					CEREAL_NVP(multiSamplerType),
+					CEREAL_NVP(multiSamplerFilterType),
+					CEREAL_NVP(multiSampleCountSqrt),
+					CEREAL_NVP(timeSamplerType),
+					CEREAL_NVP(timeSampleCount),
+					CEREAL_NVP(cameraSamplerType),
+					CEREAL_NVP(cameraSampleCountSqrt),
 					CEREAL_NVP(visualizeDepth),
 					CEREAL_NVP(visualizeDepthMaxDistance),
 					CEREAL_NVP(enableNormalMapping));
@@ -141,7 +139,7 @@ namespace Raycer
 			double exposure = 0.0;
 			double key = 0.18;
 			bool enableAveraging = false;
-			double averageAlpha = 0.1;
+			double averagingAlpha = 0.1;
 
 			template <class Archive>
 			void serialize(Archive& ar)
@@ -153,7 +151,7 @@ namespace Raycer
 					CEREAL_NVP(exposure),
 					CEREAL_NVP(key),
 					CEREAL_NVP(enableAveraging),
-					CEREAL_NVP(averageAlpha));
+					CEREAL_NVP(averagingAlpha));
 			}
 
 		} toneMapper;

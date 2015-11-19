@@ -28,9 +28,9 @@ Scene Scene::createTestScene7()
 	boxMaterial.diffuseReflectance = Color(0.5, 0.0, 0.0);
 	boxMaterial.rayTransmittance = 0.75;
 	boxMaterial.refractiveIndex = 1.0;
-	boxMaterial.enableAttenuation = true;
-	boxMaterial.attenuationFactor = 1.0;
-	boxMaterial.attenuationColor = Color(0.1, 0.0, 0.0);
+	boxMaterial.enableRayTransmissionAttenuation = true;
+	boxMaterial.rayTransmissionAttenuationFactor = 1.0;
+	boxMaterial.rayTransmissionAttenuationColor = Color(0.1, 0.0, 0.0);
 	boxMaterial.nonShadowing = true;
 
 	scene.materials.push_back(boxMaterial);

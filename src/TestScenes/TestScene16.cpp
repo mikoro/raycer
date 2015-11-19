@@ -12,7 +12,7 @@ Scene Scene::createTestScene16()
 {
 	Scene scene;
 
-	scene.general.timeSamples = 3;
+	scene.general.timeSampleCount = 3;
 
 	scene.simpleFog.enabled = false;
 	scene.simpleFog.distance = 20.0;
