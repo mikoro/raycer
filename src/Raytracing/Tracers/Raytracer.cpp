@@ -53,6 +53,8 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 
 	if (material->skipLighting)
 	{
+		finalColor = material->diffuseReflectance;
+
 		if (material->diffuseMapTexture != nullptr)
 			finalColor = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
 

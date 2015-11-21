@@ -24,7 +24,7 @@ Scene Scene::createTestScene19()
 
 	ImageTexture groundTexture;
 	groundTexture.id = 1;
-	groundTexture.intensity = 1.0 / M_PI;
+	groundTexture.intensity = 1.0;
 	groundTexture.imageFilePath = "data/images/wood_floor.jpg";
 	groundTexture.applyGamma = true;
 
@@ -74,11 +74,39 @@ Scene Scene::createTestScene19()
 	scene.materials.push_back(sphereMaterial);
 	scene.models.push_back(modelInfo);
 
+	// EMITTERS //
+
+	Material emitterMaterial;
+	emitterMaterial.id = 3;
+	emitterMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	emitterMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
+	emitterMaterial.emittance = Color(1.0, 1.0, 1.0) * 10.0;
+	emitterMaterial.nonShadowing = true;
+	emitterMaterial.skipLighting = true;
+
+	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
+	modelInfo.modelFilePath = "data/meshes/square.obj";
+	modelInfo.defaultMaterialId = emitterMaterial.id;
+	modelInfo.idStartOffset = 3000;
+	modelInfo.scale = Vector3(8.0, 8.0, 1.0);
+	modelInfo.rotate = EulerAngle(0.0, 20.0, 0.0);
+	modelInfo.translate = Vector3(5.0, 5.0, 15.0);
+
+	scene.materials.push_back(emitterMaterial);
+	scene.models.push_back(modelInfo);
+
+	modelInfo.idStartOffset = 4000;
+	modelInfo.scale = Vector3(8.0, 8.0, 1.0);
+	modelInfo.rotate = EulerAngle(0.0, -20.0, 0.0);
+	modelInfo.translate = Vector3(-10.0, 5.0, 13.0);
+
+	scene.models.push_back(modelInfo);
+
 	// MATPREVIEW MODEL //
 
 	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/matpreview/matpreview.obj";
-	modelInfo.idStartOffset = 3000;
+	modelInfo.idStartOffset = 5000;
 	modelInfo.baseMaterial.normalInterpolation = true;
 
 	scene.models.push_back(modelInfo);

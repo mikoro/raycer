@@ -110,7 +110,10 @@ void DefaultState::update(double timeStep)
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_R))
+	{
 		scene.camera.reset();
+		film.clear();
+	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_N))
 		scene.general.enableNormalMapping = !scene.general.enableNormalMapping;
