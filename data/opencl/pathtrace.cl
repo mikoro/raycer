@@ -10,20 +10,19 @@ kernel void pathtrace(
 	constant PointLight* pointLights,
 	constant Triangle* triangles,
 	constant BVHNode* nodes,
-	write_only image2d_t outputImage,
+	global uint2* seeds,
+	global float4* cumulativeColors,
+	global float* filterWeights,
 	TEX_INPUT_ARGS)
 {
 	int x = get_global_id(0);
 	int y = get_global_id(1);
+	int index = y * state->imageWidth + x;
 
-	Ray ray = getCameraRay(camera, x, y);
-	Intersection intersection = constructIntersection();
-	float4 outputColor = general->backgroundColor;
+	//Ray ray = getCameraRay(camera, x, y);
+	//Intersection intersection = constructIntersection();
+	//float4 outputColor = general->backgroundColor;
 
-	outputColor = (float4)(0.2, 0.4, 0.6, 1.0);
-
-	outputColor = clamp(pow(outputColor, 1.0 / 2.2), 0.0, 1.0);
-	outputColor.w = 1.0;
-
-	write_imagef(outputImage, (int2)(x, y), outputColor);
+	cumulativeColors[index] += (float4)(0.2, 0.4, 0.6, 1.0);
+	filterWeights[index] += 1.0f;
 }

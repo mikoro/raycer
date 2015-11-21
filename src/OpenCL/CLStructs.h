@@ -26,6 +26,8 @@ namespace Raycer
 		struct State
 		{
 			cl_float ALIGN(4) time;
+			cl_int ALIGN(4) imageWidth;
+			cl_int ALIGN(4) imageHeight;
 			cl_int ALIGN(4) directionalLightCount;
 			cl_int ALIGN(4) pointLightCount;
 			cl_int ALIGN(4) triangleCount;

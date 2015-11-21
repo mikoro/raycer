@@ -4,6 +4,7 @@
 #pragma once
 
 #include <atomic>
+#include <random>
 
 #ifdef __APPLE__
 #include <OpenCL/opencl.h>
@@ -29,8 +30,8 @@ namespace Raycer
 		void initializeKernels();
 		void releaseKernels();
 
-		void initializeImageBuffer(uint64_t width, uint64_t height, uint64_t imageTextureId);
-		void releaseImageBuffer();
+		void initializeImageBuffers(uint64_t width, uint64_t height, uint64_t imageTextureId);
+		void releaseImageBuffers();
 
 		void initializeBuffers(const Scene& scene);
 		void releaseBuffers();
@@ -40,9 +41,6 @@ namespace Raycer
 
 	private:
 
-		CLTracer(const CLTracer& c);
-		CLTracer& operator=(const CLTracer& c);
-
 		void createBuffers();
 		void uploadFullData();
 		void uploadMinimalData();
@@ -50,8 +48,9 @@ namespace Raycer
 
 		CLScene clScene;
 
-		uint64_t imageBufferWidth = 0;
-		uint64_t imageBufferHeight = 0;
+		uint64_t imageWidth = 0;
+		uint64_t imageHeight = 0;
+		uint64_t imageLength = 0;
 
 		cl_mem statePtr = nullptr;
 		cl_mem generalPtr = nullptr;
@@ -64,6 +63,9 @@ namespace Raycer
 		cl_mem pointLightsPtr = nullptr;
 		cl_mem trianglesPtr = nullptr;
 		cl_mem bvhNodesPtr = nullptr;
+		cl_mem seedsPtr = nullptr;
+		cl_mem cumulativeColorsPtr = nullptr;
+		cl_mem filterWeightsPtr = nullptr;
 		cl_mem outputImagePtr = nullptr;
 
 		std::vector<cl_mem> textureImagePtrs;
@@ -73,9 +75,16 @@ namespace Raycer
 		cl_program program = nullptr;
 		cl_kernel raytraceKernel = nullptr;
 		cl_kernel pathtraceKernel = nullptr;
+		cl_kernel postprocessKernel = nullptr;
 
-		uint64_t kernelArgumentIndex = 0;
-		uint64_t outputImageArgumentIndex = 0;
+		uint64_t currentKernelArgumentIndex = 0;
+		uint64_t seedsArgumentIndex = 0;
+		uint64_t cumulativeColorsArgumentIndex = 0;
+		uint64_t filterWeightsArgumentIndex = 0;
+
 		bool buffersInitialized = false;
+
+		std::mt19937_64 generator;
+		std::vector<uint64_t> seeds;
 	};
 }

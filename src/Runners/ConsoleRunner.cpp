@@ -84,7 +84,7 @@ void ConsoleRunner::run(TracerState& state)
 	if (settings.openCL.enabled)
 	{
 		clTracer.initializeKernels();
-		clTracer.initializeImageBuffer(state.filmWidth, state.filmHeight, 0);
+		clTracer.initializeImageBuffers(state.filmWidth, state.filmHeight, 0);
 		clTracer.initializeBuffers(*state.scene);
 	}
 

@@ -3,6 +3,8 @@
 typedef struct State
 {
 	float time;
+	int imageWidth;
+	int imageHeight;
 	int directionalLightCount;
 	int pointLightCount;
 	int triangleCount;

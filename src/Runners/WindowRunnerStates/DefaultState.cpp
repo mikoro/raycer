@@ -306,12 +306,12 @@ void DefaultState::resizeFilm()
     filmHeight = std::max(uint64_t(1), filmHeight);
 
 	if (settings.openCL.enabled)
-		clTracer.releaseImageBuffer();
+		clTracer.releaseImageBuffers();
 
 	film.resize(filmWidth, filmHeight);
 	filmRenderer.setFilmSize(filmWidth, filmHeight);
 	scene.camera.setImagePlaneSize(filmWidth, filmHeight);
 
 	if (settings.openCL.enabled)
-		clTracer.initializeImageBuffer(filmWidth, filmHeight, filmRenderer.getFilmTextureId());
+		clTracer.initializeImageBuffers(filmWidth, filmHeight, filmRenderer.getFilmTextureId());
 }
