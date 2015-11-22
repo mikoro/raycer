@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// soft shadows and glossy reflections
+// glossy reflections
 Scene Scene::createTestScene11()
 {
 	Scene scene;
@@ -17,7 +17,7 @@ Scene Scene::createTestScene11()
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.44, 7.05, 7.33);
-	scene.camera.orientation = EulerAngle(-26.56, 22.22, 0.0);
+	scene.camera.orientation = EulerAngle(-21.89, 8.77, 0.0);
 
 	// BOUNDING SPHERE //
 
@@ -84,8 +84,9 @@ Scene Scene::createTestScene11()
 	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
 	boxMaterial.rayTransmittance = 1.0;
 	boxMaterial.refractiveIndex = 1.5;
-	boxMaterial.rayTransmittanceGlossinessSampleCountSqrt = 3;
+	boxMaterial.rayTransmittanceGlossinessSampleCountSqrt = 4;
 	boxMaterial.rayTransmittanceGlossiness = 1000.0;
+	boxMaterial.nonShadowing = true;
 	box.id = 10;
 	box.invisible = true;
 	box.materialId = boxMaterial.id;
@@ -98,22 +99,6 @@ Scene Scene::createTestScene11()
 	scene.primitives.boxes.push_back(box);
 	scene.primitives.instances.push_back(boxInstance);
 
-	boxMaterial.id = 11;
-	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
-	boxMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
-	boxMaterial.rayTransmittance = 0.0;
-	box.id = 11;
-	box.invisible = true;
-	box.materialId = boxMaterial.id;
-	box.position = Vector3(-4.0, 3.51, -3.0);
-	box.extent = Vector3(4.0, 7.0, 0.6);
-	boxInstance.id = 1001;
-	boxInstance.primitiveId = box.id;
-	boxInstance.rotate = EulerAngle(0.0, 30.0, 0.0);
-	scene.materials.push_back(boxMaterial);
-	scene.primitives.boxes.push_back(box);
-	scene.primitives.instances.push_back(boxInstance);
-
 	boxMaterial.id = 12;
 	boxMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 	boxMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
@@ -121,8 +106,8 @@ Scene Scene::createTestScene11()
 	box.id = 12;
 	box.invisible = true;
 	box.materialId = boxMaterial.id;
-	box.position = Vector3(3.0, 4.01, -4.0);
-	box.extent = Vector3(4.0, 8.0, 1.2);
+	box.position = Vector3(-1.0, 2.0, -6.0);
+	box.extent = Vector3(14.0, 4.0, 0.5);
 	boxInstance.id = 1002;
 	boxInstance.primitiveId = box.id;
 	boxInstance.rotate = EulerAngle(0.0, -20.0, 0.0);
@@ -134,18 +119,33 @@ Scene Scene::createTestScene11()
 
 	sphereMaterial = Material();
 	sphereMaterial.id = 20;
-	sphereMaterial.ambientReflectance = Color(0.0, 1.0, 0.0) * 0.0;
-	sphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0) * 1.0;
-	sphereMaterial.diffuseMapTextureId = groundTexture.id;
-	sphereMaterial.rayReflectance = 0.0;
-	sphereMaterial.rayReflectanceGlossinessSampleCountSqrt = 3;
-	sphereMaterial.rayReflectanceGlossiness = 100.0;
+	sphereMaterial.ambientReflectance = Color(1.0, 0.0, 0.0);
+	sphereMaterial.diffuseReflectance = Color(1.0, 0.0, 0.0);
+	sphereMaterial.nonShadowing = true;
 
 	sphere = Sphere();
 	sphere.id = 20;
 	sphere.materialId = sphereMaterial.id;
-	sphere.position = Vector3(3.0, 1.0, 3.0);
-	sphere.radius = 1.0;
+	sphere.position = Vector3(-2.5, 1.5, -2.3);
+	sphere.radius = 1.5;
+
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+
+	sphereMaterial = Material();
+	sphereMaterial.id = 21;
+	sphereMaterial.ambientReflectance = Color(0.01, 0.01, 0.01);
+	sphereMaterial.diffuseReflectance = Color(0.01, 0.01, 0.01);
+	sphereMaterial.rayReflectance = 1.0;
+	sphereMaterial.rayReflectanceGlossinessSampleCountSqrt = 4;
+	sphereMaterial.rayReflectanceGlossiness = 50.0;
+	sphereMaterial.nonShadowing = true;
+
+	sphere = Sphere();
+	sphere.id = 21;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(-8.0, 2.0, -6.0);
+	sphere.radius = 2.0;
 
 	scene.materials.push_back(sphereMaterial);
 	scene.primitives.spheres.push_back(sphere);
@@ -161,10 +161,7 @@ Scene Scene::createTestScene11()
 	pointLight.position = Vector3(10.0, 10.0, 10.0);
 	pointLight.maxDistance = 1000.0;
 	pointLight.attenuation = 2.0;
-	//pointLight.enableAreaLight = true;
-	pointLight.areaLightSampleCountSqrt = 3;
-	pointLight.areaLightRadius = 0.5;
-
+	
 	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
