@@ -17,6 +17,11 @@ Scene Scene::createTestScene12()
 	scene.camera.position = Vector3(4.0, 3.0, 12.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
 
+	scene.volumetricFog.enabled = true;
+	scene.volumetricFog.steps = 100;
+	scene.volumetricFog.color = Color(1.0, 1.0, 1.0);
+	scene.volumetricFog.density = 0.05;
+
 	// GROUND PLANE //
 
 	Material groundMaterial;
@@ -62,9 +67,9 @@ Scene Scene::createTestScene12()
 	// LIGHTS //
 
 	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
-	scene.lights.ambientLight.intensity = 0.0;
+	scene.lights.ambientLight.intensity = 0.1;
 
-	SpotLight spotLight;
+	/*SpotLight spotLight;
 	spotLight.color = Color(1.0, 1.0, 1.0);
 	spotLight.intensity = 1.0;
 	spotLight.position = Vector3(-10.0, 20.0, 0.0);
@@ -75,10 +80,23 @@ Scene Scene::createTestScene12()
 	spotLight.sideAttenuation = 1.0;
 	spotLight.enableAreaLight = true;
 	spotLight.areaLightSamplerType = SamplerType::CMJ;
-	spotLight.areaLightSampleCountSqrt = 9;
+	spotLight.areaLightSampleCountSqrt = 3;
 	spotLight.areaLightRadius = 1.0;
 
-	scene.lights.spotLights.push_back(spotLight);
+	scene.lights.spotLights.push_back(spotLight);*/
+	
+	PointLight pointLight;
+	pointLight.color = Color(1.0, 1.0, 1.0);
+	pointLight.intensity = 1.0;
+	pointLight.position = Vector3(-10.0, 20.0, 0.0);
+	pointLight.maxDistance = 40.0;
+	pointLight.attenuation = 1.0;
+	pointLight.enableAreaLight = false;
+	pointLight.areaLightSamplerType = SamplerType::CMJ;
+	pointLight.areaLightSampleCountSqrt = 3;
+	pointLight.areaLightRadius = 1.0;
+
+	scene.lights.pointLights.push_back(pointLight);
 
 	return scene;
 }

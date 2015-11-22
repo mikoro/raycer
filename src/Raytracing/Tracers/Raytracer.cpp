@@ -85,12 +85,15 @@ Color Raytracer::traceRecursive(const Scene& scene, const Ray& ray, Intersection
 
 	finalColor = lightColor + reflectedColor + transmittedColor;
 
-	if (scene.simpleFog.enabled)
+	if (ray.direction.dot(intersection.normal) < 0.0) // is outside
 	{
-		if (ray.direction.dot(intersection.normal) < 0.0) // is outside
+		if (scene.simpleFog.enabled)
 			finalColor = calculateSimpleFogColor(scene, intersection, finalColor);
-	}
 
+		if (scene.volumetricFog.enabled)
+			finalColor = calculateVolumetricFogColor(scene, ray, intersection, finalColor, generator);
+	}
+	
 	return finalColor;
 }
 
@@ -419,6 +422,34 @@ Color Raytracer::calculateSimpleFogColor(const Scene& scene, const Intersection&
 	}
 
 	return Color::lerp(pixelColor, scene.simpleFog.color, t1);
+}
+
+Color Raytracer::calculateVolumetricFogColor(const Scene& scene, const Ray& ray, const Intersection& intersection, const Color& pixelColor, std::mt19937& generator)
+{
+	// TODO: needs improving, very quick ad hoc implementation
+
+	double stepSize = intersection.distance / scene.volumetricFog.steps;
+	double currentDistance = 0.0;
+	double transparency = 1.0;
+
+	Color addedLight;
+	Intersection sampleIntersection;
+
+	for (uint64_t i = 0; i < scene.volumetricFog.steps; ++i)
+	{
+		transparency = (1.0 - stepSize * scene.volumetricFog.density) * transparency;
+
+		for (const PointLight& light : scene.lights.pointLights)
+		{
+			sampleIntersection.position = ray.origin + currentDistance * ray.direction;
+			double shadowAmount = calculateShadowAmount(scene, ray, sampleIntersection, light, generator);
+			addedLight += (1.0 - shadowAmount) * scene.volumetricFog.color * stepSize * scene.volumetricFog.density * transparency;
+		}
+
+		currentDistance += stepSize;
+	}
+
+	return transparency * pixelColor + addedLight;
 }
 
 double Raytracer::calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection, std::mt19937& generator)

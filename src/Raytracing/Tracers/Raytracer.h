@@ -36,6 +36,7 @@ namespace Raycer
 		Color calculateLightColor(const Scene& scene, const Ray& ray, const Intersection& intersection, std::mt19937& generator);
 		Color calculatePhongShadingColor(const Vector3& normal, const Vector3& directionToLight, const Vector3& directionToCamera, const Light& light, const Color& diffuseReflectance, const Color& specularReflectance, double shininess);
 		Color calculateSimpleFogColor(const Scene& scene, const Intersection& intersection, const Color& pixelColor);
+		Color calculateVolumetricFogColor(const Scene& scene, const Ray& ray, const Intersection& intersection, const Color& pixelColor, std::mt19937& generator);
 		double calculateAmbientOcclusionAmount(const Scene& scene, const Intersection& intersection, std::mt19937& generator);
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const DirectionalLight& light);
 		double calculateShadowAmount(const Scene& scene, const Ray& ray, const Intersection& intersection, const PointLight& light, std::mt19937& generator);

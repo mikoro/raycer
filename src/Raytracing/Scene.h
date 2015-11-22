@@ -182,6 +182,24 @@ namespace Raycer
 
 		} simpleFog;
 
+		struct VolumetricFog
+		{
+			bool enabled = false;
+			Color color = Color::WHITE;
+			double density = 1.0;
+			uint64_t steps = 0;
+
+			template <class Archive>
+			void serialize(Archive& ar)
+			{
+				ar(CEREAL_NVP(enabled),
+					CEREAL_NVP(color),
+					CEREAL_NVP(density),
+					CEREAL_NVP(steps));
+			}
+
+		} volumetricFog;
+
 		struct RootBVH
 		{
 			bool enabled = false;
@@ -320,6 +338,7 @@ namespace Raycer
 				CEREAL_NVP(camera),
 				CEREAL_NVP(toneMapper),
 				CEREAL_NVP(simpleFog),
+				CEREAL_NVP(volumetricFog),
 				CEREAL_NVP(rootBVH),
 				CEREAL_NVP(boundingBoxes),
 				CEREAL_NVP(textures),
