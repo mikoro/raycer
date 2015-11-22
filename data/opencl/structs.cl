@@ -85,6 +85,7 @@ typedef struct Material
 	int nonShadowing;
 	int normalInterpolation;
 	int invertNormal;
+	int isEmissive;
 	int ambientMapTextureIndex;
 	int diffuseMapTextureIndex;
 	float specularShininess;

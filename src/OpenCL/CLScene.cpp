@@ -121,6 +121,7 @@ void CLScene::readSceneFull(const Scene& scene)
 		clMaterial.nonShadowing = cl_int(material.nonShadowing);
 		clMaterial.normalInterpolation = cl_int(material.normalInterpolation);
 		clMaterial.invertNormal = cl_int(material.invertNormal);
+		clMaterial.isEmissive = cl_int(material.isEmissive);
 		clMaterial.ambientMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.ambientMapTextureId);
 		clMaterial.diffuseMapTextureIndex = findTextureIndex(scene.textures.imageTextures, material.diffuseMapTextureId);
 		clMaterial.specularShininess = cl_float(material.specularShininess);

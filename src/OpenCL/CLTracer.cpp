@@ -53,6 +53,7 @@ void CLTracer::initializeKernels()
 		"data/opencl/common.cl",
 		"data/opencl/structs.cl",
 		"data/opencl/random.cl",
+		"data/opencl/sampler.cl",
 		"data/opencl/constructors.cl",
 		"data/opencl/camera.cl",
 		"data/opencl/textures.cl",

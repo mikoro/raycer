@@ -44,14 +44,16 @@ Color PathTracer::traceRecursive(const Scene& scene, const Ray& ray, uint64_t it
 
 	Material* material = intersection.primitive->material;
 
-	Color emittance = material->emittance;
+	if (material->isEmissive)
+	{
+		Color emittance = material->emittance;
 
-	if (material->emittanceMapTexture != nullptr)
-		emittance = material->emittanceMapTexture->getColor(intersection.texcoord, intersection.position) * material->emittanceMapTexture->intensity;
+		if (material->emittanceMapTexture != nullptr)
+			emittance = material->emittanceMapTexture->getColor(intersection.texcoord, intersection.position) * material->emittanceMapTexture->intensity;
 
-	if (!emittance.isZero())
 		return emittance;
-	
+	}
+
 	Sampler* sampler = samplers[SamplerType::RANDOM].get();
 	Vector3 newDirection = sampler->getHemisphereSample(intersection.onb, 1.0, 0, 0, 1, 1, 0, generator);
 
@@ -60,12 +62,10 @@ Color PathTracer::traceRecursive(const Scene& scene, const Ray& ray, uint64_t it
 	newRay.direction = newDirection;
 	newRay.precalculate();
 
-	Color reflectance;
+	Color reflectance = material->diffuseReflectance;
 
 	if (material->diffuseMapTexture != nullptr)
 		reflectance = material->diffuseMapTexture->getColor(intersection.texcoord, intersection.position) * material->diffuseMapTexture->intensity;
-	else
-		reflectance = material->diffuseReflectance;
 
 	double alpha = std::abs(newDirection.dot(intersection.normal));
 	Color brdf = 2.0 * reflectance * alpha;

@@ -1,5 +1,5 @@
 // http://cas.ee.ic.ac.uk/people/dt10/research/rngs-gpu-mwc64x.html
-uint randomInt(uint2* state)
+uint randomInt(global uint2* state)
 {
 	enum { A = 4294883355U };
 	uint x = (*state).x;
@@ -13,7 +13,7 @@ uint randomInt(uint2* state)
 	return res;
 }
 
-float randomFloat(uint2* state)
+float randomFloat(global uint2* state)
 {
 	return (float)randomInt(state) / (float)0xFFFFFFFF;
 }

@@ -108,6 +108,7 @@ namespace Raycer
 			cl_int ALIGN(4) nonShadowing;
 			cl_int ALIGN(4) normalInterpolation;
 			cl_int ALIGN(4) invertNormal;
+			cl_int ALIGN(4) isEmissive;
 			cl_int ALIGN(4) ambientMapTextureIndex;
 			cl_int ALIGN(4) diffuseMapTextureIndex;
 			cl_float ALIGN(4) specularShininess;

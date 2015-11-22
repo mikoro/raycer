@@ -24,6 +24,7 @@ namespace Raycer
 		bool normalInterpolation = false;
 		bool invertNormal = false;
 		bool enableCSG = false;
+		bool isEmissive = false;
 
 		Vector2 texcoordScale = Vector2(1.0, 1.0);
 
@@ -86,6 +87,7 @@ namespace Raycer
 				CEREAL_NVP(normalInterpolation),
 				CEREAL_NVP(invertNormal),
 				CEREAL_NVP(enableCSG),
+				CEREAL_NVP(isEmissive),
 				CEREAL_NVP(texcoordScale),
 				CEREAL_NVP(ambientReflectance),
 				CEREAL_NVP(ambientMapTextureId),

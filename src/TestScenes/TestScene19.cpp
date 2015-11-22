@@ -13,6 +13,8 @@ Scene Scene::createTestScene19()
 	Scene scene;
 
 	scene.general.tracerType = TracerType::RAY;
+	scene.general.pathSampleCount = 1;
+
 	scene.rootBVH.enabled = true;
 
 	// CAMERA //
@@ -62,6 +64,7 @@ Scene Scene::createTestScene19()
 	sphereMaterial.emittanceMapTextureId = sphereTexture.id;
 	sphereMaterial.skipLighting = true;
 	sphereMaterial.nonShadowing = true;
+	sphereMaterial.isEmissive = true;
 
 	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/sphere.obj";
@@ -83,6 +86,7 @@ Scene Scene::createTestScene19()
 	emitterMaterial.emittance = Color(1.0, 1.0, 1.0) * 10.0;
 	emitterMaterial.nonShadowing = true;
 	emitterMaterial.skipLighting = true;
+	emitterMaterial.isEmissive = true;
 
 	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/square.obj";

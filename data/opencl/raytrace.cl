@@ -15,6 +15,9 @@ kernel void raytrace(
 	global float* filterWeights,
 	TEX_INPUT_ARGS)
 {
+	if (state->triangleCount == 0 || state->bvhNodeCount == 0)
+		return;
+
 	int x = get_global_id(0);
 	int y = get_global_id(1);
 	int index = y * state->imageWidth + x;
@@ -23,24 +26,22 @@ kernel void raytrace(
 	Intersection intersection = constructIntersection();
 	float4 finalColor = general->backgroundColor;
 
-	if (state->triangleCount > 0 && state->bvhNodeCount > 0)
+	if (intersectBVH(nodes, triangles, materials, ray, &intersection, TEX_OUTPUT_ARGS))
 	{
-		if (intersectBVH(nodes, triangles, materials, ray, &intersection, TEX_OUTPUT_ARGS))
-		{
-			finalColor = calculateLightColor(nodes,
-				triangles,
-				materials,
-				state,
-				general,
-				ambientLight,
-				directionalLights,
-				pointLights,
-				ray,
-				intersection,
-				TEX_OUTPUT_ARGS);
-		}
+		finalColor = calculateLightColor(
+			nodes,
+			triangles,
+			materials,
+			state,
+			general,
+			ambientLight,
+			directionalLights,
+			pointLights,
+			ray,
+			intersection,
+			TEX_OUTPUT_ARGS);
 	}
 
 	cumulativeColors[index] += finalColor;
-	filterWeights[index] += 1.0f;
+	filterWeights[index] += 1.0;
 }
