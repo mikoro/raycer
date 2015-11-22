@@ -42,6 +42,9 @@ namespace Raycer
 
 	private:
 
+		CLTracer(const CLTracer& c);
+		CLTracer& operator=(const CLTracer& c);
+
 		void createBuffers();
 		void uploadFullData();
 		void uploadMinimalData();
