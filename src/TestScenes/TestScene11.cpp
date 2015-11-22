@@ -84,7 +84,7 @@ Scene Scene::createTestScene11()
 	boxMaterial.diffuseReflectance = Color(0.0, 0.0, 0.0);
 	boxMaterial.rayTransmittance = 1.0;
 	boxMaterial.refractiveIndex = 1.5;
-	boxMaterial.rayTransmittanceGlossinessSampleCountSqrt = 4;
+	boxMaterial.rayTransmittanceGlossinessSampleCountSqrt = 2;
 	boxMaterial.rayTransmittanceGlossiness = 1000.0;
 	boxMaterial.nonShadowing = true;
 	box.id = 10;
@@ -137,7 +137,7 @@ Scene Scene::createTestScene11()
 	sphereMaterial.ambientReflectance = Color(0.01, 0.01, 0.01);
 	sphereMaterial.diffuseReflectance = Color(0.01, 0.01, 0.01);
 	sphereMaterial.rayReflectance = 1.0;
-	sphereMaterial.rayReflectanceGlossinessSampleCountSqrt = 4;
+	sphereMaterial.rayReflectanceGlossinessSampleCountSqrt = 2;
 	sphereMaterial.rayReflectanceGlossiness = 50.0;
 	sphereMaterial.nonShadowing = true;
 

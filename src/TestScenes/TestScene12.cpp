@@ -14,8 +14,71 @@ Scene Scene::createTestScene12()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 0.0, 0.0);
+	scene.camera.position = Vector3(4.0, 3.0, 12.0);
 	scene.camera.orientation = EulerAngle(0.0, 0.0, 0.0);
+
+	// GROUND PLANE //
+
+	Material groundMaterial;
+	groundMaterial.id = 1;
+	groundMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	groundMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
+
+	Plane groundPlane;
+	groundPlane.id = 1;
+	groundPlane.materialId = groundMaterial.id;
+	groundPlane.position = Vector3(0.0, 0.0, 0.0);
+	groundPlane.normal = Vector3(0.0, 1.0, 0.0);
+
+	scene.materials.push_back(groundMaterial);
+	scene.primitives.planes.push_back(groundPlane);
+
+	// BACK PLANE //
+
+	Plane backPlane;
+	backPlane.id = 2;
+	backPlane.materialId = groundMaterial.id;
+	backPlane.position = Vector3(0.0, 0.0, -20.0);
+	backPlane.normal = Vector3(0.0, 0.0, 1.0);
+
+	scene.primitives.planes.push_back(backPlane);
+
+	// SPHERE //
+
+	Material sphereMaterial;
+	sphereMaterial.id = 3;
+	sphereMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	sphereMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
+	
+	Sphere sphere;
+	sphere.id = 3;
+	sphere.materialId = sphereMaterial.id;
+	sphere.position = Vector3(0.0, 5.0, 0.0);
+	sphere.radius = 1.0;
+
+	scene.materials.push_back(sphereMaterial);
+	scene.primitives.spheres.push_back(sphere);
+
+	// LIGHTS //
+
+	scene.lights.ambientLight.color = Color(1.0, 1.0, 1.0);
+	scene.lights.ambientLight.intensity = 0.0;
+
+	SpotLight spotLight;
+	spotLight.color = Color(1.0, 1.0, 1.0);
+	spotLight.intensity = 1.0;
+	spotLight.position = Vector3(-10.0, 20.0, 0.0);
+	spotLight.maxDistance = 100.0;
+	spotLight.attenuation = 1.0;
+	spotLight.direction = EulerAngle(-55.0, -90.0, 0.0).getDirection();
+	spotLight.angle = 2.0;
+	spotLight.sideAttenuation = 1.0;
+	spotLight.enableAreaLight = true;
+	spotLight.areaLightSamplerType = SamplerType::CMJ;
+	spotLight.areaLightSampleCountSqrt = 9;
+	spotLight.areaLightRadius = 1.0;
+
+	scene.lights.spotLights.push_back(spotLight);
 
 	return scene;
 }
