@@ -65,6 +65,7 @@ Scene Scene::createTestScene15()
 	modelMaterial.id = 3;
 	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
 	modelMaterial.diffuseReflectance = modelMaterial.ambientReflectance;
+	modelMaterial.normalInterpolation = true;
 
 	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
@@ -85,7 +86,7 @@ Scene Scene::createTestScene15()
 	scene.lights.ambientLight.intensity = 0.4;
 	scene.lights.ambientLight.enableAmbientOcclusion = true;
 	scene.lights.ambientLight.ambientOcclusionMaxSampleDistance = 10.0;
-	scene.lights.ambientLight.ambientOcclusionSampleCountSqrt = 3;
+	scene.lights.ambientLight.ambientOcclusionSampleCountSqrt = 4;
 
 	return scene;
 }

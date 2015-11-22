@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// relativistic effects
+// volumetric fog
 Scene Scene::createTestScene12()
 {
 	Scene scene;

@@ -189,6 +189,7 @@ Scene Scene::createTestScene1()
 	Material lightSphereMaterial;
 	lightSphereMaterial.id = 8;
 	lightSphereMaterial.emittance = Color(1.0, 1.0, 1.0) * 2.0;
+	lightSphereMaterial.isEmissive = true;
 	lightSphereMaterial.nonShadowing = true;
 	
 	Sphere lightSphere;
