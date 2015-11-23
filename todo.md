@@ -1,11 +1,15 @@
-tracer
+raytracer
  - height map
  - relativistic effects
 
-lighting
- - path tracer materials
+pathtracer
+ - pathtracer materials
+ - direct light sampling
+ - russian roulette
 
 textures
+ - mip map generation
+ - ray differentials
  - EWA texture filtering
 
 misc
@@ -21,3 +25,7 @@ misc
  - replace align macro with alignas
  - check if camera dof needs jitter
  - fast preview with "dot product lighting"
+ - replace mersenne twister with pcg
+ - remove recursion from cpu pathtracer
+ - implement info text panel + more statistics
+ - move ray-scene intersection to scene
