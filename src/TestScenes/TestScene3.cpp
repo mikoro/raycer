@@ -12,6 +12,8 @@ Scene Scene::createTestScene3()
 {
 	Scene scene;
 
+	scene.rootBVH.enabled = true;
+
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.0, 1.0, 3.5);
@@ -19,7 +21,7 @@ Scene Scene::createTestScene3()
 
 	// MODEL //
 
-	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
+	ModelLoaderInfo modelInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/cornellbox.obj";
 	modelInfo.combinedGroupId = 1;
 	modelInfo.combinedGroupInstanceId = 2;

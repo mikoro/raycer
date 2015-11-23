@@ -93,6 +93,9 @@ namespace
 				currentMaterial.emittance.r = readDouble(line, lineIndex, part);
 				currentMaterial.emittance.g = readDouble(line, lineIndex, part);
 				currentMaterial.emittance.b = readDouble(line, lineIndex, part);
+
+				if (!currentMaterial.emittance.isZero())
+					currentMaterial.isEmissive = true;
 			}
 			else if (part == "Ns") // shininess
 			{
@@ -143,6 +146,7 @@ namespace
 				ImageTexture imageTexture;
 				imageTexture.id = ++currentId;
 				currentMaterial.emittanceMapTextureId = imageTexture.id;
+				currentMaterial.isEmissive = true;
 
 				StringUtils::readUntilSpace(line, lineIndex, part);
 				imageTexture.imageFilePath = getAbsolutePath(objFileDirectory, part);
