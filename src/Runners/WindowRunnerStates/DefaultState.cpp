@@ -105,7 +105,10 @@ void DefaultState::update(double timeStep)
 			tracer = Tracer::getTracer(scene.general.tracerType);
 
 			if (settings.openCL.enabled)
+			{
 				clTracer.initializeBuffers(scene);
+				clTracer.clear();
+			}
 		}
 	}
 
@@ -113,6 +116,9 @@ void DefaultState::update(double timeStep)
 	{
 		scene.camera.reset();
 		film.clear();
+
+		if (settings.openCL.enabled)
+			clTracer.clear();
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_N))
@@ -130,6 +136,9 @@ void DefaultState::update(double timeStep)
 
 		tracer = Tracer::getTracer(scene.general.tracerType);
 		film.clear();
+
+		if (settings.openCL.enabled)
+			clTracer.clear();
 	}
 
 	if (windowRunner.keyWasPressed(GLFW_KEY_F5))
@@ -259,6 +268,9 @@ void DefaultState::render(double timeStep, double interpolation)
 	{
 		film.clear();
 		sampleCount = 0;
+
+		if (settings.openCL.enabled)
+			clTracer.clear();
 	}
 
 	sampleCount += scene.general.pathSampleCount;

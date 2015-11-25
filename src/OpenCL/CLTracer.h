@@ -38,6 +38,7 @@ namespace Raycer
 
 		void run(TracerState& state, std::atomic<bool>& interrupted);
 		Image downloadImage();
+		void clear();
 
 	private:
 

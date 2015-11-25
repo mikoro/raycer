@@ -158,6 +158,8 @@ void CLTracer::initializeImageBuffers(uint64_t width, uint64_t height, uint64_t 
 
 	status = clEnqueueWriteBuffer(clManager.commandQueue, seedsPtr, CL_TRUE, 0, sizeof(uint64_t) * imageLength, &seeds[0], 0, nullptr, nullptr);
 	CLManager::checkError(status, "Could not write seeds buffer");
+
+	clear();
 }
 
 void CLTracer::releaseImageBuffers()
@@ -283,14 +285,6 @@ void CLTracer::run(TracerState& state, std::atomic<bool>& interrupted)
 		CLManager::checkError(clEnqueueAcquireGLObjects(clManager.commandQueue, 1, &outputImagePtr, 0, nullptr, nullptr), "Could not enqueue OpenGL object acquire");
 	}
 
-	if (state.scene->general.tracerType == TracerType::RAY || (state.scene->general.tracerType == TracerType::PATH && state.scene->camera.hasMoved()))
-	{
-		cl_float pattern[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
-
-		CLManager::checkError(clEnqueueFillBuffer(clManager.commandQueue, cumulativeColorsPtr, pattern, sizeof(cl_float) * 4, 0, sizeof(cl_float) * 4 * imageLength, 0, nullptr, nullptr), "Could not enqueue fill buffer");
-		CLManager::checkError(clEnqueueFillBuffer(clManager.commandQueue, filterWeightsPtr, pattern, sizeof(cl_float), 0, sizeof(cl_float) * imageLength, 0, nullptr, nullptr), "Could not enqueue fill buffer");
-	}
-
 	size_t globalSizes[] = { imageWidth, imageHeight };
 
 	if (state.scene->general.tracerType == TracerType::RAY)
@@ -326,6 +320,16 @@ Image CLTracer::downloadImage()
 	CLManager::checkError(status, "Could not read output image buffer");
 
 	return Image(imageWidth, imageHeight, &data[0]);
+}
+
+void CLTracer::clear()
+{
+	CLManager& clManager = App::getCLManager();
+
+	cl_float pattern[4] = { 0.0f, 0.0f, 0.0f, 0.0f };
+
+	CLManager::checkError(clEnqueueFillBuffer(clManager.commandQueue, cumulativeColorsPtr, pattern, sizeof(cl_float) * 4, 0, sizeof(cl_float) * 4 * imageLength, 0, nullptr, nullptr), "Could not enqueue fill buffer");
+	CLManager::checkError(clEnqueueFillBuffer(clManager.commandQueue, filterWeightsPtr, pattern, sizeof(cl_float), 0, sizeof(cl_float) * imageLength, 0, nullptr, nullptr), "Could not enqueue fill buffer");
 }
 
 void CLTracer::createBuffers()
