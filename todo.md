@@ -14,6 +14,7 @@ textures
 
 misc
  - convert to using opencl c++ wrapper
+ - opencl work group sizes
  - add spline curve class
  - add camera movement with splines
  - add BVH -> QBVH conversion
@@ -29,3 +30,5 @@ misc
  - remove recursion from cpu pathtracer
  - implement info text panel + more statistics
  - move ray-scene intersection to scene
+ - remove csg suppport
+ - add image data to serialization

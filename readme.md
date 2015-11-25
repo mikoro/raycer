@@ -46,6 +46,7 @@ For the interactive mode:
 | **F8**                  | Render current scene externally                                                       |
 | **F10**                 | Decrease internal rendering resolution                                                |
 | **F11**                 | Increase internal rendering resolution                                                |
+| **F12**                 | Take screenshot                                                                       |
 | **R**                   | Reset camera                                                                          |
 | **N**                   | Toggle normal mapping on/off                                                          |
 | **B**                   | Rebuild BVH                                                                           |
