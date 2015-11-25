@@ -21,13 +21,19 @@ Scene Scene::createTestScene9()
 
 	// MODEL //
 
+	Material modelMaterial;
+	modelMaterial.id = 1;
+	modelMaterial.normalInterpolation = true;
+
 	ModelLoaderInfo modelInfo(ModelLoaderPreset::COMBINED_GROUP);
 	modelInfo.modelFilePath = "data/meshes/monkey3.obj";
+	modelInfo.defaultMaterialId = modelMaterial.id;
 	modelInfo.combinedGroupId = 1;
 	modelInfo.enableCombinedGroupInstance = false;
 	modelInfo.idStartOffset = 2;
 	modelInfo.scale = Vector3(6.0, 6.0, 6.0);
 
+	scene.materials.push_back(modelMaterial);
 	scene.models.push_back(modelInfo);
 
 	// INSTANCES //

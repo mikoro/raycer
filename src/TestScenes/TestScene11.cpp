@@ -12,8 +12,6 @@ Scene Scene::createTestScene11()
 {
 	Scene scene;
 
-	scene.toneMapper.type = ToneMapperType::SIMPLE;
-
 	// CAMERA //
 
 	scene.camera.position = Vector3(0.44, 7.05, 7.33);

@@ -77,7 +77,7 @@ Scene Scene::createTestScene12()
 	spotLight.attenuation = 1.0;
 	spotLight.direction = EulerAngle(-55.0, -90.0, 0.0).getDirection();
 	spotLight.angle = 2.0;
-	spotLight.sideAttenuation = 1.0;
+	spotLight.sideAttenuation = 2.0;
 	spotLight.enableAreaLight = true;
 	spotLight.areaLightSamplerType = SamplerType::CMJ;
 	spotLight.areaLightSampleCountSqrt = 3;

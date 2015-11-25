@@ -14,7 +14,7 @@ Scene Scene::createTestScene4()
 
 	// CAMERA //
 
-	scene.camera.position = Vector3(0.0, 5.0, 8.0);
+	scene.camera.position = Vector3(0.0, 5.0, 6.25);
 	scene.camera.orientation = EulerAngle(-26.0, 0.0, 0.0);
 
 	// GROUND //
