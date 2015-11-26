@@ -108,11 +108,23 @@ Scene Scene::createTestScene19()
 
 	// MATPREVIEW MODEL //
 
+	Material modelMaterial;
+	modelMaterial.id = 4;
+	modelMaterial.ambientReflectance = Color(1.0, 1.0, 1.0);
+	modelMaterial.diffuseReflectance = Color(1.0, 1.0, 1.0);
+	modelMaterial.normalInterpolation = true;
+
 	modelInfo = ModelLoaderInfo(ModelLoaderPreset::TRIANGLES);
 	modelInfo.modelFilePath = "data/meshes/matpreview/matpreview.obj";
-	modelInfo.idStartOffset = 5000;
+	//modelInfo.modelFilePath = "data/meshes/sphere.obj";
+	modelInfo.defaultMaterialId = modelMaterial.id;
 	modelInfo.baseMaterial.normalInterpolation = true;
+	modelInfo.idStartOffset = 5000;
+	modelInfo.scale = Vector3(1.0, 1.0, 1.0);
+	modelInfo.rotate = EulerAngle(0.0, 0.0, 0.0);
+	modelInfo.translate = Vector3(0.0, 0.0, 0.0);
 
+	scene.materials.push_back(modelMaterial);
 	scene.models.push_back(modelInfo);
 
 	// LIGHTS //

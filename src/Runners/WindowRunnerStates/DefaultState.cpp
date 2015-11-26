@@ -103,6 +103,7 @@ void DefaultState::update(double timeStep)
 
 			scene.camera.setImagePlaneSize(film.getWidth(), film.getHeight());
 			tracer = Tracer::getTracer(scene.general.tracerType);
+			sampleCount = 0;
 
 			if (settings.openCL.enabled)
 			{
@@ -116,6 +117,7 @@ void DefaultState::update(double timeStep)
 	{
 		scene.camera.reset();
 		film.clear();
+		sampleCount = 0;
 
 		if (settings.openCL.enabled)
 			clTracer.clear();
@@ -136,6 +138,7 @@ void DefaultState::update(double timeStep)
 
 		tracer = Tracer::getTracer(scene.general.tracerType);
 		film.clear();
+		sampleCount = 0;
 
 		if (settings.openCL.enabled)
 			clTracer.clear();
@@ -326,6 +329,7 @@ void DefaultState::resizeFilm()
 	film.resize(filmWidth, filmHeight);
 	filmRenderer.setFilmSize(filmWidth, filmHeight);
 	scene.camera.setImagePlaneSize(filmWidth, filmHeight);
+	sampleCount = 0;
 
 	if (settings.openCL.enabled)
 		clTracer.initializeImageBuffers(filmWidth, filmHeight, filmRenderer.getFilmTextureId());
