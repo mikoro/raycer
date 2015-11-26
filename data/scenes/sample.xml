@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <cereal>
 	<scene>
+		<general>
+			<tracerType>0</tracerType>
+			<maxRayIterations>3</maxRayIterations>
+			<maxPathLength>3</maxPathLength>
+			<pathSampleCount>1</pathSampleCount>
+			<rayStartOffset>1.0000000000000001e-05</rayStartOffset>
+			<backgroundColor>
+				<r>0</r>
+				<g>0</g>
+				<b>0</b>
+				<a>1</a>
+			</backgroundColor>
+			<offLensColor>
+				<r>0</r>
+				<g>0</g>
+				<b>0</b>
+				<a>1</a>
+			</offLensColor>
+			<multiSamplerType>4</multiSamplerType>
+			<multiSamplerFilterType>4</multiSamplerFilterType>
+			<multiSampleCountSqrt>1</multiSampleCountSqrt>
+			<timeSamplerType>3</timeSamplerType>
+			<timeSampleCount>1</timeSampleCount>
+			<cameraSamplerType>4</cameraSamplerType>
+			<cameraSampleCountSqrt>1</cameraSampleCountSqrt>
+			<visualizeDepth>false</visualizeDepth>
+			<visualizeDepthMaxDistance>25</visualizeDepthMaxDistance>
+			<enableNormalMapping>true</enableNormalMapping>
+		</general>
 		<camera>
 			<position>
 				<x>8</x>
@@ -30,31 +59,6 @@
 				<roll>0</roll>
 			</rotateInTime>
 		</camera>
-		<raytracer>
-			<maxRayIterations>3</maxRayIterations>
-			<rayStartOffset>9.9999999999999995e-07</rayStartOffset>
-			<backgroundColor>
-				<r>0</r>
-				<g>0</g>
-				<b>0</b>
-				<a>1</a>
-			</backgroundColor>
-			<offLensColor>
-				<r>0</r>
-				<g>0</g>
-				<b>0</b>
-				<a>1</a>
-			</offLensColor>
-			<multiSamples>0</multiSamples>
-			<timeSamples>0</timeSamples>
-			<cameraSamples>0</cameraSamples>
-			<multiSamplerType>3</multiSamplerType>
-			<multiSamplerFilterType>3</multiSamplerFilterType>
-			<timeSamplerType>2</timeSamplerType>
-			<cameraSamplerType>3</cameraSamplerType>
-			<visualizeDepth>false</visualizeDepth>
-			<visualizeDepthMaxDistance>25</visualizeDepthMaxDistance>
-		</raytracer>
 		<toneMapper>
 			<type>1</type>
 			<applyGamma>true</applyGamma>
@@ -62,7 +66,8 @@
 			<gamma>2.2000000000000002</gamma>
 			<exposure>0</exposure>
 			<key>0.17999999999999999</key>
-			<maxLuminance>1</maxLuminance>
+			<enableAveraging>false</enableAveraging>
+			<averagingAlpha>0.10000000000000001</averagingAlpha>
 		</toneMapper>
 		<simpleFog>
 			<enabled>false</enabled>
@@ -78,6 +83,17 @@
 			<height>100</height>
 			<heightSteepness>1</heightSteepness>
 		</simpleFog>
+		<volumetricFog>
+			<enabled>false</enabled>
+			<color>
+				<r>1</r>
+				<g>1</g>
+				<b>1</b>
+				<a>1</a>
+			</color>
+			<density>1</density>
+			<steps>0</steps>
+		</volumetricFog>
 		<rootBVH>
 			<enabled>true</enabled>
 			<buildInfo>
@@ -88,68 +104,65 @@
 				<axisSplit>1</axisSplit>
 			</buildInfo>
 			<bvh>
-				<id>0</id>
-				<materialId>0</materialId>
-				<invisible>false</invisible>
+				<primitive>
+					<id>0</id>
+					<materialId>0</materialId>
+					<invisible>false</invisible>
+				</primitive>
 				<hasBeenBuilt>true</hasBeenBuilt>
 				<flatNodes size="dynamic">
 					<value0>
 						<aabb>
 							<min>
-								<x>-1000</x>
-								<y>-1000</y>
-								<z>-1000</z>
+								<x>-1000000</x>
+								<y>-1000000</y>
+								<z>-1000000</z>
 							</min>
 							<max>
-								<x>1000</x>
-								<y>1000</y>
-								<z>1000</z>
+								<x>1000000</x>
+								<y>1000000</y>
+								<z>1000000</z>
 							</max>
-							<center>
-								<x>0</x>
-								<y>0</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2000</x>
-								<y>2000</y>
-								<z>2000</z>
-							</extent>
-							<surfaceArea>24000000</surfaceArea>
 						</aabb>
 						<rightOffset>2</rightOffset>
 						<startOffset>0</startOffset>
-						<primitiveCount>7</primitiveCount>
+						<primitiveCount>8</primitiveCount>
 					</value0>
 					<value1>
 						<aabb>
 							<min>
-								<x>-1000</x>
-								<y>-1000</y>
-								<z>-1000</z>
+								<x>-1000000</x>
+								<y>-1000000</y>
+								<z>-1000000</z>
 							</min>
 							<max>
-								<x>1000</x>
-								<y>1000</y>
-								<z>1000</z>
+								<x>1000000</x>
+								<y>1000000</y>
+								<z>1000000</z>
 							</max>
-							<center>
-								<x>0</x>
-								<y>0</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2000</x>
-								<y>2000</y>
-								<z>2000</z>
-							</extent>
-							<surfaceArea>24000000</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>0</startOffset>
 						<primitiveCount>1</primitiveCount>
 					</value1>
 					<value2>
+						<aabb>
+							<min>
+								<x>-4.8171276411157713</x>
+								<y>-0.12107447590219111</y>
+								<z>-1.7460288232016672</z>
+							</min>
+							<max>
+								<x>20.817127641115771</x>
+								<y>33.78064204069689</y>
+								<z>35.464361697284275</z>
+							</max>
+						</aabb>
+						<rightOffset>12</rightOffset>
+						<startOffset>1</startOffset>
+						<primitiveCount>7</primitiveCount>
+					</value2>
+					<value3>
 						<aabb>
 							<min>
 								<x>-1.1408563820557887</x>
@@ -161,23 +174,12 @@
 								<y>4.1210744759021907</y>
 								<z>1.8460288232016673</z>
 							</max>
-							<center>
-								<x>7.5472964459402023</x>
-								<y>1.9999999999999998</y>
-								<z>0.050000000000000044</z>
-							</center>
-							<extent>
-								<x>17.376305655991981</x>
-								<y>4.2421489518043813</y>
-								<z>3.5920576464033345</z>
-							</extent>
-							<surfaceArea>302.73522400431449</surfaceArea>
 						</aabb>
 						<rightOffset>8</rightOffset>
 						<startOffset>1</startOffset>
 						<primitiveCount>6</primitiveCount>
-					</value2>
-					<value3>
+					</value3>
+					<value4>
 						<aabb>
 							<min>
 								<x>-1.1408563820557887</x>
@@ -189,23 +191,12 @@
 								<y>2.8363259077753673</y>
 								<z>1.4623905230535228</z>
 							</max>
-							<center>
-								<x>4.586824088833465</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>11.455360941778508</x>
-								<y>2.6726518155507346</y>
-								<z>2.9247810461070456</z>
-							</extent>
-							<surfaceArea>143.87507030125681</surfaceArea>
 						</aabb>
 						<rightOffset>4</rightOffset>
 						<startOffset>1</startOffset>
 						<primitiveCount>4</primitiveCount>
-					</value3>
-					<value4>
+					</value4>
+					<value5>
 						<aabb>
 							<min>
 								<x>-1.1408563820557887</x>
@@ -217,23 +208,12 @@
 								<y>2.787406999661878</y>
 								<z>1.3097265287726245</z>
 							</max>
-							<center>
-								<x>1.5868240888334653</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>5.4553609417785083</x>
-								<y>2.574813999323756</y>
-								<z>2.619453057545249</z>
-							</extent>
-							<surfaceArea>70.162412052697789</surfaceArea>
 						</aabb>
 						<rightOffset>2</rightOffset>
 						<startOffset>1</startOffset>
 						<primitiveCount>2</primitiveCount>
-					</value4>
-					<value5>
+					</value5>
+					<value6>
 						<aabb>
 							<min>
 								<x>-1.1408563820557887</x>
@@ -245,23 +225,12 @@
 								<y>2.6163969279990438</y>
 								<z>0.33988021837967036</z>
 							</max>
-							<center>
-								<x>-1.1102230246251565e-16</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2.2817127641115773</x>
-								<y>2.2327938559980876</y>
-								<z>0.67976043675934072</z>
-							</extent>
-							<surfaceArea>16.326754465398849</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>1</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value5>
-					<value6>
+					</value6>
+					<value7>
 						<aabb>
 							<min>
 								<x>1.6854954402772813</x>
@@ -273,23 +242,12 @@
 								<y>2.787406999661878</y>
 								<z>1.3097265287726245</z>
 							</max>
-							<center>
-								<x>3</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2.6290091194454379</x>
-								<y>2.574813999323756</y>
-								<z>2.619453057545249</z>
-							</extent>
-							<surfaceArea>40.800759728965105</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>2</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value6>
-					<value7>
+					</value7>
+					<value8>
 						<aabb>
 							<min>
 								<x>4.4737411745244611</x>
@@ -301,23 +259,12 @@
 								<y>2.8363259077753673</y>
 								<z>1.4623905230535228</z>
 							</max>
-							<center>
-								<x>7.3941228671235901</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>5.8407633851982581</x>
-								<y>2.6726518155507346</y>
-								<z>2.9247810461070456</z>
-							</extent>
-							<surfaceArea>81.020404564885283</surfaceArea>
 						</aabb>
 						<rightOffset>2</rightOffset>
 						<startOffset>3</startOffset>
 						<primitiveCount>2</primitiveCount>
-					</value7>
-					<value8>
+					</value8>
+					<value9>
 						<aabb>
 							<min>
 								<x>4.4737411745244611</x>
@@ -329,23 +276,12 @@
 								<y>2.6640436830997101</y>
 								<z>1.4623905230535228</z>
 							</max>
-							<center>
-								<x>6</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>3.0525176509510779</x>
-								<y>2.3280873661994201</y>
-								<z>2.9247810461070456</z>
-							</extent>
-							<surfaceArea>45.687238698060369</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>3</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value8>
-					<value9>
+					</value9>
+					<value10>
 						<aabb>
 							<min>
 								<x>7.6854954402772808</x>
@@ -357,23 +293,12 @@
 								<y>2.8363259077753673</y>
 								<z>1.3088103241724176</z>
 							</max>
-							<center>
-								<x>9</x>
-								<y>1.5</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2.6290091194454384</x>
-								<y>2.6726518155507346</y>
-								<z>2.6176206483448352</z>
-							</extent>
-							<surfaceArea>41.808326260308917</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>4</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value9>
-					<value10>
+					</value10>
+					<value11>
 						<aabb>
 							<min>
 								<x>10.739879188186197</x>
@@ -385,23 +310,12 @@
 								<y>4.1210744759021907</y>
 								<z>1.8460288232016673</z>
 							</max>
-							<center>
-								<x>13.487664231061196</x>
-								<y>1.9999999999999998</y>
-								<z>0.050000000000000044</z>
-							</center>
-							<extent>
-								<x>5.4955700857499963</x>
-								<y>4.2421489518043813</y>
-								<z>3.5920576464033345</z>
-							</extent>
-							<surfaceArea>116.58295001241277</surfaceArea>
 						</aabb>
 						<rightOffset>2</rightOffset>
 						<startOffset>5</startOffset>
 						<primitiveCount>2</primitiveCount>
-					</value10>
-					<value11>
+					</value11>
+					<value12>
 						<aabb>
 							<min>
 								<x>10.739879188186197</x>
@@ -413,23 +327,12 @@
 								<y>3.1511864502438418</y>
 								<z>1.0500229906010452</z>
 							</max>
-							<center>
-								<x>12</x>
-								<y>1.75</y>
-								<z>0</z>
-							</center>
-							<extent>
-								<x>2.5202416236276051</x>
-								<y>2.8023729004876836</y>
-								<z>2.1000459812020904</z>
-							</extent>
-							<surfaceArea>36.480784139182539</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>5</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value11>
-					<value12>
+					</value12>
+					<value13>
 						<aabb>
 							<min>
 								<x>13.364550726063809</x>
@@ -441,22 +344,28 @@
 								<y>4.1210744759021907</y>
 								<z>1.8460288232016673</z>
 							</max>
-							<center>
-								<x>14.800000000000001</x>
-								<y>1.9999999999999998</y>
-								<z>0.050000000000000044</z>
-							</center>
-							<extent>
-								<x>2.8708985478723843</x>
-								<y>4.2421489518043813</y>
-								<z>3.5920576464033345</z>
-							</extent>
-							<surfaceArea>75.458511852075205</surfaceArea>
 						</aabb>
 						<rightOffset>0</rightOffset>
 						<startOffset>6</startOffset>
 						<primitiveCount>1</primitiveCount>
-					</value12>
+					</value13>
+					<value14>
+						<aabb>
+							<min>
+								<x>-4.8171276411157713</x>
+								<y>6.2193579593031085</y>
+								<z>4.535638302715725</z>
+							</min>
+							<max>
+								<x>20.817127641115771</x>
+								<y>33.78064204069689</y>
+								<z>35.464361697284275</z>
+							</max>
+						</aabb>
+						<rightOffset>0</rightOffset>
+						<startOffset>7</startOffset>
+						<primitiveCount>1</primitiveCount>
+					</value14>
 				</flatNodes>
 				<orderedPrimitiveIds size="dynamic">
 					<value0>1</value0>
@@ -466,64 +375,82 @@
 					<value4>1005</value4>
 					<value5>1006</value5>
 					<value6>1007</value6>
+					<value7>1008</value7>
 				</orderedPrimitiveIds>
 			</bvh>
 		</rootBVH>
 		<boundingBoxes>
 			<enabled>false</enabled>
+			<useDefaultMaterial>true</useDefaultMaterial>
 			<material>
 				<id>0</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>true</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0.10000000000000001</r>
 					<g>0.10000000000000001</g>
 					<b>0.20000000000000001</b>
 					<a>1</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0.10000000000000001</r>
 					<g>0.10000000000000001</g>
 					<b>0.20000000000000001</b>
 					<a>1</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>1</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>1</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</material>
 		</boundingBoxes>
 		<textures>
 			<colorTextures size="dynamic"/>
+			<colorGradientTextures size="dynamic"/>
 			<checkerTextures size="dynamic"/>
 			<imageTextures size="dynamic"/>
 			<perlinNoiseTextures size="dynamic"/>
@@ -540,447 +467,576 @@
 				<id>1</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0.29999999999999999</r>
 					<g>0.29999999999999999</g>
 					<b>0.29999999999999999</b>
 					<a>0.29999999999999999</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0.29999999999999999</r>
 					<g>0.29999999999999999</g>
 					<b>0.29999999999999999</b>
 					<a>0.29999999999999999</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value0>
 			<value1>
 				<id>2</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0.5</r>
 					<g>0</g>
 					<b>0</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0.5</r>
 					<g>0</g>
 					<b>0</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value1>
 			<value2>
 				<id>3</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0</r>
 					<g>0.5</g>
 					<b>0</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0</r>
 					<g>0.5</g>
 					<b>0</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value2>
 			<value3>
 				<id>4</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value3>
 			<value4>
 				<id>5</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0.5</r>
 					<g>0.5</g>
 					<b>0</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0.5</r>
 					<g>0.5</g>
 					<b>0</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value4>
 			<value5>
 				<id>6</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0</r>
 					<g>0.5</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0</r>
 					<g>0.5</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value5>
 			<value6>
 				<id>7</id>
 				<skipLighting>false</skipLighting>
 				<nonShadowing>false</nonShadowing>
-				<normalInterpolation>true</normalInterpolation>
-				<backfaceCulling>false</backfaceCulling>
+				<normalInterpolation>false</normalInterpolation>
 				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>false</isEmissive>
 				<texcoordScale>
 					<x>1</x>
 					<y>1</y>
 				</texcoordScale>
-				<ambientMapTextureId>0</ambientMapTextureId>
 				<ambientReflectance>
 					<r>0.5</r>
 					<g>0</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</ambientReflectance>
-				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<ambientMapTextureId>0</ambientMapTextureId>
 				<diffuseReflectance>
 					<r>0.5</r>
 					<g>0</g>
 					<b>0.5</b>
 					<a>0.5</a>
 				</diffuseReflectance>
-				<specularMapTextureId>0</specularMapTextureId>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
 				<specularReflectance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
 				</specularReflectance>
-				<shininess>2</shininess>
-				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
-				<rayReflectance>0</rayReflectance>
-				<fresnelReflection>false</fresnelReflection>
-				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
-				<rayTransmittance>0</rayTransmittance>
-				<refractiveIndex>1</refractiveIndex>
-				<enableAttenuation>false</enableAttenuation>
-				<attenuationFactor>1</attenuationFactor>
-				<attenuationColor>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
 					<r>0</r>
 					<g>0</g>
 					<b>0</b>
 					<a>1</a>
-				</attenuationColor>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
 				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
 				<heightMapTextureId>0</heightMapTextureId>
 			</value6>
+			<value7>
+				<id>8</id>
+				<skipLighting>false</skipLighting>
+				<nonShadowing>true</nonShadowing>
+				<normalInterpolation>false</normalInterpolation>
+				<invertNormal>false</invertNormal>
+				<enableCSG>false</enableCSG>
+				<isEmissive>true</isEmissive>
+				<texcoordScale>
+					<x>1</x>
+					<y>1</y>
+				</texcoordScale>
+				<ambientReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</ambientReflectance>
+				<ambientMapTextureId>0</ambientMapTextureId>
+				<diffuseReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</diffuseReflectance>
+				<diffuseMapTextureId>0</diffuseMapTextureId>
+				<specularReflectance>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</specularReflectance>
+				<specularShininess>2</specularShininess>
+				<specularMapTextureId>0</specularMapTextureId>
+				<emittance>
+					<r>2</r>
+					<g>2</g>
+					<b>2</b>
+					<a>2</a>
+				</emittance>
+				<emittanceMapTextureId>0</emittanceMapTextureId>
+				<fresnelReflection>false</fresnelReflection>
+				<refractiveIndex>1</refractiveIndex>
+				<rayReflectance>0</rayReflectance>
+				<rayReflectanceMapTextureId>0</rayReflectanceMapTextureId>
+				<rayReflectanceGlossinessSamplerType>4</rayReflectanceGlossinessSamplerType>
+				<rayReflectanceGlossinessSampleCountSqrt>0</rayReflectanceGlossinessSampleCountSqrt>
+				<rayReflectanceGlossiness>1000</rayReflectanceGlossiness>
+				<rayTransmittance>0</rayTransmittance>
+				<rayTransmittanceMapTextureId>0</rayTransmittanceMapTextureId>
+				<rayTransmittanceGlossinessSamplerType>4</rayTransmittanceGlossinessSamplerType>
+				<rayTransmittanceGlossinessSampleCountSqrt>0</rayTransmittanceGlossinessSampleCountSqrt>
+				<rayTransmittanceGlossiness>1000</rayTransmittanceGlossiness>
+				<enableRayTransmissionAttenuation>false</enableRayTransmissionAttenuation>
+				<rayTransmissionAttenuationFactor>1</rayTransmissionAttenuationFactor>
+				<rayTransmissionAttenuationColor>
+					<r>0</r>
+					<g>0</g>
+					<b>0</b>
+					<a>1</a>
+				</rayTransmissionAttenuationColor>
+				<normalMapTextureId>0</normalMapTextureId>
+				<maskMapTextureId>0</maskMapTextureId>
+				<heightMapTextureId>0</heightMapTextureId>
+			</value7>
 		</materials>
 		<lights>
 			<ambientLight>
-				<color>
-					<r>1</r>
-					<g>1</g>
-					<b>1</b>
-					<a>1</a>
-				</color>
-				<intensity>0.01</intensity>
-				<enableOcclusion>false</enableOcclusion>
-				<maxDistance>10</maxDistance>
-				<samplerType>3</samplerType>
-				<samples>3</samples>
-				<distribution>1</distribution>
-			</ambientLight>
-			<directionalLights size="dynamic"/>
-			<pointLights size="dynamic">
-				<value0>
+				<light>
 					<color>
 						<r>1</r>
 						<g>1</g>
 						<b>1</b>
 						<a>1</a>
 					</color>
-					<intensity>1</intensity>
+					<intensity>0.01</intensity>
+				</light>
+				<enableAmbientOcclusion>false</enableAmbientOcclusion>
+				<ambientOcclusionSamplerType>4</ambientOcclusionSamplerType>
+				<ambientOcclusionSampleCountSqrt>0</ambientOcclusionSampleCountSqrt>
+				<ambientOcclusionMaxSampleDistance>1</ambientOcclusionMaxSampleDistance>
+				<ambientOcclusionSampleDistribution>1</ambientOcclusionSampleDistribution>
+			</ambientLight>
+			<directionalLights size="dynamic"/>
+			<pointLights size="dynamic">
+				<value0>
+					<light>
+						<color>
+							<r>1</r>
+							<g>1</g>
+							<b>1</b>
+							<a>1</a>
+						</color>
+						<intensity>1.5</intensity>
+					</light>
 					<position>
 						<x>8</x>
 						<y>10</y>
 						<z>5</z>
 					</position>
-					<distance>20</distance>
+					<maxDistance>20</maxDistance>
 					<attenuation>1</attenuation>
-					<softShadows>false</softShadows>
-					<radius>1</radius>
-					<samplerType>3</samplerType>
-					<samples>3</samples>
+					<enableAreaLight>false</enableAreaLight>
+					<areaLightSamplerType>4</areaLightSamplerType>
+					<areaLightSampleCountSqrt>0</areaLightSampleCountSqrt>
+					<areaLightRadius>1</areaLightRadius>
 				</value0>
 			</pointLights>
 			<spotLights size="dynamic"/>
 		</lights>
+		<models size="dynamic"/>
 		<primitives>
-			<planes size="dynamic">
-				<value0>
-					<id>1</id>
-					<materialId>1</materialId>
-					<invisible>false</invisible>
-					<position>
-						<x>0</x>
-						<y>0</y>
-						<z>0</z>
-					</position>
-					<normal>
-						<x>0</x>
-						<y>1</y>
-						<z>0</z>
-					</normal>
-				</value0>
-			</planes>
-			<spheres size="dynamic">
-				<value0>
-					<id>3</id>
-					<materialId>3</materialId>
-					<invisible>true</invisible>
-					<position>
-						<x>0</x>
-						<y>0</y>
-						<z>0</z>
-					</position>
-					<radius>1</radius>
-					<uvMapType>0</uvMapType>
-				</value0>
-			</spheres>
-			<boxes size="dynamic">
-				<value0>
-					<id>4</id>
-					<materialId>4</materialId>
-					<invisible>true</invisible>
-					<position>
-						<x>0</x>
-						<y>0</y>
-						<z>0</z>
-					</position>
-					<extent>
-						<x>2</x>
-						<y>2</y>
-						<z>2</z>
-					</extent>
-				</value0>
-			</boxes>
 			<triangles size="dynamic">
 				<value0>
-					<id>2</id>
-					<materialId>2</materialId>
-					<invisible>true</invisible>
+					<primitive>
+						<id>2</id>
+						<materialId>2</materialId>
+						<invisible>true</invisible>
+					</primitive>
 					<vertices>
 						<value0>
 							<x>-1</x>
@@ -1029,181 +1085,105 @@
 							<y>0</y>
 						</value2>
 					</texcoords>
-					<normal>
-						<x>0</x>
-						<y>0</y>
-						<z>1</z>
-					</normal>
-					<tangent>
-						<x>-0.99999999500000003</x>
-						<y>9.9999999500000007e-05</y>
-						<z>0</z>
-					</tangent>
-					<bitangent>
-						<x>9.9999999500000007e-05</x>
-						<y>0.99999999500000003</y>
-						<z>-0</z>
-					</bitangent>
 				</value0>
 			</triangles>
+			<planes size="dynamic">
+				<value0>
+					<primitive>
+						<id>1</id>
+						<materialId>1</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<position>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</position>
+					<normal>
+						<x>0</x>
+						<y>1</y>
+						<z>0</z>
+					</normal>
+				</value0>
+			</planes>
+			<spheres size="dynamic">
+				<value0>
+					<primitive>
+						<id>3</id>
+						<materialId>3</materialId>
+						<invisible>true</invisible>
+					</primitive>
+					<position>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</position>
+					<radius>1</radius>
+					<uvMapType>0</uvMapType>
+				</value0>
+				<value1>
+					<primitive>
+						<id>8</id>
+						<materialId>8</materialId>
+						<invisible>true</invisible>
+					</primitive>
+					<position>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</position>
+					<radius>5</radius>
+					<uvMapType>0</uvMapType>
+				</value1>
+			</spheres>
+			<boxes size="dynamic">
+				<value0>
+					<primitive>
+						<id>4</id>
+						<materialId>4</materialId>
+						<invisible>true</invisible>
+					</primitive>
+					<position>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</position>
+					<extent>
+						<x>2</x>
+						<y>2</y>
+						<z>2</z>
+					</extent>
+				</value0>
+			</boxes>
 			<cylinders size="dynamic">
 				<value0>
-					<id>5</id>
-					<materialId>5</materialId>
-					<invisible>true</invisible>
+					<primitive>
+						<id>5</id>
+						<materialId>5</materialId>
+						<invisible>true</invisible>
+					</primitive>
 					<radius>1</radius>
 					<height>2</height>
 				</value0>
 			</cylinders>
 			<toruses size="dynamic">
 				<value0>
-					<id>6</id>
-					<materialId>6</materialId>
-					<invisible>true</invisible>
+					<primitive>
+						<id>6</id>
+						<materialId>6</materialId>
+						<invisible>true</invisible>
+					</primitive>
 					<outerRadius>1</outerRadius>
 					<innerRadius>0.25</innerRadius>
 				</value0>
 			</toruses>
-			<instances size="dynamic">
-				<value0>
-					<id>1002</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>2</primitiveId>
-					<scale>
-						<x>1</x>
-						<y>1</y>
-						<z>1</z>
-					</scale>
-					<rotate>
-						<pitch>-10</pitch>
-						<yaw>10</yaw>
-						<roll>10</roll>
-					</rotate>
-					<translate>
-						<x>0</x>
-						<y>0.5</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value0>
-				<value1>
-					<id>1003</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>3</primitiveId>
-					<scale>
-						<x>1</x>
-						<y>1</y>
-						<z>1</z>
-					</scale>
-					<rotate>
-						<pitch>-10</pitch>
-						<yaw>10</yaw>
-						<roll>10</roll>
-					</rotate>
-					<translate>
-						<x>3</x>
-						<y>1.5</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value1>
-				<value2>
-					<id>1004</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>4</primitiveId>
-					<scale>
-						<x>1</x>
-						<y>1</y>
-						<z>1</z>
-					</scale>
-					<rotate>
-						<pitch>10</pitch>
-						<yaw>45</yaw>
-						<roll>-10</roll>
-					</rotate>
-					<translate>
-						<x>6</x>
-						<y>1.5</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value2>
-				<value3>
-					<id>1005</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>5</primitiveId>
-					<scale>
-						<x>1</x>
-						<y>1</y>
-						<z>1</z>
-					</scale>
-					<rotate>
-						<pitch>-10</pitch>
-						<yaw>10</yaw>
-						<roll>-10</roll>
-					</rotate>
-					<translate>
-						<x>9</x>
-						<y>0.5</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value3>
-				<value4>
-					<id>1006</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>6</primitiveId>
-					<scale>
-						<x>1</x>
-						<y>1</y>
-						<z>1</z>
-					</scale>
-					<rotate>
-						<pitch>-20</pitch>
-						<yaw>-20</yaw>
-						<roll>0</roll>
-					</rotate>
-					<translate>
-						<x>12</x>
-						<y>1.75</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value4>
-				<value5>
-					<id>1007</id>
-					<materialId>0</materialId>
-					<invisible>false</invisible>
-					<primitiveId>7</primitiveId>
-					<scale>
-						<x>2</x>
-						<y>2</y>
-						<z>2</z>
-					</scale>
-					<rotate>
-						<pitch>-20</pitch>
-						<yaw>-20</yaw>
-						<roll>0</roll>
-					</rotate>
-					<translate>
-						<x>15</x>
-						<y>1.5</y>
-						<z>0</z>
-					</translate>
-					<changePrimitive>false</changePrimitive>
-				</value5>
-			</instances>
-			<csgs size="dynamic"/>
 			<blinnBlobs size="dynamic">
 				<value0>
-					<id>7</id>
-					<materialId>7</materialId>
-					<invisible>true</invisible>
+					<primitive>
+						<id>7</id>
+						<materialId>7</materialId>
+						<invisible>true</invisible>
+					</primitive>
 					<blobs size="dynamic">
 						<value0>
 							<position>
@@ -1239,9 +1219,291 @@
 					<solverIterations>16</solverIterations>
 				</value0>
 			</blinnBlobs>
+			<csgs size="dynamic"/>
 			<primitiveGroups size="dynamic"/>
+			<instances size="dynamic">
+				<value0>
+					<primitive>
+						<id>1002</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>2</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>10</roll>
+					</rotate>
+					<translate>
+						<x>0</x>
+						<y>0.5</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value0>
+				<value1>
+					<primitive>
+						<id>1003</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>3</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>10</roll>
+					</rotate>
+					<translate>
+						<x>3</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value1>
+				<value2>
+					<primitive>
+						<id>1004</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>4</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>10</pitch>
+						<yaw>45</yaw>
+						<roll>-10</roll>
+					</rotate>
+					<translate>
+						<x>6</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value2>
+				<value3>
+					<primitive>
+						<id>1005</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>5</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-10</pitch>
+						<yaw>10</yaw>
+						<roll>-10</roll>
+					</rotate>
+					<translate>
+						<x>9</x>
+						<y>0.5</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value3>
+				<value4>
+					<primitive>
+						<id>1006</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>6</primitiveId>
+					<scale>
+						<x>1</x>
+						<y>1</y>
+						<z>1</z>
+					</scale>
+					<rotate>
+						<pitch>-20</pitch>
+						<yaw>-20</yaw>
+						<roll>0</roll>
+					</rotate>
+					<translate>
+						<x>12</x>
+						<y>1.75</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value4>
+				<value5>
+					<primitive>
+						<id>1007</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>7</primitiveId>
+					<scale>
+						<x>2</x>
+						<y>2</y>
+						<z>2</z>
+					</scale>
+					<rotate>
+						<pitch>-20</pitch>
+						<yaw>-20</yaw>
+						<roll>0</roll>
+					</rotate>
+					<translate>
+						<x>15</x>
+						<y>1.5</y>
+						<z>0</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value5>
+				<value6>
+					<primitive>
+						<id>1008</id>
+						<materialId>0</materialId>
+						<invisible>false</invisible>
+					</primitive>
+					<primitiveId>8</primitiveId>
+					<scale>
+						<x>2</x>
+						<y>2</y>
+						<z>2</z>
+					</scale>
+					<rotate>
+						<pitch>-20</pitch>
+						<yaw>-20</yaw>
+						<roll>0</roll>
+					</rotate>
+					<translate>
+						<x>8</x>
+						<y>20</y>
+						<z>20</z>
+					</translate>
+					<isTimeVariant>false</isTimeVariant>
+					<scaleInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</scaleInTime>
+					<rotateInTime>
+						<pitch>0</pitch>
+						<yaw>0</yaw>
+						<roll>0</roll>
+					</rotateInTime>
+					<translateInTime>
+						<x>0</x>
+						<y>0</y>
+						<z>0</z>
+					</translateInTime>
+					<changePrimitive>false</changePrimitive>
+				</value6>
+			</instances>
 		</primitives>
-		<models size="dynamic"/>
 	</scene>
 </cereal>
 
