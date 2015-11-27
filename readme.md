@@ -1,21 +1,44 @@
 # Raycer
 
-A raytracer and a pathtracer with an interactive real-time mode and GPGPU support (OpenCL). Work in progress.
+A raytracer and a pathtracer with an interactive real-time mode and GPGPU support (OpenCL).
+
+[Image gallery](https://www.flickr.com/photos/136293057@N06/albums/72157660998109840)
 
 * Author: [Mikko Ronkainen](http://mikkoronkainen.com)
 * Website: [github.com/mikoro/raycer](https://github.com/mikoro/raycer)
 
+![Screenshot](http://mikoro.github.io/images/raycer/readme-screenshot.jpg "Screenshot")
+
 ## Download
 
-[Scene data](https://dl.dropboxusercontent.com/u/41666920/raycer/raycer_data.zip)
+### Binaries
 
-Extract and merge the scene data zip to the existing data folder.
+Download the latest version:
 
-No prebuilt binaries available at the moment.
+| Windows 64-bit                                                                                         | Mac OS X (10.9+)                                                                                       | Linux (Ubuntu 14.04)                                                                                         |
+|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| [raycer-1.0.0-win.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-win.zip) | [raycer-1.0.0-mac.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-mac.zip) | [raycer-1.0.0-ubuntu.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-ubuntu.zip) |
+
+### Test scene data
+
+Test scene data is already included in the binary packages.
+
+Download test scene data: [Mirror 1](https://dl.dropboxusercontent.com/u/41666920/raycer/raycer_data.zip)
+
+Extract and merge the data folder from the zip file to the existing data folder after compilation.
+
+## Features
+
+- a
+- b
+- c
+- d
 
 ## Instructions
 
-Edit the settings.ini file to configure the program. Some options can be overridden with command line.
+Running the program will open the first test scene in an interactive windowed mode. Use WASD to move and left mouse button to look around. Cycle through the test scenes with F2/F3.
+
+Edit the settings.ini file to further configure the program. Some options can be overridden with command line switches.
 
 ### Controls
 
@@ -50,6 +73,24 @@ For the interactive mode:
 | **R**                   | Reset camera                                                                          |
 | **N**                   | Toggle normal mapping on/off                                                          |
 | **B**                   | Rebuild BVH                                                                           |
+
+## References
+
+Some books and websites I found helpful while developing the program:
+
+- a
+- b
+- c
+- d
+
+## Test scene data sources
+
+Websites where the test scene data was sourced from:
+
+- a
+- b
+- c
+- d
 
 ## License
 
