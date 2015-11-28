@@ -40,7 +40,7 @@ HEADERS += src/App.h \
            src/Raytracing/Ray.h \
            src/Raytracing/Scene.h \
            src/Rendering/Film.h \
-           src/Rendering/Framebuffer.h \
+           src/Rendering/FilmRenderer.h \
            src/Rendering/Image.h \
            src/Rendering/ImagePool.h \
            src/Rendering/Text.h \
@@ -75,6 +75,7 @@ HEADERS += src/App.h \
            src/Raytracing/Textures/AtmosphereTexture.h \
            src/Raytracing/Textures/CellNoiseTexture.h \
            src/Raytracing/Textures/CheckerTexture.h \
+           src/Raytracing/Textures/ColorGradientTexture.h \
            src/Raytracing/Textures/ColorTexture.h \
            src/Raytracing/Textures/FireTexture.h \
            src/Raytracing/Textures/ImageTexture.h \
@@ -85,9 +86,9 @@ HEADERS += src/App.h \
            src/Raytracing/Textures/VoronoiTexture.h \
            src/Raytracing/Textures/WoodTexture.h \
            src/Raytracing/Tracers/PathTracer.h \
+           src/Raytracing/Tracers/Raytracer.h \
            src/Raytracing/Tracers/Tracer.h \
            src/Raytracing/Tracers/TracerState.h \
-           src/Raytracing/Tracers/WhittedRaytracer.h \
            src/Rendering/Filters/BellFilter.h \
            src/Rendering/Filters/BoxFilter.h \
            src/Rendering/Filters/Filter.h \
@@ -95,6 +96,7 @@ HEADERS += src/App.h \
            src/Rendering/Filters/LanczosSincFilter.h \
            src/Rendering/Filters/MitchellFilter.h \
            src/Rendering/Filters/TentFilter.h \
+           src/Rendering/Samplers/CenterSampler.h \
            src/Rendering/Samplers/CMJSampler.h \
            src/Rendering/Samplers/JitteredSampler.h \
            src/Rendering/Samplers/PoissonDiscSampler.h \
@@ -133,7 +135,7 @@ SOURCES += src/App.cpp \
            src/Raytracing/Ray.cpp \
            src/Raytracing/Scene.cpp \
            src/Rendering/Film.cpp \
-           src/Rendering/Framebuffer.cpp \
+           src/Rendering/FilmRenderer.cpp \
            src/Rendering/Image.cpp \
            src/Rendering/ImagePool.cpp \
            src/Rendering/Text.cpp \
@@ -199,6 +201,7 @@ SOURCES += src/App.cpp \
            src/Raytracing/Textures/AtmosphereTexture.cpp \
            src/Raytracing/Textures/CellNoiseTexture.cpp \
            src/Raytracing/Textures/CheckerTexture.cpp \
+           src/Raytracing/Textures/ColorGradientTexture.cpp \
            src/Raytracing/Textures/ColorTexture.cpp \
            src/Raytracing/Textures/FireTexture.cpp \
            src/Raytracing/Textures/ImageTexture.cpp \
@@ -208,8 +211,8 @@ SOURCES += src/App.cpp \
            src/Raytracing/Textures/VoronoiTexture.cpp \
            src/Raytracing/Textures/WoodTexture.cpp \
            src/Raytracing/Tracers/PathTracer.cpp \
+           src/Raytracing/Tracers/Raytracer.cpp \
            src/Raytracing/Tracers/Tracer.cpp \
-           src/Raytracing/Tracers/WhittedRaytracer.cpp \
            src/Rendering/Filters/BellFilter.cpp \
            src/Rendering/Filters/BoxFilter.cpp \
            src/Rendering/Filters/Filter.cpp \
@@ -217,6 +220,7 @@ SOURCES += src/App.cpp \
            src/Rendering/Filters/LanczosSincFilter.cpp \
            src/Rendering/Filters/MitchellFilter.cpp \
            src/Rendering/Filters/TentFilter.cpp \
+           src/Rendering/Samplers/CenterSampler.cpp \
            src/Rendering/Samplers/CMJSampler.cpp \
            src/Rendering/Samplers/JitteredSampler.cpp \
            src/Rendering/Samplers/PoissonDiscSampler.cpp \
