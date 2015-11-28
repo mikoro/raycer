@@ -1,6 +1,6 @@
 # Raycer
 
-A raytracer and a pathtracer with an interactive real-time mode and GPGPU support (OpenCL).
+A C++ raytracer and pathtracer with an interactive real-time mode and GPGPU support (OpenCL).
 
 [Image gallery](https://www.flickr.com/photos/136293057@N06/albums/72157660998109840)
 
@@ -11,30 +11,21 @@ A raytracer and a pathtracer with an interactive real-time mode and GPGPU suppor
 
 ## Download
 
-### Binaries
-
 Download the latest version:
 
 | Windows 64-bit                                                                                         | Mac OS X (10.9+)                                                                                       | Linux (Ubuntu 14.04)                                                                                         |
 |--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
 | [raycer-1.0.0-win.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-win.zip) | [raycer-1.0.0-mac.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-mac.zip) | [raycer-1.0.0-ubuntu.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-ubuntu.zip) |
 
-### Test scene data
-
-Test scene data is already included in the binary packages.
-
-Download test scene data: [Mirror 1](https://dl.dropboxusercontent.com/u/41666920/raycer/raycer_data.zip)
-
-Extract and merge the data folder from the zip file to the existing data folder after compilation.
+**Note:** To run the program you have to install graphics drivers that have support for OpenCL. Otherwise the program will complain of missing OpenCL libraries. The recent graphics driver packages from Intel/Nvidia/AMD will include the necessary files. 
 
 ## Features
 
 - Multiplatform modern C++11/14 + OpenMP + OpenCL + OpenGL
   - Runs on 64-bit Windows, Mac OS X and Linux
   - Multithreaded using OpenMP
-  - Minimal shared state between threads and minimal heap memory allocations during rendering
   - GPU features are implemented with OpenCL
-  - OpenGL used for interactive mode (display rendering results with textured quads)
+  - OpenGL used for interactive mode only (display raytracing results with textured quads)
 - Interactive and non-interactive mode
   - Interactive mode allows moving in the scene and editing primitives
   - Non-interactive mode renders the scene to an image file with helpful progress indicators
@@ -172,19 +163,25 @@ For the interactive mode:
 
 Some books and websites I found helpful while developing the program:
 
-- a
-- b
-- c
-- d
+- [Computer Graphics: Principles and Practice](http://www.amazon.com/Computer-Graphics-Principles-Practice-Edition/dp/0321399528)
+- [An Introduction to Ray Tracing](http://www.amazon.com/Introduction-Tracing-Kaufmann-Computer-Graphics/dp/0122861604)
+- [Ray Tracing from the Ground Up](http://www.amazon.com/Ray-Tracing-Ground-Kevin-Suffern/dp/1568812728)
+- [Realistic Ray Tracing](http://www.amazon.com/Realistic-Ray-Tracing-Second-Edition/dp/1568814615)
+- [Advanced Global Illumination](http://www.amazon.com/Advanced-Global-Illumination-Second-Edition/dp/1568813074)
+- [Realistic Image Synthesis Using Photon Mapping](http://www.amazon.com/Realistic-Image-Synthesis-Photon-Mapping/dp/1568811470)
+- [Physically Based Rendering](http://www.amazon.com/Physically-Based-Rendering-Second-Edition/dp/0123750792)
+- [High Dynamic Range Imaging](http://www.amazon.com/Dynamic-Range-Imaging-Second-Edition/dp/012374914X)
+- [Scratchapixel](http://www.scratchapixel.com/)
 
 ## Test scene data sources
 
 Websites where the test scene data was sourced from:
 
-- a
-- b
-- c
-- d
+- [The Stanford 3D Scanning Repository](http://graphics.stanford.edu/data/3Dscanrep/)
+- [McGuire Graphics Data](http://graphics.cs.williams.edu/data/meshes.xml)
+- [sIBL Archive](http://www.hdrlabs.com/sibl/archive.html)
+- [Bernhard Vogl - Light probes](http://dativ.at/lightprobes/)
+- [CGSkies](https://www.cgskies.com/)
 
 ## License
 

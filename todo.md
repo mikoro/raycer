@@ -34,3 +34,4 @@ misc
  - add image data to serialization
  - disable reinhard averaging when not in interactive mode
  - templetize image (float and double images)
+ - opencl version check
