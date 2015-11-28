@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// cornell box
+// cornell box (only triangles)
 Scene Scene::createTestScene3()
 {
 	Scene scene;

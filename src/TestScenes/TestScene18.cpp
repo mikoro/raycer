@@ -7,7 +7,7 @@
 
 using namespace Raycer;
 
-// sponza atrium scene
+// sponza atrium scene (only triangles)
 Scene Scene::createTestScene18()
 {
 	Scene scene;

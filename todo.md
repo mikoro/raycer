@@ -32,3 +32,5 @@ misc
  - move ray-scene intersection to scene
  - remove csg suppport
  - add image data to serialization
+ - disable reinhard averaging when not in interactive mode
+ - templetize image (float and double images)
