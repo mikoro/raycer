@@ -74,7 +74,7 @@ See remarks of the linux build.
 
 ## Download test scene data
 
-Download test scene data: [Mirror 1](https://dl.dropboxusercontent.com/u/41666920/raycer/raycer_data.zip)
+Download test scene data: [Mirror 1](https://s3.amazonaws.com/raycer/v1.0.0/raycer_test_scene_data.zip)
 
 Extract and merge the data folder from the zip file to the existing data folder after compilation.
 
