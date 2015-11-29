@@ -16,10 +16,8 @@
 *.exe
 .vs
 My*
+*sublime*
 Thumbs.db
 .directory
 .DS_Store
 Raycer.app
-*sublime*
-README.txt
-handout5.pdf
