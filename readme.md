@@ -13,9 +13,9 @@ A C++ raytracer and pathtracer with an interactive real-time mode and GPGPU supp
 
 Download the latest version:
 
-| Windows 64-bit                                                                                         | Mac OS X (10.9+)                                                                                       | Linux (Ubuntu 14.04)                                                                                         |
-|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
-| [raycer-1.0.0-win.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-win.zip) | [raycer-1.0.0-mac.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-mac.zip) | [raycer-1.0.0-ubuntu.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-ubuntu.zip) |
+| Windows 64-bit                                                                                         | Mac OS X (10.9+)                                                                                       | Linux 64-bit (Ubuntu 15.10)                                                                                      |
+|--------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------|
+| [raycer-1.0.0-win.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-win.zip) | [raycer-1.0.0-mac.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-mac.zip) | [raycer-1.0.0-ubuntu15.zip](https://github.com/mikoro/raycer/releases/download/v1.0.0/raycer-1.0.0-ubuntu15.zip) |
 
 **Note:** To run the program you have to install graphics drivers that have support for OpenCL. Otherwise the program will complain of missing OpenCL libraries. The recent graphics driver packages from Intel/Nvidia/AMD will include the necessary files. 
 
