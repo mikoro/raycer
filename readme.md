@@ -3,6 +3,7 @@
 A C++11/OpenMP/OpenCL raytracer with an interactive preview mode.
 
 [Image gallery](https://www.flickr.com/photos/136293057@N06/albums/72157660998109840)
+
 [Feature video](https://youtu.be/0t6a2wXFJkE)
 
 * Author: [Mikko Ronkainen](http://mikkoronkainen.com)
